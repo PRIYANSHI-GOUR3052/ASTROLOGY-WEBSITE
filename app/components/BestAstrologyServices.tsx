@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 const services = [
   {
     title: "ज्योतिष (Astrology)",
-    icon: "/placeholder.svg?height=200&width=200", // Replace with actual astrology chart image
+    icon: "/images/astrology.svg", // Replace with actual astrology chart image
     description: {
       en: "Unlock celestial guidance for your destiny. Gain insights and clarity on life's journey through expert astrology services tailored just for you.",
       hi: "अपनी नियति के लिए खगोलीय मार्गदर्शन को खोलें। विशेषज्ञ ज्योतिष सेवाओं के माध्यम से जीवन की यात्रा पर अंतर्दृष्टि और स्पष्टता प्राप्त करें।"
@@ -12,7 +12,7 @@ const services = [
   },
   {
     title: "अंक ज्योतिष (Numerology)",
-    icon: "/placeholder.svg?height=200&width=200", // Replace with actual numerology symbol
+    icon: "/images/Numerology.svg", // Replace with actual numerology symbol
     description: {
       en: "Decode the numbers of your life's path. Explore personality traits, destiny, and potential through personalized numerology guidance.",
       hi: "अपने जीवन के मार्ग की संख्याओं को समझें। व्यक्तिगत अंक ज्योतिष मार्गदर्शन के माध्यम से व्यक्तित्व, भाग्य और क्षमता का पता लगाएं।"
@@ -20,7 +20,7 @@ const services = [
   },
   {
     title: "हस्त रेखा (Palmistry)",
-    icon: "/placeholder.svg?height=200&width=200", // Replace with actual palmistry diagram
+    icon: "/images/palm.svg", // Replace with actual palmistry diagram
     description: {
       en: "Delve into the ancient wisdom of palmistry to reveal your destiny and potential. Explore the intricate lines of your palms for insights.",
       hi: "अपनी नियति और क्षमता को प्रकट करने के लिए हस्त रेखा के प्राचीन ज्ञान में गहराई से जाएं। अंतर्दृष्टि के लिए अपनी हथेलियों की जटिल रेखाओं का पता लगाएं।"
@@ -28,7 +28,7 @@ const services = [
   },
   {
     title: "तंत्र विद्या (Tantra)",
-    icon: "/placeholder.svg?height=200&width=200", // Replace with actual tantra symbol
+    icon: "/images/tantra.svg", // Replace with actual tantra symbol
     description: {
       en: "Embark on a journey of spiritual awakening and self-discovery through tantra. Experience profound healing and empowerment.",
       hi: "तंत्र के माध्यम से आध्यात्मिक जागृति और आत्म-खोज की यात्रा पर निकलें। गहन चिकित्सा और सशक्तिकरण का अनुभव करें।"

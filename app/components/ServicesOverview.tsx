@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Star, Moon, Sun, Hash, Home, Map, Gem, Sparkles, Heart } from 'lucide-react'
+import ServiceButton from './ServiceButton'
 
 const services = [
   {
@@ -63,9 +64,7 @@ export function ServicesOverview() {
                 <h3 className="text-2xl font-serif font-semibold mb-4 text-gold text-center">{service.title}</h3>
                 <p className="mb-6 text-sm text-lavender text-center">{service.description}</p>
                 <div className="text-center">
-                  <Button asChild className="bg-gold text-midnight-blue hover:bg-gold-light">
-                    <Link href={`/services/${service.slug}`}>और जानें (Learn More)</Link>
-                  </Button>
+                  <ServiceButton slug={service.slug} title="और जानें (Learn More)" />
                 </div>
               </CardContent>
             </Card>

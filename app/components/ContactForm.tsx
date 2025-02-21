@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 export function ContactForm() {
   return (
-    <section className="py-16 relative">
+    <section id="contact-us" className="py-16 relative">
       <div className="absolute inset-0 bg-gradient-to-r from-celestial-blue/30 to-cosmic-purple/30 rounded-3xl"></div>
       <div className="container mx-auto px-4 relative z-10">
         <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-center text-gold">
