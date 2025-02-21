@@ -1,3 +1,5 @@
+"use client";
+
 import { GraduationCap, Heart, Activity, Briefcase, Users, Baby } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -54,6 +56,13 @@ const solutions = [
 ]
 
 export function LifeChangingSolutions() {
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact-us');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="py-16 relative">
       <div className="absolute inset-0 bg-gradient-to-r from-cosmic-purple/30 to-celestial-blue/30 rounded-3xl"></div>
@@ -79,7 +88,10 @@ export function LifeChangingSolutions() {
           ))}
         </div>
         <div className="text-center mt-12">
-          <Button className="bg-gold text-midnight-blue hover:bg-gold-light text-lg px-8 py-6">
+          <Button 
+            className="bg-black text-white hover:bg-gray-900 text-lg px-8 py-6"
+            onClick={scrollToContact}
+          >
             अभी कॉल बुक करें (BOOK YOUR CALL NOW)
           </Button>
         </div>
