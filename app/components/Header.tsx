@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Home, BookOpen, ShoppingBag, PenTool, Info, PhoneCall, GraduationCap } from 'lucide-react'
+import { Menu, X, Home, BookOpen, ShoppingBag, PenTool, Info, PhoneCall, GraduationCap, LogIn } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 
@@ -15,6 +15,7 @@ const navItems = [
   { label: 'About', labelHi: 'हमारे बारे में', href: '/about', icon: Info },
   { label: 'Contact', labelHi: 'संपर्क', href: '/contact', icon: PhoneCall },
   { label: 'Study', labelHi: 'अध्ययन', href: '/study', icon: GraduationCap },
+  { label: 'Sign In', labelHi: 'साइन इन', href: '/signin', icon: LogIn, special: true }, // Sign In added
 ]
 
 export function Header() {
@@ -39,10 +40,13 @@ export function Header() {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
+          {/* Logo */}
           <Link href="/" className="text-2xl font-serif font-bold text-royal-gold hover:text-royal-gold-light transition-colors">
             Nakshatra Gyaan<br />
             <span className="text-sm">नक्षत्र ज्ञान</span>
           </Link>
+
+          {/* Navigation - Desktop */}
           <nav className="hidden lg:flex space-x-1">
             {navItems.map((item) => (
               <Link
@@ -52,7 +56,9 @@ export function Header() {
                   pathname === item.href
                     ? 'bg-royal-gold text-nebula-indigo'
                     : 'text-starlight-silver hover:bg-celestial-blue hover:text-starlight-silver'
-                } transition-colors duration-200`}
+                } transition-colors duration-200 ${
+                  item.special ? 'ml-4 px-4 py-2 font-bold bg-royal-gold text-nebula-indigo hover:bg-goldenrod' : ''
+                }`} // Special styling for Sign In button
               >
                 <item.icon className="w-5 h-5 mb-1" />
                 <span>{item.label}</span>
@@ -60,6 +66,8 @@ export function Header() {
               </Link>
             ))}
           </nav>
+
+          {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             size="icon"
@@ -70,6 +78,8 @@ export function Header() {
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
+
+        {/* Mobile Menu */}
         {isMenuOpen && (
           <motion.nav 
             className="lg:hidden mt-4 space-y-2"
@@ -101,4 +111,3 @@ export function Header() {
     </motion.header>
   )
 }
-

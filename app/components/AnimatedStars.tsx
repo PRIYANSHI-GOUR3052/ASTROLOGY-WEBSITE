@@ -28,6 +28,8 @@ export function AnimatedStars() {
     }
 
     function animate() {
+      if (!ctx) return;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       stars.forEach(star => {
@@ -49,8 +51,11 @@ export function AnimatedStars() {
     animate()
 
     const handleResize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      const currentCanvas = canvasRef.current;
+      if (currentCanvas) {
+        currentCanvas.width = window.innerWidth
+        currentCanvas.height = window.innerHeight
+      }
     }
 
     window.addEventListener('resize', handleResize)

@@ -6,14 +6,14 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
 
-export default function PalmistryPage() {
+export default function TantraPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     dateOfBirth: "",
-    dominantHand: "right", // or "left"
-    concerns: "",
+    experience: "",
+    purpose: "",
     message: ""
   });
 
@@ -26,7 +26,7 @@ export default function PalmistryPage() {
   return (
     <div className="container mx-auto px-4 py-16">
       <h1 className="text-4xl md:text-5xl font-serif font-bold text-center mb-4 text-gold">
-        हस्त रेखा परामर्श (Palmistry Consultation)
+        तंत्र विद्या परामर्श (Tantra Consultation)
       </h1>
       <div className="max-w-3xl mx-auto mt-12">
         <Card className="bg-midnight-blue-light/80 border-gold">
@@ -74,31 +74,34 @@ export default function PalmistryPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-gold block mb-2">Dominant Hand</label>
+                  <label className="text-gold block mb-2">Previous Experience with Tantra</label>
                   <select
-                    value={formData.dominantHand}
-                    onChange={(e) => setFormData({...formData, dominantHand: e.target.value})}
+                    value={formData.experience}
+                    onChange={(e) => setFormData({...formData, experience: e.target.value})}
                     className="w-full bg-midnight-blue text-lavender border-gold rounded-md p-2"
                     required
                   >
-                    <option value="right">Right</option>
-                    <option value="left">Left</option>
+                    <option value="">Select your experience level</option>
+                    <option value="none">No prior experience</option>
+                    <option value="beginner">Basic knowledge</option>
+                    <option value="intermediate">Some practice</option>
+                    <option value="advanced">Advanced practitioner</option>
                   </select>
                 </div>
                 <div>
-                  <label className="text-gold block mb-2">Primary Concerns</label>
+                  <label className="text-gold block mb-2">Purpose of Consultation</label>
                   <select
-                    value={formData.concerns}
-                    onChange={(e) => setFormData({...formData, concerns: e.target.value})}
+                    value={formData.purpose}
+                    onChange={(e) => setFormData({...formData, purpose: e.target.value})}
                     className="w-full bg-midnight-blue text-lavender border-gold rounded-md p-2"
                     required
                   >
-                    <option value="">Select your primary concern</option>
-                    <option value="career">Career & Success</option>
-                    <option value="relationship">Love & Relationships</option>
-                    <option value="health">Health & Wellbeing</option>
-                    <option value="wealth">Wealth & Prosperity</option>
-                    <option value="general">General Life Reading</option>
+                    <option value="">Select primary purpose</option>
+                    <option value="spiritual">Spiritual Growth</option>
+                    <option value="healing">Healing & Energy Work</option>
+                    <option value="meditation">Meditation Practices</option>
+                    <option value="protection">Protection & Blessing</option>
+                    <option value="general">General Guidance</option>
                   </select>
                 </div>
               </div>
@@ -108,7 +111,7 @@ export default function PalmistryPage() {
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
                   className="bg-midnight-blue text-lavender border-gold h-32"
-                  placeholder="Please share any specific questions or areas you'd like the palm reader to focus on..."
+                  placeholder="Please share your specific interests or questions about Tantra practices..."
                 />
               </div>
               <Button 
@@ -123,5 +126,4 @@ export default function PalmistryPage() {
       </div>
     </div>
   )
-}
-
+} 
