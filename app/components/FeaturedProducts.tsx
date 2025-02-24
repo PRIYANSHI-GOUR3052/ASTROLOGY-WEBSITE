@@ -1,8 +1,7 @@
 "use client"
-import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { useState, useEffect } from 'react'
 
 const products = [
   {
@@ -40,6 +39,28 @@ export function FeaturedProducts() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Function to handle checkout using Stripe API
+  const handleCheckout = async (price: number, productName: string) => {
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ price, productName }),
+      });
+
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url; // Redirect to Stripe checkout page
+      } else {
+        console.error("Checkout Error:", data);
+        alert("Payment Failed! Check console for details.");
+      }
+    } catch (error) {
+      console.error("Error processing checkout:", error);
+      alert("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <section className="py-16 relative">
       <div className="absolute inset-0 bg-gradient-to-r from-celestial-blue/30 to-cosmic-purple/30 rounded-3xl"></div>
@@ -50,6 +71,7 @@ export function FeaturedProducts() {
         <h3 className="text-2xl md:text-3xl font-serif text-center mb-12 text-gold">
           Featured Products
         </h3>
+
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gold"></div>
@@ -63,8 +85,11 @@ export function FeaturedProducts() {
                   <p className="mb-4 text-sm text-lavender text-center">{product.description}</p>
                   <p className="text-xl font-bold mb-4 text-gold text-center">₹{product.price.toLocaleString('en-IN')}</p>
                   <div className="text-center">
-                    <Button asChild className="bg-gold text-midnight-blue hover:bg-gold-light">
-                      <Link href={`/shop/${product.slug}`}>खरीदें (Buy Now)</Link>
+                    <Button
+                      onClick={() => handleCheckout(product.price, product.name)}
+                      className="bg-gold text-midnight-blue hover:bg-gold-light"
+                    >
+                      खरीदें (Buy Now)
                     </Button>
                   </div>
                 </CardContent>
@@ -74,6 +99,5 @@ export function FeaturedProducts() {
         )}
       </div>
     </section>
-  )
+  );
 }
-

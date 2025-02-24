@@ -79,8 +79,8 @@ export function ServicesGrid() {
               <div className="text-center">
                 <Button asChild className="bg-sunburst-yellow text-mystic-brown hover:bg-sunburst-yellow-light">
                   <Link href={service.link}>
-                    <span className="block">और जानें</span>
-                    <span className="block">Learn More</span>
+                    <span className="block">आप अभी बुक करें</span>
+                    <span className="block">BOOK YOUR CALL NOW</span>
                   </Link>
                 </Button>
               </div>
