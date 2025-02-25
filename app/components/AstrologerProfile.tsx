@@ -9,14 +9,14 @@ const credentials = [
     titleHi: "अंतर्राष्ट्रीय वैदिक ज्योतिष महासंघ, यूएसए के ब्रांड एंबेसडर",
     description: "Dr. Narendra Kumar Sharma's acknowledgement by the International Vedic Astrology Federation, USA, as their brand ambassador is a testament to his dedication and expertise in the field.",
     descriptionHi: "डॉ. नरेंद्र कुमार शर्मा को अंतर्राष्ट्रीय वैदिक ज्योतिष महासंघ, यूएसए द्वारा उनके ब्रांड एंबेसडर के रूप में मान्यता उनके समर्पण और विशेषज्ञता का प्रमाण है।",
-    image: "/placeholder.svg?height=400&width=600"
+    image: "/images/ambassadoor.webp"
   },
   {
     title: "Grand Ph.D. in Astrology",
     titleHi: "ज्योतिष में ग्रैंड पीएचडी",
     description: "Dr. Narendra Kumar Sharma's remarkable achievement of receiving the Grand Ph.D. in Astrology stands as a testament to his exceptional contributions to the field.",
     descriptionHi: "डॉ. नरेंद्र कुमार शर्मा की ज्योतिष में ग्रैंड पीएचडी प्राप्त करने की उल्लेखनीय उपलब्धि इस क्षेत्र में उनके असाधारण योगदान का प्रमाण है।",
-    image: "/placeholder.svg?height=400&width=600"
+    image: "/images/phd.webp"
   }
 ]
 

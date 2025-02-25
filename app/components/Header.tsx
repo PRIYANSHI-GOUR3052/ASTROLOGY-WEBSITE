@@ -2,26 +2,67 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Menu, X, Home, BookOpen, ShoppingBag, PenTool, Info, PhoneCall, GraduationCap, LogIn } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Menu, X, Home, BookOpen, ShoppingBag, PenTool, Info, PhoneCall, GraduationCap, LogIn, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 
-const navItems = [
-  { label: 'Home', labelHi: 'होम', href: '/', icon: Home },
-  { label: 'Services', labelHi: 'सेवाएं', href: '/services', icon: BookOpen },
-  { label: 'Shop', labelHi: 'दुकान', href: '/shop', icon: ShoppingBag },
-  { label: 'Blog', labelHi: 'ब्लॉग', href: '/blog', icon: PenTool },
-  { label: 'About', labelHi: 'हमारे बारे में', href: '/about', icon: Info },
-  { label: 'Contact', labelHi: 'संपर्क', href: '/contact', icon: PhoneCall },
-  { label: 'Study', labelHi: 'अध्ययन', href: '/study', icon: GraduationCap },
-  { label: 'Sign In', labelHi: 'साइन इन', href: '/signin', icon: LogIn, special: true }, // Sign In added
-]
-
 export function Header() {
   const pathname = usePathname()
+  const router = useRouter()
+
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Check if user is logged in on page load
+    const checkLoginStatus = () => {
+      const token = localStorage.getItem('token')
+      console.log('Token found:', !!token) // Debug log
+      setIsLoggedIn(!!token)
+      setIsLoading(false)
+    }
+
+    // Run immediately
+    checkLoginStatus()
+
+    // Add event listener for storage changes
+    // Listen for auth changes triggered by login/signup/logout
+    window.addEventListener('authChange', checkLoginStatus)
+
+    // Also listen to storage changes (for multi-tab support)
+    window.addEventListener('storage', checkLoginStatus)
+
+    return () => {
+      window.removeEventListener('authChange', checkLoginStatus)
+      window.removeEventListener('storage', checkLoginStatus)
+    }
+  }, [])
+
+  // Add this useEffect to debug state changes
+  useEffect(() => {
+    console.log('Login state:', isLoggedIn)
+    console.log('Loading state:', isLoading)
+  }, [isLoggedIn, isLoading])
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    setIsLoggedIn(false)
+    router.push('/signin')
+  }
+
+  const navItems = [
+    { label: 'Home', labelHi: 'होम', href: '/', icon: Home },
+    { label: 'Services', labelHi: 'सेवाएं', href: '/services', icon: BookOpen },
+    { label: 'Shop', labelHi: 'दुकान', href: '/shop', icon: ShoppingBag },
+    { label: 'Blog', labelHi: 'ब्लॉग', href: '/blog', icon: PenTool },
+    { label: 'About', labelHi: 'हमारे बारे में', href: '/about', icon: Info },
+    { label: 'Contact', labelHi: 'संपर्क', href: '/contact', icon: PhoneCall },
+    { label: 'Study', labelHi: 'अध्ययन', href: '/study', icon: GraduationCap },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,15 +97,34 @@ export function Header() {
                   pathname === item.href
                     ? 'bg-royal-gold text-nebula-indigo'
                     : 'text-starlight-silver hover:bg-celestial-blue hover:text-starlight-silver'
-                } transition-colors duration-200 ${
-                  item.special ? 'ml-4 px-4 py-2 font-bold bg-royal-gold text-nebula-indigo hover:bg-goldenrod' : ''
-                }`} // Special styling for Sign In button
+                } transition-colors duration-200`}
               >
                 <item.icon className="w-5 h-5 mb-1" />
                 <span>{item.label}</span>
                 <span className="text-xs">{item.labelHi}</span>
               </Link>
             ))}
+
+            {/* Sign In / Sign Out Button */}
+            {!isLoading && (
+              isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center py-2 px-4 rounded-md bg-black text-white hover:bg-gray-900 transition-colors w-full"
+                >
+                  <LogOut className="w-5 h-5 mr-2" />
+                  Sign Out
+                </button>
+              ) : (
+                <Link
+                  href="/signin"
+                  className="ml-4 px-4 py-2 font-bold bg-royal-gold text-nebula-indigo hover:bg-goldenrod rounded-md transition-colors flex items-center"
+                >
+                  <LogIn className="w-5 h-5 mr-2" />
+                  Sign In
+                </Link>
+              )
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -105,6 +165,31 @@ export function Header() {
                 </span>
               </Link>
             ))}
+
+            {/* Sign In / Sign Out Button for Mobile */}
+            {!isLoading && (
+              isLoggedIn ? (
+                <button
+                  onClick={() => {
+                    handleLogout()
+                    setIsMenuOpen(false)
+                  }}
+                  className="flex items-center py-2 px-4 rounded-md bg-black text-nebula-indigo hover:bg-gray-900 transition-colors w-full"
+                >
+                  <LogOut className="w-5 h-5 mr-3" />
+                  Sign Out
+                </button>
+              ) : (
+                <Link
+                  href="/signin"
+                  className="flex items-center py-2 px-4 rounded-md bg-royal-gold text-nebula-indigo hover:bg-goldenrod transition-colors w-full"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <LogIn className="w-5 h-5 mr-3" />
+                  Sign In
+                </Link>
+              )
+            )}
           </motion.nav>
         )}
       </div>

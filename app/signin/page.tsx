@@ -11,7 +11,7 @@ import { MysticBackground } from '../components/MysticBackground'
 
 export default function SignInPage() {
   const router = useRouter()
-  const [role, setRole] = useState<'user' | 'admin'>('user')
+  const [role, setRole] = useState<'user'>('user')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -55,15 +55,19 @@ export default function SignInPage() {
 
       const result = await response.json()
       console.log('Response:', result)
-
       if (result.token) {
         localStorage.setItem('token', result.token)
         localStorage.setItem('user', JSON.stringify(result.user))
+      
+        // 🔥 Dispatch a custom event to notify the header
+        window.dispatchEvent(new Event('authChange'))
+      
+        // Redirect based on user role
         router.push('/')
       } else {
         throw new Error('No token received')
       }
-
+      
     } catch (error) {
       console.error('Authentication error:', error)
       setError(error instanceof Error ? error.message : 'Authentication failed')
@@ -92,18 +96,17 @@ export default function SignInPage() {
             </div>
           )}
 
-          {/* Toggle Between User & Admin */}
+          {/* User and Admin Navigation */}
           <div className="flex justify-center mb-6">
             <Button
-              variant={role === 'user' ? 'default' : 'outline'}
+              variant="default"
               className="mr-2"
-              onClick={() => setRole('user')}
             >
               User
             </Button>
             <Button
-              variant={role === 'admin' ? 'default' : 'outline'}
-              onClick={() => setRole('admin')}
+              variant="outline"
+              onClick={() => router.push('/admin')}
             >
               Admin
             </Button>
@@ -143,45 +146,51 @@ export default function SignInPage() {
               </form>
             </TabsContent>
 
-            {/* SIGNUP FORM */}
+            {/* SIGNUP FORM - Only show for user role */}
             <TabsContent value="signup">
-              <form className="space-y-4" onSubmit={(e) => handleSubmit(e, 'signup')}>
-                <Input 
-                  name="name"
-                  type="text" 
-                  placeholder="Full Name" 
-                  required 
-                  className="bg-white/80"
-                />
-                <Input 
-                  name="email"
-                  type="email" 
-                  placeholder={`${role === 'user' ? 'User' : 'Admin'} Email`} 
-                  required 
-                  className="bg-white/80"
-                />
-                <Input 
-                  name="password"
-                  type="password" 
-                  placeholder="Password" 
-                  required 
-                  className="bg-white/80"
-                />
-                <Input 
-                  name="confirmPassword"
-                  type="password" 
-                  placeholder="Confirm Password" 
-                  required 
-                  className="bg-white/80"
-                />
-                <Button 
-                  type="submit" 
-                  className="w-full" 
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Loading...' : 'Sign Up'}
-                </Button>
-              </form>
+              {role === 'user' ? (
+                <form className="space-y-4" onSubmit={(e) => handleSubmit(e, 'signup')}>
+                  <Input 
+                    name="name"
+                    type="text" 
+                    placeholder="Full Name" 
+                    required 
+                    className="bg-white/80"
+                  />
+                  <Input 
+                    name="email"
+                    type="email" 
+                    placeholder={`${role === 'user' ? 'User' : 'Admin'} Email`} 
+                    required 
+                    className="bg-white/80"
+                  />
+                  <Input 
+                    name="password"
+                    type="password" 
+                    placeholder="Password" 
+                    required 
+                    className="bg-white/80"
+                  />
+                  <Input 
+                    name="confirmPassword"
+                    type="password" 
+                    placeholder="Confirm Password" 
+                    required 
+                    className="bg-white/80"
+                  />
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Loading...' : 'Sign Up'}
+                  </Button>
+                </form>
+              ) : (
+                <div className="text-center text-gray-600 py-4">
+                  Admin signup is not available. Please contact system administrator.
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>

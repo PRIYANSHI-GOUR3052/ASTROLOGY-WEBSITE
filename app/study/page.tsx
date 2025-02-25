@@ -11,28 +11,28 @@ const studyTopics = [
     titleHi: "वैदिक ज्योतिष के मूल सिद्धांत",
     description: "Learn the basics of Vedic astrology, including planets, houses, and zodiac signs.",
     icon: <Sun className="w-12 h-12 text-gold" />,
-    href: "/study/vedic-astrology-fundamentals"
+    href: "/study/vedic-astrology"
   },
   {
     title: "Numerology Essentials",
     titleHi: "अंक ज्योतिष के आवश्यक तत्व",
     description: "Discover the mystical significance of numbers in your life and their impact on your destiny.",
     icon: <Star className="w-12 h-12 text-gold" />,
-    href: "/study/numerology-essentials"
+    href: "/study/numerology"
   },
   {
     title: "Palmistry Techniques",
     titleHi: "हस्तरेखा विज्ञान की तकनीकें",
     description: "Explore the art of reading palms and understanding the lines that shape our lives.",
     icon: <Moon className="w-12 h-12 text-gold" />,
-    href: "/study/palmistry-techniques"
+    href: "/study/palmistry"
   },
   {
     title: "Tarot Card Reading",
     titleHi: "टैरो कार्ड रीडिंग",
     description: "Learn the meanings behind tarot cards and how to conduct insightful readings.",
     icon: <BookOpen className="w-12 h-12 text-gold" />,
-    href: "/study/tarot-card-reading"
+    href: "/study/tarot"
   }
 ]
 

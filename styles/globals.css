@@ -47,3 +47,8 @@ export default function RootLayout({
     </html>
   )
 }
+
+:root {
+  --primary-color: #6b46c1;
+  --secondary-color: #805ad5;
+}
