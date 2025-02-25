@@ -82,6 +82,16 @@ module.exports = {
         "spin-slow": "spin-slow 20s linear infinite",
         "twinkle": "twinkle 3s ease-in-out infinite",
       },
+      screens: {
+        'xs': '475px',
+      },
+      transitionDelay: {
+        '75': '75ms',
+        '150': '150ms',
+        '300': '300ms',
+        '500': '500ms',
+        '700': '700ms',
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
