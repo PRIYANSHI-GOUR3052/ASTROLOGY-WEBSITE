@@ -6,12 +6,6 @@ import ServiceButton from './ServiceButton'
 
 const services = [
   {
-    title: "हाथ ज्योतिष (Palmistry)",
-    description: "व्यक्तित्व, शक्तियों और भविष्य (भाग्य) को समझने के लिए व्यक्तिगत हाथ की रेखा पढ़ना।",
-    slug: "palmistry",
-    icon: <Star className="w-12 h-12" />,
-  },
-  {
     title: "चेहरे की पहेली (Face Reading)",
     description: "आपके स्वभाव और तकदीर के बारे में जानकारी प्राप्त करने के लिए चेहरे की लकीरों का विश्लेषण।",
     slug: "face-reading",
@@ -22,12 +16,6 @@ const services = [
     description: "करियर, प्रेम और स्वास्थ्य की भविष्यवाणियों के लिए अनुकूलित जन्म कुंडली पठन।",
     slug: "horoscope",
     icon: <Sun className="w-12 h-12" />,
-  },
-  {
-    title: "अंक ज्योतिष (Numerology)",
-    description: "अपने जीवन को मार्गदर्शन देने के लिए जीवन पथ (जीवन रास्ता), अभिव्यक्ति और आत्मा की इच्छा संख्याओं को उजागर करें।",
-    slug: "numerology",
-    icon: <Hash className="w-12 h-12" />,
   },
   {
     title: "वास्तु शास्त्र",
@@ -54,7 +42,7 @@ export function ServicesOverview() {
         <h3 className="text-2xl md:text-3xl font-serif text-center mb-12 text-gold">
           Our Spiritual Services
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
           {services.map((service, index) => (
             <Card key={index} className="bg-midnight-blue-light/80 hover:bg-midnight-blue transition-colors transform hover:scale-105 duration-300 border border-gold/30 hover:border-gold">
               <CardContent className="p-6">
