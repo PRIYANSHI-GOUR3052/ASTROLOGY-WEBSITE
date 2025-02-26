@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 
 const credentials = [
   {
@@ -9,14 +10,14 @@ const credentials = [
     titleHi: "अंतर्राष्ट्रीय वैदिक ज्योतिष महासंघ, यूएसए के ब्रांड एंबेसडर",
     description: "Dr. Narendra Kumar Sharma's acknowledgement by the International Vedic Astrology Federation, USA, as their brand ambassador is a testament to his dedication and expertise in the field.",
     descriptionHi: "डॉ. नरेंद्र कुमार शर्मा को अंतर्राष्ट्रीय वैदिक ज्योतिष महासंघ, यूएसए द्वारा उनके ब्रांड एंबेसडर के रूप में मान्यता उनके समर्पण और विशेषज्ञता का प्रमाण है।",
-    image: "/images/ambassadoor.webp"
+    image: "/images/ASTRO.webp"
   },
   {
     title: "Grand Ph.D. in Astrology",
     titleHi: "ज्योतिष में ग्रैंड पीएचडी",
     description: "Dr. Narendra Kumar Sharma's remarkable achievement of receiving the Grand Ph.D. in Astrology stands as a testament to his exceptional contributions to the field.",
     descriptionHi: "डॉ. नरेंद्र कुमार शर्मा की ज्योतिष में ग्रैंड पीएचडी प्राप्त करने की उल्लेखनीय उपलब्धि इस क्षेत्र में उनके असाधारण योगदान का प्रमाण है।",
-    image: "/images/phd.webp"
+    image: "/images/PHD.webp"
   }
 ]
 
@@ -24,7 +25,7 @@ export function AstrologerProfile() {
   return (
     <section className="py-16 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-midnight-blue/50 to-cosmic-purple/50"></div>
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 mt-20">
         <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-4 text-gold">
           डॉ. नरेंद्र कुमार शर्मा क्यों?
         </h2>
@@ -72,9 +73,11 @@ export function AstrologerProfile() {
           <p className="text-lg text-gold font-semibold">
             25+ years of experience in teaching astrology and practicing
           </p>
-          <Button className="bg-gold text-midnight-blue hover:bg-gold-light mt-8 text-lg px-8 py-6">
-            अपॉइंटमेंट बुक करें (Book Appointment)
-          </Button>
+          <Link href="/contact">
+            <Button asChild className="bg-gold text-midnight-blue hover:bg-gold-light mt-8 text-lg px-8 py-6">
+              <span>अपॉइंटमेंट बुक करें (Book Appointment)</span>
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

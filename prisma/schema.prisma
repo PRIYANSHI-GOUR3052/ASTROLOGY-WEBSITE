@@ -29,3 +29,12 @@ enum Role {
   USER
   ADMIN
 }
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  timestamp DateTime
+  createdAt DateTime @default(now())
+}
