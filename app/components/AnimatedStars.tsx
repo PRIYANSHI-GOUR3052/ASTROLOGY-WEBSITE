@@ -28,24 +28,25 @@ export function AnimatedStars() {
     }
 
     function animate() {
-      if (!ctx) return;
+      const canvas = canvasRef.current;
+      if (!canvas || !ctx) return;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       stars.forEach(star => {
-        ctx.beginPath()
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
-        ctx.fill()
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.fill();
 
-        star.x += star.vx
-        star.y += star.vy
+        star.x += star.vx;
+        star.y += star.vy;
 
-        if (star.x < 0 || star.x > canvas.width) star.vx = -star.vx
-        if (star.y < 0 || star.y > canvas.height) star.vy = -star.vy
-      })
+        if (star.x < 0 || star.x > canvas.width) star.vx = -star.vx;
+        if (star.y < 0 || star.y > canvas.height) star.vy = -star.vy;
+      });
 
-      requestAnimationFrame(animate)
+      requestAnimationFrame(animate);
     }
 
     animate()

@@ -1,16 +1,12 @@
 import './globals.css'
 import { Cormorant_Garamond, Open_Sans } from 'next/font/google'
-import { Header } from './components/Header'
-import { Footer } from './components/Footer'
-import { LiveChat } from './components/LiveChat'
-import { PageTransition } from './components/PageTransition'
-import { MysticBackground } from './components/MysticBackground'
+import ClientLayout from './ClientLayout'
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin'],
   variable: '--font-serif',
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'], // Include the available weights
+  weight: ['300', '400', '500', '600', '700'],
 })
 
 const openSans = Open_Sans({
@@ -32,17 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorantGaramond.variable} ${openSans.variable}`}>
       <body className="bg-nebula-indigo text-starlight-silver font-sans relative">
-        <MysticBackground />
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-grow">
-            <PageTransition>
-              {children}
-            </PageTransition>
-          </main>
-          <Footer />
-        </div>
-        <LiveChat />
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   )
