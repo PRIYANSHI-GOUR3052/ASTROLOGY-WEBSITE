@@ -2,7 +2,7 @@ import './globals.css'
 import { Cormorant_Garamond, Open_Sans } from 'next/font/google'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
-import { LiveChat } from './components/LiveChat'
+import Chatbot from './components/Chatbot'
 import { PageTransition } from './components/PageTransition'
 import { MysticBackground } from './components/MysticBackground'
 
@@ -42,7 +42,7 @@ export default function RootLayout({
           </main>
           <Footer />
         </div>
-        <LiveChat />
+        <Chatbot />
       </body>
     </html>
   )
