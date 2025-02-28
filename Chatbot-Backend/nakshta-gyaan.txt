@@ -1,0 +1,88 @@
+1. Website Overview
+Name: Nakshatra Gyaan
+Tagline: "Unlock the Secrets of the Cosmos"
+Purpose: Nakshatra Gyaan is a premier Hindu astrology platform offering daily horoscopes and personalized solutions to life’s challenges, including career, love and relationships, health, business, marriage, and childbirth.
+Mission: To empower individuals with celestial wisdom rooted in Vedic traditions, guided by expert astrologer Dr. Narendra Kumar Sharma.
+Language Support: English and Hindi
+Current Date Reference: February 20, 2025
+2. Daily Horoscope
+Description: Nakshatra Gyaan provides free daily horoscope updates based on Vedic astrology principles, focusing on the 27 Nakshatras (lunar mansions) and 12 zodiac signs (Rashi).
+Categories Covered:
+Career: Insights into job opportunities, promotions, and workplace challenges.
+Love and Relationships: Predictions about romance, compatibility, and resolving conflicts.
+Health: Guidance on physical and mental well-being.
+Business: Advice for entrepreneurs and financial success.
+Marriage: Forecasts about marital harmony and finding a life partner.
+Child: Predictions related to childbirth and parenting.
+Format: Daily updates available on the website, with an option for personalized horoscopes via consultation.
+3. Services Offered
+Astrology: Vedic astrology readings based on birth charts (Kundli), planetary positions, and Nakshatras.
+Numerology: Insights derived from birth dates and names to predict life paths.
+Palmistry: Hand-reading sessions to uncover destiny and personality traits.
+Tantra: Spiritual remedies and rituals to overcome obstacles.
+Face Reading: Analysis of facial features for character and fate predictions.
+Vastu Shastra: Home and workplace design consultations for harmony and prosperity.
+Astrocartography: Mapping of planetary influences on geographic locations to guide travel or relocation.
+Delivery Mode: Online consultations, in-person appointments (where available), and detailed reports.
+Booking: Users can book appointments via the website with Dr. Narendra Kumar Sharma or his team.
+4. Expert Profile: Dr. Narendra Kumar Sharma
+Name: Dr. Narendra Kumar Sharma
+Designation: Chief Astrologer and Founder of Nakshatra Gyaan
+Credentials:
+Brand Ambassador: International Vedic Astrology Federation, USA
+Description (English): Dr. Narendra Kumar Sharma's acknowledgement by the International Vedic Astrology Federation, USA, as their brand ambassador is a testament to his dedication and expertise in the field.
+Description (Hindi): डॉ. नरेंद्र कुमार शर्मा को अंतर्राष्ट्रीय वैदिक ज्योतिष महासंघ, यूएसए द्वारा उनके ब्रांड एंबेसडर के रूप में मान्यता उनके समर्पण और विशेषज्ञता का प्रमाण है।
+Grand Ph.D. in Astrology:
+Description (English): Dr. Narendra Kumar Sharma's remarkable achievement of receiving the Grand Ph.D. in Astrology stands as a testament to his exceptional contributions to the field.
+Description (Hindi): डॉ. नरेंद्र कुमार शर्मा की ज्योतिष में ग्रैंड पीएचडी प्राप्त करने की उल्लेखनीय उपलब्धि इस क्षेत्र में उनके असाधारण योगदान का प्रमाण है।
+Experience: Over 25 years of teaching and practicing Vedic astrology.
+Expertise: Specializes in Nakshatra-based predictions, remedial measures, and holistic life guidance.
+Why Choose Dr. Sharma?:
+Globally recognized authority in Vedic astrology.
+Combines traditional wisdom with modern insights.
+Compassionate and client-focused approach.
+5. Featured Products
+Healing Crystal Set (उपचार पत्थर सेट):
+Description (English): A curated set of healing stones to balance your energy and promote well-being.
+Description (Hindi): अपनी ऊर्जा को संतुलित करने के लिए उपचार पत्थरों का एक चयनित सेट।
+Price: ₹2,499
+Action: Buy Now (खरीदें)
+Prosperity Yantra (समृद्धि यंत्र):
+Description (English): Attract abundance and wealth with this powerful yantra.
+Description (Hindi): इस शक्तिशाली यंत्र के साथ प्रचुरता और धन को आकर्षित करें।
+Price: ₹1,999
+Action: Buy Now (खरीदें)
+Meditation Cushion (ध्यान गद्दी):
+Description (English): Enhance your meditation practice with our comfortable cushion.
+Description (Hindi): हमारे आरामदायक कुशन के साथ अपने ध्यान अभ्यास को बढ़ाएं।
+Price: ₹1,499
+Action: Buy Now (खरीदें)
+Astrology Journal (ज्योतिष डायरी):
+Description (English): Track your celestial journey with our beautifully designed diary.
+Description (Hindi): हमारी सुंदर डिज़ाइन की गई डायरी के साथ अपनी आकाशीय यात्रा को ट्रैक करें।
+Price: ₹999
+Action: Buy Now (खरीदें)
+Availability: Products are available for purchase directly on the Nakshatra Gyaan website with secure payment options and worldwide shipping.
+6. Appointment Booking
+Process:
+Visit the "Book Appointment" section on the website.
+Select a service (e.g., astrology, numerology, etc.).
+Choose a date and time slot.
+Provide birth details (date, time, place) for accurate readings.
+Pay consultation fees online.
+Consultation Modes: Video call, phone call, or in-person (location-based).
+Fees: Vary by service; starting at ₹999 for basic consultations.
+Lead Time: Appointments available within 24-48 hours, subject to availability.
+7. Sample User Queries and Responses (for RAG Training)
+Query: "What is Nakshatra Gyaan about?"
+Response: Nakshatra Gyaan is a Hindu astrology website offering daily horoscopes and solutions for career, love, health, business, marriage, and childbirth. Led by Dr. Narendra Kumar Sharma, it provides services like astrology, numerology, palmistry, tantra, face reading, Vastu Shastra, and astrocartography.
+Query: "Who is Dr. Narendra Kumar Sharma?"
+Response: Dr. Narendra Kumar Sharma is the founder of Nakshatra Gyaan, a renowned astrologer with over 25 years of experience. He holds a Grand Ph.D. in Astrology and serves as the Brand Ambassador for the International Vedic Astrology Federation, USA, reflecting his expertise and dedication.
+Query: "What products does Nakshatra Gyaan sell?"
+Response: Nakshatra Gyaan offers a Healing Crystal Set (₹2,499), Prosperity Yantra (₹1,999), Meditation Cushion (₹1,499), and Astrology Journal (₹999), all designed to enhance your spiritual and cosmic journey.
+Query: "How can I book an appointment?"
+Response: To book an appointment, visit the Nakshatra Gyaan website, select your desired service, choose a date and time, provide your birth details, and complete the payment. Consultations start at ₹999 and can be conducted via video, phone, or in-person.
+8. Additional Features
+Blog Section: Articles on Vedic astrology, Nakshatras, planetary transits, and remedies.
+Customer Support: Available via email (support@nakshatragyaan.com) and phone (+91-XXX-XXX-XXXX).
+Social Media: Active on platforms like Instagram, Twitter (X), and Facebook for daily tips and updates.
