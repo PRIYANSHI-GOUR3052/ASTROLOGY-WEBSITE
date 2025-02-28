@@ -2,7 +2,7 @@
 
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { LiveChat } from './components/LiveChat';
+
 import { PageTransition } from './components/PageTransition';
 import { MysticBackground } from './components/MysticBackground';
 import { AuthProvider } from './contexts/AuthContext';
@@ -26,7 +26,7 @@ export default function ClientLayout({
           <Footer />
         </div>
       </AuthProvider>
-      <LiveChat />
+      
     </>
   );
 } 
