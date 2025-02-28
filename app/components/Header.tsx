@@ -110,7 +110,7 @@ export function Header() {
               isLoggedIn ? (
                 <button
                   onClick={handleLogout}
-                  className="flex items-center py-2 px-4 rounded-md bg-black text-white hover:bg-gray-900 transition-colors w-full"
+                  className="flex items-center py-2 px-4 rounded-md text-black hover:text-gray-700 transition-colors w-full"
                 >
                   <LogOut className="w-5 h-5 mr-2" />
                   Sign Out
@@ -174,7 +174,7 @@ export function Header() {
                     handleLogout()
                     setIsMenuOpen(false)
                   }}
-                  className="flex items-center py-2 px-4 rounded-md bg-black text-nebula-indigo hover:bg-gray-900 transition-colors w-full"
+                  className="flex items-center py-2 px-4 rounded-md text-black hover:text-gray-700 transition-colors w-full"
                 >
                   <LogOut className="w-5 h-5 mr-3" />
                   Sign Out
