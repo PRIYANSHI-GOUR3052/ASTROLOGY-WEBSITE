@@ -1,0 +1,30 @@
+/* Convert the existing CSS to CSS modules */
+.adminContainer {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: var(--dark-color);
+  color: white;
+  padding: 20px 0;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* Add all the other CSS styles, converting them to CSS module format */
+/* Remember to change class names to camelCase for CSS modules */
+
+.dashboardContainer {
+  --primary-color: #6b46c1;
+  --secondary-color: #805ad5;
+  --dark-color: #1a202c;
+  --light-color: #f8f9fa;
+  --success-color: #48bb78;
+  --warning-color: #f6ad55;
+  --danger-color: #f56565;
+}
+
+/* Add the rest of your styles... */ 

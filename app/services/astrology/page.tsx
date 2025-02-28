@@ -1,20 +1,116 @@
-import { AnimatedStars } from '../../components/AnimatedStars'
-import { MysticBackground } from '../../components/MysticBackground'
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { useState } from "react"
 
 export default function AstrologyPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    dateOfBirth: "",
+    timeOfBirth: "",
+    placeOfBirth: "",
+    message: ""
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log(formData);
+  };
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-midnight-blue via-cosmic-purple to-celestial-blue">
-      <AnimatedStars />
-      <MysticBackground />
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        <h1 className="text-5xl md:text-7xl font-serif font-bold mb-12 text-center text-gold animate-pulse">
-          ज्योतिष<br />
-          <span className="text-3xl md:text-5xl">Astrology</span>
-        </h1>
-        <p className="text-lavender text-lg mb-8 text-center max-w-2xl mx-auto">
-          Discover the cosmic influences on your life through our expert astrology services. Our skilled astrologers will analyze your birth chart to provide insights into your personality, relationships, career, and life path.
-        </p>
-        {/* Add more content about astrology services here */}
+    <div className="container mx-auto px-4 py-16">
+      <h1 className="text-4xl md:text-5xl font-serif font-bold text-center mb-4 text-gold">
+        ज्योतिष परामर्श (Astrology Consultation)
+      </h1>
+      <div className="max-w-3xl mx-auto mt-12">
+        <Card className="bg-midnight-blue-light/80 border-gold">
+          <CardContent className="p-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-gold block mb-2">Name</label>
+                  <Input 
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    className="bg-midnight-blue text-lavender border-gold"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-gold block mb-2">Email</label>
+                  <Input 
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="bg-midnight-blue text-lavender border-gold"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-gold block mb-2">Phone Number</label>
+                  <Input 
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    className="bg-midnight-blue text-lavender border-gold"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-gold block mb-2">Date of Birth</label>
+                  <Input 
+                    type="date"
+                    value={formData.dateOfBirth}
+                    onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
+                    className="bg-midnight-blue text-lavender border-gold"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-gold block mb-2">Time of Birth</label>
+                  <Input 
+                    type="time"
+                    value={formData.timeOfBirth}
+                    onChange={(e) => setFormData({...formData, timeOfBirth: e.target.value})}
+                    className="bg-midnight-blue text-lavender border-gold"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-gold block mb-2">Place of Birth</label>
+                  <Input 
+                    type="text"
+                    value={formData.placeOfBirth}
+                    onChange={(e) => setFormData({...formData, placeOfBirth: e.target.value})}
+                    className="bg-midnight-blue text-lavender border-gold"
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-gold block mb-2">Your Message or Specific Concerns</label>
+                <Textarea 
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  className="bg-midnight-blue text-lavender border-gold h-32"
+                />
+              </div>
+              <Button 
+                type="submit"
+                className="w-full bg-gold text-midnight-blue hover:bg-gold/90"
+              >
+                Book Consultation
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

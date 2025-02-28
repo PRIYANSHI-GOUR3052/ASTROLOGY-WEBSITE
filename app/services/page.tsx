@@ -11,7 +11,7 @@ export default function ServicesPage() {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
       <AnimatedStars />
       <MysticBackground />
-      <div className="container mx-auto px-4 py-16 relative z-10">
+      <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
         <h1 className="text-5xl md:text-7xl font-serif font-bold mb-12 text-center text-mystic-brown animate-pulse">
           हमारी आध्यात्मिक सेवाएं<br />
           <span className="text-3xl md:text-5xl">Our Spiritual Services</span>

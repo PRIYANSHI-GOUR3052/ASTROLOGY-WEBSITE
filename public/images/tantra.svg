@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <!-- Define an arrow marker for workflow connections -->
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="black" />
+    </marker>
+  </defs>
+  <!-- White background -->
+  <rect x="0" y="0" width="400" height="400" fill="white" />
+
+  <!-- Outer holistic circle -->
+  <circle cx="200" cy="200" r="180" stroke="black" stroke-width="2" fill="none" />
+
+  <!-- Workflow arrows connecting nodes -->
+  <line x1="200" y1="70" x2="330" y2="200" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="330" y1="200" x2="200" y2="330" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="200" y1="330" x2="70" y2="200" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="70" y1="200" x2="200" y2="70" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Top node: A five-point star representing astrological methodology -->
+  <polygon fill="none" stroke="black" stroke-width="2" points="
+    200,58
+    202.94,65.96
+    211.41,66.29
+    204.76,71.55
+    207.05,79.71
+    200,75
+    192.95,79.71
+    195.25,71.55
+    188.59,66.29
+    197.06,65.96
+  "/>
+
+  <!-- Right node: An equilateral triangle representing dynamic consultation -->
+  <polygon fill="none" stroke="black" stroke-width="2" points="
+    342,200
+    324,210.39
+    324,189.61
+  "/>
+
+  <!-- Bottom node: A square symbolizing structure and grounding -->
+  <rect x="188" y="318" width="24" height="24" fill="none" stroke="black" stroke-width="2" />
+
+  <!-- Left node: A circle with a central dot representing holistic unity -->
+  <circle cx="70" cy="200" r="12" fill="none" stroke="black" stroke-width="2" />
+  <circle cx="70" cy="200" r="4" fill="black" />
+
+  <!-- Central mandala element symbolizing the consultation process -->
+  <circle cx="200" cy="200" r="20" fill="none" stroke="black" stroke-width="2" />
+  <line x1="200" y1="180" x2="200" y2="220" stroke="black" stroke-width="2" />
+  <line x1="180" y1="200" x2="220" y2="200" stroke="black" stroke-width="2" />
+</svg>

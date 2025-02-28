@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Define arrow marker for the connecting lines -->
+  <defs>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#000" />
+    </marker>
+  </defs>
+  
+  <!-- White background -->
+  <rect x="0" y="0" width="200" height="200" fill="#fff" />
+  
+  <!-- Four nodes arranged in a circle -->
+  <circle cx="100" cy="30" r="20" stroke="#000" stroke-width="2" fill="none"/>
+  <circle cx="170" cy="100" r="20" stroke="#000" stroke-width="2" fill="none"/>
+  <circle cx="100" cy="170" r="20" stroke="#000" stroke-width="2" fill="none"/>
+  <circle cx="30" cy="100" r="20" stroke="#000" stroke-width="2" fill="none"/>
+  
+  <!-- Text labels for each node -->
+  <text x="100" y="30" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="#000">Astrology</text>
+  <text x="170" y="100" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="#000">Palmistry</text>
+  <text x="100" y="170" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="#000">Consult</text>
+  <text x="30" y="100" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="#000">Workflow</text>
+  
+  <!-- Arrows connecting the nodes in a cyclic flow -->
+  <line x1="100" y1="50" x2="150" y2="100" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="150" y1="100" x2="100" y2="150" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="100" y1="150" x2="50" y2="100" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="50" y1="100" x2="100" y2="50" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

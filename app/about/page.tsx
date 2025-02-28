@@ -8,7 +8,7 @@ export default function AboutPage() {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-midnight-blue via-cosmic-purple to-celestial-blue">
       <AnimatedStars />
       <MysticBackground />
-      <div className="container mx-auto px-4 py-16 relative z-10">
+      <div className="container mx-auto px-4 pt-32 py-16 relative z-10">
         <h1 className="text-5xl md:text-7xl font-serif font-bold mb-12 text-center text-gold animate-pulse">
           हमारे बारे में<br />
           <span className="text-3xl md:text-5xl">About Us</span>

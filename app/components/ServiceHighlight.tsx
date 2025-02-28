@@ -5,22 +5,26 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 
 const services = [
   {
     title: "Personal Astrology Reading",
     description: "Gain deep insights into your personality, life path, and potential future outcomes with a personalized astrology reading. Our expert astrologers will analyze your birth chart and provide guidance on various aspects of your life.",
-    image: "/placeholder.svg?height=300&width=400"
+    image: "/placeholder.svg?height=300&width=400",
+    url: "/services/personal-reading"
   },
   {
     title: "Couple Compatibility Analysis",
     description: "Understand the dynamics of your relationship through astrological compatibility analysis. We'll examine the synastry between you and your partner, highlighting strengths and potential challenges in your relationship.",
-    image: "/placeholder.svg?height=300&width=400"
+    image: "/placeholder.svg?height=300&width=400",
+    url: "/services/couple-compatibility"
   },
   {
     title: "Career Guidance Through Astrology",
     description: "Discover your professional strengths and ideal career paths with our astrological career guidance. We'll analyze your birth chart to identify your natural talents and the best times for career moves.",
-    image: "/placeholder.svg?height=300&width=400"
+    image: "/placeholder.svg?height=300&width=400",
+    url: "/services/career-guidance"
   }
 ]
 
@@ -57,8 +61,8 @@ export function ServiceHighlight() {
                 <div className="md:w-1/2">
                   <h3 className="text-2xl font-serif font-semibold mb-4 text-mystic-brown">{services[currentIndex].title}</h3>
                   <p className="text-mystic-brown/80 mb-6">{services[currentIndex].description}</p>
-                  <Button className="bg-sunburst-yellow text-mystic-brown hover:bg-sunburst-yellow-light">
-                    Learn More
+                  <Button asChild className="bg-sunburst-yellow text-mystic-brown hover:bg-sunburst-yellow-light">
+                    <Link href={services[currentIndex].url}>Learn More</Link>
                   </Button>
                 </div>
               </CardContent>

@@ -1,0 +1,19 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#000">
+    <rect width="200" height="200" fill="white"/>
+    <circle cx="100" cy="100" r="50" stroke-width="2"/>
+    <text x="100" y="60" font-family="Arial" font-size="20" text-anchor="middle">1</text>
+    <text x="140" y="100" font-family="Arial" font-size="20" text-anchor="middle">2</text>
+    <text x="100" y="140" font-family="Arial" font-size="20" text-anchor="middle">3</text>
+    <text x="60" y="100" font-family="Arial" font-size="20" text-anchor="middle">4</text>
+    <line x1="100" y1="60" x2="140" y2="100" stroke-width="2"/>
+    <line x1="140" y1="100" x2="100" y2="140" stroke-width="2"/>
+    <line x1="100" y1="140" x2="60" y2="100" stroke-width="2"/>
+    <line x1="60" y1="100" x2="100" y2="60" stroke-width="2"/>
+    <circle cx="100" cy="100" r="80" stroke-width="2" stroke-dasharray="5,5"/>
+    <polygon points="100,20 95,30 105,30"/>
+    <polygon points="180,100 170,95 170,105"/>
+    <polygon points="100,180 95,170 105,170"/>
+    <polygon points="20,100 30,95 30,105"/>
+  </g>
+</svg>
