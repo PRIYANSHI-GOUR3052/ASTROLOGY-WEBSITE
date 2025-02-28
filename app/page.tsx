@@ -15,6 +15,7 @@ import { AstrologyQuiz } from './components/AstrologyQuiz'
 import { Statistics } from './components/Statistics'
 import { ScrollAnimation } from './components/ScrollAnimation'
 
+
 export default function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-cosmic-purple-dark via-celestial-blue-dark to-cosmic-purple-dark">
@@ -72,6 +73,7 @@ export default function HomePage() {
         <ScrollAnimation>
           <ContactForm />
         </ScrollAnimation>
+       
       </div>
     </div>
   )
