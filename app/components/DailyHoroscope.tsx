@@ -44,7 +44,7 @@ export function DailyHoroscope() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={getHoroscope} className="w-full bg-gold text-midnight-blue hover:bg-gold-light mb-4" disabled={!selectedSign}>
+            <Button onClick={getHoroscope} className="w-full bg-black text-white hover:bg-gray-900 mb-4" disabled={!selectedSign}>
               राशिफल देखें (View Horoscope)
             </Button>
             {horoscope && (

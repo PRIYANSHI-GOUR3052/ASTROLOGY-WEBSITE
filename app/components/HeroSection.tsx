@@ -9,7 +9,7 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-nebula-indigo-dark via-cosmic-purple to-celestial-blue opacity-70"></div>
       <div className="absolute inset-0">
         <Image
-          src="/placeholder.svg?height=1080&width=1920"
+          src="/images/placeholder.svg"
           alt="Cosmic background"
           layout="fill"
           objectFit="cover"
@@ -42,9 +42,9 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
-          <Image src="/placeholder.svg?height=100&width=100" alt="Mystical Symbol 1" width={100} height={100} className="animate-spin-slow" />
-          <Image src="/placeholder.svg?height=100&width=100" alt="Mystical Symbol 2" width={100} height={100} className="animate-float" />
-          <Image src="/placeholder.svg?height=100&width=100" alt="Mystical Symbol 3" width={100} height={100} className="animate-glow" />
+          <Image src="/images/astrology.svg" alt="Mystical Symbol 1" width={100} height={100} className="animate-spin-slow" />
+          <Image src="/images/astrology.svg" alt="Mystical Symbol 2" width={100} height={100} className="animate-float" />
+          <Image src="/images/astrology.svg" alt="Mystical Symbol 3" width={100} height={100} className="animate-glow" />
         </motion.div>
       </motion.div>
     </section>
