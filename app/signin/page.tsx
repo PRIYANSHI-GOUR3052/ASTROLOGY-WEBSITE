@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,7 +10,6 @@ import { MysticBackground } from '../components/MysticBackground'
 
 export default function SignInPage() {
   const router = useRouter()
-  const [role, setRole] = useState<'user'>('user')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -34,7 +32,6 @@ export default function SignInPage() {
         email: formData.get('email'),
         password,
         name: action === 'signup' ? formData.get('name') : undefined,
-        role,
         action,
       }
 
@@ -59,10 +56,10 @@ export default function SignInPage() {
         localStorage.setItem('token', result.token)
         localStorage.setItem('user', JSON.stringify(result.user))
       
-        // 🔥 Dispatch a custom event to notify the header
+        // Dispatch a custom event to notify the header
         window.dispatchEvent(new Event('authChange'))
       
-        // Redirect based on user role
+        // Redirect to home page
         router.push('/')
       } else {
         throw new Error('No token received')
@@ -87,7 +84,7 @@ export default function SignInPage() {
       {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col justify-center items-center px-4">
         <div className="bg-white/95 backdrop-blur-sm shadow-xl rounded-lg p-8 w-full max-w-md">
-          <h2 className="text-2xl font-bold text-center mb-6">Sign In / Sign Up</h2>
+          <h2 className="text-2xl font-bold text-center mb-6">User Authentication</h2>
 
           {/* Display error message if any */}
           {error && (
@@ -95,6 +92,7 @@ export default function SignInPage() {
               {error}
             </div>
           )}
+
 
           {/* User and Admin Navigation */}
           <div className="flex justify-center mb-6">
@@ -125,7 +123,7 @@ export default function SignInPage() {
                 <Input 
                   name="email"
                   type="email" 
-                  placeholder={`${role === 'user' ? 'User' : 'Admin'} Email`} 
+                  placeholder="Email" 
                   required 
                   className="bg-white/80"
                 />
@@ -146,51 +144,45 @@ export default function SignInPage() {
               </form>
             </TabsContent>
 
-            {/* SIGNUP FORM - Only show for user role */}
+            {/* SIGNUP FORM */}
             <TabsContent value="signup">
-              {role === 'user' ? (
-                <form className="space-y-4" onSubmit={(e) => handleSubmit(e, 'signup')}>
-                  <Input 
-                    name="name"
-                    type="text" 
-                    placeholder="Full Name" 
-                    required 
-                    className="bg-white/80"
-                  />
-                  <Input 
-                    name="email"
-                    type="email" 
-                    placeholder={`${role === 'user' ? 'User' : 'Admin'} Email`} 
-                    required 
-                    className="bg-white/80"
-                  />
-                  <Input 
-                    name="password"
-                    type="password" 
-                    placeholder="Password" 
-                    required 
-                    className="bg-white/80"
-                  />
-                  <Input 
-                    name="confirmPassword"
-                    type="password" 
-                    placeholder="Confirm Password" 
-                    required 
-                    className="bg-white/80"
-                  />
-                  <Button 
-                    type="submit" 
-                    className="w-full" 
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Loading...' : 'Sign Up'}
-                  </Button>
-                </form>
-              ) : (
-                <div className="text-center text-gray-600 py-4">
-                  Admin signup is not available. Please contact system administrator.
-                </div>
-              )}
+              <form className="space-y-4" onSubmit={(e) => handleSubmit(e, 'signup')}>
+                <Input 
+                  name="name"
+                  type="text" 
+                  placeholder="Full Name" 
+                  required 
+                  className="bg-white/80"
+                />
+                <Input 
+                  name="email"
+                  type="email" 
+                  placeholder="Email" 
+                  required 
+                  className="bg-white/80"
+                />
+                <Input 
+                  name="password"
+                  type="password" 
+                  placeholder="Password" 
+                  required 
+                  className="bg-white/80"
+                />
+                <Input 
+                  name="confirmPassword"
+                  type="password" 
+                  placeholder="Confirm Password" 
+                  required 
+                  className="bg-white/80"
+                />
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Loading...' : 'Sign Up'}
+                </Button>
+              </form>
             </TabsContent>
           </Tabs>
         </div>

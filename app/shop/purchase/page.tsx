@@ -1,30 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-const BuyNowButton = ({ price, productName }: { price: number; productName: string }) => {
-  const [loading, setLoading] = useState(false);
+interface Product {
+  name: string;
+  description: string;
+  price: number;
+}
 
-  const handleCheckout = async () => {
-    setLoading(true);
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ price, productName }),
-    });
+function PurchaseContent() {
+  const searchParams = useSearchParams();
+  const productName = searchParams?.get('productName');
+  const price = Number(searchParams?.get('price')) || 0;
 
-    const data = await res.json();
-    if (data.url) {
-      window.location.href = data.url;
-    }
-    setLoading(false);
-  };
+  if (!productName || !price) {
+    return <div className="text-center p-8">Invalid product information</div>;
+  }
 
   return (
-    <button onClick={handleCheckout} disabled={loading} className="bg-purple-600 text-white px-4 py-2 rounded">
-      {loading ? "Processing..." : "Buy Now"}
-    </button>
+    <div className="max-w-4xl mx-auto p-8">
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <h1 className="text-3xl font-bold mb-4">{productName}</h1>
+        <p className="text-xl font-semibold mb-6">
+          Price: ₹{price.toLocaleString('en-IN')}
+        </p>
+        <button
+          onClick={() => {
+            // Add purchase logic here
+            console.log('Processing purchase...');
+          }}
+          className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+        >
+          Proceed to Payment
+        </button>
+      </div>
+    </div>
   );
-};
+}
 
-export default BuyNowButton;
+export default function PurchasePage() {
+  return (
+    <Suspense fallback={<div className="text-center p-8">Loading...</div>}>
+      <PurchaseContent />
+    </Suspense>
+  );
+}

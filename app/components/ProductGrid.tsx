@@ -61,7 +61,9 @@ export function ProductGrid() {
               {product.isStone ? (
                 <StoneDetails pricePerCarat={product.pricePerCarat} />
               ) : (
-                <p className="text-xl font-bold mb-4 text-mystic-brown text-center">₹{product.price.toLocaleString('en-IN')}</p>
+                <p className="text-xl font-bold mb-4 text-mystic-brown text-center">
+                  ₹{product.price ? product.price.toLocaleString('en-IN') : 'Price not available'}
+                </p>
               )}
               <div className="text-center">
                 <Button asChild className="bg-sunburst-yellow text-mystic-brown hover:bg-sunburst-yellow-light">
