@@ -21,7 +21,7 @@ export default function HomePage() {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-cosmic-purple-dark via-celestial-blue-dark to-cosmic-purple-dark">
       <AnimatedStars />
       <HeroSection />
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto pt-32 px-4 relative z-10">
         <ScrollAnimation>
           <Statistics />
         </ScrollAnimation>

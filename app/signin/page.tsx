@@ -106,7 +106,7 @@ export default function SignInPage() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => router.push('/admin')}
+              onClick={() => router.push('/admin/dashboard')}
             >
               Admin
             </Button>
