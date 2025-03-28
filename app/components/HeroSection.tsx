@@ -22,7 +22,7 @@ export function HeroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 text-royal-gold">
+        <h1 className="text-5xl pt-32 md:text-7xl font-serif font-bold mb-6 text-royal-gold">
           नक्षत्र ज्ञान
           <span className="block text-3xl md:text-5xl mt-2 text-starlight-silver">Nakshatra Gyaan</span>
         </h1>

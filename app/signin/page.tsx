@@ -93,6 +93,23 @@ export default function SignInPage() {
             </div>
           )}
 
+
+          {/* User and Admin Navigation */}
+          <div className="flex justify-center mb-6">
+            <Button
+              variant="default"
+              className="mr-2"
+            >
+              User
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => router.push('/admin/dashboard')}
+            >
+              Admin
+            </Button>
+          </div>
+
           {/* Tabs for Login and Signup */}
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="w-full grid grid-cols-2 mb-4">
