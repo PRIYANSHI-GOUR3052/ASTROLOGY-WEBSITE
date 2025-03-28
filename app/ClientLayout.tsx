@@ -14,7 +14,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   
   
   const hideLayout = [
-    "/admin"
+    "/admin/dashboard",
+    "/admin/clients",
+    "/admin/courses",
+    "/admin/products",
+    "/admin/messages",
+    "/admin/reviews",
+    "/admin/settings"
   ].includes(pathname ?? '');
   
   return (
