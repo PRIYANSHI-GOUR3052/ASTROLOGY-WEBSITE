@@ -35,8 +35,6 @@ export default function SignInPage() {
         action,
       }
 
-      console.log('Submitting data:', { ...data, password: '***' })
-
       const response = await fetch('/api/auth', {
         method: 'POST',
         headers: {
@@ -51,12 +49,12 @@ export default function SignInPage() {
       }
 
       const result = await response.json()
-      console.log('Response:', result)
       if (result.token) {
+        // Store user information securely
         localStorage.setItem('token', result.token)
         localStorage.setItem('user', JSON.stringify(result.user))
       
-        // Dispatch a custom event to notify the header
+        // Notify any listeners about authentication change
         window.dispatchEvent(new Event('authChange'))
       
         // Redirect to home page
@@ -92,23 +90,6 @@ export default function SignInPage() {
               {error}
             </div>
           )}
-
-
-          {/* User and Admin Navigation */}
-          <div className="flex justify-center mb-6">
-            <Button
-              variant="default"
-              className="mr-2"
-            >
-              User
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => router.push('/admin/dashboard')}
-            >
-              Admin
-            </Button>
-          </div>
 
           {/* Tabs for Login and Signup */}
           <Tabs defaultValue="login" className="w-full">
