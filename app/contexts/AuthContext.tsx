@@ -1,51 +1,81 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+'use client';
+
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface AuthContextType {
-  user: any; // Replace 'any' with your user type
-  logout: () => Promise<void>;
+  user: any | null;
+  loading: boolean;
+  login: (token: string) => void;
+  logout: () => void;
+  isAuthenticated: boolean;
 }
 
-// Define the props type for AuthProvider
-interface AuthProviderProps {
-  children: ReactNode; // This allows children to be passed
-}
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+  login: () => {},
+  logout: () => {},
+  isAuthenticated: false,
+});
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<any>({
-    id: '123',
-    name: 'John Doe',
-    isAdmin: true, // Set to true for testing
-  });
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch user data from your auth service
-    const fetchUser = async () => {
-      // Replace with your actual user fetching logic
-      const fetchedUser = await getUserFromAuthService();
-      setUser(fetchedUser);
-    };
-
-    fetchUser();
+    // Check for stored token on mount
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Validate token and set user
+      validateToken(token);
+    } else {
+      setLoading(false);
+    }
   }, []);
 
-  const logout = async () => {
-    // Your logout logic here
+  const validateToken = async (token: string) => {
+    try {
+      const response = await fetch('/api/auth/validate', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData);
+      } else {
+        localStorage.removeItem('token');
+      }
+    } catch (error) {
+      console.error('Token validation error:', error);
+      localStorage.removeItem('token');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const login = (token: string) => {
+    localStorage.setItem('token', token);
+    validateToken(token);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, logout }}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      login,
+      logout,
+      isAuthenticated: !!user
+    }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}; 
+} 
