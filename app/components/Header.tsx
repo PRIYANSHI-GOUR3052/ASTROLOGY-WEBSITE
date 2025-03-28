@@ -3,55 +3,21 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, Home, BookOpen, ShoppingBag, PenTool, Info, PhoneCall, GraduationCap, LogIn, LogOut } from 'lucide-react'
+import { Menu, X, Home, BookOpen, ShoppingBag, PenTool, Info, PhoneCall, GraduationCap, LogIn, LogOut, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export function Header() {
   const pathname = usePathname()
   const router = useRouter()
+  const { data: session, status } = useSession()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    // Check if user is logged in on page load
-    const checkLoginStatus = () => {
-      const token = localStorage.getItem('token')
-      console.log('Token found:', !!token) // Debug log
-      setIsLoggedIn(!!token)
-      setIsLoading(false)
-    }
-
-    // Run immediately
-    checkLoginStatus()
-
-    // Add event listener for storage changes
-    // Listen for auth changes triggered by login/signup/logout
-    window.addEventListener('authChange', checkLoginStatus)
-
-    // Also listen to storage changes (for multi-tab support)
-    window.addEventListener('storage', checkLoginStatus)
-
-    return () => {
-      window.removeEventListener('authChange', checkLoginStatus)
-      window.removeEventListener('storage', checkLoginStatus)
-    }
-  }, [])
-
-  // Add this useEffect to debug state changes
-  useEffect(() => {
-    console.log('Login state:', isLoggedIn)
-    console.log('Loading state:', isLoading)
-  }, [isLoggedIn, isLoading])
-
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    setIsLoggedIn(false)
-    router.push('/signin')
+  const handleLogout = async () => {
+    await signOut({ redirect: true, callbackUrl: '/signin' })
   }
 
   const navItems = [
@@ -88,7 +54,7 @@ export function Header() {
           </Link>
 
           {/* Navigation - Desktop */}
-          <nav className="hidden lg:flex space-x-1">
+          <nav className="hidden lg:flex space-x-1 items-center">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -105,24 +71,30 @@ export function Header() {
               </Link>
             ))}
 
-            {/* Sign In / Sign Out Button */}
-            {!isLoading && (
-              isLoggedIn ? (
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center py-2 px-4 rounded-md text-black hover:text-gray-700 transition-colors w-full"
-                >
-                  <LogOut className="w-5 h-5 mr-2" />
-                  Sign Out
-                </button>
+            {/* User Profile / Sign In / Sign Out Button */}
+            {status !== 'loading' && (
+              session ? (
+                <div className="flex items-center space-x-2 ml-4">
+                  <div className="flex items-center bg-celestial-blue/20 px-3 py-2 rounded-md">
+                    <User className="w-5 h-5 mr-2" />
+                    <span className="text-starlight-silver">{session.user.name}</span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center py-2 px-4 rounded-md text-black hover:text-gray-700 transition-colors"
+                  >
+                    <LogOut className="w-5 h-5 mr-2" />
+                    Sign Out
+                  </button>
+                </div>
               ) : (
-                <Link
-                  href="/signin"
+                <button
+                  onClick={() => signIn()}
                   className="ml-4 px-4 py-2 font-bold bg-royal-gold text-nebula-indigo hover:bg-goldenrod rounded-md transition-colors flex items-center"
                 >
                   <LogIn className="w-5 h-5 mr-2" />
                   Sign In
-                </Link>
+                </button>
               )
             )}
           </nav>
@@ -166,28 +138,36 @@ export function Header() {
               </Link>
             ))}
 
-            {/* Sign In / Sign Out Button for Mobile */}
-            {!isLoading && (
-              isLoggedIn ? (
+            {/* User Profile / Sign In / Sign Out Button for Mobile */}
+            {status !== 'loading' && (
+              session ? (
+                <div className="space-y-2">
+                  <div className="flex items-center py-2 px-4 bg-celestial-blue/20 rounded-md">
+                    <User className="w-5 h-5 mr-3" />
+                    <span className="text-starlight-silver">{session.user.name}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      handleLogout()
+                      setIsMenuOpen(false)
+                    }}
+                    className="flex items-center py-2 px-4 rounded-md text-black hover:text-gray-700 transition-colors w-full"
+                  >
+                    <LogOut className="w-5 h-5 mr-3" />
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
                 <button
                   onClick={() => {
-                    handleLogout()
+                    signIn()
                     setIsMenuOpen(false)
                   }}
-                  className="flex items-center py-2 px-4 rounded-md text-black hover:text-gray-700 transition-colors w-full"
-                >
-                  <LogOut className="w-5 h-5 mr-3" />
-                  Sign Out
-                </button>
-              ) : (
-                <Link
-                  href="/signin"
                   className="flex items-center py-2 px-4 rounded-md bg-royal-gold text-nebula-indigo hover:bg-goldenrod transition-colors w-full"
-                  onClick={() => setIsMenuOpen(false)}
                 >
                   <LogIn className="w-5 h-5 mr-3" />
                   Sign In
-                </Link>
+                </button>
               )
             )}
           </motion.nav>
@@ -195,4 +175,4 @@ export function Header() {
       </div>
     </motion.header>
   )
-}
+} 
