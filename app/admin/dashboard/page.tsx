@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Plus } from 'lucide-react';
 
 export default function AdminDashboard() {
   // Mock data for visitors and sales
@@ -155,10 +156,44 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Add Product Button */}
-      <div className="fixed bottom-4 right-4 bg-blue-500 text-white rounded-full p-4 shadow-lg">
-        <span>197:55</span>
-        <p className="text-xs">Add related products on the go</p>
+      {/* New Sections: Top Selling Products and Customer with Most Sales */}
+      <div className="grid grid-cols-2 gap-4 mt-4">
+        {/* Top Selling Products */}
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold">Top Selling Products</h2>
+            <span className="text-sm text-gray-500">26 Feb - 28 Mar</span>
+          </div>
+          <div className="flex items-center justify-center h-40 border-2 border-dashed border-gray-200 rounded-lg">
+            <div className="text-center">
+              <div className="flex justify-center mb-2">
+                <div className="bg-blue-100 p-3 rounded-full">
+                  <Plus className="text-blue-500" size={24} />
+                </div>
+              </div>
+              <h3 className="text-sm font-semibold">Add Product</h3>
+              <p className="text-xs text-gray-500">Add related products on the go</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Customer with Most Sales */}
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold">Customer With Most Sales</h2>
+            <span className="text-sm text-gray-500">26 Feb - 28 Mar</span>
+          </div>
+          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div>
+              <h3 className="text-sm font-semibold">Ashish Kumar</h3>
+              <p className="text-xs text-gray-500">ashishkumarbhai.tester454@webklu.in</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-bold text-gray-700">$0.00</p>
+              <p className="text-xs text-gray-500">1 Orders</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
