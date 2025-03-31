@@ -7,15 +7,6 @@ export function HeroSection() {
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-nebula-indigo-dark via-cosmic-purple to-celestial-blue opacity-70"></div>
-      <div className="absolute inset-0">
-        <Image
-          src="/images/placeholder.svg"
-          alt="Cosmic background"
-          layout="fill"
-          objectFit="cover"
-          className="opacity-30"
-        />
-      </div>
       <motion.div 
         className="relative z-10 text-center"
         initial={{ opacity: 0, y: 20 }}
