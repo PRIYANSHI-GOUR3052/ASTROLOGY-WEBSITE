@@ -104,6 +104,12 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       href: '/admin/products',
       active: pathname === '/admin/products'
     },
+    {
+      icon: Package,
+      label: 'Stone',
+      href: '/admin/stone',
+      active: pathname === '/admin/stone'
+    },
     { 
       icon: MessageCircle, 
       label: 'Services', 
