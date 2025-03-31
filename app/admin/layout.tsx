@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { 
   Home, 
@@ -22,7 +22,11 @@ import {
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  
+  // Check if current path is login page
+  const isLoginPage = pathname === '/admin/login';
 
   // Effect to apply dark mode and persist preference
   useEffect(() => {
@@ -51,6 +55,27 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     } else {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
+    }
+  };
+
+  // Logout function
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        // Redirect to login page after successful logout
+        router.push('/admin/login');
+      } else {
+        console.error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
     }
   };
 
@@ -99,6 +124,16 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     }
   ];
 
+  // If login page, only render children without layout
+  if (isLoginPage) {
+    return (
+      <div className="h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        {children}
+      </div>
+    );
+  }
+
+  // Regular admin layout for all other admin pages
   return (
     <div className="flex h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       {/* Sidebar */}
@@ -177,8 +212,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                 <p className="text-xs text-gray-500 dark:text-gray-400">Admin</p>
               </div>
               
-              {/* Logout Button */}
+              {/* Updated Logout Button */}
               <button 
+                onClick={handleLogout}
                 className="bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 p-2 rounded-lg 
                 hover:bg-red-100 dark:hover:bg-red-800 transition-colors flex items-center justify-center"
               >
