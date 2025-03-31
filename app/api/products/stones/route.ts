@@ -1,22 +1,78 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import pool from '@/lib/db';
 
-export async function GET() {
+// GET handler to fetch all stones
+export async function GET(req: NextRequest) {
   try {
-    // In a real application, you would fetch this data from your database
-    const stones = [
-      { name: "रूबी", nameEn: "Ruby", zodiac: "सिंह", zodiacEn: "Leo", benefits: "आत्मविश्वास, नेतृत्व और जीवन शक्ति बढ़ाता है", benefitsEn: "Enhances confidence, leadership, and vitality", pricePerCarat: 15000 },
-      { name: "मोती", nameEn: "Pearl", zodiac: "कर्क", zodiacEn: "Cancer", benefits: "भावनात्मक संतुलन और अंतर्ज्ञान को बढ़ावा देता है", benefitsEn: "Promotes emotional balance and intuition", pricePerCarat: 5000 },
-      { name: "पन्ना", nameEn: "Emerald", zodiac: "वृषभ", zodiacEn: "Taurus", benefits: "विकास, धैर्य और कल्याण को प्रोत्साहित करता है", benefitsEn: "Encourages growth, patience, and wellbeing", pricePerCarat: 18000 },
-      { name: "पुखराज", nameEn: "Yellow Sapphire", zodiac: "धनु", zodiacEn: "Sagittarius", benefits: "ज्ञान, समृद्धि और आशावाद लाता है", benefitsEn: "Brings wisdom, prosperity, and optimism", pricePerCarat: 12000 },
-      { name: "हीरा", nameEn: "Diamond", zodiac: "मेष", zodiacEn: "Aries", benefits: "व्यक्तिगत शक्ति और स्पष्टता को बढ़ाता है", benefitsEn: "Amplifies personal power and clarity", pricePerCarat: 50000 },
-      { name: "नीलम", nameEn: "Blue Sapphire", zodiac: "तुला", zodiacEn: "Libra", benefits: "मानसिक स्पष्टता और आध्यात्मिक अंतर्दृष्टि को बढ़ाता है", benefitsEn: "Enhances mental clarity and spiritual insight", pricePerCarat: 20000 },
-      { name: "मूंगा", nameEn: "Red Coral", zodiac: "वृश्चिक", zodiacEn: "Scorpio", benefits: "ऊर्जा, साहस और महत्वाकांक्षा को बढ़ावा देता है", benefitsEn: "Boosts energy, courage, and ambition", pricePerCarat: 8000 },
-      { name: "गोमेद", nameEn: "Hessonite", zodiac: "मकर", zodiacEn: "Capricorn", benefits: "ऊर्जा को जमीन से जोड़ता है और व्यावहारिकता को बढ़ाता है", benefitsEn: "Grounds energy and enhances practicality", pricePerCarat: 6000 },
-      { name: "लहसुनिया", nameEn: "Cat's Eye", zodiac: "केतु", zodiacEn: "Ketu", benefits: "नकारात्मक ऊर्जाओं और अचानक परिवर्तनों से सुरक्षा प्रदान करता है", benefitsEn: "Protects against negative energies and sudden changes", pricePerCarat: 10000 }
-    ];
-
-    return NextResponse.json({ stones });
+    const connection = await pool.getConnection();
+    
+    // Get search parameter if it exists
+    const url = new URL(req.url);
+    const search = url.searchParams.get('search') || '';
+    
+    let query = 'SELECT * FROM stones';
+    let params = [];
+    
+    // Add search functionality if search parameter exists
+    if (search) {
+      query = `
+        SELECT * FROM stones 
+        WHERE name LIKE ? 
+        OR name_en LIKE ? 
+        OR zodiac LIKE ? 
+        OR zodiac_en LIKE ?
+      `;
+      params = Array(4).fill(`%${search}%`);
+    }
+    
+    // Execute the query
+    const [rows] = await connection.query(query, params);
+    connection.release();
+    
+    return NextResponse.json({ stones: rows });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch astrology stones' }, { status: 500 });
+    console.error('Error fetching stones:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch stones' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST handler to add a new stone
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { stoneName, stoneNameEn, zodiac, zodiacEn, benefits, benefitsEn, pricePerCarat } = body;
+    
+    // Validate required fields
+    if (!stoneName || !stoneNameEn || !zodiac || !zodiacEn || !benefits || !benefitsEn || !pricePerCarat) {
+      return NextResponse.json(
+        { error: 'All fields are required' },
+        { status: 400 }
+      );
+    }
+    
+    const connection = await pool.getConnection();
+    
+    // Insert the new stone
+    const [result] = await connection.query(
+      `INSERT INTO stones (name, name_en, zodiac, zodiac_en, benefits, benefits_en, price_per_carat)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [stoneName, stoneNameEn, zodiac, zodiacEn, benefits, benefitsEn, pricePerCarat]
+    );
+    
+    connection.release();
+    
+    return NextResponse.json({ 
+      message: 'Stone added successfully',
+      stoneId: (result as any).insertId
+    });
+  } catch (error) {
+    console.error('Error adding stone:', error);
+    return NextResponse.json(
+      { error: 'Failed to add stone' },
+      { status: 500 }
+    );
   }
 }
