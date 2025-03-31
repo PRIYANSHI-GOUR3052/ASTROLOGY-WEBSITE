@@ -8,7 +8,6 @@ export default function ProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // State for form fields
-  const [productId, setProductId] = useState('');
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [productPrice, setProductPrice] = useState('');
@@ -23,7 +22,7 @@ export default function ProductsPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // You can handle the form submission here, like sending the data to an API.
-    console.log({ productId, productName, productDescription, productPrice });
+    console.log({ productName, productDescription, productPrice });
     closeModal(); // Close modal after submitting the form
   };
 
@@ -68,9 +67,6 @@ export default function ProductsPage() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Price
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Available
-              </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
               </th>
@@ -80,18 +76,15 @@ export default function ProductsPage() {
             {[ 
               {
                 name: 'Astrology Book',
-                price: '$29.99',
-                available: 120
+                price: '$29.99'
               },
               {
                 name: 'Zodiac Necklace',
-                price: '$19.99',
-                available: 75
+                price: '$19.99'
               },
               {
                 name: 'Tarot Card Set',
-                price: '$39.99',
-                available: 50
+                price: '$39.99'
               }
             ].map((product, index) => (
               <tr key={index} className="hover:bg-gray-50">
@@ -100,9 +93,6 @@ export default function ProductsPage() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">{product.price}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{product.available}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button className="text-blue-600 hover:text-blue-900 mr-2">
@@ -125,16 +115,6 @@ export default function ProductsPage() {
             <h3 className="text-xl font-semibold mb-4">Add New Product</h3>
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Product ID</label>
-                  <input
-                    type="text"
-                    value={productId}
-                    onChange={(e) => setProductId(e.target.value)}
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    required
-                  />
-                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Product Name</label>
                   <input
