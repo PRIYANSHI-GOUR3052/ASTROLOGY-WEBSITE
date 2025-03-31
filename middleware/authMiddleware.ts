@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+/*import { NextRequest, NextResponse } from 'next/server';
 import { jwtVerify } from 'jose'; // We'll use jose for JWT verification in middleware
 
 export async function middleware(request: NextRequest) {
@@ -36,4 +36,4 @@ export async function middleware(request: NextRequest) {
 // Configure the middleware to run only on admin dashboard routes
 export const config = {
   matcher: '/admin/dashboard/:path*',
-};
+};*/
