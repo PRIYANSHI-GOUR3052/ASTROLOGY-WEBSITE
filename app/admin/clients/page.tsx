@@ -8,9 +8,6 @@ export default function ClientsPage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">Clients</h2>
-        <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-          Add New Client
-        </button>
       </div>
 
       {/* Search and Filter */}
@@ -55,7 +52,7 @@ export default function ClientsPage() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {[
+            {[ 
               {
                 name: 'Rahul Sharma',
                 email: 'rahul@example.com',
@@ -118,4 +115,4 @@ export default function ClientsPage() {
       </div>
     </div>
   );
-} 
+}
