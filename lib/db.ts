@@ -40,6 +40,21 @@ async function initializeDatabase() {
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );`);
 
+await connection.query(`
+  CREATE TABLE IF NOT EXISTS stones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    name_en VARCHAR(255) NOT NULL,
+    zodiac VARCHAR(255) NOT NULL,
+    zodiac_en VARCHAR(255) NOT NULL,
+    benefits TEXT NOT NULL,
+    benefits_en TEXT NOT NULL,
+    price_per_carat DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  )
+`);
+
     // Define the default password
     const defaultPassword = 'adminPass@123';
     

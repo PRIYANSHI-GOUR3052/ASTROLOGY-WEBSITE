@@ -11,8 +11,8 @@ interface Stone {
   zodiac: string;
   zodiacEn: string;
   benefits: string;
-  benefitsEn: string;
-  pricePerCarat: number;
+  benefits_en: string;
+  price_per_carat: number;
 }
 
 export function AstrologyStones() {
@@ -36,7 +36,7 @@ export function AstrologyStones() {
         // Initialize carat values
         const initialCaratValues: Record<string, number> = {};
         data.stones.forEach((stone: Stone) => {
-          initialCaratValues[stone.nameEn] = 1;
+          initialCaratValues[stone.nameEn || ''] = 1;
         });
         setCaratValues(initialCaratValues);
       } catch (err) {
@@ -61,7 +61,8 @@ export function AstrologyStones() {
   // Handler for add to cart
   const handleAddToCart = (stone: Stone) => {
     // Add your cart logic here
-    alert(`Added ${caratValues[stone.nameEn]} carats of ${stone.nameEn} to cart!`);
+    const stoneName = stone.nameEn || 'stone';
+    alert(`Added ${caratValues[stoneName] || 1} carats of ${stoneName} to cart!`);
   };
 
   return (
@@ -88,34 +89,40 @@ export function AstrologyStones() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {stones.map((stone) => (
-            <Card key={stone.nameEn} className="bg-celestial-cream/90 shadow-lg overflow-hidden">
+            <Card key={stone.nameEn || `stone-${Math.random()}`} className="bg-celestial-cream/90 shadow-lg overflow-hidden">
               <CardContent className="p-6">
                 <div className="text-center">
                   <h3 className="text-2xl font-serif font-semibold mb-2 text-mystic-brown">
-                    {stone.nameEn} ({stone.name})
+                    {stone.nameEn || 'Stone'} ({stone.name || ''})
                   </h3>
                   <p className="text-mystic-brown/80 mb-2">
-                    Associated with {stone.zodiacEn} ({stone.zodiac})
+                    Associated with {stone.zodiacEn || ''} ({stone.zodiac || ''})
                   </p>
-                  <p className="text-mystic-brown/80 mb-4">
-                    {stone.benefitsEn}
-                  </p>
+                  <div className="mb-4">
+                    <p className="text-mystic-brown/80 mb-1 font-medium">Benefits:</p>
+                    <p className="text-mystic-brown/80 italic mb-2">
+                      {stone.benefits || ''}
+                    </p>
+                    <p className="text-mystic-brown/80">
+                      {stone.benefits_en || ''}
+                    </p>
+                  </div>
                   <div className="mt-6 border-t border-mystic-brown/20 pt-4">
                     <p className="text-mystic-brown font-medium mb-3">
-                      ₹{stone.pricePerCarat.toLocaleString('en-IN')} per carat
+                      ₹{stone.price_per_carat ? stone.price_per_carat.toLocaleString('en-IN') : '0'} per carat
                     </p>
                     <div className="flex items-center justify-center mb-4">
                       <input
                         type="number"
                         min="1"
-                        value={caratValues[stone.nameEn]}
-                        onChange={(e) => handleCaratChange(stone.nameEn, parseInt(e.target.value) || 1)}
+                        value={caratValues[stone.nameEn || ''] || 1}
+                        onChange={(e) => handleCaratChange(stone.nameEn || '', parseInt(e.target.value) || 1)}
                         className="w-16 p-2 text-center border border-mystic-brown/30 rounded mr-2"
                       />
                       <span className="text-mystic-brown/80">carats</span>
                     </div>
                     <p className="text-lg font-bold text-mystic-brown mb-4">
-                      Total: ₹{(stone.pricePerCarat * caratValues[stone.nameEn]).toLocaleString('en-IN')}
+                      Total: ₹{((stone.price_per_carat || 0) * (caratValues[stone.nameEn || ''] || 1)).toLocaleString('en-IN')}
                     </p>
                     <div className="grid grid-cols-2 gap-2">
                       <Button 
@@ -128,7 +135,7 @@ export function AstrologyStones() {
                         asChild 
                         className="w-full bg-black text-white hover:bg-gray-800"
                       >
-                        <Link href={`/shop/${stone.nameEn.toLowerCase().replace(' ', '-')}`}>
+                        <Link href={`/shop/${(stone.nameEn || 'stone').toLowerCase().replace(/ /g, '-')}`}>
                           <span>खरीदें (Buy Now)</span>
                         </Link>
                       </Button>
