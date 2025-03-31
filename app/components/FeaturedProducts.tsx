@@ -3,41 +3,37 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
-const products = [
-  {
-    name: "उपचार पत्थर सेट (Healing Crystal Set)",
-    description: "अपनी ऊर्जा को संतुलित करने के लिए उपचार पत्थरों का एक चयनित सेट।",
-    price: 2499,
-    slug: "healing-crystals-set"
-  },
-  {
-    name: "समृद्धि यंत्र (Prosperity Yantra)",
-    description: "इस शक्तिशाली यंत्र के साथ प्रचुरता और धन को आकर्षित करें।",
-    price: 1999,
-    slug: "prosperity-yantra"
-  },
-  {
-    name: "ध्यान गद्दी (Meditation Cushion)",
-    description: "हमारे आरामदायक कुशन के साथ अपने ध्यान अभ्यास को बढ़ाएं।",
-    price: 1499,
-    slug: "meditation-cushion"
-  },
-  {
-    name: "ज्योतिष डायरी (Astrology Journal)",
-    description: "हमारी सुंदर डिज़ाइन की गई डायरी के साथ अपनी आकाशीय यात्रा को ट्रैक करें।",
-    price: 999,
-    slug: "astrology-journal"
-  },
-]
+interface Product {
+  name: string;
+  description: string;
+  price: number;
+  slug: string;
+}
 
 export function FeaturedProducts() {
   const [loading, setLoading] = useState(true)
+  const [products, setProducts] = useState<Product[]>([])
+  const [error, setError] = useState<string | null>(null)
   
   useEffect(() => {
-    // Simulate loading delay
-    const timer = setTimeout(() => setLoading(false), 1000)
-    return () => clearTimeout(timer)
-  }, [])
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("/api/products/featured");
+        if (!res.ok) {
+          throw new Error('Failed to fetch featured products');
+        }
+        const data = await res.json();
+        setProducts(data.products);
+      } catch (err) {
+        setError('Failed to load featured products');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProducts();
+  }, []);
   
   // Function to handle checkout using Stripe API
   const handleCheckout = async (price: number, productName: string) => {
@@ -62,7 +58,7 @@ export function FeaturedProducts() {
   };
 
   // Function to handle adding to cart
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: Product) => {
     // Implement your cart logic here
     console.log(`Added ${product.name} to cart`);
     // You could dispatch to a cart context/store here
@@ -83,6 +79,8 @@ export function FeaturedProducts() {
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gold"></div>
           </div>
+        ) : error ? (
+          <div className="text-center text-red-500 p-8">{error}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {products.map((product, index) => (
