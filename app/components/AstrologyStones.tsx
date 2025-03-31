@@ -41,6 +41,12 @@ export function AstrologyStones() {
     }));
   };
 
+  // Handler for add to cart
+  const handleAddToCart = (stone: Stone) => {
+    // Add your cart logic here
+    alert(`Added ${caratValues[stone.nameEn]} carats of ${stone.nameEn} to cart!`);
+  };
+
   return (
     <section className="my-16">
       <div className="text-center mb-12">
@@ -87,14 +93,22 @@ export function AstrologyStones() {
                   <p className="text-lg font-bold text-mystic-brown mb-4">
                     Total: ₹{(stone.pricePerCarat * caratValues[stone.nameEn]).toLocaleString('en-IN')}
                   </p>
-                  <Button 
-                    asChild 
-                    className="w-full bg-sunburst-yellow text-mystic-brown hover:bg-sunburst-yellow-light"
-                  >
-                    <Link href={`/shop/${stone.nameEn.toLowerCase().replace(' ', '-')}`}>
-                      <span>खरीदें (Buy Now)</span>
-                    </Link>
-                  </Button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button 
+                      onClick={() => handleAddToCart(stone)}
+                      className="w-full bg-black text-white hover:bg-gray-800"
+                    >
+                      <span>Add to Cart</span>
+                    </Button>
+                    <Button 
+                      asChild 
+                      className="w-full bg-black text-white hover:bg-gray-800"
+                    >
+                      <Link href={`/shop/${stone.nameEn.toLowerCase().replace(' ', '-')}`}>
+                        <span>खरीदें (Buy Now)</span>
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>

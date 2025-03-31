@@ -65,8 +65,11 @@ export function ProductGrid() {
                   ₹{product.price ? product.price.toLocaleString('en-IN') : 'Price not available'}
                 </p>
               )}
-              <div className="text-center">
-                <Button asChild className="bg-sunburst-yellow text-mystic-brown hover:bg-sunburst-yellow-light">
+              <div className="text-center flex justify-center gap-2">
+                <Button className="bg-black text-white hover:bg-gray-800">
+                  Add to Cart
+                </Button>
+                <Button asChild className="bg-black text-white hover:bg-gray-800">
                   <Link href={`/shop/${product.slug}`}>खरीदें (Buy Now)</Link>
                 </Button>
               </div>
@@ -77,4 +80,3 @@ export function ProductGrid() {
     </section>
   )
 }
-
