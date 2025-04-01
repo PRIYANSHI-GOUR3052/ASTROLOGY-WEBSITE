@@ -76,8 +76,16 @@ export function ServicesGrid() {
               <h3 className="text-xl font-serif mb-4 text-mystic-brown text-center">{service.titleEn}</h3>
               <p className="text-mystic-brown/80 mb-2 text-center">{service.description}</p>
               <p className="text-mystic-brown/80 mb-4 text-center">{service.descriptionEn}</p>
-              <div className="text-center">
-                <Button asChild className="bg-sunburst-yellow text-mystic-brown hover:bg-sunburst-yellow-light">
+              <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                <Button className="bg-black text-white hover:bg-gray-800 flex-1">
+                  Add to Cart
+                </Button>
+                <Button className="bg-black text-white hover:bg-gray-800 flex-1">
+                  खरीदें (Buy Now)
+                </Button>
+              </div>
+              <div className="text-center mt-4">
+                <Button asChild className="bg-black text-white hover:bg-gray-800 flex-1">
                   <Link href={service.link}>
                     <span className="block">आप अभी बुक करें</span>
                     <span className="block">BOOK YOUR CALL NOW</span>
@@ -91,4 +99,3 @@ export function ServicesGrid() {
     </div>
   )
 }
-
