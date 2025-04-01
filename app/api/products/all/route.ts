@@ -1,55 +1,45 @@
 import { NextResponse } from 'next/server';
+import pool from '@/lib/db';
 
 export async function GET() {
   try {
-    // In a real application, you would fetch this data from your database
-    const allProducts = [
-      {
-        name: "रुद्राक्ष माला (Rudraksha Mala)",
-        description: "शुद्ध रुद्राक्ष बीज से निर्मित पारंपरिक माला, आध्यात्मिक शक्ति और सुरक्षा के लिए।",
-        price: 2499,
-        slug: "rudraksha-mala",
-        isStone: false
-      },
-      {
-        name: "ध्यान गद्दी (Meditation Cushion)",
-        description: "हमारे आरामदायक कुशन के साथ अपने ध्यान अभ्यास को बढ़ाएं।",
-        price: 1499,
-        slug: "meditation-cushion",
-        isStone: false
-      },
-      {
-        name: "Ruby (रूबी)",
-        description: "Enhances confidence, leadership, and vitality. Associated with the Sun.",
-        pricePerCarat: 15000,
-        slug: "ruby",
-        isStone: true
-      },
-      {
-        name: "Blue Sapphire (नीलम)",
-        description: "Enhances mental clarity and spiritual insight. Associated with Saturn.",
-        pricePerCarat: 20000,
-        slug: "blue-sapphire",
-        isStone: true
-      },
-      {
-        name: "Emerald (पन्ना)",
-        description: "Encourages growth, patience, and wellbeing. Associated with Mercury.",
-        pricePerCarat: 18000,
-        slug: "emerald",
-        isStone: true
-      },
-      {
-        name: "Yellow Sapphire (पुखराज)",
-        description: "Brings wisdom, prosperity, and optimism. Associated with Jupiter.",
-        pricePerCarat: 12000,
-        slug: "yellow-sapphire",
-        isStone: true
-      }
-    ];
-
+    const connection = await pool.getConnection();
+    
+    // Fetch regular products
+    const [products] = await connection.query('SELECT * FROM products ORDER BY id DESC');
+    
+    // Fetch stones
+    const [stones] = await connection.query('SELECT * FROM stones');
+    
+    // Transform stones data to match the expected format
+    const formattedStones = (stones as any[]).map(stone => ({
+      name: stone.name,
+      description: stone.benefits,
+      pricePerCarat: stone.price_per_carat,
+      slug: stone.name_en.toLowerCase().replace(/\s+/g, '-'),
+      isStone: true,
+      zodiac: stone.zodiac,
+      zodiacEn: stone.zodiac_en,
+      benefitsEn: stone.benefits_en
+    }));
+    
+    // Transform products data to match the expected format
+    const formattedProducts = (products as any[]).map(product => ({
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      slug: product.slug,
+      isStone: false
+    }));
+    
+    // Combine both datasets
+    const allProducts = [...formattedProducts, ...formattedStones];
+    
+    connection.release();
+    
     return NextResponse.json({ products: allProducts });
   } catch (error) {
+    console.error('Error fetching all products:', error);
     return NextResponse.json({ error: 'Failed to fetch all products' }, { status: 500 });
   }
 }
