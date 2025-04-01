@@ -5,8 +5,17 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Star, Moon, Sun, Hash, Home, Map, Gem, Sparkles, Heart } from 'lucide-react'
 import ServiceButton from './ServiceButton'
+import AddToCartButton from './AddToCartButton'
 
-const services = [
+interface Service {
+  title: string;
+  description: string;
+  slug: string;
+  icon: JSX.Element;
+  price: number;
+}
+
+const services: Service[] = [
   {
     title: "चेहरे की पहेली (Face Reading)",
     description: "आपके स्वभाव और तकदीर के बारे में जानकारी प्राप्त करने के लिए चेहरे की लकीरों का विश्लेषण।",
@@ -38,17 +47,12 @@ const services = [
 ]
 
 export function ServicesOverview() {
-  const handleAddToCart = (service) => {
-    console.log(`Added ${service.title} to cart`);
-    // Add your cart logic here
-  };
-
-  const handleBuyNow = (service) => {
+  const handleBuyNow = (service: Service) => {
     console.log(`Buy Now: ${service.title}`);
     // Add your buy now logic here
   };
 
-  const handleBookConsultation = (service) => {
+  const handleBookConsultation = (service: Service) => {
     console.log(`Book Consultation for ${service.title}`);
     // Add your consultation booking logic here
   };
@@ -80,12 +84,12 @@ export function ServicesOverview() {
                 
                 {/* Action buttons */}
                 <div className="flex gap-2 justify-center mb-4">
-                  <button 
-                    className="bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors w-full"
-                    onClick={() => handleAddToCart(service)}
-                  >
-                    Add to Cart
-                  </button>
+                  <AddToCartButton
+                    id={service.slug}
+                    name={service.title}
+                    price={service.price}
+                    className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors"
+                  />
                   <button 
                     className="bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors w-full"
                     onClick={() => handleBuyNow(service)}
