@@ -24,6 +24,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     "/admin/settings",
     "/admin/login",
     "/signin",
+    "/cart",
     "/admin/stone"
   ].includes(pathname ?? '');
   

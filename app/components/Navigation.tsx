@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
 import { useRouter } from 'next/router'
+import CartIcon from './CartIcon'
 
 export function Navigation() {
   const { user, logout } = useAuth()
@@ -60,17 +61,20 @@ export function Navigation() {
                 Admin
               </Link>
             )}
+            <div className="h-5 w-px bg-gray-600/50" /> {/* Divider */}
+            <CartIcon />
+            <div className="h-5 w-px bg-gray-600/50" /> {/* Divider */}
             {user ? (
               <motion.button 
                 onClick={handleLogout}
-                className="text-white hover:text-black"
+                className="text-white hover:text-gold transition-colors"
                 whileHover={{ scale: 1.1 }}
               >
                 लॉग आउट
               </motion.button>
             ) : (
               <Link href="/signin">
-                <Button variant="outline" className="text-white hover:text-black">
+                <Button variant="outline" className="text-white hover:text-gold border-gold/50 hover:border-gold">
                   साइन इन
                 </Button>
               </Link>
