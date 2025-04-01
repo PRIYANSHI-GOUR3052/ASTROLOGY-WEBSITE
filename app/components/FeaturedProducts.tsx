@@ -2,15 +2,21 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
 
 interface Product {
   name: string;
   description: string;
   price: number;
   slug: string;
+  id: number;
 }
 
 export function FeaturedProducts() {
+  const router = useRouter()
+  const { data: session, status } = useSession()
   const [loading, setLoading] = useState(true)
   const [products, setProducts] = useState<Product[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -36,32 +42,96 @@ export function FeaturedProducts() {
   }, []);
   
   // Function to handle checkout using Stripe API
-  const handleCheckout = async (price: number, productName: string) => {
+  const handleCheckout = async (price: number, productName: string, productId: number) => {
+    // Check if user is logged in
+    if (status !== 'authenticated') {
+      // Save product info to session storage for after login
+      sessionStorage.setItem('checkoutItem', JSON.stringify({
+        price,
+        productName,
+        productId,
+        action: 'buy'
+      }));
+      
+      // Redirect to sign in
+      router.push('/signin?redirect=checkout');
+      return;
+    }
+    
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ price, productName }),
+        body: JSON.stringify({ 
+          price, 
+          productName,
+          quantity: 1,
+          isStone: false,
+          productId
+        }),
       });
       
       const data = await res.json();
+      
+      if (data.authenticated === false) {
+        // Handle case where session expired after page load
+        router.push(data.redirectUrl);
+        return;
+      }
+      
       if (data.url) {
         window.location.href = data.url; // Redirect to Stripe checkout page
       } else {
         console.error("Checkout Error:", data);
-        alert("Payment Failed! Check console for details.");
+        toast.error("Payment Failed! Please try again.");
       }
     } catch (error) {
       console.error("Error processing checkout:", error);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
   // Function to handle adding to cart
-  const handleAddToCart = (product: Product) => {
-    // Implement your cart logic here
-    console.log(`Added ${product.name} to cart`);
-    // You could dispatch to a cart context/store here
+  const handleAddToCart = async (product: Product) => {
+    // Check if user is logged in
+    if (status !== 'authenticated') {
+      // Save product info to session storage for after login
+      sessionStorage.setItem('checkoutItem', JSON.stringify({
+        price: product.price,
+        productName: product.name,
+        productId: product.id,
+        action: 'cart'
+      }));
+      
+      // Redirect to sign in
+      router.push('/signin?redirect=cart');
+      return;
+    }
+    
+    try {
+      const res = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: product.id,
+          quantity: 1,
+          isStone: false
+        }),
+      });
+      
+      const data = await res.json();
+      
+      if (data.authenticated === false) {
+        // Handle case where session expired after page load
+        router.push(data.redirectUrl);
+        return;
+      }
+      
+      toast.success(`${product.name} added to cart`);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      toast.error("Failed to add to cart. Please try again.");
+    }
   };
   
   return (
@@ -97,7 +167,7 @@ export function FeaturedProducts() {
                       Add to Cart
                     </Button>
                     <Button
-                      onClick={() => handleCheckout(product.price, product.name)}
+                      onClick={() => handleCheckout(product.price, product.name, product.id)}
                       className="bg-black text-white hover:bg-gray-800 w-full"
                     >
                       खरीदें (Buy Now)
