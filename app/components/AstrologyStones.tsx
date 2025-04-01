@@ -4,8 +4,12 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
 
 interface Stone {
+  id: number;
   name: string;
   nameEn: string;
   zodiac: string;
@@ -16,6 +20,8 @@ interface Stone {
 }
 
 export function AstrologyStones() {
+  const router = useRouter()
+  const { data: session, status } = useSession()
   const [stones, setStones] = useState<Stone[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -59,10 +65,106 @@ export function AstrologyStones() {
   };
 
   // Handler for add to cart
-  const handleAddToCart = (stone: Stone) => {
-    // Add your cart logic here
+  const handleAddToCart = async (stone: Stone) => {
     const stoneName = stone.nameEn || 'stone';
-    alert(`Added ${caratValues[stoneName] || 1} carats of ${stoneName} to cart!`);
+    const carats = caratValues[stoneName] || 1;
+    
+    // Check if user is logged in
+    if (status !== 'authenticated') {
+      // Save stone info to session storage for after login
+      sessionStorage.setItem('checkoutItem', JSON.stringify({
+        price: stone.price_per_carat,
+        productName: stoneName,
+        productId: stone.id,
+        carats,
+        isStone: true,
+        action: 'cart'
+      }));
+      
+      // Redirect to sign in
+      router.push('/signin?redirect=cart');
+      return;
+    }
+    
+    try {
+      const res = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: stone.id,
+          isStone: true,
+          carats
+        }),
+      });
+      
+      const data = await res.json();
+      
+      if (data.authenticated === false) {
+        // Handle case where session expired after page load
+        router.push(data.redirectUrl);
+        return;
+      }
+      
+      toast.success(`${carats} carats of ${stoneName} added to cart`);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      toast.error("Failed to add to cart. Please try again.");
+    }
+  };
+  
+  // Handler for buy now
+  const handleBuyNow = async (stone: Stone) => {
+    const stoneName = stone.nameEn || 'stone';
+    const carats = caratValues[stoneName] || 1;
+    
+    // Check if user is logged in
+    if (status !== 'authenticated') {
+      // Save stone info to session storage for after login
+      sessionStorage.setItem('checkoutItem', JSON.stringify({
+        price: stone.price_per_carat,
+        productName: stoneName,
+        productId: stone.id,
+        carats,
+        isStone: true,
+        action: 'buy'
+      }));
+      
+      // Redirect to sign in
+      router.push('/signin?redirect=checkout');
+      return;
+    }
+    
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          price: stone.price_per_carat, 
+          productName: stoneName,
+          isStone: true,
+          carats,
+          productId: stone.id
+        }),
+      });
+      
+      const data = await res.json();
+      
+      if (data.authenticated === false) {
+        // Handle case where session expired after page load
+        router.push(data.redirectUrl);
+        return;
+      }
+      
+      if (data.url) {
+        window.location.href = data.url; // Redirect to Stripe checkout page
+      } else {
+        console.error("Checkout Error:", data);
+        toast.error("Payment Failed! Please try again.");
+      }
+    } catch (error) {
+      console.error("Error processing checkout:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -132,12 +234,10 @@ export function AstrologyStones() {
                         <span>Add to Cart</span>
                       </Button>
                       <Button 
-                        asChild 
+                        onClick={() => handleBuyNow(stone)}
                         className="w-full bg-black text-white hover:bg-gray-800"
                       >
-                        <Link href={`/shop/${(stone.nameEn || 'stone').toLowerCase().replace(/ /g, '-')}`}>
-                          <span>खरीदें (Buy Now)</span>
-                        </Link>
+                        <span>खरीदें (Buy Now)</span>
                       </Button>
                     </div>
                   </div>

@@ -1,54 +1,93 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
+import { NextAuthOptions } from 'next-auth';
+import { DefaultSession } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import pool from '@/lib/db';
 
-export interface AuthenticatedRequest extends NextApiRequest {
-  user?: {
-    userId: number;
-    email: string;
+// Extend the next-auth types
+declare module 'next-auth' {
+  interface User {
+    role?: string;
+  }
+  
+  interface Session {
+    user: {
+      id: number;
+      role: string;
+    } & DefaultSession['user'];
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    id: number;
     role: string;
-  };
+  }
 }
 
-type NextApiHandler = (
-  req: AuthenticatedRequest,
-  res: NextApiResponse
-) => Promise<void> | void;
+export const authOptions: NextAuthOptions = {
+  providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error('Please enter an email and password');
+        }
 
-// Middleware to protect API routes
-export function withAuth(handler: NextApiHandler) {
-  return async (req: AuthenticatedRequest, res: NextApiResponse) => {
-    try {
-      // Get the token from cookies
-      const token = req.cookies.adminToken;
-      
-      if (!token) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        const connection = await pool.getConnection();
+        try {
+          const [users] = await connection.query(
+            'SELECT * FROM users WHERE email = ?',
+            [credentials.email]
+          );
+
+          const user = (users as any[])[0];
+          
+          if (!user) {
+            throw new Error('No user found with this email');
+          }
+
+          // In a real application, you should hash the password and compare hashes
+          // This is just a basic example
+          if (user.password !== credentials.password) {
+            throw new Error('Invalid password');
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            role: user.role
+          };
+        } finally {
+          connection.release();
+        }
       }
-      
-      // Verify the token
-      const decoded = jwt.verify(
-        token, 
-        process.env.JWT_SECRET || 'your-secret-key'
-      ) as {
-        userId: number;
-        email: string;
-        role: string;
-      };
-      
-      // Attach the user information to the request
-      req.user = decoded;
-      
-      // Call the original handler
-      return handler(req, res);
-      
-    } catch (error) {
-      console.error('Auth error:', error);
-      return res.status(401).json({ message: 'Unauthorized' });
+    })
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = Number(user.id);
+        token.role = String(user.role);
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as number;
+        session.user.role = token.role as string;
+      }
+      return session;
     }
-  };
-}
-
-// Helper function to verify if a user has admin role
-export function isAdmin(req: AuthenticatedRequest): boolean {
-  return req.user?.role === 'admin';
-}
+  },
+  pages: {
+    signIn: '/signin',
+  },
+  session: {
+    strategy: 'jwt',
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+};
