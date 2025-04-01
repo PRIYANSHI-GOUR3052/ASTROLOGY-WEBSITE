@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, Home, BookOpen, ShoppingBag, PenTool, Info, PhoneCall, GraduationCap, LogIn, LogOut, User } from 'lucide-react'
+import { Menu, X, Home, BookOpen, ShoppingBag, PenTool, Info, PhoneCall, GraduationCap, LogIn, LogOut, User, ShoppingCart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import { useSession, signIn, signOut } from "next-auth/react"
@@ -28,6 +28,7 @@ export function Header() {
     { label: 'About', labelHi: 'हमारे बारे में', href: '/about', icon: Info },
     { label: 'Contact', labelHi: 'संपर्क', href: '/contact', icon: PhoneCall },
     { label: 'Study', labelHi: 'अध्ययन', href: '/study', icon: GraduationCap },
+    { label: 'Cart', labelHi: 'कार्ट', href: '/cart', icon: ShoppingCart },
   ]
 
   useEffect(() => {
