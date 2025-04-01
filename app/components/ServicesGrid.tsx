@@ -13,7 +13,8 @@ const services = [
     description: "अपने जीवन पथ, संबंधों और करियर के बारे में व्यक्तिगत ज्योतिषीय पठन के माध्यम से अंतर्दृष्टि प्राप्त करें।",
     descriptionEn: "Gain insights into your life path, relationships, and career through personalized astrological readings.",
     icon: <Sun className="w-12 h-12 text-sunburst-yellow" />,
-    link: "/services/astrology"
+    link: "/services/astrology",
+    price: "₹1,999"
   },
   {
     title: "वास्तु शास्त्र",
@@ -21,7 +22,8 @@ const services = [
     description: "सकारात्मक ऊर्जा और समृद्धि को आकर्षित करने के लिए अपने रहने और काम करने के स्थानों को सामंजस्यपूर्ण बनाएं।",
     descriptionEn: "Harmonize your living and working spaces to attract positive energy and prosperity.",
     icon: <Home className="w-12 h-12 text-sunburst-yellow" />,
-    link: "/services/vastu-shastra"
+    link: "/services/vastu-shastra",
+    price: "₹2,499"
   },
   {
     title: "अंक ज्योतिष",
@@ -29,7 +31,8 @@ const services = [
     description: "अपने जीवन की संख्याओं में छिपे अर्थों और आपकी नियति पर उनके प्रभाव को जानें।",
     descriptionEn: "Uncover the hidden meanings in your life's numbers and their influence on your destiny.",
     icon: <Hash className="w-12 h-12 text-sunburst-yellow" />,
-    link: "/services/numerology"
+    link: "/services/numerology",
+    price: "₹1,499"
   },
   {
     title: "टैरो रीडिंग",
@@ -37,7 +40,8 @@ const services = [
     description: "टैरो कार्ड के प्राचीन ज्ञान के माध्यम से अपने अतीत, वर्तमान और भविष्य पर स्पष्टता प्राप्त करें।",
     descriptionEn: "Gain clarity on your past, present, and future through the ancient wisdom of tarot cards.",
     icon: <Star className="w-12 h-12 text-sunburst-yellow" />,
-    link: "/services/tarot-reading"
+    link: "/services/tarot-reading",
+    price: "₹1,799"
   },
   {
     title: "कुंडली मिलान",
@@ -45,7 +49,8 @@ const services = [
     description: "वैदिक ज्योतिषीय विश्लेषण के माध्यम से संबंधों में संगतता और सद्भाव सुनिश्चित करें।",
     descriptionEn: "Ensure compatibility and harmony in relationships through vedic astrological analysis.",
     icon: <Moon className="w-12 h-12 text-sunburst-yellow" />,
-    link: "/services/kundli-matching"
+    link: "/services/kundli-matching",
+    price: "₹2,299"
   },
   {
     title: "ज्योतिष यात्रा परामर्श",
@@ -53,7 +58,8 @@ const services = [
     description: "सबसे शुभ यात्राओं के लिए खगोलीय ऊर्जाओं के साथ सामंजस्य में अपनी यात्राओं की योजना बनाएं।",
     descriptionEn: "Plan your travels in harmony with celestial energies for the most auspicious journeys.",
     icon: <Map className="w-12 h-12 text-sunburst-yellow" />,
-    link: "/services/astro-travel"
+    link: "/services/astro-travel",
+    price: "₹1,899"
   }
 ]
 
@@ -76,6 +82,9 @@ export function ServicesGrid() {
               <h3 className="text-xl font-serif mb-4 text-mystic-brown text-center">{service.titleEn}</h3>
               <p className="text-mystic-brown/80 mb-2 text-center">{service.description}</p>
               <p className="text-mystic-brown/80 mb-4 text-center">{service.descriptionEn}</p>
+              <div className="text-center mb-4">
+                <span className="text-2xl font-bold text-sunburst-yellow">{service.price}</span>
+              </div>
               <div className="flex flex-col sm:flex-row gap-2 justify-center">
                 <Button className="bg-black text-white hover:bg-gray-800 flex-1">
                   Add to Cart
@@ -85,7 +94,7 @@ export function ServicesGrid() {
                 </Button>
               </div>
               <div className="text-center mt-4">
-                <Button asChild className="bg-black text-white hover:bg-gray-800 flex-1">
+                <Button asChild className="bg-sunburst-yellow text-mystic-brown hover:bg-sunburst-yellow-light">
                   <Link href={service.link}>
                     <span className="block">आप अभी बुक करें</span>
                     <span className="block">BOOK YOUR CALL NOW</span>

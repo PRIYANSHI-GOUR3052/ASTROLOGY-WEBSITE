@@ -10,6 +10,7 @@ interface Service {
   title: string;
   icon: string;
   slug: string;
+  price: string;
   description: {
     en: string;
     hi: string;
@@ -21,6 +22,7 @@ const services: Service[] = [
     title: "ज्योतिष (Astrology)",
     icon: "/images/astrology.svg", // Replace with actual astrology chart image
     slug: "astrology",
+    price: "₹1,999",
     description: {
       en: "Unlock celestial guidance for your destiny. Gain insights and clarity on life's journey through expert astrology services tailored just for you.",
       hi: "अपनी नियति के लिए खगोलीय मार्गदर्शन को खोलें। विशेषज्ञ ज्योतिष सेवाओं के माध्यम से जीवन की यात्रा पर अंतर्दृष्टि और स्पष्टता प्राप्त करें।"
@@ -30,6 +32,7 @@ const services: Service[] = [
     title: "अंक ज्योतिष (Numerology)",
     icon: "/images/Numerology.svg", // Replace with actual numerology symbol
     slug: "numerology",
+    price: "₹1,499",
     description: {
       en: "Decode the numbers of your life's path. Explore personality traits, destiny, and potential through personalized numerology guidance.",
       hi: "अपने जीवन के मार्ग की संख्याओं को समझें। व्यक्तिगत अंक ज्योतिष मार्गदर्शन के माध्यम से व्यक्तित्व, भाग्य और क्षमता का पता लगाएं।"
@@ -39,6 +42,7 @@ const services: Service[] = [
     title: "हस्त रेखा (Palmistry)",
     icon: "/images/palm.svg", // Replace with actual palmistry diagram
     slug: "palmistry",
+    price: "₹1,799",
     description: {
       en: "Delve into the ancient wisdom of palmistry to reveal your destiny and potential. Explore the intricate lines of your palms for insights.",
       hi: "अपनी नियति और क्षमता को प्रकट करने के लिए हस्त रेखा के प्राचीन ज्ञान में गहराई से जाएं। अंतर्दृष्टि के लिए अपनी हथेलियों की जटिल रेखाओं का पता लगाएं।"
@@ -48,6 +52,7 @@ const services: Service[] = [
     title: "तंत्र विद्या (Tantra)",
     icon: "/images/tantra.svg", // Replace with actual tantra symbol
     slug: "tantra",
+    price: "₹2,299",
     description: {
       en: "Embark on a journey of spiritual awakening and self-discovery through tantra. Experience profound healing and empowerment.",
       hi: "तंत्र के माध्यम से आध्यात्मिक जागृति और आत्म-खोज की यात्रा पर निकलें। गहन चिकित्सा और सशक्तिकरण का अनुभव करें।"
@@ -86,6 +91,26 @@ export function BestAstrologyServices() {
                 <h3 className="text-2xl font-serif font-semibold mb-4 text-gold">{service.title}</h3>
                 <p className="text-sm text-lavender mb-2">{service.description.hi}</p>
                 <p className="text-sm text-lavender mb-6">{service.description.en}</p>
+                
+                {/* Price Display */}
+                <div className="mb-4">
+                  <span className="text-2xl font-bold text-gold">{service.price}</span>
+                </div>
+                
+                {/* Add to Cart and Buy Now buttons */}
+                <div className="flex flex-col sm:flex-row gap-2 justify-center mb-4">
+                  <Button 
+                    className="bg-black text-white hover:bg-gray-800 flex-1 border border-gold/30"
+                  >
+                    Add to Cart
+                  </Button>
+                  <Button 
+                    className="bg-black text-white hover:bg-gray-800 flex-1 border border-gold/30"
+                  >
+                    खरीदें (Buy Now)
+                  </Button>
+                </div>
+                
                 <div className="space-y-4">
                   <Dialog>
                     <DialogTrigger asChild>
@@ -98,13 +123,15 @@ export function BestAstrologyServices() {
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-midnight-blue border-gold text-white shadow-xl p-6">
-
                       <DialogHeader>
                         <DialogTitle className="text-2xl font-serif text-gold">{service.title}</DialogTitle>
                       </DialogHeader>
                       <div className="mt-4">
                         <p className="text-lavender mb-4">{service.description.hi}</p>
                         <p className="text-lavender">{service.description.en}</p>
+                        <div className="mt-4">
+                          <span className="text-2xl font-bold text-gold">{service.price}</span>
+                        </div>
                         <div className="mt-6 space-y-4">
                           <h4 className="text-gold font-serif text-xl">Additional Benefits:</h4>
                           {service.title.includes("ज्योतिष") && (
@@ -160,4 +187,3 @@ export function BestAstrologyServices() {
     </section>
   )
 }
-
