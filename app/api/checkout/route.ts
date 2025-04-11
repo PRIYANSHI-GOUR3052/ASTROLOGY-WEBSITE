@@ -17,30 +17,35 @@ export async function POST(req: NextRequest) {
     
     // Parse request body
     const body = await req.json();
-    const { price, productName, quantity = 1, isStone = false, carats } = body;
+    const { cartItems } = body;
     
-    // Calculate the total price (for display purposes on checkout page)
-    let totalAmount = price;
-    if (isStone && carats) {
-      totalAmount = price * carats;
-    } else {
-      totalAmount = price * quantity;
+    // Validate cart data
+    if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
+      return NextResponse.json({ 
+        error: 'Invalid cart data. Cart cannot be empty.' 
+      }, { status: 400 });
     }
     
-    // Instead of creating a Stripe checkout session, return data for redirect
+    // Calculate the total amount from all cart items
+    const totalAmount = cartItems.reduce((sum, item) => {
+      const itemPrice = item.price * (item.quantity || 1);
+      return sum + itemPrice;
+    }, 0);
+    
+    // Return success with cart details for checkout page
     return NextResponse.json({ 
       success: true,
       redirectUrl: '/checkout',
       orderDetails: {
-        productName,
-        isStone,
-        carats: isStone ? carats : null,
-        quantity,
-        totalAmount
+        cartItems,
+        totalAmount,
+        userId: session.user.id
       }
     });
   } catch (error) {
     console.error('Checkout error:', error);
-    return NextResponse.json({ error: 'Failed to process checkout request' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Failed to process checkout request' 
+    }, { status: 500 });
   }
 }

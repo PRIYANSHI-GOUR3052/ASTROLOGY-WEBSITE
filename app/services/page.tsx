@@ -1,11 +1,11 @@
 import { AnimatedStars } from '../components/AnimatedStars'
 import { MysticBackground } from '../components/MysticBackground'
-import { ServicesGrid } from '../components/ServicesGrid'
+// import { ServicesGrid } from '../components/ServicesGrid'
 import { Testimonials } from '../components/Testimonials'
 import { FAQSection } from '../components/FAQSection'
 import { CTASection } from '../components/CTASection'
 import { ServiceHighlight } from '../components/ServiceHighlight'
-
+import { UniversalServicesGrid } from '../components/UniversalServiceGrid'
 export default function ServicesPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
@@ -20,7 +20,9 @@ export default function ServicesPage() {
           Embark on a transformative journey with our comprehensive range of spiritual services. 
           Let our expert astrologers and spiritual guides illuminate your path to self-discovery and enlightenment.
         </p>
-        <ServicesGrid />
+
+        {/* <ServicesGrid /> */}
+        <UniversalServicesGrid />
         <ServiceHighlight />
         <Testimonials />
         <FAQSection />
