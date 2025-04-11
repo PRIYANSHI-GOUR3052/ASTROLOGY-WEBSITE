@@ -12,6 +12,7 @@ import { AnimatedStars } from '@/app/components/AnimatedStars'
 import { MysticBackground } from '@/app/components/MysticBackground'
 import { toast } from 'sonner'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Trash2, Plus, Minus } from 'lucide-react'
 
 interface CheckoutItem {
   id: number;
@@ -48,6 +49,7 @@ export default function CheckoutPage() {
   })
   const [savedAddresses, setSavedAddresses] = useState<AddressInfo[]>([])
   const [paymentMethod, setPaymentMethod] = useState('online')
+  const [isUpdatingCart, setIsUpdatingCart] = useState(false)
   
   useEffect(() => {
     // Redirect if not authenticated
@@ -62,6 +64,14 @@ export default function CheckoutPage() {
         const cartRes = await fetch("/api/cart");
         if (!cartRes.ok) throw new Error('Failed to fetch cart');
         const cartData = await cartRes.json();
+        
+        // Convert is_stone from number to boolean to match our interface
+        const formattedItems = cartData.cartItems?.map((item: any) => ({
+          ...item,
+          is_stone: item.is_stone === 1
+        })) || [];
+        
+        setItems(formattedItems);
         
         // Fetch saved addresses if available
         try {
@@ -79,8 +89,6 @@ export default function CheckoutPage() {
           console.error("Could not fetch addresses:", err);
           // Continue with checkout even if addresses can't be fetched
         }
-        
-        setItems(cartData.cartItems || []);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load checkout information");
@@ -103,6 +111,64 @@ export default function CheckoutPage() {
     const selected = savedAddresses.find((addr, index) => index.toString() === addressId);
     if (selected) {
       setAddress(selected);
+    }
+  };
+
+  const handleRemoveItem = async (itemId: number) => {
+    setIsUpdatingCart(true);
+    try {
+      const res = await fetch(`/api/cart?id=${itemId}`, {
+        method: 'DELETE'
+      });
+      
+      if (!res.ok) throw new Error('Failed to remove item');
+      
+      // Update local state
+      setItems(items.filter(item => item.id !== itemId));
+      toast.success("Item removed from cart");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to remove item from cart");
+    } finally {
+      setIsUpdatingCart(false);
+    }
+  };
+
+  const handleUpdateQuantity = async (itemId: number, newQuantity: number, isStone: boolean) => {
+    if (newQuantity < 1) return;
+    
+    setIsUpdatingCart(true);
+    try {
+      const payload = isStone 
+        ? { cartItemId: itemId, carats: newQuantity }
+        : { cartItemId: itemId, quantity: newQuantity };
+        
+      const res = await fetch('/api/cart', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!res.ok) throw new Error('Failed to update quantity');
+      
+      // Update local state
+      setItems(items.map(item => {
+        if (item.id === itemId) {
+          if (isStone) {
+            return { ...item, carats: newQuantity };
+          } else {
+            return { ...item, quantity: newQuantity };
+          }
+        }
+        return item;
+      }));
+      
+      toast.success("Cart updated");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update cart");
+    } finally {
+      setIsUpdatingCart(false);
     }
   };
   
@@ -195,10 +261,10 @@ export default function CheckoutPage() {
       <MysticBackground />
       <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
         <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-center text-mystic-brown">
-          चेकआउट
+          Checkout
         </h1>
         <h2 className="text-2xl md:text-3xl font-serif text-center mb-12 text-mystic-brown">
-          Complete Your Order
+          Review and Complete Your Order
         </h2>
         
         {loading ? (
@@ -218,18 +284,19 @@ export default function CheckoutPage() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              {/* Product Table */}
+              {/* Product Table with Edit Options */}
               <Card className="mb-8 bg-midnight-blue-light/80 border border-gold/30">
                 <CardContent className="p-6">
-                  <h3 className="text-2xl font-serif font-semibold mb-6 text-gold">Your Items</h3>
+                  <h3 className="text-2xl font-serif font-semibold mb-6 text-gold">Review Your Items</h3>
                   <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
                         <TableRow>
                           <TableHead className="text-lavender">Product</TableHead>
                           <TableHead className="text-lavender text-right">Price</TableHead>
-                          <TableHead className="text-lavender text-center">Quantity</TableHead>
+                          <TableHead className="text-lavender text-center">Quantity/Carats</TableHead>
                           <TableHead className="text-lavender text-right">Total</TableHead>
+                          <TableHead className="text-lavender text-center">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -237,27 +304,80 @@ export default function CheckoutPage() {
                           <TableRow key={item.id}>
                             <TableCell className="text-lavender font-medium">
                               {item.product_name}
-                              {item.is_stone && item.carats && (
-                                <span className="block text-sm opacity-80">
-                                  {item.carats} carats
-                                </span>
-                              )}
                             </TableCell>
                             <TableCell className="text-lavender text-right">
                               ₹{item.unit_price.toLocaleString('en-IN')}
                               {item.is_stone && <span className="text-sm">/carat</span>}
                             </TableCell>
-                            <TableCell className="text-lavender text-center">
-                              {item.is_stone ? item.carats : item.quantity}
-                              {item.is_stone && <span className="text-sm ml-1">carats</span>}
+                            <TableCell className="text-center">
+                              <div className="flex items-center justify-center space-x-2">
+                                <Button 
+                                  variant="outline" 
+                                  size="icon" 
+                                  className="h-8 w-8 rounded-full bg-midnight-blue border-gold/30 text-lavender"
+                                  onClick={() => handleUpdateQuantity(
+                                    item.id, 
+                                    item.is_stone ? (item.carats || 0) - 0.5 : item.quantity - 1, 
+                                    item.is_stone
+                                  )}
+                                  disabled={
+                                    isUpdatingCart || 
+                                    (item.is_stone ? (item.carats || 0) <= 0.5 : item.quantity <= 1)
+                                  }
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </Button>
+                                
+                                <span className="text-lavender min-w-16 text-center">
+                                  {item.is_stone ? (
+                                    <span>{item.carats} carats</span>
+                                  ) : (
+                                    <span>{item.quantity}</span>
+                                  )}
+                                </span>
+                                
+                                <Button 
+                                  variant="outline" 
+                                  size="icon" 
+                                  className="h-8 w-8 rounded-full bg-midnight-blue border-gold/30 text-lavender"
+                                  onClick={() => handleUpdateQuantity(
+                                    item.id, 
+                                    item.is_stone ? (item.carats || 0) + 0.5 : item.quantity + 1, 
+                                    item.is_stone
+                                  )}
+                                  disabled={isUpdatingCart}
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </Button>
+                              </div>
                             </TableCell>
                             <TableCell className="text-gold text-right">
                               ₹{calculateTotalPrice(item).toLocaleString('en-IN')}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="text-lavender hover:text-red-400 hover:bg-red-400/10"
+                                onClick={() => handleRemoveItem(item.id)}
+                                disabled={isUpdatingCart}
+                              >
+                                <Trash2 className="h-5 w-5" />
+                              </Button>
                             </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
                     </Table>
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <Button 
+                      variant="outline"
+                      className="text-lavender border-gold/30 hover:bg-gold/10"
+                      onClick={() => router.push('/shop')}
+                    >
+                      Continue Shopping
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -419,7 +539,7 @@ export default function CheckoutPage() {
                   
                   <div className="space-y-4 mb-6">
                     <div className="border-t border-gold/30 pt-4 flex justify-between">
-                      <span className="text-lavender">Subtotal</span>
+                      <span className="text-lavender">Subtotal ({items.length} {items.length === 1 ? 'item' : 'items'})</span>
                       <span className="text-gold">₹{subtotal.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="flex justify-between">
@@ -435,8 +555,9 @@ export default function CheckoutPage() {
                   <Button 
                     onClick={handleSubmit}
                     className="w-full bg-black text-white hover:bg-gray-800 py-6"
+                    disabled={items.length === 0 || isUpdatingCart}
                   >
-                    {paymentMethod === 'online' ? 'प्रोसीड टू पेमेंट (Proceed to Payment)' : 'प्लेस ऑर्डर (Place Order)'}
+                    {paymentMethod === 'online' ? 'Proceed to Payment' : 'Place Order'}
                   </Button>
                 </CardContent>
               </Card>

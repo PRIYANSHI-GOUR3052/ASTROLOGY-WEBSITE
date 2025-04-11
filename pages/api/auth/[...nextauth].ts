@@ -5,15 +5,14 @@ import mysql from 'mysql2/promise'
 import bcrypt from 'bcryptjs'
 
 // Extend the next-auth types
+import { DefaultSession } from "next-auth";
+
 declare module "next-auth" {
   interface Session {
     user: {
-      role: string
-      id: string;
-      name?: string | null;
-      email?: string | null;
-
-    }
+      id: number;
+      role: string;
+    } & DefaultSession["user"]
   }
 }
 
@@ -123,13 +122,13 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
+        token.id = Number(user.id)
       }
       return token
     },
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id as string
+        session.user.id = token.id
       }
       return session
     }

@@ -1,10 +1,9 @@
 "use client"
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { toast } from 'sonner'
+import { UniversalCartButton } from '@/app/components/UniversalCartButton'
 
 interface Product {
   name: string;
@@ -16,7 +15,7 @@ interface Product {
 
 export function FeaturedProducts() {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [loading, setLoading] = useState(true)
   const [products, setProducts] = useState<Product[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -40,99 +39,6 @@ export function FeaturedProducts() {
     
     fetchProducts();
   }, []);
-  
-  // Function to handle checkout using Stripe API
-  const handleCheckout = async (price: number, productName: string, productId: number) => {
-    // Check if user is logged in
-    if (status !== 'authenticated') {
-      // Save product info to session storage for after login
-      sessionStorage.setItem('checkoutItem', JSON.stringify({
-        price,
-        productName,
-        productId,
-        action: 'buy'
-      }));
-      
-      // Redirect to sign in
-      router.push('/signin?redirect=checkout');
-      return;
-    }
-    
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          price, 
-          productName,
-          quantity: 1,
-          isStone: false,
-          productId
-        }),
-      });
-      
-      const data = await res.json();
-      
-      if (data.authenticated === false) {
-        // Handle case where session expired after page load
-        router.push(data.redirectUrl);
-        return;
-      }
-      
-      if (data.url) {
-        window.location.href = data.url; // Redirect to Stripe checkout page
-      } else {
-        console.error("Checkout Error:", data);
-        toast.error("Payment Failed! Please try again.");
-      }
-    } catch (error) {
-      console.error("Error processing checkout:", error);
-      toast.error("Something went wrong. Please try again.");
-    }
-  };
-
-  // Function to handle adding to cart
-  const handleAddToCart = async (product: Product) => {
-    // Check if user is logged in
-    if (status !== 'authenticated') {
-      // Save product info to session storage for after login
-      sessionStorage.setItem('checkoutItem', JSON.stringify({
-        price: product.price,
-        productName: product.name,
-        productId: product.id,
-        action: 'cart'
-      }));
-      
-      // Redirect to sign in
-      router.push('/signin?redirect=cart');
-      return;
-    }
-    
-    try {
-      const res = await fetch("/api/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId: product.id,
-          quantity: 1,
-          isStone: false
-        }),
-      });
-      
-      const data = await res.json();
-      
-      if (data.authenticated === false) {
-        // Handle case where session expired after page load
-        router.push(data.redirectUrl);
-        return;
-      }
-      
-      toast.success(`${product.name} added to cart`);
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-      toast.error("Failed to add to cart. Please try again.");
-    }
-  };
   
   return (
     <section className="py-16 relative">
@@ -160,18 +66,30 @@ export function FeaturedProducts() {
                   <p className="mb-4 text-sm text-lavender text-center">{product.description}</p>
                   <p className="text-xl font-bold mb-4 text-gold text-center">₹{product.price.toLocaleString('en-IN')}</p>
                   <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      onClick={() => handleAddToCart(product)}
+                    <UniversalCartButton
+                      productId={product.id.toString()}
+                      productName={product.name}
+                      price={product.price}
+                      variant="addToCart"
                       className="bg-black text-white hover:bg-gray-800 w-full"
                     >
                       Add to Cart
-                    </Button>
-                    <Button
-                      onClick={() => handleCheckout(product.price, product.name, product.id)}
+                    </UniversalCartButton>
+                    
+                    <UniversalCartButton
+                      productId={product.id.toString()}
+                      productName={product.name}
+                      price={product.price}
+                      variant="buyNow"
                       className="bg-black text-white hover:bg-gray-800 w-full"
+                      onClick={() => {
+                        if (status === 'authenticated') {
+                          router.push('/checkout');
+                        }
+                      }}
                     >
                       खरीदें (Buy Now)
-                    </Button>
+                    </UniversalCartButton>
                   </div>
                 </CardContent>
               </Card>

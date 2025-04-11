@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Star, Moon, Sun, Hash, Home, Map } from 'lucide-react'
-import { useCart } from '../contexts/CartContext'
+import { UniversalCartButton } from '@/app/components/UniversalCartButton'
 
 const services = [
   {
@@ -71,25 +71,6 @@ const services = [
 ]
 
 export function ServicesGrid() {
-  const { addItem } = useCart();
-
-  const handleAddToCart = (service) => {
-    addItem({
-      id: service.id,
-      name: `${service.title} (${service.titleEn})`,
-      price: service.price
-    });
-  };
-
-  const handleBuyNow = (service) => {
-    addItem({
-      id: service.id,
-      name: `${service.title} (${service.titleEn})`,
-      price: service.price
-    });
-    window.location.href = '/cart';
-  };
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
       {services.map((service, index) => (
@@ -112,18 +93,29 @@ export function ServicesGrid() {
                 <span className="text-2xl font-bold text-sunburst-yellow">₹{service.price}</span>
               </div>
               <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                <Button 
+                <UniversalCartButton
+                  productId={service.id}
+                  productName={`${service.title} (${service.titleEn})`}
+                  price={service.price}
+                  quantity={1}
+                  isStone={false}
+                  carats={null}
                   className="bg-black text-white hover:bg-gray-800 flex-1"
-                  onClick={() => handleAddToCart(service)}
                 >
                   Add to Cart
-                </Button>
-                <Button 
+                </UniversalCartButton>
+                <UniversalCartButton
+                  productId={service.id}
+                  productName={`${service.title} (${service.titleEn})`}
+                  price={service.price}
+                  quantity={1}
+                  isStone={false}
+                  carats={null}
+                  variant="buyNow"
                   className="bg-black text-white hover:bg-gray-800 flex-1"
-                  onClick={() => handleBuyNow(service)}
                 >
                   खरीदें (Buy Now)
-                </Button>
+                </UniversalCartButton>
               </div>
               <div className="text-center mt-4">
                 <Button asChild className="bg-black text-white hover:bg-gray-800 flex-1">
