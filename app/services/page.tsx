@@ -1,6 +1,5 @@
 import { AnimatedStars } from '../components/AnimatedStars'
 import { MysticBackground } from '../components/MysticBackground'
-// import { ServicesGrid } from '../components/ServicesGrid'
 import { Testimonials } from '../components/Testimonials'
 import { FAQSection } from '../components/FAQSection'
 import { CTASection } from '../components/CTASection'
@@ -10,7 +9,7 @@ export default function ServicesPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
       <AnimatedStars />
-      <MysticBackground />
+      <MysticBackground>
       <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
         <h1 className="text-5xl md:text-7xl font-serif font-bold mb-12 text-center text-mystic-brown animate-pulse">
           हमारी आध्यात्मिक सेवाएं<br />
@@ -21,14 +20,14 @@ export default function ServicesPage() {
           Let our expert astrologers and spiritual guides illuminate your path to self-discovery and enlightenment.
         </p>
 
-        {/* <ServicesGrid /> */}
+      
         <UniversalServicesGrid />
         <ServiceHighlight />
         <Testimonials />
         <FAQSection />
         <CTASection />
       </div>
+        </MysticBackground>
     </div>
   )
 }
-

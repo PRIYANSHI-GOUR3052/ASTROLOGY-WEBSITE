@@ -1,14 +1,18 @@
 "use client";
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter } from 'next/navigation';
 import Head from 'next/head';
 
-export default function AdminLogin() {
+// Create a separate component for the part that uses useSearchParams
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  
+  // Import useSearchParams in a component that will be wrapped in Suspense
+  const { useSearchParams } = require('next/navigation');
   const searchParams = useSearchParams();
   
   // Get callback URL if available
@@ -35,7 +39,7 @@ export default function AdminLogin() {
     checkAuth();
   }, [router, callbackUrl]);
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
@@ -71,6 +75,82 @@ export default function AdminLogin() {
   };
 
   return (
+    <form onSubmit={handleSubmit}>
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 text-red-700 border border-red-200 rounded-md text-sm">
+          {error}
+        </div>
+      )}
+      
+      <div className="mb-4">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          Email
+        </label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+          placeholder="admin@yoursite.com"
+          required
+        />
+      </div>
+      
+      <div className="mb-6">
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          Password
+        </label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+          placeholder="••••••••"
+          required
+        />
+      </div>
+      
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <input
+            id="remember-me"
+            type="checkbox"
+            className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
+          />
+          <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+            Remember me
+          </label>
+        </div>
+        
+        <div className="text-sm">
+          <a href="#" className="text-black hover:underline">
+            Forgot password?
+          </a>
+        </div>
+      </div>
+      
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors disabled:opacity-50"
+      >
+        {isLoading ? 'Signing in...' : 'Sign in'}
+      </button>
+    </form>
+  );
+}
+
+// Loading fallback component
+function LoginFormLoading() {
+  return <div className="text-center p-4">Loading login form...</div>;
+}
+
+export const dynamic = 'force-dynamic';
+
+export default function AdminLogin() {
+  return (
     <>
       <Head>
         <title>Admin Login | Astrology Dashboard</title>
@@ -97,70 +177,10 @@ export default function AdminLogin() {
               <p className="text-gray-600 mt-1">Enter your credentials to access the dashboard</p>
             </div>
             
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 text-red-700 border border-red-200 rounded-md text-sm">
-                {error}
-              </div>
-            )}
-            
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                  placeholder="admin@yoursite.com"
-                  required
-                />
-              </div>
-              
-              <div className="mb-6">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
-                  />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                    Remember me
-                  </label>
-                </div>
-                
-                <div className="text-sm">
-                  <a href="#" className="text-black hover:underline">
-                    Forgot password?
-                  </a>
-                </div>
-              </div>
-              
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors disabled:opacity-50"
-              >
-                {isLoading ? 'Signing in...' : 'Sign in'}
-              </button>
-            </form>
+            {/* Wrap the component using useSearchParams in Suspense */}
+            <Suspense fallback={<LoginFormLoading />}>
+              <LoginForm />
+            </Suspense>
             
             <div className="mt-6 text-center text-sm text-gray-600">
               <p>Need help? Contact <a href="mailto:support@yourastrologysite.com" className="text-black hover:underline">support</a></p>

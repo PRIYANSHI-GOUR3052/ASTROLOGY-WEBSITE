@@ -12,8 +12,22 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 import { Trash2, Edit, Plus, Sun } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
+// Define the Service interface
+interface Service {
+  id: number;
+  title_hi: string;
+  title_en: string;
+  slug: string;
+  description_hi: string;
+  description_en: string;
+  price: number;
+  icon_type: string;
+  icon_path: string;
+  priority: number;
+}
+
 export default function AdminServicesPage() {
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     title_hi: '',
@@ -26,7 +40,7 @@ export default function AdminServicesPage() {
     icon_path: 'Sun',
     priority: 100
   });
-  const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   const router = useRouter();
@@ -59,7 +73,7 @@ export default function AdminServicesPage() {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -80,14 +94,14 @@ export default function AdminServicesPage() {
     setIsDialogOpen(true);
   };
 
-  const handleEdit = (service) => {
+  const handleEdit = (service: Service) => {
     setFormData({
       title_hi: service.title_hi,
       title_en: service.title_en,
       slug: service.slug,
       description_hi: service.description_hi,
       description_en: service.description_en,
-      price: service.price,
+      price: service.price.toString(),
       icon_type: service.icon_type,
       icon_path: service.icon_path,
       priority: service.priority || 100
@@ -96,7 +110,7 @@ export default function AdminServicesPage() {
     setIsDialogOpen(true);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     try {
@@ -130,7 +144,7 @@ export default function AdminServicesPage() {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this service?')) {
       return;
     }

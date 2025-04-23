@@ -1,4 +1,5 @@
 // types/dashboard.ts
+
 export interface SummaryStatistic {
   totalSales: number;
   totalOrders: number;
@@ -63,24 +64,27 @@ export interface ProductInventory {
 }
 
 export interface PerformanceDataPoint {
-  date: string;
+  date: string; // e.g. '08 Apr'
   visitors: number;
+  unique_visitors: number;
   sales: number;
+  orders: number;
+  conversionRate: string; // e.g. '25.00%'
 }
 
 export interface StorePerformance {
   performanceData: PerformanceDataPoint[];
   dateRange: {
-    start: string;
-    end: string;
-    formattedRange: string;
+    start: string; // ISO string: '2025-03-12'
+    end: string;   // ISO string: '2025-04-11'
+    formattedRange: string; // e.g. '12 Mar - 11 Apr'
   };
   totals: {
     visitors: number;
-    uniqueVisitors: number;
+    unique_visitors: number;
     sales: number;
     orders: number;
-    conversionRate: string;
+    conversionRate: string; // e.g. '55.56%'
   };
 }
 
@@ -99,6 +103,30 @@ export interface TopCustomer {
   email: string;
   order_count: number;
   total_spent: number;
+  last_order_date: string;
+}
+
+export interface TopSellingStone {
+  id: number;
+  name: string;
+  name_en: string;
+  zodiac: string;
+  zodiac_en: string;
+  price: number;
+  total_carats_sold: number;
+  total_sold: number;
+  total_revenue: number;
+}
+
+export interface TopSellingService {
+  id: number;
+  name: string;
+  name_hi?: string;
+  slug?: string;
+  price?: number;
+  icon?: string;
+  total_sold: number;
+  total_revenue: number;
 }
 
 export interface DashboardData {
@@ -106,9 +134,8 @@ export interface DashboardData {
   todayStats: TodayStatistic;
   productInventory: ProductInventory;
   storePerformance: StorePerformance;
-  topSellingProducts?: TopSellingProduct[];
-  topSellingServices?: any[];
-  topSellingStones?: any[];
+  topSellingProducts: TopSellingProduct[];
+  topSellingServices: TopSellingService[];
+  topSellingStones: TopSellingStone[];
   topCustomers: TopCustomer[];
-
 }

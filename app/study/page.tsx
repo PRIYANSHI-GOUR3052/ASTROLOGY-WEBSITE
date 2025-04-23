@@ -40,7 +40,8 @@ export default function StudyPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-nebula-indigo via-cosmic-purple to-celestial-blue">
       <AnimatedStars />
-      <MysticBackground />
+      <MysticBackground>
+      
       <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
         <h1 className="text-5xl md:text-7xl font-serif font-bold mb-12 text-center text-gold animate-pulse">
           आध्यात्मिक अध्ययन<br />
@@ -68,7 +69,9 @@ export default function StudyPage() {
             </Card>
           ))}
         </div>
+        
       </div>
+      </MysticBackground>
     </div>
   )
 }

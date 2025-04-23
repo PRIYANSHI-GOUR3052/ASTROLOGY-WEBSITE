@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Plus, Loader2, MoveRight, Info } from 'lucide-react';
 import { useDashboardData } from '@/hooks/useDashboardData';
 
@@ -14,40 +14,6 @@ const formatCurrency = (value: string | number) => {
 // Helper function to safely convert to string
 const formatNumber = (value: number) => {
   return value ? String(value) : '0';
-};
-
-// Helper function to format changes with proper indicators
-const formatChange = (change: string | string[]) => {
-  if (!change) return '0%';
-  
-  // If change is already a formatted string with % sign
-  if (typeof change === 'string' && change.includes('%')) {
-    const value = parseFloat(change);
-    if (isNaN(value)) return '0%';
-    
-    // Add + sign for positive values
-    return value > 0 ? `+${change}` : change;
-  }
-  
-  // If change is a number
-  const numChange = typeof change === 'string' ? parseFloat(change) : Number(change);
-  if (isNaN(numChange)) return '0%';
-  
-  const formattedChange = `${numChange.toFixed(2)}%`;
-  return numChange > 0 ? `+${formattedChange}` : formattedChange;
-};
-
-// Helper function to get appropriate color based on change value
-const getChangeColor = (change: string) => {
-  if (!change) return 'text-gray-500';
-  
-  const numChange = typeof change === 'string' 
-    ? parseFloat(change.replace('%', '')) 
-    : Number(change);
-  
-  if (isNaN(numChange)) return 'text-gray-500';
-  
-  return numChange > 0 ? 'text-green-500' : numChange < 0 ? 'text-red-500' : 'text-gray-500';
 };
 
 export default function AdminDashboard() {
@@ -85,17 +51,10 @@ export default function AdminDashboard() {
     productInventory = { products: [], stones: [], services: [] },
     storePerformance, 
     topSellingProducts = [], 
-    topSellingServices = [],
+    topSellingServices = [], 
     topSellingStones = [],
     topCustomers = [] 
   } = dashboardData;
-
-  // Fix for storePerformance data
-  const fixedPerformanceData = storePerformance?.performanceData?.map(item => ({
-    date: item.date,
-    visitors: item.visitors,
-    sales: item.sales
-  })) || [];
 
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
@@ -105,20 +64,19 @@ export default function AdminDashboard() {
 
       {/* Overall Details */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
+      
         {[
-          { icon: '💰', label: 'Total Sales', value: `₹${formatCurrency(summaryStats.totalSales)}`, change: summaryStats.changes?.totalSales },
-          { icon: '📋', label: 'Total Orders', value: formatNumber(summaryStats.totalOrders), change: summaryStats.changes?.totalOrders },
-          { icon: '👥', label: 'Total Customers', value: formatNumber(summaryStats.totalCustomers), change: summaryStats.changes?.totalCustomers },
-          { icon: '📊', label: 'Average Order Sale', value: `₹${formatCurrency(summaryStats.averageOrderSale)}`, change: summaryStats.changes?.averageOrderSale },
-          { icon: '💳', label: 'Total Unpaid Invoices', value: `₹${formatCurrency(summaryStats.totalUnpaid)}`, change: summaryStats.changes?.totalUnpaid }
+          { icon: '💰', label: 'Total Sales', value: `₹${formatCurrency(summaryStats.totalSales)}`, change: summaryStats.changes.totalSales },
+          { icon: '📋', label: 'Total Orders', value: formatNumber(summaryStats.totalOrders), change: summaryStats.changes.totalOrders },
+          { icon: '👥', label: 'Total Customers', value: formatNumber(summaryStats.totalCustomers), change: summaryStats.changes.totalCustomers },
+          { icon: '📊', label: 'Average Order Sale', value: `₹${formatCurrency(summaryStats.averageOrderSale)}`, change: summaryStats.changes.averageOrderSale },
+          { icon: '💳', label: 'Total Unpaid Invoices', value: `₹${formatCurrency(summaryStats.totalUnpaid)}`, change: summaryStats.changes.totalUnpaid }
         ].map((item, index) => (
           <div key={index} className="bg-white p-4 rounded-lg shadow-sm text-center">
             <div className="text-2xl mb-2">{item.icon}</div>
             <p className="text-xs text-gray-500">{item.label}</p>
             <h3 className="text-lg font-bold">{item.value}</h3>
-            <p className={`text-xs ${getChangeColor(item.change)}`}>
-              {formatChange(item.change)}
-            </p>
+            <p className={`text-xs ${item.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>{item.change}</p>
           </div>
         ))}
       </div>
@@ -126,23 +84,21 @@ export default function AdminDashboard() {
       {/* Today's Details */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         {[
-          { icon: '💰', label: 'Today\'s Sales', value: `₹${formatCurrency(todayStats.todaySales)}`, change: todayStats.changes?.todaySales },
-          { icon: '📋', label: 'Today\'s Orders', value: formatNumber(todayStats.todayOrders), change: todayStats.changes?.todayOrders },
-          { icon: '👥', label: 'Today\'s Customers', value: formatNumber(todayStats.todayCustomers), change: todayStats.changes?.todayCustomers }
+          { icon: '💰', label: 'Today\'s Sales', value: `₹${formatCurrency(todayStats.todaySales)}`, change: todayStats.changes.todaySales },
+          { icon: '📋', label: 'Today\'s Orders', value: formatNumber(todayStats.todayOrders), change: todayStats.changes.todayOrders },
+          { icon: '👥', label: 'Today\'s Customers', value: formatNumber(todayStats.todayCustomers), change: todayStats.changes.todayCustomers }
         ].map((item, index) => (
           <div key={index} className="bg-white p-4 rounded-lg shadow-sm text-center">
             <div className="text-2xl mb-2">{item.icon}</div>
             <p className="text-xs text-gray-500">{item.label}</p>
             <h3 className="text-lg font-bold">{item.value}</h3>
-            <p className={`text-xs ${getChangeColor(item.change)}`}>
-              {formatChange(item.change)}
-            </p>
+            <p className={`text-xs ${item.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>{item.change}</p>
           </div>
         ))}
       </div>
 
       {/* Main Content Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
         {/* Inventory Section - Modified to show products, stones and services */}
         <div className="bg-white p-4 rounded-lg shadow-sm">
           <h2 className="text-lg font-bold mb-4">Inventory Overview</h2>
@@ -208,49 +164,9 @@ export default function AdminDashboard() {
             )}
           </div>
         </div>
-
-        {/* Visitors and Sales Charts */}
-        <div className="bg-white p-4 rounded-lg shadow-sm">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">Store Performance</h2>
-            <div className="text-sm text-gray-500">{storePerformance.dateRange.formattedRange}</div>
-          </div>
-          
-          {/* Dual Charts Container */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {/* Visitors Chart */}
-            <div>
-              <p className="text-xs text-gray-500 text-center">Daily Visitors</p>
-              <ResponsiveContainer width="100%" height={120}>
-                <BarChart data={fixedPerformanceData}>
-                  <XAxis dataKey="date" />
-                  <Tooltip />
-                  <Bar dataKey="visitors" fill="#3B82F6" />
-                </BarChart>
-              </ResponsiveContainer>
-              <p className="text-xs text-gray-500 text-center">
-                {formatNumber(storePerformance.totals.visitors)} Total Visitors ({formatNumber(storePerformance.totals.uniqueVisitors)} unique)
-              </p>
-            </div>
-
-            {/* Sales Chart */}
-            <div>
-              <p className="text-xs text-gray-500 text-center">Daily Sales</p>
-              <ResponsiveContainer width="100%" height={120}>
-                <LineChart data={fixedPerformanceData}>
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="sales" stroke="#10B981" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-              <p className="text-xs text-gray-500 text-center">₹{formatCurrency(summaryStats.totalSales)} Total Sales</p>
-            </div>
-          </div>
-        </div>
       </div>
 
-      {/* New Sections: Top Selling Products and Customer with Most Sales */}
+      {/* Top Selling Items and Customers */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
         {/* Top Selling Items - Combined Version */}
         <div className="bg-white p-4 rounded-lg shadow-sm">
@@ -334,7 +250,7 @@ export default function AdminDashboard() {
           )}
         </div>
 
-        {/* Customer with Most Sales */}
+        {/* Top Customers */}
         <div className="bg-white p-4 rounded-lg shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold">Top Customers</h2>
@@ -398,15 +314,15 @@ export default function AdminDashboard() {
               },
               { 
                 label: 'Total Orders', 
-                value: formatNumber(summaryStats.totalOrders), 
+                value: formatNumber(storePerformance.totals.orders), 
                 subtext: `${storePerformance.totals.conversionRate} conversion`,
                 icon: '📦',
                 color: 'bg-blue-50 text-blue-600'
               },
               { 
                 label: 'Average Order Value', 
-                value: summaryStats.totalOrders > 0 ? 
-                  `₹${formatCurrency(summaryStats.totalSales / summaryStats.totalOrders)}` : 
+                value: storePerformance.totals.orders > 0 ? 
+                  `₹${formatCurrency(summaryStats.totalSales / storePerformance.totals.orders)}` : 
                   '₹0.00', 
                 subtext: 'Per completed order',
                 icon: '📈',

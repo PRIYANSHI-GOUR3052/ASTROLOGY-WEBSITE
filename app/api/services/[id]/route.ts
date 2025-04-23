@@ -1,9 +1,8 @@
-
 import ServiceModel from '@/backend/models/services';
 import { NextResponse } from 'next/server';
 
 // PUT handler
-export async function PUT(request: { json: () => any; }, { params }: any) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const id = params.id;
     const serviceData = await request.json();
