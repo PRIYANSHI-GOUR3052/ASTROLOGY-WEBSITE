@@ -82,68 +82,68 @@ export default function SignInPage() {
     <main className="relative w-full min-h-screen overflow-hidden">
       <div className="fixed inset-0 z-0">
         <AnimatedStars />
-        <MysticBackground />
-      </div>
+        <MysticBackground>
+          <div className="relative z-10 min-h-screen flex flex-col justify-center items-center px-4">
+            <div className="bg-white/95 backdrop-blur-sm shadow-xl rounded-lg p-8 w-full max-w-md">
+              <h2 className="text-2xl font-bold text-center mb-6">User Authentication</h2>
 
-      <div className="relative z-10 min-h-screen flex flex-col justify-center items-center px-4">
-        <div className="bg-white/95 backdrop-blur-sm shadow-xl rounded-lg p-8 w-full max-w-md">
-          <h2 className="text-2xl font-bold text-center mb-6">User Authentication</h2>
+              {error && (
+                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+                  {error}
+                </div>
+              )}
 
-          {error && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
-              {error}
+              <Tabs defaultValue="login" className="w-full">
+                <TabsList className="w-full grid grid-cols-2 mb-4">
+                  <TabsTrigger value="login">Login</TabsTrigger>
+                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="login">
+                  <form className="space-y-4" onSubmit={(e) => handleCredentialSubmit(e, 'login')}>
+                    <Input name="email" type="email" placeholder="Email" required className="bg-white/80" />
+                    <Input name="password" type="password" placeholder="Password" required className="bg-white/80" />
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                      {isLoading ? 'Loading...' : 'Login'}
+                    </Button>
+                  </form>
+                  <div className="mt-4">
+                    <Button 
+                      variant="outline" 
+                      className="w-full" 
+                      onClick={handleGoogleSignIn}
+                      disabled={isLoading}
+                    >
+                      Sign in with Google
+                    </Button>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="signup">
+                  <form className="space-y-4" onSubmit={(e) => handleCredentialSubmit(e, 'signup')}>
+                    <Input name="name" type="text" placeholder="Full Name" required className="bg-white/80" />
+                    <Input name="email" type="email" placeholder="Email" required className="bg-white/80" />
+                    <Input name="password" type="password" placeholder="Password" required className="bg-white/80" />
+                    <Input name="confirmPassword" type="password" placeholder="Confirm Password" required className="bg-white/80" />
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                      {isLoading ? 'Loading...' : 'Sign Up'}
+                    </Button>
+                  </form>
+                  <div className="mt-4">
+                    <Button 
+                      variant="outline" 
+                      className="w-full" 
+                      onClick={handleGoogleSignIn}
+                      disabled={isLoading}
+                    >
+                      Sign up with Google
+                    </Button>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
-          )}
-
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="w-full grid grid-cols-2 mb-4">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="login">
-              <form className="space-y-4" onSubmit={(e) => handleCredentialSubmit(e, 'login')}>
-                <Input name="email" type="email" placeholder="Email" required className="bg-white/80" />
-                <Input name="password" type="password" placeholder="Password" required className="bg-white/80" />
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Loading...' : 'Login'}
-                </Button>
-              </form>
-              <div className="mt-4">
-                <Button 
-                  variant="outline" 
-                  className="w-full" 
-                  onClick={handleGoogleSignIn}
-                  disabled={isLoading}
-                >
-                  Sign in with Google
-                </Button>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="signup">
-              <form className="space-y-4" onSubmit={(e) => handleCredentialSubmit(e, 'signup')}>
-                <Input name="name" type="text" placeholder="Full Name" required className="bg-white/80" />
-                <Input name="email" type="email" placeholder="Email" required className="bg-white/80" />
-                <Input name="password" type="password" placeholder="Password" required className="bg-white/80" />
-                <Input name="confirmPassword" type="password" placeholder="Confirm Password" required className="bg-white/80" />
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Loading...' : 'Sign Up'}
-                </Button>
-              </form>
-              <div className="mt-4">
-                <Button 
-                  variant="outline" 
-                  className="w-full" 
-                  onClick={handleGoogleSignIn}
-                  disabled={isLoading}
-                >
-                  Sign up with Google
-                </Button>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
+          </div>
+        </MysticBackground>
       </div>
     </main>
   )

@@ -7,7 +7,7 @@ function formatDateForMySQL(dateInput: string | number | Date) {
   return date.toISOString().slice(0, 19).replace('T', ' ');
 }
 
-export async function POST(request: { json: () => PromiseLike<{ visitorId: any; path: any; timestamp: any; referrer: any; }> | { visitorId: any; path: any; timestamp: any; referrer: any; }; }) {
+export async function POST(request: Request) {
   try {
     const data = await request.json();
     

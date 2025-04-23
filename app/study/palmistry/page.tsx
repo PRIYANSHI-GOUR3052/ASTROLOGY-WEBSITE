@@ -6,7 +6,7 @@ const Palmistry = () => {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-nebula-indigo via-cosmic-purple to-celestial-blue">
       <AnimatedStars />
-      <MysticBackground />
+      <MysticBackground>
       <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
         <h1 className="text-4xl font-bold text-center mb-4 text-gold">Palmistry Techniques</h1>
         <h2 className="text-2xl font-semibold text-center mb-2 text-gold">हस्तरेखा विज्ञान की तकनीकें</h2>
@@ -46,6 +46,7 @@ const Palmistry = () => {
         </p>
         {/* Add more content as needed */}
       </div>
+      </MysticBackground>
     </div>
   );
 };

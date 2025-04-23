@@ -24,7 +24,7 @@ export default function AddToCartButton({
 
   const handleAddToCart = () => {
     setIsAdding(true);
-    addItem({ id, name, price, image });
+    addItem({ id, name, price });
     setTimeout(() => setIsAdding(false), 1000);
   };
 

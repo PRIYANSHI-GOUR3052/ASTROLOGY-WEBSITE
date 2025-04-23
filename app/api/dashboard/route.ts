@@ -413,32 +413,38 @@ async function getProductInventory() {
     connection.release();
   }
 }
-// Enhanced getStorePerformance function for real visitor data
+function formatDate(date: Date) {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = date.toLocaleString('en-US', { month: 'short' });
+  return `${day} ${month}`;
+}
+
+// Enhanced getStorePerformance function
 async function getStorePerformance() {
   console.log('[DEBUG] Starting getStorePerformance');
   const connection = await pool.getConnection();
   console.log('[DEBUG] Database connection established');
-  
+
   try {
     // Get date range (last 30 days)
     const today = new Date();
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
+
     const startDate = thirtyDaysAgo.toISOString().split('T')[0];
     const endDate = today.toISOString().split('T')[0];
-    
+
     console.log(`[DEBUG] Date range: ${startDate} to ${endDate}`);
-    
-    interface SalesPerformanceRow extends RowDataPacket {
+
+    interface SalesRow extends RowDataPacket {
       date_raw: string;
       date: string;
       sales: number;
     }
 
-    // Get daily sales data from orders table (confirmed from schema)
+    // Get daily sales data from orders table
     console.log('[DEBUG] Executing sales data query');
-    const [salesRows] = await connection.query<SalesPerformanceRow[]>(`
+    const [salesRows] = await connection.query<SalesRow[]>(`
       SELECT 
         DATE(created_at) as date_raw,
         DATE_FORMAT(DATE(created_at), '%d %b') as date,
@@ -448,22 +454,22 @@ async function getStorePerformance() {
       GROUP BY DATE(created_at), date
       ORDER BY date_raw
     `, [startDate, endDate]);
-    
+
     console.log(`[DEBUG] Retrieved sales data: ${salesRows.length} rows`);
     if (salesRows.length > 0) {
       console.log('[DEBUG] Sample sales data:', salesRows[0]);
     }
-    
-    // Get daily visitor data from page_visits and visitors tables
-    interface VisitorDataRow extends RowDataPacket {
+
+    interface VisitorRow extends RowDataPacket {
       date_raw: string;
       date: string;
       visitors: number;
       unique_visitors: number;
     }
 
+    // Get daily visitor data from page_visits table
     console.log('[DEBUG] Executing visitor data query');
-    const [visitorRows] = await connection.query<VisitorDataRow[]>(`
+    const [visitorRows] = await connection.query<VisitorRow[]>(`
       SELECT 
         DATE(timestamp) as date_raw,
         DATE_FORMAT(DATE(timestamp), '%d %b') as date,
@@ -474,82 +480,72 @@ async function getStorePerformance() {
       GROUP BY DATE(timestamp), date
       ORDER BY date_raw
     `, [startDate, endDate]);
-    
+
     console.log(`[DEBUG] Retrieved visitor data: ${visitorRows.length} rows`);
     if (visitorRows.length > 0) {
       console.log('[DEBUG] Sample visitor data:', visitorRows[0]);
     }
-    
+
     // Create a dataset with continuous dates
     console.log('[DEBUG] Creating combined dataset with continuous dates');
     const combinedData = [];
     let currentDate = new Date(thirtyDaysAgo);
-    
+
     while (currentDate <= today) {
-      const dateObj = currentDate;
-      const dateStr = currentDate.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
-      const formattedDate = dateStr;
-      
-      // Find matching sales data
-      const salesData = salesRows.find(row => row.date === formattedDate);
-      
-      // Find matching visitor data
-      const visitorData = visitorRows.find(row => row.date === formattedDate);
-      
+      const dateKey = currentDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+      const formattedDate = formatDate(currentDate); // 'dd MMM' for display
+
+      // Match data using raw date
+      const salesData = salesRows.find(row => row.date_raw === dateKey);
+      const visitorData = visitorRows.find((row: { date_raw: string; }) => row.date_raw === dateKey);
+
       const dailySales = salesData ? Number(salesData.sales) : 0;
       const dailyVisitors = visitorData ? Number(visitorData.visitors) : 0;
-      const dailyUniqueVisitors = visitorData ? Number(visitorData.unique_visitors) : 0;
-      
-      // Calculate conversion rate by getting orders for the day
-      console.log(`[DEBUG] Getting orders for ${dateStr}`);
-      const ordersForDay = await getOrdersForDay(connection, dateObj);
-      console.log(`[DEBUG] ${dateStr}: ${ordersForDay} orders`);
-      const conversionRate = dailyVisitors > 0 ? (ordersForDay / dailyVisitors) : 0;
-      
+      const dailyuniqueVisitors = visitorData ? Number(visitorData.unique_visitors) : 0;
+
+      // Calculate orders and conversion rate
+      const ordersForDay = await getOrdersForDay(connection, dateKey);
+      const conversionRate = dailyVisitors > 0 ? (ordersForDay / dailyVisitors * 100).toFixed(2) : "0";
+
       combinedData.push({
-        date: dateStr,
+        date: formattedDate,
         visitors: dailyVisitors,
-        uniqueVisitors: dailyUniqueVisitors,
+        unique_visitors: dailyuniqueVisitors,
         sales: dailySales,
         orders: ordersForDay,
-        conversionRate: conversionRate
+        conversionRate: `${conversionRate}%`
       });
-      
-      // Move to next day
+
       currentDate.setDate(currentDate.getDate() + 1);
     }
-    
+
     console.log(`[DEBUG] Combined dataset created with ${combinedData.length} days`);
-    
+
     // Calculate totals
     console.log('[DEBUG] Calculating totals');
     const totalSales = combinedData.reduce((sum, item) => sum + item.sales, 0);
     const totalVisitors = combinedData.reduce((sum, item) => sum + item.visitors, 0);
-    const uniqueVisitors = combinedData.reduce((sum, item) => sum + item.uniqueVisitors, 0);
-    
-    console.log('[DEBUG] Getting total orders in date range');
+    const unique_visitors = combinedData.reduce((sum, item) => sum + item.unique_visitors, 0);
     const totalOrders = await getTotalOrdersInDateRange(connection, startDate, endDate);
-    console.log(`[DEBUG] Total orders in range: ${totalOrders}`);
-    
     const overallConversionRate = totalVisitors > 0 ? (totalOrders / totalVisitors * 100).toFixed(2) : "0";
-    
+
     console.log('[DEBUG] Preparing final result object');
     const result = {
       performanceData: combinedData,
       dateRange: {
         start: startDate,
         end: endDate,
-        formattedRange: `${new Date(startDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })} - ${new Date(endDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}`
+        formattedRange: `${formatDate(thirtyDaysAgo)} - ${formatDate(today)}`
       },
       totals: {
         visitors: totalVisitors,
-        uniqueVisitors,
+        unique_visitors: unique_visitors,
         sales: totalSales,
         orders: totalOrders,
         conversionRate: `${overallConversionRate}%`
       }
     };
-    
+
     console.log('[DEBUG] getStorePerformance completed successfully');
     return result;
   } catch (error) {
@@ -559,8 +555,7 @@ async function getStorePerformance() {
     console.log('[DEBUG] Releasing database connection');
     connection.release();
   }
-}
-// Helper function to get orders for a specific day
+}// Helper function to get orders for a specific day
 async function getOrdersForDay(connection: PoolConnection, date: string | number | Date) {
   try {
     const startOfDay = new Date(date);

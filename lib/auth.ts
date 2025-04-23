@@ -2,6 +2,9 @@ import { NextAuthOptions } from 'next-auth';
 import { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import pool from '@/lib/db';
+import { getToken } from 'next-auth/jwt';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth';
 
 // Extend the next-auth types
 declare module 'next-auth' {
@@ -22,6 +25,40 @@ declare module 'next-auth/jwt' {
     id: number;
     role: string;
   }
+}
+
+// Define the AuthenticatedRequest type
+export interface AuthenticatedRequest extends NextApiRequest {
+  user?: {
+    userId: number;
+    email: string;
+    role: string;
+  };
+}
+
+// Create the withAuth middleware
+export function withAuth(handler: any) {
+  return async (req: AuthenticatedRequest, res: NextApiResponse) => {
+    try {
+      const session = await getServerSession(req, res, authOptions);
+      
+      if (!session) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      
+      // Add user info to the request
+      req.user = {
+        userId: session.user.id,
+        email: session.user.email || '',
+        role: session.user.role
+      };
+      
+      return handler(req, res);
+    } catch (error) {
+      console.error('Auth error:', error);
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+  };
 }
 
 export const authOptions: NextAuthOptions = {
