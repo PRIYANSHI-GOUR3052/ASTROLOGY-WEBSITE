@@ -196,20 +196,27 @@ await connection.query(`
   );
 `);
 
-    // Define the default password
-    const defaultPassword = 'adminPass@123';
+    // Get admin credentials from environment variables
+    const adminEmail = process.env.ADMIN_EMAIL || 'default@example.com';
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    
+    if (!adminPassword) {
+      console.warn('Warning: ADMIN_PASSWORD environment variable is not set. Default admin will not be created.');
+      connection.release();
+      return;
+    }
     
     // Hash the password using bcrypt
     const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(defaultPassword, saltRounds);
+    const hashedPassword = await bcrypt.hash(adminPassword, saltRounds);
 
     // Insert default admin with hashed password if not exists
     await connection.query(`
       INSERT IGNORE INTO admins (email, password) 
-      VALUES ('Scalixity@example.com', ?)
-    `, [hashedPassword]); // Use parameterized query to prevent SQL injection
+      VALUES (?, ?)
+    `, [adminEmail, hashedPassword]); // Use parameterized query to prevent SQL injection
 
-    console.log('Database initialized successfully');
+    console.log('Database initialized successfully with admin:', adminEmail);
     connection.release();
   } catch (error) {
     console.error('Database initialization error:', error);
