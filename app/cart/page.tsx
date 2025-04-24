@@ -240,10 +240,10 @@ export default function CartPage() {
   
   if (status === 'unauthenticated') {
     return (
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto pt-10 px-4 py-16">
         <div className="text-center">
-          <h1 className="text-3xl font-serif font-bold mb-6 text-mystic-brown">Your Cart</h1>
-          <p className="mb-6 text-mystic-brown/80">Please sign in to view your cart.</p>
+        <h1 className="text-6xl lg:text-7xl font-serif font-black mb-2 text-mystic-brown">आपकी कार्ट</h1>
+        <h2 className="text-4xl lg:text-5xl font-serif font-medium mb-6 text-mystic-brown">Your Cart</h2>
           <Button asChild>
             <Link href="/signin?redirect=cart">Sign In</Link>
           </Button>
@@ -253,8 +253,14 @@ export default function CartPage() {
   }
   
   return (
-    <div className="container mx-auto px-4 py-16">
-      <h1 className="text-3xl font-serif font-bold mb-6 text-mystic-brown">Your Cart</h1>
+    <div className="container mx-auto pt-10 px-4 py-16">
+      <div className="text-center">
+        <h1 className="text-6xl lg:text-7xl font-serif font-black mb-2 text-mystic-brown">आपकी कार्ट</h1>
+        <h2 className="text-4xl lg:text-5xl font-serif font-medium mb-6 text-mystic-brown">Your Cart</h2>
+        <p className="text-lg max-w-3xl mx-auto mb-8 text-mystic-brown/80">
+          View and manage items in your cart. Proceed to checkout when you're ready to complete your purchase.
+        </p>
+      </div>
       
       {loading ? (
         <div className="flex justify-center items-center h-64">
