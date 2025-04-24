@@ -94,7 +94,7 @@ export function Header() {
 
   return (
     <motion.header 
-      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-nebula-indigo/90 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-nebula-indigo/90 backdrop-blur-md shadow-lg' : 'bg-nebula-indigo/50 backdrop-blur-sm'}`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
