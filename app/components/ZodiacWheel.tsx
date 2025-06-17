@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 
 const zodiacSigns = [
   { name: 'मेष (Aries)', symbol: '♈' },
@@ -22,7 +21,10 @@ export function ZodiacWheel() {
   const [activeSign, setActiveSign] = useState<string | null>(null)
 
   return (
-    <div className="relative w-96 h-96 mx-auto">
+    <div 
+      className="relative w-96 h-96 mx-auto animate-spin"
+      style={{ animationDuration: '20s' }}
+    >
       <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 rounded-full"></div>
       {zodiacSigns.map((sign, index) => {
         const angle = (index / zodiacSigns.length) * 360
@@ -30,18 +32,17 @@ export function ZodiacWheel() {
         const y = Math.sin((angle - 90) * (Math.PI / 180)) * 150 + 192
 
         return (
-          <motion.div
+          <div
             key={sign.name}
-            className="absolute w-16 h-16 flex items-center justify-center cursor-pointer"
+            className="absolute w-16 h-16 flex items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-120"
             style={{ left: x - 32, top: y - 32 }}
-            whileHover={{ scale: 1.2 }}
-            onHoverStart={() => setActiveSign(sign.name)}
-            onHoverEnd={() => setActiveSign(null)}
+            onMouseEnter={() => setActiveSign(sign.name)}
+            onMouseLeave={() => setActiveSign(null)}
           >
             <div className="w-full h-full rounded-full bg-midnight-blue-light/80 border border-gold flex items-center justify-center">
               <span className="text-3xl text-gold">{sign.symbol}</span>
             </div>
-          </motion.div>
+          </div>
         )
       })}
       {activeSign && (
@@ -54,4 +55,3 @@ export function ZodiacWheel() {
     </div>
   )
 }
-

@@ -3,10 +3,19 @@ interface BlogPost {
     hi: string;
     en: string;
   };
+  description: {
+    hi: string;
+    en: string;
+  };
   content: {
     hi: string;
     en: string;
   };
+  imageUrl: string;
+  themeColor: string;
+  author: string;
+  date: string;
+  category: string;
 }
 
 export const blogPosts: Record<string, BlogPost> = {
@@ -14,6 +23,10 @@ export const blogPosts: Record<string, BlogPost> = {
     title: {
       hi: "ग्रहों का प्रभाव",
       en: "The Influence of Planets"
+    },
+    description: {
+      hi: "खगोलीय पिंड हमारे दैनिक जीवन और आध्यात्मिक यात्रा को कैसे प्रभावित करते हैं, इस विषय की गहन जानकारी।",
+      en: "Discover how celestial bodies affect our daily lives and spiritual journey."
     },
     content: {
       hi: `खगोलीय पिंड हमारे दैनिक जीवन और आध्यात्मिक यात्रा को कैसे प्रभावित करते हैं, इस विषय की गहन जानकारी।
@@ -30,12 +43,21 @@ Key Points:
 • Effects of Planetary Movements
 • Planetary Periods and Sub-periods
 • Planetary Remedies`
-    }
+    },
+    imageUrl: "/images/blog/planets.jpg",
+    themeColor: "#a78bfa",
+    author: "Dr. Narendra Kumar Sharma",
+    date: "15 April, 2024",
+    category: "Astrology"
   },
   "understanding-vedic-astrology": {
     title: {
       hi: "वैदिक ज्योतिष को समझना",
       en: "Understanding Vedic Astrology"
+    },
+    description: {
+      hi: "वैदिक ज्योतिष के मूल सिद्धांतों और जीवन के निर्णयों पर इसके प्रभाव की विस्तृत जानकारी।",
+      en: "Learn the fundamentals of Vedic astrology and its impact on life decisions."
     },
     content: {
       hi: `वैदिक ज्योतिष के मूल सिद्धांतों और जीवन के निर्णयों पर इसके प्रभाव की विस्तृत जानकारी।
@@ -52,12 +74,21 @@ Main Topics:
 • Influence of Zodiac Signs
 • Planetary Combinations
 • Dasha System`
-    }
+    },
+    imageUrl: "/images/blog/vedic-astrology.jpg",
+    themeColor: "#fca4a4",
+    author: "Dr. Narendra Kumar Sharma",
+    date: "15 April, 2024",
+    category: "Astrology"
   },
   "gemstones-and-powers": {
     title: {
       hi: "रत्नों की शक्तियां",
       en: "Gemstones and Their Powers"
+    },
+    description: {
+      hi: "रत्नों के रहस्यमय गुणों और उनके ज्योतिषीय महत्व की विस्तृत जानकारी।",
+      en: "Explore the mystical properties of gemstones and their astrological significance."
     },
     content: {
       hi: `रत्नों के रहस्यमय गुणों और उनके ज्योतिषीय महत्व की विस्तृत जानकारी।
@@ -74,12 +105,21 @@ Major Gemstones:
 • Pearl - Moon's Stone
 • Ruby - Sun's Stone
 • Emerald - Mercury's Stone`
-    }
+    },
+    imageUrl: "/images/blog/gemstones.jpg",
+    themeColor: "#86efad",
+    author: "Dr. Narendra Kumar Sharma",
+    date: "15 April, 2024",
+    category: "Astrology"
   },
   "numerology-basics": {
     title: {
       hi: "अंक ज्योतिष का परिचय",
       en: "Numerology Basics"
+    },
+    description: {
+      hi: "संख्याओं का जीवन पर प्रभाव और उनका वैज्ञानिक महत्व।",
+      en: "Understanding how numbers influence your life path and destiny."
     },
     content: {
       hi: `संख्याओं का जीवन पर प्रभाव और उनका वैज्ञानिक महत्व।
@@ -96,12 +136,21 @@ Basic Principles:
 • Significance of Destiny Number
 • Name's Influence
 • Nature of Numbers`
-    }
+    },
+    imageUrl: "/images/blog/numerology.jpg",
+    themeColor: "#a78bfa",
+    author: "Dr. Narendra Kumar Sharma",
+    date: "15 April, 2024",
+    category: "Astrology"
   },
   "understanding-your-birth-chart": {
     title: {
       hi: "अपनी जन्म कुंडली को समझना",
       en: "Understanding Your Birth Chart"
+    },
+    description: {
+      hi: "जन्म कुंडली आपके जीवन का एक महत्वपूर्ण मानचित्र है। यह आपके जन्म के समय आकाश में ग्रहों की स्थिति को दर्शाती है।",
+      en: "A birth chart is a vital map of your life, showing the position of planets at the time of your birth."
     },
     content: {
       hi: `जन्म कुंडली आपके जीवन का एक महत्वपूर्ण मानचित्र है। यह आपके जन्म के समय आकाश में ग्रहों की स्थिति को दर्शाती है।
@@ -130,12 +179,21 @@ Points to understand your horoscope:
 2. Position of planets
 3. Impact of houses
 4. Major and sub-periods`
-    }
+    },
+    imageUrl: "/images/blog/birth-chart.jpg",
+    themeColor: "#fca4a4",
+    author: "Dr. Narendra Kumar Sharma",
+    date: "15 April, 2024",
+    category: "Astrology"
   },
   "power-of-meditation": {
     title: {
       hi: "ध्यान की शक्ति",
       en: "The Power of Meditation"
+    },
+    description: {
+      hi: "ध्यान एक प्राचीन अभ्यास है जो मन और शरीर को शांति प्रदान करता है।",
+      en: "Meditation is an ancient practice that brings peace to mind and body."
     },
     content: {
       hi: `ध्यान एक प्राचीन अभ्यास है जो मन और शरीर को शांति प्रदान करता है।
@@ -164,12 +222,21 @@ Benefits of Meditation:
 2. Increased Focus
 3. Emotional Balance
 4. Spiritual Growth`
-    }
+    },
+    imageUrl: "/images/blog/meditation.jpg",
+    themeColor: "#86efad",
+    author: "Dr. Narendra Kumar Sharma",
+    date: "15 April, 2024",
+    category: "Spiritual Healing"
   },
   "crystal-healing": {
     title: {
       hi: "क्रिस्टल हीलिंग का मार्गदर्शन",
       en: "Guide to Crystal Healing"
+    },
+    description: {
+      hi: "क्रिस्टल हीलिंग एक प्राचीन उपचार पद्धति है जो ऊर्जा के संतुलन पर आधारित है।",
+      en: "Crystal healing is an ancient therapy based on energy balance."
     },
     content: {
       hi: `क्रिस्टल हीलिंग एक प्राचीन उपचार पद्धति है जो ऊर्जा के संतुलन पर आधारित है।
@@ -198,6 +265,13 @@ Ways to Use:
 2. In Meditation
 3. Home Placement
 4. Chakra Balancing`
-    }
+    },
+    imageUrl: "/images/blog/crystal-healing.jpg",
+    themeColor: "#fca4a4",
+    author: "Dr. Narendra Kumar Sharma",
+    date: "15 April, 2024",
+    category: "Spiritual Healing"
+  },
+  
+   
   }
-}; 
