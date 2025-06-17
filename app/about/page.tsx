@@ -9,7 +9,7 @@ export default function AboutPage() {
       <AnimatedStars />
       <MysticBackground>
         <div className="container mx-auto px-4 pt-32 py-16 relative z-10">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold mb-12 text-center text-gold animate-pulse">
+          <h1 className="text-5xl md:text-7xl font-serif font-bold mb-12 text-center text-gold">
             हमारे बारे में<br />
             <span className="text-3xl md:text-5xl">About Us</span>
           </h1>
@@ -29,4 +29,3 @@ export default function AboutPage() {
     </div>
   )
 }
-

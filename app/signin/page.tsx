@@ -21,11 +21,11 @@ export default function SignInPage() {
 
     try {
       const formData = new FormData(event.currentTarget)
-      
+
       if (action === 'signup') {
         const password = formData.get('password') as string
         const confirmPassword = formData.get('confirmPassword') as string
-        
+
         if (password !== confirmPassword) {
           throw new Error('Passwords do not match')
         }
@@ -42,14 +42,13 @@ export default function SignInPage() {
         })
 
         if (!response.ok) throw new Error('Signup failed')
-        
+
         const result = await response.json()
         localStorage.setItem('token', result.token)
         localStorage.setItem('user', JSON.stringify(result.user))
         window.dispatchEvent(new Event('authChange'))
         router.push('/')
       } else {
-        // Use NextAuth's signIn for credentials
         const result = await signIn('credentials', {
           redirect: false,
           email: formData.get('email'),
@@ -85,32 +84,44 @@ export default function SignInPage() {
         <MysticBackground>
           <div className="relative z-10 min-h-screen flex flex-col justify-center items-center px-4">
             <div className="bg-white/95 backdrop-blur-sm shadow-xl rounded-lg p-8 w-full max-w-md">
-              <h2 className="text-2xl font-bold text-center mb-6">User Authentication</h2>
+              <h2 className="text-2xl font-bold text-center mb-6 text-black">User Authentication</h2>
 
               {error && (
-                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-full border border-red-400 text-center">
                   {error}
                 </div>
               )}
 
               <Tabs defaultValue="login" className="w-full">
-                <TabsList className="w-full grid grid-cols-2 mb-4">
-                  <TabsTrigger value="login">Login</TabsTrigger>
-                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsList className="w-full grid grid-cols-2 mb-4 bg-[#FFA500] text-black border border-black rounded-full">
+                  <TabsTrigger value="login" className="text-black">Login</TabsTrigger>
+                  <TabsTrigger value="signup" className="text-black">Sign Up</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="login">
                   <form className="space-y-4" onSubmit={(e) => handleCredentialSubmit(e, 'login')}>
-                    <Input name="email" type="email" placeholder="Email" required className="bg-white/80" />
-                    <Input name="password" type="password" placeholder="Password" required className="bg-white/80" />
-                    <Button type="submit" className="w-full" disabled={isLoading}>
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      required
+                      className="bg-[#FFA500] text-black placeholder-black font-semibold border border-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                    <Input
+                      name="password"
+                      type="password"
+                      placeholder="Enter your password"
+                      required
+                      className="bg-[#FFA500] text-black placeholder-black font-semibold border border-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                    <Button type="submit" className="w-full bg-[#FFA500] text-black font-semibold border border-black rounded-full hover:bg-[#e69500]" disabled={isLoading}>
                       {isLoading ? 'Loading...' : 'Login'}
                     </Button>
                   </form>
                   <div className="mt-4">
-                    <Button 
-                      variant="outline" 
-                      className="w-full" 
+                    <Button
+                      variant="outline"
+                      className="w-full bg-[#FFA500] text-black font-semibold border border-black rounded-full hover:bg-[#e69500]"
                       onClick={handleGoogleSignIn}
                       disabled={isLoading}
                     >
@@ -121,18 +132,42 @@ export default function SignInPage() {
 
                 <TabsContent value="signup">
                   <form className="space-y-4" onSubmit={(e) => handleCredentialSubmit(e, 'signup')}>
-                    <Input name="name" type="text" placeholder="Full Name" required className="bg-white/80" />
-                    <Input name="email" type="email" placeholder="Email" required className="bg-white/80" />
-                    <Input name="password" type="password" placeholder="Password" required className="bg-white/80" />
-                    <Input name="confirmPassword" type="password" placeholder="Confirm Password" required className="bg-white/80" />
-                    <Button type="submit" className="w-full" disabled={isLoading}>
+                    <Input
+                      name="name"
+                      type="text"
+                      placeholder="Full Name"
+                      required
+                      className="bg-[#FFA500] text-black placeholder-black font-semibold border border-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      required
+                      className="bg-[#FFA500] text-black placeholder-black font-semibold border border-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                    <Input
+                      name="password"
+                      type="password"
+                      placeholder="Create password"
+                      required
+                      className="bg-[#FFA500] text-black placeholder-black font-semibold border border-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                    <Input
+                      name="confirmPassword"
+                      type="password"
+                      placeholder="Confirm password"
+                      required
+                      className="bg-[#FFA500] text-black placeholder-black font-semibold border border-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                    <Button type="submit" className="w-full bg-[#FFA500] text-black font-semibold border border-black rounded-full hover:bg-[#e69500]" disabled={isLoading}>
                       {isLoading ? 'Loading...' : 'Sign Up'}
                     </Button>
                   </form>
                   <div className="mt-4">
-                    <Button 
-                      variant="outline" 
-                      className="w-full" 
+                    <Button
+                      variant="outline"
+                      className="w-full bg-[#FFA500] text-black font-semibold border border-black rounded-full hover:bg-[#e69500]"
                       onClick={handleGoogleSignIn}
                       disabled={isLoading}
                     >

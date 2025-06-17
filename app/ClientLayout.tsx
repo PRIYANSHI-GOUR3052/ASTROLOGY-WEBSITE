@@ -8,13 +8,14 @@ import { PageTransition } from './components/PageTransition';
 import { MysticBackground } from './components/MysticBackground';
 import Chatbot from './components/chatbot';
 import { AuthProvider } from './contexts/AuthContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { v4 as uuidv4 } from 'uuid';
+import { SubHeader } from './components/SubHeader';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  
-  // Array of admin paths where we should hide the regular layout
-  const hideLayout = [
+
+  const shouldHideLayout = [
     "/admin/dashboard",
     "/admin/clients",
     "/admin/courses",
@@ -28,24 +29,20 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   ].includes(pathname ?? '');
 
   useEffect(() => {
-    // Get or create visitor ID
+    if (shouldHideLayout) return;
+
     let visitorId = localStorage.getItem('visitor_id');
-    
+
     if (!visitorId) {
-      // If no visitor ID exists, create a new one
       visitorId = uuidv4();
       localStorage.setItem('visitor_id', visitorId);
     }
 
-    // Track page visit
     const trackPageVisit = async () => {
       try {
-        // Record the page visit to your API
         const response = await fetch('/api/track-visitor', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             visitorId,
             path: pathname,
@@ -53,7 +50,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             referrer: document.referrer || null,
           }),
         });
-        
+
         if (!response.ok) {
           console.error('Failed to track visitor');
         }
@@ -62,28 +59,27 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       }
     };
 
-    // Only track visits on non-admin pages
-    if (!hideLayout) {
-      trackPageVisit();
-    }
-  }, [pathname, hideLayout]);
+    trackPageVisit();
+  }, [pathname, shouldHideLayout]);
+
+  if (shouldHideLayout) {
+    return <>{children}</>;
+  }
 
   return (
     <AuthProvider>
-      {!hideLayout ? (
-        <>
+      <LanguageProvider>
+        <div className="min-h-screen bg-white">
+          
+          <Header />
+          <SubHeader />
           <PageTransition>
-            <MysticBackground>
-              <Header />
-              <main>{children}</main>
-              <Footer />
-              <Chatbot />
-            </MysticBackground>
+            {children}
           </PageTransition>
-        </>
-      ) : (
-        children
-      )}
+          <Footer />
+          <Chatbot />
+        </div>
+      </LanguageProvider>
     </AuthProvider>
   );
 }
