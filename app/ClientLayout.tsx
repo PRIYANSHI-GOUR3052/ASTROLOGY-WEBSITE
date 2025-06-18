@@ -6,7 +6,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { PageTransition } from './components/PageTransition';
 import { MysticBackground } from './components/MysticBackground';
-import Chatbot from './components/chatbot';
+import Chatbot from './components/Chatbot';
 import { AuthProvider } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { v4 as uuidv4 } from 'uuid';
