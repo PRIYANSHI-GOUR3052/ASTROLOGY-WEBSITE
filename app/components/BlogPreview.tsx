@@ -1,4 +1,4 @@
-
+'use client';
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -6,16 +6,18 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useLanguage } from '../contexts/LanguageContext'
 
+interface BlogPost {
+  title: { en: string; hi: string };
+  description: { en: string; hi: string };
+  date: string;
+  slug: string;
+  imageUrl: string;
+  category: string;
+  themeColor?: string;
+}
+
 interface BlogPostProps {
-  post?: {
-    title: { en: string; hi: string };
-    description: { en: string; hi: string };
-    date: string;
-    slug: string;
-    imageUrl: string;
-    category: string;
-    themeColor?: string;
-  };
+  post?: BlogPost;
   className?: string;
 }
 
@@ -23,7 +25,35 @@ export function BlogPreview({ post, className }: BlogPostProps) {
   const { lang } = useLanguage();
   const fallbackColor = '#FFF5E6';
 
-  if (!post) return null; // ⛔ Prevent rendering if post is undefined
+  if (!post) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <BlogPostCard 
+          post={{
+            title: { en: "Sample Post", hi: "नमूना पोस्ट" },
+            description: { en: "This is a sample blog post", hi: "यह एक नमूना ब्लॉग पोस्ट है" },
+            date: "2024-03-20",
+            slug: "sample-post",
+            imageUrl: "/images/blog/sample.jpg",
+            category: "Astrology",
+            themeColor: fallbackColor
+          }}
+        />
+      </div>
+    );
+  }
+
+  return <BlogPostCard post={post} className={className} />;
+}
+
+interface BlogPostCardProps {
+  post: BlogPost;
+  className?: string;
+}
+
+function BlogPostCard({ post, className }: BlogPostCardProps) {
+  const { lang } = useLanguage();
+  const fallbackColor = '#FFF5E6';
 
   return (
     <Card
@@ -31,7 +61,12 @@ export function BlogPreview({ post, className }: BlogPostProps) {
       style={{ backgroundColor: post.themeColor || fallbackColor }}
     >
       <div className="relative w-full h-48 overflow-hidden rounded-t-xl">
-        <Image src={post.imageUrl} alt={post.title[lang]} layout="fill" objectFit="cover" />
+        <Image 
+          src={post.imageUrl} 
+          alt={post.title[lang]} 
+          fill
+          style={{ objectFit: 'cover' }}
+        />
       </div>
       <CardContent className="p-6 flex-grow">
         <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -50,5 +85,5 @@ export function BlogPreview({ post, className }: BlogPostProps) {
         </Link>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -13,7 +13,12 @@ const servicesDropdown = [
   {
     title: { en: 'Consultations', hi: 'परामर्श' },
     items: [
-      
+      { label: { en: "Today's Panchang", hi: 'आज का पंचांग' }, href: '/panchang' },
+      { label: { en: 'Kundali Matching', hi: 'कुंडली मिलान' }, href: '/kundali-matching' },
+      { label: { en: 'Buy Products', hi: 'उत्पाद खरीदें' }, href: '/shop' },
+      { label: { en: 'Free Daily Horoscope', hi: 'दैनिक राशिफल' }, href: '/daily-horoscope' },
+      { label: { en: 'Online Puja', hi: 'ऑनलाइन पूजा' }, href: '/online-puja' },
+      { label: { en: 'Astrology', hi: 'ज्योतिष' }, href: '/astrology' },
       { label: { en: 'Chat with Astrologer', hi: 'ज्योतिषी से चैट करें' }, href: '/services/chat-with-astrologer' },
       { label: { en: 'Love & Relationship', hi: 'प्रेम और संबंध' }, href: '/services/love-relationship' },
       { label: { en: 'Career & Job', hi: 'करियर और नौकरी' }, href: '/services/career-job' },
@@ -113,10 +118,10 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-base font-medium text-black hover:bg-gray-200 transition-all`}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-base font-medium text-[#7C3AED] hover:bg-[#F3E8FF] hover:text-[#FBBF24] transition-all`}
             >
-              <item.icon className="w-4 h-4" />
-              <span className="bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
+              <item.icon className="w-4 h-4 text-[#7C3AED] group-hover:text-[#FBBF24] transition-colors" />
+              <span className="text-[#7C3AED] group-hover:text-[#FBBF24] transition-colors">
                 {item.label[lang]}
               </span>
             </Link>
@@ -126,28 +131,47 @@ export function Header() {
           <div className="relative">
             <button
               onClick={() => setIsServicesOpen(!isServicesOpen)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-base font-medium text-black hover:bg-gray-200 transition-all"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-base font-medium text-[#7C3AED] hover:bg-[#F3E8FF] hover:text-[#FBBF24] transition-all"
             >
-              <span className="bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
+              <span className="text-[#7C3AED] group-hover:text-[#FBBF24] transition-colors">
                 {servicesDropdown[0].title[lang]}
               </span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${isServicesOpen ? 'rotate-180' : 'rotate-0'}`} />
+              <ChevronDown className={`w-4 h-4 transition-transform ${isServicesOpen ? 'rotate-180' : 'rotate-0'} text-[#7C3AED] group-hover:text-[#FBBF24]`} />
             </button>
             
             {/* Services Dropdown Menu */}
             {isServicesOpen && (
-              <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 p-4">
-                {servicesDropdown.map((col) => (
-                  <div key={col.title.en} className="mb-4 last:mb-0">
-                    <div className="uppercase text-sm font-semibold bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text mb-2">
+              <div className="absolute top-full left-0 mt-2 w-[520px] bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-50">
+                {/* Main Consultations as grid */}
+                <div className="mb-4">
+                  <div className="uppercase text-sm font-bold text-black mb-2 bg-[#F3E8FF] rounded px-3 py-1 border border-[#E0E0E0] shadow-sm w-max">
+                    {servicesDropdown[0].title[lang]}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {servicesDropdown[0].items.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="text-[#7C3AED] rounded-lg px-2 py-2 block transition-all duration-150 hover:bg-[#F3E8FF] hover:text-[#FBBF24] text-base font-medium"
+                        onClick={() => setIsServicesOpen(false)}
+                      >
+                        {link.label[lang]}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                {/* Other dropdown sections as grid lists below */}
+                {servicesDropdown.slice(1).map((col) => (
+                  <div key={col.title.en} className="mb-4">
+                    <div className="uppercase text-sm font-bold text-black mb-2 bg-[#F3E8FF] rounded px-3 py-1 border border-[#E0E0E0] shadow-sm w-max">
                       {col.title[lang]}
                     </div>
-                    <ul className="space-y-1">
+                    <ul className="grid grid-cols-2 gap-2">
                       {col.items.map((link) => (
                         <li key={link.href}>
                           <Link
                             href={link.href}
-                            className="text-gray-600 rounded-lg px-2 py-1.5 block transition-all duration-150 hover:bg-gradient-to-r hover:from-[#6A0DAD] hover:to-[#FF8C00] hover:text-white"
+                            className="text-[#7C3AED] rounded-lg px-2 py-1.5 block transition-all duration-150 hover:bg-[#F3E8FF] hover:text-[#FBBF24]"
                             onClick={() => setIsServicesOpen(false)}
                           >
                             {link.label[lang]}

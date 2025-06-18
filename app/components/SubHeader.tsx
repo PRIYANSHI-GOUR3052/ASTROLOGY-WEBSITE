@@ -45,13 +45,13 @@ const subHeaderItems = [
 
 export function SubHeader() {
   return (
-    <div className="relative w-full overflow-hidden bg-gradient-to-br from-blue-100 to-indigo-200 py-6 rounded-xl shadow-[inset_4px_4px_8px_#D1D9E6,_inset_-4px_-4px_8px_#FFFFFF,_4px_4px_8px_#D1D9E6,_-4px_-4px_8px_#FFFFFF] border border-[#E0E0E0] mx-auto max-w-7xl mt-6">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-center md:justify-between items-center gap-6 overflow-x-auto scrollbar-hide">
+    <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#f8fafc] via-[#f3e8ff] to-[#f8fafc] py-1 rounded-xl shadow border border-[#E0E0E0] mx-auto mt-24">
+      <div className="w-full px-8">
+        <div className="flex flex-wrap justify-center items-center gap-8 overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {subHeaderItems.map((item) => (
             <Link key={item.label} href={item.href} className="flex-shrink-0">
               <motion.div
-                className="flex flex-col items-center w-24 text-center group cursor-pointer"
+                className="flex flex-col items-center w-20 text-center group cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -63,7 +63,7 @@ export function SubHeader() {
                     </span>
                   )}
                 </div>
-                <p className="mt-2 text-sm font-semibold text-gray-800 group-hover:text-[#6A0DAD] transition-colors duration-200 leading-tight">
+                <p className="mt-4 text-sm font-semibold text-gray-800 group-hover:text-[#6A0DAD] transition-colors duration-200 leading-tight">
                   {item.label}
                 </p>
               </motion.div>
@@ -71,6 +71,11 @@ export function SubHeader() {
           ))}
         </div>
       </div>
+      {/* Hide scrollbar for all browsers */}
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </div>
   )
 }

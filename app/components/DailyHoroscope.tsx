@@ -104,17 +104,20 @@ export function DailyHoroscope() {
   return (
     <section className="min-h-screen bg-gradient-to-b from-white to-[#F8F8F8] py-16 font-sans">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl md:text-5xl font-serif font-bold text-center mb-4 leading-tight bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
-          {lang === 'hi' ? 'दैनिक राशिफल' : 'Daily Horoscope'}
-        </h1>
-        <p className="text-lg font-serif text-gray-700 text-center mb-12">
-          {lang === 'hi' ? 'आज सितारों से अपनी अंतर्दृष्टि प्राप्त करें' : 'Get your daily insights from the stars today'}
-        </p>
+        {/* Banner Heading */}
+        <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-10 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight">
+            {lang === 'hi' ? 'दैनिक राशिफल' : 'Daily Horoscope'}
+          </h1>
+          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl">
+            {lang === 'hi' ? 'आज सितारों से अपनी अंतर्दृष्टि प्राप्त करें' : 'Get your daily insights from the stars today'}
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             <Card className="bg-white shadow-lg border border-orange-200 max-w-2xl mx-auto rounded-2xl p-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
+              <h3 className="text-2xl font-bold text-black mb-4">
                 {lang === 'hi' ? 'अपनी राशि जानें' : 'Know Your Sign'}
               </h3>
               <div className="mb-4">
@@ -144,8 +147,8 @@ export function DailyHoroscope() {
                 disabled={!selectedSign}
                 className={`w-full px-4 py-2 rounded-xl border text-sm font-semibold mb-4 transition-all
                 ${!selectedSign
-                  ? 'bg-gray-300 text-gray-600 border-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] hover:from-[#5A0D9D] hover:to-[#FF7C00] text-white'}
+                  ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                  : 'bg-[#F3E8FF] text-[#7C3AED] border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24]'}
                 shadow-md`}
               >
                 {lang === 'hi' ? 'राशिफल देखें' : 'View Horoscope'}
@@ -167,10 +170,10 @@ export function DailyHoroscope() {
                     'bg-[#FFF0F5]'
                   }`}
                 >
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">{card.title[lang]}</h3>
+                  <h3 className="text-xl font-bold text-black mb-2">{card.title[lang]}</h3>
                   <p className="text-gray-700 mb-4 line-clamp-3">{card.description[lang]}</p>
                   <Link href={card.href} passHref>
-                    <Button className="bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] hover:from-[#5A0D9D] hover:to-[#FF7C00] text-white rounded-lg py-2 px-6 shadow-md transition-all duration-300">
+                    <Button className="bg-[#F3E8FF] text-[#7C3AED] rounded-lg py-2 px-6 shadow-md transition-all duration-300 border border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24]">
                       {lang === 'hi' ? 'और जानें' : 'Learn More'}
                     </Button>
                   </Link>
@@ -185,11 +188,11 @@ export function DailyHoroscope() {
                 <Image
                   src="/images/placeholder-author.jpg"
                   alt="Dr. Narendra Kumar Sharma"
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text mb-2">
+              <h3 className="text-2xl font-bold text-black mb-2">
                 {lang === 'hi' ? 'डॉ. नरेंद्र कुमार शर्मा' : 'Dr. Narendra Kumar Sharma'}
               </h3>
               <p className="text-purple-600 text-sm mb-4">{lang === 'hi' ? 'वैदिक ज्योतिषी' : 'Vedic Astrologer'}</p>
@@ -197,7 +200,7 @@ export function DailyHoroscope() {
                 {lang === 'hi' ? 'नमस्ते, मैं एक अनुभवी वैदिक ज्योतिषी हूँ। मेरा जुनून आपको ब्रह्मांडीय ऊर्जाओं के माध्यम से मार्गदर्शन करना और आपकी वास्तविक क्षमता को उजागर करने में मदद करना है।' : 'Hey, I\'m a renowned Vedic astrologer with years of experience. My passion is to guide you through cosmic energies and help you unlock your true potential.'}
               </p>
               <Link href="/contact" passHref>
-                <Button className="w-full bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] hover:from-[#5A0D9D] hover:to-[#FF7C00] text-white rounded-full py-2 px-4 shadow-md transition duration-300 mb-4">
+                <Button className="w-full bg-[#F3E8FF] text-[#7C3AED] rounded-full py-2 px-4 shadow-md transition duration-300 border border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24] mb-4">
                   {lang === 'hi' ? 'मुझसे संपर्क करें' : 'Contact Me'}
                 </Button>
               </Link>
@@ -210,7 +213,7 @@ export function DailyHoroscope() {
             </Card>
 
             <Card className="bg-[#FFF5E6] rounded-xl shadow-lg p-6 border border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
+              <h3 className="text-2xl font-bold text-black mb-4">
                 {lang === 'hi' ? 'अक्सर पूछे जाने वाले प्रश्न' : 'Frequently Asked Questions'}
               </h3>
               <div className="space-y-4">
