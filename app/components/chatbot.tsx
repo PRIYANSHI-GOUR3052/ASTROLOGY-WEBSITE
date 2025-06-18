@@ -1,3 +1,4 @@
+// Case-sensitivity check: forced update for Netlify build issues
 'use client'
 import { useState, useEffect } from 'react';
 import { Send, MessageSquare, X, Globe, MessageCircle } from 'lucide-react';
