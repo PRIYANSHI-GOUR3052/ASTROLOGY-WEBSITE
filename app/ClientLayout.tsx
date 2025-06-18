@@ -10,7 +10,6 @@ import Chatbot from './components/chatbot';
 import { AuthProvider } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { v4 as uuidv4 } from 'uuid';
-import { SubHeader } from './components/SubHeader';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -69,16 +68,16 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <AuthProvider>
       <LanguageProvider>
-        <div className="min-h-screen bg-white">
-          
-          <Header />
-          <SubHeader />
-          <PageTransition>
-            {children}
-          </PageTransition>
-          <Footer />
-          <Chatbot />
-        </div>
+        <MysticBackground>
+          <div className="min-h-screen bg-white">
+            <Header />
+            <PageTransition>
+              {children}
+            </PageTransition>
+            <Footer />
+            <Chatbot />
+          </div>
+        </MysticBackground>
       </LanguageProvider>
     </AuthProvider>
   );

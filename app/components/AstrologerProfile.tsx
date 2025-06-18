@@ -74,7 +74,7 @@ export function AstrologerProfile() {
             25+ years of experience in teaching astrology and practicing
           </p>
           <Link href="/contact">
-            <Button asChild className="bg-[#A6033F] text-white hover:bg-[#8e0234] mt-8 text-lg px-8 py-6">
+            <Button asChild className="bg-[#F3E8FF] text-[#7C3AED] border border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24] mt-8 text-lg px-8 py-6 transition-all duration-200">
               <span>अपॉइंटमेंट बुक करें (Book Appointment)</span>
             </Button>
           </Link>

@@ -254,7 +254,7 @@ export function ServicesOverview() {
             <h3 className="text-xl font-bold text-black mb-2 text-center">{snapshotContent.pasteCoolPhotos.title[lang]}</h3>
             <p className="text-black text-sm mb-4 text-center">{snapshotContent.pasteCoolPhotos.description[lang]}</p>
             <div className="relative w-full h-32 mb-4 rounded-xl overflow-hidden">
-              <Image src={snapshotContent.pasteCoolPhotos.imageUrl} alt="Horoscope Daily" layout="fill" objectFit="cover" />
+              <Image src={snapshotContent.pasteCoolPhotos.imageUrl} alt="Horoscope Daily" fill style={{ objectFit: 'cover' }} />
             </div>
             <Link href="/daily-horoscope" passHref>
               <Button className="btn-grad rounded-full text-sm font-semibold">
@@ -320,7 +320,7 @@ export function ServicesOverview() {
             <h3 className="text-2xl font-bold text-black mb-2 text-center">{snapshotContent.coffeinia.title[lang]}</h3>
             <p className="text-black text-sm mb-4 text-center">{snapshotContent.coffeinia.description[lang]}</p>
             <div className="relative w-48 h-96">
-              <Image src={snapshotContent.coffeinia.appScreenshot} alt="App Screenshot" layout="fill" objectFit="contain" />
+              <Image src={snapshotContent.coffeinia.appScreenshot} alt="App Screenshot" fill style={{ objectFit: 'contain' }} />
             </div>
             <div className="space-y-2 w-full mt-4">
                 <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
@@ -424,7 +424,7 @@ export function ServicesOverview() {
             <h3 className="text-2xl font-bold text-black mb-2 text-center">{snapshotContent.simpleMockups.title[lang]}</h3>
             <p className="text-black text-sm mb-4 text-center">{snapshotContent.simpleMockups.description[lang]}</p>
             <div className="relative w-full h-48">
-              <Image src={snapshotContent.simpleMockups.laptopScreenshot} alt="Laptop Screenshot" layout="fill" objectFit="contain" />
+              <Image src={snapshotContent.simpleMockups.laptopScreenshot} alt="Laptop Screenshot" fill style={{ objectFit: 'contain' }} />
             </div>
           </motion.div>
 

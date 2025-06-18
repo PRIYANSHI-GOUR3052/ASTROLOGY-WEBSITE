@@ -92,11 +92,19 @@ export function LifeChangingSolutions() {
   return (
     <section className="py-16 bg-white text-black font-sans">
       <div className="container mx-auto px-4">
+        {/* Banner Section */}
+        <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-10 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight">
+            {lang === 'hi' ? 'एक कॉल में जीवन बदलने वाले समाधान' : 'Best Life Changing Solutions In Just One Call'}
+          </h2>
+          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl">
+            {lang === 'hi'
+              ? 'छात्रों, प्रेम, स्वास्थ्य, व्यापार, विवाह, और संतान से जुड़े सभी सवालों के लिए ज्योतिषीय समाधान पाएं।'
+              : 'Get astrological solutions for all your questions related to career, love, health, business, marriage, and children.'}
+          </p>
+        </div>
         {/* Main Solutions Section */}
         <div className="mb-12">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">{lang === 'hi' ? 'एक कॉल में जीवन बदलने वाले समाधान' : 'Best Life Changing Solutions In Just One Call'}</h2>
-          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {solutions.map((solution, index) => (
               <motion.div
@@ -112,19 +120,19 @@ export function LifeChangingSolutions() {
                   <Image 
                     src={`/images/course-${index + 1}.webp`}
                     alt={solution.title[lang]}
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    style={{ objectFit: 'cover' }}
                   />
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-extrabold mb-2 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">{solution.title[lang]}</h3>
+                  <h3 className="text-xl font-extrabold mb-2 text-black">{solution.title[lang]}</h3>
                   <p className="text-base text-black mb-4 leading-tight tracking-wide font-serif">
                     {expandedCards[index] ? solution.description[lang] : truncateText(solution.description[lang], 100)}
                   </p>
                   {solution.description[lang].length > 100 && (
                     <Button 
                       variant="link" 
-                      className="text-purple-600 hover:underline p-0 h-auto text-sm font-semibold" 
+                      className="text-[#7C3AED] hover:text-[#FBBF24] hover:underline p-0 h-auto text-sm font-semibold bg-[#F3E8FF] border border-[#E0E0E0] rounded-lg transition-all duration-200"
                       onClick={() => toggleExpand(index)}
                     >
                       {expandedCards[index] ? 'Read Less' : 'Read More'}
@@ -139,7 +147,7 @@ export function LifeChangingSolutions() {
         {/* Explore More Astrological Insights Section */}
         <div>
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold">{lang === 'hi' ? 'और ज्योतिषीय अंतर्दृष्टि का अन्वेषण करें' : 'Explore More Astrological Insights'}</h2>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-black">{lang === 'hi' ? 'और ज्योतिषीय अंतर्दृष्टि का अन्वेषण करें' : 'Explore More Astrological Insights'}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Continue Learning Content Card */}
@@ -155,12 +163,12 @@ export function LifeChangingSolutions() {
                 <Image 
                   src="/images/continue-learning.webp"
                   alt={lang === 'hi' ? 'ज्योतिषीय यात्रा जारी रखें' : 'Continue Astrological Journey'}
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
               <CardContent className="p-6 md:w-1/2 flex flex-col justify-center">
-                <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">{lang === 'hi' ? 'अपनी ज्योतिषीय समझ को गहरा करें' : 'Deepen Your Astrological Understanding'}</h3>
+                <h3 className="text-xl font-bold mb-2 text-black">{lang === 'hi' ? 'अपनी ज्योतिषीय समझ को गहरा करें' : 'Deepen Your Astrological Understanding'}</h3>
                 <p className="text-base text-gray-700 mb-4 leading-relaxed tracking-wide font-serif">{lang === 'hi' ? 'प्राचीन ज्योतिषीय सिद्धांतों और उनके आधुनिक अनुप्रयोगों में गोता लगाएँ। हमारे व्यापक संसाधनों के साथ अपनी आध्यात्मिक यात्रा को आगे बढ़ाएँ।' : 'Dive deeper into ancient astrological principles and their modern applications. Advance your spiritual journey with our comprehensive resources.'}</p>
               </CardContent>
             </motion.div>
@@ -184,7 +192,7 @@ export function LifeChangingSolutions() {
               <p className="text-gray-600 mb-6 text-center max-w-sm relative z-10">{lang === 'hi' ? 'व्यक्तिगत ज्योतिषीय मार्गदर्शन और समाधान के लिए हमारे विशेषज्ञों के साथ एक विशेष परामर्श बुक करें।' : 'Book a personalized consultation with our experts for astrological guidance and solutions.'}</p>
               <motion.button
                 onClick={scrollToContact}
-                className="bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 relative z-10"
+                className="bg-[#F3E8FF] text-[#7C3AED] font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-[#E0F2FE] hover:text-[#FBBF24] border border-[#E0E0E0] transition-all duration-300 transform hover:scale-105 relative z-10"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -202,7 +210,7 @@ export function LifeChangingSolutions() {
               <p className="text-gray-600 mb-6 text-center max-w-sm relative z-10">{lang === 'hi' ? 'अपनी ज्योतिषीय शिक्षा और अंतर्दृष्टि को गहरा करते रहें। हमारे व्यापक संसाधनों के साथ अपनी आध्यात्मिक यात्रा को आगे बढ़ाएँ।' : 'Dive deeper into ancient astrological principles and their modern applications. Advance your spiritual journey with our comprehensive resources.'}</p>
               <Link href="/blog" passHref>
                 <motion.button
-                  className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 relative z-10"
+                  className="bg-[#F3E8FF] text-[#7C3AED] font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-[#E0F2FE] hover:text-[#FBBF24] border border-[#E0E0E0] transition-all duration-300 transform hover:scale-105 relative z-10"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

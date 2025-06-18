@@ -47,11 +47,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ? require("framer-motion").motion.button
       : "button"
 
+    // Filter out motion props when not using animation
+    const filteredProps = animated ? props : Object.fromEntries(
+      Object.entries(props).filter(([key]) => !key.startsWith('while') && !key.startsWith('animate') && !key.startsWith('initial') && !key.startsWith('transition'))
+    )
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        {...props}
+        {...filteredProps}
       />
     )
   }
