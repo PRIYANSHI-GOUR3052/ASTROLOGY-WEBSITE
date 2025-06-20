@@ -87,7 +87,7 @@ const searchTags = [
 
 export function HeroSection() {
   return (
-    <section className="w-full min-h-[90vh] bg-white px-2 md:px-8 py-10 flex flex-col items-center justify-center">
+    <section className="w-full min-h-[70vh] bg-white px-2 md:px-8 py-4 flex flex-col items-center justify-center mt-20 md:mt-32">
       <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 items-start">
         {/* Left Column */}
         <div className="flex flex-col gap-8">

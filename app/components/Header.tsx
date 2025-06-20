@@ -52,11 +52,11 @@ const servicesDropdown = [
 
 const navItems = [
   { label: { en: 'Home', hi: 'होम' }, href: '/', icon: Home },
-  { label: { en: 'Shop', hi: 'दुकान' }, href: '/shop', icon: ShoppingCart },
-  { label: { en: 'Blog', hi: 'ब्लॉग' }, href: '/blog', icon: PenTool },
   { label: { en: 'About', hi: 'हमारे बारे में' }, href: '/about', icon: Info },
+  { label: { en: 'Courses', hi: 'पाठ्यक्रम' }, href: '/courses', icon: GraduationCap },
   { label: { en: 'Contact', hi: 'संपर्क' }, href: '/contact', icon: PhoneCall },
-  { label: { en: 'Study', hi: 'अध्ययन' }, href: '/study', icon: GraduationCap },
+  { label: { en: 'Blog', hi: 'ब्लॉग' }, href: '/blog', icon: BookOpen },
+  { label: { en: 'Study', hi: 'अध्ययन' }, href: '/study', icon: PenTool },
 ];
 
 export function Header() {

@@ -1,18 +1,21 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Header } from './components/Header';
-import { Footer } from './components/Footer';
+import Footer from './components/Footer';
 import { PageTransition } from './components/PageTransition';
 import { MysticBackground } from './components/MysticBackground';
 import Chatbot from './components/Chatbot';
 import { AuthProvider } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { v4 as uuidv4 } from 'uuid';
+import { Toaster } from '@/components/ui/sonner';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith('/admin');
+  const isSignInRoute = pathname === '/signin';
 
   const shouldHideLayout = [
     "/admin/dashboard",
@@ -27,7 +30,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     "/admin/stone"
   ].includes(pathname ?? '');
 
+  const [isClient, setIsClient] = useState(false)
+
   useEffect(() => {
+    setIsClient(true)
     if (shouldHideLayout) return;
 
     let visitorId = localStorage.getItem('visitor_id');
@@ -61,7 +67,33 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     trackPageVisit();
   }, [pathname, shouldHideLayout]);
 
+  useEffect(() => {
+    // Store original body background
+    const originalBodyBg = document.body.style.backgroundColor;
+
+    if (isSignInRoute) {
+      // Force background to black for sign-in route
+      document.body.style.backgroundColor = 'black';
+    } else {
+      // Revert to original for other routes
+      document.body.style.backgroundColor = originalBodyBg;
+    }
+    
+    // Cleanup on component unmount to restore original style
+    return () => {
+      document.body.style.backgroundColor = originalBodyBg;
+    };
+  }, [isSignInRoute]);
+
+  if (!isClient) {
+    return null;
+  }
+
   if (shouldHideLayout) {
+    return <>{children}</>;
+  }
+
+  if (isSignInRoute) {
     return <>{children}</>;
   }
 
@@ -76,6 +108,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             </PageTransition>
             <Footer />
             <Chatbot />
+            <Toaster />
           </div>
         </MysticBackground>
       </LanguageProvider>
