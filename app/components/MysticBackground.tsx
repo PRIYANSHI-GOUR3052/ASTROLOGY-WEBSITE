@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-export function MysticBackground({ children }: { children: React.ReactNode }) {
+export function MysticBackground({ children }: { children?: React.ReactNode }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
