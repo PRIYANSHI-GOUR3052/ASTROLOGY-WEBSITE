@@ -17,7 +17,6 @@ const servicesDropdown = [
       { label: { en: 'Kundali Matching', hi: 'कुंडली मिलान' }, href: '/kundali-matching' },
       { label: { en: 'Buy Products', hi: 'उत्पाद खरीदें' }, href: '/shop' },
       { label: { en: 'Free Daily Horoscope', hi: 'दैनिक राशिफल' }, href: '/daily-horoscope' },
-      { label: { en: 'Online Puja', hi: 'ऑनलाइन पूजा' }, href: '/online-puja' },
       { label: { en: 'Astrology', hi: 'ज्योतिष' }, href: '/astrology' },
       { label: { en: 'Chat with Astrologer', hi: 'ज्योतिषी से चैट करें' }, href: '/services/chat-with-astrologer' },
       { label: { en: 'Love & Relationship', hi: 'प्रेम और संबंध' }, href: '/services/love-relationship' },
@@ -28,7 +27,7 @@ const servicesDropdown = [
   {
     title: { en: 'Puja & Rituals', hi: 'पूजा और अनुष्ठान' },
     items: [
-      { label: { en: 'Online Puja', hi: 'ऑनलाइन पूजा' }, href: '/services/online-puja' },
+      { label: { en: 'Online Puja', hi: 'ऑनलाइन पूजा' }, href: '/online-puja' },
       { label: { en: 'Grah Shanti', hi: 'ग्रह शांति' }, href: '/services/grah-shanti' },
       { label: { en: 'Manokamna Pooja', hi: 'मनोकामना पूजा' }, href: '/services/manokamna-pooja' },
     ],
@@ -44,7 +43,7 @@ const servicesDropdown = [
   {
     title: { en: 'Learning', hi: 'सीखना' },
     items: [
-      { label: { en: 'Astrology Courses', hi: 'ज्योतिष पाठ्यक्रम' }, href: '/services/courses' },
+      { label: { en: 'Astrology Courses', hi: 'ज्योतिष पाठ्यक्रम' }, href: '/courses' },
       { label: { en: 'Blog', hi: 'ब्लॉग' }, href: '/blog' },
     ],
   },

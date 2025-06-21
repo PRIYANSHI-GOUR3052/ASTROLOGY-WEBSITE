@@ -49,7 +49,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
     ];
     return (
       <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-blue-50 to-white text-black">
-        <div className="container mx-auto px-4 pt-32 pb-20 relative z-10">
+        <div className="container mx-auto px-4 pt-8 pb-20 relative z-10">
           {/* Glassmorphic Banner */}
           <div className="w-full rounded-3xl bg-gradient-to-r from-[#e0f7fa] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e0f7fa]">
             <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg" style={{ fontFamily: 'Playfair Display, serif' }}>

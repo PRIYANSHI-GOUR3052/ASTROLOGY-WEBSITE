@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useLanguage } from '@/app/contexts/LanguageContext'
 import { Sparkles, ArrowRight, Facebook, Instagram, Twitter, ChevronDown } from 'lucide-react'
+import { horoscopeCards } from '@/app/data/horoscopeCards'
 
 const zodiacSigns = [
   { label: { en: 'Aries', hi: 'मेष' }, value: 'Aries' },
@@ -22,45 +23,6 @@ const zodiacSigns = [
   { label: { en: 'Capricorn', hi: 'मकर' }, value: 'Capricorn' },
   { label: { en: 'Aquarius', hi: 'कुंभ' }, value: 'Aquarius' },
   { label: { en: 'Pisces', hi: 'मीन' }, value: 'Pisces' },
-]
-
-interface HoroscopeCard {
-  title: { en: string; hi: string; };
-  description: { en: string; hi: string; };
-  href: string;
-}
-
-const horoscopeCards: HoroscopeCard[] = [
-  {
-    title: { en: "Aries Horoscope", hi: "मेष राशिफल" },
-    description: { en: "Your daily insights for Aries, focusing on career and finance.", hi: "मेष राशि के लिए आपकी दैनिक अंतर्दृष्टि, करियर और वित्त पर ध्यान केंद्रित करते हुए।" },
-    href: "/daily-horoscope/aries",
-  },
-  {
-    title: { en: "Taurus Horoscope", hi: "वृषभ राशिफल" },
-    description: { en: "Discover what the stars hold for Taurus in love and relationships.", hi: "प्रेम और रिश्तों में वृषभ के लिए सितारे क्या कहते हैं, जानें।" },
-    href: "/daily-horoscope/taurus",
-  },
-  {
-    title: { en: "Gemini Horoscope", hi: "मिथुन राशिफल" },
-    description: { en: "Guidance for Gemini on health and well-being today.", hi: "आज स्वास्थ्य और कल्याण पर मिथुन राशि के लिए मार्गदर्शन।" },
-    href: "/daily-horoscope/gemini",
-  },
-  {
-    title: { en: "Cancer Horoscope", hi: "कर्क राशिफल" },
-    description: { en: "Career growth and personal development tips for Cancerians.", hi: "कर्क राशि वालों के लिए करियर में वृद्धि और व्यक्तिगत विकास के सुझाव।" },
-    href: "/daily-horoscope/cancer",
-  },
-  {
-    title: { en: "Leo Horoscope", hi: "सिंह राशिफल" },
-    description: { en: "Financial predictions and lucky numbers for Leo today.", hi: "आज सिंह राशि के लिए वित्तीय भविष्यवाणियां और भाग्यशाली संख्याएँ।" },
-    href: "/daily-horoscope/leo",
-  },
-  {
-    title: { en: "Virgo Horoscope", hi: "कन्या राशिफल" },
-    description: { en: "Love life and social interactions for Virgo this week.", hi: "इस सप्ताह कन्या राशि के लिए प्रेम जीवन और सामाजिक संबंध।" },
-    href: "/daily-horoscope/virgo",
-  },
 ]
 
 interface FAQItem {
@@ -102,7 +64,7 @@ export function DailyHoroscope() {
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-white to-[#F8F8F8] py-16 font-sans">
+    <section className="min-h-screen bg-gradient-to-b from-white to-[#F8F8F8] pt-8 pb-16 font-sans">
       <div className="container mx-auto px-4">
         {/* Banner Heading */}
         <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-10 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
