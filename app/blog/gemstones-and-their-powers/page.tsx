@@ -55,121 +55,27 @@ export default function GemstonesAndPowersPage() {
               <Image src="/images/ASTRO.webp" alt={post.title.en} fill className="object-cover" />
             </motion.div>
             {/* Intro */}
-            <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6">
+            <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6 text-justify">
               <p>
                 {post.content.en.split('\n')[0]}
               </p>
-              <p>
-                <span className="font-semibold text-indigo-700">Why Gemstones?</span> Gemstones have been used for centuries in Vedic astrology to balance planetary energies, attract abundance, and protect against negativity. Each stone resonates with a specific planet and can amplify its positive effects or reduce its challenges.
-              </p>
-              <ul className="list-disc list-inside ml-4 space-y-4">
-                <li><span className="font-semibold text-indigo-700">Yellow Sapphire (Pukhraj):</span> Associated with Jupiter, brings wisdom, prosperity, and spiritual growth.</li>
-                <li><span className="font-semibold text-indigo-700">Pearl (Moti):</span> Linked to the Moon, enhances emotional balance, peace, and intuition.</li>
-                <li><span className="font-semibold text-indigo-700">Ruby (Manik):</span> Represents the Sun, boosts confidence, vitality, and leadership.</li>
-                <li><span className="font-semibold text-indigo-700">Emerald (Panna):</span> Mercury's stone, sharpens intellect, communication, and creativity.</li>
-                <li><span className="font-semibold text-indigo-700">Blue Sapphire (Neelam):</span> Saturn's gem, offers discipline, focus, and protection from obstacles.</li>
-                <li><span className="font-semibold text-indigo-700">Coral (Moonga):</span> Mars' stone, increases courage, energy, and determination.</li>
-                <li><span className="font-semibold text-indigo-700">Diamond (Heera):</span> Venus' gem, attracts love, luxury, and artistic inspiration.</li>
-                <li><span className="font-semibold text-indigo-700">Hessonite (Gomed):</span> Rahu's stone, helps with ambition, clarity, and overcoming confusion.</li>
-                <li><span className="font-semibold text-indigo-700">Cat's Eye (Lehsunia):</span> Ketu's gem, supports spiritual insight, detachment, and protection from hidden dangers.</li>
-              </ul>
-              <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg">
-                <span className="text-indigo-600 font-medium">Tip:</span> Always consult a qualified astrologer before wearing a gemstone. The right stone can empower you, but the wrong one may intensify challenges.
-              </div>
             </motion.div>
             {/* Tab Content */}
             {activeTab === 'Overview' && (
-              <section className="mb-16">
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">How Gemstones Work in Astrology</h2>
-                <motion.ul initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-3 text-gray-700 mb-8">
+                <ul className="space-y-3 text-gray-700 mb-8 text-justify">
                   <li><span className="text-indigo-500 mr-2">•</span>Gemstones act as cosmic amplifiers, channeling planetary energies into your aura and chakras.</li>
                   <li><span className="text-indigo-500 mr-2">•</span>Each stone has unique vibrations that can heal, protect, or enhance specific qualities.</li>
                   <li><span className="text-indigo-500 mr-2">•</span>Wearing a gemstone on the correct finger and metal is crucial for best results.</li>
-                  <li><span className="text-indigo-500 mr-2">•</span>Purification rituals and energizing mantras activate the stone's power.</li>
-                </motion.ul>
-                {/* FAQ-style questions */}
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-6 mb-8">
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">How do I choose the right gemstone?</h3>
-                    <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                      <li>Consult your birth chart to identify planetary strengths and weaknesses.</li>
-                      <li>Choose a gemstone that supports your goals and balances challenging influences.</li>
-                      <li>Seek guidance from a trusted astrologer for personalized recommendations.</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">Can anyone wear any gemstone?</h3>
-                    <p className="text-gray-700 ml-2">No. Wearing the wrong stone can intensify negative effects. Always get a professional recommendation before wearing a gemstone.</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">How should gemstones be worn?</h3>
-                    <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                      <li>Wear the stone on the correct finger and in the right metal (e.g., gold, silver, or panchdhatu).</li>
-                      <li>Perform purification and energizing rituals before wearing.</li>
-                      <li>Regularly cleanse and recharge your gemstone for continued benefits.</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">Are synthetic or treated stones effective?</h3>
-                    <p className="text-gray-700 ml-2">Natural, untreated gemstones are preferred for astrological purposes. Synthetic or treated stones may lack the necessary vibrations.</p>
-                  </div>
-                </motion.div>
-                {/* Gemstone Guide Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Gemstone Guide: Properties and Effects</h3>
-                  <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="grid md:grid-cols-2 gap-8">
-                    {[
-                      ['Yellow Sapphire', 'Jupiter', 'Wisdom, prosperity, spiritual growth', '/images/ASTRO.webp'],
-                      ['Pearl', 'Moon', 'Emotional balance, peace, intuition', '/images/phd.webp'],
-                      ['Ruby', 'Sun', 'Confidence, vitality, leadership', '/images/ASTRO.webp'],
-                      ['Emerald', 'Mercury', 'Intellect, communication, creativity', '/images/phd.webp'],
-                      ['Blue Sapphire', 'Saturn', 'Discipline, focus, protection', '/images/ASTRO.webp'],
-                      ['Coral', 'Mars', 'Courage, energy, determination', '/images/phd.webp'],
-                      ['Diamond', 'Venus', 'Love, luxury, artistic inspiration', '/images/ASTRO.webp'],
-                      ['Hessonite', 'Rahu', 'Ambition, clarity, overcoming confusion', '/images/phd.webp'],
-                      ["Cat's Eye", 'Ketu', 'Spiritual insight, detachment, protection', '/images/ASTRO.webp'],
-                    ].map(([name, planet, effect, img], i) => (
-                      <motion.div key={name as string} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.07 }} className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition-all cursor-pointer">
-                        <div className="relative w-32 h-32 mb-4">
-                          <Image src={img as string} alt={name as string} fill className="object-cover rounded-full border-4 border-indigo-100 shadow" />
-                        </div>
-                        <h4 className="text-xl font-bold text-black mb-1">{name}</h4>
-                        <p className="text-indigo-700 font-medium mb-1">Planet: {planet}</p>
-                        <p className="text-gray-700 mb-2">{effect}</p>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                  <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg mt-8">
-                    <span className="text-indigo-600 font-medium">Tip:</span> <span className="text-black font-medium italic">Always buy gemstones from a reputable source and verify authenticity before use.</span>
-                  </div>
-                </section>
-                {/* Misconceptions Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Common Misconceptions about Gemstones</h3>
-                  <ul className="list-disc list-inside ml-4 text-gray-700 space-y-2 mb-4">
-                    <li>Any gemstone can be worn by anyone—this is not true; the wrong stone can cause problems.</li>
-                    <li>Gemstones work instantly; in reality, their effects build gradually over time.</li>
-                    <li>Size and price are not the only factors—clarity, authenticity, and correct usage matter most.</li>
-                    <li>Gemstones are not a substitute for effort, self-care, or medical advice.</li>
-                  </ul>
-                  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
-                    <span className="text-yellow-700 font-medium">Did you know?</span> <span className="text-black font-medium">Even a small, genuine gemstone can be powerful if chosen and worn correctly.</span>
-                  </div>
-                </section>
-                {/* Case Study Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Case Study: The Power of the Right Gemstone</h3>
-                  <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-                    <p className="text-gray-700 mb-4">Ravi, a 35-year-old entrepreneur, struggled with indecision and financial instability. After consulting an astrologer, he was advised to wear a yellow sapphire for Jupiter. Within months, he noticed increased confidence, better decision-making, and new business opportunities. Regular cleansing and mantra chanting amplified the stone's effects.</p>
-                    <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                      <li><span className="font-semibold text-green-700">Lesson:</span> The right gemstone, chosen with care, can support your goals and well-being.</li>
-                      <li><span className="font-semibold text-green-700">Remedy:</span> Combine gemstone use with positive actions, self-reflection, and regular spiritual practices for best results.</li>
-                    </ul>
-                  </motion.div>
-                </section>
-                {/* Table: Gemstones and Planets */}
-                <div className="overflow-x-auto mb-8">
-                  <motion.table initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="min-w-full bg-white border border-gray-200 rounded-xl overflow-hidden">
+                </ul>
+              </motion.section>
+            )}
+            {activeTab === 'Gemstone Guide' && (
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Gemstone Guide: Properties and Effects</h2>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full bg-white border border-gray-200 rounded-xl overflow-hidden">
                     <thead className="bg-gray-100">
                       <tr>
                         <th className="py-4 px-4 border-b text-left font-bold text-black text-base">Gemstone</th>
@@ -185,9 +91,6 @@ export default function GemstonesAndPowersPage() {
                         ['Emerald', 'Mercury', 'Intellect, communication, creativity'],
                         ['Blue Sapphire', 'Saturn', 'Discipline, focus, protection'],
                         ['Coral', 'Mars', 'Courage, energy, determination'],
-                        ['Diamond', 'Venus', 'Love, luxury, artistic inspiration'],
-                        ['Hessonite', 'Rahu', 'Ambition, clarity, overcoming confusion'],
-                        ["Cat's Eye", 'Ketu', 'Spiritual insight, detachment, protection'],
                       ].map(([gem, planet, benefit], i) => (
                         <tr key={gem} className={i % 2 === 0 ? 'bg-gray-50' : ''}>
                           <td className="py-3 px-4 border-b font-medium text-black">{gem}</td>
@@ -196,50 +99,37 @@ export default function GemstonesAndPowersPage() {
                         </tr>
                       ))}
                     </tbody>
-                  </motion.table>
+                  </table>
                 </div>
-              </section>
-            )}
-            {activeTab === 'Gemstone Guide' && (
-              <section className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Gemstone Selection & Care</h2>
-                <motion.ul initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-3 text-gray-700">
-                  <li><span className="text-indigo-500 mr-2">✓</span>Choose gemstones based on your birth chart and current planetary periods.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Cleanse stones regularly with water, sunlight, or mantra chanting.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Store gemstones separately to avoid scratches and energy mixing.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Recharge stones during auspicious planetary transits or full moons.</li>
-                </motion.ul>
-              </section>
+              </motion.section>
             )}
             {activeTab === 'Remedies' && (
-              <section className="mb-16">
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Gemstone Remedies for Life's Challenges</h2>
-                <motion.ul initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-3 text-gray-700">
-                  <li><span className="text-green-500 mr-2">•</span>Yellow Sapphire for wisdom, prosperity, and overcoming obstacles in education or career.</li>
-                  <li><span className="text-green-500 mr-2">•</span>Pearl for emotional healing, peace, and better relationships.</li>
-                  <li><span className="text-green-500 mr-2">•</span>Blue Sapphire for protection, discipline, and success during Saturn periods.</li>
-                  <li><span className="text-green-500 mr-2">•</span>Emerald for communication, creativity, and business growth.</li>
-                  <li><span className="text-green-500 mr-2">•</span>Diamond for love, luxury, and artistic inspiration.</li>
-                </motion.ul>
-              </section>
+                <ul className="space-y-3 text-gray-700 text-justify">
+                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Yellow Sapphire:</span> For wisdom, prosperity, and overcoming obstacles in education or career.</li>
+                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Pearl:</span> For emotional healing, peace, and better relationships.</li>
+                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Blue Sapphire:</span> For protection, discipline, and success during Saturn periods.</li>
+                </ul>
+              </motion.section>
             )}
             {activeTab === 'FAQs' && (
-              <section className="mb-16">
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Frequently Asked Questions</h2>
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-6">
+                <div className="space-y-6 text-justify">
                   {[
-                    ['Can gemstones change my destiny?', 'They can support your efforts and balance energies, but your actions and intentions are most important.'],
+                    ['Can gemstones change my destiny?', 'They support your efforts and balance energies, but your actions are most important.'],
                     ['How long does it take for a gemstone to work?', 'Effects may be felt within weeks to months, depending on your chart and consistency.'],
                     ['Can I wear more than one gemstone?', 'Yes, but only after consulting an astrologer to avoid conflicting energies.'],
-                    ['What if I feel discomfort after wearing a stone?', 'Remove it and consult your astrologer for guidance. Not every stone is suitable for everyone.'],
+                    ['What if I feel discomfort after wearing a stone?', 'Remove it and consult your astrologer. Not every stone is suitable for everyone.'],
                   ].map(([q, a], i) => (
                     <div key={q} className="border-b border-gray-200 pb-6">
                       <h3 className="text-lg font-bold text-indigo-900 mb-2 flex items-center"><HelpCircle className="w-5 h-5 mr-2 text-indigo-400" />{q}</h3>
                       <p className="text-gray-700">{a}</p>
                     </div>
                   ))}
-                </motion.div>
-              </section>
+                </div>
+              </motion.section>
             )}
             <CTASection />
             

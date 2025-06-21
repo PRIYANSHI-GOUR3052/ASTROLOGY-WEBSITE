@@ -61,7 +61,7 @@ export default function InfluenceOfPlanetsPage() {
               <Image src={post.imageUrl} alt={post.title.en} fill className="object-cover" />
             </div>
             {/* Intro */}
-            <div className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6">
+            <div className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6 text-justify">
               <p>
                 Discover how celestial bodies affect our daily lives and spiritual journey. The positions and movements of the planets, Sun, and Moon at the time of your birth create a unique cosmic blueprint—your birth chart. This chart reveals your strengths, challenges, and the lessons you are meant to learn in this lifetime.
               </p>
@@ -86,136 +86,59 @@ export default function InfluenceOfPlanetsPage() {
             </div>
             {/* Tab Content */}
             {activeTab === 'Overview' && (
-              <section className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">What Are the Navagraha?</h2>
-                <ul className="space-y-3 text-gray-700 mb-8">
-                  <li><span className="text-indigo-500 mr-2">•</span>The Navagraha are the nine major celestial bodies in Vedic astrology: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, and Ketu.</li>
-                  <li><span className="text-indigo-500 mr-2">•</span>Each planet governs specific aspects of life, personality, and destiny.</li>
-                  <li><span className="text-indigo-500 mr-2">•</span>Planetary periods (Dasha) and transits (Gochar) shape your experiences and challenges.</li>
-                </ul>
-                {/* Additional FAQ-style questions */}
-                <div className="space-y-6 mb-8">
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">How do planets influence my daily life?</h3>
-                    <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                      <li>Planetary transits can affect your mood, energy, and opportunities each day.</li>
-                      <li>Major events often coincide with significant planetary movements in your chart.</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">What is a Dasha period?</h3>
-                    <p className="text-gray-700 ml-2">A Dasha is a planetary period that highlights the influence of a specific planet over several years, shaping your experiences and growth during that time.</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">Why are remedies recommended in astrology?</h3>
-                    <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                      <li>Remedies help balance challenging planetary influences.</li>
-                      <li>They can include mantras, donations, gemstones, and rituals to promote harmony and well-being.</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">Can astrology help with relationships and career?</h3>
-                    <p className="text-gray-700 ml-2">Yes! Astrology provides insights into compatibility, timing for important decisions, and strategies for personal and professional growth.</p>
-                  </div>
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Planetary Influences Explained</h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {[
+                    ['Sun (Surya)', 'Soul, ego, vitality, leadership', 'Leo'],
+                    ['Moon (Chandra)', 'Mind, emotions, mother, peace', 'Cancer'],
+                    ['Mars (Mangal)', 'Energy, courage, ambition, conflict', 'Aries, Scorpio'],
+                    ['Mercury (Budha)', 'Intellect, communication, skills', 'Gemini, Virgo'],
+                    ['Jupiter (Guru)', 'Wisdom, luck, expansion, spirituality', 'Sagittarius, Pisces'],
+                    ['Venus (Shukra)', 'Love, beauty, luxury, creativity', 'Taurus, Libra'],
+                    ['Saturn (Shani)', 'Discipline, karma, challenges, longevity', 'Capricorn, Aquarius'],
+                    ['Rahu (North Node)', 'Ambition, obsession, foreign influences', 'Co-rules Aquarius'],
+                    ['Ketu (South Node)', 'Spirituality, detachment, past karma', 'Co-rules Scorpio'],
+                  ].map(([planet, influence, sign]) => (
+                    <div key={planet} className="bg-white rounded-xl shadow p-6 text-center hover:shadow-xl transition-shadow">
+                      <h4 className="text-xl font-bold text-black mb-2">{planet}</h4>
+                      <p className="text-gray-700 mb-2 text-justify">{influence}</p>
+                      <p className="text-indigo-600 font-semibold">Zodiac: {sign}</p>
+                    </div>
+                  ))}
                 </div>
-                {/* New: Planetary Yogas Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">What are Planetary Yogas?</h3>
-                  <p className="text-gray-700 mb-4">Yogas are special planetary combinations in your birth chart that can bring unique blessings or challenges. Some famous yogas include:</p>
-                  <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1 mb-4">
-                    <li><span className="font-semibold text-indigo-700">Gajakesari Yoga:</span> Formed by Jupiter and Moon, brings wisdom, respect, and prosperity.</li>
-                    <li><span className="font-semibold text-indigo-700">Budh-Aditya Yoga:</span> Sun and Mercury together, enhances intellect and communication.</li>
-                    <li><span className="font-semibold text-indigo-700">Chandra-Mangal Yoga:</span> Moon and Mars, gives financial growth and determination.</li>
-                    <li><span className="font-semibold text-indigo-700">Vipreet Raj Yoga:</span> Planets in certain houses turn challenges into success.</li>
-                  </ul>
-                  <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg mb-4">
-                    <span className="text-indigo-600 font-medium">Tip:</span> <span className="text-black font-medium">Not all yogas are active at all times. Their effects depend on planetary periods (Dasha) and transits.</span>
-                  </div>
-                </section>
-                {/* New: Common Misconceptions Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Common Misconceptions about Planets in Astrology</h3>
-                  <ul className="list-disc list-inside ml-4 text-gray-700 space-y-2 mb-4">
-                    <li>Planets do not cause events directly—they reflect cosmic patterns and tendencies.</li>
-                    <li>Retrograde planets are not always negative; they can bring introspection and growth.</li>
-                    <li>Everyone has both strengths and challenges in their chart—no chart is "bad" or "cursed".</li>
-                    <li>Astrology is a tool for guidance, not fatalism. Your actions and choices matter.</li>
-                  </ul>
-                  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
-                    <span className="text-yellow-700 font-medium">Did you know?</span> Even challenging planetary placements can be transformed through awareness, <span className="text-black font-medium">remedies, and positive action.</span>
-                  </div>
-                </section>
-                {/* New: Case Study Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Case Study: How Planetary Transits Changed a Life</h3>
-                  <p className="text-gray-700 mb-4">Priya, a 32-year-old teacher, faced career stagnation and emotional stress. Analyzing her chart revealed a challenging Saturn transit and a favorable Jupiter Dasha approaching. Remedies included chanting, charity, and meditation. Within a year, she received a promotion and found greater peace of mind.</p>
-                  <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                    <li><span className="font-semibold text-green-700">Lesson:</span> Understanding your chart helps you prepare for challenges and seize opportunities.</li>
-                    <li><span className="font-semibold text-green-700">Remedy:</span> Personalized solutions can make a real difference in your life journey.</li>
-                  </ul>
-                </section>
-                <div className="overflow-x-auto mb-8">
-                  <table className="min-w-full bg-white border border-gray-200 rounded-xl overflow-hidden">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="py-4 px-4 border-b text-left font-bold text-black text-base">Planet</th>
-                        <th className="py-4 px-4 border-b text-left font-bold text-black text-base">Significance</th>
-                        <th className="py-4 px-4 border-b text-left font-bold text-black text-base">Remedy</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        ['Sun', 'Soul, authority, health', 'Surya Namaskar, offer water to Sun'],
-                        ['Moon', 'Mind, emotions, mother', 'Chant Chandra mantra, wear pearl'],
-                        ['Mars', 'Energy, courage, siblings', 'Donate red lentils, Hanuman worship'],
-                        ['Mercury', 'Intellect, speech, business', 'Chant Budh mantra, wear emerald'],
-                        ['Jupiter', 'Wisdom, teachers, children', 'Donate yellow sweets, wear yellow sapphire'],
-                        ['Venus', 'Love, beauty, luxury', 'Chant Shukra mantra, wear diamond'],
-                        ['Saturn', 'Karma, discipline, obstacles', 'Shani puja, donate black sesame'],
-                        ['Rahu', 'Desires, illusions, foreign', 'Chant Rahu mantra, donate blue cloth'],
-                        ['Ketu', 'Spirituality, detachment', 'Chant Ketu mantra, feed stray dogs'],
-                      ].map(([planet, significance, remedy], i) => (
-                        <tr key={planet} className={i % 2 === 0 ? 'bg-gray-50' : ''}>
-                          <td className="py-3 px-4 border-b font-medium text-black">{planet}</td>
-                          <td className="py-3 px-4 border-b font-medium text-black">{significance}</td>
-                          <td className="py-3 px-4 border-b font-medium text-black">{remedy}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
+              </motion.section>
             )}
             {activeTab === 'Effects' && (
-              <section className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">How Planets Affect Your Life</h2>
-                <ul className="space-y-3 text-gray-700">
-                  <li><span className="text-indigo-500 mr-2">✓</span>Planetary positions at birth shape your personality, strengths, and challenges.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Transits trigger important life events—marriage, career, health, etc.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Understanding your Dasha helps you prepare for opportunities and obstacles.</li>
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Common Misconceptions</h2>
+                <ul className="list-disc list-inside ml-4 text-gray-700 space-y-2 mb-4 text-justify">
+                  <li>Planets are not "good" or "bad"; their influence depends on their placement in your chart.</li>
+                  <li>Astrology is a guide, not a fixed verdict. Your choices matter.</li>
+                  <li>Remedies are not magic; they require faith and consistent effort.</li>
                 </ul>
-              </section>
+              </motion.section>
             )}
             {activeTab === 'Remedies' && (
-              <section className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Astrological Remedies</h2>
-                <ul className="space-y-3 text-gray-700">
-                  <li><span className="text-green-500 mr-2">•</span>Chanting mantras for afflicted planets</li>
-                  <li><span className="text-green-500 mr-2">•</span>Wearing gemstones as per astrological advice</li>
-                  <li><span className="text-green-500 mr-2">•</span>Charity and donations on specific days</li>
-                  <li><span className="text-green-500 mr-2">•</span>Fasting and puja for planetary peace</li>
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Remedies for Planetary Imbalances</h2>
+                <ul className="space-y-3 text-gray-700 text-justify">
+                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Sun:</span> Offer water to the Sun (Surya Arghya), chant Gayatri Mantra.</li>
+                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Moon:</span> Wear a pearl, donate milk, meditate on Mondays.</li>
+                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Saturn:</span> Chant Hanuman Chalisa, donate black items on Saturdays, serve the needy.</li>
+                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Rahu/Ketu:</span> Worship Lord Ganesha and Durga, donate to leprosy patients.</li>
                 </ul>
-              </section>
+              </motion.section>
             )}
             {activeTab === 'FAQs' && (
-              <section className="mb-16">
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Frequently Asked Questions</h2>
-                <div className="space-y-6">
+                <div className="space-y-6 text-justify">
                   {[
-                    ['How do I know which planet is strong or weak in my chart?', 'Consult your birth chart (Janam Kundli) with an astrologer for detailed analysis.'],
-                    ['Can remedies really change my destiny?', 'Remedies help reduce negative effects and enhance positive ones, but karma and effort are also important.'],
-                    ['What is Dasha and why is it important?', 'Dasha is the planetary period system that influences life events and timing.'],
-                    ['Are gemstones safe for everyone?', 'Only wear gemstones after consulting a qualified astrologer, as wrong stones can have adverse effects.'],
+                    ['Are planets "good" or "bad"?', 'No planet is inherently good or bad. Their effect depends on their placement in your chart and the karma you are working through.'],
+                    ['What is Sade Sati?', 'It is a challenging 7.5-year period of Saturn\'s transit over your natal Moon, meant for discipline, introspection, and spiritual growth.'],
+                    ['How do planetary transits affect me?', 'As planets move, they activate different parts of your chart, bringing new opportunities and challenges. An astrologer can help you navigate these cycles.'],
+                    ['Can I change my planetary influences?', 'While you cannot change your chart, you can work with the energies through remedies, conscious action, and spiritual practices to improve outcomes.'],
                   ].map(([q, a], i) => (
                     <div key={q} className="border-b border-gray-200 pb-6">
                       <h3 className="text-lg font-bold text-indigo-900 mb-2 flex items-center"><HelpCircle className="w-5 h-5 mr-2 text-indigo-400" />{q}</h3>
@@ -223,7 +146,7 @@ export default function InfluenceOfPlanetsPage() {
                     </div>
                   ))}
                 </div>
-              </section>
+              </motion.section>
             )}
             <CTASection />
             

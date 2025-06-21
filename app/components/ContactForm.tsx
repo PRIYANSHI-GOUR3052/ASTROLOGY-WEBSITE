@@ -5,23 +5,27 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useState, useRef } from 'react'
 import { Phone, Mail, MapPin, Send, Star, Sparkles, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 const FloatingCard = ({ 
   className, 
   children, 
-  gradient 
+  gradient,
+  href,
 }: { 
   className?: string; 
   children?: React.ReactNode;
   gradient?: string;
+  href: string;
 }) => (
-  <div
-    className={`absolute ${gradient || 'bg-gradient-to-br from-violet-500 via-pink-500 to-orange-400'} rounded-2xl shadow-2xl pointer-events-none hidden lg:block ${className}`}
+  <Link
+    href={href}
+    className={`absolute ${gradient || 'bg-gradient-to-br from-violet-500 via-pink-500 to-orange-400'} rounded-2xl shadow-2xl hidden lg:block cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out ${className}`}
   >
     <div className="p-6">
       {children}
     </div>
-  </div>
+  </Link>
 );
 
 export function ContactForm() {
@@ -71,7 +75,8 @@ export function ContactForm() {
     <section id="contact-us" className="relative bg-black text-white overflow-hidden min-h-screen py-20">
       {/* Floating decorative cards matching footer style */}
       <FloatingCard 
-        className="top-[10%] -left-20 w-72 rotate-[-12deg] opacity-90 z-10"
+        href="#contact-us"
+        className="top-[10%] left-4 w-72 rotate-[-12deg] opacity-90 z-10"
         gradient="bg-gradient-to-br from-violet-500 via-pink-500 to-orange-400"
       >
         <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Cosmic Connection</div>
@@ -84,7 +89,8 @@ export function ContactForm() {
       </FloatingCard>
 
       <FloatingCard 
-        className="top-[50%] -right-24 w-72 rotate-[12deg] opacity-90 z-10"
+        href="/services"
+        className="top-[50%] right-4 w-72 rotate-[12deg] opacity-90 z-10"
         gradient="bg-gradient-to-br from-blue-500 via-teal-400 to-green-400"
       >
         <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Guidance Awaits</div>
@@ -97,7 +103,8 @@ export function ContactForm() {
       </FloatingCard>
 
       <FloatingCard 
-        className="bottom-[5%] -left-12 w-80 rotate-[-8deg] opacity-90 z-10"
+        href="/services"
+        className="bottom-[5%] left-4 w-80 rotate-[-8deg] opacity-90 z-10"
         gradient="bg-gradient-to-br from-purple-600 via-indigo-500 to-blue-500"
       >
         <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Expert Consultation</div>
@@ -117,7 +124,7 @@ export function ContactForm() {
             <span className="bg-gradient-to-r from-violet-500 to-pink-500 bg-clip-text text-transparent">cosmic realm</span>
           </h1>
           <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-            Have a question, need guidance, or wish to book a consultation? Reach out to us. Your cosmic conversation awaits with personalized celestial insights.
+            Have a question for Innovana Astro Services Limited, need guidance, or wish to book a consultation? Reach out to us. Your cosmic conversation awaits.
           </p>
         </div>
 
@@ -139,8 +146,8 @@ export function ContactForm() {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-1">Phone</h3>
-                  <p className="text-gray-300 text-lg">(+654) 6544 55</p>
-                  <p className="text-sm text-gray-400">Available Mon-Fri, 9am-6pm</p>
+                  <p className="text-gray-300 text-lg">+91-7229808887</p>
+                  <p className="text-sm text-gray-400">10:00AM to 7:00PM (Mon-Fri)</p>
                 </div>
               </div>
 
@@ -150,7 +157,7 @@ export function ContactForm() {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-1">Email</h3>
-                  <p className="text-gray-300 text-lg">mail@nakshatragyaan.com</p>
+                  <p className="text-gray-300 text-lg">support@anytimeastro.com</p>
                   <p className="text-sm text-gray-400">We reply within 24 hours</p>
                 </div>
               </div>
@@ -161,8 +168,8 @@ export function ContactForm() {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-1">Location</h3>
-                  <p className="text-gray-300 text-lg">Delhi, India</p>
-                  <p className="text-sm text-gray-400">Serving clients worldwide</p>
+                  <p className="text-gray-300 text-lg">1- KHA -18, Jawahar Nagar, Jaipur</p>
+                  <p className="text-sm text-gray-400">Rajasthan, 302004 India</p>
                 </div>
               </div>
             </div>

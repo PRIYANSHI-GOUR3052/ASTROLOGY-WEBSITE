@@ -58,7 +58,7 @@ export default function UnderstandingVedicAstrologyPage() {
               <Image src={post.imageUrl} alt={post.title.en} fill className="object-cover" />
             </div>
             {/* Intro */}
-            <div className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6">
+            <div className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6 text-justify">
               <p>
                 {post.content.en.split('\n')[0]}
               </p>
@@ -81,88 +81,42 @@ export default function UnderstandingVedicAstrologyPage() {
             </div>
             {/* Tab Content */}
             {activeTab === 'Overview' && (
-              <section className="mb-16">
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Core Principles of Vedic Astrology</h2>
-                <ul className="space-y-3 text-gray-700 mb-8">
-                  <li><span className="text-indigo-500 mr-2">•</span>Every individual has a unique birth chart based on the exact time, date, and place of birth. The chart is divided into twelve houses, each representing a different area of life.</li>
-                  <li><span className="text-indigo-500 mr-2">•</span>The twelve houses represent self, family, wealth, communication, home, creativity, health, marriage, transformation, luck, career, gains, and liberation.</li>
-                  <li><span className="text-indigo-500 mr-2">•</span>Planets in different signs and houses create specific yogas and influences. The relationships between planets (aspects, conjunctions) add further depth to the analysis.</li>
-                  <li><span className="text-indigo-500 mr-2">•</span>Transits and Dashas activate different parts of your chart at different times, bringing opportunities for growth, change, or healing.</li>
-                </ul>
-                {/* Additional FAQ-style questions */}
-                <div className="space-y-6 mb-8">
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">How is Vedic astrology different from Western astrology?</h3>
-                    <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                      <li>Vedic astrology uses the sidereal zodiac, which is aligned with the actual constellations, while Western astrology uses the tropical zodiac based on the seasons.</li>
-                      <li>Vedic astrology places greater emphasis on the Moon sign, ascendant, and planetary periods (Dashas), while Western astrology often focuses on the Sun sign.</li>
-                      <li>Vedic astrology incorporates karmic theory and spiritual evolution as core principles.</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">What is the importance of the ascendant (Lagna)?</h3>
-                    <p className="text-gray-700 ml-2">The ascendant sets the structure of your birth chart and influences your physical appearance, health, and approach to life. It is the starting point for house calculations and colors your entire chart interpretation.</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">Can astrology predict the future?</h3>
-                    <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                      <li>Astrology reveals trends, opportunities, and challenges, but your choices and actions shape your destiny. It is a tool for guidance, not fatalism.</li>
-                      <li>Timing is a key strength of Vedic astrology—knowing your Dashas and transits can help you make the most of favorable periods and prepare for challenges.</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">How can I use astrology for self-growth?</h3>
-                    <p className="text-gray-700 ml-2">By understanding your chart, you can align with your strengths, work on your challenges, and make empowered decisions for personal and spiritual growth. Astrology can also help you choose the right career, improve relationships, and find your spiritual path.</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">What are Nakshatras?</h3>
-                    <p className="text-gray-700 ml-2">Nakshatras are the 27 lunar constellations in Vedic astrology. They add a deeper layer of meaning to your chart, influencing your mind, emotions, and destiny. Each Nakshatra has its own symbolism, ruling deity, and qualities.</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">How do yogas affect my life?</h3>
-                    <p className="text-gray-700 ml-2">Yogas are special planetary combinations that can bring success, wealth, fame, or challenges. Their effects depend on activation by Dashas and transits, and a skilled astrologer can help you understand their impact in your chart.</p>
-                  </div>
+                <div className="space-y-6 text-gray-700 mb-8 text-justify">
+                  <p>
+                    At the heart of Vedic Astrology lies the profound principle of karma, the universal law of cause and effect. Your birth chart is not a random assortment of planetary positions but a precise map of your accumulated karmas from past lives. It reveals the karmic baggage you carry—both positive and negative—and illustrates the life path your soul has chosen to experience for its evolution. This perspective shifts the focus from simple fortune-telling to a deeper understanding of your life's purpose. It empowers you to see challenges not as punishments, but as opportunities to resolve old patterns, and to recognize your blessings as the fruits of past positive actions.
+                  </p>
+                  <p>
+                    The nine planets, or Navagrahas, are the celestial agents that deliver the results of your karma. Each planet embodies a specific divine energy and governs different facets of human existence. The Sun (Surya) represents your soul and ego; the Moon (Chandra) governs your mind and emotions; Mars (Mangal) dictates your energy and drive. These celestial bodies are not seen as malevolent forces but as cosmic teachers, guiding you through various life lessons. Their placement in your chart—whether strong, weak, exalted, or debilitated—indicates the areas of life where you will experience ease or face challenges, providing a roadmap for conscious living.
+                  </p>
+                  <p>
+                    The Ascendant (Lagna) is the cornerstone of the birth chart, representing the zodiac sign that was rising on the eastern horizon at your exact moment of birth. It defines your physical self, your core personality, and your overall approach to the world. The entire framework of the twelve houses (Bhavas) is built upon the Lagna. Each house signifies a specific domain of life, such as the 1st house for self, the 7th for marriage, and the 10th for career. Analyzing which planets occupy or influence these houses provides a detailed and nuanced picture of your life's potential, opportunities, and learning curves.
+                  </p>
+                  <p>
+                    Vedic Astrology's predictive power comes from its sophisticated system of planetary time periods, known as Dashas. The most prominent is the Vimshottari Dasha system, a 120-year cycle that reveals when the karmic potential of each planet will be activated. Your life unfolds in chapters, each ruled by a different planet, bringing its unique themes and experiences to the forefront. Superimposed on this are the continuous movements of planets, or transits (Gochara). When a transiting planet interacts with a sensitive point in your birth chart during a relevant Dasha period, significant life events are triggered, making this dual system a powerful tool for timing and preparation.
+                  </p>
+                  <p>
+                    Ultimately, the true purpose of Jyotish, or Vedic Astrology, is to be a guiding light (Jyoti means light). It is a sacred science designed to illuminate the hidden patterns of your life, enabling you to move from darkness to light, from ignorance to self-awareness. It is not a tool for passive fatalism but a call to empowered action. By understanding your karmic blueprint, you can make more conscious choices, align your actions with your highest potential (Dharma), and skillfully navigate the currents of your destiny. It offers practical remedies (Upayas) like mantras, gemstones, and rituals to mitigate negative influences and enhance positive ones, transforming your chart from a static map into a dynamic guide for spiritual growth.
+                  </p>
                 </div>
-                {/* New: Yogas Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Important Yogas in Vedic Astrology</h3>
-                  <p className="text-gray-700 mb-4">Yogas are special combinations that can bring success, fame, or challenges. Some key yogas include:</p>
-                  <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1 mb-4">
-                    <li><span className="font-semibold text-indigo-700">Raj Yoga:</span> Brings leadership, authority, and prosperity when benefic planets combine in key houses. People with Raj Yoga often rise to positions of power and influence.</li>
-                    <li><span className="font-semibold text-indigo-700">Dhan Yoga:</span> Indicates wealth and financial success through favorable planetary placements. Dhan Yoga can manifest as business acumen, inheritance, or sudden gains.</li>
-                    <li><span className="font-semibold text-indigo-700">Chandra-Mangal Yoga:</span> Moon and Mars together, giving financial acumen and drive. This yoga is known for boosting entrepreneurial spirit and determination.</li>
-                    <li><span className="font-semibold text-indigo-700">Vipreet Raj Yoga:</span> Adversity turns into success through certain planetary positions. People with this yoga often overcome great obstacles to achieve remarkable success.</li>
-                    <li><span className="font-semibold text-indigo-700">Gaja-Kesari Yoga:</span> Jupiter and Moon in mutual kendras, bestowing intelligence, respect, and good fortune.</li>
-                    <li><span className="font-semibold text-indigo-700">Neecha Bhanga Raja Yoga:</span> Cancellation of planetary debilitation, leading to unexpected rise and recovery from setbacks.</li>
-                  </ul>
-                  <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg mb-4">
-                    <span className="text-indigo-600 font-medium">Tip:</span> <span className="text-black font-medium italic">Yogas manifest fully only when activated by Dashas and transits. Their results may vary based on the strength and placement of planets in your chart.</span>
-                  </div>
-                </section>
-                {/* New: Common Misconceptions Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Common Misconceptions about Vedic Astrology</h3>
-                  <ul className="list-disc list-inside ml-4 text-gray-700 space-y-2 mb-4">
-                    <li>Astrology is not superstition—it is a science of cosmic patterns and timing, validated by centuries of observation and experience.</li>
-                    <li>Not all predictions are fixed; free will and karma play a major role. Your actions and intentions can change outcomes.</li>
-                    <li>Remedies are not magic—they work by aligning your actions with cosmic energies and require faith, patience, and consistency.</li>
-                    <li>Everyone has strengths and challenges; astrology helps you understand and work with them, not judge or label.</li>
-                    <li>Astrology is not a substitute for medical or professional advice, but a complementary tool for self-awareness and growth.</li>
-                  </ul>
-                  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
-                    <span className="text-yellow-700 font-medium">Did you know?</span> Even challenging planetary placements can be transformed through awareness, <span className="text-black font-medium">remedies, and positive action.</span>
-                  </div>
-                </section>
-                {/* New: Case Study Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Case Study: Using Vedic Astrology for Life Decisions</h3>
-                  <p className="text-gray-700 mb-4">Amit, a 28-year-old engineer, was unsure about a career change. His chart showed a favorable Mercury Dasha and strong tenth house. With astrological guidance, he timed his move, resulting in a successful transition and greater job satisfaction. He also used recommended remedies, such as chanting Mercury mantras and wearing an emerald, to enhance his confidence and communication skills. Over time, Amit noticed improved relationships at work and a sense of purpose in his new role.</p>
-                  <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                    <li><span className="font-semibold text-green-700">Lesson:</span> Astrology can help you make informed decisions and maximize opportunities. It is most powerful when combined with self-reflection and conscious action.</li>
-                    <li><span className="font-semibold text-green-700">Remedy:</span> Personalized mantras, rituals, and lifestyle changes can support your goals and reduce obstacles. Consistency and faith are key to seeing results.</li>
-                  </ul>
-                </section>
-                {/* Table: Houses and Their Meanings */}
+              </motion.section>
+            )}
+            {activeTab === 'Principles' && (
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Important Yogas in Vedic Astrology</h2>
+                <p className="text-gray-700 mb-4 text-justify">Yogas are special combinations that can bring success, fame, or challenges. Some key yogas include:</p>
+                <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1 mb-4 text-justify">
+                  <li><span className="font-semibold text-indigo-700">Raj Yoga:</span> Brings leadership, authority, and prosperity when benefic planets combine in key houses.</li>
+                  <li><span className="font-semibold text-indigo-700">Dhan Yoga:</span> Indicates wealth and financial success through favorable planetary placements.</li>
+                  <li><span className="font-semibold text-indigo-700">Vipreet Raj Yoga:</span> Adversity turns into success through certain planetary positions.</li>
+                  <li><span className="font-semibold text-indigo-700">Gaja-Kesari Yoga:</span> Jupiter and Moon in mutual kendras, bestowing intelligence, respect, and good fortune.</li>
+                </ul>
+              </motion.section>
+            )}
+            {activeTab === 'Remedies' && (
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Houses and Their Meanings</h2>
                 <div className="overflow-x-auto mb-8">
                   <table className="min-w-full bg-white border border-gray-200 rounded-xl overflow-hidden">
                     <thead className="bg-gray-100">
@@ -196,39 +150,17 @@ export default function UnderstandingVedicAstrologyPage() {
                     </tbody>
                   </table>
                 </div>
-              </section>
-            )}
-            {activeTab === 'Principles' && (
-              <section className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Fundamental Principles Explained</h2>
-                <ul className="space-y-3 text-gray-700">
-                  <li><span className="text-indigo-500 mr-2">✓</span>The ascendant (Lagna) is the starting point of your chart and sets the tone for your life's journey.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Each planet has a unique role—Sun for soul, Moon for mind, Mars for energy, etc.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Houses, signs, and planets interact to create your unique destiny.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Remedies can help balance difficult influences and enhance positive ones.</li>
-                </ul>
-              </section>
-            )}
-            {activeTab === 'Remedies' && (
-              <section className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Vedic Remedies for Life's Challenges</h2>
-                <ul className="space-y-3 text-gray-700">
-                  <li><span className="text-green-500 mr-2">•</span>Chanting specific mantras for planetary peace</li>
-                  <li><span className="text-green-500 mr-2">•</span>Wearing gemstones as per astrological advice</li>
-                  <li><span className="text-green-500 mr-2">•</span>Charity and donations to balance karma</li>
-                  <li><span className="text-green-500 mr-2">•</span>Observing fasts and rituals on auspicious days</li>
-                </ul>
-              </section>
+              </motion.section>
             )}
             {activeTab === 'FAQs' && (
-              <section className="mb-16">
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Frequently Asked Questions</h2>
-                <div className="space-y-6">
+                <div className="space-y-6 text-justify">
                   {[
-                    ['Can Vedic astrology help with health issues?', 'Yes, it can indicate periods of vulnerability and suggest remedies for prevention and healing.'],
-                    ['Is my destiny fixed according to my chart?', 'No, astrology shows tendencies and timing, but your actions and awareness shape your future.'],
-                    ['How often should I consult an astrologer?', 'It is helpful to check your chart during major life changes or when facing important decisions.'],
-                    ['Are online horoscopes accurate?', 'General horoscopes are broad; personalized readings based on your birth chart are much more accurate.'],
+                    ['How is Vedic astrology different from Western astrology?', 'Vedic astrology uses the sidereal zodiac (aligned with constellations), emphasizes the Moon sign, and incorporates karmic theory.'],
+                    ['What is the importance of the ascendant (Lagna)?', 'The ascendant sets the structure of your chart and influences your physical appearance, health, and approach to life.'],
+                    ['Can astrology predict the future?', 'It reveals trends and probabilities, not a fixed destiny. It is a tool for guidance, not fatalism.'],
+                    ['How can I use astrology for self-growth?', 'By understanding your chart, you can align with your strengths, work on challenges, and make empowered decisions.'],
                   ].map(([q, a], i) => (
                     <div key={q} className="border-b border-gray-200 pb-6">
                       <h3 className="text-lg font-bold text-indigo-900 mb-2 flex items-center"><HelpCircle className="w-5 h-5 mr-2 text-indigo-400" />{q}</h3>
@@ -236,7 +168,7 @@ export default function UnderstandingVedicAstrologyPage() {
                     </div>
                   ))}
                 </div>
-              </section>
+              </motion.section>
             )}
             <CTASection />
             

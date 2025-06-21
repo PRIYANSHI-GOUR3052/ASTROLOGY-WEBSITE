@@ -46,7 +46,7 @@ export default function NumerologyBasicsPage() {
             </div>
             {/* Key Takeaway */}
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="bg-indigo-50 border-l-4 border-indigo-400 p-4 mb-8 rounded-lg">
-              <p className="text-gray-700">
+              <p className="text-gray-700 text-justify">
                 <span className="text-indigo-600 font-medium">Key Takeaway:</span> Numbers are not just mathematical symbols—they carry vibrational energies that influence every aspect of your life, from personality traits to life purpose and destiny.
               </p>
             </motion.div>
@@ -55,7 +55,7 @@ export default function NumerologyBasicsPage() {
               <Image src="/images/Numerology.svg" alt={post.title.en} fill className="object-cover" />
             </motion.div>
             {/* Intro */}
-            <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6">
+            <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6 text-justify">
               <p>
                 {post.content.en.split('\n')[0]}
               </p>
@@ -79,173 +79,125 @@ export default function NumerologyBasicsPage() {
             </motion.div>
             {/* Tab Content */}
             {activeTab === 'Overview' && (
-              <section className="mb-16">
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">How Numerology Works</h2>
-                <motion.ul initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-3 text-gray-700 mb-8">
+                <ul className="space-y-3 text-gray-700 mb-8 text-justify">
                   <li><span className="text-indigo-500 mr-2">•</span>Numbers vibrate at specific frequencies that influence our energy and experiences.</li>
                   <li><span className="text-indigo-500 mr-2">•</span>Your birth date and name create a unique numerical blueprint for your life.</li>
                   <li><span className="text-indigo-500 mr-2">•</span>Each number (1-9) has distinct characteristics, strengths, and challenges.</li>
                   <li><span className="text-indigo-500 mr-2">•</span>Master numbers (11, 22, 33) carry higher spiritual vibrations and potential.</li>
-                </motion.ul>
-                {/* FAQ-style questions */}
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-6 mb-8">
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">How do I calculate my Life Path Number?</h3>
-                    <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                      <li>Add all digits of your birth date (e.g., 15-03-1990 = 1+5+0+3+1+9+9+0 = 28)</li>
-                      <li>Reduce to a single digit: 2+8 = 10, then 1+0 = 1</li>
-                      <li>Your Life Path Number is 1</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">What's the difference between Life Path and Destiny Number?</h3>
-                    <p className="text-gray-700 ml-2">Life Path Number comes from your birth date and shows your life's purpose, while Destiny Number comes from your name and reveals your natural talents and abilities.</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">Do master numbers need to be reduced?</h3>
-                    <p className="text-gray-700 ml-2">No, master numbers (11, 22, 33) should be kept as they are, as they carry special spiritual significance and higher vibrations.</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-black text-lg mb-2">Can numerology predict the future?</h3>
-                    <p className="text-gray-700 ml-2">Numerology provides insights into patterns and tendencies, but it doesn't predict specific events. It helps you understand your potential and make better choices.</p>
-                  </div>
-                </motion.div>
-                {/* Number Guide Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Number Meanings: 1-9 and Master Numbers</h3>
-                  <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="grid md:grid-cols-2 gap-8">
-                    {[
-                      ['1', 'Leader', 'Independence, ambition, innovation', '/images/Numerology.svg', 'Fire', 'bg-gradient-to-br from-red-50 to-orange-50'],
-                      ['2', 'Peacemaker', 'Cooperation, diplomacy, intuition', '/images/Numerology.svg', 'Water', 'bg-gradient-to-br from-blue-50 to-cyan-50'],
-                      ['3', 'Communicator', 'Creativity, expression, joy', '/images/Numerology.svg', 'Air', 'bg-gradient-to-br from-yellow-50 to-amber-50'],
-                      ['4', 'Builder', 'Stability, organization, hard work', '/images/Numerology.svg', 'Earth', 'bg-gradient-to-br from-green-50 to-emerald-50'],
-                      ['5', 'Adventurer', 'Freedom, change, experience', '/images/Numerology.svg', 'Air', 'bg-gradient-to-br from-purple-50 to-indigo-50'],
-                      ['6', 'Nurturer', 'Responsibility, harmony, service', '/images/Numerology.svg', 'Earth', 'bg-gradient-to-br from-pink-50 to-rose-50'],
-                      ['7', 'Seeker', 'Spirituality, analysis, wisdom', '/images/Numerology.svg', 'Water', 'bg-gradient-to-br from-slate-50 to-gray-50'],
-                      ['8', 'Achiever', 'Power, success, material wealth', '/images/Numerology.svg', 'Fire', 'bg-gradient-to-br from-orange-50 to-red-50'],
-                      ['9', 'Humanitarian', 'Compassion, completion, universal love', '/images/Numerology.svg', 'Fire', 'bg-gradient-to-br from-violet-50 to-purple-50'],
-                      ['11', 'Intuitive', 'Spiritual insight, inspiration, illumination', '/images/Numerology.svg', 'Master', 'bg-gradient-to-br from-indigo-50 to-blue-50'],
-                      ['22', 'Master Builder', 'Practical vision, large-scale achievement', '/images/Numerology.svg', 'Master', 'bg-gradient-to-br from-teal-50 to-cyan-50'],
-                      ['33', 'Master Teacher', 'Spiritual teaching, healing, guidance', '/images/Numerology.svg', 'Master', 'bg-gradient-to-br from-amber-50 to-yellow-50'],
-                    ].map(([number, title, traits, img, element, bgClass], i) => (
-                      <motion.div key={number as string} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.07 }} className={`${bgClass} rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition-all cursor-pointer border border-gray-100 hover:border-gray-200`}>
-                        <div className="relative w-32 h-32 mb-4">
-                          <Image src={img as string} alt={`Number ${number}`} fill className="object-cover rounded-full border-4 border-white shadow-lg" />
-                        </div>
-                        <div className="mb-3">
-                          <span className="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-white/70 rounded-full border border-gray-200">
-                            {element} Element
-                          </span>
-                        </div>
-                        <h4 className="text-6xl font-black text-gray-800 mb-2 tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>{number}</h4>
-                        <h5 className="text-xl font-bold text-gray-900 mb-2 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>{title}</h5>
-                        <p className="text-gray-700 mb-2 text-sm leading-relaxed font-medium">{traits}</p>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                  <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg mt-8">
-                    <span className="text-indigo-600 font-medium">Tip:</span> <span className="text-black font-medium italic">Your numbers work together to create a complete picture of your personality and life path.</span>
-                  </div>
-                </section>
-                {/* Misconceptions Section */}
-                <section className="mb-12">
-                  <h3 className="font-bold text-black text-xl mb-4">Common Misconceptions about Numerology</h3>
-                  <ul className="list-disc list-inside ml-4 text-gray-700 space-y-2 mb-4">
-                    <li>Numerology is just superstition—it's actually based on mathematical patterns and vibrational frequencies.</li>
-                    <li>All people with the same number are identical—numbers show tendencies, but individual choices matter.</li>
-                    <li>Numbers can predict exact events—they provide guidance and insights, not specific predictions.</li>
-                    <li>Changing your name will completely change your destiny—it can influence your path, but your core numbers remain.</li>
-                  </ul>
-                  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
-                    <span className="text-yellow-700 font-medium">Did you know?</span> <span className="text-black font-medium">Pythagoras, the famous mathematician, was also a numerologist who believed numbers were the language of the universe.</span>
-                  </div>
-                </section>
-                {/* Case Study Section */}
+                </ul>
                 <section className="mb-12">
                   <h3 className="font-bold text-black text-xl mb-4">Case Study: Discovering Life Purpose Through Numbers</h3>
-                  <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-                    <p className="text-gray-700 mb-4">Priya, a 28-year-old marketing professional, felt unfulfilled despite her success. Her Life Path Number 7 revealed her natural inclination toward analysis and spirituality. This insight led her to pursue a career in market research and start a meditation practice. Within a year, she felt more aligned with her true purpose and experienced greater satisfaction in both work and personal life.</p>
-                    <ul className="list-disc list-inside ml-4 text-gray-700 space-y-1">
-                      <li><span className="font-semibold text-green-700">Lesson:</span> Understanding your numbers can help you align with your natural talents and life purpose.</li>
-                      <li><span className="font-semibold text-green-700">Application:</span> Use numerology as a tool for self-discovery and making informed life choices.</li>
-                    </ul>
-                  </motion.div>
+                  <div className="text-gray-700 mb-4 text-justify">
+                    <p>Priya, a 28-year-old marketing professional, felt unfulfilled despite her success. Her Life Path Number 7 revealed her natural inclination toward analysis and spirituality. This insight led her to pursue a career in market research and start a meditation practice. Within a year, she felt more aligned with her true purpose and experienced greater satisfaction in both work and personal life.</p>
+                  </div>
                 </section>
-                {/* Table: Number Characteristics */}
-                <div className="overflow-x-auto mb-8">
-                  <motion.table initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="min-w-full bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <section>
+                  <h3 className="font-bold text-black text-xl mb-4">Common Misconceptions</h3>
+                  <ul className="list-disc list-inside ml-4 text-gray-700 space-y-2 mb-4 text-justify">
+                    <li>Numerology is just superstition—it's actually based on mathematical patterns and vibrational frequencies.</li>
+                    <li>All people with the same number are identical—numbers show tendencies, but individual choices matter.</li>
+                    <li>Changing your name will completely change your destiny—it can influence your path, but your core numbers remain.</li>
+                  </ul>
+                </section>
+              </motion.section>
+            )}
+            {activeTab === 'Number Guide' && (
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Number Meanings: 1-9 and Master Numbers</h2>
+                <div className="grid md:grid-cols-2 gap-8 mb-8">
+                  {[
+                    ['1', 'Leader', 'Independence, ambition, innovation'],
+                    ['2', 'Peacemaker', 'Cooperation, diplomacy, intuition'],
+                    ['3', 'Communicator', 'Creativity, expression, joy'],
+                    ['4', 'Builder', 'Stability, organization, hard work'],
+                    ['5', 'Adventurer', 'Freedom, change, experience'],
+                    ['6', 'Nurturer', 'Responsibility, harmony, service'],
+                    ['7', 'Seeker', 'Spirituality, analysis, wisdom'],
+                    ['8', 'Achiever', 'Power, success, material wealth'],
+                    ['9', 'Humanitarian', 'Compassion, completion, universal love'],
+                    ['11', 'Intuitive', 'Spiritual insight, inspiration'],
+                    ['22', 'Master Builder', 'Practical vision, large-scale achievement'],
+                    ['33', 'Master Teacher', 'Spiritual teaching, healing'],
+                  ].map(([number, title, traits], i) => (
+                    <div key={number as string} className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition-all cursor-pointer border">
+                      <h4 className="text-4xl font-bold text-gray-800 mb-2">{number}</h4>
+                      <h5 className="text-lg font-bold text-gray-900 mb-2">{title}</h5>
+                      <p className="text-gray-700 text-sm">{traits}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full bg-white border border-gray-200 rounded-xl overflow-hidden">
                     <thead className="bg-gray-100">
                       <tr>
                         <th className="py-4 px-4 border-b text-left font-bold text-black text-base">Number</th>
-                        <th className="py-4 px-4 border-b text-left font-bold text-black text-base">Element</th>
                         <th className="py-4 px-4 border-b text-left font-bold text-black text-base">Strengths</th>
                         <th className="py-4 px-4 border-b text-left font-bold text-black text-base">Challenges</th>
                       </tr>
                     </thead>
                     <tbody>
                       {[
-                        ['1', 'Fire', 'Leadership, independence, innovation', 'Impatience, ego, domination'],
-                        ['2', 'Water', 'Cooperation, intuition, diplomacy', 'Oversensitivity, indecision'],
-                        ['3', 'Air', 'Creativity, communication, joy', 'Scattered energy, superficiality'],
-                        ['4', 'Earth', 'Stability, organization, reliability', 'Rigidity, resistance to change'],
-                        ['5', 'Air', 'Freedom, adventure, versatility', 'Restlessness, irresponsibility'],
-                        ['6', 'Earth', 'Responsibility, harmony, service', 'Self-sacrifice, worry'],
-                        ['7', 'Water', 'Spirituality, analysis, wisdom', 'Isolation, skepticism'],
-                        ['8', 'Fire', 'Power, success, material wealth', 'Materialism, workaholism'],
-                        ['9', 'Fire', 'Compassion, completion, universal love', 'Emotional baggage, martyrdom'],
-                      ].map(([num, element, strengths, challenges], i) => (
+                        ['1', 'Leadership, independence', 'Impatience, ego'],
+                        ['2', 'Cooperation, intuition', 'Oversensitivity, indecision'],
+                        ['3', 'Creativity, communication', 'Scattered energy, superficiality'],
+                        ['4', 'Stability, organization', 'Rigidity, resistance to change'],
+                        ['5', 'Freedom, adventure', 'Restlessness, irresponsibility'],
+                        ['6', 'Responsibility, harmony', 'Self-sacrifice, worry'],
+                        ['7', 'Spirituality, analysis', 'Isolation, skepticism'],
+                        ['8', 'Power, success', 'Materialism, workaholism'],
+                        ['9', 'Compassion, completion', 'Emotional baggage, martyrdom'],
+                      ].map(([num, strengths, challenges], i) => (
                         <tr key={num} className={i % 2 === 0 ? 'bg-gray-50' : ''}>
                           <td className="py-3 px-4 border-b font-medium text-black">{num}</td>
-                          <td className="py-3 px-4 border-b font-medium text-black">{element}</td>
                           <td className="py-3 px-4 border-b font-medium text-black">{strengths}</td>
                           <td className="py-3 px-4 border-b font-medium text-black">{challenges}</td>
                         </tr>
                       ))}
                     </tbody>
-                  </motion.table>
+                  </table>
                 </div>
-              </section>
-            )}
-            {activeTab === 'Number Guide' && (
-              <section className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Understanding Your Numbers</h2>
-                <motion.ul initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-3 text-gray-700">
-                  <li><span className="text-indigo-500 mr-2">✓</span>Calculate your core numbers to understand your life blueprint.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Recognize your strengths and work on your challenges.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Use numerology to make better life decisions and career choices.</li>
-                  <li><span className="text-indigo-500 mr-2">✓</span>Understand compatibility with others through number analysis.</li>
-                </motion.ul>
-              </section>
+              </motion.section>
             )}
             {activeTab === 'Calculations' && (
-              <section className="mb-16">
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Numerology Calculations Made Simple</h2>
-                <motion.ul initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-3 text-gray-700">
-                  <li><span className="text-green-500 mr-2">•</span>Life Path Number: Add all digits of birth date, reduce to single digit</li>
-                  <li><span className="text-green-500 mr-2">•</span>Destiny Number: Convert name letters to numbers, add, reduce</li>
-                  <li><span className="text-green-500 mr-2">•</span>Soul Number: Use only vowels from your name</li>
-                  <li><span className="text-green-500 mr-2">•</span>Personality Number: Use only consonants from your name</li>
-                  <li><span className="text-green-500 mr-2">•</span>Personal Year: Add birth day + birth month + current year</li>
-                </motion.ul>
-              </section>
+                <div className="space-y-6 text-justify">
+                  <div>
+                    <h3 className="font-bold text-black text-lg mb-2">How do I calculate my Life Path Number?</h3>
+                    <p className="text-gray-700">Add all digits of your birth date (e.g., 15-03-1990 is 1+5+0+3+1+9+9+0 = 28). Then, reduce the result to a single digit (2+8 = 10, then 1+0 = 1). Your Life Path Number is 1.</p>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-black text-lg mb-2">How do I calculate my Destiny Number?</h3>
+                    <p className="text-gray-700">Assign a number (1-9) to each letter of your full birth name using a standard Pythagorean chart. Add the numbers for each name separately, reduce them to a single digit or master number, and then add the results together and reduce again.</p>
+                  </div>
+                   <div>
+                    <h3 className="font-bold text-black text-lg mb-2">What is the Personal Year Number?</h3>
+                    <p className="text-gray-700">Your Personal Year number reveals the theme for the current year. Calculate it by adding your birth day, your birth month, and the current year's digits, then reducing the total to a single digit. For example, for a birthdate of March 15 in the year 2024: (3 + 1+5 + 2+0+2+4) = 17, which reduces to 1+7 = 8. The Personal Year is 8.</p>
+                  </div>
+                </div>
+              </motion.section>
             )}
             {activeTab === 'FAQs' && (
-              <section className="mb-16">
+              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Frequently Asked Questions</h2>
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="space-y-6">
+                <div className="space-y-6 text-justify">
                   {[
-                    ['Can numerology help with career choices?', 'Yes, your numbers can reveal your natural talents and suitable career paths.'],
-                    ['Do numbers affect relationships?', 'Numerology can show compatibility and potential challenges in relationships.'],
-                    ['Should I change my name for better numbers?', 'Consider it carefully - it can influence your path but won\'t change your core essence.'],
-                    ['How accurate is numerology?', 'It provides valuable insights and patterns, but your free will and choices are most important.'],
+                    ['Can numerology help with career choices?', 'Yes, your numbers can reveal your natural talents and suggest suitable career paths where you are likely to thrive.'],
+                    ['Do numbers affect relationships?', 'Numerology can show compatibility between individuals by comparing their core numbers, highlighting areas of harmony and potential challenges.'],
+                    ['Should I change my name for better numbers?', 'While changing your name can influence your Destiny Number, it should be done with careful consideration and expert guidance, as it doesn\'t alter your core Life Path Number.'],
+                    ['How accurate is numerology?', 'It provides valuable insights into personality traits and life patterns. However, your free will and choices are always the most important factors in shaping your destiny.'],
+                     ['What\'s the difference between Life Path and Destiny Number?', 'Your Life Path Number comes from your birth date and shows your life\'s overarching purpose and lessons. Your Destiny Number comes from your name and reveals your natural talents and how you will express that purpose.'],
+                    ['Do master numbers need to be reduced?', 'No, master numbers (11, 22, 33) should not be reduced in the final calculation, as they carry a special spiritual significance and a higher potential for achievement and challenges.'],
                   ].map(([q, a], i) => (
                     <div key={q} className="border-b border-gray-200 pb-6">
                       <h3 className="text-lg font-bold text-indigo-900 mb-2 flex items-center"><HelpCircle className="w-5 h-5 mr-2 text-indigo-400" />{q}</h3>
                       <p className="text-gray-700">{a}</p>
                     </div>
                   ))}
-                </motion.div>
-              </section>
+                </div>
+              </motion.section>
             )}
             <CTASection />
             

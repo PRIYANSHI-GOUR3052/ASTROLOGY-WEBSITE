@@ -23,7 +23,7 @@ export default function Footer() {
   return (
     <footer className="relative bg-black text-white py-20 overflow-hidden">
       {/* Floating decorative cards */}
-      <div className="hidden md:block absolute top-10 left-10 rotate-[-12deg] opacity-90 z-10">
+      <Link href="/blog/astrology-remedies-for-life" className="hidden md:block absolute top-10 left-10 rotate-[-12deg] opacity-90 z-10 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out">
         <div className="bg-gradient-to-br from-violet-500 via-pink-500 to-orange-400 rounded-2xl p-6 w-72 shadow-2xl">
           <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Astrology & Culture</div>
           <h3 className="text-white font-bold text-lg mb-2 leading-snug">The mystical art of celestial guidance</h3>
@@ -32,10 +32,10 @@ export default function Footer() {
             <span>December 20, 2024</span>
             <span className="ml-auto">5 mins</span>
           </div>
-          <button className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30">Read more →</button>
+          <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30 inline-block">Read more →</span>
         </div>
-      </div>
-      <div className="hidden md:block absolute top-16 right-10 rotate-[12deg] opacity-90 z-10">
+      </Link>
+      <Link href="/blog/the-influence-of-planets" className="hidden md:block absolute top-16 right-10 rotate-[12deg] opacity-90 z-10 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out">
         <div className="bg-gradient-to-br from-blue-500 via-teal-400 to-green-400 rounded-2xl p-6 w-72 shadow-2xl">
           <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Cosmic Insights</div>
           <h3 className="text-white font-bold text-lg mb-2 leading-snug">The importance of planetary alignment for spiritual results</h3>
@@ -44,9 +44,9 @@ export default function Footer() {
             <span>December 11, 2024</span>
             <span className="ml-auto">8 mins</span>
           </div>
-          <button className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30">Read more →</button>
+          <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30 inline-block">Read more →</span>
         </div>
-      </div>
+      </Link>
 
       <div className="max-w-6xl mx-auto px-5 relative z-20">
         {/* Main content */}
