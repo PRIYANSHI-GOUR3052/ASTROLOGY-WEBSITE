@@ -229,6 +229,47 @@ Benefits of Meditation:
     date: "15 April, 2024",
     category: "Spiritual Healing"
   },
+  "unveiling-nakshatra-secrets": {
+    title: {
+      hi: "नक्षत्रों के रहस्य",
+      en: "Unveiling Nakshatra Secrets"
+    },
+    description: {
+      hi: "नक्षत्र, या चंद्र हवेली, वैदिक ज्योतिष का एक महत्वपूर्ण हिस्सा हैं। वे हमारे व्यक्तित्व और भाग्य को आकार देने में महत्वपूर्ण भूमिका निभाते हैं।",
+      en: "Nakshatras, or lunar mansions, are a crucial part of Vedic astrology. They play a significant role in shaping our personality and destiny."
+    },
+    content: {
+      hi: `नक्षत्र, या चंद्र हवेली, वैदिक ज्योतिष का एक महत्वपूर्ण हिस्सा हैं। वे हमारे व्यक्तित्व और भाग्य को आकार देने में महत्वपूर्ण भूमिका निभाते हैं।
+
+प्रमुख नक्षत्र और उनके प्रभाव:
+• अश्विनी - शुरुआत और उपचार
+• भरणी - परिवर्तन और इच्छा
+• कृत्तिका - शक्ति और महत्वाकांक्षा
+• रोहिणी - विकास और रचनात्मकता
+
+नक्षत्रों का महत्व:
+1.  जन्म नक्षत्र: आपके मूल स्वभाव और जीवन पथ को निर्धारित करता है।
+2.  विवाह अनुकूलता: विवाह में अनुकूलता का आकलन करने के लिए नक्षत्रों का मिलान किया जाता है।
+3.  मुहूर्त: शुभ समय का चयन करने के लिए नक्षत्रों का उपयोग किया जाता है।`,
+      en: `Nakshatras, or lunar mansions, are a crucial part of Vedic astrology. They play a significant role in shaping our personality and destiny.
+
+Key Nakshatras and Their Influence:
+• Ashwini - Beginnings and healing
+• Bharani - Transformation and desire
+• Krittika - Power and ambition
+• Rohini - Growth and creativity
+
+Significance of Nakshatras:
+1.  Birth Nakshatra: Determines your core nature and life path.
+2.  Marriage Compatibility: Nakshatras are matched to assess compatibility in marriage.
+3.  Muhurta: Nakshatras are used to select auspicious timings for important events.`
+    },
+    imageUrl: "/images/blog/nakshatra.jpg",
+    themeColor: "#a78bfa",
+    author: "Dr. Narendra Kumar Sharma",
+    date: "28 July, 2024",
+    category: "Astrology"
+  },
   "crystal-healing": {
     title: {
       hi: "क्रिस्टल हीलिंग का मार्गदर्शन",

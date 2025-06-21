@@ -7,8 +7,7 @@ import Image from 'next/image';
 import { CTASection } from '../../components/CTASection';
 import { motion } from 'framer-motion';
 import { notFound } from 'next/navigation';
-import { AstrologerProfile } from '../../components/AstrologerProfile';
-import { AboutSummary } from '../../components/AboutSummary';
+import { DrNarendraProfile } from '../../components/DrNarendraProfile';
 
 const tabs = ["Today's Forecast", 'Love & Career', 'Health & Remedies', 'FAQs'];
 
@@ -30,7 +29,7 @@ export default function DailyHoroscopePage({ params }: { params: { sign: string 
   };
 
   return (
-    <div className="min-h-screen bg-white pt-20 md:pt-32">
+    <div className="min-h-screen bg-white pt-16 md:pt-24">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Banner Heading */}
         <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
@@ -114,28 +113,9 @@ export default function DailyHoroscopePage({ params }: { params: { sign: string 
                 </div>
               </motion.section>
             )}
-            <CTASection />
           </div>
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            {/* Author Info */}
-            <a href="/about" className="block bg-indigo-50 rounded-lg p-6 mb-8 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-16 h-16 bg-indigo-200 rounded-full flex items-center justify-center">
-                  <User className="w-8 h-8 text-indigo-700" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 mb-1">
-                    <span className="text-indigo-700 font-medium">Astrological Forecast by</span> <br />
-                    <span className="font-semibold text-indigo-900">{horoscope.author}</span>
-                  </p>
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    <span>Updated on {horoscope.date}</span>
-                  </p>
-                </div>
-              </div>
-            </a>
             {/* Newsletter */}
             <div className="bg-orange-50 rounded-lg p-6 mb-8">
               <h3 className="text-lg font-bold text-orange-900 mb-4">Get Daily Horoscope Insights</h3>
@@ -183,16 +163,10 @@ export default function DailyHoroscopePage({ params }: { params: { sign: string 
           </div>
         </div>
       </div>
-      {/* Astrologer Profile and About Summary below the sidebar */}
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="lg:grid-cols-3 grid gap-8">
-          <div className="lg:col-span-2"></div>
-          <div className="lg:col-span-1 flex flex-col gap-8">
-            <AstrologerProfile />
-            <AboutSummary />
-          </div>
-        </div>
+      <div className="my-12">
+        <DrNarendraProfile />
       </div>
+      <CTASection />
     </div>
   );
 }

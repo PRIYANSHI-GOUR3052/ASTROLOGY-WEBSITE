@@ -92,34 +92,44 @@ export function HeroSection() {
         {/* Left Column */}
         <div className="flex flex-col gap-8">
           {/* Article 1 */}
-          <div className="flex flex-col">
-            <div className="relative w-full h-64 md:h-72 flex-shrink-0 overflow-hidden">
-              <Image src="/images/ASTRO.webp" alt="Nakshatra Secrets" fill className="object-cover" />
-            </div>
-            <div className="mt-4">
-              <div className="font-extrabold text-xl md:text-2xl leading-snug">Unveiling Nakshatra Secrets</div>
-              <div className="text-sm text-gray-500 mb-1">JUL 15 • ASTROLOGY</div>
-              <div className="text-base text-gray-700">Explore the hidden meanings and cosmic influences of each Nakshatra in your birth chart.</div>
-            </div>
-          </div>
+          <motion.div whileHover={{ scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
+            <Link href="/blog/unveiling-nakshatra-secrets">
+              <div className="flex flex-col cursor-pointer">
+                <div className="relative w-full h-64 md:h-72 flex-shrink-0 overflow-hidden rounded-lg shadow-lg">
+                  <Image src="/images/ASTRO.webp" alt="Nakshatra Secrets" fill className="object-cover" />
+                </div>
+                <div className="mt-4">
+                  <div className="font-extrabold text-xl md:text-2xl leading-snug">Unveiling Nakshatra Secrets</div>
+                  <div className="text-sm text-gray-500 mb-1">JUL 15 • ASTROLOGY</div>
+                  <div className="text-base text-gray-700">Explore the hidden meanings and cosmic influences of each Nakshatra in your birth chart.</div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
           {/* Article 2 */}
-          <div className="flex flex-col">
-            <div className="relative w-full h-64 md:h-72 flex-shrink-0 overflow-hidden">
-              <Image src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=900&q=80" alt="Astrology Remedies" fill className="object-cover" />
-            </div>
-            <div className="mt-4">
-              <div className="font-extrabold text-xl md:text-2xl leading-snug">Astrology Remedies for Life</div>
-              <div className="text-sm text-gray-500 mb-1">JUL 10 • REMEDIES</div>
-              <div className="text-base text-gray-700">Discover powerful Vedic remedies to balance your planetary energies and improve your destiny.</div>
-            </div>
-          </div>
+          <motion.div whileHover={{ scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
+            <Link href="/blog/astrology-remedies-for-life">
+              <div className="flex flex-col cursor-pointer">
+                <div className="relative w-full h-64 md:h-72 flex-shrink-0 overflow-hidden rounded-lg shadow-lg">
+                  <Image src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=900&q=80" alt="Astrology Remedies" fill className="object-cover" />
+                </div>
+                <div className="mt-4">
+                  <div className="font-extrabold text-xl md:text-2xl leading-snug">Astrology Remedies for Life</div>
+                  <div className="text-sm text-gray-500 mb-1">JUL 10 • REMEDIES</div>
+                  <div className="text-base text-gray-700">Discover powerful Vedic remedies to balance your planetary energies and improve your destiny.</div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
         </div>
 
         {/* Center Column */}
         <div className="flex flex-col items-start w-full">
-          <div className="relative w-full h-80 md:h-[500px] overflow-hidden mb-6">
-            <Image src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80" alt="Nakshatra Gyan Hero" fill className="object-cover" />
-          </div>
+          <motion.div whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }} className="relative w-full h-80 md:h-[500px] overflow-hidden mb-6 rounded-lg shadow-2xl">
+            <Link href="/about">
+              <Image src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80" alt="Nakshatra Gyan Hero" fill className="object-cover cursor-pointer" />
+            </Link>
+          </motion.div>
           <div className="w-full">
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-3 text-black">Nakshatra Gyaan: Unlock Your Celestial Path</h1>
             <p className="text-gray-700 text-lg md:text-xl font-medium">Dive deep into the wisdom of Nakshatras and Vedic astrology. Get expert guidance, daily insights, and cosmic solutions for your life's journey.</p>
@@ -129,27 +139,35 @@ export function HeroSection() {
         {/* Right Column */}
         <div className="flex flex-col gap-8">
           {/* Article 1 */}
-          <div className="flex flex-col">
-            <div className="relative w-full h-52 md:h-64 flex-shrink-0 overflow-hidden">
-              <Image src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80" alt="Daily Horoscope" fill className="object-cover" />
-            </div>
-            <div className="mt-4">
-              <div className="font-extrabold text-xl leading-snug">Today's Nakshatra Forecast</div>
-              <div className="text-sm text-gray-500 mb-1">JUL 16 • HOROSCOPE</div>
-              <div className="text-base text-gray-700">Get your personalized Nakshatra-based horoscope and make the most of today's energies.</div>
-            </div>
-          </div>
+          <motion.div whileHover={{ scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
+            <Link href="/daily-horoscope">
+              <div className="flex flex-col cursor-pointer">
+                <div className="relative w-full h-52 md:h-64 flex-shrink-0 overflow-hidden rounded-lg shadow-lg">
+                  <Image src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80" alt="Daily Horoscope" fill className="object-cover" />
+                </div>
+                <div className="mt-4">
+                  <div className="font-extrabold text-xl leading-snug">Today's Nakshatra Forecast</div>
+                  <div className="text-sm text-gray-500 mb-1">JUL 16 • HOROSCOPE</div>
+                  <div className="text-base text-gray-700">Get your personalized Nakshatra-based horoscope and make the most of today's energies.</div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
           {/* Article 2 */}
-          <div className="flex flex-col">
-            <div className="relative w-full h-52 md:h-64 flex-shrink-0 overflow-hidden">
-              <Image src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80" alt="Astrology Consultation" fill className="object-cover" />
-            </div>
-            <div className="mt-4">
-              <div className="font-extrabold text-xl leading-snug">Book a Vedic Astrology Consultation</div>
-              <div className="text-sm text-gray-500 mb-1">JUL 18 • CONSULTATION</div>
-              <div className="text-base text-gray-700">Connect with our expert astrologers for in-depth Nakshatra and planetary guidance.</div>
-            </div>
-          </div>
+          <motion.div whileHover={{ scale: 1.03 }} transition={{ type: 'spring', stiffness: 300 }}>
+            <Link href="/services/personal-reading">
+              <div className="flex flex-col cursor-pointer">
+                <div className="relative w-full h-52 md:h-64 flex-shrink-0 overflow-hidden rounded-lg shadow-lg">
+                  <Image src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80" alt="Astrology Consultation" fill className="object-cover" />
+                </div>
+                <div className="mt-4">
+                  <div className="font-extrabold text-xl leading-snug">Book a Vedic Astrology Consultation</div>
+                  <div className="text-sm text-gray-500 mb-1">JUL 18 • CONSULTATION</div>
+                  <div className="text-base text-gray-700">Connect with our expert astrologers for in-depth Nakshatra and planetary guidance.</div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
         </div>
       </div>
     </section>
