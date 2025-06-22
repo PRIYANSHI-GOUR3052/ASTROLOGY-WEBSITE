@@ -14,6 +14,7 @@ const solutions = [
   {
     icon: <GraduationCap className="w-12 h-12 text-black" />,
     title: { hi: "करियर (Career)", en: "Career" },
+    href: "/services/career-guidance",
     description: {
       hi: "छात्रों को परीक्षाओं के बाद क्या करना है, नौकरियों और भविष्य के बारे में जानने की जरूरत होती है। ज्योतिषी अरुण जी आपकी जन्म कुंडली का विश्लेषण करके सही करियर चुनने में मदद करेंगे।",
       en: "Many students get confused about what to do after exams, jobs, and the future. Talk to astrologer Arun ji who can assist you in making the right career choices by analyzing your birth chart."
@@ -23,6 +24,7 @@ const solutions = [
   {
     icon: <Heart className="w-12 h-12 text-black" />,
     title: { hi: "प्रेम और रिश्ते (Love & Relationship)", en: "Love & Relationship" },
+    href: "/services/love-relationship",
     description: {
       hi: "अपने साथी के साथ सर्वश्रेष्ठ प्रेम राशिफल संगतता की तलाश में हैं? एक परामर्श कॉल आपके रिश्ते की संभावनाओं को उजागर कर सकती है।",
       en: "Looking for the best love horoscope compatibility with your partner? One counseling call can reveal the potential of your relationship."
@@ -32,6 +34,7 @@ const solutions = [
   {
     icon: <Activity className="w-12 h-12 text-black" />,
     title: { hi: "स्वास्थ्य (Health)", en: "Health" },
+    href: "/services/health-astrology",
     description: {
       hi: "वैदिक ज्योतिष भविष्यवाणियां स्वास्थ्य समस्याओं की पूर्व सूचना दे सकती हैं। शीघ्र परामर्श के लिए ज्योतिषी से बात करें।",
       en: "Vedic astrology predictions can forecast health issues before they appear. Seek early consultation by talking to the astrologer."
@@ -41,6 +44,7 @@ const solutions = [
   {
     icon: <Briefcase className="w-12 h-12 text-black" />,
     title: { hi: "व्यापार (Business)", en: "Business" },
+    href: "/services/business-astrology",
     description: {
       hi: "व्यापार शुरू करते समय या बड़े निर्णय लेते समय, ज्योतिष से सटीक मार्गदर्शन महत्वपूर्ण है। एक ज्योतिषी से परामर्श आपकी व्यावसायिक समस्याओं को हल कर सकता है।",
       en: "When starting a business or facing big choices, getting accurate insights from astrology is important. Consulting an astrologer can help solve your business problems."
@@ -50,6 +54,7 @@ const solutions = [
   {
     icon: <Users className="w-12 h-12 text-black" />,
     title: { hi: "विवाह (Marriage)", en: "Marriage" },
+    href: "/kundali-matching",
     description: {
       hi: "भारत में विवाह के लिए कुंडली मिलान की प्रथा बहुत महत्वपूर्ण है। गुण मिलान, मंगल दोष और संगतता विश्लेषण प्राप्त करें।",
       en: "In India, the practice of Kundli Milan for marriage is very important. Get Gun Milan, Mangal Dosha, & compatibility analysis."
@@ -59,6 +64,7 @@ const solutions = [
   {
     icon: <Baby className="w-12 h-12 text-black" />,
     title: { hi: "संतान (Child)", en: "Child" },
+    href: "/services/child-astrology",
     description: {
       hi: "प्राचीन भारतीय वैदिक ज्योतिष दोनों साथियों की कुंडली का परीक्षण करता है, विशेष रूप से बच्चों के बारे में जानने के इच्छुक लोगों के लिए। ज्योतिषी आपको संतान से संबंधित समस्याओं के लिए सटीक समाधान प्रदान करेंगे।",
       en: "The ancient Indian Vedic astrology examines the horoscopes of both partners, especially for those interested in knowing about children. The astrologer will provide accurate solutions for issues related to childbirth."
@@ -70,23 +76,9 @@ const solutions = [
 export function LifeChangingSolutions() {
   const { lang } = useLanguage();
   const router = useRouter();
-  const [expandedCards, setExpandedCards] = useState<boolean[]>(Array(solutions.length).fill(false));
-
-  const toggleExpand = (index: number) => {
-    setExpandedCards(prev => {
-      const newExpandedCards = [...prev];
-      newExpandedCards[index] = !newExpandedCards[index];
-      return newExpandedCards;
-    });
-  };
 
   const scrollToContact = () => {
     router.push('/contact');
-  };
-
-  const truncateText = (text: string, maxLength: number) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
   };
 
   return (
@@ -107,39 +99,31 @@ export function LifeChangingSolutions() {
         <div className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {solutions.map((solution, index) => (
-              <motion.div
-                key={index}
-                className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-105"
-                whileHover={{ scale: 1.05, y: -5, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
-                whileTap={{ scale: 0.98, rotate: 0 }}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <div className={`relative h-48 w-full ` + (solution.themeColor ? `bg-[${solution.themeColor}]` : 'bg-gray-200')}>
-                  <Image 
-                    src={`/images/course-${index + 1}.webp`}
-                    alt={solution.title[lang]}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-extrabold mb-2 text-black">{solution.title[lang]}</h3>
-                  <p className="text-base text-black mb-4 leading-tight tracking-wide font-serif">
-                    {expandedCards[index] ? solution.description[lang] : truncateText(solution.description[lang], 100)}
-                  </p>
-                  {solution.description[lang].length > 100 && (
-                    <Button 
-                      variant="link" 
-                      className="text-[#7C3AED] hover:text-[#FBBF24] hover:underline p-0 h-auto text-sm font-semibold bg-[#F3E8FF] border border-[#E0E0E0] rounded-lg transition-all duration-200"
-                      onClick={() => toggleExpand(index)}
-                    >
-                      {expandedCards[index] ? 'Read Less' : 'Read More'}
-                    </Button>
-                  )}
-                </CardContent>
-              </motion.div>
+              <Link href={solution.href} key={index} className="block h-full">
+                <motion.div
+                  className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-105 h-full flex flex-col"
+                  whileHover={{ scale: 1.05, y: -5, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
+                  whileTap={{ scale: 0.98, rotate: 0 }}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className={`relative h-48 w-full ` + (solution.themeColor ? `bg-[${solution.themeColor}]` : 'bg-gray-200')}>
+                    <Image
+                      src={`/images/course-${index + 1}.webp`}
+                      alt={solution.title[lang]}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </div>
+                  <CardContent className="p-6 flex-grow flex flex-col">
+                    <h3 className="text-xl font-extrabold mb-2 text-black">{solution.title[lang]}</h3>
+                    <p className="text-base text-black mb-4 leading-tight tracking-wide font-serif flex-grow">
+                      {solution.description[lang]}
+                    </p>
+                  </CardContent>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>
