@@ -7,40 +7,9 @@ import Link from 'next/link';
 export function DrNarendraProfile() {
   return (
     <section className="relative bg-black text-white py-20 overflow-hidden">
-      {/* Floating decorative cards */}
-      <div className="hidden md:block absolute top-10 left-10 rotate-[-12deg] opacity-90 z-10">
-        <div className="bg-gradient-to-br from-violet-500 via-pink-500 to-orange-400 rounded-2xl p-6 w-72 shadow-2xl">
-          <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Astrology Expert</div>
-          <h3 className="text-white font-bold text-lg mb-2 leading-snug">20+ Years of Transforming Lives</h3>
-          <div className="flex items-center text-white/80 text-sm mb-4">
-            <span className="mr-2">🌟</span>
-            <span>10K+ Clients</span>
-            <span className="ml-auto">98% Satisfaction</span>
-          </div>
-          <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30 inline-block">See Reviews →</span>
-        </div>
-      </div>
-      <div className="hidden md:block absolute top-16 right-10 rotate-[12deg] opacity-90 z-10">
-        <div className="bg-gradient-to-br from-blue-500 via-teal-400 to-green-400 rounded-2xl p-6 w-72 shadow-2xl">
-          <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Global Recognition</div>
-          <h3 className="text-white font-bold text-lg mb-2 leading-snug">Consultations in 30+ Countries</h3>
-          <div className="flex items-center text-white/80 text-sm mb-4">
-            <span className="mr-2">🌍</span>
-            <span>5K+ Consultations</span>
-            <span className="ml-auto">1000+ Reviews</span>
-          </div>
-          <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30 inline-block">Learn More →</span>
-        </div>
-      </div>
-
       <div className="max-w-6xl mx-auto px-5 relative z-20">
-        {/* Large brand name watermark */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none opacity-10 z-0">
-          <h1 className="text-[80px] md:text-[120px] font-bold tracking-wider m-0">nakshatra</h1>
-        </div>
-
         {/* Main profile card */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-12 bg-gradient-to-r from-[#1E3A8A]/90 to-[#065F46]/90 p-10 rounded-3xl shadow-2xl mb-16 border border-white/10 relative z-10">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12 bg-gradient-to-br from-gray-900 via-purple-900 to-slate-900 p-10 rounded-3xl shadow-2xl mb-16 border border-white/10 relative z-10">
           <div className="flex-shrink-0">
             <Image 
               src="/images/PHD .webp" 
@@ -55,11 +24,43 @@ export function DrNarendraProfile() {
             <p className="text-lg md:text-xl mb-4 text-white/90 max-w-2xl">
               Dr. Narendra Kumar Sharma is a globally renowned astrologer with over 20 years of experience in Vedic astrology. He is celebrated for his accurate predictions, insightful guidance, and compassionate approach to helping individuals navigate life's challenges. His expertise spans across various astrological domains, including career, relationships, health, and finance.
             </p>
-            <div className="flex items-center justify-center md:justify-start space-x-2 text-yellow-400 mb-2">
+            <div className="flex items-center justify-center md:justify-start space-x-2 text-pink-300 mb-2">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-6 h-6 fill-current" />
               ))}
-              <span className="ml-2 text-white">(5.0/5.0) - 1000+ Reviews</span>
+              <span className="ml-2 text-pink-300 font-semibold">(5.0/5.0) - 1000+ Reviews</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+          <div className="bg-gradient-to-br from-violet-500 via-pink-500 to-orange-400 rounded-2xl p-6 shadow-2xl flex flex-col h-full">
+            <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block self-start">Astrology Expert</div>
+            <h3 className="text-white font-bold text-lg mb-2 leading-snug">20+ Years of Transforming Lives</h3>
+            <div className="flex items-center text-white/80 text-sm mb-4">
+              <span className="mr-2">🌟</span>
+              <span>10K+ Clients</span>
+              <span className="ml-auto">98% Satisfaction</span>
+            </div>
+            <div className="mt-auto pt-4">
+              <Link href="/reviews" className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30 inline-block">
+                See Reviews →
+              </Link>
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-blue-500 via-teal-400 to-green-400 rounded-2xl p-6 shadow-2xl flex flex-col h-full">
+            <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block self-start">Global Recognition</div>
+            <h3 className="text-white font-bold text-lg mb-2 leading-snug">Consultations in 30+ Countries</h3>
+            <div className="flex items-center text-white/80 text-sm mb-4">
+              <span className="mr-2">🌍</span>
+              <span>5K+ Consultations</span>
+              <span className="ml-auto">1000+ Reviews</span>
+            </div>
+            <div className="mt-auto pt-4">
+              <Link href="/about" className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30 inline-block">
+                Learn More →
+              </Link>
             </div>
           </div>
         </div>

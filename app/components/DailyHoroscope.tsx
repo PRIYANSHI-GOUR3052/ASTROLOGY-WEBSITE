@@ -25,6 +25,57 @@ const zodiacSigns = [
   { label: { en: 'Pisces', hi: 'मीन' }, value: 'Pisces' },
 ]
 
+const dailyPredictions = {
+  Aries: {
+    en: "Today is a day for bold action, Aries. Your dynamic energy is high, making it a perfect time to start new projects or tackle challenging tasks. Trust your instincts and lead the way.",
+    hi: "मेष, आज साहसिक कार्रवाई का दिन है। आपकी गतिशील ऊर्जा उच्च है, जो इसे नई परियोजनाओं को शुरू करने या चुनौतीपूर्ण कार्यों से निपटने के लिए एक आदर्श समय बनाती है। अपनी प्रवृत्ति पर भरोसा करें और नेतृत्व करें।",
+  },
+  Taurus: {
+    en: "Focus on stability and comfort, Taurus. It's a great day to manage your finances or indulge in simple pleasures. Patience will be your greatest asset, so avoid rushing into decisions.",
+    hi: "वृषभ, स्थिरता और आराम पर ध्यान केंद्रित करें। यह आपके वित्त का प्रबंधन करने या साधारण सुखों में लिप्त होने के लिए एक अच्छा दिन है। धैर्य आपकी सबसे बड़ी संपत्ति होगी, इसलिए निर्णयों में जल्दबाजी करने से बचें।",
+  },
+  Gemini: {
+    en: "Your communication skills are at their peak, Gemini. Engage in meaningful conversations, share your ideas, and connect with others. A new perspective could come from an unexpected chat.",
+    hi: "मिथुन, आपकी संचार कौशल अपने चरम पर है। सार्थक बातचीत में शामिल हों, अपने विचार साझा करें और दूसरों से जुड़ें। एक अप्रत्याशित बातचीत से एक नया दृष्टिकोण आ सकता है।",
+  },
+  Cancer: {
+    en: "Listen to your heart today, Cancer. Your intuition is guiding you, especially in matters of home and family. Nurture your relationships and create a sense of security around you.",
+    hi: "कर्क, आज अपने दिल की सुनें। आपकी अंतर्ज्ञान आपको मार्गदर्शन कर रही है, खासकर घर और परिवार के मामलों में। अपने रिश्तों का पोषण करें और अपने आस-पास सुरक्षा की भावना पैदा करें।",
+  },
+  Leo: {
+    en: "It's your time to shine, Leo! Your creativity and confidence are magnetic. Step into the spotlight, express yourself, and don't be afraid to take center stage. Your talents will be recognized.",
+    hi: "सिंह, यह आपके चमकने का समय है! आपकी रचनात्मकता और आत्मविश्वास चुंबकीय हैं। सुर्खियों में कदम रखें, खुद को व्यक्त करें, और केंद्र मंच लेने से न डरें। आपकी प्रतिभाओं को पहचाना जाएगा।",
+  },
+  Virgo: {
+    en: "A practical and organized approach will serve you well, Virgo. Focus on details, whether at work or in your personal life. Your efficiency will bring you a sense of accomplishment.",
+    hi: "कन्या, एक व्यावहारिक और संगठित दृष्टिकोण आपकी अच्छी सेवा करेगा। काम पर या अपने निजी जीवन में विवरणों पर ध्यान केंद्रित करें। आपकी दक्षता आपको उपलब्धि की भावना लाएगी।",
+  },
+  Libra: {
+    en: "Harmony in relationships is your focus, Libra. Seek balance and fairness in your interactions. A diplomatic approach will help you resolve any conflicts and strengthen your bonds.",
+    hi: "तुला, रिश्तों में सामंजस्य आपका ध्यान है। अपनी बातचीत में संतुलन और निष्पक्षता की तलाश करें। एक राजनयिक दृष्टिकोण आपको किसी भी संघर्ष को हल करने और अपने बंधनों को मजबूत करने में मदद करेगा।",
+  },
+  Scorpio: {
+    en: "Embrace transformation, Scorpio. Today is a powerful day for inner growth and letting go of what no longer serves you. Trust the process and welcome positive change.",
+    hi: "वृश्चिक, परिवर्तन को अपनाएं। आज आंतरिक विकास और जो अब आपकी सेवा नहीं करता है उसे जाने देने के लिए एक शक्तिशाली दिन है। प्रक्रिया पर भरोसा करें और सकारात्मक बदलाव का स्वागत करें।",
+  },
+  Sagittarius: {
+    en: "Adventure is calling, Sagittarius! Broaden your horizons, whether by learning something new or exploring a different place. Your optimistic outlook will attract exciting opportunities.",
+    hi: "धनु, रोमांच बुला रहा है! अपनी क्षितिज का विस्तार करें, चाहे कुछ नया सीखकर या किसी अलग जगह की खोज करके। आपका आशावादी दृष्टिकोण रोमांचक अवसरों को आकर्षित करेगा।",
+  },
+  Capricorn: {
+    en: "Your ambition is highlighted today, Capricorn. Focus on your long-term goals and take practical steps to achieve them. Your discipline and hard work will pay off.",
+    hi: "मकर, आज आपकी महत्वाकांक्षा पर प्रकाश डाला गया है। अपने दीर्घकालिक लक्ष्यों पर ध्यान केंद्रित करें और उन्हें प्राप्त करने के लिए व्यावहारिक कदम उठाएं। आपका अनुशासन और कड़ी मेहनत रंग लाएगी।",
+  },
+  Aquarius: {
+    en: "Your innovative ideas can make a difference, Aquarius. Connect with like-minded people and collaborate on projects that matter to you. Your unique perspective is valuable.",
+    hi: "कुंभ, आपके अभिनव विचार एक अंतर डाल सकते हैं। समान विचारधारा वाले लोगों से जुड़ें और उन परियोजनाओं पर सहयोग करें जो आपके लिए मायने रखती हैं। आपका अनूठा दृष्टिकोण मूल्यवान है।",
+  },
+  Pisces: {
+    en: "Trust your intuition, Pisces. Your sensitivity and compassion are heightened, allowing you to connect deeply with others. It's a good day for creative pursuits and spiritual reflection.",
+    hi: "मीन, अपनी अंतर्ज्ञान पर भरोसा करें। आपकी संवेदनशीलता और करुणा बढ़ गई है, जिससे आप दूसरों के साथ गहराई से जुड़ सकते हैं। यह रचनात्मक कार्यों और आध्यात्मिक प्रतिबिंब के लिए एक अच्छा दिन है।",
+  },
+};
+
 interface FAQItem {
   question: { en: string; hi: string; };
   answer: { en: string; hi: string; };
@@ -56,7 +107,12 @@ export function DailyHoroscope() {
   const { lang } = useLanguage()
 
   const getHoroscope = () => {
-    setHoroscope(`Today is a great day for ${selectedSign}. You'll find opportunities for growth and success in unexpected places. Keep an open mind and trust your instincts.`)
+    if (selectedSign) {
+      const prediction = dailyPredictions[selectedSign as keyof typeof dailyPredictions];
+      if (prediction) {
+        setHoroscope(prediction[lang]);
+      }
+    }
   }
 
   const toggleFAQ = (index: number) => {
@@ -77,51 +133,51 @@ export function DailyHoroscope() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
-            <Card className="bg-white shadow-lg border border-orange-200 max-w-2xl mx-auto rounded-2xl p-6">
-              <h3 className="text-2xl font-bold text-black mb-4">
-                {lang === 'hi' ? 'अपनी राशि जानें' : 'Know Your Sign'}
-              </h3>
-              <div className="mb-4">
-                <label htmlFor="zodiac-sign" className="block text-sm font-medium mb-2 text-black">
-                  {lang === 'hi' ? 'अपनी राशि चुनें' : 'Select Your Zodiac Sign'}
-                </label>
-                <Select onValueChange={setSelectedSign}>
-                  <SelectTrigger className="w-full bg-orange-100 text-black border border-orange-400 rounded-xl px-4 py-2 hover:bg-orange-200 transition-all">
-                    <SelectValue placeholder={lang === 'hi' ? 'अपनी राशि चुनें' : 'Choose your sign'} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-orange-300 rounded-xl shadow-lg">
-                    {zodiacSigns.map((sign) => (
-                      <SelectItem
-                        key={sign.value}
-                        value={sign.value}
-                        className="px-4 py-2 text-sm text-black hover:bg-orange-100 cursor-pointer rounded-xl"
-                      >
-                        {sign.label[lang]}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Button
-                onClick={getHoroscope}
-                disabled={!selectedSign}
-                className={`w-full px-4 py-2 rounded-xl border text-sm font-semibold mb-4 transition-all
-                ${!selectedSign
-                  ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
-                  : 'bg-[#F3E8FF] text-[#7C3AED] border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24]'}
-                shadow-md`}
-              >
-                {lang === 'hi' ? 'राशिफल देखें' : 'View Horoscope'}
-              </Button>
-
-              {horoscope && (
-                <p className="text-black whitespace-pre-wrap mt-4 font-serif text-base">{horoscope}</p>
-              )}
-            </Card>
-
+          <div className="lg:col-span-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="md:col-span-2 bg-white shadow-lg border border-orange-200 rounded-2xl p-6">
+                <h3 className="text-2xl font-bold text-black mb-4">
+                  {lang === 'hi' ? 'अपनी राशि जानें' : 'Know Your Sign'}
+                </h3>
+                <div className="mb-4">
+                  <label htmlFor="zodiac-sign" className="block text-sm font-medium mb-2 text-black">
+                    {lang === 'hi' ? 'अपनी राशि चुनें' : 'Select Your Zodiac Sign'}
+                  </label>
+                  <Select onValueChange={setSelectedSign}>
+                    <SelectTrigger className="w-full bg-orange-100 text-black border border-orange-400 rounded-xl px-4 py-2 hover:bg-orange-200 transition-all">
+                      <SelectValue placeholder={lang === 'hi' ? 'अपनी राशि चुनें' : 'Choose your sign'} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border border-orange-300 rounded-xl shadow-lg">
+                      {zodiacSigns.map((sign) => (
+                        <SelectItem
+                          key={sign.value}
+                          value={sign.value}
+                          className="px-4 py-2 text-sm text-black hover:bg-orange-100 cursor-pointer rounded-xl"
+                        >
+                          {sign.label[lang]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button
+                  onClick={getHoroscope}
+                  disabled={!selectedSign}
+                  className={`w-full px-4 py-2 rounded-xl border text-sm font-semibold mb-4 transition-all
+                  ${!selectedSign
+                    ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                    : 'bg-[#F3E8FF] text-[#7C3AED] border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24]'}
+                  shadow-md`}
+                >
+                  {lang === 'hi' ? 'राशिफल देखें' : 'View Horoscope'}
+                </Button>
+
+                {horoscope && (
+                  <p className="text-black whitespace-pre-wrap mt-4 font-serif text-base">{horoscope}</p>
+                )}
+              </Card>
+
               {horoscopeCards.map((card, index) => (
                 <div
                   key={index}
