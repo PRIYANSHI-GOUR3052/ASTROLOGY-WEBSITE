@@ -23,28 +23,28 @@ const credentials = [
 
 export function AstrologerProfile() {
   return (
-    <section className="py-16 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-midnight-blue/50 to-cosmic-purple/50"></div>
+    <section className="py-16 relative bg-[#fef6f2]">
+      <div className="absolute inset-0"></div>
       <div className="container mx-auto px-4 relative z-10 mt-20">
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-4 text-gold">
+        <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-4 text-black">
           डॉ. नरेंद्र कुमार शर्मा क्यों?
         </h2>
-        <h3 className="text-2xl md:text-3xl font-serif text-center mb-12 text-gold">
+        <h3 className="text-2xl md:text-3xl font-serif text-center mb-12 text-black">
           Why Dr. Narendra Kumar Sharma?
         </h3>
         
         <div className="space-y-8">
           {credentials.map((credential, index) => (
-            <Card key={index} className="bg-midnight-blue-light/80 border border-gold/30">
+            <Card key={index} className="bg-white border border-black/30">
               <CardContent className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div className="space-y-4">
-                    <h3 className="text-2xl font-serif font-semibold text-gold">
+                    <h3 className="text-2xl font-serif font-semibold text-black">
                       {credential.titleHi}<br />
                       {credential.title}
                     </h3>
-                    <p className="text-lavender">{credential.descriptionHi}</p>
-                    <p className="text-lavender">{credential.description}</p>
+                    <p className="text-black">{credential.descriptionHi}</p>
+                    <p className="text-black">{credential.description}</p>
                   </div>
                   <div className="relative h-[400px] rounded-lg overflow-hidden">
                     <Image 
@@ -61,20 +61,20 @@ export function AstrologerProfile() {
         </div>
 
         <div className="text-center max-w-4xl mx-auto mt-12 space-y-6">
-          <p className="text-lg text-lavender">
+          <p className="text-lg text-black">
             डॉ. शर्मा का मानना है कि शारीरिक स्वास्थ्य की तरह, प्रत्येक व्यक्ति में आध्यात्मिक कल्याण को पोषित करने की क्षमता होती है।
           </p>
-          <p className="text-lg text-lavender">
+          <p className="text-lg text-black">
             Dr. Sharma believes that, akin to physical health, every individual possesses spiritual well-being to nurture.
           </p>
-          <p className="text-lg text-gold font-semibold">
+          <p className="text-lg text-black font-semibold">
             25+ वर्षों का ज्योतिष शिक्षण और अभ्यास का अनुभव
           </p>
-          <p className="text-lg text-gold font-semibold">
+          <p className="text-lg text-black font-semibold">
             25+ years of experience in teaching astrology and practicing
           </p>
           <Link href="/contact">
-            <Button asChild className="bg-gold text-midnight-blue hover:bg-gold-light mt-8 text-lg px-8 py-6">
+            <Button asChild className="bg-[#F3E8FF] text-[#7C3AED] border border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24] mt-8 text-lg px-8 py-6 transition-all duration-200">
               <span>अपॉइंटमेंट बुक करें (Book Appointment)</span>
             </Button>
           </Link>

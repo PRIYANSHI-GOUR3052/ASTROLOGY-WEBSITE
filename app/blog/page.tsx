@@ -1,22 +1,22 @@
 import { BlogPreview } from '../components/BlogPreview'
-import { BlogGrid } from '../components/BlogGrid'
-import { AnimatedStars } from '../components/AnimatedStars'
-import { MysticBackground } from '../components/MysticBackground'
+import FeaturedBlogs from '../components/FeaturedBlogs'
+import RecentPosts from '../components/RecentPosts'
+import { CTASection } from '../components/CTASection'
 
 export default function BlogPage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-midnight-blue via-cosmic-purple to-celestial-blue">
-      <AnimatedStars />
-      <MysticBackground>
-        <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold mb-12 text-center text-gold animate-pulse">
-            आकाशीय अंतर्दृष्टि ब्लॉग<br />
-            <span className="text-3xl md:text-5xl">Celestial Insights Blog</span>
-          </h1>
-          <BlogPreview />
-          <BlogGrid />
+    <div className="relative min-h-screen py-16 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Banner Heading */}
+        <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight">Astrology Blog</h1>
+          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl">Explore the latest insights, remedies, and wisdom from the world of Vedic astrology, Nakshatras, and spiritual healing.</p>
         </div>
-      </MysticBackground>
+        <FeaturedBlogs />
+        <RecentPosts />
+        <CTASection />
+        <BlogPreview  />
+      </div>
     </div>
   )
 }
