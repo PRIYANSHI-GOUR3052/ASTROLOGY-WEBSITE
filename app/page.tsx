@@ -1,8 +1,7 @@
 import { HeroSection } from './components/HeroSection'
 import { LifeChangingSolutions } from './components/LifeChangingSolutions'
 import { AstrologerProfile } from './components/AstrologerProfile'
-import { BestAstrologyServices } from './components/BestAstrologyServices'
-import { AnimatedStars } from './components/AnimatedStars'
+import  { BestServices }  from './components/BestServices'
 import { ZodiacExplorer } from './components/ZodiacExplorer'
 import { Testimonials } from './components/Testimonials'
 import { AstrologyCalculator } from './components/AstrologyCalculator'
@@ -14,18 +13,23 @@ import { DailyHoroscope } from './components/DailyHoroscope'
 import { AstrologyQuiz } from './components/AstrologyQuiz'
 import { Statistics } from './components/Statistics'
 import { ScrollAnimation } from './components/ScrollAnimation'
+import RecentPosts from './components/RecentPosts'
+import FeaturedBlogs from './components/FeaturedBlogs'
+
 
 
 export default function HomePage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-cosmic-purple-dark via-celestial-blue-dark to-cosmic-purple-dark">
-      <AnimatedStars />
+    <div className="relative min-h-screen overflow-hidden bg-white">
+    
       <HeroSection />
-      <div className="container mx-auto pt-32 px-4 relative z-10">
+      <div className="pt-32 relative z-10">
         <ScrollAnimation>
           <Statistics />
         </ScrollAnimation>
-
+        <RecentPosts />
+        <FeaturedBlogs />
+        
         <ScrollAnimation>
           <DailyHoroscope />
         </ScrollAnimation>
@@ -35,32 +39,33 @@ export default function HomePage() {
         </ScrollAnimation>
 
         <ScrollAnimation>
-          <BestAstrologyServices />
+          <BestServices />
         </ScrollAnimation>
 
         <ScrollAnimation>
           <ServicesOverview />
         </ScrollAnimation>
 
-        <ScrollAnimation>
-          <ZodiacExplorer />
-        </ScrollAnimation>
+        <div className="flex flex-col md:flex-row items-start gap-8 mt-12">
+          <div className="flex-1">
+            <ScrollAnimation>
+              <ZodiacExplorer />
+            </ScrollAnimation>
+          </div>
 
-        <ScrollAnimation>
-          <AstrologyCalculator />
-        </ScrollAnimation>
+          <div className="flex-1">
+            <ScrollAnimation>
+              <AstrologyCalculator />
+            </ScrollAnimation>
+          </div>
+        </div>
 
         <ScrollAnimation>
           <AstrologerProfile />
         </ScrollAnimation>
 
-        <ScrollAnimation>
-          <FeaturedProducts />
-        </ScrollAnimation>
 
-        <ScrollAnimation>
-          <BlogPreview />
-        </ScrollAnimation>
+       
 
         <ScrollAnimation>
           <AstrologyQuiz />
@@ -78,4 +83,3 @@ export default function HomePage() {
     </div>
   )
 }
-

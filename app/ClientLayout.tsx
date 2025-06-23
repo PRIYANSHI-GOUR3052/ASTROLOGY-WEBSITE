@@ -1,20 +1,23 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Header } from './components/Header';
-import { Footer } from './components/Footer';
+import Footer from './components/Footer';
 import { PageTransition } from './components/PageTransition';
 import { MysticBackground } from './components/MysticBackground';
-import Chatbot from './components/chatbot';
+import Chatbot from './components/Chatbot';
 import { AuthProvider } from './contexts/AuthContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { v4 as uuidv4 } from 'uuid';
+import { Toaster } from '@/components/ui/sonner';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  
-  // Array of admin paths where we should hide the regular layout
-  const hideLayout = [
+  const isAdminRoute = pathname?.startsWith('/admin');
+  const isSignInRoute = pathname === '/signin';
+
+  const shouldHideLayout = [
     "/admin/dashboard",
     "/admin/clients",
     "/admin/courses",
@@ -27,25 +30,24 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     "/admin/stone"
   ].includes(pathname ?? '');
 
+  const [isClient, setIsClient] = useState(false)
+
   useEffect(() => {
-    // Get or create visitor ID
+    setIsClient(true)
+    if (shouldHideLayout) return;
+
     let visitorId = localStorage.getItem('visitor_id');
-    
+
     if (!visitorId) {
-      // If no visitor ID exists, create a new one
       visitorId = uuidv4();
       localStorage.setItem('visitor_id', visitorId);
     }
 
-    // Track page visit
     const trackPageVisit = async () => {
       try {
-        // Record the page visit to your API
         const response = await fetch('/api/track-visitor', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             visitorId,
             path: pathname,
@@ -53,7 +55,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             referrer: document.referrer || null,
           }),
         });
-        
+
         if (!response.ok) {
           console.error('Failed to track visitor');
         }
@@ -62,28 +64,54 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       }
     };
 
-    // Only track visits on non-admin pages
-    if (!hideLayout) {
-      trackPageVisit();
+    trackPageVisit();
+  }, [pathname, shouldHideLayout]);
+
+  useEffect(() => {
+    // Store original body background
+    const originalBodyBg = document.body.style.backgroundColor;
+
+    if (isSignInRoute) {
+      // Force background to black for sign-in route
+      document.body.style.backgroundColor = 'black';
+    } else {
+      // Revert to original for other routes
+      document.body.style.backgroundColor = originalBodyBg;
     }
-  }, [pathname, hideLayout]);
+    
+    // Cleanup on component unmount to restore original style
+    return () => {
+      document.body.style.backgroundColor = originalBodyBg;
+    };
+  }, [isSignInRoute]);
+
+  if (!isClient) {
+    return null;
+  }
+
+  if (shouldHideLayout) {
+    return <>{children}</>;
+  }
+
+  if (isSignInRoute) {
+    return <>{children}</>;
+  }
 
   return (
     <AuthProvider>
-      {!hideLayout ? (
-        <>
-          <PageTransition>
-            <MysticBackground>
-              <Header />
-              <main>{children}</main>
-              <Footer />
-              <Chatbot />
-            </MysticBackground>
-          </PageTransition>
-        </>
-      ) : (
-        children
-      )}
+      <LanguageProvider>
+        <MysticBackground>
+          <div className="min-h-screen bg-white">
+            <Header />
+            <PageTransition>
+              {children}
+            </PageTransition>
+            <Footer />
+            <Chatbot />
+            <Toaster />
+          </div>
+        </MysticBackground>
+      </LanguageProvider>
     </AuthProvider>
   );
 }

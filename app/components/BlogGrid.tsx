@@ -308,29 +308,50 @@ Conclusion: We can influence our destiny through our actions. Positive karma and
 
 export function BlogGrid() {
   return (
-    <section className="py-16">
-      <h2 className="text-3xl md:text-4xl font-serif font-semibold mb-8 text-center text-gold">
-        सभी ब्लॉग पोस्ट (All Blog Posts)
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {blogPosts.map((post, index) => (
-          <Card key={index} className="bg-midnight-blue-light/80 hover:bg-midnight-blue transition-colors transform hover:scale-105 duration-300 border border-gold/30 hover:border-gold">
-            <CardContent className="p-6">
-              <h3 className="text-2xl font-serif font-semibold mb-2 text-gold">
-                {post.title.hi}
-              </h3>
-              <h4 className="text-xl font-serif mb-2 text-gold/80">
-                {post.title.en}
-              </h4>
-              <p className="mb-4 text-sm text-lavender/70">{post.date}</p>
-              <p className="mb-2 text-sm text-lavender">{post.excerpt.hi}</p>
-              <p className="mb-4 text-sm text-lavender/80">{post.excerpt.en}</p>
-              <Button asChild className="bg-gold text-midnight-blue hover:bg-gold-light">
-                <Link href={`/blog/${post.slug}`}>और पढ़ें (Read More)</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+    <section className="py-16 relative bg-[#FAE6E6]">
+      <div className="container mx-auto px-4 relative z-10">
+        <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-center text-black">
+          आकाशीय अंतर्दृष्टि ब्लॉग
+        </h2>
+        <h3 className="text-2xl md:text-3xl font-serif text-center mb-12 text-black">
+          Celestial Insights Blog
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogPosts.map((blogPost, index) => (
+            <Card key={index} className="bg-white hover:bg-gray-100 transition-colors transform hover:scale-105 duration-300 border border-black hover:border-black">
+              <CardContent className="p-6">
+                <h3 className="text-2xl font-serif font-semibold mb-2 text-black text-center">
+                  {blogPost.title.hi}
+                </h3>
+                <p className="mb-4 text-sm text-black text-center">
+                  {blogPost.excerpt.hi}
+                </p>
+                <p className="mb-4 text-sm text-black text-center">
+                  {blogPost.excerpt.en}
+                </p>
+                <p className="text-sm text-black text-center">
+                  {blogPost.date}
+                </p>
+                <div className="text-center mt-4">
+                  <Link href={`/blog/${blogPost.slug}`} passHref>
+                    <Button className="bg-[#780D20] hover:bg-[#5C151B] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transform transition duration-300">
+                      और पढ़ें (Read More)
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <Link href="/blog" passHref>
+            <Button className="bg-[#780D20] hover:bg-[#5C151B] text-white text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transform transition duration-300">
+              सभी ब्लॉग देखें (View All Blogs)
+            </Button>
+          </Link>
+        </div>
       </div>
     </section>
   )

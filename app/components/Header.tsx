@@ -1,266 +1,367 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, Home, BookOpen, ShoppingBag, PenTool, Info, PhoneCall, GraduationCap, LogIn, LogOut, User, ShoppingCart } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { motion } from 'framer-motion'
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import {
+  Search, ShoppingCart, BookOpen, User, Home, PenTool, Info, PhoneCall, GraduationCap, ChevronDown, LogIn, Menu, X
+} from 'lucide-react';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { useLanguage } from '../contexts/LanguageContext';
+
+const servicesDropdown = [
+  {
+    title: { en: 'Consultations', hi: 'परामर्श' },
+    items: [
+      { label: { en: "Today's Panchang", hi: 'आज का पंचांग' }, href: '/panchang' },
+      { label: { en: 'Kundali Matching', hi: 'कुंडली मिलान' }, href: '/kundali-matching' },
+      { label: { en: 'Buy Products', hi: 'उत्पाद खरीदें' }, href: '/shop' },
+      { label: { en: 'Free Daily Horoscope', hi: 'दैनिक राशिफल' }, href: '/daily-horoscope' },
+      { label: { en: 'Astrology', hi: 'ज्योतिष' }, href: '/astrology' },
+      { label: { en: 'Chat with Astrologer', hi: 'ज्योतिषी से चैट करें' }, href: '/services/chat-with-astrologer' },
+      { label: { en: 'Love & Relationship', hi: 'प्रेम और संबंध' }, href: '/services/love-relationship' },
+      { label: { en: 'Career & Job', hi: 'करियर और नौकरी' }, href: '/services/career-job' },
+      { label: { en: 'Numerology', hi: 'अंक ज्योतिष' }, href: '/services/numerology' },
+    ],
+  },
+  {
+    title: { en: 'Puja & Rituals', hi: 'पूजा और अनुष्ठान' },
+    items: [
+      { label: { en: 'Online Puja', hi: 'ऑनलाइन पूजा' }, href: '/online-puja' },
+      { label: { en: 'Grah Shanti', hi: 'ग्रह शांति' }, href: '/services/grah-shanti' },
+      { label: { en: 'Manokamna Pooja', hi: 'मनोकामना पूजा' }, href: '/services/manokamna-pooja' },
+    ],
+  },
+  {
+    title: { en: 'Horoscopes', hi: 'राशियाँ' },
+    items: [
+      { label: { en: 'Daily Horoscope', hi: 'दैनिक राशिफल' }, href: '/services/daily-horoscope' },
+      { label: { en: 'Monthly Horoscope', hi: 'मासिक राशिफल' }, href: '/services/monthly-horoscope' },
+      { label: { en: 'Yearly Horoscope', hi: 'वार्षिक राशिफल' }, href: '/services/yearly-horoscope' },
+    ],
+  },
+  {
+    title: { en: 'Learning', hi: 'सीखना' },
+    items: [
+      { label: { en: 'Astrology Courses', hi: 'ज्योतिष पाठ्यक्रम' }, href: '/courses' },
+      { label: { en: 'Blog', hi: 'ब्लॉग' }, href: '/blog' },
+    ],
+  },
+];
+
+const navItems = [
+  { label: { en: 'Home', hi: 'होम' }, href: '/', icon: Home },
+  { label: { en: 'About', hi: 'हमारे बारे में' }, href: '/about', icon: Info },
+  { label: { en: 'Courses', hi: 'पाठ्यक्रम' }, href: '/courses', icon: GraduationCap },
+  { label: { en: 'Contact', hi: 'संपर्क' }, href: '/contact', icon: PhoneCall },
+  { label: { en: 'Blog', hi: 'ब्लॉग' }, href: '/blog', icon: BookOpen },
+  { label: { en: 'Study', hi: 'अध्ययन' }, href: '/study', icon: PenTool },
+];
 
 export function Header() {
-  const pathname = usePathname()
-  const router = useRouter()
-  const { data: session, status } = useSession()
+  const pathname = usePathname();
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const { lang, setLang } = useLanguage();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [cartItemCount, setCartItemCount] = useState(0)
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const mobileMenu = document.getElementById('mobile-menu');
+      const hamburgerButton = document.getElementById('hamburger-button');
+      if (mobileMenu && !mobileMenu.contains(event.target as Node) && 
+          hamburgerButton && !hamburgerButton.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
+      setSearchQuery('');
+    }
+  };
 
   const handleLogout = async () => {
-    await signOut({ redirect: true, callbackUrl: '/signin' })
-  }
-
-  const navItems = [
-    { label: 'Home', labelHi: 'होम', href: '/', icon: Home },
-    { label: 'Services', labelHi: 'सेवाएं', href: '/services', icon: BookOpen },
-    { label: 'Shop', labelHi: 'दुकान', href: '/shop', icon: ShoppingBag },
-    { label: 'Blog', labelHi: 'ब्लॉग', href: '/blog', icon: PenTool },
-    { label: 'About', labelHi: 'हमारे बारे में', href: '/about', icon: Info },
-    { label: 'Contact', labelHi: 'संपर्क', href: '/contact', icon: PhoneCall },
-    { label: 'Study', labelHi: 'अध्ययन', href: '/study', icon: GraduationCap },
-  ]
-
-  // Fetch cart items when session changes
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      if (session && session.user) {
-        try {
-          const response = await fetch('/api/cart')
-          if (response.ok) {
-            const data = await response.json()
-            if (data.cartItems && Array.isArray(data.cartItems)) {
-              setCartItemCount(data.cartItems.length)
-            }
-          }
-        } catch (error) {
-          console.error('Failed to fetch cart items:', error)
-        }
-      } else {
-        setCartItemCount(0)
-      }
-    }
-
-    fetchCartItems()
-    
-    // Setup event listener for cart updates
-    window.addEventListener('cartUpdated', fetchCartItems)
-    
-    return () => {
-      window.removeEventListener('cartUpdated', fetchCartItems)
-    }
-  }, [session])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  // Create a custom Cart item with notification badge
-  const CartNavItem = () => (
-    <Link
-      href="/cart"
-      className={`flex flex-col items-center px-3 py-2 rounded-md text-sm font-medium relative ${
-        pathname === '/cart'
-          ? 'bg-royal-gold text-nebula-indigo'
-          : 'text-starlight-silver hover:bg-celestial-blue hover:text-starlight-silver'
-      } transition-colors duration-200`}
-    >
-      <div className="relative">
-        <ShoppingCart className="w-5 h-5 mb-1" />
-        {cartItemCount > 0 && (
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            {cartItemCount > 99 ? '99+' : cartItemCount}
-          </span>
-        )}
-      </div>
-      <span>Cart</span>
-      <span className="text-xs">कार्ट</span>
-    </Link>
-  )
+    await signOut({ redirect: true, callbackUrl: '/signin' });
+  };
 
   return (
-    <motion.header 
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-nebula-indigo/90 backdrop-blur-md shadow-lg' : 'bg-nebula-indigo/50 backdrop-blur-sm'}`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <Link href="/" className="text-2xl font-serif font-bold text-royal-gold hover:text-royal-gold-light transition-colors">
-            Nakshatra Gyaan<br />
-            <span className="text-sm">नक्षत्र ज्ञान</span>
-          </Link>
+    <>
+      {/* Header */}
+      <header className="fixed top-6 left-0 right-0 mx-auto max-w-7xl z-50 bg-[#FAEBE6] shadow-md rounded-3xl py-2 px-6 flex items-center justify-between">
+        {/* Left: Logo */}
+        <div className="flex flex-col items-start">
+          <span className="text-xl font-bold text-purple-800 leading-tight">नक्षत्र ज्ञान</span>
+          <span className="text-base font-serif text-purple-600 leading-tight">Nakshatra Gyaan</span>
+        </div>
 
-          {/* Navigation - Desktop */}
-          <nav className="hidden lg:flex space-x-1 items-center">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex flex-col items-center px-3 py-2 rounded-md text-sm font-medium ${
-                  pathname === item.href
-                    ? 'bg-royal-gold text-nebula-indigo'
-                    : 'text-starlight-silver hover:bg-celestial-blue hover:text-starlight-silver'
-                } transition-colors duration-200`}
-              >
-                <item.icon className="w-5 h-5 mb-1" />
-                <span>{item.label}</span>
-                <span className="text-xs">{item.labelHi}</span>
-              </Link>
-            ))}
+        {/* Center: Navigation - Hidden on Mobile */}
+        <nav className="hidden md:flex items-center gap-4">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-base font-medium text-[#7C3AED] hover:bg-[#F3E8FF] hover:text-[#FBBF24] transition-all`}
+            >
+              <item.icon className="w-4 h-4 text-[#7C3AED] group-hover:text-[#FBBF24] transition-colors" />
+              <span className="text-[#7C3AED] group-hover:text-[#FBBF24] transition-colors">
+                {item.label[lang]}
+              </span>
+            </Link>
+          ))}
+          
+          {/* Services Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setIsServicesOpen(!isServicesOpen)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-base font-medium text-[#7C3AED] hover:bg-[#F3E8FF] hover:text-[#FBBF24] transition-all"
+            >
+              <span className="text-[#7C3AED] group-hover:text-[#FBBF24] transition-colors">
+                {servicesDropdown[0].title[lang]}
+              </span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isServicesOpen ? 'rotate-180' : 'rotate-0'} text-[#7C3AED] group-hover:text-[#FBBF24]`} />
+            </button>
             
-            {/* Cart with notification badge */}
-            <CartNavItem />
+            {/* Services Dropdown Menu */}
+            {isServicesOpen && (
+              <div className="absolute top-full left-0 mt-2 w-[520px] bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-50">
+                {/* Main Consultations as grid */}
+                <div className="mb-4">
+                  <div className="uppercase text-sm font-bold text-black mb-2 bg-[#F3E8FF] rounded px-3 py-1 border border-[#E0E0E0] shadow-sm w-max">
+                    {servicesDropdown[0].title[lang]}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {servicesDropdown[0].items.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="text-[#7C3AED] rounded-lg px-2 py-2 block transition-all duration-150 hover:bg-[#F3E8FF] hover:text-[#FBBF24] text-base font-medium"
+                        onClick={() => setIsServicesOpen(false)}
+                      >
+                        {link.label[lang]}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                {/* Other dropdown sections as grid lists below */}
+                {servicesDropdown.slice(1).map((col) => (
+                  <div key={col.title.en} className="mb-4">
+                    <div className="uppercase text-sm font-bold text-black mb-2 bg-[#F3E8FF] rounded px-3 py-1 border border-[#E0E0E0] shadow-sm w-max">
+                      {col.title[lang]}
+                    </div>
+                    <ul className="grid grid-cols-2 gap-2">
+                      {col.items.map((link) => (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className="text-[#7C3AED] rounded-lg px-2 py-1.5 block transition-all duration-150 hover:bg-[#F3E8FF] hover:text-[#FBBF24]"
+                            onClick={() => setIsServicesOpen(false)}
+                          >
+                            {link.label[lang]}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </nav>
 
-            {/* User Profile / Sign In / Sign Out Button */}
+        {/* Right: Icons and Auth */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setIsSearchOpen(true)}
+            className="p-2 rounded-full bg-white text-gray-700 hover:bg-gray-100 transition-colors"
+            aria-label="Search"
+          >
+            <Search className="w-5 h-5" />
+          </button>
+          
+          {/* Mobile Menu Button */}
+          <button
+            id="hamburger-button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 rounded-full bg-white text-gray-700 hover:bg-gray-100 transition-colors"
+            aria-label="Menu"
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+
+          {/* Desktop Auth Buttons */}
+          <div className="hidden md:flex items-center gap-4">
             {status !== 'loading' && (
               session ? (
-                <div className="flex items-center space-x-2 ml-4">
-                  <Link
-                    href="/profile"
-                    className="flex items-center bg-celestial-blue/20 px-3 py-2 rounded-md hover:bg-celestial-blue/30 transition-colors"
-                  >
-                    <User className="w-5 h-5 mr-2" />
-                    <span className="text-starlight-silver">{session.user.name}</span>
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center py-2 px-4 rounded-md text-black hover:text-gray-700 transition-colors"
-                  >
-                    <LogOut className="w-5 h-5 mr-2" />
-                    Sign Out
-                  </button>
-                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-transparent bg-clip-text bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] hover:bg-gray-100 transition-all font-semibold"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
               ) : (
                 <button
                   onClick={() => signIn()}
-                  className="ml-4 px-4 py-2 font-bold bg-royal-gold text-nebula-indigo hover:bg-goldenrod rounded-md transition-colors flex items-center"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-transparent bg-clip-text bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] hover:bg-gray-100 transition-all font-semibold"
                 >
-                  <LogIn className="w-5 h-5 mr-2" />
-                  Sign In
+                  <LogIn className="w-4 h-4" />
+                  <span>Sign In</span>
                 </button>
               )
             )}
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden text-royal-gold hover:text-royal-gold-light"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <motion.nav 
-            className="lg:hidden mt-4 space-y-2"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center py-2 px-4 rounded-md ${
-                  pathname === item.href
-                    ? 'bg-royal-gold text-nebula-indigo'
-                    : 'text-starlight-silver hover:bg-celestial-blue hover:text-starlight-silver'
-                } transition-colors duration-200`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <item.icon className="w-5 h-5 mr-3" />
-                <span className="flex flex-col">
-                  <span>{item.label}</span>
-                  <span className="text-xs">{item.labelHi}</span>
-                </span>
-              </Link>
-            ))}
             
-            {/* Cart with notification badge for mobile */}
-            <Link
-              href="/cart"
-              className={`flex items-center py-2 px-4 rounded-md ${
-                pathname === '/cart'
-                  ? 'bg-royal-gold text-nebula-indigo'
-                  : 'text-starlight-silver hover:bg-celestial-blue hover:text-starlight-silver'
-              } transition-colors duration-200`}
-              onClick={() => setIsMenuOpen(false)}
+            <button
+              onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}
+              className="px-4 py-2 rounded-lg bg-white text-transparent bg-clip-text bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] hover:bg-gray-100 transition-all font-semibold"
             >
-              <div className="relative mr-3">
-                <ShoppingCart className="w-5 h-5" />
-                {cartItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartItemCount > 99 ? '99+' : cartItemCount}
-                  </span>
-                )}
-              </div>
-              <span className="flex flex-col">
-                <span>Cart</span>
-                <span className="text-xs">कार्ट</span>
-              </span>
-            </Link>
+              {lang === 'en' ? 'हिन्दी' : 'English'}
+            </button>
+          </div>
+        </div>
+      </header>
 
-            {/* User Profile / Sign In / Sign Out Button for Mobile */}
-            {status !== 'loading' && (
-              session ? (
-                <div className="space-y-2">
-                  <Link
-                    href="/profile"
-                    className="flex items-center py-2 px-4 bg-celestial-blue/20 rounded-md hover:bg-celestial-blue/30 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <User className="w-5 h-5 mr-3" />
-                    <span className="text-starlight-silver">{session.user.name}</span>
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout()
-                      setIsMenuOpen(false)
-                    }}
-                    className="flex items-center py-2 px-4 rounded-md text-black hover:text-gray-700 transition-colors w-full"
-                  >
-                    <LogOut className="w-5 h-5 mr-3" />
-                    Sign Out
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => {
-                    signIn()
-                    setIsMenuOpen(false)
-                  }}
-                  className="flex items-center py-2 px-4 rounded-md bg-royal-gold text-nebula-indigo hover:bg-goldenrod transition-colors w-full"
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div
+          id="mobile-menu" 
+          className="fixed top-20 left-0 right-0 bottom-0 bg-white shadow-lg rounded-b-2xl mx-4 z-40 md:hidden overflow-hidden"
+        >
+          <div className="h-full overflow-y-auto pb-4">
+            <nav className="flex flex-col gap-2 p-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium text-black hover:bg-gray-100 transition-all ${
+                    pathname === item.href ? 'font-bold bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text' : ''
+                  }`}
                 >
-                  <LogIn className="w-5 h-5 mr-3" />
-                  Sign In
+                  <item.icon className="w-5 h-5" />
+                  <span>{item.label[lang]}</span>
+                </Link>
+              ))}
+
+              {/* Mobile Services Section */}
+              <div className="border-t border-gray-200 pt-4 mt-2">
+                {servicesDropdown.map((col) => (
+                  <div key={col.title.en} className="mb-4 last:mb-0">
+                    <div className="uppercase text-sm font-semibold bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text mb-2">
+                      {col.title[lang]}
+                    </div>
+                    <ul className="space-y-1">
+                      {col.items.map((link) => (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className="text-gray-600 rounded-lg px-4 py-2 block transition-all duration-150 hover:bg-gray-100"
+                          >
+                            {link.label[lang]}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mobile Auth Buttons */}
+              <div className="border-t border-gray-200 pt-4 mt-2 flex flex-col gap-2">
+                {status !== 'loading' && (
+                  session ? (
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white hover:from-[#5A0D9D] hover:to-[#FF7C00] transition-all font-semibold"
+                    >
+                      <User className="w-5 h-5" />
+                      <span>Sign Out</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => signIn()}
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white hover:from-[#5A0D9D] hover:to-[#FF7C00] transition-all font-semibold"
+                    >
+                      <LogIn className="w-5 h-5" />
+                      <span>Sign In</span>
+                    </button>
+                  )
+                )}
+                
+                <button
+                  onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}
+                  className="px-4 py-3 rounded-lg bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white hover:from-[#5A0D9D] hover:to-[#FF7C00] transition-all font-semibold"
+                >
+                  {lang === 'en' ? 'हिन्दी' : 'English'}
                 </button>
-              )
-            )}
-          </motion.nav>
-        )}
-      </div>
-    </motion.header>
-  )
+              </div>
+            </nav>
+          </div>
+        </div>
+      )}
+
+      {/* Search Modal */}
+      {isSearchOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start justify-center pt-32"
+          onClick={() => setIsSearchOpen(false)}
+        >
+          <div
+            className="bg-[#F7E5A5] rounded-2xl p-6 w-full max-w-2xl mx-4 shadow-xl border border-black/10"
+            onClick={e => e.stopPropagation()}
+          >
+            <form onSubmit={handleSearch} className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for services, products, or articles..."
+                className="w-full bg-black/5 text-black placeholder-gray-500 rounded-xl px-4 py-3 pl-12 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                autoFocus
+              />
+              <Search className="w-5 h-5 text-black absolute left-4 top-1/2 transform -translate-y-1/2" />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-1.5 rounded-lg hover:shadow-lg transition-all duration-200"
+              >
+                Search
+              </button>
+            </form>
+            <div className="mt-4 text-sm text-gray-400">
+              <p>Popular searches:</p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {[ 'Horoscope', 'Tarot Reading', 'Meditation', 'Astrology Course'].map((term) => (
+                  <button
+                    key={term}
+                    onClick={() => {
+                      setSearchQuery(term);
+                      handleSearch(new Event('submit') as any);
+                    }}
+                    className="px-3 py-1 bg-white/5 rounded-full hover:bg-white/10 transition-all duration-200"
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
