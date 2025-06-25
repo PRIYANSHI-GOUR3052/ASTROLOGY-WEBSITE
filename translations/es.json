@@ -1,0 +1,73 @@
+{
+  "hero": {
+    "mainHeading": "Desbloquear los secretos del cosmos",
+    "subHeading": "Astrología védica personalizada para iluminar su camino",
+    "ctaButton": "Obtenga su kundli gratis",
+    "secondaryText": "Predicciones precisas para la carrera, el amor y la vida."
+  },
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Nakshatra Gyaan"
+    },
+    "nav": {
+      "home": "Hogar",
+      "about": "Acerca de",
+      "courses": "Cursos",
+      "contact": "Contacto",
+      "blog": "Blog",
+      "study": "Estudiar",
+      "consultations": "Consultas"
+    },
+    "cart": "Carro",
+    "mega_menu": {
+      "consultations": {
+        "title": "Consultas",
+        "items": {
+          "panchang": "Panchang de hoy",
+          "kundali_matching": "Kundali Matching",
+          "buy_products": "Comprar productos",
+          "free_daily_horoscope": "Horóscopo diario gratis",
+          "astrology": "Astrología",
+          "chat_with_astrologer": "Chatear con el astrólogo",
+          "love_relationship": "Amor y relación",
+          "career_guidance": "Carrera y trabajo",
+          "numerology": "Numerología"
+        }
+      },
+      "puja_rituals": {
+        "title": "Puja y rituales",
+        "items": {
+          "online_puja": "Puja en línea",
+          "grah_shanti": "Grah Shanti",
+          "manokamna_pooja": "Manokamna pooja"
+        }
+      },
+      "horoscopes": {
+        "title": "Horóscopos",
+        "items": {
+          "daily_horoscope": "Horóscopo diario",
+          "monthly_horoscope": "Horóscopio mensual",
+          "yearly_horoscope": "Horóscopo anual"
+        }
+      },
+      "learning": {
+        "title": "Aprendiendo",
+        "items": {
+          "astrology_courses": "Cursos de astrología",
+          "blog": "Blog"
+        }
+      }
+    },
+    "auth": {
+      "signin": "Iniciar sesión",
+      "my_profile": "Mi perfil",
+      "my_orders": "Mis pedidos",
+      "logout": "Cierre de sesión"
+    },
+    "language_selector": {
+      "button": "Lenguaje seleccionado",
+      "dropdown_title": "Seleccione su idioma"
+    }
+  }
+}

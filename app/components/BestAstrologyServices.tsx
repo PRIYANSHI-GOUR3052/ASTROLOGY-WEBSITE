@@ -76,10 +76,10 @@ const services: Service[] = [
   }
 ];
 
-// ...rest of your component stays unchanged...
-
-// Replace only the services array above in your original code
-
+// Helper function for safe language access
+function getLocalizedText(obj: { en: string; hi: string }, lang: string) {
+  return obj[lang as keyof typeof obj] ?? obj['en'];
+}
 
 const BestAstrologyServices = () => {
   const [expandedCards, setExpandedCards] = useState<boolean[]>(Array(services.length).fill(false));
@@ -155,16 +155,16 @@ const BestAstrologyServices = () => {
               >
                 <Image
                   src={service.icon}
-                  alt={service.title[lang]}
+                  alt={getLocalizedText(service.title, lang)}
                   layout="fill"
                   objectFit="contain"
                 />
               </motion.div>
-              <h3 className="text-3xl font-serif font-extrabold mb-2 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">{service.title[lang]}</h3>
+              <h3 className="text-3xl font-serif font-extrabold mb-2 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">{getLocalizedText(service.title, lang)}</h3>
               <p className="text-sm font-serif text-black mb-4 leading-tight tracking-wide">
-                {expandedCards[index] ? service.description[lang] : truncateText(service.description[lang], 100)}
+                {expandedCards[index] ? getLocalizedText(service.description, lang) : truncateText(getLocalizedText(service.description, lang), 100)}
               </p>
-              {service.description[lang].length > 100 && (
+              {getLocalizedText(service.description, lang).length > 100 && (
                 <Button
                   variant="link"
                   className="text-purple-600 hover:underline p-0 h-auto text-sm font-semibold"
@@ -192,11 +192,10 @@ const BestAstrologyServices = () => {
                   </DialogTrigger>
                   <DialogContent className="bg-white border-gray-200 text-black shadow-xl p-6">
                     <DialogHeader>
-                      <DialogTitle className="text-2xl font-serif text-black">{selectedService?.title[lang]}</DialogTitle>
+                      <DialogTitle className="text-2xl font-serif text-black">{selectedService ? getLocalizedText(selectedService.title, lang) : ''}</DialogTitle>
                     </DialogHeader>
                     <div className="mt-4">
-                      <p className="text-black mb-4">{selectedService?.description.hi}</p>
-                      <p className="text-black">{selectedService?.description.en}</p>
+                      <p className="text-black mb-4">{selectedService ? getLocalizedText(selectedService.description, lang) : ''}</p>
                       <div className="mt-4">
                         <span className="text-2xl font-bold text-black">{selectedService?.price}</span>
                       </div>

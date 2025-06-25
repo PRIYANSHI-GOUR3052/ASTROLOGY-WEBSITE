@@ -1,0 +1,73 @@
+{
+  "hero": {
+    "mainHeading": "Разблокировать секреты космоса",
+    "subHeading": "Персонализированная ведическая астрология, чтобы осветить ваш путь",
+    "ctaButton": "Получите бесплатный кундли",
+    "secondaryText": "Точные прогнозы для карьеры, любви и жизни."
+  },
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Накшатра Гьян"
+    },
+    "nav": {
+      "home": "Дом",
+      "about": "О",
+      "courses": "Курсы",
+      "contact": "Контакт",
+      "blog": "Блог",
+      "study": "Изучать",
+      "consultations": "Консультации"
+    },
+    "cart": "Тележка",
+    "mega_menu": {
+      "consultations": {
+        "title": "Консультации",
+        "items": {
+          "panchang": "Сегодняшний Панчанг",
+          "kundali_matching": "Кундали соответствует",
+          "buy_products": "Купить товары",
+          "free_daily_horoscope": "Бесплатный ежедневный гороскоп",
+          "astrology": "Астрология",
+          "chat_with_astrologer": "Общаться с астрологом",
+          "love_relationship": "Любовь и отношения",
+          "career_guidance": "Карьера и работа",
+          "numerology": "Нумерология"
+        }
+      },
+      "puja_rituals": {
+        "title": "Пуджа и ритуалы",
+        "items": {
+          "online_puja": "Онлайн пуджа",
+          "grah_shanti": "Гра Шанти",
+          "manokamna_pooja": "Манокамна Пуджа"
+        }
+      },
+      "horoscopes": {
+        "title": "Гороскопы",
+        "items": {
+          "daily_horoscope": "Ежедневный гороскоп",
+          "monthly_horoscope": "Ежемесячный гороскоп",
+          "yearly_horoscope": "Ежегодный гороскоп"
+        }
+      },
+      "learning": {
+        "title": "Обучение",
+        "items": {
+          "astrology_courses": "Астрологические курсы",
+          "blog": "Блог"
+        }
+      }
+    },
+    "auth": {
+      "signin": "Войти",
+      "my_profile": "Мой профиль",
+      "my_orders": "Мои заказы",
+      "logout": "Выход"
+    },
+    "language_selector": {
+      "button": "Выберите язык",
+      "dropdown_title": "Выберите свой язык"
+    }
+  }
+}

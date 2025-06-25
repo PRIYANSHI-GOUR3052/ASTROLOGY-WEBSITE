@@ -110,6 +110,11 @@ const services: Service[] = [
   },
 ];
 
+// Helper function for safe language access
+function getLocalizedText(obj: { en: string; hi: string }, lang: string) {
+  return obj[lang as keyof typeof obj] ?? obj['en'];
+}
+
 export function BestServices() {
   const { lang } = useLanguage();
 
@@ -177,10 +182,10 @@ export function BestServices() {
 
               <div className="flex flex-col justify-end h-full">
                 <h4 className="text-xl font-extrabold text-black leading-tight mb-2">
-                  {service.title[lang]}
+                  {getLocalizedText(service.title, lang)}
                 </h4>
                 <p className="text-black text-sm mb-4">
-                  {truncateText(service.description[lang], 80)}
+                  {truncateText(getLocalizedText(service.description, lang), 80)}
                 </p>
                 <div className="flex items-center text-black text-sm">
                   {service.rating && <><Star className="w-4 h-4 mr-1 fill-current text-black" /> {service.rating}</>}
@@ -207,10 +212,10 @@ export function BestServices() {
 
               <div className="flex flex-col justify-end h-full">
                 <h4 className="text-3xl md:text-4xl font-extrabold text-black leading-tight mb-4">
-                  {service.title[lang]}
+                  {getLocalizedText(service.title, lang)}
                 </h4>
                 <p className="text-black text-base mb-6">
-                  {truncateText(service.description[lang], 150)}
+                  {truncateText(getLocalizedText(service.description, lang), 150)}
                 </p>
                 <div className="flex items-center text-black text-lg">
                   {service.rating && <><Star className="w-5 h-5 mr-1 fill-current text-black" /> {service.rating}</>}
@@ -237,10 +242,10 @@ export function BestServices() {
 
               <div className="flex flex-col justify-end h-full">
                 <h4 className="text-3xl md:text-4xl font-extrabold text-black leading-tight mb-4">
-                  {service.title[lang]}
+                  {getLocalizedText(service.title, lang)}
                 </h4>
                 <p className="text-black text-base mb-6">
-                  {truncateText(service.description[lang], 150)}
+                  {truncateText(getLocalizedText(service.description, lang), 150)}
                 </p>
                 <div className="flex items-center text-black text-lg">
                   {service.rating && <><Star className="w-5 h-5 mr-1 fill-current text-black" /> {service.rating}</>}
@@ -267,10 +272,10 @@ export function BestServices() {
 
               <div className="flex flex-col justify-end h-full">
                 <h4 className="text-xl font-extrabold text-black leading-tight mb-2">
-                  {service.title[lang]}
+                  {getLocalizedText(service.title, lang)}
                 </h4>
                 <p className="text-black text-sm mb-4">
-                  {truncateText(service.description[lang], 80)}
+                  {truncateText(getLocalizedText(service.description, lang), 80)}
                 </p>
                 <div className="flex items-center text-black text-sm">
                   {service.rating && <><Star className="w-4 h-4 mr-1 fill-current text-black" /> {service.rating}</>}
@@ -335,10 +340,10 @@ export function BestServices() {
 
               <div className="flex flex-col justify-end h-full">
                 <h4 className="text-xl font-extrabold text-black leading-tight mb-2">
-                  {service.title[lang]}
+                  {getLocalizedText(service.title, lang)}
                 </h4>
                 <p className="text-black text-sm mb-4">
-                  {truncateText(service.description[lang], 80)}
+                  {truncateText(getLocalizedText(service.description, lang), 80)}
                 </p>
                 <div className="flex items-center text-black text-sm">
                   {service.rating && <><Star className="w-4 h-4 mr-1 fill-current text-black" /> {service.rating}</>}

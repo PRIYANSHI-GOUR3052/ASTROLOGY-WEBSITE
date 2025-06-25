@@ -1,0 +1,73 @@
+{
+  "hero": {
+    "mainHeading": "Schalte die Geheimnisse des Kosmos frei",
+    "subHeading": "Personalisierte vedische Astrologie, um Ihren Weg zu beleuchten",
+    "ctaButton": "Holen Sie sich Ihren kostenlosen Kundli",
+    "secondaryText": "Genaue Vorhersagen für Karriere, Liebe und Leben."
+  },
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Nakshatra Gyaan"
+    },
+    "nav": {
+      "home": "Heim",
+      "about": "Um",
+      "courses": "Kurse",
+      "contact": "Kontakt",
+      "blog": "Blog",
+      "study": "Studie",
+      "consultations": "Konsultationen"
+    },
+    "cart": "Wagen",
+    "mega_menu": {
+      "consultations": {
+        "title": "Konsultationen",
+        "items": {
+          "panchang": "Heute Panchang",
+          "kundali_matching": "Kundali -Matching",
+          "buy_products": "Produkte kaufen",
+          "free_daily_horoscope": "Freies tägliches Horoskop",
+          "astrology": "Astrologie",
+          "chat_with_astrologer": "Chatten Sie mit Astrologen",
+          "love_relationship": "Liebe & Beziehung",
+          "career_guidance": "Karriere & Job",
+          "numerology": "Numerologie"
+        }
+      },
+      "puja_rituals": {
+        "title": "Puja & Rituale",
+        "items": {
+          "online_puja": "Online -Puja",
+          "grah_shanti": "Grah Shanti",
+          "manokamna_pooja": "Manokamna Pooja"
+        }
+      },
+      "horoscopes": {
+        "title": "Horoskope",
+        "items": {
+          "daily_horoscope": "Tägliches Horoskop",
+          "monthly_horoscope": "Monatliches Horoskop",
+          "yearly_horoscope": "Jährliches Horoskop"
+        }
+      },
+      "learning": {
+        "title": "Lernen",
+        "items": {
+          "astrology_courses": "Astrologiekurse",
+          "blog": "Blog"
+        }
+      }
+    },
+    "auth": {
+      "signin": "Anmelden",
+      "my_profile": "Mein Profil",
+      "my_orders": "Meine Bestellungen",
+      "logout": "Abmelden"
+    },
+    "language_selector": {
+      "button": "Sprache auswählen",
+      "dropdown_title": "Wählen Sie Ihre Sprache aus"
+    }
+  }
+}

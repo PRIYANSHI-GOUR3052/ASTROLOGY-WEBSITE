@@ -1,0 +1,73 @@
+{
+  "hero": {
+    "mainHeading": "Déverrouiller les secrets du cosmos",
+    "subHeading": "Astrologie védique personnalisée pour éclairer votre chemin",
+    "ctaButton": "Obtenez votre kundli gratuit",
+    "secondaryText": "Prédictions précises pour la carrière, l'amour et la vie."
+  },
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Nakshatra gyaan"
+    },
+    "nav": {
+      "home": "Maison",
+      "about": "À propos",
+      "courses": "Cours",
+      "contact": "Contact",
+      "blog": "Bloguer",
+      "study": "Étude",
+      "consultations": "Consultations"
+    },
+    "cart": "Chariot",
+    "mega_menu": {
+      "consultations": {
+        "title": "Consultations",
+        "items": {
+          "panchang": "Panchang d'aujourd'hui",
+          "kundali_matching": "Kundali Matching",
+          "buy_products": "Acheter des produits",
+          "free_daily_horoscope": "Horoscope quotidien gratuit",
+          "astrology": "Astrologie",
+          "chat_with_astrologer": "Discuter avec l'astrologue",
+          "love_relationship": "Amour et relation",
+          "career_guidance": "Carrière et travail",
+          "numerology": "Numérologie"
+        }
+      },
+      "puja_rituals": {
+        "title": "Puja et rituels",
+        "items": {
+          "online_puja": "Puja en ligne",
+          "grah_shanti": "Grah Shanti",
+          "manokamna_pooja": "Manokamna pooja"
+        }
+      },
+      "horoscopes": {
+        "title": "Horoscopes",
+        "items": {
+          "daily_horoscope": "Horoscope quotidien",
+          "monthly_horoscope": "Horoscope mensuel",
+          "yearly_horoscope": "Horoscope annuel"
+        }
+      },
+      "learning": {
+        "title": "Apprentissage",
+        "items": {
+          "astrology_courses": "Cours d'astrologie",
+          "blog": "Bloguer"
+        }
+      }
+    },
+    "auth": {
+      "signin": "Se connecter",
+      "my_profile": "Mon profil",
+      "my_orders": "Mes commandes",
+      "logout": "Déconnexion"
+    },
+    "language_selector": {
+      "button": "Sélectionner la langue",
+      "dropdown_title": "Sélectionnez votre langue"
+    }
+  }
+}

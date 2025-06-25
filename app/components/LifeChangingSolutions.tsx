@@ -73,6 +73,11 @@ const solutions = [
   }
 ]
 
+// Helper function for safe language access
+function getLocalizedText(obj: { en: string; hi: string }, lang: string) {
+  return obj[lang as keyof typeof obj] ?? obj['en'];
+}
+
 export function LifeChangingSolutions() {
   const { lang } = useLanguage();
   const router = useRouter();
@@ -111,15 +116,15 @@ export function LifeChangingSolutions() {
                   <div className={`relative h-48 w-full ` + (solution.themeColor ? `bg-[${solution.themeColor}]` : 'bg-gray-200')}>
                     <Image
                       src={`/images/course-${index + 1}.webp`}
-                      alt={solution.title[lang]}
+                      alt={getLocalizedText(solution.title, lang)}
                       fill
                       style={{ objectFit: 'cover' }}
                     />
                   </div>
                   <CardContent className="p-6 flex-grow flex flex-col">
-                    <h3 className="text-xl font-extrabold mb-2 text-black">{solution.title[lang]}</h3>
+                    <h3 className="text-xl font-extrabold mb-2 text-black">{getLocalizedText(solution.title, lang)}</h3>
                     <p className="text-base text-black mb-4 leading-tight tracking-wide font-serif flex-grow">
-                      {solution.description[lang]}
+                      {getLocalizedText(solution.description, lang)}
                     </p>
                   </CardContent>
                 </motion.div>
