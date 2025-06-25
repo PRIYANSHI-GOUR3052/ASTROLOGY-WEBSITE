@@ -100,6 +100,11 @@ const horoscopeFAQs: FAQItem[] = [
   },
 ]
 
+// Helper function for safe language access
+function getLocalizedText(obj: { en: string; hi: string }, lang: string) {
+  return obj[lang as keyof typeof obj] ?? obj['en'];
+}
+
 export function DailyHoroscope() {
   const [selectedSign, setSelectedSign] = useState<string>('')
   const [horoscope, setHoroscope] = useState<string>('')
@@ -110,7 +115,7 @@ export function DailyHoroscope() {
     if (selectedSign) {
       const prediction = dailyPredictions[selectedSign as keyof typeof dailyPredictions];
       if (prediction) {
-        setHoroscope(prediction[lang]);
+        setHoroscope(getLocalizedText(prediction, lang));
       }
     }
   }
@@ -154,7 +159,7 @@ export function DailyHoroscope() {
                           value={sign.value}
                           className="px-4 py-2 text-sm text-black hover:bg-orange-100 cursor-pointer rounded-xl"
                         >
-                          {sign.label[lang]}
+                          {getLocalizedText(sign.label, lang)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -188,8 +193,8 @@ export function DailyHoroscope() {
                     'bg-[#FFF0F5]'
                   }`}
                 >
-                  <h3 className="text-xl font-bold text-black mb-2">{card.title[lang]}</h3>
-                  <p className="text-gray-700 mb-4 line-clamp-3">{card.description[lang]}</p>
+                  <h3 className="text-xl font-bold text-black mb-2">{getLocalizedText(card.title, lang)}</h3>
+                  <p className="text-gray-700 mb-4 line-clamp-3">{getLocalizedText(card.description, lang)}</p>
                   <Link href={card.href} passHref>
                     <Button className="bg-[#F3E8FF] text-[#7C3AED] rounded-lg py-2 px-6 shadow-md transition-all duration-300 border border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24]">
                       {lang === 'hi' ? 'और जानें' : 'Learn More'}
@@ -241,12 +246,12 @@ export function DailyHoroscope() {
                       onClick={() => toggleFAQ(index)}
                       className="w-full text-left flex justify-between items-center text-base font-semibold text-gray-900 focus:outline-none py-2"
                     >
-                      {faq.question[lang]}
+                      {getLocalizedText(faq.question, lang)}
                       <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${openFAQIndex === index ? 'rotate-180' : 'rotate-0'}`} />
                     </button>
                     {openFAQIndex === index && (
                       <p className="text-gray-700 font-serif text-sm pt-1 pb-2 transition-all duration-300">
-                        {faq.answer[lang]}
+                        {getLocalizedText(faq.answer, lang)}
                       </p>
                     )}
                   </div>

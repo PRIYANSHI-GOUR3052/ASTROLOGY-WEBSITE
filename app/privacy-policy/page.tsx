@@ -1,6 +1,7 @@
 "use client";
 // This page intentionally hides the Header for a legal/standalone look.
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { useEffect } from "react";
 
@@ -26,6 +27,15 @@ const PrivacyPolicyPage = () => {
   return (
     <div className="w-full min-h-screen bg-black py-12 pl-12 pr-4 text-white font-sans mt-24" style={{fontWeight: 400, letterSpacing: 0.01}}>
       <div className="space-y-8 leading-relaxed" style={{textAlign: 'justify'}}>
+        <div className="relative w-full h-[200px] mb-8 rounded-lg overflow-hidden">
+          <Image
+            src="/images/privacy-policy-banner.jpg"
+            alt="Privacy Policy Banner"
+            fill
+            style={{ objectFit: 'cover' }}
+            priority
+          />
+        </div>
         <div className="space-y-2">
           <h1 className="text-4xl font-bold mb-2" style={{textAlign: 'left'}}>Privacy Policy</h1>
           <p className="text-lg mb-6" style={{textAlign: 'left'}}>Last updated: January 1, 2024</p>

@@ -1,0 +1,73 @@
+{
+  "hero": {
+    "mainHeading": "فتح أسرار الكون",
+    "subHeading": "علم التنجيم الفيدي الشخصي لإلقاء الضوء على طريقك",
+    "ctaButton": "احصل على Kundli المجاني",
+    "secondaryText": "تنبؤات دقيقة للوظيفة والحب والحياة."
+  },
+  "header": {
+    "logo": {
+      "line1": "नक ज",
+      "line2": "ناكشاترا جيان"
+    },
+    "nav": {
+      "home": "بيت",
+      "about": "عن",
+      "courses": "دورات",
+      "contact": "اتصال",
+      "blog": "مدونة",
+      "study": "يذاكر",
+      "consultations": "المشاورات"
+    },
+    "cart": "عربة",
+    "mega_menu": {
+      "consultations": {
+        "title": "المشاورات",
+        "items": {
+          "panchang": "بانشانغ اليوم",
+          "kundali_matching": "مطابقة كوندالي",
+          "buy_products": "شراء المنتجات",
+          "free_daily_horoscope": "برجك يومي مجاني",
+          "astrology": "علم التنجيم",
+          "chat_with_astrologer": "الدردشة مع المنجم",
+          "love_relationship": "الحب والعلاقة",
+          "career_guidance": "الوظيفي والوظيفة",
+          "numerology": "الأعداد"
+        }
+      },
+      "puja_rituals": {
+        "title": "بوجا والطقوس",
+        "items": {
+          "online_puja": "بوجا على الانترنت",
+          "grah_shanti": "جراه شانتي",
+          "manokamna_pooja": "مانوكامنا بوجا"
+        }
+      },
+      "horoscopes": {
+        "title": "الأبراج",
+        "items": {
+          "daily_horoscope": "برجك اليومية",
+          "monthly_horoscope": "برجك شهري",
+          "yearly_horoscope": "برجك سنوي"
+        }
+      },
+      "learning": {
+        "title": "تعلُّم",
+        "items": {
+          "astrology_courses": "دورات التنجيم",
+          "blog": "مدونة"
+        }
+      }
+    },
+    "auth": {
+      "signin": "تسجيل الدخول",
+      "my_profile": "ملفي الشخصي",
+      "my_orders": "أوامري",
+      "logout": "تسجيل الخروج"
+    },
+    "language_selector": {
+      "button": "حدد اللغة",
+      "dropdown_title": "حدد لغتك"
+    }
+  }
+}

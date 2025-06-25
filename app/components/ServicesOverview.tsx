@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Moon, Sun, Home, Map, ArrowRight, Facebook, Instagram, Twitter, MessageSquare, Heart, Bookmark, Share2, ShoppingBag } from 'lucide-react';
-import { useLanguage } from '@/app/contexts/LanguageContext';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -159,7 +158,6 @@ const recentPosts: RecentPost[] = [
 
 
 export function ServicesOverview() {
-  const { lang } = useLanguage();
   const [showFullDescription, setShowFullDescription] = useState<{ [key: string]: boolean }>({});
 
   const toggleDescription = (slug: string) => {
@@ -170,6 +168,7 @@ export function ServicesOverview() {
   };
 
   const truncateText = (text: string, maxLength: number) => {
+    if (!text) return '';
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
   };
@@ -208,17 +207,17 @@ export function ServicesOverview() {
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-black mb-2">
-                    {services[0].title[lang]}
+                    {services[0].title.en}
                   </h3>
                   <p className="text-black text-sm mb-4">
-                    {showFullDescription[services[0].slug] && services[0].fullDescription ? services[0].fullDescription[lang] : truncateText(services[0].description[lang], 100)}
+                    {showFullDescription[services[0].slug] && services[0].fullDescription ? services[0].fullDescription.en : truncateText(services[0].description.en, 100)}
                   </p>
                   {services[0].fullDescription && (
                     <Button
                       onClick={() => toggleDescription(services[0].slug)}
                       className="mt-2 bg-transparent hover:bg-gray-100 text-blue-600 hover:text-blue-700 py-1 px-2 rounded"
                     >
-                      {showFullDescription[services[0].slug] ? (lang === 'en' ? 'Read Less' : 'कम पढ़ें') : (lang === 'en' ? 'Read More' : 'और पढ़ें')}
+                      {showFullDescription[services[0].slug] ? 'Read Less' : 'Read More'}
                     </Button>
                   )}
                   <div className="mb-4 mt-2">
@@ -226,7 +225,7 @@ export function ServicesOverview() {
                   </div>
                   <div className="space-y-2 w-full">
                     <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
-                      {lang === 'hi' ? 'अभी खरीदें' : 'Buy Now'}
+                      Buy Now
                     </Button>
                   </div>
                 </CardContent>
@@ -240,7 +239,7 @@ export function ServicesOverview() {
             className="lg:col-span-1 flex items-center justify-center"
           >
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 text-center">
-              {lang === 'en' ? "Explore Our Key Offerings" : "हमारी प्रमुख पेशकशों का अन्वेषण करें"}
+              Explore Our Key Offerings
             </h2>
           </motion.div>
 
@@ -251,14 +250,14 @@ export function ServicesOverview() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className={`${cuteGradients[1]} rounded-2xl shadow-lg p-6 flex flex-col items-center justify-between`}
           >
-            <h3 className="text-xl font-bold text-black mb-2 text-center">{snapshotContent.pasteCoolPhotos.title[lang]}</h3>
-            <p className="text-black text-sm mb-4 text-center">{snapshotContent.pasteCoolPhotos.description[lang]}</p>
+            <h3 className="text-xl font-bold text-black mb-2 text-center">{snapshotContent.pasteCoolPhotos.title.en}</h3>
+            <p className="text-black text-sm mb-4 text-center">{snapshotContent.pasteCoolPhotos.description.en}</p>
             <div className="relative w-full h-32 mb-4 rounded-xl overflow-hidden">
               <Image src={snapshotContent.pasteCoolPhotos.imageUrl} alt="Horoscope Daily" fill style={{ objectFit: 'cover' }} />
             </div>
             <Link href="/daily-horoscope" passHref>
               <Button className="btn-grad rounded-full text-sm font-semibold">
-                {lang === 'en' ? "Learn More" : "और जानें"} <ArrowRight className="w-4 h-4 ml-1" />
+                Learn More <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </Link>
           </motion.div>
@@ -286,17 +285,17 @@ export function ServicesOverview() {
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-black mb-2">
-                    {services[1].title[lang]}
+                    {services[1].title.en}
                   </h3>
                   <p className="text-black text-sm mb-4">
-                    {showFullDescription[services[1].slug] && services[1].fullDescription ? services[1].fullDescription[lang] : truncateText(services[1].description[lang], 100)}
+                    {showFullDescription[services[1].slug] && services[1].fullDescription ? services[1].fullDescription.en : truncateText(services[1].description.en, 100)}
                   </p>
                   {services[1].fullDescription && (
                     <Button
                       onClick={() => toggleDescription(services[1].slug)}
                       className="mt-2 bg-transparent hover:bg-gray-100 text-blue-600 hover:text-blue-700 py-1 px-2 rounded"
                     >
-                      {showFullDescription[services[1].slug] ? (lang === 'en' ? 'Read Less' : 'कम पढ़ें') : (lang === 'en' ? 'Read More' : 'और पढ़ें')}
+                      {showFullDescription[services[1].slug] ? 'Read Less' : 'Read More'}
                     </Button>
                   )}
                   <div className="mb-4 mt-2">
@@ -304,7 +303,7 @@ export function ServicesOverview() {
                   </div>
                   <div className="space-y-2 w-full">
                     <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
-                      {lang === 'hi' ? 'अभी खरीदें' : 'Buy Now'}
+                      Buy Now
                     </Button>
                   </div>
                 </CardContent>
@@ -317,14 +316,14 @@ export function ServicesOverview() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className={`relative rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center overflow-hidden ${cuteGradients[3]}`}
           >
-            <h3 className="text-2xl font-bold text-black mb-2 text-center">{snapshotContent.coffeinia.title[lang]}</h3>
-            <p className="text-black text-sm mb-4 text-center">{snapshotContent.coffeinia.description[lang]}</p>
+            <h3 className="text-2xl font-bold text-black mb-2 text-center">{snapshotContent.coffeinia.title.en}</h3>
+            <p className="text-black text-sm mb-4 text-center">{snapshotContent.coffeinia.description.en}</p>
             <div className="relative w-48 h-96">
               <Image src={snapshotContent.coffeinia.appScreenshot} alt="App Screenshot" fill style={{ objectFit: 'contain' }} />
             </div>
             <div className="space-y-2 w-full mt-4">
                 <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
-                  {lang === 'hi' ? 'अभी खरीदें' : 'Buy Now'}
+                  Buy Now
                 </Button>
             </div>
           </motion.div>
@@ -339,12 +338,12 @@ export function ServicesOverview() {
             >
               <div className="flex items-center mb-4">
                 <ArrowRight className="w-6 h-6 text-black mr-2" />
-                <h3 className="text-xl font-bold text-black">{snapshotContent.equipATeam.title[lang]}</h3>
+                <h3 className="text-xl font-bold text-black">{snapshotContent.equipATeam.title.en}</h3>
               </div>
-              <p className="text-black text-sm mb-4">{snapshotContent.equipATeam.description[lang]}</p>
+              <p className="text-black text-sm mb-4">{snapshotContent.equipATeam.description.en}</p>
               <Link href="/courses" passHref className="ml-auto">
                 <Button className="btn-grad rounded-full text-sm font-semibold">
-                  {lang === 'en' ? "Explore Courses" : "पाठ्यक्रम अन्वेषण करें"}
+                  Explore Courses
                 </Button>
               </Link>
             </motion.div>
@@ -356,12 +355,12 @@ export function ServicesOverview() {
             >
               <div className="flex items-center mb-4">
                 <ArrowRight className="w-6 h-6 text-black mr-2" />
-                <h3 className="text-xl font-bold text-black">{snapshotContent.saveTime.title[lang]}</h3>
+                <h3 className="text-xl font-bold text-black">{snapshotContent.saveTime.title.en}</h3>
               </div>
-              <p className="text-black text-sm mb-4">{snapshotContent.saveTime.description[lang]}</p>
+              <p className="text-black text-sm mb-4">{snapshotContent.saveTime.description.en}</p>
               <Link href="/consultation" passHref className="ml-auto">
                 <Button className="btn-grad rounded-full text-sm font-semibold">
-                  {lang === 'en' ? "Book Now" : "अभी बुक करें"}
+                  Book Now
                 </Button>
               </Link>
             </motion.div>
@@ -390,17 +389,17 @@ export function ServicesOverview() {
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-black mb-2">
-                    {services[2].title[lang]}
+                    {services[2].title.en}
                   </h3>
                   <p className="text-black text-sm mb-4">
-                    {showFullDescription[services[2].slug] && services[2].fullDescription ? services[2].fullDescription[lang] : truncateText(services[2].description[lang], 100)}
+                    {showFullDescription[services[2].slug] && services[2].fullDescription ? services[2].fullDescription.en : truncateText(services[2].description.en, 100)}
                   </p>
                   {services[2].fullDescription && (
                     <Button
                       onClick={() => toggleDescription(services[2].slug)}
                       className="mt-2 bg-transparent hover:bg-gray-100 text-blue-600 hover:text-blue-700 py-1 px-2 rounded"
                     >
-                      {showFullDescription[services[2].slug] ? (lang === 'en' ? 'Read Less' : 'कम पढ़ें') : (lang === 'en' ? 'Read More' : 'और पढ़ें')}
+                      {showFullDescription[services[2].slug] ? 'Read Less' : 'Read More'}
                     </Button>
                   )}
                   <div className="mb-4 mt-2">
@@ -408,7 +407,7 @@ export function ServicesOverview() {
                   </div>
                   <div className="space-y-2 w-full">
                     <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
-                      {lang === 'hi' ? 'अभी खरीदें' : 'Buy Now'}
+                      Buy Now
                     </Button>
                   </div>
                 </CardContent>
@@ -421,8 +420,8 @@ export function ServicesOverview() {
             transition={{ duration: 0.6, delay: 0.8 }}
             className={`relative rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center overflow-hidden ${cuteGradients[7]}`}
           >
-            <h3 className="text-2xl font-bold text-black mb-2 text-center">{snapshotContent.simpleMockups.title[lang]}</h3>
-            <p className="text-black text-sm mb-4 text-center">{snapshotContent.simpleMockups.description[lang]}</p>
+            <h3 className="text-2xl font-bold text-black mb-2 text-center">{snapshotContent.simpleMockups.title.en}</h3>
+            <p className="text-black text-sm mb-4 text-center">{snapshotContent.simpleMockups.description.en}</p>
             <div className="relative w-full h-48">
               <Image src={snapshotContent.simpleMockups.laptopScreenshot} alt="Laptop Screenshot" fill style={{ objectFit: 'contain' }} />
             </div>
@@ -436,11 +435,11 @@ export function ServicesOverview() {
               transition={{ duration: 0.6, delay: 0.9 }}
               className={`rounded-2xl shadow-lg p-6 flex flex-col justify-between ${cuteGradients[8]}`}
             >
-              <h3 className="text-xl font-bold text-black mb-2">{snapshotContent.rescalable.title[lang]}</h3>
-              <p className="text-black text-sm mb-4">{snapshotContent.rescalable.description[lang]}</p>
+              <h3 className="text-xl font-bold text-black mb-2">{snapshotContent.rescalable.title.en}</h3>
+              <p className="text-black text-sm mb-4">{snapshotContent.rescalable.description.en}</p>
               <Link href="/advanced-courses" passHref>
                 <Button className="btn-grad rounded-full text-sm font-semibold mt-auto">
-                  {lang === 'en' ? "Download Resources" : "संसाधन डाउनलोड करें"}
+                  Download Resources
                 </Button>
               </Link>
             </motion.div>
@@ -450,8 +449,8 @@ export function ServicesOverview() {
               transition={{ duration: 0.6, delay: 1.0 }}
               className={`rounded-2xl shadow-lg p-6 flex flex-col justify-between ${cuteGradients[9]}`}
             >
-              <h3 className="text-xl font-bold text-black mb-2">{snapshotContent.forDesigners.title[lang]}</h3>
-              <p className="text-black text-sm mb-4">{snapshotContent.forDesigners.description[lang]}</p>
+              <h3 className="text-xl font-bold text-black mb-2">{snapshotContent.forDesigners.title.en}</h3>
+              <p className="text-black text-sm mb-4">{snapshotContent.forDesigners.description.en}</p>
               <div className="flex justify-end mt-auto">
                 <Image src="/images/designer_icon.png" alt="Designer Icon" width={80} height={80} className="opacity-50" />
               </div>

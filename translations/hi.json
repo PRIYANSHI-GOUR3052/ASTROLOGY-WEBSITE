@@ -1,0 +1,73 @@
+{
+  "hero": {
+    "mainHeading": "ब्रह्मांड के रहस्य खोलें",
+    "subHeading": "आपके मार्ग को रोशन करने के लिए व्यक्तिगत वैदिक ज्योतिष",
+    "ctaButton": "अपनी मुफ्त कुंडली प्राप्त करें",
+    "secondaryText": "करियर, प्यार और जीवन के लिए सटीक भविष्यवाणियां।"
+  },
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Nakshatra Gyaan"
+    },
+    "nav": {
+      "home": "होम",
+      "about": "हमारे बारे में",
+      "courses": "कोर्स",
+      "contact": "संपर्क",
+      "blog": "ब्लॉग",
+      "study": "अध्ययन",
+      "consultations": "परामर्श"
+    },
+    "cart": "कार्ट",
+    "mega_menu": {
+      "consultations": {
+        "title": "परामर्श",
+        "items": {
+          "panchang": "आज का पंचांग",
+          "kundali_matching": "कुंडली मिलान",
+          "buy_products": "उत्पाद खरीदें",
+          "free_daily_horoscope": "मुफ्त दैनिक राशिफल",
+          "astrology": "ज्योतिष",
+          "chat_with_astrologer": "ज्योतिषी से चैट करें",
+          "love_relationship": "प्रेम और संबंध",
+          "career_guidance": "करियर और नौकरी",
+          "numerology": "अंक ज्योतिष"
+        }
+      },
+      "puja_rituals": {
+        "title": "पूजा और अनुष्ठान",
+        "items": {
+          "online_puja": "ऑनलाइन पूजा",
+          "grah_shanti": "ग्रह शांति",
+          "manokamna_pooja": "मनोकामना पूजा"
+        }
+      },
+      "horoscopes": {
+        "title": "राशिफल",
+        "items": {
+          "daily_horoscope": "दैनिक राशिफल",
+          "monthly_horoscope": "मासिक राशिफल",
+          "yearly_horoscope": "वार्षिक राशिफल"
+        }
+      },
+      "learning": {
+        "title": "सीखना",
+        "items": {
+          "astrology_courses": "ज्योतिष पाठ्यक्रम",
+          "blog": "ब्लॉग"
+        }
+      }
+    },
+    "auth": {
+      "signin": "साइन इन",
+      "my_profile": "मेरी प्रोफाइल",
+      "my_orders": "मेरे आदेश",
+      "logout": "लॉग आउट"
+    },
+    "language_selector": {
+      "button": "भाषा चुनें",
+      "dropdown_title": "अपनी भाषा चुनें"
+    }
+  }
+} 

@@ -1,0 +1,73 @@
+{
+  "hero": {
+    "mainHeading": "Unlock the Secrets of the Cosmos",
+    "subHeading": "Personalized Vedic Astrology to Illuminate Your Path",
+    "ctaButton": "Get Your Free Kundli",
+    "secondaryText": "Accurate Predictions for Career, Love, and Life."
+  },
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Nakshatra Gyaan"
+    },
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "courses": "Courses",
+      "contact": "Contact",
+      "blog": "Blog",
+      "study": "Study",
+      "consultations": "Consultations"
+    },
+    "cart": "Cart",
+    "mega_menu": {
+      "consultations": {
+        "title": "Consultations",
+        "items": {
+          "panchang": "Today's Panchang",
+          "kundali_matching": "Kundali Matching",
+          "buy_products": "Buy Products",
+          "free_daily_horoscope": "Free Daily Horoscope",
+          "astrology": "Astrology",
+          "chat_with_astrologer": "Chat with Astrologer",
+          "love_relationship": "Love & Relationship",
+          "career_guidance": "Career & Job",
+          "numerology": "Numerology"
+        }
+      },
+      "puja_rituals": {
+        "title": "Puja & Rituals",
+        "items": {
+          "online_puja": "Online Puja",
+          "grah_shanti": "Grah Shanti",
+          "manokamna_pooja": "Manokamna Pooja"
+        }
+      },
+      "horoscopes": {
+        "title": "Horoscopes",
+        "items": {
+          "daily_horoscope": "Daily Horoscope",
+          "monthly_horoscope": "Monthly Horoscope",
+          "yearly_horoscope": "Yearly Horoscope"
+        }
+      },
+      "learning": {
+        "title": "Learning",
+        "items": {
+          "astrology_courses": "Astrology Courses",
+          "blog": "Blog"
+        }
+      }
+    },
+    "auth": {
+      "signin": "Sign In",
+      "my_profile": "My Profile",
+      "my_orders": "My Orders",
+      "logout": "Logout"
+    },
+    "language_selector": {
+      "button": "Select Language",
+      "dropdown_title": "Select Your Language"
+    }
+  }
+} 

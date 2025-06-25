@@ -123,6 +123,11 @@ const randomCardsData = [
   }
 ]
 
+// Helper function for safe language access
+function getLocalizedText(obj: { en: string; hi: string }, lang: string) {
+  return obj[lang as keyof typeof obj] ?? obj['en'];
+}
+
 export function AstrologyQuiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -180,8 +185,8 @@ export function AstrologyQuiz() {
           }}
         >
           <card.icon className="w-8 h-8 mb-2" />
-          <h5 className="font-bold mb-1 text-sm">{card.title[lang]}</h5>
-          <p className="text-xs">{card.description[lang]}</p>
+          <h5 className="font-bold mb-1 text-sm">{getLocalizedText(card.title, lang)}</h5>
+          <p className="text-xs">{getLocalizedText(card.description, lang)}</p>
         </motion.div>
       ))}
 
@@ -205,7 +210,7 @@ export function AstrologyQuiz() {
             </div>
             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border border-gray-200">
               {currentQuestion && (
-                <p className="text-xl font-bold text-gray-800 uppercase">{currentQuestion.question[lang]}</p>
+                <p className="text-xl font-bold text-gray-800 uppercase">{getLocalizedText(currentQuestion.question, lang)}</p>
               )}
             </div>
           </div>
@@ -233,7 +238,7 @@ export function AstrologyQuiz() {
                         disabled={showFeedback}
                       >
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-lg">{optionLetters[index]}.</span>
-                        <span className="ml-8">{option[lang]}</span>
+                        <span className="ml-8">{getLocalizedText(option, lang)}</span>
                       </Button>
                     </motion.div>
                   ))}

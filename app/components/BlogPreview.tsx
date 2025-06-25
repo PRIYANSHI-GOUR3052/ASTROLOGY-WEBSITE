@@ -55,6 +55,11 @@ function BlogPostCard({ post, className }: BlogPostCardProps) {
   const { lang } = useLanguage();
   const fallbackColor = '#FFF5E6';
 
+  // Helper function for safe language access
+  function getLocalizedText(obj: { en: string; hi: string }, lang: string) {
+    return obj[lang as keyof typeof obj] ?? obj['en'];
+  }
+
   return (
     <Card
       className={`flex flex-col rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${className || ''}`}
@@ -63,7 +68,7 @@ function BlogPostCard({ post, className }: BlogPostCardProps) {
       <div className="relative w-full h-48 overflow-hidden rounded-t-xl">
         <Image 
           src={post.imageUrl} 
-          alt={post.title[lang]} 
+          alt={getLocalizedText(post.title, lang)} 
           fill
           style={{ objectFit: 'cover' }}
         />
@@ -75,8 +80,8 @@ function BlogPostCard({ post, className }: BlogPostCardProps) {
           <span className="mx-2">•</span>
           <span>{post.date}</span>
         </div>
-        <h3 className="text-2xl font-bold mb-2 text-black leading-tight">{post.title[lang]}</h3>
-        <p className="text-gray-700 mb-4 line-clamp-3">{post.description[lang].split('\n')[0]}</p>
+        <h3 className="text-2xl font-bold mb-2 text-black leading-tight">{getLocalizedText(post.title, lang)}</h3>
+        <p className="text-gray-700 mb-4 line-clamp-3">{getLocalizedText(post.description, lang).split('\n')[0]}</p>
         <Link href={`/blog/${post.slug}`} className="inline-flex items-center text-purple-700 hover:text-purple-800 transition-colors group">
           {lang === 'en' ? 'Continue Reading' : 'पढ़ना जारी रखें'}
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 transform transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">

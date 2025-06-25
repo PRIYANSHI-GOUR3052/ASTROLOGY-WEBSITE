@@ -1,0 +1,73 @@
+{
+  "hero": {
+    "mainHeading": "解锁宇宙的秘密",
+    "subHeading": "个性化的吠陀占星术以照亮您的道路",
+    "ctaButton": "获取免费的昆德利",
+    "secondaryText": "对职业，爱情和生活的准确预测。"
+  },
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Nakshatra Gyaan"
+    },
+    "nav": {
+      "home": "家",
+      "about": "关于",
+      "courses": "课程",
+      "contact": "接触",
+      "blog": "博客",
+      "study": "学习",
+      "consultations": "咨询"
+    },
+    "cart": "大车",
+    "mega_menu": {
+      "consultations": {
+        "title": "咨询",
+        "items": {
+          "panchang": "今天的Panchang",
+          "kundali_matching": "昆达利匹配",
+          "buy_products": "购买产品",
+          "free_daily_horoscope": "免费的每日星座",
+          "astrology": "占星术",
+          "chat_with_astrologer": "与占星家聊天",
+          "love_relationship": "爱与关系",
+          "career_guidance": "职业和工作",
+          "numerology": "命理学"
+        }
+      },
+      "puja_rituals": {
+        "title": "法会和仪式",
+        "items": {
+          "online_puja": "在线puja",
+          "grah_shanti": "格拉·尚蒂（Grah Shanti）",
+          "manokamna_pooja": "Manokamna Pooja"
+        }
+      },
+      "horoscopes": {
+        "title": "星座运势",
+        "items": {
+          "daily_horoscope": "每日星座",
+          "monthly_horoscope": "每月星座",
+          "yearly_horoscope": "年度星座"
+        }
+      },
+      "learning": {
+        "title": "学习",
+        "items": {
+          "astrology_courses": "占星术课程",
+          "blog": "博客"
+        }
+      }
+    },
+    "auth": {
+      "signin": "登入",
+      "my_profile": "我的个人资料",
+      "my_orders": "我的命令",
+      "logout": "注销"
+    },
+    "language_selector": {
+      "button": "选择语言",
+      "dropdown_title": "选择您的语言"
+    }
+  }
+}
