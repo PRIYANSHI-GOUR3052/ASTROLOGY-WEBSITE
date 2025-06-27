@@ -207,6 +207,14 @@ export function Header() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center gap-4">
+            {/* Join Us Button */}
+            <Link href="/astrologer/auth">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 transition-all font-semibold">
+                <User className="w-4 h-4" />
+                <span>Join Us</span>
+              </button>
+            </Link>
+
             {status !== 'loading' && (
               session ? (
                 <button
