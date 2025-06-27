@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
@@ -30,60 +30,47 @@ const cardGradients = [
 // Content constants
 const largeArticleCardContent = {
   image: "https://via.placeholder.com/400x250/A6B7C3/FFFFFF?text=Astrology+Insight", // Placeholder for lamp image
-  title: {
-    en: "Nakshatra Gyaan",
-    hi: "नक्षत्र ज्ञान",
-  },
-  description: {
-    en: "Discover Your Celestial Path. Unlock the secrets of the cosmos and find your life's purpose through our spiritual services and expert guidance.",
-    hi: "अपना आकाशीय मार्ग खोजें। हमारी आध्यात्मिक सेवाओं और विशेषज्ञ मार्गदर्शन के माध्यम से ब्रह्मांड के रहस्यों को अनलॉक करें और अपने जीवन का उद्देश्य खोजें।",
-  },
-  author: { en: "Dr. Narendra Kumar Sharma", hi: "डॉ. नरेंद्र कुमार शर्मा" },
-  date: { en: "Jul 15, 2024", hi: "जुलाई 15, 2024" },
+  titleKey: "hero.largeArticleCard.title",
+  descriptionKey: "hero.largeArticleCard.description",
+  authorKey: "hero.largeArticleCard.author",
+  dateKey: "hero.largeArticleCard.date",
 };
 
 const coffeeArticleCardContent = {
-  // image: "https://via.placeholder.com/150/A6B7C3/FFFFFF?text=Cosmic+Coffee", // Placeholder for coffee image
-  title: {
-    en: "The Astrological Significance of Daily Rituals",
-    hi: "दैनिक अनुष्ठानों का ज्योतिषीय महत्व",
-  },
-  author: { en: "Priya Singh", hi: "प्रिया सिंह" },
-  // authorImage: "https://via.placeholder.com/30/C4D1D9/FFFFFF?text=PS",
-  date: { en: "Jul 10, 2024", hi: "जुलाई 10, 2024" },
+  titleKey: "hero.coffeeArticleCard.title",
+  authorKey: "hero.coffeeArticleCard.author",
+  dateKey: "hero.coffeeArticleCard.date",
 };
 
 const videoCardContent = {
-  // image: "https://via.placeholder.com/200x120/A6B7C3/FFFFFF?text=Nakshatra+Film", // Placeholder for building image
-  title: { en: "An Inspiring Short Film: Journey Through Nakshatras", hi: "एक प्रेरणादायक लघु फिल्म: नक्षत्रों के माध्यम से यात्रा" },
+  titleKey: "hero.videoCard.title",
   views: "80,989",
 };
 
 const profileCardContent = {
-  // image: "https://via.placeholder.com/80/C4D1D9/FFFFFF?text=AG", // Placeholder for Alex's image
-  name: { en: "Dr. Narendra Kumar Sharma", hi: "डॉ. नरेंद्र कुमार शर्मा" }, // Changed name
-  title: { en: "Vedic Astrologer", hi: "वैदिक ज्योतिषी" },
+  nameKey: "hero.profileCard.name",
+  titleKey: "hero.profileCard.title",
   stats: [
-    { label: { en: "Readings", hi: "पठन" }, value: "34" },
-    { label: { en: "Clients", hi: "ग्राहक" }, value: "980" },
-    { label: { en: "Rating", hi: "रेटिंग" }, value: "4.9" },
+    { labelKey: "hero.profileCard.stats.readings", value: "34" },
+    { labelKey: "hero.profileCard.stats.clients", value: "980" },
+    { labelKey: "hero.profileCard.stats.rating", value: "4.9" },
   ],
 };
 
 const categories = [
-  { icon: Circle, label: { en: "Nakshatras", hi: "नक्षत्र" } },
-  { icon: Briefcase, label: { en: "Horoscopes", hi: "राशिफल" } },
-  { icon: Play, label: { en: "Remedies", hi: "उपाय" } },
-  { icon: BookOpen, label: { en: "Vedic Texts", hi: "वैदिक ग्रंथ" } },
-  { icon: HeartPulse, label: { en: "Astro-Wellness", hi: "ज्योतिष-कल्याण" } },
+  { icon: Circle, labelKey: "hero.categories.nakshatras" },
+  { icon: Briefcase, labelKey: "hero.categories.horoscopes" },
+  { icon: Play, labelKey: "hero.categories.remedies" },
+  { icon: BookOpen, labelKey: "hero.categories.vedicTexts" },
+  { icon: HeartPulse, labelKey: "hero.categories.astroWellness" },
 ];
 
 const searchTags = [
-  { en: "Predictive", hi: "भविष्यवाचक" },
-  { en: "Compatibility", hi: "संगतता" },
-  { en: "Transits", hi: "गोचर" },
-  { en: "Remedies", hi: "उपाय" },
-  { en: "Dasha", hi: "दशा" },
+  { key: "hero.searchTags.predictive" },
+  { key: "hero.searchTags.compatibility" },
+  { key: "hero.searchTags.transits" },
+  { key: "hero.searchTags.remedies" },
+  { key: "hero.searchTags.dasha" },
 ];
 
 // Updated data for corner cards with final CSS positions
@@ -92,25 +79,41 @@ const cornerCards = [
     final_top: '5rem', final_left: '2.5rem', final_right: 'auto', final_bottom: 'auto',
     rotation: -12,
     gradient: "from-blue-500 to-purple-600",
-    key: 0,
+    tagKey: "hero.corner_cards.0.tag",
+    titleKey: "hero.corner_cards.0.title",
+    subtextKey: "hero.corner_cards.0.subtext",
+    link: "/services/astrology",
+    linkTextKey: "hero.corner_cards.0.linkText",
   },
   {
     final_top: '5rem', final_left: 'auto', final_right: '2.5rem', final_bottom: 'auto',
     rotation: 10,
     gradient: "from-purple-500 to-indigo-600",
-    key: 1,
+    tagKey: "hero.corner_cards.1.tag",
+    titleKey: "hero.corner_cards.1.title",
+    subtextKey: "hero.corner_cards.1.subtext",
+    link: "/services/career-guidance",
+    linkTextKey: "hero.corner_cards.1.linkText",
   },
   {
     final_top: 'auto', final_left: '2.5rem', final_right: 'auto', final_bottom: '7rem',
     rotation: 15,
     gradient: "from-pink-500 to-orange-500",
-    key: 2,
+    tagKey: "hero.corner_cards.2.tag",
+    titleKey: "hero.corner_cards.2.title",
+    subtextKey: "hero.corner_cards.2.subtext",
+    link: "/blog/understanding-vedic-astrology",
+    linkTextKey: "hero.corner_cards.2.linkText",
   },
   {
     final_top: 'auto', final_left: 'auto', final_right: '2.5rem', final_bottom: '7rem',
     rotation: -8,
     gradient: "from-teal-400 to-green-500",
-    key: 3,
+    tagKey: "hero.corner_cards.3.tag",
+    titleKey: "hero.corner_cards.3.title",
+    subtextKey: "hero.corner_cards.3.subtext",
+    link: "/blog/the-influence-of-planets",
+    linkTextKey: "hero.corner_cards.3.linkText",
   },
 ];
 
@@ -196,7 +199,7 @@ function FloatingElements() {
   );
 }
 
-export function HeroSection() {
+export default function HeroSection() {
   const { t } = useLanguage();
 
   return (
@@ -207,7 +210,7 @@ export function HeroSection() {
       <div className="absolute top-0 left-0 w-full h-full opacity-30">
         <Image 
           src="/images/hero-bg-1.jpg" 
-          alt="Cosmic background" 
+          alt={t('hero.bgAlt')} 
           layout="fill" 
           objectFit="cover" 
           className="animate-pulse-slow"
@@ -220,7 +223,7 @@ export function HeroSection() {
       <AnimatePresence>
         {cornerCards.map((card, i) => (
           <motion.div
-            key={card.key}
+            key={card.titleKey}
             custom={{ ...card, i }}
             variants={cardVariants}
             initial="initial"
@@ -229,11 +232,11 @@ export function HeroSection() {
             className={`absolute z-20 w-72 p-6 rounded-2xl shadow-2xl bg-gradient-to-br ${card.gradient} text-white border border-white/20 hidden lg:block`}
           >
             <motion.div animate={floatingAnimation(i)}>
-              <div className="text-xs font-bold uppercase tracking-wider text-white/80 mb-2">{t(`hero.corner_cards.${card.key}.tag`)}</div>
-              <h3 className="text-lg font-bold text-white mb-2 leading-tight">{t(`hero.corner_cards.${card.key}.title`)}</h3>
-              <p className="text-sm text-white/70 mb-4">{t(`hero.corner_cards.${card.key}.subtext`)}</p>
-              <Link href={t(`hero.corner_cards.${card.key}.link`)} className="text-sm font-semibold text-white hover:text-white/80 transition-colors flex items-center gap-1">
-                {t(`hero.corner_cards.${card.key}.linkText`)}
+              <div className="text-xs font-bold uppercase tracking-wider text-white/80 mb-2">{t(card.tagKey)}</div>
+              <h3 className="text-lg font-bold text-white mb-2 leading-tight">{t(card.titleKey)}</h3>
+              <p className="text-sm text-white/70 mb-4">{t(card.subtextKey)}</p>
+              <Link href={card.link} className="text-sm font-semibold text-white hover:text-white/80 transition-colors flex items-center gap-1">
+                {t(card.linkTextKey)}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </motion.div>
@@ -283,4 +286,4 @@ export function HeroSection() {
       </motion.div>
     </div>
   );
-}
+} 

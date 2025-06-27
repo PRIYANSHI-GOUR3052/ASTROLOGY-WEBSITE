@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useLanguage } from '@/app/contexts/LanguageContext'
+import { useLanguage } from '../contexts/useLanguage'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 

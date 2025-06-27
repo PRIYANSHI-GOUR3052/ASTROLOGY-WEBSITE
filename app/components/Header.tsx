@@ -4,7 +4,8 @@ import { useState, useEffect, useRef, FormEvent } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { useLanguage, SupportedLang, LANGUAGE_NAMES } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
+import { SupportedLang, LANGUAGE_NAMES } from '../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronDown, Search, Menu, X, User, LogIn, LogOut 
@@ -64,6 +65,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [isMobileLangMenuOpen, setIsMobileLangMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -219,76 +221,100 @@ export function Header() {
         </DialogContent>
       </Dialog>
 
-      <div ref={mobileMenuRef} className={`fixed top-0 right-0 h-full w-72 bg-white shadow-lg z-50 transform transition-transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="p-6">
-          <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 right-4 text-gray-600"><X className="w-6 h-6" /></button>
-          <div className="mt-8 flex flex-col gap-4 overflow-y-auto">
-            {/* Standard Nav Links */}
-            <Link href="/" className="px-4 py-3 rounded-lg hover:bg-gray-100 font-semibold" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.home')}</Link>
-            <Link href="/about" className="px-4 py-3 rounded-lg hover:bg-gray-100 font-semibold" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.about')}</Link>
-            <Link href="/courses" className="px-4 py-3 rounded-lg hover:bg-gray-100 font-semibold" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.courses')}</Link>
-            <Link href="/contact" className="px-4 py-3 rounded-lg hover:bg-gray-100 font-semibold" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.contact')}</Link>
-            <Link href="/blog" className="px-4 py-3 rounded-lg hover:bg-gray-100 font-semibold" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.blog')}</Link>
-            <Link href="/study" className="px-4 py-3 rounded-lg hover:bg-gray-100 font-semibold" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.study')}</Link>
-            
-            <div className="border-t border-gray-200 pt-4">
-              {Object.entries(servicesMegaMenu).map(([sectionKey, sectionValue]) => (
-                <div key={sectionKey} className="mb-4">
-                  <h3 className="text-sm font-bold uppercase text-purple-900 bg-purple-100 rounded px-3 py-1 mb-2 inline-block">
-                    {t(`header.mega_menu.${sectionKey}.title`)}
-                  </h3>
-                  <ul className="space-y-2">
-                    {sectionValue.items.map((item) => (
-                      <li key={item.key}>
-                        <Link
-                          href={item.href}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="block px-4 py-2 text-gray-700 hover:bg-purple-50 rounded-md"
-                        >
-                          {t(`header.mega_menu.${sectionKey}.items.${item.key}`)}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="border-t border-gray-200 pt-4 mt-auto flex flex-col gap-3">
-            {session?.user ? (
-              <>
-                <Link href="/profile" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white hover:from-[#5A0D9D] hover:to-[#FF7C00] transition-all font-semibold whitespace-nowrap"><User className="w-5 h-5" /> {t('header.auth.my_profile')}</Link>
-                <Link href="/orders" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white hover:from-[#5A0D9D] hover:to-[#FF7C00] transition-all font-semibold whitespace-nowrap"><User className="w-5 h-5" /> {t('header.auth.my_orders')}</Link>
-                <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white hover:from-[#5A0D9D] hover:to-[#FF7C00] transition-all font-semibold whitespace-nowrap"><LogOut className="w-5 h-5" /> {t('header.auth.logout')}</button>
-              </>
-            ) : (
-              <button onClick={() => signIn()} className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white hover:from-[#5A0D9D] hover:to-[#FF7C00] transition-all font-semibold whitespace-nowrap"><LogIn className="w-5 h-5" /> {t('header.auth.signin')}</button>
-            )}
-            <div className="relative">
-              <button onClick={() => setIsLangDropdownOpen(prev => !prev)} className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white hover:from-[#5A0D9D] hover:to-[#FF7C00] transition-all font-semibold flex items-center justify-between" aria-haspopup="listbox" aria-expanded={isLangDropdownOpen}>
-                <span>{t('header.language_selector.button')}</span>
-                <ChevronDown className="w-4 h-4" />
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            ref={mobileMenuRef}
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="md:hidden fixed top-0 right-0 h-full w-full max-w-sm bg-[#FAEBE6] shadow-lg z-40 p-6 overflow-y-auto"
+          >
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-xl font-bold text-purple-800">{t('header.mobile_menu.title')}</h2>
+              <button onClick={() => setIsMobileMenuOpen(false)}>
+                <X className="h-6 w-6 text-gray-900" />
               </button>
-              {isLangDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-full rounded-lg shadow-lg border border-purple-200 z-50 bg-[#FAEBE6] font-[Montserrat,sans-serif] drop-shadow-xl">
-                  <div className="py-2">
-                    <div className="px-4 py-2 text-xs text-gray-500 font-semibold">{t('header.language_selector.dropdown_title')}</div>
-                    {languageList.map((code) => (
-                      <button 
-                        key={code} 
-                        onClick={() => { setLang(code); setIsLangDropdownOpen(false); }} 
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-[#F3E8FF] ${lang === code ? 'font-bold text-[#7C3AED]' : 'text-gray-700'} font-[Montserrat,sans-serif]`}
-                      >
-                        {(LANGUAGE_NAMES as Record<string, string>)[code] || LANGUAGE_NAMES['en']}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
-          </div>
-        </div>
-      </div>
+
+            <nav className="flex flex-col gap-6">
+              <Link href="/" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.home')}</Link>
+              <Link href="/about" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.about')}</Link>
+              <Link href="/courses" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.courses')}</Link>
+              <Link href="/contact" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.contact')}</Link>
+              <Link href="/blog" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.blog')}</Link>
+              <Link href="/study" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.study')}</Link>
+              
+              <div className="border-t border-gray-200 pt-6">
+                <h3 className="text-base font-bold text-purple-800 mb-4">{t('header.nav.consultations')}</h3>
+                <div className="flex flex-col gap-4">
+                  {Object.values(servicesMegaMenu).flatMap(section => section.items).map(item => (
+                    <Link key={item.key} href={item.href} className="text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>
+                      {t(`header.mega_menu.${Object.keys(servicesMegaMenu).find(key => servicesMegaMenu[key as keyof typeof servicesMegaMenu].items.some(i => i.key === item.key))}.items.${item.key}`)}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* User Auth Section for Mobile */}
+              <div className="border-t border-gray-200 pt-6 mt-6">
+                {session?.user ? (
+                  <div className="flex flex-col gap-4">
+                    <Link href="/profile" className="flex items-center gap-3 text-lg font-semibold text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>
+                      <User className="w-5 h-5" /> {t('header.auth.my_profile')}
+                    </Link>
+                    <Link href="/orders" className="flex items-center gap-3 text-lg font-semibold text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>
+                      <User className="w-5 h-5" /> {t('header.auth.my_orders')}
+                    </Link>
+                    <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 text-lg font-semibold text-gray-900 hover:text-purple-600">
+                      <LogOut className="w-5 h-5" /> {t('header.auth.logout')}
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={() => { signIn(); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 text-lg font-semibold text-gray-900 hover:text-purple-600">
+                    <LogIn className="w-5 h-5" /> {t('header.auth.signin')}
+                  </button>
+                )}
+              </div>
+
+              {/* Language Selector for Mobile */}
+              <div className="border-t border-gray-200 pt-6">
+                <button
+                  onClick={() => setIsMobileLangMenuOpen(prev => !prev)}
+                  className="flex justify-between items-center w-full text-lg font-semibold text-gray-900 hover:text-purple-600"
+                >
+                  <span>{t('header.language_selector.button')}</span>
+                  <ChevronDown className={`w-5 h-5 transition-transform ${isMobileLangMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {isMobileLangMenuOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="mt-4 pl-4 flex flex-col gap-2 overflow-hidden"
+                    >
+                      {languageList.map((code) => (
+                        <button
+                          key={code}
+                          onClick={() => {
+                            setLang(code);
+                            setIsMobileLangMenuOpen(false);
+                          }}
+                          className={`text-left text-base py-1 ${lang === code ? 'font-bold text-purple-600' : 'text-gray-700'} hover:text-purple-600`}
+                        >
+                          {(LANGUAGE_NAMES as Record<string, string>)[code] || LANGUAGE_NAMES['en']}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

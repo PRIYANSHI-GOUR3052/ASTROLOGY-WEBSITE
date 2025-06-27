@@ -1,11 +1,14 @@
 import { blogPosts } from '../data/blogPosts';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLanguage } from '../contexts/useLanguage';
 
 // Get the 4 most recent astrology blog posts
 const posts = Object.values(blogPosts)
   .filter(post => post.category.toLowerCase().includes('astrology'))
   .slice(0, 4);
+
+const { lang, t } = useLanguage();
 
 export default function RecentBlogs() {
   return (
@@ -22,7 +25,7 @@ export default function RecentBlogs() {
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors mb-1">
-                {post.title.en}
+                {post.title?.[lang] || post.title?.['en']}
               </h4>
               <p className="text-xs text-gray-500">{post.date}</p>
             </div>
