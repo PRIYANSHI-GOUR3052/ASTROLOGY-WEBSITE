@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useState, useRef } from 'react'
 import { Phone, Mail, MapPin, Send, Star, Sparkles, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '../contexts/useLanguage';
 
 const FloatingCard = ({ 
   className, 
@@ -29,6 +30,7 @@ const FloatingCard = ({
 );
 
 export function ContactForm() {
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const formRef = useRef<HTMLFormElement>(null)
@@ -79,13 +81,13 @@ export function ContactForm() {
         className="top-[10%] left-4 w-72 rotate-[-12deg] opacity-90 z-10"
         gradient="bg-gradient-to-br from-violet-500 via-pink-500 to-orange-400"
       >
-        <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Cosmic Connection</div>
-        <h3 className="text-white font-bold text-lg mb-2 leading-snug">Your celestial journey begins here</h3>
+        <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">{t('contact.floatingCard1.label')}</div>
+        <h3 className="text-white font-bold text-lg mb-2 leading-snug">{t('contact.floatingCard1.title')}</h3>
         <div className="flex items-center text-white/80 text-sm mb-4">
           <Star className="w-4 h-4 mr-2" />
-          <span>Connect with the cosmos</span>
+          <span>{t('contact.floatingCard1.subtitle')}</span>
         </div>
-        <div className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium">Reach out →</div>
+        <div className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium">{t('contact.floatingCard1.button')}</div>
       </FloatingCard>
 
       <FloatingCard 
@@ -93,13 +95,13 @@ export function ContactForm() {
         className="top-[50%] right-4 w-72 rotate-[12deg] opacity-90 z-10"
         gradient="bg-gradient-to-br from-blue-500 via-teal-400 to-green-400"
       >
-        <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Guidance Awaits</div>
-        <h3 className="text-white font-bold text-lg mb-2 leading-snug">Transform your path with stellar wisdom</h3>
+        <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">{t('contact.floatingCard2.label')}</div>
+        <h3 className="text-white font-bold text-lg mb-2 leading-snug">{t('contact.floatingCard2.title')}</h3>
         <div className="flex items-center text-white/80 text-sm mb-4">
           <Sparkles className="w-4 h-4 mr-2" />
-          <span>Personalized insights</span>
+          <span>{t('contact.floatingCard2.subtitle')}</span>
         </div>
-        <div className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium">Discover →</div>
+        <div className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium">{t('contact.floatingCard2.button')}</div>
       </FloatingCard>
 
       <FloatingCard 
@@ -107,24 +109,24 @@ export function ContactForm() {
         className="bottom-[5%] left-4 w-80 rotate-[-8deg] opacity-90 z-10"
         gradient="bg-gradient-to-br from-purple-600 via-indigo-500 to-blue-500"
       >
-        <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">Expert Consultation</div>
-        <h3 className="text-white font-bold text-lg mb-2 leading-snug">Professional astrological guidance</h3>
+        <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">{t('contact.floatingCard3.label')}</div>
+        <h3 className="text-white font-bold text-lg mb-2 leading-snug">{t('contact.floatingCard3.title')}</h3>
         <div className="flex items-center text-white/80 text-sm mb-4">
           <span className="mr-2">🌟</span>
-          <span>Available worldwide</span>
+          <span>{t('contact.floatingCard3.subtitle')}</span>
         </div>
-        <div className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium">Book now →</div>
+        <div className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium">{t('contact.floatingCard3.button')}</div>
       </FloatingCard>
 
       <div className="max-w-6xl mx-auto px-5 relative z-20">
         {/* Header section matching footer style */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            Connect with the<br />
-            <span className="bg-gradient-to-r from-violet-500 to-pink-500 bg-clip-text text-transparent">cosmic realm</span>
+            {t('contact.header.title1')}<br />
+            <span className="bg-gradient-to-r from-violet-500 to-pink-500 bg-clip-text text-transparent">{t('contact.header.title2')}</span>
           </h1>
           <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-            Have a question for Innovana Astro Services Limited, need guidance, or wish to book a consultation? Reach out to us. Your cosmic conversation awaits.
+            {t('contact.header.description')}
           </p>
         </div>
 
@@ -133,9 +135,9 @@ export function ContactForm() {
           {/* Contact Information */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-3xl font-bold text-white mb-6">Get In Touch</h2>
+              <h2 className="text-3xl font-bold text-white mb-6">{t('contact.info.title')}</h2>
               <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-                We are available via phone, email, or you can send us a message directly. We look forward to guiding you on your celestial journey.
+                {t('contact.info.description')}
               </p>
             </div>
 
@@ -145,9 +147,9 @@ export function ContactForm() {
                   <Phone className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-1">Phone</h3>
-                  <p className="text-gray-300 text-lg">+91-7229808887</p>
-                  <p className="text-sm text-gray-400">10:00AM to 7:00PM (Mon-Fri)</p>
+                  <h3 className="text-xl font-semibold text-white mb-1">{t('contact.info.phoneTitle')}</h3>
+                  <p className="text-gray-300 text-lg">{t('contact.info.phoneNumber')}</p>
+                  <p className="text-sm text-gray-400">{t('contact.info.phoneHours')}</p>
                 </div>
               </div>
 
@@ -156,9 +158,9 @@ export function ContactForm() {
                   <Mail className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-1">Email</h3>
+                  <h3 className="text-xl font-semibold text-white mb-1">{t('contact.info.emailTitle')}</h3>
                   <p className="text-gray-300 text-lg">support@anytimeastro.com</p>
-                  <p className="text-sm text-gray-400">We reply within 24 hours</p>
+                  <p className="text-sm text-gray-400">{t('contact.info.emailNote')}</p>
                 </div>
               </div>
 
@@ -167,9 +169,11 @@ export function ContactForm() {
                   <MapPin className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-1">Location</h3>
-                  <p className="text-gray-300 text-lg">1- KHA -18, Jawahar Nagar, Jaipur</p>
-                  <p className="text-sm text-gray-400">Rajasthan, 302004 India</p>
+                  <h3 className="text-xl font-semibold text-white mb-1">{t('contact.info.locationTitle')}</h3>
+                  <p className="text-gray-300 text-lg">{t('contact.info.addressLine1')}</p>
+                  <p className="text-sm text-gray-400">{t('contact.info.addressLine2')}</p>
+                  <p className="text-sm text-gray-400">{t('contact.info.addressCity')}, {t('contact.info.addressState')} {t('contact.info.addressZip')}</p>
+                  <p className="text-sm text-gray-400">{t('contact.info.addressCountry')}</p>
                 </div>
               </div>
             </div>
@@ -177,7 +181,7 @@ export function ContactForm() {
 
           {/* Contact Form */}
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 lg:p-10">
-            <h2 className="text-3xl font-bold mb-6 text-white">Send us a message</h2>
+            <h2 className="text-3xl font-bold mb-6 text-white">{t('contact.form.title')}</h2>
             <form 
               ref={formRef}
               onSubmit={handleSubmit} 
@@ -188,7 +192,7 @@ export function ContactForm() {
                   type="text" 
                   id="name" 
                   name="name" 
-                  placeholder="Your Name" 
+                  placeholder={t('contact.form.namePlaceholder')} 
                   required 
                   className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-full text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-base"
                 />
@@ -196,7 +200,7 @@ export function ContactForm() {
                   type="email" 
                   id="email" 
                   name="email" 
-                  placeholder="Your Email" 
+                  placeholder={t('contact.form.emailPlaceholder')} 
                   required 
                   className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-full text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-base"
                 />
@@ -205,7 +209,7 @@ export function ContactForm() {
               <Textarea 
                 id="message" 
                 name="message" 
-                placeholder="Tell us about your cosmic journey..." 
+                placeholder={t('contact.form.messagePlaceholder')} 
                 className="w-full p-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none transition-all text-base"
                 rows={6}
                 required
@@ -217,10 +221,10 @@ export function ContactForm() {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
-                  'Sending message...'
+                  t('contact.form.sending')
                 ) : (
                   <>
-                    Send Message 
+                    {t('contact.form.sendButton')} 
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
@@ -229,7 +233,7 @@ export function ContactForm() {
               {submitStatus === 'success' && (
                 <div className="text-center p-4 bg-green-500/20 border border-green-500/30 rounded-2xl">
                   <p className="text-green-300 font-medium">
-                    ✨ Message sent successfully! We'll get back to you soon.
+                    ✨ {t('contact.form.success')}
                   </p>
                 </div>
               )}
@@ -237,7 +241,7 @@ export function ContactForm() {
               {submitStatus === 'error' && (
                 <div className="text-center p-4 bg-red-500/20 border border-red-500/30 rounded-2xl">
                   <p className="text-red-300 font-medium">
-                    Something went wrong. Please try again.
+                    {t('contact.form.error')}
                   </p>
                 </div>
               )}
@@ -247,7 +251,7 @@ export function ContactForm() {
 
         {/* Large brand name matching footer */}
         <div className="text-center mt-20 mb-12">
-          <h1 className="text-[48px] md:text-[64px] font-bold text-white/10 tracking-wider m-0 select-none">nakshatra</h1>
+          <h1 className="text-[48px] md:text-[64px] font-bold text-white/10 tracking-wider m-0 select-none">{t('contact.brand')}</h1>
         </div>
       </div>
     </section>

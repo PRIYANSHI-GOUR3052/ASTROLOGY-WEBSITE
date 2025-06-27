@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from '../contexts/useLanguage';
 
 interface Service {
   title: {

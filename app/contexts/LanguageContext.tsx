@@ -50,16 +50,33 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+// Helper to normalize language codes
+function normalizeLang(code: string): SupportedLang {
+  if (code.startsWith('en')) return 'en';
+  if (code.startsWith('hi')) return 'hi';
+  if (code.startsWith('es')) return 'es';
+  if (code.startsWith('fr')) return 'fr';
+  if (code.startsWith('de')) return 'de';
+  if (code.startsWith('zh')) return 'zh';
+  if (code.startsWith('ar')) return 'ar';
+  if (code.startsWith('ru')) return 'ru';
+  return 'en'; // fallback
+}
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [lang, setLang] = useState<SupportedLang>('en');
+  const [lang, setLangRaw] = useState<SupportedLang>('en');
+
+  // Wrap setLang to normalize
+  const setLang = (code: string) => {
+    setLangRaw(normalizeLang(code));
+  };
 
   // Function to get nested translation value
-  const t = (key: string): string => {
+  const t = (key: string): any => {
     const keys = key.split('.');
-    let result: any = (translations as Record<SupportedLang, any>)[lang];
-    
+    let result: any = (translations as Record<SupportedLang, any>)[normalizeLang(lang)];
     for (const k of keys) {
       result = result?.[k];
       if (result === undefined) {
@@ -71,22 +88,14 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         return fallbackResult || key;
       }
     }
-    return result || key;
+    return result;
   };
 
-  const value = { lang, setLang, t };
+  const value = { lang: normalizeLang(lang), setLang, t };
 
   return (
     <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );
-};
-
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
 }; 

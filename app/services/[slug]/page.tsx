@@ -12,7 +12,7 @@ import { AboutSummary } from '@/app/components/AboutSummary';
 import { motion } from 'framer-motion';
 import { FaRegLightbulb, FaRegHeart, FaRegStar, FaRegSmile, FaRegComments, FaRegSun, FaRegGem } from 'react-icons/fa';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/useLanguage';
 import { DrNarendraProfile } from '@/app/components/DrNarendraProfile';
 import { CTASection } from '@/app/components/CTASection';
 

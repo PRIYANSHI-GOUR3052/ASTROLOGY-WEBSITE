@@ -83,7 +83,7 @@ function SearchComponent() {
             post.title.hi.toLowerCase().includes(lowerCaseQuery) ||
             post.content.en.toLowerCase().includes(lowerCaseQuery) ||
             post.content.hi.toLowerCase().includes(lowerCaseQuery) ||
-            post.author.toLowerCase().includes(lowerCaseQuery)
+            post.author.en.toLowerCase().includes(lowerCaseQuery)
           )
           .map(([slug, post]) => ({
             type: 'Blog',

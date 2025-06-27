@@ -1,3 +1,4 @@
+"use client";
 import { AnimatedStars } from '../components/AnimatedStars'
 import { MysticBackground } from '../components/MysticBackground'
 import { Testimonials } from '../components/Testimonials'

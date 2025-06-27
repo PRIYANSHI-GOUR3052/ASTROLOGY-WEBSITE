@@ -1,4 +1,4 @@
-import { HeroSection } from './components/HeroSection'
+import NewHeroSection from './components/NewHeroSection'
 import { LifeChangingSolutions } from './components/LifeChangingSolutions'
 import { AstrologerProfile } from './components/AstrologerProfile'
 import  { BestServices }  from './components/BestServices'
@@ -20,7 +20,7 @@ export default function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-white">
     
-      <HeroSection />
+      <NewHeroSection />
       <div className="pt-32 relative z-10">
         <ScrollAnimation>
           <Statistics />
