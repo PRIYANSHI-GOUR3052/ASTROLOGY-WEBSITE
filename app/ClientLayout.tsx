@@ -27,7 +27,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     "/admin/settings",
     "/admin/login",
     "/signin",
-    "/admin/stone"
+    "/admin/stone",
+    "/astrologer/profile",
+    "/astrologer/availability",
+    "/astrologer/bookings",
+    "/astrologer/consultations",
+    "/astrologer/reviews",
+    "/astrologer/withdraw" 
   ].includes(pathname ?? '');
 
   const [isClient, setIsClient] = useState(false)
