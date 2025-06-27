@@ -33,7 +33,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     "/astrologer/bookings",
     "/astrologer/consultations",
     "/astrologer/reviews",
-    "/astrologer/withdraw" 
+    "/astrologer/withdraw",
+    "/astrologer/register",
+    "/astrologer/auth",
+    "/astrologer/forgot-password"
   ].includes(pathname ?? '');
 
   const [isClient, setIsClient] = useState(false)
