@@ -239,7 +239,7 @@
   "about": {
     "banner": {
       "heading": "Acerca de Nakshatra Gyaan",
-      "text": "Durante más de dos décadas, hemos guiado a buscadores en su viaje espiritual. Nuestro equipo de astrólogos expertos y consejeros espirituales combina la sabiduría ancestral con conocimientos modernos para brindarle una guía precisa y que le cambiará la vida."
+      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
     },
     "tabs": {
       "0": "Nuestro viaje",
@@ -448,9 +448,11 @@
   },
   "footer": {
     "newsletter": {
-      "title": "Suscríbete a nuestro boletín",
-      "placeholder": "Introduce tu correo electrónico",
-      "button": "Suscribir"
+      "title": "Mantente informado con nuestro",
+      "titleHighlight": "boletín celestial",
+      "subtitle": "Las actualizaciones regulares aseguran que los lectores tengan acceso a nuevas perspectivas cósmicas, haciendo de Nakshatra Gyaan una lectura imprescindible.",
+      "placeholder": "Dirección de correo",
+      "button": "Suscribirse →"
     },
     "quote": "Las estrellas se inclinan, no obligan.",
     "about": {
@@ -491,12 +493,47 @@
     "brand": {
       "name": "nakshatra",
       "taglinePrefix": "Diseñado por ",
-      "team": "Equipo Nakshatra",
+      "team": "Scalixity Team",
       "copyright": "© Nakshatra Gyaan. Todos los derechos reservados.",
       "poweredByPrefix": "Impulsado por ",
       "energy": "Energía Cósmica",
       "language": "🌍 ES Español"
-    }
+    },
+    "links": {
+      "keepExploring": "Sigue explorando",
+      "connect": "Conectar",
+      "legal": "Legal",
+      "quickLinks": {
+        "home": "Inicio",
+        "about": "Acerca de",
+        "services": "Servicios",
+        "reviews": "Reseñas",
+        "blog": "Blog",
+        "contact": "Contacto"
+      },
+      "legalLinks": {
+        "terms": "Términos y condiciones",
+        "privacy": "Política de privacidad",
+        "credits": "Créditos del sitio"
+      }
+    },
+    "floatingCards": {
+      "card1": {
+        "tag": "Astrología y Cultura",
+        "title": "El arte místico de la guía celestial",
+        "date": "20 de diciembre de 2024",
+        "readTime": "5 min",
+        "button": "Leer más →"
+      },
+      "card2": {
+        "tag": "Perspectivas cósmicas",
+        "title": "La importancia de la alineación planetaria para resultados espirituales",
+        "date": "11 de diciembre de 2024",
+        "readTime": "8 min",
+        "button": "Leer más →"
+      }
+    },
+    "scrollToTop": "Volver arriba"
   },
   "blog": {
     "recent": { "heading": "Blogs Recientes" },
@@ -505,7 +542,7 @@
       "viewAll": "Ver todo",
       "readMore": "Leer más",
       "minRead": "min de lectura",
-      "dateFormat": "d 'de' MMMM 'de' yyyy"
+      "dateFormat": "PPP"
     },
     "preview": { "continueReading": "Leer más" }
   },

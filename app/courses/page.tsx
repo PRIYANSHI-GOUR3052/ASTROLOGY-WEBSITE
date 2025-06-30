@@ -2,12 +2,11 @@
 
 import Link from 'next/link';
 import { GraduationCap, BookOpen, Star, BarChart, Users, Zap, ShieldCheck } from 'lucide-react';
-import { AnimatedStars } from '../components/AnimatedStars';
-import { MysticBackground } from '../components/MysticBackground';
 import { DrNarendraProfile } from '../components/DrNarendraProfile';
 import { FAQSection } from '../components/FAQSection';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/useLanguage';
+import { motion } from 'framer-motion';
 
 export default function CoursesPage() {
   const { t } = useLanguage();
@@ -18,7 +17,7 @@ export default function CoursesPage() {
       slug: 'vedic-astrology-mastery',
       description: t('courses.courses.0.description'),
       icon: BookOpen,
-      gradient: 'from-purple-500 to-indigo-500',
+      iconBg: 'bg-purple-400',
       tags: [t('courses.courses.0.tags.0'), t('courses.courses.0.tags.1'), t('courses.courses.0.tags.2')],
     },
     {
@@ -26,7 +25,7 @@ export default function CoursesPage() {
       slug: 'numerology-cosmic-codes',
       description: t('courses.courses.1.description'),
       icon: BarChart,
-      gradient: 'from-pink-500 to-rose-500',
+      iconBg: 'bg-purple-400',
       tags: [t('courses.courses.1.tags.0')],
     },
     {
@@ -34,7 +33,7 @@ export default function CoursesPage() {
       slug: 'art-of-palmistry',
       description: t('courses.courses.2.description'),
       icon: Zap,
-      gradient: 'from-teal-500 to-cyan-500',
+      iconBg: 'bg-purple-400',
       tags: [t('courses.courses.2.tags.0'), t('courses.courses.2.tags.1')],
     },
     {
@@ -42,7 +41,7 @@ export default function CoursesPage() {
       slug: 'tarot-reading-modern-mystic',
       description: t('courses.courses.3.description'),
       icon: Star,
-      gradient: 'from-amber-500 to-yellow-500',
+      iconBg: 'bg-purple-400',
       tags: [t('courses.courses.3.tags.0')],
     },
     {
@@ -50,7 +49,7 @@ export default function CoursesPage() {
       slug: 'advanced-predictive-astrology',
       description: t('courses.courses.4.description'),
       icon: GraduationCap,
-      gradient: 'from-blue-500 to-sky-500',
+      iconBg: 'bg-purple-400',
       tags: [t('courses.courses.4.tags.0')],
     },
     {
@@ -58,7 +57,7 @@ export default function CoursesPage() {
       slug: 'vaastu-shastra-harmony',
       description: t('courses.courses.5.description'),
       icon: ShieldCheck,
-      gradient: 'from-green-500 to-emerald-500',
+      iconBg: 'bg-purple-400',
       tags: [t('courses.courses.5.tags.0')],
     },
   ];
@@ -87,67 +86,77 @@ export default function CoursesPage() {
   ];
 
   return (
-    <div className="bg-black text-white">
-      <div className="fixed top-0 left-0 w-full h-full -z-10">
-        <AnimatedStars />
-        <MysticBackground />
+    <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+      {/* New Banner */}
+      <div className="w-full rounded-3xl bg-[#E8DAC8] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-amber-200 max-w-7xl mx-auto mt-20">
+        <h1 className="text-5xl md:text-6xl font-extrabold text-[#23244a] mb-4 text-center drop-shadow-lg tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>
+          Our Astrology Courses
+        </h1>
+        <p className="text-lg md:text-2xl text-[#3a3b5c] text-center max-w-3xl leading-relaxed">
+          Learn from the best astrologers and master the science of the stars.
+        </p>
       </div>
-
-      {/* Hero Section */}
-      <section className="relative text-center py-24 md:py-32">
-        <div className="relative z-10 container mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent" style={{ fontFamily: 'Playfair Display, serif' }}>
-            {t('courses.hero.heading')}
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-            {t('courses.hero.subheading')}
-          </p>
-        </div>
-      </section>
 
       {/* Courses Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">{t('courses.curriculum.heading')}</h2>
+          <h2 className="text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Georgia, serif' }}>Course Curriculum</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.map((course, index) => (
-              <div key={index} className={`bg-gray-900/50 backdrop-blur-md border border-gray-700 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:border-fuchsia-500 hover:shadow-2xl hover:shadow-fuchsia-500/20`}>
-                <div className={`mb-4 p-3 rounded-full bg-gradient-to-r ${course.gradient}`}>
-                  <course.icon className="w-8 h-8 text-white" />
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`rounded-3xl bg-[#E8DAC8] shadow-md p-8 flex flex-col items-start justify-between min-h-[340px]`}
+              >
+                <div className="mb-4 p-3 rounded-full bg-[#F6F5EF]">
+                  <course.icon className="w-8 h-8 text-gray-800" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2">{course.title}</h3>
-                <p className="text-gray-400 mb-4 flex-grow">{course.description}</p>
+                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Georgia, serif' }}>{course.title}</h3>
+                <p className="text-gray-600 mb-4 flex-grow">{course.description}</p>
                 <div className="flex flex-wrap gap-2 mb-6">
-                    {course.tags.map(tag => (
-                        <span key={tag} className="text-xs font-semibold bg-gray-700 text-white px-3 py-1 rounded-full">{tag}</span>
-                    ))}
+                  {course.tags.map(tag => (
+                    <span key={tag} className="text-xs font-semibold bg-gray-200 text-gray-800 px-3 py-1 rounded-full">{tag}</span>
+                  ))}
                 </div>
                 <Link href={`/courses/${course.slug}`} className="w-full">
-                  <Button className="w-full bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-bold py-3 rounded-lg hover:brightness-110 transition-all">
+                  <Button className="w-full bg-orange-300 hover:bg-orange-400 text-white font-bold py-3 rounded-lg transition-all">
                     {t('courses.courses.enrollButton')}
                   </Button>
                 </Link>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Why Learn With Us Section */}
-      <section className="py-20 bg-gray-900/50">
+      <section className="py-20 bg-white/50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">{t('courses.why.heading')}</h2>
+          <h2 className="text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Georgia, serif' }}>{t('courses.why.heading')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit, index) => (
-              <div key={index} className="text-center p-6 bg-gray-800/60 rounded-xl border border-gray-700">
+              <motion.button
+                key={index}
+                type="button"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ scale: 1.04, y: -4, boxShadow: '0 8px 32px 0 rgba(0,0,0,0.10)' }}
+                className="text-center p-8 bg-white rounded-2xl border border-gray-100 shadow-lg flex flex-col items-center cursor-pointer focus:outline-none transition-transform"
+                tabIndex={0}
+              >
                 <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-gradient-to-r from-fuchsia-500 to-cyan-500 rounded-full">
-                        <benefit.icon className="w-8 h-8 text-white" />
-                    </div>
+                  <div className="p-3 bg-[#F6F5EF] rounded-full">
+                    <benefit.icon className="w-8 h-8 text-gray-800" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
-                <p className="text-gray-400">{benefit.description}</p>
-              </div>
+                <h3 className="text-xl font-bold mb-2" style={{ fontFamily: 'Georgia, serif' }}>{benefit.title}</h3>
+                <p className="text-gray-600">{benefit.description}</p>
+              </motion.button>
             ))}
           </div>
         </div>

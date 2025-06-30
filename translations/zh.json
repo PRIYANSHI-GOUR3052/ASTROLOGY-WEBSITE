@@ -103,7 +103,7 @@
   "about": {
     "banner": {
       "heading": "关于 Nakshatra Gyaan",
-      "text": "二十多年来，我们的专家占星师和精神导师团队一直在引导寻求者的灵性之旅。我们将古老的智慧与现代见解相结合，为您提供精准且改变人生的指导。"
+      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
     },
     "tabs": {
       "0": "我们的旅程",
@@ -372,7 +372,7 @@
     "brand": {
       "name": "nakshatra",
       "taglinePrefix": "设计者 ",
-      "team": "Nakshatra 团队",
+      "team": "Scalixity Team",
       "copyright": "© Nakshatra Gyaan. 保留所有权利。",
       "poweredByPrefix": "由...驱动 ",
       "energy": "宇宙能量",
@@ -383,7 +383,55 @@
         "instagram": "Instagram",
         "youtube": "优兔"
       }
-    }
+    },
+    "newsletter": {
+      "title": "随时了解我们的",
+      "titleHighlight": "天体通讯",
+      "subtitle": "定期更新确保读者能够获得新的宇宙视角，使Nakshatra Gyaan成为必读之选。",
+      "placeholder": "电子邮件地址",
+      "button": "订阅 →"
+    },
+    "links": {
+      "keepExploring": "继续探索",
+      "connect": "联系",
+      "legal": "法律信息",
+      "quickLinks": {
+        "home": "首页",
+        "about": "关于",
+        "services": "服务",
+        "reviews": "评论",
+        "blog": "博客",
+        "contact": "联系"
+      },
+      "legalLinks": {
+        "terms": "条款与条件",
+        "privacy": "隐私政策",
+        "credits": "网站鸣谢"
+      }
+    },
+    "floatingCards": {
+      "card1": {
+        "tag": "占星与文化",
+        "title": "天体指引的神秘艺术",
+        "date": "2024年12月20日",
+        "readTime": "5分钟",
+        "button": "阅读更多 →"
+      },
+      "card2": {
+        "tag": "宇宙洞见",
+        "title": "行星排列对精神成果的重要性",
+        "date": "2024年12月11日",
+        "readTime": "8分钟",
+        "button": "阅读更多 →"
+      }
+    },
+    "social": {
+      "facebook": "脸书",
+      "twitter": "推特",
+      "instagram": "Instagram",
+      "youtube": "优兔"
+    },
+    "scrollToTop": "回到顶部"
   },
   "astrologerProfile": {
     "heading": "认识纳伦德拉博士——您值得信赖的占星师",
@@ -409,7 +457,7 @@
       "viewAll": "查看全部",
       "readMore": "阅读全文",
       "minRead": "分钟阅读",
-      "dateFormat": "yyyy年M月d日"
+      "dateFormat": "PPP"
     },
     "preview": { "continueReading": "阅读全文" }
   },

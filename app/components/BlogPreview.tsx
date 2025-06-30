@@ -23,36 +23,46 @@ interface BlogPost {
 interface BlogPostProps {
   post: BlogPost;
   className?: string;
+  cardBg?: string;
 }
 
 const localeMap = { en: undefined, hi: undefined, es, fr, de, zh: zhCN, ar: arSA, ru };
 
-export function BlogPreview({ post, className }: BlogPostProps) {
+export function BlogPreview({ post, className, cardBg }: BlogPostProps) {
   const { lang, t } = useLanguage();
   const fallbackColor = '#FFF5E6';
   if (!post) return null;
   const safeLang = lang in post.title ? lang : 'en';
   const author = post.author?.[safeLang] || post.author?.['en'] || '';
-  const dateFormat = t('blog.featured.dateFormat') || 'PPP';
+  let safeFormat = t('blog.featured.dateFormat');
+  if (!/^[dMyPBhHma\s,.'\-/:]+$/i.test(safeFormat)) {
+    safeFormat = 'PPP'; // fallback to a safe default
+  }
   const locale = localeMap[safeLang] || undefined;
-  const formattedDate = post.date ? format(new Date(post.date), dateFormat, { locale }) : '';
+  const formattedDate = post.date ? format(new Date(post.date), safeFormat, { locale }) : '';
 
   return (
-    <BlogPostCard post={post} className={className} />
+    <BlogPostCard post={post} className={className} cardBg={cardBg} />
   );
 }
 
-export function BlogPostCard({ post, className }: BlogPostProps) {
+export function BlogPostCard({ post, className, cardBg }: BlogPostProps) {
   const { lang, t } = useLanguage();
   const fallbackColor = '#FFF5E6';
   const safeLang = lang in post.title ? lang : 'en';
   const author = post.author?.[safeLang] || post.author?.['en'] || '';
-  const dateFormat = t('blog.featured.dateFormat') || 'PPP';
+  let safeFormat = t('blog.featured.dateFormat');
+  if (!/^[dMyPBhHma\s,.'\-/:]+$/i.test(safeFormat)) {
+    safeFormat = 'PPP'; // fallback to a safe default
+  }
   const locale = localeMap[safeLang] || undefined;
-  const formattedDate = post.date ? format(new Date(post.date), dateFormat, { locale }) : '';
+  const formattedDate = post.date ? format(new Date(post.date), safeFormat, { locale }) : '';
+
+  // Use cardBg as a className for the Card, fallback to a soothing gradient
+  const cardBgClass = cardBg || 'bg-gradient-to-br from-blue-50 to-indigo-100';
 
   return (
-    <Card className={className} style={{ backgroundColor: post.themeColor || fallbackColor }}>
+    <Card className={`${cardBgClass} ${className || ''}`} style={{ backgroundColor: undefined }}>
       <CardContent>
         <div className="flex flex-col gap-2">
           <div className="flex items-center text-xs text-gray-500 mb-1 gap-2">

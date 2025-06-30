@@ -120,7 +120,7 @@ export function ContactForm() {
 
       <div className="max-w-6xl mx-auto px-5 relative z-20">
         {/* Header section matching footer style */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 mt-20">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
             {t('contact.header.title1')}<br />
             <span className="bg-gradient-to-r from-violet-500 to-pink-500 bg-clip-text text-transparent">{t('contact.header.title2')}</span>

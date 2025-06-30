@@ -237,7 +237,7 @@
   "about": {
     "banner": {
       "heading": "Über Nakshatra Gyaan",
-      "text": "Seit über zwei Jahrzehnten begleiten wir Suchende auf ihrer spirituellen Reise. Unser Team aus erfahrenen Astrologen und spirituellen Beratern verbindet altes Wissen mit modernen Erkenntnissen, um Ihnen präzise und lebensverändernde Orientierung zu bieten."
+      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
     },
     "tabs": {
       "0": "Unsere Reise",
@@ -446,9 +446,11 @@
   },
   "footer": {
     "newsletter": {
-      "title": "Abonnieren Sie unseren Newsletter",
-      "placeholder": "Geben sie ihre E-Mail Adresse ein",
-      "button": "Abonnieren"
+      "title": "Bleiben Sie informiert mit unserem",
+      "titleHighlight": "himmlischen Newsletter",
+      "subtitle": "Regelmäßige Updates stellen sicher, dass Leser Zugang zu neuen kosmischen Perspektiven haben und Nakshatra Gyaan ein Muss ist.",
+      "placeholder": "E-Mail-Adresse",
+      "button": "Abonnieren →"
     },
     "quote": "Die Sterne neigen, sie zwingen nicht.",
     "about": {
@@ -489,12 +491,47 @@
     "brand": {
       "name": "nakshatra",
       "taglinePrefix": "Entworfen von ",
-      "team": "Nakshatra Team",
+      "team": "Scalixity Team",
       "copyright": "© Nakshatra Gyaan. Alle Rechte vorbehalten.",
       "poweredByPrefix": "Angetrieben von ",
       "energy": "Kosmische Energie",
-      "language": "�� DE Deutsch"
-    }
+      "language": "🌍 DE Deutsch"
+    },
+    "links": {
+      "keepExploring": "Weiter erkunden",
+      "connect": "Verbinden",
+      "legal": "Rechtliches",
+      "quickLinks": {
+        "home": "Startseite",
+        "about": "Über uns",
+        "services": "Dienstleistungen",
+        "reviews": "Bewertungen",
+        "blog": "Blog",
+        "contact": "Kontakt"
+      },
+      "legalLinks": {
+        "terms": "Allgemeine Geschäftsbedingungen",
+        "privacy": "Datenschutzrichtlinie",
+        "credits": "Seiten-Credits"
+      }
+    },
+    "floatingCards": {
+      "card1": {
+        "tag": "Astrologie & Kultur",
+        "title": "Die mystische Kunst der himmlischen Führung",
+        "date": "20. Dezember 2024",
+        "readTime": "5 Min",
+        "button": "Mehr lesen →"
+      },
+      "card2": {
+        "tag": "Kosmische Einblicke",
+        "title": "Die Bedeutung der planetaren Ausrichtung für spirituelle Ergebnisse",
+        "date": "11. Dezember 2024",
+        "readTime": "8 Min",
+        "button": "Mehr lesen →"
+      }
+    },
+    "scrollToTop": "Nach oben"
   },
   "blog": {
     "recent": { "heading": "Neueste Blogs" },
@@ -503,7 +540,7 @@
       "viewAll": "Alle ansehen",
       "readMore": "Weiterlesen",
       "minRead": "Min. Lesezeit",
-      "dateFormat": "d. MMMM yyyy"
+      "dateFormat": "PPP"
     },
     "preview": { "continueReading": "Weiterlesen" }
   },

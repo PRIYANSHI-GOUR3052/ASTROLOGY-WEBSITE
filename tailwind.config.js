@@ -47,6 +47,9 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         serif: ["var(--font-serif)", ...fontFamily.serif],
+        cinzel: ['Cinzel', 'serif'],
+        cormorant: ['Cormorant Garamond', 'serif'],
+        marcellus: ['Marcellus', 'serif'],
       },
       keyframes: {
         "accordion-down": {
