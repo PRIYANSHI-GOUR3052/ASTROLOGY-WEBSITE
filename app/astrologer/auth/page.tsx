@@ -1,66 +1,85 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
+import { AnimatedStars } from "../../components/AnimatedStars";
+import { MysticBackground } from "../../components/MysticBackground";
 
 const AstrologerAuthPage = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAEBE6] px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-3xl shadow-lg border border-[#e2e2e2]">
-        <h2 className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00]">
+    <div className="bg-[#ece7e4] relative min-h-screen flex items-center justify-center px-4">
+      {/* Background Effects */}
+      <div className="absolute inset-0 z-0 opacity-90">
+        <AnimatedStars />
+        <MysticBackground />
+      </div>
+
+      <div className="relative z-10 max-w-md w-full bg-[#111] p-8 rounded-3xl shadow-2xl border border-[#222] text-white">
+        <h2
+          className="text-2xl font-bold text-center mb-2"
+          style={{ fontFamily: "Playfair Display, serif" }}
+        >
           Astrologer Account Login
         </h2>
-        <p className="text-sm text-center text-gray-600 mb-6">
+        <p className="text-sm text-center text-gray-400 mb-6">
           Access your astrologer dashboard
         </p>
 
         <form className="space-y-5">
           <div>
-            <label className="block mb-1 font-medium text-gray-800">Astrologer Email</label>
+            <label className="block mb-1 font-medium text-gray-300">
+              Astrologer Email
+            </label>
             <input
               type="email"
               placeholder="Enter your email"
-              className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-4 py-2 border border-gray-700 bg-[#1C1C1C] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium text-gray-800">Password</label>
-            <div className="relative">
-              <input
-                type="password"
-                placeholder="Enter your password"
-                className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
+            <div className="flex items-center justify-between mb-1">
+              <label className="font-medium text-gray-300">Password</label>
               <Link
                 href="/astrologer/forgot-password"
-                className="absolute top-2 right-3 text-sm text-orange-600 hover:underline"
+                className="text-sm text-[#f857a6] hover:underline whitespace-nowrap"
               >
                 Forgot your password?
               </Link>
             </div>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              className="w-full px-4 py-2 border border-gray-700 bg-[#1C1C1C] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+            />
           </div>
           <div className="flex items-center gap-2">
-            <input type="checkbox" className="form-checkbox accent-gray-400" />
-            <label className="text-sm text-gray-700">Remember me</label>
+            <input type="checkbox" className="accent-[#a084ee]" />
+            <label className="text-sm text-gray-300">Remember me</label>
           </div>
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white py-2 px-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-200"
+            className="w-full py-3 bg-gradient-to-r from-[#a084ee] to-[#f857a6] text-white rounded-xl font-semibold hover:brightness-110 transition"
           >
             Sign in to Astrologer Account
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-700">
+        <div className="mt-6 text-center text-sm text-gray-400">
           <p>
-            Don’t have an astrologer account?{' '}
-            <Link href="/astrologer/register" className="text-orange-600 hover:underline font-medium">
+            Don’t have an astrologer account?{" "}
+            <Link
+              href="/astrologer/register"
+              className="text-[#f857a6] hover:underline font-medium"
+            >
               Register
             </Link>
           </p>
           <p className="mt-2">
-            Need a user account?{' '}
-            <Link href="/signin" className="text-orange-600 hover:underline font-medium">
+            Need a user account?{" "}
+            <Link
+              href="/signin"
+              className="text-[#f857a6] hover:underline font-medium"
+            >
               Sign in as user
             </Link>
           </p>
