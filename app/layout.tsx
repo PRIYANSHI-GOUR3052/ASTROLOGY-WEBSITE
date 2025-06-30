@@ -2,6 +2,7 @@ import './globals.css';
 import { Cormorant_Garamond, Noto_Sans, Noto_Sans_SC } from 'next/font/google';
 import { Providers } from './providers';
 import ClientLayout from './ClientLayout';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin'],
@@ -30,10 +31,12 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${cormorantGaramond.variable} ${notoSans.variable} ${notoSansSC.variable}`}>
-      <body className="bg-white text-starlight-silver font-sans relative">
-        <Providers>
-          <ClientLayout>{children}</ClientLayout>
-        </Providers>
+      <body>
+        <LanguageProvider>
+          <Providers>
+            <ClientLayout>{children}</ClientLayout>
+          </Providers>
+        </LanguageProvider>
       </body>
     </html>
   );

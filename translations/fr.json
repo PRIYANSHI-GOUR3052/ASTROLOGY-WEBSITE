@@ -106,7 +106,7 @@
   "about": {
     "banner": {
       "heading": "À propos de Nakshatra Gyaan",
-      "text": "Guidant les chercheurs dans leur voyage spirituel depuis plus de deux décennies. Notre équipe d'astrologues experts et de guides spirituels combine la sagesse ancienne avec des perspectives modernes pour vous offrir des conseils précis et transformateurs."
+      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
     },
     "tabs": {
       "0": "Notre parcours",
@@ -180,10 +180,11 @@
       "a12": "Nous traitons vos informations avec le plus grand respect et ne partageons jamais vos données sans votre consentement."
     },
     "newsletter": {
-      "heading": "Recevez des perspectives astrologiques hebdomadaires",
-      "text": "Inscrivez-vous à notre newsletter et recevez chaque semaine des conseils cosmiques, des remèdes et des prédictions.",
-      "placeholder": "Votre adresse e-mail",
-      "button": "S'abonner maintenant"
+      "title": "Restez informé avec notre",
+      "titleHighlight": "newsletter céleste",
+      "subtitle": "Des mises à jour régulières garantissent que les lecteurs ont accès à de nouvelles perspectives cosmiques, faisant de Nakshatra Gyaan une lecture incontournable.",
+      "placeholder": "Adresse e-mail",
+      "button": "S'abonner →"
     },
     "quickfacts": {
       "heading": "Faits rapides",
@@ -347,7 +348,7 @@
       "viewAll": "Voir tout",
       "readMore": "Lire la suite",
       "minRead": "min de lecture",
-      "dateFormat": "d MMMM yyyy"
+      "dateFormat": "PPP"
     },
     "recent": {
       "heading": "Blogs Récents"
@@ -559,19 +560,63 @@
     },
     "brand": "nakshatra"
   },
-  "brand": {
-    "name": "nakshatra",
-    "taglinePrefix": "Conçu par ",
-    "team": "Équipe Nakshatra",
-    "copyright": "© Nakshatra Gyaan. Tous droits réservés.",
-    "poweredByPrefix": "Propulsé par ",
-    "energy": "Énergie Cosmique",
-    "language": "🌍 FR Français",
+  "footer": {
+    "newsletter": {
+      "title": "Restez informé avec notre",
+      "titleHighlight": "newsletter céleste",
+      "subtitle": "Des mises à jour régulières garantissent que les lecteurs ont accès à de nouvelles perspectives cosmiques, faisant de Nakshatra Gyaan une lecture incontournable.",
+      "placeholder": "Adresse e-mail",
+      "button": "S'abonner →"
+    },
+    "links": {
+      "keepExploring": "Continuez à explorer",
+      "connect": "Connecter",
+      "legal": "Légal",
+      "quickLinks": {
+        "home": "Accueil",
+        "about": "À propos",
+        "services": "Services",
+        "reviews": "Avis",
+        "blog": "Blog",
+        "contact": "Contact"
+      },
+      "legalLinks": {
+        "terms": "Conditions d'utilisation",
+        "privacy": "Politique de confidentialité",
+        "credits": "Crédits du site"
+      }
+    },
+    "floatingCards": {
+      "card1": {
+        "tag": "Astrologie & Culture",
+        "title": "L'art mystique de la guidance céleste",
+        "date": "20 décembre 2024",
+        "readTime": "5 min",
+        "button": "Lire plus →"
+      },
+      "card2": {
+        "tag": "Aperçus cosmiques",
+        "title": "L'importance de l'alignement planétaire pour des résultats spirituels",
+        "date": "11 décembre 2024",
+        "readTime": "8 min",
+        "button": "Lire plus →"
+      }
+    },
     "social": {
       "facebook": "Facebook",
       "twitter": "Twitter",
       "instagram": "Instagram",
       "youtube": "YouTube"
-    }
+    },
+    "brand": {
+      "name": "nakshatra",
+      "taglinePrefix": "Conçu par ",
+      "team": "Équipe Scalixity",
+      "copyright": "© Nakshatra Gyaan. Tous droits réservés.",
+      "poweredByPrefix": "Propulsé par ",
+      "energy": "Énergie Cosmique",
+      "language": "🌍 FR Français"
+    },
+    "scrollToTop": "Retour en haut"
   }
 }

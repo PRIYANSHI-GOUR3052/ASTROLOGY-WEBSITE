@@ -125,7 +125,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm border-t border-white/10 pt-8 gap-4">
           <div>
             <span>{t('footer.brand.taglinePrefix')}</span>
-            <a href="#" className="text-white hover:underline">{t('footer.brand.team')}</a>
+            <a href="https://scalixity.com/" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">{t('footer.brand.team')}</a>
           </div>
           <div className="text-center">
             <p className="m-0">{t('footer.brand.copyright')}</p>
