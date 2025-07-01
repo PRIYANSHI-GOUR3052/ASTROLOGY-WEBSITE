@@ -91,34 +91,11 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="bg-black">
-      <main className="relative w-full min-h-screen overflow-hidden bg-black flex flex-col">
-        <div className="absolute inset-0 z-0">
-          <AnimatedStars />
-          <MysticBackground />
-        </div>
-        
-        <FloatingCard className="top-[15%] -left-24 w-72 h-40 transform -rotate-12 p-8 flex items-center justify-between">
-          <span className="text-7xl text-white/10">🌙</span>
-          <span className="text-5xl text-white/10 mt-12">✨</span>
-        </FloatingCard>
-        <FloatingCard className="top-[30%] -right-20 w-80 h-56 transform rotate-8 p-8 flex flex-col justify-between overflow-hidden">
-          <span className="text-8xl text-white/10 self-end -mr-4">♌</span>
-          <span className="text-8xl text-white/10 self-start -ml-4">♏</span>
-        </FloatingCard>
-        <FloatingCard className="bottom-[10%] -left-16 w-80 h-32 transform rotate-12 p-6 overflow-hidden">
-            <div className="absolute w-full h-full">
-                <div className="absolute top-8 left-10 w-3 h-3 bg-white/20 rounded-full" />
-                <div className="absolute top-16 right-12 w-2 h-2 bg-white/20 rounded-full" />
-                <div className="absolute bottom-6 left-24 w-4 h-4 bg-white/20 rounded-full" />
-                <div className="absolute top-6 right-28 w-2 h-2 bg-white/20 rounded-full" />
-                <svg className="absolute top-0 left-0 w-full h-full opacity-10" preserveAspectRatio="none">
-                    <line x1="46" y1="38" x2="260" y2="70" stroke="white" strokeWidth="1" strokeDasharray="4 4"/>
-                    <line x1="102" y1="110" x2="260" y2="70" stroke="white" strokeWidth="1" strokeDasharray="4 4"/>
-                </svg>
-            </div>
-        </FloatingCard>
-        
+    <div className="relative bg-black">
+      {/* Exact cosmic background overlay, no floating cards */}
+      <ExactCosmicBackground />
+      <main className="relative w-full min-h-screen overflow-hidden bg-transparent flex flex-col">
+        {/* FloatingCard components removed for exact match */}
         <div className="relative z-10 flex-grow flex flex-col justify-center items-center px-4 py-20">
           <div className="bg-[#111] border border-[#222] shadow-2xl rounded-3xl p-8 w-full max-w-md">
             <div className="text-center mb-8">
@@ -246,4 +223,35 @@ export default function SignInPage() {
       </main>
     </div>
   )
+}
+
+// Exact cosmic background component
+function ExactCosmicBackground() {
+  return (
+    <div className="fixed inset-0 z-0 pointer-events-none">
+      {/* Main solid black background to match footer */}
+      <div className="absolute inset-0 bg-[#111]" />
+      {/* Glowing orbs/planets, less blur, more defined */}
+      <div className="absolute -left-40 top-0 w-[380px] h-[380px] rounded-full bg-[#F8B195] opacity-80 blur-[60px]" />
+      <div className="absolute left-1/4 top-32 w-[180px] h-[180px] rounded-full bg-[#A084EE] opacity-70 blur-[40px]" />
+      <div className="absolute right-1/4 top-1/2 w-[260px] h-[260px] rounded-full bg-[#F857A6] opacity-80 blur-[50px]" />
+      <div className="absolute right-0 bottom-0 w-[340px] h-[340px] rounded-full bg-[#A084EE] opacity-70 blur-[60px]" />
+      <div className="absolute left-1/2 bottom-0 w-[120px] h-[120px] rounded-full bg-[#F8B195] opacity-50 blur-[30px]" />
+      <div className="absolute left-[60%] top-[10%] w-[90px] h-[90px] rounded-full bg-[#F857A6] opacity-60 blur-[25px]" />
+      {/* Dense, subtle stars, slightly brighter */}
+      {[...Array(100)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute bg-white rounded-full opacity-50"
+          style={{
+            width: `${Math.random() * 1.5 + 1}px`,
+            height: `${Math.random() * 1.5 + 1}px`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            filter: 'blur(0.3px)'
+          }}
+        />
+      ))}
+    </div>
+  );
 }

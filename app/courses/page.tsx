@@ -2,149 +2,164 @@
 
 import Link from 'next/link';
 import { GraduationCap, BookOpen, Star, BarChart, Users, Zap, ShieldCheck } from 'lucide-react';
-import { AnimatedStars } from '../components/AnimatedStars';
-import { MysticBackground } from '../components/MysticBackground';
 import { DrNarendraProfile } from '../components/DrNarendraProfile';
 import { FAQSection } from '../components/FAQSection';
 import { Button } from '@/components/ui/button';
-
-const courses = [
-  {
-    title: 'Vedic Astrology Mastery',
-    slug: 'vedic-astrology-mastery',
-    description: 'A comprehensive journey from the fundamentals to advanced predictive techniques of Vedic Astrology.',
-    icon: BookOpen,
-    gradient: 'from-purple-500 to-indigo-500',
-    tags: ['Beginner', 'Intermediate', 'Advanced'],
-  },
-  {
-    title: 'Numerology & Cosmic Codes',
-    slug: 'numerology-cosmic-codes',
-    description: 'Unlock the secrets of numbers and their vibrations. Learn to create detailed numerology reports.',
-    icon: BarChart,
-    gradient: 'from-pink-500 to-rose-500',
-    tags: ['All Levels'],
-  },
-  {
-    title: 'The Art of Palmistry',
-    slug: 'art-of-palmistry',
-    description: 'Read the stories etched in the palms. A practical course on identifying lines, mounts, and signs.',
-    icon: Zap,
-    gradient: 'from-teal-500 to-cyan-500',
-    tags: ['Beginner', 'Intermediate'],
-  },
-  {
-    title: 'Tarot Reading for the Modern Mystic',
-    slug: 'tarot-reading-modern-mystic',
-    description: 'Master the 78 keys of the Tarot to provide insightful and empowering readings.',
-    icon: Star,
-    gradient: 'from-amber-500 to-yellow-500',
-    tags: ['All Levels'],
-  },
-  {
-    title: 'Advanced Predictive Astrology',
-    slug: 'advanced-predictive-astrology',
-    description: 'For seasoned astrologers. Dive deep into Dasha, Transits, and Ashtakavarga.',
-    icon: GraduationCap,
-    gradient: 'from-blue-500 to-sky-500',
-    tags: ['Advanced'],
-  },
-  {
-    title: 'Vaastu Shastra for Harmony',
-    slug: 'vaastu-shastra-harmony',
-    description: 'Learn the ancient science of architecture to create harmonious living and working spaces.',
-    icon: ShieldCheck,
-    gradient: 'from-green-500 to-emerald-500',
-    tags: ['Beginner'],
-  },
-];
-
-const benefits = [
-  {
-    icon: Users,
-    title: 'Expert-Led Instruction',
-    description: 'Learn directly from seasoned astrologers and mystics with decades of practical experience.'
-  },
-  {
-    icon: BookOpen,
-    title: 'Comprehensive Curriculum',
-    description: 'Our courses cover everything from foundational principles to advanced predictive techniques.'
-  },
-  {
-    icon: Star,
-    title: 'Practical Application',
-    description: 'Emphasis on real-world case studies and chart analysis to build your confidence.'
-  },
-  {
-    icon: Zap,
-    title: 'Interactive Learning',
-    description: 'Engage in live Q&A sessions, community forums, and hands-on exercises.'
-  }
-];
+import { useLanguage } from '../contexts/useLanguage';
+import { motion } from 'framer-motion';
 
 export default function CoursesPage() {
-  return (
-    <div className="bg-black text-white">
-      <div className="fixed top-0 left-0 w-full h-full -z-10">
-        <AnimatedStars />
-        <MysticBackground />
-      </div>
+  const { t } = useLanguage();
 
-      {/* Hero Section */}
-      <section className="relative text-center py-24 md:py-32">
-        <div className="relative z-10 container mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent" style={{ fontFamily: 'Playfair Display, serif' }}>
-            Astrology Courses
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-            Embark on a transformative journey into the heart of cosmic wisdom. Master ancient arts and unlock your potential.
-          </p>
-        </div>
-      </section>
+  const courses = [
+    {
+      title: t('courses.courses.0.title'),
+      slug: 'vedic-astrology-mastery',
+      description: t('courses.courses.0.description'),
+      icon: BookOpen,
+      iconBg: 'bg-purple-400',
+      tags: [t('courses.courses.0.tags.0'), t('courses.courses.0.tags.1'), t('courses.courses.0.tags.2')],
+    },
+    {
+      title: t('courses.courses.1.title'),
+      slug: 'numerology-cosmic-codes',
+      description: t('courses.courses.1.description'),
+      icon: BarChart,
+      iconBg: 'bg-purple-400',
+      tags: [t('courses.courses.1.tags.0')],
+    },
+    {
+      title: t('courses.courses.2.title'),
+      slug: 'art-of-palmistry',
+      description: t('courses.courses.2.description'),
+      icon: Zap,
+      iconBg: 'bg-purple-400',
+      tags: [t('courses.courses.2.tags.0'), t('courses.courses.2.tags.1')],
+    },
+    {
+      title: t('courses.courses.3.title'),
+      slug: 'tarot-reading-modern-mystic',
+      description: t('courses.courses.3.description'),
+      icon: Star,
+      iconBg: 'bg-purple-400',
+      tags: [t('courses.courses.3.tags.0')],
+    },
+    {
+      title: t('courses.courses.4.title'),
+      slug: 'advanced-predictive-astrology',
+      description: t('courses.courses.4.description'),
+      icon: GraduationCap,
+      iconBg: 'bg-purple-400',
+      tags: [t('courses.courses.4.tags.0')],
+    },
+    {
+      title: t('courses.courses.5.title'),
+      slug: 'vaastu-shastra-harmony',
+      description: t('courses.courses.5.description'),
+      icon: ShieldCheck,
+      iconBg: 'bg-purple-400',
+      tags: [t('courses.courses.5.tags.0')],
+    },
+  ];
+
+  const benefits = [
+    {
+      icon: Users,
+      title: t('courses.benefits.0.title'),
+      description: t('courses.benefits.0.description')
+    },
+    {
+      icon: BookOpen,
+      title: t('courses.benefits.1.title'),
+      description: t('courses.benefits.1.description')
+    },
+    {
+      icon: Star,
+      title: t('courses.benefits.2.title'),
+      description: t('courses.benefits.2.description')
+    },
+    {
+      icon: Zap,
+      title: t('courses.benefits.3.title'),
+      description: t('courses.benefits.3.description')
+    }
+  ];
+
+  return (
+    <div style={{ background: '#F8FAF5', minHeight: '100vh' }}>
+      {/* New Banner */}
+      <div className="w-full rounded-3xl bg-white py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-amber-200 max-w-7xl mx-auto mt-32">
+        <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight">
+          Our Astrology Courses
+        </h1>
+        <p className="text-lg md:text-2xl text-black text-center max-w-3xl leading-relaxed">
+          Learn from the best astrologers and master the science of the stars.
+        </p>
+      </div>
 
       {/* Courses Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Our Curriculum</h2>
+          <h2 className="text-4xl font-bold text-center mb-12 text-black">Course Curriculum</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.map((course, index) => (
-              <div key={index} className={`bg-gray-900/50 backdrop-blur-md border border-gray-700 rounded-2xl p-8 flex flex-col items-start transition-all duration-300 hover:border-fuchsia-500 hover:shadow-2xl hover:shadow-fuchsia-500/20`}>
-                <div className={`mb-4 p-3 rounded-full bg-gradient-to-r ${course.gradient}`}>
-                  <course.icon className="w-8 h-8 text-white" />
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`rounded-3xl bg-white shadow-md p-8 flex flex-col items-start justify-between min-h-[340px]`}
+              >
+                <div className="relative w-full aspect-[16/9] rounded-t-3xl overflow-hidden mb-6">
+                  <img src="/placeholder.jpg" alt={course.title} className="w-full h-full object-cover rounded-t-3xl" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2">{course.title}</h3>
-                <p className="text-gray-400 mb-4 flex-grow">{course.description}</p>
+                <div className="mb-4 p-3 rounded-full bg-[#F6F5EF]">
+                  <course.icon className="w-8 h-8 text-gray-800" />
+                </div>
+                <h3 className="text-2xl font-bold mb-2 text-black">{course.title}</h3>
+                <p className="text-black mb-4 flex-grow">{course.description}</p>
                 <div className="flex flex-wrap gap-2 mb-6">
-                    {course.tags.map(tag => (
-                        <span key={tag} className="text-xs font-semibold bg-gray-700 text-white px-3 py-1 rounded-full">{tag}</span>
-                    ))}
+                  {course.tags.map(tag => (
+                    <span key={tag} className="text-xs font-semibold bg-gray-200 text-gray-800 px-3 py-1 rounded-full">{tag}</span>
+                  ))}
                 </div>
                 <Link href={`/courses/${course.slug}`} className="w-full">
-                  <Button className="w-full bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-bold py-3 rounded-lg hover:brightness-110 transition-all">
-                    Enroll Now
+                  <Button className="w-full bg-orange-300 hover:bg-orange-400 text-white font-bold py-3 rounded-lg transition-all">
+                    {t('courses.courses.enrollButton')}
                   </Button>
                 </Link>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Why Learn With Us Section */}
-      <section className="py-20 bg-gray-900/50">
+      <section className="py-20 bg-white/50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Why Learn with Nakshatra Gyaan?</h2>
+          <h2 className="text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Georgia, serif' }}>{t('courses.why.heading')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit, index) => (
-              <div key={index} className="text-center p-6 bg-gray-800/60 rounded-xl border border-gray-700">
+              <motion.button
+                key={index}
+                type="button"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ scale: 1.04, y: -4, boxShadow: '0 8px 32px 0 rgba(0,0,0,0.10)' }}
+                className="text-center p-8 bg-white rounded-2xl border border-gray-100 shadow-lg flex flex-col items-center cursor-pointer focus:outline-none transition-transform"
+                tabIndex={0}
+              >
                 <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-gradient-to-r from-fuchsia-500 to-cyan-500 rounded-full">
-                        <benefit.icon className="w-8 h-8 text-white" />
-                    </div>
+                  <div className="p-3 bg-[#F6F5EF] rounded-full">
+                    <benefit.icon className="w-8 h-8 text-gray-800" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
-                <p className="text-gray-400">{benefit.description}</p>
-              </div>
+                <h3 className="text-xl font-bold mb-2" style={{ fontFamily: 'Georgia, serif' }}>{benefit.title}</h3>
+                <p className="text-gray-600">{benefit.description}</p>
+              </motion.button>
             ))}
           </div>
         </div>
@@ -158,7 +173,7 @@ export default function CoursesPage() {
       {/* FAQ Section */}
        <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+          <h2 className="text-4xl font-bold text-center mb-12">{t('courses.faq.heading')}</h2>
            <FAQSection />
         </div>
       </section>

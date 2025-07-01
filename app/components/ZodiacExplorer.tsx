@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useLanguage } from '@/app/contexts/LanguageContext'
+import { useLanguage } from '../contexts/useLanguage'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 interface ZodiacSign {
   id: string
@@ -259,130 +260,130 @@ export function ZodiacExplorer() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-[#F8F8F8] to-white py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-      <h1 className="text-5xl font-extrabold text-gray-900 mb-12 text-center font-serif bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
+    <div className="w-full px-0 py-16 mt-20 md:mt-24">
+      {/* Header Section */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 font-serif bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
         {lang === 'hi' ? 'राशिचक्र अन्वेषक' : 'Zodiac Explorer'}
       </h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          {lang === 'hi' 
+            ? 'अपनी राशि की विशेषताओं और प्रभावों को जानें'
+            : 'Discover the characteristics and influences of your zodiac sign'}
+        </p>
+      </div>
 
-      {/* Main content with zodiac wheel and cards */}
-      <div className="relative w-full max-w-7xl h-[900px] bg-white rounded-xl shadow-lg p-8">
-        {/* Zodiac Wheel - Centered within this container */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-64 h-64 rounded-full border border-gray-300 flex items-center justify-center shadow-inner">
+      {/* Main Content: 3-column grid layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full px-4 lg:px-12 xl:px-24">
+        {/* Left: Sign Details Card */}
+        <motion.div 
+          className="bg-white rounded-2xl shadow-xl p-6 md:p-8 flex flex-col items-center border w-full"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className="w-full text-center lg:text-left" 
+            key={activeSign.id} 
+            initial={{opacity: 0, x: -20}} 
+            animate={{opacity: 1, x: 0}}
+            transition={{duration: 0.5}}
+          >
+            <p className="text-7xl mb-4 text-center lg:text-left" style={{color: activeSign.color}}>{activeSign.symbol}</p>
+            <h2 className="text-4xl md:text-5xl font-bold font-serif mb-4 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
+              {(activeSign.name as Record<string, string>)[lang] || activeSign.name['en']}
+            </h2>
+            <div className="space-y-2 text-gray-700 text-lg mb-6">
+              <p><span className="font-semibold">{lang === 'hi' ? 'तत्व: ' : 'Element: '}</span>{(activeSign.element as Record<string, string>)[lang] || activeSign.element['en']}</p>
+              <p><span className="font-semibold">{lang === 'hi' ? 'दिनांक: ' : 'Dates: '}</span>{activeSign.dates}</p>
+            </div>
+            <p className="text-gray-600 leading-relaxed mb-6">{(activeSign.traits as Record<string, string>)[lang] || activeSign.traits['en']}</p>
+            <div className="flex justify-center lg:justify-start space-x-4">
+              <motion.button
+                onClick={prevSign}
+                className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <ChevronLeft size={24} />
+              </motion.button>
+              <motion.button
+                onClick={nextSign}
+                className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <ChevronRight size={24} />
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Center: Zodiac Wheel */}
+        <div className="flex flex-col items-center justify-center w-full">
+          <div className="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center flex-shrink-0 mx-auto">
             {zodiacSigns.map((sign, index) => {
-              const rotation = sign.angle - 90 // Adjust for CSS rotation starting from 12 o'clock
-              const radius = 100 // Distance from center
+              const rotation = sign.angle - 90
+              const radius = 130 // md: 150
               const x = radius * Math.cos((rotation * Math.PI) / 180)
               const y = radius * Math.sin((rotation * Math.PI) / 180)
 
               return (
-                <div
+                <motion.div
                   key={sign.id}
-                  className="absolute flex flex-col items-center cursor-pointer transition-transform duration-200 hover:scale-110 active:scale-90"
+                  className="absolute flex flex-col items-center cursor-pointer"
                   style={{
-                    transform: `translate(${x}px, ${y}px) rotate(${rotation + 90}deg)`,
+                    transform: `translate(${x}px, ${y}px)`,
                   }}
+                  whileHover={{ scale: 1.15 }}
                   onClick={() => setActiveSignIndex(index)}
+                  animate={{ scale: activeSignIndex === index ? 1.2 : 1 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <span
-                    className="text-xl"
-                    style={{ color: activeSignIndex === index ? sign.color : '#6B7280' }}
+                  <motion.div 
+                    className="text-3xl"
+                    style={{ color: activeSignIndex === index ? sign.color : '#9CA3AF' }}
                   >
                     {sign.symbol}
-                  </span>
-                  <span
-                    className="text-xs font-medium mt-1"
-                    style={{ color: activeSignIndex === index ? sign.color : '#6B7280' }}
-                  >
-                    {sign.name[lang]}
-                  </span>
-                </div>
+                  </motion.div>
+                </motion.div>
               )
             })}
+            {/* Center circle */}
+            <div className="w-48 h-48 bg-gray-50 rounded-full border shadow-inner"></div>
           </div>
         </div>
 
-        {/* Randomly placed Zodiac Cards - Eye candy bloggy look */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
-          {zodiacCards.map((card) => (
-            <div
+        {/* Right: Key Concepts 2x2 grid */}
+        <div className="flex flex-col items-center lg:items-end w-full">
+          <h2 className="text-2xl font-bold text-center lg:text-right mb-2 text-gray-800">
+            {lang === 'en' ? 'Explore Key Concepts' : 'मुख्य अवधारणाएँ खोजें'}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg">
+            {zodiacCards.slice(0,4).map((card, index) => (
+              <motion.div
               key={card.id}
-              className="absolute p-4 rounded-xl shadow-md cursor-pointer border border-gray-200 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-98"
-              style={{
-                top: card.position.top,
-                left: card.position.left,
-                backgroundColor: card.themeColor,
-              }}
-            >
-              <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text font-serif">
-                {card.title[lang]}
-              </h3>
-              <p className="text-gray-700 text-sm mb-4">{card.description[lang]}</p>
-              <button className="px-4 py-2 bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full text-sm font-medium transition duration-300">
+                className="rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                style={{ backgroundColor: card.themeColor }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+              >
+                <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
+                  {(card.title as Record<string, string>)[lang] || card.title['en']}
+                </h3>
+                <p className="text-gray-700 mb-4">
+                  {(card.description as Record<string, string>)[lang] || card.description['en']}
+                </p>
+                <button className="px-4 py-2 bg-white/60 hover:bg-white/90 text-gray-800 rounded-full text-sm font-semibold transition duration-300 shadow-sm">
                 {lang === 'hi' ? 'और जानें' : 'Learn More'}
               </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Active Sign Card - Centered relative to the wheel */}
-        <div
-          key={activeSign.id}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-auto bg-white rounded-xl shadow-lg p-6 border border-gray-100 flex flex-col items-center text-center"
-        >
-          <h2 className="text-4xl mb-2 font-bold font-serif bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-transparent bg-clip-text">
-            {activeSign.name[lang]}
-          </h2>
-          <p className="text-6xl mb-4">{activeSign.symbol}</p>
-          <p className="text-md text-gray-700 mb-2">
-            <span className="font-semibold">{lang === 'hi' ? 'तत्व:' : 'Element:'}</span> {activeSign.element[lang]}
-          </p>
-          <p className="text-md text-gray-700 mb-4">
-            <span className="font-semibold">{lang === 'hi' ? 'दिनांक:' : 'Dates:'}</span> {activeSign.dates}
-          </p>
-          <p className="text-sm text-gray-600 mb-4">{activeSign.traits[lang]}</p>
-          <div className="flex space-x-4">
-            <button
-              onClick={prevSign}
-              className="p-2 rounded-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] transition duration-300"
-            >
-              <ChevronLeft size={24} />
-            </button>
-            <button
-              onClick={nextSign}
-              className="p-2 rounded-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] transition duration-300"
-            >
-              <ChevronRight size={24} />
-            </button>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
-
-      {/* Zodiac Cards Section */}
-      <div className="relative z-10 mt-16 w-full max-w-7xl">
-        <h2 className="mb-8 text-center text-4xl font-extrabold text-gray-900">
-          {lang === 'en' ? 'Explore Key Concepts' : 'मुख्यA अवधारणाएँA खोजें'}
-        </h2>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
-          {zodiacCards.map((card) => (
-            <div
-              key={card.id}
-              className="flex flex-col items-start rounded-xl p-6 shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-103 hover:shadow-xl active:scale-98"
-              style={{ backgroundColor: card.themeColor }}
-            >
-              <h4 className="mb-3 text-2xl font-bold text-gray-800">
-                {card.title[lang]}
-              </h4>
-              <p className="text-base text-gray-700">
-                {card.description[lang]}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Astrology Calculator Section */}
-      {/* <AstrologyCalculator /> */}
     </div>
   )
 }

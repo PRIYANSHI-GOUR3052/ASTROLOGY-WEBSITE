@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { Star } from 'lucide-react'
-import { useLanguage } from '@/app/contexts/LanguageContext'
+import { useLanguage } from '../contexts/useLanguage'
 
 interface Testimonial {
   name: string;
@@ -14,80 +14,31 @@ interface Testimonial {
   type: 'quote_top' | 'avatar_top' | 'simple_with_stars' | 'large_avatar_quote';
 }
 
-const testimonials: Testimonial[] = [
-  {
-    name: "Rahul S.",
-    occupation: "Software Engineer",
-    image: "/images/placeholder_male.webp",
-    text: "The career guidance from my horoscope reading was spot on! It helped me make a crucial decision about my job change. A truly transformative experience.",
-    rating: 5,
-    type: 'quote_top'
-  },
-  {
-    name: "Priya M.",
-    occupation: "College Student",
-    image: "/images/placeholder_female.webp",
-    text: "I really appreciate!! The personalized numerology session gave me clarity and boosted my confidence, helping me navigate my academic journey with more purpose.",
-    rating: 5,
-    type: 'avatar_top'
-  },
-  {
-    name: "Amit & Neha",
-    occupation: "Newlyweds",
-    image: "/images/placeholder_couple.webp",
-    text: "Good Job! The compatibility analysis through face reading was incredibly accurate. It's helping us understand each other better and strengthen our bond.",
-    rating: 4,
-    type: 'avatar_top'
-  },
-  {
-    name: "Dr. Sharma",
-    occupation: "Medical Professional",
-    image: "/images/placeholder_male.webp",
-    text: "I was very impressed! The Vastu consultation for my clinic has noticeably improved the energy. My patients feel more at ease and the atmosphere is very positive now.",
-    rating: 5,
-    type: 'simple_with_stars'
-  },
-  {
-    name: "Anjali K.",
-    occupation: "Entrepreneur",
-    image: "/images/placeholder_female.webp",
-    text: "The guidance on auspicious timings for my new venture proved invaluable. The business is thriving, and I attribute much of it to these cosmic insights.",
-    rating: 5,
-    type: 'avatar_top'
-  },
-  {
-    name: "Deepak V.",
-    occupation: "Artist",
-    image: "/images/placeholder_male.webp",
-    text: "Truly insightful readings! The tarot session helped me unlock creative blocks and find new direction in my artistic endeavors. Highly recommend for clarity.",
-    rating: 4,
-    type: 'large_avatar_quote'
-  },
-  {
-    name: "Sonia L.",
-    occupation: "Student",
-    image: "/images/placeholder_female.webp",
-    text: "Nakshatra Gyaan's daily horoscopes are consistently accurate and provide a great start to my day. They offer subtle wisdom to navigate life's challenges.",
-    rating: 4,
-    type: 'simple_with_stars'
-  },
-  {
-    name: "Rajesh P.",
-    occupation: "Business Owner",
-    image: "/images/placeholder_male.webp",
-    text: "Excellent guidance on financial astrology. Helped me make informed decisions during volatile market times. Highly recommended!",
-    rating: 5,
-    type: 'avatar_top'
-  },
-  {
-    name: "Meera D.",
-    occupation: "Homemaker",
-    image: "/images/placeholder_female.webp",
-    text: "The family compatibility reading brought so much understanding and harmony to our home. Thank you, Nakshatra Gyaan!",
-    rating: 5,
-    type: 'quote_top'
-  },
+const testimonialTypes = [
+  'quote_top',
+  'avatar_top', 
+  'avatar_top',
+  'simple_with_stars',
+  'avatar_top',
+  'large_avatar_quote',
+  'simple_with_stars',
+  'avatar_top',
+  'quote_top'
 ];
+
+const testimonialImages = [
+  "/images/placeholder_male.webp",
+  "/images/placeholder_female.webp",
+  "/images/placeholder_couple.webp",
+  "/images/placeholder_male.webp",
+  "/images/placeholder_female.webp",
+  "/images/placeholder_male.webp",
+  "/images/placeholder_female.webp",
+  "/images/placeholder_male.webp",
+  "/images/placeholder_female.webp",
+];
+
+const testimonialRatings = [5, 5, 4, 5, 5, 4, 4, 5, 5];
 
 export const pastelColors = [
   'bg-[#FDE2E4]', // light pink
@@ -101,7 +52,7 @@ export const pastelColors = [
 ]
 
 export function Testimonials() {
-  const { lang } = useLanguage()
+  const { t, lang } = useLanguage()
 
   const renderStars = (rating: number) => (
     <div className="flex">
@@ -110,6 +61,29 @@ export function Testimonials() {
       ))}
     </div>
   )
+
+  // Get testimonials from translation
+  const getTestimonials = (): Testimonial[] => {
+    const testimonialsData = [];
+    for (let i = 0; i < 9; i++) {
+      const testimonialKey = `testimonials.testimonials.${i}`;
+      const name = t(`${testimonialKey}.name`);
+      const occupation = t(`${testimonialKey}.occupation`);
+      const text = t(`${testimonialKey}.text`);
+      
+      testimonialsData.push({
+        name,
+        occupation,
+        image: testimonialImages[i],
+        text,
+        rating: testimonialRatings[i],
+        type: testimonialTypes[i] as any
+      });
+    }
+    return testimonialsData;
+  };
+
+  const testimonials = getTestimonials();
 
   return (
     <section className="relative w-full min-h-screen bg-[#F0F2F5] overflow-hidden py-20">
@@ -126,7 +100,7 @@ export function Testimonials() {
           className="text-6xl md:text-7xl font-extrabold text-[#FCAAA4] mb-16 transform -rotate-6 origin-bottom-left"
           style={{ fontFamily: 'Georgia, serif' }}
         >
-          {lang === 'en' ? 'Client Reviews' : 'ग्राहक समीक्षाएं'}
+          {t('testimonials.heading')}
         </motion.h2>
 
         <div className="flex flex-wrap justify-center gap-4 max-w-6xl mx-auto">
