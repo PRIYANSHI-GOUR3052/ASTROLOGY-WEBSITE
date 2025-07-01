@@ -46,11 +46,11 @@ const AstrologerChatModal = ({ open, chat, onClose }: AstrologerChatModalProps) 
   if (!open || !chat) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="relative bg-white dark:bg-black rounded-lg shadow-lg w-[350px] sm:w-[400px] flex flex-col">
+      <div className="relative bg-amber-new dark:bg-black rounded-lg shadow-lg w-[350px] sm:w-[400px] flex flex-col">
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="font-bold text-lg text-purple-700">Chat with {chat.client}</div>
+          <div className="font-bold text-lg text-amber-500 dark:text-purple-700">Chat with {chat.client}</div>
           <button
-            className="bg-white dark:bg-midnight-black-light text-xs text-black dark:text-white rounded-full py-1 px-2 shadow hover:bg-gray-200"
+            className="bg-amber-new-light dark:bg-midnight-black-light text-xs text-black dark:text-white rounded-full py-1 px-2 shadow hover:bg-gray-200"
             onClick={onClose}
           >
             &#10005;
@@ -64,7 +64,7 @@ const AstrologerChatModal = ({ open, chat, onClose }: AstrologerChatModalProps) 
             >
               <div
                 className={`px-3 py-2 rounded-lg max-w-[70%] text-sm shadow
-                  ${msg.sender === 'astrologer' ? 'bg-purple-700 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100'}`}
+                  ${msg.sender === 'astrologer' ? 'bg-amber-500 dark:bg-purple-700 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100'}`}
               >
                 {msg.content}
               </div>
@@ -82,7 +82,7 @@ const AstrologerChatModal = ({ open, chat, onClose }: AstrologerChatModalProps) 
             onKeyDown={e => { if (e.key === 'Enter') handleSend(); }}
           />
           <button
-            className="px-4 py-2 bg-purple-700 text-white rounded-lg font-semibold hover:bg-purple-800 transition-colors"
+            className="px-4 py-2 bg-amber-500 dark:bg-purple-700 text-white rounded-lg font-semibold hover:bg-amber-600 dark:hover:bg-purple-800 transition-colors"
             onClick={handleSend}
           >
             Send
