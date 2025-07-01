@@ -22,16 +22,16 @@ export function Statistics() {
 
   return (
     <section 
-      className="py-16 rounded-3xl relative overflow-hidden bg-[#FFF5E1]"
+      className="py-16 rounded-3xl relative overflow-hidden bg-white"
     >
       <div className="px-8 md:px-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <div key={index} className="flex flex-col items-center justify-center">
-              <span className="text-4xl font-bold mb-2 bg-gradient-to-r from-[#a084ee] to-[#f857a6] bg-clip-text text-transparent">
+              <span className="text-6xl font-bold mb-2 bg-gradient-to-r from-[#5fa143] to-[#77A656] bg-clip-text text-transparent">
                 {stat.value}
               </span>
-              <span className="text-base text-center font-medium text-[#23244a]">
+              <span className="text-base text-center font-medium text-black">
                 {stat.label}
               </span>
             </div>

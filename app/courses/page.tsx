@@ -86,13 +86,13 @@ export default function CoursesPage() {
   ];
 
   return (
-    <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+    <div style={{ background: '#F8FAF5', minHeight: '100vh' }}>
       {/* New Banner */}
-      <div className="w-full rounded-3xl bg-[#E8DAC8] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-amber-200 max-w-7xl mx-auto mt-20">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-[#23244a] mb-4 text-center drop-shadow-lg tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>
+      <div className="w-full rounded-3xl bg-white py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-amber-200 max-w-7xl mx-auto mt-32">
+        <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight">
           Our Astrology Courses
         </h1>
-        <p className="text-lg md:text-2xl text-[#3a3b5c] text-center max-w-3xl leading-relaxed">
+        <p className="text-lg md:text-2xl text-black text-center max-w-3xl leading-relaxed">
           Learn from the best astrologers and master the science of the stars.
         </p>
       </div>
@@ -100,7 +100,7 @@ export default function CoursesPage() {
       {/* Courses Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Georgia, serif' }}>Course Curriculum</h2>
+          <h2 className="text-4xl font-bold text-center mb-12 text-black">Course Curriculum</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.map((course, index) => (
               <motion.div
@@ -109,13 +109,16 @@ export default function CoursesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`rounded-3xl bg-[#E8DAC8] shadow-md p-8 flex flex-col items-start justify-between min-h-[340px]`}
+                className={`rounded-3xl bg-white shadow-md p-8 flex flex-col items-start justify-between min-h-[340px]`}
               >
+                <div className="relative w-full aspect-[16/9] rounded-t-3xl overflow-hidden mb-6">
+                  <img src="/placeholder.jpg" alt={course.title} className="w-full h-full object-cover rounded-t-3xl" />
+                </div>
                 <div className="mb-4 p-3 rounded-full bg-[#F6F5EF]">
                   <course.icon className="w-8 h-8 text-gray-800" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Georgia, serif' }}>{course.title}</h3>
-                <p className="text-gray-600 mb-4 flex-grow">{course.description}</p>
+                <h3 className="text-2xl font-bold mb-2 text-black">{course.title}</h3>
+                <p className="text-black mb-4 flex-grow">{course.description}</p>
                 <div className="flex flex-wrap gap-2 mb-6">
                   {course.tags.map(tag => (
                     <span key={tag} className="text-xs font-semibold bg-gray-200 text-gray-800 px-3 py-1 rounded-full">{tag}</span>
