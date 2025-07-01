@@ -1,10 +1,8 @@
-import { HeroSection } from './components/HeroSection'
+import NewHeroSection from './components/NewHeroSection'
 import { LifeChangingSolutions } from './components/LifeChangingSolutions'
 import { AstrologerProfile } from './components/AstrologerProfile'
 import  { BestServices }  from './components/BestServices'
-import { ZodiacExplorer } from './components/ZodiacExplorer'
 import { Testimonials } from './components/Testimonials'
-import { AstrologyCalculator } from './components/AstrologyCalculator'
 import { ServicesOverview } from './components/ServicesOverview'
 import { FeaturedProducts } from './components/FeaturedProducts'
 import { BlogPreview } from './components/BlogPreview'
@@ -22,7 +20,7 @@ export default function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-white">
     
-      <HeroSection />
+      <NewHeroSection />
       <div className="pt-32 relative z-10">
         <ScrollAnimation>
           <Statistics />
@@ -48,16 +46,18 @@ export default function HomePage() {
 
         <div className="flex flex-col md:flex-row items-start gap-8 mt-12">
           <div className="flex-1">
-            <ScrollAnimation>
-              <ZodiacExplorer />
-            </ScrollAnimation>
+    
+              
+            
           </div>
 
           <div className="flex-1">
-            <ScrollAnimation>
-              <AstrologyCalculator />
-            </ScrollAnimation>
+            
+              
+            
           </div>
+
+        
         </div>
 
         <ScrollAnimation>

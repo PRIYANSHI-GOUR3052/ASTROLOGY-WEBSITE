@@ -1,0 +1,553 @@
+{
+  "hero": {
+    "mainHeading": "解锁宇宙的秘密",
+    "subHeading": "个性化的吠陀占星术以照亮您的道路",
+    "ctaButton": "获取免费的昆德利",
+    "secondaryText": "对职业，爱情和生活的准确预测。",
+    "corner_cards": {
+      "0": {
+        "tag": "专家咨询",
+        "title": "专业的占星指导",
+        "subtext": "全球可用",
+        "link": "/services/astrology",
+        "linkText": "立即预订"
+      },
+      "1": {
+        "tag": "职业占星",
+        "title": "让你的职业与星辰对齐",
+        "subtext": "找到你的真正使命",
+        "link": "/services/career-guidance",
+        "linkText": "探索路径"
+      },
+      "2": {
+        "tag": "占星与文化",
+        "title": "神秘的天体指引艺术",
+        "subtext": "5分钟阅读",
+        "link": "/blog/understanding-vedic-astrology",
+        "linkText": "阅读更多"
+      },
+      "3": {
+        "tag": "宇宙洞见",
+        "title": "行星排列的重要性",
+        "subtext": "8分钟阅读",
+        "link": "/blog/the-influence-of-planets",
+        "linkText": "阅读更多"
+      }
+    }
+  },
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Nakshatra Gyaan"
+    },
+    "nav": {
+      "home": "家",
+      "about": "关于",
+      "courses": "课程",
+      "contact": "接触",
+      "blog": "博客",
+      "study": "学习",
+      "consultations": "咨询"
+    },
+    "cart": "大车",
+    "mega_menu": {
+      "consultations": {
+        "title": "咨询",
+        "items": {
+          "panchang": "今天的Panchang",
+          "kundali_matching": "昆达利匹配",
+          "buy_products": "购买产品",
+          "free_daily_horoscope": "免费的每日星座",
+          "astrology": "占星术",
+          "chat_with_astrologer": "与占星家聊天",
+          "love_relationship": "爱与关系",
+          "career_guidance": "职业和工作",
+          "numerology": "命理学"
+        }
+      },
+      "puja_rituals": {
+        "title": "法会和仪式",
+        "items": {
+          "online_puja": "在线puja",
+          "grah_shanti": "格拉·尚蒂（Grah Shanti）",
+          "manokamna_pooja": "Manokamna Pooja"
+        }
+      },
+      "horoscopes": {
+        "title": "星座运势",
+        "items": {
+          "daily_horoscope": "每日星座",
+          "monthly_horoscope": "每月星座",
+          "yearly_horoscope": "年度星座"
+        }
+      },
+      "learning": {
+        "title": "学习",
+        "items": {
+          "astrology_courses": "占星术课程",
+          "blog": "博客"
+        }
+      }
+    },
+    "auth": {
+      "signin": "登入",
+      "my_profile": "我的个人资料",
+      "my_orders": "我的命令",
+      "logout": "注销"
+    },
+    "language_selector": {
+      "button": "选择语言",
+      "dropdown_title": "选择您的语言"
+    }
+  },
+  "about": {
+    "banner": {
+      "heading": "关于 Nakshatra Gyaan",
+      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
+    },
+    "tabs": {
+      "0": "我们的旅程",
+      "1": "我们的团队",
+      "2": "使命与愿景",
+      "3": "常见问题"
+    },
+    "journey": {
+      "heading": "我们的故事",
+      "story": {
+        "0": "Nakshatra Gyaan 的诞生并非源于商业计划，而是源于一次深刻的个人探索。我们的创始人深深扎根于企业界，感受到物质成功与内心满足之间日益扩大的鸿沟。一次偶然的机会，在一个小村庄遇到了一位传统的吠陀占星师，点燃了灵感。这不是人们常说的那种预测性、恐惧驱动的占星术，而是一门深刻而富有同情心的自我理解科学——一张关于业力和潜能的宇宙地图。这次经历具有变革性，揭示了一条以觉知和优雅应对生活复杂性的道路。这一深刻的洞见成为我们使命的种子：与一个寻求意义的世界分享这种真实且赋能的智慧。",
+        "1": "我们的旅程始于 2002 年，远离我们今天所处的数字世界。第一个'办公室'是创始人家中的一个安静角落，配备了经典的占星书籍和帮助他人的深厚热情。我们的第一批客户是朋友和家人，我们的成长完全依赖于口碑。每一次咨询都是一次亲密的对话，是对写在星星里的独特人生故事的共同探索。那些早期岁月充满了巨大的奉献精神，无数小时研究出生图，以及看到某人因获得清晰和新希望而眼睛发亮的简单而强大的回报。",
+        "2": "从一开始，我们的理念就植根于这样一种信念：占星术是一种赋能工具，而不是不可避免命运的宣判。我们将出生图视为神圣的蓝图，突出我们的天赋、精神挑战和终极人生目标。我们致力于揭开这门古老科学的神秘面纱，消除迷信，展现其实用性和心理深度。我们的方法是整体的，将吠陀占星术的永恒精准与现代心理学理解和实用的精神建议相结合，确保我们的指导始终相关、富有同情心且充满活力。",
+        "3": "最初的十年是安静、专注服务和有机增长的十年。我们有意识地避免商业广告，而是让我们的工作自己说话。这一时期对于磨练我们的实践和建立信任基础至关重要。我们衡量成功的标准不是收入，而是我们在客户生活中见证的切实、积极的转变——修复的关系、新的职业道路、获得的深度平静。这种对诚信和客户福祉的坚定关注，创造了一个忠诚的社区，成为 Nakshatra Gyaan 的基石。",
+        "4": "2015 年是我们故事的转折点。我们意识到，真正的精神指导需求不受地理界限的限制。我们迎接了这一挑战，推出了我们的在线平台，这一决定需要巨大的信心飞跃和陡峭的学习曲线。目标是将面对面咨询的亲密和深度转化为数字体验，同时不失人情味。这是一个艰难的转变，但它源于让全球每个角落的寻求者都能获得这种深刻知识的愿景。",
+        "5": "数字平台的推出为我们打开了梦想的大门。突然间，我们与来自 30 多个国家的人们建立了联系，每个人都有自己独特的文化背景和人生故事。这种全球扩展既令人谦卑又令人充实。它加深了我们对人类普遍意义追求的理解，并促使我们优化沟通方式，使其更加清晰、敏感和具有文化意识。我们不再只是本地服务；我们已成为全球灵性探索的避风港，由宇宙的共同语言联系在一起。",
+        "6": "随着社区的壮大，问题的范围也在扩大。我们意识到，要提供真正全面的指导，就必须超越出生图。这促使我们整合了占星术的姊妹科学。我们谨慎地扩展了团队，吸纳了数字命理、塔罗、风水和手相等领域的专家。这一演变使我们能够提供多元化的视角，为客户提供更丰富、更全面的生活理解，并赋予他们更多个人和精神成长的工具。",
+        "7": "我们很快意识到，人们不仅在寻找答案，还在寻找联系。这一洞见使我们从单纯的服务提供者转变为社区促进者。我们推出了每周通讯，不是作为营销工具，而是作为共享学习和宇宙见解的来源。我们开发了研讨会和在线论坛，创建了一个安全、支持性的空间，让人们可以分享经验、提问并共同成长。Nakshatra Gyaan 发展成为一个充满活力的生态系统，聚集了志同道合的灵魂，共同踏上探索之旅。",
+        "8": "在一个信息错误泛滥的领域，我们始终坚持最高的道德和诚信标准。这是我们最神圣的承诺。我们的指导旨在赋能，而不是制造恐惧或依赖。我们对占星术能做什么和不能做什么保持透明，并鼓励客户将自由意志作为最终的指导力量。我们致力于不断学习和负责任地实践这门神圣的科学，确保对我们的信任始终得到尊重。",
+        "9": "展望未来，我们的使命保持不变，但愿景不断扩展。我们正在探索将古老智慧与现代技术相结合的创新方式，创造更具互动性和个性化的学习体验。我们的目标是扩展教育产品，开发深入的课程，使个人能够更好地理解自己出生图的语言。我们将 Nakshatra Gyaan 视为灵性科学领域的全球领先之光，继续为后代引导、激励和赋能寻求者。"
+      },
+      "testimonial": {
+        "text": "Nakshatra Gyaan 的指导改变了我的生活。他们的补救措施和见解帮助我在困难时期找到了清晰和信心。",
+        "author": "— Aarti Sharma，孟买"
+      }
+    },
+    "team": {
+      "heading": "认识我们的创始人",
+      "testimonial": {
+        "text": "Nakshatra Gyaan 团队不仅专业——他们真的很关心。 他们的支持和智慧对我来说是无价的。",
+        "author": "— Suresh Gupta，德里"
+      }
+    },
+    "mission": {
+      "heading": "我们的使命与愿景",
+      "missionTitle": "使命",
+      "missionText": "通过占星知识赋能个人，帮助他们做出明智的决定，拥抱自己的优势，并自信地应对生活的挑战。我们的目标是揭开占星术的神秘面纱，使其成为自我成长的工具，而不是迷信。",
+      "visionTitle": "愿景",
+      "visionText": "成为最值得信赖的占星指导来源，融合传统与创新，促进全球寻求者社区的发展。我们设想一个每个人都能获得星辰智慧、创造有意义和快乐生活的世界。",
+      "impactTitle": "影响：",
+      "impactText": "已完成 10,000 多次咨询，举办 500 多次研讨会，全球在线社区成员超过 50,000 人。"
+    },
+    "faq": {
+      "heading": "常见问题",
+      "testimonialsHeading": "读者感言",
+      "q0": "是什么让 Nakshatra Gyaan 与众不同？",
+      "a0": "我们结合了古老的智慧、现代的见解和富有同情心的方法，使我们与众不同。我们专注于实用指导和个人赋能。",
+      "q1": "我如何咨询占星师？",
+      "a1": "您可以通过我们的网站预订会话或联系我们获取个性化指导。",
+      "q2": "你们的补救措施和预测是个性化的吗？",
+      "a2": "是的，我们所有的指导都针对您的独特出生图和生活情况量身定制。",
+      "q3": "你们提供课程或研讨会吗？",
+      "a3": "是的，我们定期为所有级别提供占星课程和研讨会。",
+      "q4": "占星术能帮助事业和人际关系吗？",
+      "a4": "绝对可以！我们的咨询涵盖事业、人际关系、健康等，为生活的各个领域提供实用见解。",
+      "q5": "我的信息会被保密吗？",
+      "a5": "是的，我们严格保密，绝不会在未经同意的情况下分享您的个人信息。",
+      "q6": "你们在咨询后提供支持吗？",
+      "a6": "是的，我们提供后续支持，并始终为您的问题和疑虑提供帮助。",
+      "q7": "我如何预订个人咨询？",
+      "a7": "您可以通过我们网站的咨询页面直接预订会话，或通过电子邮件/电话联系我们以获得个性化帮助。",
+      "q8": "你们从事哪种类型的占星术？",
+      "a8": "我们专注于吠陀占星术，但也提供数字命理、塔罗和现代占星技术的指导。",
+      "q9": "如果我不知道确切的出生时间，还能获得出生图解读吗？",
+      "a9": "可以！虽然确切的时间是理想的，但我们仍然可以通过您的出生日期和地点提供有价值的见解。",
+      "q10": "你们提供商业或职业指导的占星服务吗？",
+      "a10": "绝对可以！我们根据您的独特星盘提供职业、商业和财务占星咨询。",
+      "q11": "你们的服务在国际上可用吗？",
+      "a11": "是的，我们通过在线咨询、报告和研讨会为全球客户提供服务。",
+      "q12": "你们如何确保隐私和保密？",
+      "a12": "我们以最大尊重对待您的信息，未经您的同意绝不会分享您的数据。"
+    },
+    "newsletter": {
+      "heading": "每周获取占星见解",
+      "text": "注册我们的通讯，每周收到宇宙提示、补救措施和预测。",
+      "placeholder": "您的电子邮件地址",
+      "button": "立即订阅"
+    },
+    "quickfacts": {
+      "heading": "快速事实",
+      "fact0": "20 多年占星指导经验",
+      "fact1": "已完成 10,000 多次咨询",
+      "fact2": "500 多次研讨会和课程",
+      "fact3": "全球社区：50,000 多名成员",
+      "fact4": "个性化补救措施和解决方案",
+      "fact5": "道德、保密和富有同情心的服务"
+    },
+    "resources": {
+      "heading": "推荐资源",
+      "link0": { "title": "了解您的出生图", "url": "/blog/understanding-your-birth-chart" },
+      "link1": { "title": "宝石及其力量", "url": "/blog/gemstones-and-their-powers" },
+      "link2": { "title": "数字命理学基础", "url": "/blog/numerology-basics" },
+      "link3": { "title": "行星的影响", "url": "/blog/the-influence-of-planets" }
+    }
+  },
+  "astrologyQuiz": {
+    "title": "今日占星小测验！",
+    "subtitle": "在下方评论中告诉我们哪个是正确答案",
+    "questionHeader": "你的问题是什么？",
+    "completedTitle": "测验完成！",
+    "scoreText": "你的分数：{{total}}分之{{score}}",
+    "tryAgainButton": "再试一次",
+    "moreQuizText": "更多测验在",
+    "questions": [
+      {
+        "question": "哪个行星掌管狮子座？",
+        "options": [ "火星", "金星", "太阳", "木星" ],
+        "correctAnswerIndex": 2
+      },
+      {
+        "question": "与天蝎座相关的元素是什么？",
+        "options": [ "火", "土", "风", "水" ],
+        "correctAnswerIndex": 3
+      },
+      {
+        "question": "哪个星座由天平代表？",
+        "options": [ "天秤座", "水瓶座", "双子座", "双鱼座" ],
+        "correctAnswerIndex": 0
+      },
+      {
+        "question": "白羊座的主宰行星是什么？",
+        "options": [ "金星", "火星", "水星", "土星" ],
+        "correctAnswerIndex": 1
+      },
+      {
+        "question": "占星术中哪个宫位代表婚姻和伴侣关系？",
+        "options": [ "第二宫", "第五宫", "第七宫", "第十宫" ],
+        "correctAnswerIndex": 2
+      }
+    ],
+    "randomCards": [
+      {
+        "title": "占星小知识",
+        "description": "你知道吗，水星逆行并不总是坏事？"
+      },
+      {
+        "title": "星座运势提示",
+        "description": "阅读你的上升星座运势以获得更准确的信息！"
+      },
+      {
+        "title": "星座洞察",
+        "description": "每个星座都有其独特的优点和缺点。"
+      },
+      {
+        "title": "测验挑战",
+        "description": "通过我们的每日占星测验来测试你的知识！"
+      }
+    ]
+  },
+  "testimonials": {
+    "heading": "客户评价",
+    "headingHi": "客户评价",
+    "testimonials": {
+      "0": { "name": "王伟", "occupation": "软件工程师", "text": "我的星座职业指导非常准确！它帮助我做出了关键的换工作决定。真是一次改变人生的体验。" },
+      "1": { "name": "李娜", "occupation": "大学生", "text": "非常感谢！个性化的数字命理课程让我更加清晰自信，帮助我更有目标地完成学业。" },
+      "2": { "name": "张强和刘芳", "occupation": "新婚夫妇", "text": "很棒！通过面相分析的配对非常准确，帮助我们更好地理解彼此，增进了感情。" },
+      "3": { "name": "陈医生", "occupation": "医疗专家", "text": "非常震撼！为我的诊所做的风水咨询显著改善了能量。病人更舒适，氛围也更积极了。" },
+      "4": { "name": "赵敏", "occupation": "企业家", "text": "新项目的吉日建议非常宝贵。事业蒸蒸日上，很大程度上归功于这些宇宙洞见。" },
+      "5": { "name": "孙丽", "occupation": "艺术家", "text": "非常有洞察力的解读！塔罗牌咨询帮助我克服了创作障碍，找到了新的方向。非常推荐！" },
+      "6": { "name": "周婷", "occupation": "学生", "text": "Nakshatra Gyaan 的每日星座非常准确，为我的一天带来美好开端。它为生活挑战提供了智慧。" },
+      "7": { "name": "刘洋", "occupation": "企业主", "text": "关于财务占星的建议非常棒。在市场波动期间帮助我做出了明智的决策。强烈推荐！" },
+      "8": { "name": "王芳", "occupation": "家庭主妇", "text": "家庭配对解读为我们的家带来了更多理解与和谐。谢谢你，Nakshatra Gyaan！" }
+    }
+  },
+  "courses": {
+    "hero": {
+      "heading": "我们的占星课程",
+      "subheading": "向最优秀的占星师学习，掌握星辰的科学。"
+    },
+    "curriculum": {
+      "heading": "课程大纲"
+    },
+    "courses": {
+      "0": {
+        "title": "吠陀占星精通课程",
+        "description": "全面介绍吠陀占星学的基础知识。",
+        "tags": ["初学者", "自定进度", "证书"]
+      },
+      "1": {
+        "title": "数字命理：宇宙密码",
+        "description": "解读数字的奥秘及其对命运的影响。",
+        "tags": ["数字命理"]
+      },
+      "2": {
+        "title": "手相艺术",
+        "description": "学习古老的手相学及手掌所揭示的信息。",
+        "tags": ["手相", "手掌"]
+      },
+      "3": {
+        "title": "塔罗牌解读：现代神秘学",
+        "description": "揭开塔罗牌的神秘，为指引和洞察提供帮助。",
+        "tags": ["塔罗"]
+      },
+      "4": {
+        "title": "高级预测占星学",
+        "description": "掌握高级技巧，实现精准预测与时机把握。",
+        "tags": ["高级"]
+      },
+      "5": {
+        "title": "风水学：家居和谐",
+        "description": "为您的生活空间创造平衡与正能量。",
+        "tags": ["风水"]
+      },
+      "enrollButton": "立即报名"
+    },
+    "why": {
+      "heading": "为什么选择我们学习？"
+    },
+    "benefits": {
+      "0": {
+        "title": "专家导师",
+        "description": "向认证占星师和经验丰富的教师学习。"
+      },
+      "1": {
+        "title": "灵活学习",
+        "description": "按照自己的节奏学习，随时访问课程材料。"
+      },
+      "2": {
+        "title": "实践知识",
+        "description": "从行业专家那里获得实用技能和真实世界的见解。"
+      },
+      "3": {
+        "title": "社区支持",
+        "description": "加入学习者社区，获得同学和导师的支持。"
+      }
+    },
+    "testimonial": {
+      "text": "Nakshatra Gyaan 的课程改变了我的生活。实用的知识和专家的指导帮助我自信地开始我的占星实践。",
+      "author": "— Anita Patel，古吉拉特邦"
+    }
+  },
+  "footer": {
+    "tagline": "一次一次咨询，揭开宇宙的奥秘。",
+    "newsletterPlaceholder": "输入您的电子邮件地址",
+    "newsletterButton": "订阅",
+    "copyright": "© 2024 Nakshatra Gyaan。保留所有权利。",
+    "sections": {
+      "explore": {
+        "title": "探索",
+        "links": {
+          "about": "关于我们",
+          "services": "服务",
+          "courses": "课程",
+          "blog": "博客"
+        }
+      },
+      "services": {
+        "title": "服务",
+        "links": {
+          "personalReading": "个人解读",
+          "kundaliMatching": "昆达利匹配",
+          "careerGuidance": "职业指导",
+          "vastuConsultation": "风水咨询"
+        }
+      },
+      "support": {
+        "title": "支持",
+        "links": {
+          "contact": "联系我们",
+          "faq": "常见问题",
+          "privacy": "隐私政策",
+          "terms": "条款和条件"
+        }
+      }
+    },
+    "brand": {
+      "name": "nakshatra",
+      "taglinePrefix": "设计者 ",
+      "team": "Scalixity Team",
+      "copyright": "© Nakshatra Gyaan. 保留所有权利。",
+      "poweredByPrefix": "由...驱动 ",
+      "energy": "宇宙能量",
+      "language": "🌍 中文",
+      "social": {
+        "facebook": "脸书",
+        "twitter": "推特",
+        "instagram": "Instagram",
+        "youtube": "优兔"
+      }
+    },
+    "newsletter": {
+      "title": "随时了解我们的",
+      "titleHighlight": "天体通讯",
+      "subtitle": "定期更新确保读者能够获得新的宇宙视角，使Nakshatra Gyaan成为必读之选。",
+      "placeholder": "电子邮件地址",
+      "button": "订阅 →"
+    },
+    "links": {
+      "keepExploring": "继续探索",
+      "connect": "联系",
+      "legal": "法律信息",
+      "quickLinks": {
+        "home": "首页",
+        "about": "关于",
+        "services": "服务",
+        "reviews": "评论",
+        "blog": "博客",
+        "contact": "联系"
+      },
+      "legalLinks": {
+        "terms": "条款与条件",
+        "privacy": "隐私政策",
+        "credits": "网站鸣谢"
+      }
+    },
+    "floatingCards": {
+      "card1": {
+        "tag": "占星与文化",
+        "title": "天体指引的神秘艺术",
+        "date": "2024年12月20日",
+        "readTime": "5分钟",
+        "button": "阅读更多 →"
+      },
+      "card2": {
+        "tag": "宇宙洞见",
+        "title": "行星排列对精神成果的重要性",
+        "date": "2024年12月11日",
+        "readTime": "8分钟",
+        "button": "阅读更多 →"
+      }
+    },
+    "social": {
+      "facebook": "脸书",
+      "twitter": "推特",
+      "instagram": "Instagram",
+      "youtube": "优兔"
+    },
+    "scrollToTop": "回到顶部"
+  },
+  "astrologerProfile": {
+    "heading": "认识纳伦德拉博士——您值得信赖的占星师",
+    "subheading": "拥有数十年经验的吠陀占星专家",
+    "credential1": {
+      "title": "吠陀占星专家",
+      "description": "纳伦德拉博士是著名的吠陀占星师，在传统印度占星术方面拥有15年以上经验。他专注于本命盘分析、行星疗法和通过古老吠陀智慧进行人生指导。"
+    },
+    "credential2": {
+      "title": "占星学与哲学博士",
+      "description": "拥有占星学与哲学博士学位的纳伦德拉博士，将传统知识与现代理解相结合，提供全面的占星咨询和精神指导。"
+    },
+    "beliefHi": "我相信每个人的生活都是独一无二的，每个问题都有解决办法。",
+    "beliefEn": "I believe that every individual's life is unique and every problem has a solution.",
+    "experienceHi": "15年以上经验，成千上万的满意客户",
+    "experienceEn": "15+ Years of Experience and Thousands of Satisfied Clients",
+    "bookAppointment": "预约咨询"
+  },
+  "blog": {
+    "recent": { "heading": "最新博客" },
+    "featured": {
+      "heading": "精选博客",
+      "viewAll": "查看全部",
+      "readMore": "阅读全文",
+      "minRead": "分钟阅读",
+      "dateFormat": "PPP"
+    },
+    "preview": { "continueReading": "阅读全文" }
+  },
+  "dailyHoroscope": {
+    "heading": "每日星座运势",
+    "subheading": "获取你今天来自星星的每日见解",
+    "knowYourSign": "了解你的星座",
+    "selectSign": "选择你的星座",
+    "chooseSign": "请选择星座",
+    "viewHoroscope": "查看运势",
+    "faqHeading": "常见问题",
+    "learnMore": "了解更多",
+    "authorName": "纳伦德拉·库马尔·沙尔马博士",
+    "authorTitle": "吠陀占星师",
+    "authorBio": "您好，我是一位著名的吠陀占星师，拥有多年的经验。我的热情是引导您通过宇宙能量，帮助您释放真正的潜力。",
+    "contactMe": "联系我",
+    "follow": "关注"
+  },
+  "lifeChangingSolutions": {
+    "bannerTitle": "一次通话，改变人生的解决方案",
+    "bannerDescription": "获取关于职业、爱情、健康、商业、婚姻和子女所有问题的占星解决方案。",
+    "solutions": {
+      "0": {"title": "职业", "description": "许多学生对考试、工作和下一步该做什么感到困惑。与占星师Arun Ji交谈，他可以分析您的出生图，帮助您选择正确的职业方向。"},
+      "1": {"title": "爱情与关系", "description": "想要了解与伴侣的最佳爱情匹配？一次咨询电话可以揭示你们关系的潜力。"},
+      "2": {"title": "健康", "description": "吠陀占星预测可以在健康问题显现之前就给出提示。请尽早与占星师沟通以获得建议。"},
+      "3": {"title": "商业", "description": "创业或做重大决策时，获得准确的占星见解非常重要。咨询占星师可以解决您的商业难题。"},
+      "4": {"title": "婚姻", "description": "在印度，婚姻的星盘匹配传统非常重要。获取配对分析、Manglik Dosha和Gun Milan。"},
+      "5": {"title": "子女", "description": "古印度吠陀占星会分析双方的星盘，尤其适用于想了解子女问题的人。占星师会为子女相关问题提供准确的解决方案。"}
+    },
+    "exploreMoreTitle": "探索更多占星见解",
+    "continueLearningAlt": "继续您的占星之旅",
+    "continueLearningTitle": "深化您的占星理解",
+    "continueLearningDescription": "通过我们精选的资源，持续学习占星、补救方法和灵性成长。",
+    "bookCallTitle": "立即预约您的通话！",
+    "bookCallDescription": "与经验丰富的占星师交谈，获得个性化指导和问题解决方案。",
+    "goToContact": "前往联系",
+    "progressTitle": "进步之路",
+    "progressDescription": "持续成长，探索更多占星知识。",
+    "exploreMoreButton": "查看更多"
+  },
+  "contact": {
+    "floatingCard1": {
+      "label": "宇宙连接",
+      "title": "您的星际之旅从这里开始",
+      "subtitle": "与宇宙连接",
+      "button": "联系我们 →"
+    },
+    "floatingCard2": {
+      "label": "指引在等待",
+      "title": "用星辰智慧改变你的道路",
+      "subtitle": "个性化见解",
+      "button": "探索 →"
+    },
+    "floatingCard3": {
+      "label": "专家咨询",
+      "title": "专业的占星指导",
+      "subtitle": "全球可用",
+      "button": "立即预订 →"
+    },
+    "header": {
+      "title1": "与...联系",
+      "title2": "宇宙领域",
+      "description": "有问题要问 Innovana Astro Services Limited，需要指导，或希望预订咨询？请联系我们。您的宇宙对话即将开始。"
+    },
+    "info": {
+      "title": "取得联系",
+      "description": "我们通过电话、电子邮件提供服务，您也可以直接给我们留言。我们期待在您的星际旅程中为您指引方向。",
+      "phoneTitle": "电话",
+      "phoneHours": "上午10:00至下午7:00（周一至周五）",
+      "emailTitle": "电子邮件",
+      "emailNote": "我们会在24小时内回复",
+      "locationTitle": "地址",
+      "addressLine1": "1- KHA -18, 贾瓦哈尔纳加尔",
+      "addressLine2": "斋浦尔",
+      "addressCity": "斋浦尔",
+      "addressState": "拉贾斯坦邦",
+      "addressZip": "302004",
+      "addressCountry": "印度",
+      "phoneNumber": "+９１-７２２９８０８８８７"
+    },
+    "form": {
+      "title": "给我们留言",
+      "namePlaceholder": "您的姓名",
+      "emailPlaceholder": "您的电子邮件",
+      "messagePlaceholder": "告诉我们您的星际之旅...",
+      "sendButton": "发送消息",
+      "sending": "消息发送中...",
+      "success": "消息发送成功！我们会尽快与您联系。",
+      "error": "出现问题。请再试一次。"
+    },
+    "brand": "纳克沙特拉"
+  }
+}
