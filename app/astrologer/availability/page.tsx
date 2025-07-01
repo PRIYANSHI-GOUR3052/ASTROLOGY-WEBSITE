@@ -35,7 +35,7 @@ const AvailabilityPage = () => {
 
   return (
     <motion.div
-      className="w-full mx-auto bg-gray-50 dark:bg-gray-900 p-5 sm:p-8 rounded-xl shadow"
+      className="w-full mx-auto bg-amber dark:bg-black p-5 sm:p-8 rounded-xl shadow"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
