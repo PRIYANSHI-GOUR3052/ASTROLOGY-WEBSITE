@@ -12,6 +12,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'amber-new': {
+          DEFAULT: '#FFE5B4',
+          light: "#F7F1E5",
+        },
         'sunset-orange': {
           DEFAULT: '#FF4500',
           light: '#FF6347',
