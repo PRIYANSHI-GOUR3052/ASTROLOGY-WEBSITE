@@ -11,7 +11,7 @@ import {
   ChevronDown, Search, Menu, X, User, LogIn, LogOut 
 } from 'lucide-react';
 import CartIcon from './CartIcon';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -220,101 +220,6 @@ export function Header() {
           </div>
         </DialogContent>
       </Dialog>
-
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            ref={mobileMenuRef}
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="md:hidden fixed top-0 right-0 h-full w-full max-w-sm bg-[#FAEBE6] shadow-lg z-40 p-6 overflow-y-auto"
-          >
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-xl font-bold text-purple-800">{t('header.mobile_menu.title')}</h2>
-              <button onClick={() => setIsMobileMenuOpen(false)}>
-                <X className="h-6 w-6 text-gray-900" />
-              </button>
-            </div>
-
-            <nav className="flex flex-col gap-6">
-              <Link href="/" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.home')}</Link>
-              <Link href="/about" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.about')}</Link>
-              <Link href="/courses" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.courses')}</Link>
-              <Link href="/contact" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.contact')}</Link>
-              <Link href="/blog" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.blog')}</Link>
-              <Link href="/study" className="font-semibold text-lg text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>{t('header.nav.study')}</Link>
-              
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-base font-bold text-purple-800 mb-4">{t('header.nav.consultations')}</h3>
-                <div className="flex flex-col gap-4">
-                  {Object.values(servicesMegaMenu).flatMap(section => section.items).map(item => (
-                    <Link key={item.key} href={item.href} className="text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>
-                      {t(`header.mega_menu.${Object.keys(servicesMegaMenu).find(key => servicesMegaMenu[key as keyof typeof servicesMegaMenu].items.some(i => i.key === item.key))}.items.${item.key}`)}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* User Auth Section for Mobile */}
-              <div className="border-t border-gray-200 pt-6 mt-6">
-                {session?.user ? (
-                  <div className="flex flex-col gap-4">
-                    <Link href="/profile" className="flex items-center gap-3 text-lg font-semibold text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>
-                      <User className="w-5 h-5" /> {t('header.auth.my_profile')}
-                    </Link>
-                    <Link href="/orders" className="flex items-center gap-3 text-lg font-semibold text-gray-900 hover:text-purple-600" onClick={() => setIsMobileMenuOpen(false)}>
-                      <User className="w-5 h-5" /> {t('header.auth.my_orders')}
-                    </Link>
-                    <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 text-lg font-semibold text-gray-900 hover:text-purple-600">
-                      <LogOut className="w-5 h-5" /> {t('header.auth.logout')}
-                    </button>
-                  </div>
-                ) : (
-                  <button onClick={() => { signIn(); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 text-lg font-semibold text-gray-900 hover:text-purple-600">
-                    <LogIn className="w-5 h-5" /> {t('header.auth.signin')}
-                  </button>
-                )}
-              </div>
-
-              {/* Language Selector for Mobile */}
-              <div className="border-t border-gray-200 pt-6">
-                <button
-                  onClick={() => setIsMobileLangMenuOpen(prev => !prev)}
-                  className="flex justify-between items-center w-full text-lg font-semibold text-gray-900 hover:text-purple-600"
-                >
-                  <span>{t('header.language_selector.button')}</span>
-                  <ChevronDown className={`w-5 h-5 transition-transform ${isMobileLangMenuOpen ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {isMobileLangMenuOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="mt-4 pl-4 flex flex-col gap-2 overflow-hidden"
-                    >
-                      {languageList.map((code) => (
-                        <button
-                          key={code}
-                          onClick={() => {
-                            setLang(code);
-                            setIsMobileLangMenuOpen(false);
-                          }}
-                          className={`text-left text-base py-1 ${lang === code ? 'font-bold text-purple-600' : 'text-gray-700'} hover:text-purple-600`}
-                        >
-                          {(LANGUAGE_NAMES as Record<string, string>)[code] || LANGUAGE_NAMES['en']}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 }
