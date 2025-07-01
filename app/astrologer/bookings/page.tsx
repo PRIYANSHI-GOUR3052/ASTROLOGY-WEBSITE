@@ -98,13 +98,21 @@ const BookingsPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-end gap-4 mb-6">
         <div className="flex gap-4">
           <button
-            className={`px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none ${tab === 'upcoming' ? 'bg-purple-700 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200'}`}
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none ${
+              tab === 'upcoming'
+                ? 'bg-amber-500 dark:bg-purple-500 text-white'
+                : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200'
+            }`}
             onClick={() => setTab('upcoming')}
           >
             Upcoming
           </button>
           <button
-            className={`px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none ${tab === 'past' ? 'bg-purple-700 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200'}`}
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none ${
+              tab === 'past'
+                ? 'bg-amber-500 dark:bg-purple-500 text-white'
+                : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200'
+            }`}
             onClick={() => setTab('past')}
           >
             Past
@@ -118,9 +126,8 @@ const BookingsPage = () => {
               type="date"
               value={filterDate}
               onChange={e => setFilterDate(e.target.value)}
-              className="bg-white dark:bg-gray-700 border-2 border-purple-400 dark:border-purple-600 shadow focus:border-purple-600 focus:ring-2 focus:ring-purple-300 px-2"
+              className="bg-white dark:bg-gray-700 border-2 border-amber-400 dark:border-purple-500 shadow focus:border-amber-600 dark:focus:border-purple-500 focus:ring-2 focus:ring-amber-300 dark:focus:ring-purple-300 px-2"
             />
-            {/* <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500 w-5 h-5 pointer-events-none" /> */}
           </div>
         </div>
       </div>
@@ -133,14 +140,14 @@ const BookingsPage = () => {
           {filteredBookings.map(booking => (
             <motion.div
               key={booking.id}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow p-5 border-l-4 border-purple-500 flex flex-col gap-2"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow p-5 border-l-4 border-amber-500 dark:border-purple-500 flex flex-col gap-2"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 * booking.id }}
             >
               <div className="flex justify-between items-center mb-2">
-                <span className="font-bold text-lg text-purple-700">{booking.type}</span>
-                <span className="text-xs px-2 py-1 rounded bg-purple-100 text-purple-700 font-semibold">
+                <span className="font-bold text-lg text-amber-500 dark:text-purple-400">{booking.type}</span>
+                <span className="text-xs px-2 py-1 rounded bg-amber-100 dark:bg-purple-900 text-amber-700 dark:text-purple-200 font-semibold">
                   {tab === 'upcoming' ? 'Upcoming' : 'Past'}
                 </span>
               </div>
@@ -158,8 +165,12 @@ const BookingsPage = () => {
                   <Button variant="destructive" size="sm" className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-1">
                     <X className="w-4 h-4" /> Reject
                   </Button>
-                  <Button variant="outline" size="sm" className="border-purple-500 text-purple-700 hover:bg-purple-50 flex items-center gap-1"
-                    onClick={() => handleOpenReschedule(booking)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-amber-500 dark:border-purple-500 text-amber-700 dark:text-purple-400 hover:bg-amber-50 dark:hover:bg-purple-950 flex items-center gap-1"
+                    onClick={() => handleOpenReschedule(booking)}
+                  >
                     <CalendarClock className="w-4 h-4" /> Reschedule
                   </Button>
                 </div>
@@ -178,7 +189,7 @@ const BookingsPage = () => {
             {/* Selected Date Badge */}
             <div className="flex flex-col items-center gap-2">
               <span className="text-xs text-gray-500 dark:text-gray-400">Selected Date</span>
-              <span className="inline-block px-4 py-2 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-200 text-lg font-bold tracking-wide shadow">
+              <span className="inline-block px-4 py-2 rounded-full bg-amber-100 dark:bg-purple-900 text-amber-700 dark:text-purple-200 text-lg font-bold tracking-wide shadow">
                 {rescheduleDate ? rescheduleDate.toLocaleDateString() : 'No date selected'}
               </span>
             </div>
@@ -190,7 +201,7 @@ const BookingsPage = () => {
                   onSelect={setRescheduleDate}
                   className="rounded-lg border shadow calendar-modern"
                   classNames={{
-                    day_selected: 'bg-purple-600 text-white hover:bg-purple-700 focus:bg-purple-700',
+                    day_selected: 'bg-amber-600 dark:bg-purple-600 text-white hover:bg-amber-700 dark:hover:bg-purple-700 focus:bg-amber-700 dark:focus:bg-purple-700',
                   }}
                 />
               </div>
