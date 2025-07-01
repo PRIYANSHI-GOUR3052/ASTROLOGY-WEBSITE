@@ -13,7 +13,7 @@ module.exports = {
     extend: {
       colors: {
         'amber-new': {
-          DEFAULT: '#FFE5B4',
+          DEFAULT: '#FFF5E1',
           light: "#F7F1E5",
         },
         'sunset-orange': {
