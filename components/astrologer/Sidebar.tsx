@@ -29,7 +29,7 @@ const AstrologerSidebar: FC = () => {
 
   // Sidebar content for reuse
   const sidebarContent = (
-    <div className="h-full w-64 bg-white dark:bg-gray-800 shadow-lg flex flex-col border-r border-gray-200 dark:border-gray-700">
+    <div className="h-full w-64 bg-amber-new dark:bg-black shadow-lg flex flex-col border-r border-gray-200 dark:border-gray-700">
       {/* Logo Section */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
         <div>
@@ -50,8 +50,8 @@ const AstrologerSidebar: FC = () => {
               href={item.href}
               className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                 pathname === item.href
-                  ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  ? "bg-amber-100 dark:bg-purple-900 text-amber-700 dark:text-purple-200"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-amber-100 dark:hover:bg-midnight-black"
               }`}
               onClick={() => setOpen(false)}
             >

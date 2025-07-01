@@ -89,7 +89,7 @@ const BookingsPage = () => {
 
   return (
     <motion.div
-      className="w-full mx-auto bg-gray-50 dark:bg-gray-900 p-5 sm:p-8 rounded-xl shadow"
+      className="w-full mx-auto bg-gray-50 dark:bg-black p-5 sm:p-8 rounded-xl shadow"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -98,13 +98,13 @@ const BookingsPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-end gap-4 mb-6">
         <div className="flex gap-4">
           <button
-            className={`px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none ${tab === 'upcoming' ? 'bg-purple-700 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200'}`}
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none ${tab === 'upcoming' ? 'bg-purple-700 text-white' : 'bg-gray-200 dark:bg-midnight-black-light text-gray-700 dark:text-gray-200'}`}
             onClick={() => setTab('upcoming')}
           >
             Upcoming
           </button>
           <button
-            className={`px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none ${tab === 'past' ? 'bg-purple-700 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200'}`}
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none ${tab === 'past' ? 'bg-purple-700 text-white' : 'bg-gray-200 dark:bg-midnight-black-light text-gray-700 dark:text-gray-200'}`}
             onClick={() => setTab('past')}
           >
             Past
@@ -118,7 +118,7 @@ const BookingsPage = () => {
               type="date"
               value={filterDate}
               onChange={e => setFilterDate(e.target.value)}
-              className="bg-white dark:bg-gray-700 border-2 border-purple-400 dark:border-purple-600 shadow focus:border-purple-600 focus:ring-2 focus:ring-purple-300 px-2"
+              className="bg-white dark:bg-midnight-black-light border-2 border-purple-400 dark:border-purple-600 shadow focus:border-purple-600 focus:ring-2 focus:ring-purple-300 px-2"
             />
             {/* <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500 w-5 h-5 pointer-events-none" /> */}
           </div>
@@ -133,7 +133,7 @@ const BookingsPage = () => {
           {filteredBookings.map(booking => (
             <motion.div
               key={booking.id}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow p-5 border-l-4 border-purple-500 flex flex-col gap-2"
+              className="bg-white dark:bg-midnight-black-light rounded-lg shadow p-5 border-l-4 border-purple-500 flex flex-col gap-2"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 * booking.id }}
@@ -170,11 +170,11 @@ const BookingsPage = () => {
       )}
       {/* Reschedule Modal */}
       <Dialog open={rescheduleOpen} onOpenChange={setRescheduleOpen}>
-        <DialogContent>
+        <DialogContent className='bg-white dark:bg-midnight-black'>
           <DialogHeader>
             <DialogTitle>Reschedule Booking</DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col gap-8 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl w-full mx-auto">
+          <div className="flex flex-col gap-8 p-4 bg-white dark:bg-black rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl w-full mx-auto">
             {/* Selected Date Badge */}
             <div className="flex flex-col items-center gap-2">
               <span className="text-xs text-gray-500 dark:text-gray-400">Selected Date</span>
@@ -196,7 +196,7 @@ const BookingsPage = () => {
               </div>
               <div className="flex flex-col items-center gap-2">
                 <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">Select Time</span>
-                <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-lg px-4 py-3 border border-gray-200 dark:border-gray-700 shadow gap-2">
+                <div className="flex items-center justify-center bg-gray-50 dark:bg-black rounded-lg px-4 py-3 border border-gray-200 dark:border-gray-700 shadow gap-2">
                   {/* Custom compact time picker: Only hours, minutes, AM/PM */}
                   <TimePickerNoSeconds date={rescheduleDate} setDate={setRescheduleDate} />
                 </div>
