@@ -77,7 +77,7 @@ const AvailabilityPage = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 type="submit"
-                className="py-2 px-6 bg-purple-700 text-white font-bold rounded-lg mt-2 shadow"
+                className="py-2 px-6 bg-amber-500 dark:bg-purple-700 text-white font-bold rounded-lg mt-2 shadow"
               >
                 Add Slot
               </motion.button>

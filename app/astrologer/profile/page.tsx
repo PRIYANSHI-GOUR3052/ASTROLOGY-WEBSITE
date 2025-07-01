@@ -124,9 +124,9 @@ const ProfilePage = () => {
               "/public/images/placeholder-user.jpg"
             }
             alt="Profile Preview"
-            className="w-28 h-28 object-cover rounded-full border-4 border-purple-400 shadow"
+            className="w-28 h-28 object-cover rounded-full border-4 border-amber-400 dark:border-purple-400 shadow"
           />
-          <label className="absolute bottom-0 right-0 bg-purple-600 text-white rounded-full p-2 cursor-pointer shadow-lg hover:bg-purple-700 transition-colors">
+          <label className="absolute bottom-0 right-0 bg-amber-500 dark:bg-purple-600 text-white rounded-full p-2 cursor-pointer shadow-lg hover:bg-amber-600 dark:hover:bg-purple-700 transition-colors">
             <input
               type="file"
               name="profilePhoto"
@@ -144,7 +144,7 @@ const ProfilePage = () => {
             <button
               type="button"
               key={avatar}
-              className={`w-10 h-10 rounded-full border-2 ${selectedAvatar === avatar ? "border-purple-600" : "border-gray-300"} overflow-hidden focus:outline-none focus:ring-2 focus:ring-purple-500`}
+              className={`w-10 h-10 rounded-full border-2 ${selectedAvatar === avatar ? "border-amber-600 dark:border-purple-600" : "border-gray-300"} overflow-hidden focus:outline-none focus:ring-2 focus:ring-purple-500`}
               onClick={() => handleAvatarSelect(avatar)}
             >
               <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
@@ -183,7 +183,7 @@ const ProfilePage = () => {
             {!form.phoneVerified && (
               <motion.button
                 type="button"
-                className="w-fit px-3 py-2 bg-purple-600 text-white rounded"
+                className="w-fit px-3 py-2 bg-amber-500 dark:bg-purple-600 text-white rounded"
                 onClick={sendOtp}
                 disabled={otpSent || !form.phone}
                 whileHover={{ scale: 1.05 }}
@@ -255,7 +255,7 @@ const ProfilePage = () => {
         <div className="col-span-2 flex item-center justify-center">
           <motion.button
             type="submit"
-            className="py-3 px-6 bg-purple-700 text-white font-bold rounded-lg mt-4"
+            className="py-3 px-6 bg-amber-500 dark:bg-purple-700 text-white font-bold rounded-lg mt-4"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
           >

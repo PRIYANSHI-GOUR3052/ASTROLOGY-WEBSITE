@@ -29,7 +29,7 @@ const AstrologerSidebar: FC = () => {
 
   // Sidebar content for reuse
   const sidebarContent = (
-    <div className="h-full w-64 bg-[#FFF5E1] dark:bg-black shadow-lg flex flex-col border-r border-gray-200 dark:border-gray-700">
+    <div className="h-full w-64 bg-amber-new dark:bg-black shadow-lg flex flex-col border-r border-gray-200 dark:border-gray-700">
       {/* Logo Section */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
         <div>

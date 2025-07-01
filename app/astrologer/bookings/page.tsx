@@ -89,7 +89,7 @@ const BookingsPage = () => {
 
   return (
     <motion.div
-      className="w-full mx-auto bg-gray-50 dark:bg-black p-5 sm:p-8 rounded-xl shadow"
+      className="w-full mx-auto bg-amber-new dark:bg-black p-5 sm:p-8 rounded-xl shadow"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -181,11 +181,11 @@ const BookingsPage = () => {
       )}
       {/* Reschedule Modal */}
       <Dialog open={rescheduleOpen} onOpenChange={setRescheduleOpen}>
-        <DialogContent className='bg-white dark:bg-midnight-black'>
+        <DialogContent className='bg-amber-new dark:bg-midnight-black'>
           <DialogHeader>
             <DialogTitle>Reschedule Booking</DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col gap-8 p-4 bg-white dark:bg-black rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl w-full mx-auto">
+          <div className="flex flex-col gap-8 p-4 bg-amber-new-light dark:bg-black rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl w-full mx-auto">
             {/* Selected Date Badge */}
             <div className="flex flex-col items-center gap-2">
               <span className="text-xs text-gray-500 dark:text-gray-400">Selected Date</span>
@@ -207,7 +207,7 @@ const BookingsPage = () => {
               </div>
               <div className="flex flex-col items-center gap-2">
                 <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">Select Time</span>
-                <div className="flex items-center justify-center bg-gray-50 dark:bg-black rounded-lg px-4 py-3 border border-gray-200 dark:border-gray-700 shadow gap-2">
+                <div className="flex items-center justify-center bg-amber-light dark:bg-black rounded-lg px-4 py-3 border border-gray-200 dark:border-gray-700 shadow gap-2">
                   {/* Custom compact time picker: Only hours, minutes, AM/PM */}
                   <TimePickerNoSeconds date={rescheduleDate} setDate={setRescheduleDate} />
                 </div>
