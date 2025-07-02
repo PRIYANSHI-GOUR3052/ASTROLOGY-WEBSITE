@@ -10,7 +10,7 @@ import { BookOpen, Star, Moon, Sun, HelpCircle, Users } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { Testimonials } from '../components/Testimonials';
 import { FAQSection } from '../components/FAQSection';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 
 const studyTopics = [
   {

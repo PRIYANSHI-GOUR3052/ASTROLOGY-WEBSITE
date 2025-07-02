@@ -10,7 +10,7 @@ import { Calendar } from '@/components/ui/calendar'
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useLanguage } from '@/app/contexts/LanguageContext'
+import { useLanguage } from '../contexts/useLanguage'
 
 export function AstrologyCalculator() {
   const [birthDate, setBirthDate] = useState<Date | undefined>(undefined)

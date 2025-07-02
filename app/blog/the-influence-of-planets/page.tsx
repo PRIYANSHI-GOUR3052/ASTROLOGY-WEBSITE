@@ -33,7 +33,7 @@ export default function InfluenceOfPlanetsPage() {
                 {post.title.en}
               </h1>
               <div className="flex items-center gap-6 text-sm text-gray-500 mb-6">
-                <span className="flex items-center gap-1"><User className="w-4 h-4" /> {post.author}</span>
+                <span className="flex items-center gap-1"><User className="w-4 h-4" /> {post.author.en}</span>
                 <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {post.date}</span>
                 <span className="flex items-center gap-1"><BookOpen className="w-4 h-4" /> {post.category}</span>
               </div>
@@ -195,7 +195,7 @@ export default function InfluenceOfPlanetsPage() {
                 <div>
                   <p className="text-sm text-gray-600 mb-1">
                     <span className="text-indigo-700 font-medium">Astrological Review by</span> <br />
-                    <span className="font-semibold text-indigo-900">{post.author}</span>
+                    <span className="font-semibold text-indigo-900">{post.author.en}</span>
                   </p>
                   <p className="text-sm text-gray-600 flex items-center gap-1">
                     <Calendar className="w-3 h-3" />

@@ -1,0 +1,743 @@
+{
+  "hero": {
+    "mainHeading": "Unlock the Secrets of the Cosmos",
+    "subHeading": "Discover your future with expert astrological guidance, personalized readings, and ancient wisdom.",
+    "ctaButton": "Get Your Free Reading",
+    "secondaryText": "Trusted by over 10,000 users",
+    "imageAlt": "Mystical crystal ball showing cosmic patterns",
+    "stats": {
+      "signs": "Zodiac Signs",
+      "nakshatras": "Nakshatras",
+      "experts": "Expert Astrologers"
+    },
+    "corner_cards": {
+      "0": {
+        "tag": "Expert Consultation",
+        "title": "Professional astrological guidance",
+        "subtext": "Available worldwide",
+        "link": "/services/astrology",
+        "linkText": "Book now"
+      },
+      "1": {
+        "tag": "Career Astrology",
+        "title": "Align your career with the stars",
+        "subtext": "Find your true calling",
+        "link": "/services/career-guidance",
+        "linkText": "Explore paths"
+      },
+      "2": {
+        "tag": "Astrology & Culture",
+        "title": "The mystical art of celestial guidance",
+        "subtext": "Read in 5 mins",
+        "link": "/blog/understanding-vedic-astrology",
+        "linkText": "Read more"
+      },
+      "3": {
+        "tag": "Cosmic Insights",
+        "title": "The importance of planetary alignment",
+        "subtext": "Read in 8 mins",
+        "link": "/blog/the-influence-of-planets",
+        "linkText": "Read more"
+      }
+    }
+  },
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Nakshatra Gyaan"
+    },
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "courses": "Courses",
+      "contact": "Contact",
+      "blog": "Blog",
+      "study": "Study",
+      "consultations": "Consultations"
+    },
+    "cart": "Cart",
+    "mega_menu": {
+      "consultations": {
+        "title": "Consultations",
+        "items": {
+          "panchang": "Today's Panchang",
+          "kundali_matching": "Kundali Matching",
+          "buy_products": "Buy Products",
+          "free_daily_horoscope": "Free Daily Horoscope",
+          "astrology": "Astrology",
+          "chat_with_astrologer": "Chat with Astrologer",
+          "love_relationship": "Love & Relationship",
+          "career_guidance": "Career & Job",
+          "numerology": "Numerology"
+        }
+      },
+      "puja_rituals": {
+        "title": "Puja & Rituals",
+        "items": {
+          "online_puja": "Online Puja",
+          "grah_shanti": "Grah Shanti",
+          "manokamna_pooja": "Manokamna Pooja"
+        }
+      },
+      "horoscopes": {
+        "title": "Horoscopes",
+        "items": {
+          "daily_horoscope": "Daily Horoscope",
+          "monthly_horoscope": "Monthly Horoscope",
+          "yearly_horoscope": "Yearly Horoscope"
+        }
+      },
+      "learning": {
+        "title": "Learning",
+        "items": {
+          "astrology_courses": "Astrology Courses",
+          "blog": "Blog"
+        }
+      }
+    },
+    "auth": {
+      "signin": "Sign In",
+      "my_profile": "My Profile",
+      "my_orders": "My Orders",
+      "logout": "Logout"
+    },
+    "language_selector": {
+      "button": "Select Language",
+      "dropdown_title": "Select Your Language"
+    }
+  },
+  "lifeChangingSolutions": {
+    "bannerTitle": "Life-Changing Solutions in One Call",
+    "bannerDescription": "Get astrological solutions for all your questions about career, love, health, business, marriage, and children.",
+    "solutions": {
+      "0": {"title": "Career", "description": "Many students are confused about exams, jobs, and what to do next. Talk to astrologer Arun Ji, who can analyze your birth chart and help you choose the right career option."},
+      "1": {"title": "Love & Relationships", "description": "Looking for the best love compatibility with your partner? A counseling call can reveal the potential of your relationship."},
+      "2": {"title": "Health", "description": "Vedic astrology predictions can indicate health issues before they manifest. Talk to an astrologer for early advice."},
+      "3": {"title": "Business", "description": "When starting a business or making big decisions, it's important to get accurate insights from astrology. Consulting an astrologer can solve your business problems."},
+      "4": {"title": "Marriage", "description": "The tradition of horoscope matching is very important for marriage in India. Get compatibility analysis, Manglik Dosha, and Gun Milan."},
+      "5": {"title": "Children", "description": "Ancient Indian Vedic astrology analyzes both partners' charts, especially for those wanting to know about children. The astrologer will provide accurate solutions for child-related issues."}
+    },
+    "exploreMoreTitle": "Explore More Astrological Insights",
+    "continueLearningAlt": "Continue your astrological journey",
+    "continueLearningTitle": "Deepen Your Astrological Understanding",
+    "continueLearningDescription": "Keep learning astrology, remedies, and spiritual growth with our curated resources.",
+    "bookCallTitle": "Book Your Call Now!",
+    "bookCallDescription": "Talk to an experienced astrologer for personalized guidance and solutions to your problems.",
+    "goToContact": "Go to Contact",
+    "progressTitle": "Progress & Transformation",
+    "progressDescription": "Discover success stories and tips for your own transformation journey.",
+    "exploreMoreButton": "Explore More"
+  },
+  "about": {
+    "banner": {
+      "heading": "About Nakshatra Gyaan",
+      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
+    },
+    "tabs": {
+      "0": "Our Journey",
+      "1": "Our Team",
+      "2": "Mission & Vision",
+      "3": "FAQs"
+    },
+    "journey": {
+      "heading": "Our Story",
+      "story": {
+        "0": "Nakshatra Gyaan was born not from a business plan, but from a profound personal quest. Our founder, deeply immersed in the corporate world, felt a growing disconnect between material success and inner fulfillment. It was a chance encounter with a traditional Vedic astrologer in a small village that ignited the spark. This wasn't the predictive, fear-based astrology often portrayed, but a deep, compassionate science of self-understanding—a cosmic map of one's karma and potential. The experience was transformative, revealing a path to navigate life's complexities with awareness and grace. This profound insight became the seed of our mission: to share this authentic, empowering wisdom with a world that was searching for meaning.",
+        "1": "Our journey began in 2002, far from the digital landscape we inhabit today. The first 'office' was a quiet corner in our founder's home, armed with classic astrological texts and a deep-seated passion for helping others. Our first clients were friends and family, and our growth was fueled purely by word-of-mouth. Each consultation was an intimate dialogue, a shared exploration of a unique life story written in the stars. These early years were defined by immense dedication, countless hours spent poring over birth charts, and the simple, powerful reward of seeing someone's eyes light up with clarity and renewed hope.",
+        "2": "From the very beginning, our philosophy has been rooted in the belief that astrology is a tool for empowerment, not a declaration of inescapable fate. We see the birth chart as a divine blueprint, highlighting our innate strengths, our spiritual challenges, and our ultimate life purpose. We are committed to demystifying this ancient science, stripping away superstition to reveal its practical and psychological depth. Our approach is holistic, blending the timeless precision of Vedic astrology with modern psychological understanding and actionable spiritual counsel, ensuring our guidance is always relevant, compassionate, and life-affirming.",
+        "3": "The first decade was one of quiet, dedicated service and organic growth. We consciously avoided commercial advertising, choosing instead to let our work speak for itself. This period was crucial for honing our practice and building a foundation of trust. We measured our success not in revenue, but in the tangible, positive transformations we witnessed in our clients' lives—the mended relationships, the newfound career paths, the deep sense of peace achieved. This unwavering focus on integrity and client well-being created a loyal community that became the bedrock upon which Nakshatra Gyaan was built.",
+        "4": "The year 2015 marked a pivotal moment in our story. We recognized that the need for authentic spiritual guidance knew no geographical boundaries. Embracing this challenge, we launched our online platform, a decision that required a significant leap of faith and a steep learning curve. The goal was to translate the intimacy and depth of a face-to-face consultation into a digital experience without losing the human touch. It was a demanding transition, but it was driven by the vision of making this profound knowledge accessible to seekers in every corner of the globe.",
+        "5": "The launch of our digital platform opened floodgates we had only dreamed of. Suddenly, we were connecting with individuals from over 30 countries, each with their unique cultural background and life story. This global expansion was both humbling and enriching. It deepened our understanding of the universal human quest for meaning and challenged us to refine our communication to be clear, sensitive, and culturally aware. We were no longer just a local service; we had become a global sanctuary for spiritual exploration, united by the common language of the cosmos.",
+        "6": "As our community grew, so did the scope of their questions. We realized that to provide truly comprehensive guidance, we needed to look beyond the birth chart alone. This inspired us to integrate the wisdom of astrology's sister sciences. We carefully expanded our team to include experts in Numerology, Tarot, Vastu Shastra, and Palmistry. This evolution allowed us to offer a multi-faceted perspective, providing clients with a richer, more holistic understanding of their lives and empowering them with a wider array of tools for personal and spiritual growth.",
+        "7": "We soon understood that people were not just seeking answers; they were seeking connection. This insight shifted our focus from being a mere service provider to becoming a community facilitator. We launched our weekly newsletter, not as a marketing tool, but as a source of shared learning and cosmic insights. We developed workshops and online forums to create a safe, supportive space where individuals could share their experiences, ask questions, and grow together. Nakshatra Gyaan evolved into a vibrant ecosystem for like-minded souls on a collective journey of discovery.",
+        "8": "In a field where misinformation can be rampant, we have always held ourselves to the highest standards of ethics and integrity. This is our most sacred commitment. Our guidance is designed to empower, never to create fear or dependency. We are transparent about what astrology can and cannot do, and we encourage our clients to use their free will as the ultimate guiding force. We are dedicated to the continuous study and responsible practice of this sacred science, ensuring the trust placed in us is always honored.",
+        "9": "As we look to the future, our mission remains the same, but our vision continues to expand. We are exploring innovative ways to blend ancient wisdom with modern technology, creating more interactive and personalized learning experiences. Our goal is to expand our educational offerings, creating in-depth courses that empower individuals to become more fluent in the language of their own birth charts. We envision Nakshatra Gyaan as a leading global light in the world of spiritual science, continuing to guide, inspire, and empower seekers for generations to come."
+      },
+      "testimonial": {
+        "text": "Nakshatra Gyaan's guidance changed my life. Their remedies and insights helped me find clarity and confidence during a difficult period.",
+        "author": "— Aarti Sharma, Mumbai"
+      }
+    },
+    "team": {
+      "heading": "Meet Our Founder",
+      "testimonial": {
+        "text": "The Nakshatra Gyaan team is not just knowledgeable—they truly care. Their support and wisdom have been invaluable to me.",
+        "author": "— Suresh Gupta, Delhi"
+      }
+    },
+    "mission": {
+      "heading": "Our Mission & Vision",
+      "missionTitle": "Mission",
+      "missionText": "To empower individuals with the knowledge of astrology, helping them make informed decisions, embrace their strengths, and navigate life's challenges with confidence. We aim to demystify astrology and make it a tool for self-growth, not superstition.",
+      "visionTitle": "Vision",
+      "visionText": "To be the most trusted source for astrological guidance, blending tradition with innovation and fostering a global community of seekers. We envision a world where everyone can access the wisdom of the stars to create a life of purpose and joy.",
+      "impactTitle": "Impact:",
+      "impactText": "Over 10,000+ consultations delivered, 500+ workshops conducted, and a growing online community of 50,000+ members worldwide."
+    },
+    "faq": {
+      "heading": "Frequently Asked Questions",
+      "testimonialsHeading": "Reader Testimonials",
+      "q0": "What makes Nakshatra Gyaan unique?",
+      "a0": "Our blend of ancient wisdom, modern insights, and a compassionate approach sets us apart. We focus on practical guidance and personal empowerment.",
+      "q1": "How can I consult an astrologer?",
+      "a1": "You can book a session through our website or contact us for personalized guidance.",
+      "q2": "Are your remedies and predictions personalized?",
+      "a2": "Yes, all our guidance is tailored to your unique birth chart and life situation.",
+      "q3": "Do you offer courses or workshops?",
+      "a3": "Yes, we regularly offer astrology courses and workshops for all levels.",
+      "q4": "Can astrology help with career and relationships?",
+      "a4": "Absolutely! Our consultations cover career, relationships, health, and more—providing actionable insights for every area of life.",
+      "q5": "Is my information kept confidential?",
+      "a5": "Yes, we maintain strict confidentiality and never share your personal details without consent.",
+      "q6": "Do you offer support after a consultation?",
+      "a6": "Yes, we provide follow-up support and are always available for your questions and concerns.",
+      "q7": "How do I book a personal consultation?",
+      "a7": "You can book a session directly through our website's consultation page or contact us via email/phone for personalized assistance.",
+      "q8": "What types of astrology do you practice?",
+      "a8": "We specialize in Vedic astrology, but also offer guidance in numerology, tarot, and modern astrological techniques.",
+      "q9": "Can I get a birth chart reading if I don't know my exact birth time?",
+      "a9": "Yes! While an exact time is ideal, we can still provide valuable insights using your date and place of birth.",
+      "q10": "Do you offer astrology for business or career guidance?",
+      "a10": "Absolutely! We provide career, business, and financial astrology consultations tailored to your unique chart.",
+      "q11": "Are your services available internationally?",
+      "a11": "Yes, we serve clients worldwide through online consultations, reports, and workshops.",
+      "q12": "How do you ensure privacy and confidentiality?",
+      "a12": "We treat your information with the utmost respect and never share your details without your consent."
+    },
+    "newsletter": {
+      "heading": "Get Weekly Astrology Insights",
+      "text": "Sign up for our newsletter and receive cosmic tips, remedies, and predictions every week.",
+      "placeholder": "Your email address",
+      "button": "Subscribe Now"
+    },
+    "quickfacts": {
+      "heading": "Quick Facts",
+      "fact0": "20+ years of astrological guidance",
+      "fact1": "10,000+ consultations delivered",
+      "fact2": "500+ workshops and courses",
+      "fact3": "Global community: 50,000+ members",
+      "fact4": "Personalized remedies and solutions",
+      "fact5": "Ethical, confidential, and compassionate service"
+    },
+    "resources": {
+      "heading": "Recommended Resources",
+      "link0": { "title": "Understanding Your Birth Chart", "url": "/blog/understanding-your-birth-chart" },
+      "link1": { "title": "Gemstones and Their Powers", "url": "/blog/gemstones-and-their-powers" },
+      "link2": { "title": "Numerology Basics", "url": "/blog/numerology-basics" },
+      "link3": { "title": "The Influence of Planets", "url": "/blog/the-influence-of-planets" }
+    }
+  },
+  "astrologyQuiz": {
+    "title": "Today's Astrology Quiz!",
+    "subtitle": "Tell us which one is the correct answer in the comment below",
+    "questionHeader": "What is your question?",
+    "completedTitle": "Quiz Completed!",
+    "scoreText": "Your score: {{score}} out of {{total}}",
+    "tryAgainButton": "Try Again",
+    "moreQuizText": "More Quiz At",
+    "questions": [
+      {
+        "question": "Which planet rules the zodiac sign Leo?",
+        "options": [ "Mars", "Venus", "Sun", "Jupiter" ],
+        "correctAnswerIndex": 2
+      },
+      {
+        "question": "What is the element associated with Scorpio?",
+        "options": [ "Fire", "Earth", "Air", "Water" ],
+        "correctAnswerIndex": 3
+      },
+      {
+        "question": "Which zodiac sign is represented by the Scales?",
+        "options": [ "Libra", "Aquarius", "Gemini", "Pisces" ],
+        "correctAnswerIndex": 0
+      },
+      {
+        "question": "What is the ruling planet of Aries?",
+        "options": [ "Venus", "Mars", "Mercury", "Saturn" ],
+        "correctAnswerIndex": 1
+      },
+      {
+        "question": "Which house in astrology represents marriage and partnerships?",
+        "options": [ "2nd House", "5th House", "7th House", "10th House" ],
+        "correctAnswerIndex": 2
+      }
+    ],
+    "randomCards": [
+      {
+        "title": "Astrology Fact",
+        "description": "Did you know that Mercury retrograde isn't always bad?"
+      },
+      {
+        "title": "Horoscope Tip",
+        "description": "Read your rising sign horoscope for more accuracy!"
+      },
+      {
+        "title": "Zodiac Insight",
+        "description": "Each zodiac sign has unique strengths and weaknesses."
+      },
+      {
+        "title": "Quiz Challenge",
+        "description": "Test your knowledge with our daily astrology quiz!"
+      }
+    ]
+  },
+  "testimonials": {
+    "heading": "Client Reviews",
+    "headingHi": "Client Reviews",
+    "testimonials": {
+      "0": {
+        "name": "Rahul S.",
+        "occupation": "Software Engineer",
+        "text": "The career guidance from my horoscope reading was spot on! It helped me make a crucial decision about my job change. A truly transformative experience."
+      },
+      "1": {
+        "name": "Priya M.",
+        "occupation": "College Student",
+        "text": "I really appreciate!! The personalized numerology session gave me clarity and boosted my confidence, helping me navigate my academic journey with more purpose."
+      },
+      "2": {
+        "name": "Amit & Neha",
+        "occupation": "Newlyweds",
+        "text": "Good Job! The compatibility analysis through face reading was incredibly accurate. It's helping us understand each other better and strengthen our bond."
+      },
+      "3": {
+        "name": "Dr. Sharma",
+        "occupation": "Medical Professional",
+        "text": "I was very impressed! The Vastu consultation for my clinic has noticeably improved the energy. My patients feel more at ease and the atmosphere is very positive now."
+      },
+      "4": {
+        "name": "Anjali K.",
+        "occupation": "Entrepreneur",
+        "text": "The guidance on auspicious timings for my new venture proved invaluable. The business is thriving, and I attribute much of it to these cosmic insights."
+      },
+      "5": {
+        "name": "Deepak V.",
+        "occupation": "Artist",
+        "text": "Truly insightful readings! The tarot session helped me unlock creative blocks and find new direction in my artistic endeavors. Highly recommend for clarity."
+      },
+      "6": {
+        "name": "Sonia L.",
+        "occupation": "Student",
+        "text": "Nakshatra Gyaan's daily horoscopes are consistently accurate and provide a great start to my day. They offer subtle wisdom to navigate life's challenges."
+      },
+      "7": {
+        "name": "Rajesh P.",
+        "occupation": "Business Owner",
+        "text": "Excellent guidance on financial astrology. Helped me make informed decisions during volatile market times. Highly recommended!"
+      },
+      "8": {
+        "name": "Meera D.",
+        "occupation": "Homemaker",
+        "text": "The family compatibility reading brought so much understanding and harmony to our home. Thank you, Nakshatra Gyaan!"
+      }
+    }
+  },
+  "courses": {
+    "hero": {
+      "heading": "Our Astrology Courses",
+      "subheading": "Learn from the best astrologers and master the science of the stars."
+    },
+    "curriculum": {
+      "heading": "Course Curriculum"
+    },
+    "courses": {
+      "0": {
+        "title": "Vedic Astrology Mastery",
+        "description": "A comprehensive introduction to the fundamentals of Vedic astrology.",
+        "tags": ["Beginner", "Self-paced", "Certificate"]
+      },
+      "1": {
+        "title": "Numerology: Cosmic Codes",
+        "description": "Decode the secrets of numbers and their influence on your destiny.",
+        "tags": ["Numerology"]
+      },
+      "2": {
+        "title": "Art of Palmistry",
+        "description": "Learn the ancient art of palm reading and what your hands reveal.",
+        "tags": ["Palmistry", "Hands"]
+      },
+      "3": {
+        "title": "Tarot Reading: Modern Mystic",
+        "description": "Unlock the mysteries of tarot cards for guidance and insight.",
+        "tags": ["Tarot"]
+      },
+      "4": {
+        "title": "Advanced Predictive Astrology",
+        "description": "Master advanced techniques for accurate predictions and timing.",
+        "tags": ["Advanced"]
+      },
+      "5": {
+        "title": "Vaastu Shastra: Harmony at Home",
+        "description": "Create balance and positive energy in your living spaces.",
+        "tags": ["Vaastu"]
+      },
+      "enrollButton": "Enroll Now"
+    },
+    "why": {
+      "heading": "Why Learn With Us?"
+    },
+    "benefits": {
+      "0": {
+        "title": "Expert Instructors",
+        "description": "Learn from certified astrologers and experienced teachers."
+      },
+      "1": {
+        "title": "Comprehensive Curriculum",
+        "description": "Step-by-step lessons from basics to advanced topics."
+      },
+      "2": {
+        "title": "Community Support",
+        "description": "Join a vibrant community of learners and mentors."
+      },
+      "3": {
+        "title": "Practical Application",
+        "description": "Apply your knowledge with real-world case studies."
+      }
+    },
+    "faq": {
+      "heading": "Frequently Asked Questions"
+    }
+  },
+  "blog": {
+    "banner": {
+      "heading": "Astrology Blog",
+      "subheading": "Explore the latest insights, remedies, and wisdom from the world of Vedic astrology, Nakshatras, and spiritual healing."
+    },
+    "featured": {
+      "heading": "Featured Blogs",
+      "viewAll": "View All",
+      "readMore": "Read more",
+      "minRead": "min read",
+      "dateFormat": "PPP"
+    },
+    "recent": {
+      "heading": "Recent Blogs"
+    },
+    "cta": {
+      "heading": "Begin Your Spiritual Journey Today",
+      "subheading": "Unlock the secrets of the cosmos and discover your true potential with our expert guidance.",
+      "button": "Book a Consultation"
+    },
+    "preview": {
+      "continueReading": "Continue Reading"
+    }
+  },
+  "dailyHoroscope": {
+    "heading": "Daily Horoscope",
+    "subheading": "Get your daily insights from the stars today",
+    "knowYourSign": "Know Your Sign",
+    "selectSign": "Select Your Zodiac Sign",
+    "chooseSign": "Choose your sign",
+    "viewHoroscope": "View Horoscope",
+    "learnMore": "Learn More",
+    "authorName": "Dr. Narendra Kumar Sharma",
+    "authorTitle": "Vedic Astrologer",
+    "authorBio": "Hey, I'm a renowned Vedic astrologer with years of experience. My passion is to guide you through cosmic energies and help you unlock your true potential.",
+    "contactMe": "Contact Me",
+    "follow": "Follow :",
+    "faqHeading": "Frequently Asked Questions"
+  },
+  "bestServices": {
+    "bannerHeading": "Our Best Astrology Services",
+    "bannerDescription": "Explore our most popular and highly rated astrology services, trusted by thousands of clients worldwide.",
+    "bannerButton": "See All Services",
+    "services": {
+      "0": {
+        "category": "Career Guidance",
+        "title": "Career & Job Astrology",
+        "description": "Get expert astrological advice for your career, job changes, and professional growth."
+      },
+      "1": {
+        "category": "Love & Relationship",
+        "title": "Love Compatibility Analysis",
+        "description": "Discover your compatibility and relationship potential with our in-depth love astrology readings."
+      },
+      "2": {
+        "category": "Health",
+        "title": "Health & Wellness Astrology",
+        "description": "Receive personalized health predictions and remedies based on your birth chart."
+      },
+      "3": {
+        "category": "Business",
+        "title": "Business & Finance Astrology",
+        "description": "Get guidance for business decisions, investments, and financial planning."
+      },
+      "4": {
+        "category": "Marriage",
+        "title": "Marriage Matching",
+        "description": "Ensure a harmonious marriage with detailed horoscope matching and compatibility analysis."
+      },
+      "5": {
+        "category": "Children",
+        "title": "Child Astrology",
+        "description": "Find solutions for child-related concerns and get predictions for your children's future."
+      },
+      "career-job": {
+        "title": "Career & Job Guidance",
+        "description": "Navigate your professional path with cosmic clarity. Our expert astrologers provide personalized guidance to help you make informed career decisions, identify opportunities, and overcome workplace challenges."
+      },
+      "grah-shanti": {
+        "title": "Grah Shanti Puja",
+        "description": "Harmonize planetary energies and mitigate negative influences with a traditional Grah Shanti Puja. This sacred ritual is performed to bring peace, prosperity, and balance to your life."
+      },
+      "kundali-matching": {
+        "title": "Kundali Matching",
+        "description": "Discover the science and sacred art of Vedic compatibility. Our expert astrologers blend tradition and modern insight to guide you toward a harmonious, blessed union."
+      },
+      "numerology": {
+        "title": "Numerology Analysis",
+        "description": "Discover the power of numbers in your life with personalized numerology reading."
+      },
+      "online-puja": {
+        "title": "Online Puja Services",
+        "description": "Experience the sacred power of Vedic rituals from the comfort of your home. Our online puja services connect you with expert priests, authentic traditions, and divine blessings—no matter where you are in the world."
+      },
+      "palmistry": {
+        "title": "Palmistry Consultation",
+        "description": "Unlock the secrets hidden in your hands. Our palmistry experts provide insightful readings on your life path, character, and future."
+      },
+      "panchang": {
+        "title": "Today's Panchang",
+        "description": "Your daily Vedic almanac for cosmic alignment, auspicious timings, and spiritual clarity. Discover the five limbs of time, planetary positions, and sacred rituals to harmonize your day with the universe."
+      },
+      "personal-reading": {
+        "title": "Personal Astrology Reading",
+        "description": "Our personal astrology reading service offers an in-depth analysis of your natal chart, providing insights into your personality, life path, career, relationships, and more."
+      },
+      "tantra": {
+        "title": "Tantra Consultation",
+        "description": "Explore the transformative path of Tantra with expert guidance. Our consultations focus on spiritual growth, healing, and meditation practices."
+      },
+      "tarot-reading": {
+        "title": "Tarot Reading",
+        "description": "Unlock the mystical secrets of the cards and gain profound insight into your life's journey."
+      }
+    },
+    "exploreHeading": "Explore More Astrology Services",
+    "exploreDescription": "Find the perfect service for your needs from our wide range of offerings.",
+    "popularServices": "Popular Services",
+    "consultation": "Consultation",
+    "learnMore": "Learn More",
+    "readMore": "Read More",
+    "readLess": "Read Less",
+    "buyNow": "Buy Now",
+    "learnMore": "Learn More",
+    "exploreCourses": "Explore Courses",
+    "bookNow": "Book Now",
+    "downloadResources": "Download Resources",
+    "exploreKeyOfferings": "Explore Our Key Offerings"
+  },
+  "astrologerProfile": {
+    "heading": "Meet Dr. Narendra - Your Trusted Astrologer",
+    "subheading": "Expert Vedic Astrologer with Decades of Experience",
+    "credential1": {
+      "title": "Vedic Astrology Expert",
+      "description": "Dr. Narendra is a renowned Vedic Astrologer with over 15 years of experience in traditional Indian astrology. He specializes in birth chart analysis, planetary remedies, and life guidance through ancient Vedic wisdom."
+    },
+    "credential2": {
+      "title": "PhD in Astrology & Philosophy",
+      "description": "With a PhD in Astrology and Philosophy, Dr. Narendra combines traditional knowledge with modern understanding to provide comprehensive astrological consultations and spiritual guidance."
+    },
+    "beliefHi": "मैं मानता हूं कि हर व्यक्ति का जीवन अनोखा है और हर समस्या का समाधान संभव है।",
+    "beliefEn": "I believe that every individual's life is unique and every problem has a solution.",
+    "experienceHi": "15+ वर्षों का अनुभव और हजारों संतुष्ट ग्राहक",
+    "experienceEn": "15+ Years of Experience and Thousands of Satisfied Clients",
+    "bookAppointment": "Book Your Consultation"
+  },
+  "contact": {
+    "floatingCard1": {
+      "label": "Cosmic Connection",
+      "title": "Your celestial journey begins here",
+      "subtitle": "Connect with the cosmos",
+      "button": "Reach out →"
+    },
+    "floatingCard2": {
+      "label": "Guidance Awaits",
+      "title": "Transform your path with stellar wisdom",
+      "subtitle": "Personalized insights",
+      "button": "Discover →"
+    },
+    "floatingCard3": {
+      "label": "Expert Consultation",
+      "title": "Professional astrological guidance",
+      "subtitle": "Available worldwide",
+      "button": "Book now →"
+    },
+    "header": {
+      "title1": "Connect with the",
+      "title2": "cosmic realm",
+      "description": "Have a question for Innovana Astro Services Limited, need guidance, or wish to book a consultation? Reach out to us. Your cosmic conversation awaits."
+    },
+    "info": {
+      "title": "Get In Touch",
+      "description": "We are available via phone, email, or you can send us a message directly. We look forward to guiding you on your celestial journey.",
+      "phoneTitle": "Phone",
+      "phoneHours": "10:00AM to 7:00PM (Mon-Fri)",
+      "emailTitle": "Email",
+      "emailNote": "We reply within 24 hours",
+      "locationTitle": "Location",
+      "addressLine1": "1- KHA -18, Jawahar Nagar",
+      "addressLine2": "Jaipur",
+      "addressCity": "Jaipur",
+      "addressState": "Rajasthan",
+      "addressZip": "302004",
+      "addressCountry": "India",
+      "phoneNumber": "+91-7229808887"
+    },
+    "form": {
+      "title": "Send us a message",
+      "namePlaceholder": "Your Name",
+      "emailPlaceholder": "Your Email",
+      "messagePlaceholder": "Tell us about your cosmic journey...",
+      "sendButton": "Send Message",
+      "sending": "Sending message...",
+      "success": "Message sent successfully! We'll get back to you soon.",
+      "error": "Something went wrong. Please try again."
+    },
+    "brand": "nakshatra"
+  },
+  "footer": {
+    "newsletter": {
+      "title": "Stay in the know with our",
+      "titleHighlight": "celestial newsletter",
+      "subtitle": "Regular updates ensure that readers have access to fresh cosmic perspectives, making Nakshatra Gyaan a must-read.",
+      "placeholder": "Email address",
+      "button": "Subscribe →"
+    },
+    "floatingCards": {
+      "card1": {
+        "tag": "Astrology & Culture",
+        "title": "The mystical art of celestial guidance",
+        "date": "December 20, 2024",
+        "readTime": "5 mins",
+        "button": "Read more →"
+      },
+      "card2": {
+        "tag": "Cosmic Insights",
+        "title": "The importance of planetary alignment for spiritual results",
+        "date": "December 11, 2024",
+        "readTime": "8 mins",
+        "button": "Read more →"
+      }
+    },
+    "links": {
+      "keepExploring": "Keep Exploring",
+      "connect": "Connect",
+      "legal": "Legal",
+      "quickLinks": {
+        "home": "Home",
+        "about": "About",
+        "services": "Services",
+        "reviews": "Reviews",
+        "blog": "Blog",
+        "contact": "Contact"
+      },
+      "legalLinks": {
+        "terms": "Terms & Conditions",
+        "privacy": "Privacy Policy",
+        "credits": "Site Credits"
+      }
+    },
+    "brand": {
+      "name": "nakshatra",
+      "taglinePrefix": "Designed by ",
+      "team": "Scalixity Team",
+      "copyright": "© Nakshatra Gyaan. All rights reserved.",
+      "poweredByPrefix": "Powered by ",
+      "energy": "Cosmic Energy",
+      "language": "🌍 EN English"
+    },
+    "scrollToTop": "Scroll to top",
+    "social": {
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "youtube": "YouTube"
+    }
+  },
+  "panchangPage": {
+    "banner": {
+      "heading": "Today's Panchang",
+      "description": "Your daily Vedic almanac for cosmic alignment, auspicious timings, and spiritual clarity. Discover the five limbs of time, planetary positions, and sacred rituals to harmonize your day with the universe."
+    },
+    "tabs": {
+      "overview": "Overview",
+      "coreElements": "Core Elements",
+      "timings": "Timings",
+      "about": "About"
+    },
+    "overview": {
+      "heading": "Panchang: The Sacred Almanac",
+      "p1": "The Panchang is more than just a calendar—it is a sacred timekeeping system passed down through millennia, guiding spiritual seekers, householders, and sages alike in harmonizing their daily lives with the cosmic flow. Rooted in Vedic astrology, the Panchang is composed of five key elements or 'limbs of time': Tithi (lunar day), Nakshatra (constellation), Yoga (planetary combinations), Karana (half-day lunar division), and Vaar (weekday). Together, these elements paint a complete energetic picture of the day, offering insight into the subtle forces influencing every moment of your life.",
+      "p2": "At Nakshatra Gyaan, we understand that in today's fast-paced world, ancient wisdom must be presented with clarity, relevance, and elegance. That's why we offer a modern Panchang experience, meticulously curated by seasoned astrologers who not only interpret the planetary alignments but also translate them into practical, relatable guidance for everyday living. Whether you're scheduling important events, performing rituals, or making life decisions, our Panchang helps you attune to nature's cycles and act in perfect timing.",
+      "p3": "Each day brings a unique blend of cosmic energies. A particular Tithi might be ideal for spiritual sadhana, while a specific Nakshatra may favor business dealings or healing rituals. Our Panchang entries are not just about what the stars are doing—they are about what you can do with that knowledge. We go beyond standard charts to offer daily affirmations, personalized remedies, and mindful practices to align your mind, body, and spirit with the universe's natural order. In essence, the Panchang becomes your spiritual compass—subtle, silent, and immensely powerful.",
+      "p4": "What makes our approach unique is the integration of traditional Vedic precision with a soul-centered, intuitive lens. We honor the sacred texts and astrological systems, yet we present them with language and symbolism that speaks to the modern heart. Whether you are a devoted practitioner, a curious beginner, or someone seeking deeper awareness, our Panchang offerings meet you where you are—delivering not just information, but illumination.",
+      "p5": "The Panchang is not about superstition or restriction; it is about empowerment—helping you flow with time rather than struggle against it. As you begin to live in alignment with cosmic rhythms, you will notice a shift in energy: fewer obstacles, more synchronicities, deeper inner peace. With Nakshatra Gyaan's Panchang, you don't just read your day—you rise into it, fully present, cosmically supported, and spiritually aligned. Let each sunrise greet you with clarity, and let each action be blessed by divine timing."
+    },
+    "core": {
+      "heading": "Core Panchang Elements",
+      "tithi": { "label": "Tithi", "value": "Shukla Paksha Dwitiya", "desc": "The lunar day, marking the phase of the moon and its spiritual significance." },
+      "nakshatra": { "label": "Nakshatra", "value": "Rohini", "desc": "The star constellation the moon occupies, influencing emotions and events." },
+      "yoga": { "label": "Yoga", "value": "Siddhi", "desc": "A special combination of sun and moon, shaping the day's energy." },
+      "karana": { "label": "Karana", "value": "Bava", "desc": "Half of a Tithi, indicating the quality of actions and outcomes." },
+      "vaar": { "label": "Vaar (Day)", "value": "Monday", "desc": "The weekday, each ruled by a planet and carrying unique vibrations." }
+    },
+    "timings": {
+      "heading": "Auspicious & Inauspicious Timings",
+      "auspicious": {
+        "heading": "Auspicious Timings",
+        "brahma": "Brahma Muhurta:",
+        "brahmaTime": "4:10 AM – 4:58 AM",
+        "abhijit": "Abhijit Muhurat:",
+        "abhijitTime": "11:48 AM – 12:42 PM"
+      },
+      "inauspicious": {
+        "heading": "Inauspicious Timings",
+        "rahu": "Rahu Kaal:",
+        "rahuTime": "7:30 AM – 9:00 AM",
+        "yamaganda": "Yamaganda:",
+        "yamagandaTime": "10:30 AM – 12:00 PM",
+        "gulika": "Gulika Kaal:",
+        "gulikaTime": "1:30 PM – 3:00 PM"
+      },
+      "vrat": {
+        "heading": "Vrat & Festivals",
+        "text": "Today is Somvati Amavasya, considered highly sacred for performing rituals for ancestors (Pitru Tarpan) and observing fasts for prosperity and good health."
+      },
+      "planetary": {
+        "heading": "Moon & Planetary Positions",
+        "moon": "Moon in:",
+        "moonSign": "Taurus",
+        "sun": "Sun in:",
+        "sunSign": "Gemini",
+        "mercury": "Mercury in:",
+        "mercurySign": "Cancer",
+        "jupiter": "Jupiter in:",
+        "jupiterSign": "Aries",
+        "saturn": "Saturn in:",
+        "saturnSign": "Aquarius (Retrograde)"
+      }
+    },
+    "about": {
+      "heading": "About Nakshatra Gyaan",
+      "founder": {
+        "heading": "A Message from Our Founder",
+        "p1": "Astrology is not just about glimpsing the future—it is a sacred mirror that reflects the soul's journey. It empowers us to understand who we truly are, to make choices in alignment with our higher self, and to walk through life with intention, grace, and spiritual clarity.",
+        "p2": "At Nakshatra Gyaan, our purpose is to bridge the ancient science of the stars with the evolving consciousness of today's world—so that every individual, no matter where they are, can find meaning, healing, and direction.",
+        "signature": "— Dr. Narendra Kumar Sharma\nFounder, Nakshatra Gyaan"
+      },
+      "legacy": {
+        "heading": "Our Legacy: A Journey Written in the Stars",
+        "p1": "From humble beginnings to a global spiritual movement, Nakshatra Gyaan has remained rooted in its devotion to authentic, soul-guided astrology. Every milestone marks a step closer to fulfilling our mission—to bring timeless cosmic wisdom to those seeking truth, healing, and transformation.",
+        "milestonesHeading": "Key Milestones in Our Celestial Journey",
+        "m1": "2002 — The Birth of a Vision: Nakshatra Gyaan is founded by Dr. Narendra Kumar Sharma with a single mission—to democratize astrology and make it accessible, reliable, and spiritually enriching for all.",
+        "m2": "2010 — Spreading Light, One Soul at a Time: After conducting over 100 in-person workshops across India, we embraced the digital space and began offering personalized online consultations to seekers worldwide.",
+        "m3": "2015 — Going Global with Grace: Launch of our official online platform, enabling clients from more than 30 countries to receive in-depth astrological guidance, daily horoscopes, and life-transforming insights.",
+        "m4": "2020 — Expanding Our Mystical Offerings: We broadened our services to include Vedic numerology, intuitive tarot readings, online Vedic rituals (pujas), and integrated mind-body-spirit healing practices, making Nakshatra Gyaan a holistic sanctuary for modern spirituality.",
+        "m5": "2024 — Serving a Global Spiritual Family: Today, we proudly serve a global community of over 50,000 members, with more than 10,000 consultations delivered, touching lives with truth, compassion, and clarity.",
+        "p2": "At Nakshatra Gyaan, we do not merely read charts—we listen to your soul, decode its celestial language, and guide you toward a life of alignment, fulfillment, and spiritual evolution. Our journey is fueled by love, our methods are guided by tradition, and our vision is illuminated by the stars.",
+        "cta": "Join us in awakening the cosmic wisdom within you.\nYour path is written in the stars—and we're here to help you read it."
+      }
+    }
+  }
+} 
