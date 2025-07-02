@@ -95,7 +95,7 @@ export function LifeChangingSolutions() {
                 >
                   <div className={`relative h-48 w-full ` + (solution.themeColor ? `bg-[${solution.themeColor}]` : 'bg-gray-200')}>
                     <Image
-                      src={`/images/course-${index + 1}.webp`}
+                      src={`/images/course-${index + 1}.jpg`}
                       alt={t(solution.titleKey)}
                       fill
                       style={{ objectFit: 'cover' }}
@@ -130,7 +130,7 @@ export function LifeChangingSolutions() {
             >
               <div className="relative h-48 md:h-auto md:w-1/2 w-full bg-gray-200">
                 <Image 
-                  src="/images/continue-learning.webp"
+                  src="/images/continue-learning.jpg"
                   alt={t('lifeChangingSolutions.continueLearningAlt')}
                   fill
                   style={{ objectFit: 'cover' }}

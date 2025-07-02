@@ -516,7 +516,7 @@ export function ServicesOverview() {
             <h3 className="text-xl font-bold text-black mb-2 text-center">{snapshotContent.pasteCoolPhotos.title[lang] || snapshotContent.pasteCoolPhotos.title.en}</h3>
             <p className="text-black text-sm mb-4 text-center">{snapshotContent.pasteCoolPhotos.description[lang] || snapshotContent.pasteCoolPhotos.description.en}</p>
             <div className="relative w-full h-32 mb-4 rounded-xl overflow-hidden">
-              <Image src={snapshotContent.pasteCoolPhotos.imageUrl} alt="Horoscope Daily" fill style={{ objectFit: 'cover' }} />
+              <Image src="/images/horoscopedaily.jpg" alt="Horoscope Daily" fill style={{ objectFit: 'cover' }} />
             </div>
             <Link href="/daily-horoscope" passHref>
               <Button className="btn-grad rounded-full text-sm font-semibold">
@@ -581,8 +581,8 @@ export function ServicesOverview() {
           >
             <h3 className="text-2xl font-bold text-black mb-2 text-center">{snapshotContent.coffeinia.title[lang] || snapshotContent.coffeinia.title.en}</h3>
             <p className="text-black text-sm mb-4 text-center">{snapshotContent.coffeinia.description[lang] || snapshotContent.coffeinia.description.en}</p>
-            <div className="relative w-48 h-96">
-              <Image src={snapshotContent.coffeinia.appScreenshot} alt="App Screenshot" fill style={{ objectFit: 'contain' }} />
+            <div className="relative w-64 h-[28rem] rounded-2xl overflow-hidden mx-auto">
+              <Image src="/images/astrology_app.jpg" alt="App Screenshot" fill style={{ objectFit: 'contain' }} />
             </div>
             <div className="space-y-2 w-full mt-4">
                 <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
