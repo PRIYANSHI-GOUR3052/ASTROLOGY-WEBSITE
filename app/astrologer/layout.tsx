@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 import AstrologerSidebar from "@/components/astrologer/Sidebar";
 
 const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(false);
+  const router = useRouter();
   const pathname = usePathname();
 
   const isAuthRoute =
@@ -28,6 +30,18 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
+  // Auth check for dashboard routes
+  useEffect(() => {
+    if (!isAuthRoute) {
+      setCheckingAuth(true);
+      const token = localStorage.getItem("astrologerToken");
+      if (!token) {
+        router.replace("/astrologer/auth");
+      }
+      setCheckingAuth(false);
+    }
+  }, [pathname, isAuthRoute, router]);
+
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
@@ -43,6 +57,15 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   // 🔁 If it's an auth-related page, skip layout
   if (isAuthRoute) {
     return <main className="min-h-screen">{children}</main>;
+  }
+
+  // Show loading spinner while checking auth
+  if (checkingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100" />
+      </div>
+    );
   }
 
   return (

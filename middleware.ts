@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
+import { verifyAstrologerJwt } from './lib/auth-edge';
 
 // This array contains all the paths that should be protected
 const protectedPaths = [
@@ -11,6 +12,17 @@ const protectedPaths = [
   '/admin/services',
   '/admin/reviews',
   '/admin/settings'
+];
+
+// Astrologer protected paths
+const astrologerProtectedPaths = [
+  '/astrologer/dashboard',
+  '/astrologer/profile',
+  '/astrologer/availability',
+  '/astrologer/bookings',
+  '/astrologer/consultations',
+  '/astrologer/reviews',
+  '/astrologer/withdraw',
 ];
 
 // This function can be marked `async` if using `await` inside
@@ -51,6 +63,29 @@ export async function middleware(request: NextRequest) {
     } catch (error) {
       // Token verification failed, redirect to login
       const url = new URL('/admin/login', request.url);
+      url.searchParams.set('callbackUrl', path);
+      return NextResponse.redirect(url);
+    }
+  }
+  
+  // Astrologer protection
+  const isAstrologerProtected = astrologerProtectedPaths.some(protectedPath =>
+    path === protectedPath || path.startsWith(`${protectedPath}/`)
+  );
+  if (path.startsWith('/astrologer') && isAstrologerProtected) {
+    // Try to get token from cookie or Authorization header
+    const token = request.cookies.get('astrologerToken')?.value ||
+      request.headers.get('authorization')?.replace('Bearer ', '');
+    if (!token) {
+      const url = new URL('/astrologer/auth', request.url);
+      url.searchParams.set('callbackUrl', path);
+      return NextResponse.redirect(url);
+    }
+    try {
+      await verifyAstrologerJwt(token);
+      return NextResponse.next();
+    } catch (error) {
+      const url = new URL('/astrologer/auth', request.url);
       url.searchParams.set('callbackUrl', path);
       return NextResponse.redirect(url);
     }
