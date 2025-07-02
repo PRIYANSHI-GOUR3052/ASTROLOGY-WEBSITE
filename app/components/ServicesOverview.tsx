@@ -685,7 +685,7 @@ export function ServicesOverview() {
           >
             <h3 className="text-2xl font-bold text-black mb-2 text-center">{snapshotContent.simpleMockups.title[lang] || snapshotContent.simpleMockups.title.en}</h3>
             <p className="text-black text-sm mb-4 text-center">{snapshotContent.simpleMockups.description[lang] || snapshotContent.simpleMockups.description.en}</p>
-            <div className="relative w-full h-48">
+            <div className="relative w-full h-48 rounded-2xl overflow-hidden">
               <Image src={snapshotContent.simpleMockups.laptopScreenshot} alt="Laptop Screenshot" fill style={{ objectFit: 'contain' }} />
             </div>
           </motion.div>

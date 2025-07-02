@@ -126,15 +126,16 @@ export default function HeroSection() {
   return (
     <>
       {/* Prominent Banner - visually bold, green gradient, with CTA, always below nav */}
-      <section className="pt-28 w-full flex items-center justify-center bg-gradient-to-r from-[#5fa143] via-[#77A656] to-[#357a1a] py-7 px-4 shadow-2xl relative z-30">
+      <section className="pt-28 w-full flex items-center justify-center bg-[#FEFBF2] py-7 px-4 shadow-2xl relative z-30">
         <div className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8">
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white drop-shadow-lg mb-2">Unlock Your Destiny with Nakshatra Gyan</h2>
-            <p className="text-lg md:text-xl text-white/90 font-medium drop-shadow-sm">Experience authentic Vedic astrology, remedies, and guidance for your life journey.</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#5fa143] via-[#77A656] to-[#357a1a] bg-clip-text text-transparent drop-shadow-lg mb-2">
+  Unlock Your Destiny with Nakshatra Gyan</h2>
+            <p className="text-lg md:text-xl font-medium drop-shadow-sm bg-gradient-to-r from-[#5fa143] via-[#77A656] to-[#357a1a] bg-clip-text text-transparent">Experience authentic Vedic astrology, remedies, and guidance for your life journey.</p>
           </div>
           <div className="mt-6 md:mt-0 flex-shrink-0">
             <Link href="/services">
-              <span className="inline-block bg-white text-[#357a1a] font-bold px-8 py-4 rounded-full shadow-lg hover:bg-[#e8f5e9] hover:text-[#285c13] transition-colors text-xl border-2 border-[#a3e635] tracking-wide">Explore Our Services</span>
+              <span className="inline-block bg-[#FEFBF2] text-[#23244a] font-bold px-8 py-4 rounded-full shadow-lg hover:bg-white hover:text-amber-700 transition-colors text-xl border-2 border-[#e5e5e5] tracking-wide">Explore Our Services</span>
             </Link>
           </div>
         </div>
