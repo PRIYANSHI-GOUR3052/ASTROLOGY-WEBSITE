@@ -20,6 +20,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const shouldHideLayout = [
     "/admin/dashboard",
     "/admin/clients",
+    "/admin/astrologers",
     "/admin/courses",
     "/admin/products",
     "/admin/services",
