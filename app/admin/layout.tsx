@@ -17,7 +17,8 @@ import {
   Sun,
   Bell,
   Grid,
-  UserCircle2
+  UserCircle2,
+  Orbit
 } from 'lucide-react';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
@@ -91,6 +92,12 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       label: 'Clients', 
       href: '/admin/clients',
       active: pathname === '/admin/clients'
+    },
+    { 
+      icon: Orbit, 
+      label: 'Astrologers', 
+      href: '/admin/astrologers',
+      active: pathname === '/admin/astrologers'
     },
     { 
       icon: BookOpen, 

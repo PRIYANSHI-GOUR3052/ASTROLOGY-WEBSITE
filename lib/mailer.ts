@@ -17,7 +17,7 @@ export async function sendResetPasswordEmail({ to, resetUrl, astrologerName }: {
     <div style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: #f7f6fb; padding: 32px; color: #2d1e4a;">
       <div style="max-width: 480px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 16px #e0d7f7; padding: 32px;">
         <div style="text-align: center;">
-          <img src='https://nakshatragyaan.com/logo.svg' alt='Nakshatra Gyaan' style='height: 48px; margin-bottom: 16px;' />
+          <img src='https://res.cloudinary.com/dxwspucxw/image/upload/v1751522828/logo_g3dbpz.png' alt='Nakshatra Gyaan' style='height: 48px; margin-bottom: 16px;' />
           <h2 style="color: #7c3aed; margin-bottom: 8px;">Reset Your Password</h2>
         </div>
         <p>Hi${astrologerName ? ` ${astrologerName}` : ''},</p>

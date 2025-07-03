@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const astrologer = await prisma.astrologer.findUnique({ where: { email } });
     if (!astrologer) {
-      return res.status(404).json({ message: 'No astrologer found with this email' });
+      return res.status(404).json({ message: 'Something went wrong while sending email' });
     }
 
     // Generate a secure reset token and expiry (1 hour)
