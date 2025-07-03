@@ -87,7 +87,7 @@ export const blogPosts: Record<string, BlogPost> = {
       ar: `تعرف على الأساسيات لعلم الزمان الوصي وتأثيره على القرارات المعنوية.\n\nالمواضيع الرئيسية:\n• أهمية مخطط الميلاد\n• تأثير علامات الدوران\n• تجميعات الكواكب\n• نظام داشا`,
       ru: `Узнайте основы ведической астрологии и её влияние на жизненные решения.\n\nКлючевые темы:\n• Важность рождественского графика\n• Влияние знаков зодиака\n• Планетарные комбинации\n• Планетарная система`
     },
-    imageUrl: "/images/blog/vedic-astrology.jpg",
+    imageUrl: "/images/blog/vedicastrology.jpg",
     themeColor: "#fca4a4",
     author: {
       en: "Dr. Narendra Kumar Sharma",

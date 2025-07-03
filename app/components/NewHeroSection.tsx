@@ -126,15 +126,16 @@ export default function HeroSection() {
   return (
     <>
       {/* Prominent Banner - visually bold, green gradient, with CTA, always below nav */}
-      <section className="pt-28 w-full flex items-center justify-center bg-gradient-to-r from-[#5fa143] via-[#77A656] to-[#357a1a] py-7 px-4 shadow-2xl relative z-30">
+      <section className="pt-28 w-full flex items-center justify-center bg-[#FEFBF2] py-7 px-4 shadow-2xl relative z-30">
         <div className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8">
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white drop-shadow-lg mb-2">Unlock Your Destiny with Nakshatra Gyan</h2>
-            <p className="text-lg md:text-xl text-white/90 font-medium drop-shadow-sm">Experience authentic Vedic astrology, remedies, and guidance for your life journey.</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#5fa143] via-[#77A656] to-[#357a1a] bg-clip-text text-transparent drop-shadow-lg mb-2">
+  Unlock Your Destiny with Nakshatra Gyan</h2>
+            <p className="text-lg md:text-xl font-medium drop-shadow-sm bg-gradient-to-r from-[#5fa143] via-[#77A656] to-[#357a1a] bg-clip-text text-transparent">Experience authentic Vedic astrology, remedies, and guidance for your life journey.</p>
           </div>
           <div className="mt-6 md:mt-0 flex-shrink-0">
             <Link href="/services">
-              <span className="inline-block bg-white text-[#357a1a] font-bold px-8 py-4 rounded-full shadow-lg hover:bg-[#e8f5e9] hover:text-[#285c13] transition-colors text-xl border-2 border-[#a3e635] tracking-wide">Explore Our Services</span>
+              <span className="inline-block bg-[#FEFBF2] text-[#23244a] font-bold px-8 py-4 rounded-full shadow-lg hover:bg-white hover:text-amber-700 transition-colors text-xl border-2 border-[#e5e5e5] tracking-wide">Explore Our Services</span>
             </Link>
           </div>
         </div>
@@ -165,8 +166,8 @@ export default function HeroSection() {
               <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">Cosmic Calendar</h2>
               <p className="text-gray-700 text-base">Stay attuned to the universe with daily celestial highlights, auspicious timings, and planetary movements that shape your day.</p>
               <Link href="/panchang">
-                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square border-2 border-dashed border-[#77A656] rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/placeholder.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
+                  <Image src="/images/cosmiccalendar.png" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -174,8 +175,8 @@ export default function HeroSection() {
               <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">Zodiac Personality Decoder</h2>
               <p className="text-gray-700 text-base">Uncover the hidden layers of your zodiac sign—traits, strengths, and quirks that make you uniquely you.</p>
               <Link href="/astrology">
-                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square border-2 border-dashed border-[#77A656] rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/placeholder.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
+                  <Image src="/images/zodiac_decoder.avif" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -186,8 +187,8 @@ export default function HeroSection() {
               <h2 className="text-3xl font-bold font-marcellus text-[#23244a]">Astro Wellness Tips</h2>
               <p className="text-gray-700 text-base">Receive practical, holistic wellness advice inspired by the stars, blending ancient wisdom with modern living.</p>
               <Link href="/blog/astrology-remedies-for-life">
-                <motion.div whileHover={{ scale: 1.07, boxShadow: '0 6px 32px #77A65633' }} className="relative w-full aspect-video border-2 border-dashed border-[#77A656] rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/placeholder-video.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                <motion.div whileHover={{ scale: 1.07, boxShadow: '0 6px 32px #77A65633' }} className="relative w-full aspect-video rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
+                  <Image src="/images/astrowellness.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -198,8 +199,8 @@ export default function HeroSection() {
               <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">Spiritual Growth Pathways</h2>
               <p className="text-gray-700 text-base">Explore guided meditations, affirmations, and spiritual practices to elevate your mind, body, and soul.</p>
               <Link href="/courses">
-                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square border-2 border-dashed border-[#77A656] rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/placeholder.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
+                  <Image src="/images/spiritualpathway.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -207,8 +208,8 @@ export default function HeroSection() {
               <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">Myth & Legend Spotlight</h2>
               <p className="text-gray-700 text-base">Journey through fascinating stories and legends from Vedic astrology, bringing ancient myths to life for today's seeker.</p>
               <Link href="/blog/astrology-remedies-for-life">
-                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square border-2 border-dashed border-[#77A656] rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/placeholder.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
+                  <Image src="/images/myth.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -332,4 +333,3 @@ export default function HeroSection() {
       </motion.div>
     </>
   );
-} 
