@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { AnimatedStars } from '../../components/AnimatedStars';
 import { MysticBackground } from '../../components/MysticBackground';
+import axios from 'axios';
+import { useToast } from '@/hooks/use-toast';
 
 const areas = ['Vedic', 'Tarot', 'Numerology', 'Palmistry', 'Western'];
 
@@ -15,7 +17,24 @@ const FloatingCard = ({ className, children }: { className?: string; children?: 
 
 const AstrologerRegisterPage = () => {
   const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: '',
+    yearsOfExperience: '',
+    bankName: '',
+    accountNumber: '',
+    ifscCode: '',
+    terms: false,
+  });
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const toggleArea = (area: string) => {
     setSelectedAreas(prev =>
@@ -26,9 +45,64 @@ const AstrologerRegisterPage = () => {
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setProfileImage(file);
       const reader = new FileReader();
-      reader.onloadend = () => setProfileImage(reader.result as string);
+      reader.onloadend = () => setProfileImagePreview(reader.result as string);
       reader.readAsDataURL(file);
+    } else {
+      setProfileImage(null);
+      setProfileImagePreview(null);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setForm(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (form.password !== form.confirmPassword) {
+      setError('Passwords do not match');
+      toast({ title: 'Error', description: 'Passwords do not match', variant: 'destructive' });
+      return;
+    }
+    if (!form.terms) {
+      setError('You must agree to the terms and conditions');
+      toast({ title: 'Error', description: 'You must agree to the terms', variant: 'destructive' });
+      return;
+    }
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('firstName', form.firstName);
+      formData.append('lastName', form.lastName);
+      formData.append('email', form.email);
+      formData.append('phone', form.phone);
+      formData.append('password', form.password);
+      formData.append('areasOfExpertise', selectedAreas.join(','));
+      formData.append('yearsOfExperience', form.yearsOfExperience);
+      formData.append('bankName', form.bankName);
+      formData.append('accountNumber', form.accountNumber);
+      formData.append('ifscCode', form.ifscCode);
+      if (profileImage) formData.append('profileImage', profileImage);
+      await axios.post('/api/astrologer/register', formData);
+      toast({ title: 'Success', description: 'Registration successful!', variant: 'default' });
+      // Reset form and image preview
+      setForm({
+        firstName: '', lastName: '', email: '', phone: '', password: '', confirmPassword: '', yearsOfExperience: '', bankName: '', accountNumber: '', ifscCode: '', terms: false
+      });
+      setSelectedAreas([]);
+      setProfileImage(null);
+      setProfileImagePreview(null);
+    } catch (err: any) {
+      toast({ title: 'Error', description: err?.response?.data?.message || 'Registration failed', variant: 'destructive' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,8 +149,8 @@ const AstrologerRegisterPage = () => {
               {/* Profile Upload Circle */}
               <label htmlFor="profilePic" className="cursor-pointer relative inline-block">
                 <div className="w-20 h-20 rounded-full border-4 border-[#a084ee] overflow-hidden bg-[#1C1C1C] flex items-center justify-center">
-                  {profileImage ? (
-                    <img src={profileImage} alt="Profile" className="object-cover w-full h-full" />
+                  {profileImagePreview ? (
+                    <img src={profileImagePreview} alt="Profile" className="object-cover w-full h-full" />
                   ) : (
                     <span className="text-sm text-gray-400">Upload</span>
                   )}
@@ -85,16 +159,16 @@ const AstrologerRegisterPage = () => {
               </label>
             </div>
 
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit} encType="multipart/form-data">
               {/* Personal Details */}
               <h3 className="text-lg font-semibold mb-1 text-white">Personal Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input placeholder="First Name" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
-                <input placeholder="Last Name" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
-                <input placeholder="Email" type="email" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
-                <input placeholder="Phone Number" type="tel" pattern="[0-9]{10}" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
-                <input type="password" placeholder="Password" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
-                <input type="password" placeholder="Confirm Password" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="email" value={form.email} onChange={handleChange} placeholder="Email" type="email" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" type="tel" pattern="[0-9]{10}" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="password" value={form.password} onChange={handleChange} type="password" placeholder="Password" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="confirmPassword" value={form.confirmPassword} onChange={handleChange} type="password" placeholder="Confirm Password" required className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
               </div>
 
               {/* Areas of Expertise (2 columns) */}
@@ -118,28 +192,33 @@ const AstrologerRegisterPage = () => {
               {/* Years of Experience */}
               <div>
                 <label className="block mb-2 text-sm text-gray-300">Years of Experience</label>
-                <input placeholder="e.g. 5" type="number" className="w-full px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="yearsOfExperience" value={form.yearsOfExperience} onChange={handleChange} placeholder="e.g. 5" type="number" className="w-full px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
               </div>
 
               {/* Bank Details */}
               <h3 className="text-lg font-semibold mb-1 text-white">Bank Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input placeholder="Bank Name" className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
-                <input placeholder="Account Number" className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
-                <input placeholder="IFSC Code" className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="bankName" value={form.bankName} onChange={handleChange} placeholder="Bank Name" className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="accountNumber" value={form.accountNumber} onChange={handleChange} placeholder="Account Number" className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
+                <input name="ifscCode" value={form.ifscCode} onChange={handleChange} placeholder="IFSC Code" className="px-4 py-2 bg-[#1C1C1C] text-white border border-gray-700 rounded-xl" />
               </div>
 
               {/* Terms */}
               <div className="flex items-start gap-2">
-                <input type="checkbox" className="mt-1 accent-[#a084ee]" />
+                <input name="terms" type="checkbox" checked={form.terms} onChange={handleChange} className="mt-1 accent-[#a084ee]" required />
                 <p className="text-sm text-gray-300">
                   I agree to the <span className="text-[#f857a6] underline">Terms</span> and <span className="text-[#f857a6] underline">Privacy Policy</span>
                 </p>
               </div>
 
-              <button type="submit" className="w-full py-3 text-white bg-gradient-to-r from-[#a084ee] to-[#f857a6] rounded-xl font-semibold hover:brightness-110 transition">
-                Register
+              <button type="submit" disabled={loading || !form.terms} className="w-full py-3 text-white bg-gradient-to-r from-[#a084ee] to-[#f857a6] rounded-xl font-semibold hover:brightness-110 transition">
+                {loading ? 'Registering...' : 'Register'}
               </button>
+              {error && (
+                <div className="mt-2 text-sm text-red-500 bg-red-50 border border-red-200 rounded-md p-2 text-center">
+                  {error}
+                </div>
+              )}
             </form>
 
             <p className="mt-6 text-sm text-center text-gray-400">

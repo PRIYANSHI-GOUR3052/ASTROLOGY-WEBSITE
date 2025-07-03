@@ -5,6 +5,8 @@ import pool from '@/lib/db';
 import { getToken } from 'next-auth/jwt';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
+import bcrypt from 'bcryptjs';
+import { jwtVerify, SignJWT } from 'jose';
 
 // Extend the next-auth types
 declare module 'next-auth' {
@@ -128,3 +130,36 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
+
+// --- Astrologer Auth Helpers ---
+
+export async function hashPassword(password: string): Promise<string> {
+  const salt = await bcrypt.genSalt(10);
+  return bcrypt.hash(password, salt);
+}
+
+export async function comparePassword(password: string, hash: string): Promise<boolean> {
+  return bcrypt.compare(password, hash);
+}
+
+const ASTROLOGER_JWT_SECRET = process.env.ASTROLOGER_JWT_SECRET || 'astrologer-secret-key';
+
+function getAstrologerSecretKey() {
+  return new TextEncoder().encode(ASTROLOGER_JWT_SECRET);
+}
+
+export async function signAstrologerJwt(payload: object, expiresIn = '7d') {
+  // jose does not support '7d' directly, so we convert to seconds (7*24*60*60)
+  const iat = Math.floor(Date.now() / 1000);
+  const exp = iat + 7 * 24 * 60 * 60;
+  return await new SignJWT({ ...payload })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt(iat)
+    .setExpirationTime(exp)
+    .sign(getAstrologerSecretKey());
+}
+
+export async function verifyAstrologerJwt(token: string) {
+  const { payload } = await jwtVerify(token, getAstrologerSecretKey());
+  return payload;
+}
