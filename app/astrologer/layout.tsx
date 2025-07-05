@@ -14,6 +14,7 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   const isAuthRoute =
     pathname?.includes("/astrologer/auth") ||
     pathname?.includes("/astrologer/register") ||
+    pathname?.includes("/astrologer/reset-password") ||
     pathname?.includes("/astrologer/forgot-password");
 
   useEffect(() => {
@@ -76,17 +77,33 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <header className="bg-amber-new dark:bg-black border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex justify-between items-center">
-          <div className="text-lg font-semibold ml-10 md:ml-32 w-full text-center">Astrologer Dashboard</div>
-          <button
-            onClick={toggleDarkMode}
-            className="hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-full"
-          >
-            {isDarkMode ? (
-              <Sun className="text-gray-600 dark:text-gray-300" size={20} />
-            ) : (
-              <Moon className="text-gray-600" size={20} />
-            )}
-          </button>
+          <div className="text-lg font-semibold ml-10 md:ml-32 w-full text-center">
+            Astrologer Dashboard
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleDarkMode}
+              className="hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-full"
+              title="Toggle Theme"
+            >
+              {isDarkMode ? (
+                <Sun className="text-gray-600 dark:text-gray-300" size={20} />
+              ) : (
+                <Moon className="text-gray-600" size={20} />
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                localStorage.removeItem("astrologerToken");
+                router.push("/astrologer/auth");
+              }}
+              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+            >
+              Logout
+            </button>
+          </div>
         </header>
         {/* Page Content */}
         <main className="md:pl-72 flex-1 overflow-y-auto bg-amber-50 dark:bg-midnight-black p-4 sm:p-6">
