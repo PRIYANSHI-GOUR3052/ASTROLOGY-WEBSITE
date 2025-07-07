@@ -5,9 +5,16 @@ import { usePathname, useRouter } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 import AstrologerSidebar from "@/components/astrologer/Sidebar";
 
+// Mock approval status - replace with actual data from your backend
+const getMockApprovalStatus = () => {
+  // For testing, you can change this value to 'pending', 'rejected', or 'verified'
+  return 'pending' as const;
+};
+
 const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(false);
+  const [approvalStatus, setApprovalStatus] = useState<'verified' | 'pending' | 'rejected'>('pending');
   const router = useRouter();
   const pathname = usePathname();
 
@@ -16,6 +23,8 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     pathname?.includes("/astrologer/register") ||
     pathname?.includes("/astrologer/reset-password") ||
     pathname?.includes("/astrologer/forgot-password");
+
+  const isProfilePage = pathname === "/astrologer/profile";
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -38,10 +47,19 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
       const token = localStorage.getItem("astrologerToken");
       if (!token) {
         router.replace("/astrologer/auth");
+      } else {
+        // Mock: Get approval status - replace with actual API call
+        const status = getMockApprovalStatus();
+        setApprovalStatus(status);
+        
+        // Redirect to profile page if not verified and trying to access other pages
+        if ((status === 'pending' || status === 'rejected') && !isProfilePage) {
+          router.replace("/astrologer/profile");
+        }
       }
       setCheckingAuth(false);
     }
-  }, [pathname, isAuthRoute, router]);
+  }, [pathname, isAuthRoute, router, isProfilePage]);
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
@@ -71,8 +89,9 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100">
-      {/* Sidebar */}
-      <AstrologerSidebar />
+      {/* Sidebar - Only show if verified or on profile page */}
+      {(approvalStatus === 'verified' || isProfilePage) && <AstrologerSidebar approvalStatus={approvalStatus} />}
+      
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
@@ -105,8 +124,9 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
             </button>
           </div>
         </header>
+        
         {/* Page Content */}
-        <main className="md:pl-72 flex-1 overflow-y-auto bg-amber-50 dark:bg-midnight-black p-4 sm:p-6">
+        <main className={`flex-1 overflow-y-auto bg-amber-50 dark:bg-midnight-black p-4 sm:p-6 ${approvalStatus === 'verified' || isProfilePage ? 'md:pl-72' : ''}`}>
           {children}
         </main>
       </div>
