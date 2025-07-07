@@ -4,25 +4,27 @@ import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 import AstrologerSidebar from "@/components/astrologer/Sidebar";
+import dynamic from "next/dynamic";
+import { useAuthToken } from '@/hooks/useAuthToken';
 
-// Mock approval status - replace with actual data from your backend
-const getMockApprovalStatus = () => {
-  // For testing, you can change this value to 'pending', 'rejected', or 'verified'
-  return 'pending' as const;
-};
+// Dynamically import the verification form to avoid SSR issues
+const AstrologerVerificationPage = dynamic(() => import("./verify/page"), { ssr: false });
 
 const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(false);
-  const [approvalStatus, setApprovalStatus] = useState<'verified' | 'pending' | 'rejected'>('pending');
+  const [checkingVerification, setCheckingVerification] = useState(false);
+  const [isVerified, setIsVerified] = useState(true); // default true for auth pages
   const router = useRouter();
   const pathname = usePathname();
+  const token = useAuthToken();
 
   const isAuthRoute =
     pathname?.includes("/astrologer/auth") ||
     pathname?.includes("/astrologer/register") ||
     pathname?.includes("/astrologer/reset-password") ||
     pathname?.includes("/astrologer/forgot-password");
+  const isVerifyRoute = pathname?.includes("/astrologer/verify");
 
   const isProfilePage = pathname === "/astrologer/profile";
 
@@ -40,26 +42,35 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // Auth check for dashboard routes
+  // Auth and verification check for dashboard routes
   useEffect(() => {
-    if (!isAuthRoute) {
+    if (!isAuthRoute && token) {
       setCheckingAuth(true);
-      const token = localStorage.getItem("astrologerToken");
       if (!token) {
-        router.replace("/astrologer/auth");
-      } else {
-        // Mock: Get approval status - replace with actual API call
-        const status = getMockApprovalStatus();
-        setApprovalStatus(status);
-        
-        // Redirect to profile page if not verified and trying to access other pages
-        if ((status === 'pending' || status === 'rejected') && !isProfilePage) {
-          router.replace("/astrologer/profile");
-        }
+        router.push("/astrologer/auth");
+        setCheckingAuth(false);
+        return;
       }
       setCheckingAuth(false);
+      setCheckingVerification(true);
+      fetch("/api/astrologer/verification", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.verification && data.verification.status !== "approved") {
+            setIsVerified(false);
+            router.push("/astrologer/verify");
+          } else {
+            setIsVerified(true);
+          }
+        })
+        .catch(() => {
+          setIsVerified(false);
+        })
+        .finally(() => setCheckingVerification(false));
     }
-  }, [pathname, isAuthRoute, router, isProfilePage]);
+  }, [pathname, isAuthRoute, router, token]);
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
@@ -78,8 +89,8 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     return <main className="min-h-screen">{children}</main>;
   }
 
-  // Show loading spinner while checking auth
-  if (checkingAuth) {
+  // Show loading spinner while checking auth or verification
+  if (checkingAuth || checkingVerification) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100" />
@@ -90,7 +101,7 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100">
       {/* Sidebar - Only show if verified or on profile page */}
-      {(approvalStatus === 'verified' || isProfilePage) && <AstrologerSidebar approvalStatus={approvalStatus} />}
+      {(isVerified || isProfilePage) && <AstrologerSidebar approvalStatus={isVerified ? 'verified' : 'pending'} />}
       
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
@@ -126,8 +137,10 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
         </header>
         
         {/* Page Content */}
-        <main className={`flex-1 overflow-y-auto bg-amber-50 dark:bg-midnight-black p-4 sm:p-6 ${approvalStatus === 'verified' || isProfilePage ? 'md:pl-72' : ''}`}>
+        <main className="md:pl-72 flex-1 overflow-y-auto bg-amber-50 dark:bg-midnight-black p-4 sm:p-6">
+          {/* If not verified and not on /verify, show verification form instead of children */}
           {children}
+          {/* {!isVerified && !isVerifyRoute ? <AstrologerVerificationPage /> : children} */}
         </main>
       </div>
     </div>

@@ -73,6 +73,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         accountNumber,
         ifscCode,
         profileImage: profileImageUrl,
+        verificationStatus: 'pending',
+      },
+    });
+    await prisma.astrologerVerification.create({
+      data: {
+        astrologerId: astrologer.id,
+        status: 'pending',
       },
     });
     return res.status(201).json({ message: 'Registration successful', astrologer: { id: astrologer.id, email: astrologer.email, profileImage: astrologer.profileImage } });

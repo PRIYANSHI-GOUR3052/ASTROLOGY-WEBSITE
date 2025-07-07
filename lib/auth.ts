@@ -142,7 +142,7 @@ export async function comparePassword(password: string, hash: string): Promise<b
   return bcrypt.compare(password, hash);
 }
 
-const ASTROLOGER_JWT_SECRET = process.env.ASTROLOGER_JWT_SECRET || 'astrologer-secret-key';
+const ASTROLOGER_JWT_SECRET = process.env.JWT_SECRET || 'astrologer-secret-key';
 
 function getAstrologerSecretKey() {
   return new TextEncoder().encode(ASTROLOGER_JWT_SECRET);
