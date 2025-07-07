@@ -3,7 +3,7 @@
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { CheckCircle, Clock, XCircle, AlertCircle } from "lucide-react";
+import { CheckCircle, Clock, XCircle, AlertCircle, Plus, Trash } from "lucide-react";
 
 const expertiseOptions = [
   "Vedic Astrology",
@@ -156,21 +156,6 @@ const ProfilePage = () => {
 
   return (
     <div className="relative">
-      {/* Status Indicator - Top Right */}
-      <div className="absolute top-4 right-4 z-10">
-        <motion.div
-          className={`flex items-center gap-2 px-4 py-2 rounded-full border ${statusConfig.bgColor} ${statusConfig.borderColor} shadow-lg`}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <StatusIcon className={`w-5 h-5 ${statusConfig.color}`} />
-          <span className={`font-semibold text-sm ${statusConfig.color}`}>
-            {statusConfig.text}
-          </span>
-        </motion.div>
-      </div>
-
       {/* Access Restriction Notice */}
       {(approvalStatus === 'pending' || approvalStatus === 'rejected') && (
         <motion.div
@@ -210,12 +195,27 @@ const ProfilePage = () => {
         </motion.div>
       )}
 
+      {/* Manage Profile Card */}
       <motion.div
-        className="w-full mx-auto bg-amber-new dark:bg-black p-5 sm:p-8 rounded-xl shadow"
+        className="w-full mx-auto bg-amber-new dark:bg-black p-5 sm:p-8 rounded-xl shadow relative"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
+        {/* Status Indicator - Top Right (moved inside card) */}
+        <div className="absolute top-4 right-4 z-10">
+          <motion.div
+            className={`flex items-center gap-2 px-4 py-2 rounded-full border ${statusConfig.bgColor} ${statusConfig.borderColor} shadow-lg`}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <StatusIcon className={`w-5 h-5 ${statusConfig.color}`} />
+            <span className={`font-semibold text-sm ${statusConfig.color}`}>
+              {statusConfig.text}
+            </span>
+          </motion.div>
+        </div>
         <h1 className="text-2xl font-bold mb-4">Manage Profile</h1>
         
         {/* Profile Photo Section */}
@@ -369,7 +369,128 @@ const ProfilePage = () => {
           </div>
         </motion.form>
       </motion.div>
+
+      {/* Verification Documents Section */}
+      <VerificationDocumentsSection />
     </div>
+  );
+};
+
+const VerificationDocumentsSection = () => {
+  const [docs, setDocs] = useState({
+    pan: null as File | null,
+    selfie: null as File | null,
+    workProof: null as File | null,
+    declaration: null as File | null,
+    addressProof: null as File | null,
+  });
+  const [certifications, setCertifications] = useState([
+    { courseName: '', instituteName: '', yearOfCompletion: '', file: null as File | null },
+  ]);
+  const [educations, setEducations] = useState([
+    { qualification: '', fieldOfStudy: '', universityName: '', file: null as File | null },
+  ]);
+
+  const handleDocChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+    setDocs((prev) => ({ ...prev, [name]: files && files[0] ? files[0] : null }));
+  };
+
+  const handleCertChange = (idx: number, field: string, value: string | File | null) => {
+    setCertifications((prev) =>
+      prev.map((c, i) =>
+        i === idx ? { ...c, [field]: value } : c
+      )
+    );
+  };
+  const addCert = () => setCertifications((prev) => [...prev, { courseName: '', instituteName: '', yearOfCompletion: '', file: null }]);
+  const removeCert = (idx: number) => setCertifications((prev) => prev.filter((_, i) => i !== idx));
+
+  const handleEduChange = (idx: number, field: string, value: string | File | null) => {
+    setEducations((prev) =>
+      prev.map((e, i) =>
+        i === idx ? { ...e, [field]: value } : e
+      )
+    );
+  };
+  const addEdu = () => setEducations((prev) => [...prev, { qualification: '', fieldOfStudy: '', universityName: '', file: null }]);
+  const removeEdu = (idx: number) => setEducations((prev) => prev.filter((_, i) => i !== idx));
+
+  return (
+    <motion.div
+      className="w-full mx-auto bg-amber-new dark:bg-black p-5 sm:p-8 rounded-xl shadow mt-8"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+    >
+      <h2 className="text-xl font-bold mb-4">Verification Documents</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block font-semibold text-sm mb-1">Upload PAN Card</label>
+          <input type="file" name="pan" accept="application/pdf,image/*" onChange={handleDocChange} className="w-full" />
+        </div>
+        <div>
+          <label className="block font-semibold text-sm mb-1">Upload Selfie</label>
+          <input type="file" name="selfie" accept="image/*" onChange={handleDocChange} className="w-full" />
+        </div>
+        <div>
+          <label className="block font-semibold text-sm mb-1">Upload Work Proof</label>
+          <input type="file" name="workProof" accept="application/pdf,image/*" onChange={handleDocChange} className="w-full" />
+        </div>
+        <div>
+          <label className="block font-semibold text-sm mb-1">Upload Declaration Form</label>
+          <input type="file" name="declaration" accept="application/pdf,image/*" onChange={handleDocChange} className="w-full" />
+        </div>
+        <div>
+          <label className="block font-semibold text-sm mb-1">Upload Address Proof</label>
+          <input type="file" name="addressProof" accept="application/pdf,image/*" onChange={handleDocChange} className="w-full" />
+        </div>
+      </div>
+      {/* Certifications Section */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-semibold text-lg">Certifications</h3>
+          <button type="button" onClick={addCert} className="flex items-center gap-1 px-2 py-1 bg-amber-500 dark:bg-purple-700 text-white rounded hover:bg-amber-600 dark:hover:bg-purple-800 transition-colors">
+            <Plus className="w-4 h-4" /> Add
+          </button>
+        </div>
+        <div className="flex flex-col gap-4">
+          {certifications.map((cert, idx) => (
+            <div key={idx} className="grid grid-cols-1 sm:grid-cols-5 gap-2 items-end bg-white dark:bg-zinc-900 p-3 rounded-lg shadow border border-gray-200 dark:border-zinc-800">
+              <input type="text" placeholder="Course Name" value={cert.courseName} onChange={e => handleCertChange(idx, 'courseName', e.target.value)} className="col-span-1 px-2 py-1 rounded border" />
+              <input type="text" placeholder="Institute Name" value={cert.instituteName} onChange={e => handleCertChange(idx, 'instituteName', e.target.value)} className="col-span-1 px-2 py-1 rounded border" />
+              <input type="text" placeholder="Year of Completion" value={cert.yearOfCompletion} onChange={e => handleCertChange(idx, 'yearOfCompletion', e.target.value)} className="col-span-1 px-2 py-1 rounded border" />
+              <input type="file" accept="application/pdf,image/*" onChange={e => handleCertChange(idx, 'file', e.target.files && e.target.files[0] ? e.target.files[0] : null)} className="col-span-1" />
+              <button type="button" onClick={() => removeCert(idx)} className="col-span-1 flex items-center justify-center px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                <Trash className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Educations Section */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-semibold text-lg">Educations</h3>
+          <button type="button" onClick={addEdu} className="flex items-center gap-1 px-2 py-1 bg-amber-500 dark:bg-purple-700 text-white rounded hover:bg-amber-600 dark:hover:bg-purple-800 transition-colors">
+            <Plus className="w-4 h-4" /> Add
+          </button>
+        </div>
+        <div className="flex flex-col gap-4">
+          {educations.map((edu, idx) => (
+            <div key={idx} className="grid grid-cols-1 sm:grid-cols-5 gap-2 items-end bg-white dark:bg-zinc-900 p-3 rounded-lg shadow border border-gray-200 dark:border-zinc-800">
+              <input type="text" placeholder="Qualification" value={edu.qualification} onChange={e => handleEduChange(idx, 'qualification', e.target.value)} className="col-span-1 px-2 py-1 rounded border" />
+              <input type="text" placeholder="Field of Study" value={edu.fieldOfStudy} onChange={e => handleEduChange(idx, 'fieldOfStudy', e.target.value)} className="col-span-1 px-2 py-1 rounded border" />
+              <input type="text" placeholder="University Name" value={edu.universityName} onChange={e => handleEduChange(idx, 'universityName', e.target.value)} className="col-span-1 px-2 py-1 rounded border" />
+              <input type="file" accept="application/pdf,image/*" onChange={e => handleEduChange(idx, 'file', e.target.files && e.target.files[0] ? e.target.files[0] : null)} className="col-span-1" />
+              <button type="button" onClick={() => removeEdu(idx)} className="col-span-1 flex items-center justify-center px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                <Trash className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
