@@ -12,25 +12,44 @@ const AstrologerAuthPage = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [checkingVerification, setCheckingVerification] = React.useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setCheckingVerification(false);
     try {
       const res = await axios.post('/api/astrologer/login', { email, password });
       toast({ title: 'Success', description: 'Login successful!', variant: 'default' });
-      // Store JWT in localStorage
       localStorage.setItem('astrologerToken', res.data.token);
-      // Redirect to dashboard
-      router.push('/astrologer/profile');
+      setCheckingVerification(true);
+      // Fetch verification status using the token
+      const verifyRes = await fetch('/api/astrologer/verification', {
+        headers: { Authorization: `Bearer ${res.data.token}` },
+      });
+      const verifyData = await verifyRes.json();
+      if (!verifyData.verification || verifyData.verification.status !== "approved") {
+        router.push('/astrologer/verify');
+      } else {
+        router.push('/astrologer/profile');
+      }
     } catch (err: any) {
       toast({ title: 'Error', description: err?.response?.data?.message || 'Login failed', variant: 'destructive' });
     } finally {
       setLoading(false);
+      setCheckingVerification(false);
     }
   };
+
+  if (loading || checkingVerification) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100" />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#ece7e4] relative min-h-screen flex items-center justify-center px-4">

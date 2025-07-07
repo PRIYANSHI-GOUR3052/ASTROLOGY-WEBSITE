@@ -176,20 +176,59 @@ model visitors {
 }
 
 model Astrologer {
-  id                Int      @id @default(autoincrement())
-  firstName         String
-  lastName          String
-  email             String   @unique
-  phone             String   @unique
-  password          String
-  areasOfExpertise  String   // Comma-separated
-  yearsOfExperience Int?
-  bankName          String?
-  accountNumber     String?
-  ifscCode          String?
-  profileImage      String?
-  createdAt         DateTime @default(now())
-  resetToken        String?  // For password reset
-  resetTokenExpiry  DateTime? // For password reset expiry
-} 
+  id                 Int                     @id @default(autoincrement())
+  firstName          String
+  lastName           String
+  email              String                  @unique
+  phone              String                  @unique
+  password           String
+  areasOfExpertise   String // Comma-separated
+  yearsOfExperience  Int?
+  bankName           String?
+  accountNumber      String?
+  ifscCode           String?
+  profileImage       String?
+  createdAt          DateTime                @default(now())
+  resetToken         String? // For password reset
+  resetTokenExpiry   DateTime? // For password reset expiry
+  verificationStatus String                  @default("pending") // pending, approved, rejected
+  verification       AstrologerVerification?
+}
 
+model AstrologerVerification {
+  id              Int                       @id @default(autoincrement())
+  astrologerId    Int                       @unique
+  aadharCard      String? // File URL
+  panCard         String? // File URL
+  selfie          String? // File URL
+  workProof       String? // File URL (experience letter, screenshots, etc.)
+  declarationForm String? // File URL
+  addressProof    String? // File URL (optional)
+  status          String                    @default("pending") // pending, approved, rejected
+  adminRemarks    String?
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+  astrologer      Astrologer                @relation(fields: [astrologerId], references: [id])
+  certifications  AstrologerCertification[]
+  educations      AstrologerEducation[]
+}
+
+model AstrologerCertification {
+  id               Int                    @id @default(autoincrement())
+  verificationId   Int
+  courseName       String
+  instituteName    String
+  yearOfCompletion String
+  certificateFile  String // File URL (PDF/JPG)
+  verification     AstrologerVerification @relation(fields: [verificationId], references: [id])
+}
+
+model AstrologerEducation {
+  id             Int                    @id @default(autoincrement())
+  verificationId Int
+  qualification  String
+  fieldOfStudy   String
+  universityName String
+  degreeFile     String // File URL (PDF/JPG)
+  verification   AstrologerVerification @relation(fields: [verificationId], references: [id])
+}
