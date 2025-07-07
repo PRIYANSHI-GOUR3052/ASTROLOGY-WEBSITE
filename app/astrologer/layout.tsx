@@ -4,18 +4,27 @@ import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 import AstrologerSidebar from "@/components/astrologer/Sidebar";
+import dynamic from "next/dynamic";
+import { useAuthToken } from '@/hooks/useAuthToken';
+
+// Dynamically import the verification form to avoid SSR issues
+const AstrologerVerificationPage = dynamic(() => import("./verify/page"), { ssr: false });
 
 const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(false);
+  const [checkingVerification, setCheckingVerification] = useState(false);
+  const [isVerified, setIsVerified] = useState(true); // default true for auth pages
   const router = useRouter();
   const pathname = usePathname();
+  const token = useAuthToken();
 
   const isAuthRoute =
     pathname?.includes("/astrologer/auth") ||
     pathname?.includes("/astrologer/register") ||
     pathname?.includes("/astrologer/reset-password") ||
     pathname?.includes("/astrologer/forgot-password");
+  const isVerifyRoute = pathname?.includes("/astrologer/verify");
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -31,17 +40,35 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // Auth check for dashboard routes
+  // Auth and verification check for dashboard routes
   useEffect(() => {
-    if (!isAuthRoute) {
+    if (!isAuthRoute && token) {
       setCheckingAuth(true);
-      const token = localStorage.getItem("astrologerToken");
       if (!token) {
-        router.replace("/astrologer/auth");
+        router.push("/astrologer/auth");
+        setCheckingAuth(false);
+        return;
       }
       setCheckingAuth(false);
+      setCheckingVerification(true);
+      fetch("/api/astrologer/verification", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.verification && data.verification.status !== "approved") {
+            setIsVerified(false);
+            router.push("/astrologer/verify");
+          } else {
+            setIsVerified(true);
+          }
+        })
+        .catch(() => {
+          setIsVerified(false);
+        })
+        .finally(() => setCheckingVerification(false));
     }
-  }, [pathname, isAuthRoute, router]);
+  }, [pathname, isAuthRoute, router, token]);
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
@@ -60,8 +87,8 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     return <main className="min-h-screen">{children}</main>;
   }
 
-  // Show loading spinner while checking auth
-  if (checkingAuth) {
+  // Show loading spinner while checking auth or verification
+  if (checkingAuth || checkingVerification) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100" />
@@ -107,7 +134,9 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
         </header>
         {/* Page Content */}
         <main className="md:pl-72 flex-1 overflow-y-auto bg-amber-50 dark:bg-midnight-black p-4 sm:p-6">
+          {/* If not verified and not on /verify, show verification form instead of children */}
           {children}
+          {/* {!isVerified && !isVerifyRoute ? <AstrologerVerificationPage /> : children} */}
         </main>
       </div>
     </div>

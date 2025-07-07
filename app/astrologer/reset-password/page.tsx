@@ -34,7 +34,7 @@ const ResetPasswordPage = () => {
     try {
       await axios.post("/api/astrologer/reset-password", { token, newPassword });
       toast({ title: "Success", description: "Password has been reset!", variant: "default" });
-      router.push("/astrologer");
+      router.push("/astrologer/auth");
     } catch (err: any) {
       toast({
         title: "Error",
@@ -96,7 +96,7 @@ const ResetPasswordPage = () => {
         <div className="mt-6 text-center text-sm text-gray-400">
           <p>
             Back to{" "}
-            <Link href="/astrologer" className="text-[#f857a6] hover:underline font-medium">
+            <Link href="/astrologer/auth" className="text-[#f857a6] hover:underline font-medium">
               Login
             </Link>
           </p>
