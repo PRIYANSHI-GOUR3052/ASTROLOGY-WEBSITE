@@ -60,6 +60,9 @@ const BookingsPage = () => {
   const [rescheduleOpen, setRescheduleOpen] = useState(false);
   const [rescheduleBookingId, setRescheduleBookingId] = useState<number | null>(null);
   const [rescheduleDate, setRescheduleDate] = useState<Date | undefined>(undefined);
+  const [rejectOpen, setRejectOpen] = useState(false);
+  const [rejectBookingId, setRejectBookingId] = useState<number | null>(null);
+  const [rejectRemarks, setRejectRemarks] = useState("");
 
   const filteredBookings = mockBookings.filter(b => {
     if (b.status !== tab) return false;
@@ -85,6 +88,25 @@ const BookingsPage = () => {
     setRescheduleOpen(false);
     setRescheduleBookingId(null);
     setRescheduleDate(undefined);
+  };
+
+  const handleOpenReject = (booking: typeof mockBookings[0]) => {
+    setRejectBookingId(booking.id);
+    setRejectRemarks("");
+    setRejectOpen(true);
+  };
+
+  const handleCloseReject = () => {
+    setRejectOpen(false);
+    setRejectBookingId(null);
+    setRejectRemarks("");
+  };
+
+  const handleConfirmReject = () => {
+    // Here you would handle the rejection logic, e.g., send remarks to backend
+    setRejectOpen(false);
+    setRejectBookingId(null);
+    setRejectRemarks("");
   };
 
   return (
@@ -162,7 +184,12 @@ const BookingsPage = () => {
                   <Button variant="default" size="sm" className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-1">
                     <Check className="w-4 h-4" /> Accept
                   </Button>
-                  <Button variant="destructive" size="sm" className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-1">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
+                    onClick={() => handleOpenReject(booking)}
+                  >
                     <X className="w-4 h-4" /> Reject
                   </Button>
                   <Button
@@ -217,6 +244,28 @@ const BookingsPage = () => {
           <DialogFooter>
             <Button variant="outline" onClick={handleCloseReschedule}>Cancel</Button>
             <Button variant="outline" onClick={handleSaveReschedule}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      {/* Reject Modal */}
+      <Dialog open={rejectOpen} onOpenChange={setRejectOpen}>
+        <DialogContent className='bg-amber-new dark:bg-midnight-black'>
+          <DialogHeader>
+            <DialogTitle>Reject Booking</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 p-4 bg-amber-new-light dark:bg-black rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl w-full mx-auto">
+            <Label htmlFor="remarks">Remarks (optional)</Label>
+            <textarea
+              id="remarks"
+              value={rejectRemarks}
+              onChange={e => setRejectRemarks(e.target.value)}
+              className="w-full min-h-[80px] rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-gray-900 dark:text-white"
+              placeholder="Enter remarks for rejection..."
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseReject}>Cancel</Button>
+            <Button variant="destructive" onClick={handleConfirmReject}>Confirm Reject</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

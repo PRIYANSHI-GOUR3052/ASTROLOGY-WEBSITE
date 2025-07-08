@@ -16,21 +16,37 @@ const AvailabilityPage = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [form, setForm] = useState<Slot>({ date: "", start: "", end: "", repeat: "None" });
   const [showForm, setShowForm] = useState(true);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddSlot = (e: React.FormEvent) => {
+  const handleAddOrUpdateSlot = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.date || !form.start || !form.end) return;
-    setSlots((prev) => [...prev, form]);
+    if (editIndex !== null) {
+      // Update existing slot
+      setSlots((prev) =>
+        prev.map((slot, idx) => (idx === editIndex ? form : slot))
+      );
+      setEditIndex(null);
+    } else {
+      // Add new slot
+      setSlots((prev) => [...prev, form]);
+    }
     setForm({ date: "", start: "", end: "", repeat: "None" });
   };
 
   const handleRemoveSlot = (idx: number) => {
     setSlots((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const handleEditSlot = (idx: number) => {
+    setForm(slots[idx]);
+    setEditIndex(idx);
+    setShowForm(true);
   };
 
   return (
@@ -46,7 +62,7 @@ const AvailabilityPage = () => {
         {showForm && (
           <motion.form
             className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8"
-            onSubmit={handleAddSlot}
+            onSubmit={handleAddOrUpdateSlot}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
@@ -79,8 +95,20 @@ const AvailabilityPage = () => {
                 type="submit"
                 className="py-2 px-6 bg-amber-500 dark:bg-purple-700 text-white font-bold rounded-lg mt-2 shadow"
               >
-                Add Slot
+                {editIndex !== null ? "Update Slot" : "Add Slot"}
               </motion.button>
+              {editIndex !== null && (
+                <button
+                  type="button"
+                  className="ml-4 py-2 px-4 bg-gray-300 dark:bg-gray-600 text-black dark:text-white rounded-lg mt-2"
+                  onClick={() => {
+                    setEditIndex(null);
+                    setForm({ date: "", start: "", end: "", repeat: "None" });
+                  }}
+                >
+                  Cancel
+                </button>
+              )}
             </div>
           </motion.form>
         )}
@@ -102,7 +130,7 @@ const AvailabilityPage = () => {
             {slots.map((slot, idx) => (
               <motion.div
                 key={idx}
-                className="flex flex-col sm:flex-row items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 shadow-sm gap-2"
+                className="flex flex-col sm:flex-row items-center justify-between bg-white dark:bg-midnight-black border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 shadow-sm gap-2"
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 40 }}
@@ -114,14 +142,24 @@ const AvailabilityPage = () => {
                   <span><span className="font-semibold">End:</span> {slot.end}</span>
                   <span><span className="font-semibold">Repeat:</span> {slot.repeat}</span>
                 </div>
-                <motion.button
-                  whileHover={{ scale: 1.1, backgroundColor: '#ef4444', color: '#fff' }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-3 py-1 rounded bg-red-100 text-red-600 font-semibold text-xs transition-colors"
-                  onClick={() => handleRemoveSlot(idx)}
-                >
-                  Remove
-                </motion.button>
+                <div className="flex gap-2">
+                  <motion.button
+                    whileHover={{ scale: 1.1, backgroundColor: '#ef4444', color: '#fff' }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-3 py-1 rounded bg-red-100 text-red-600 font-semibold text-xs transition-colors"
+                    onClick={() => handleRemoveSlot(idx)}
+                  >
+                    Remove
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.1, backgroundColor: '#f59e42', color: '#fff' }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-3 py-1 rounded bg-amber-100 text-amber-700 font-semibold text-xs transition-colors"
+                    onClick={() => handleEditSlot(idx)}
+                  >
+                    Edit
+                  </motion.button>
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>
