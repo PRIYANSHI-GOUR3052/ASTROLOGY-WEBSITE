@@ -160,6 +160,13 @@ export function Header() {
           <button onClick={() => setIsSearchOpen(true)} className="p-2 rounded-full hover:bg-gray-200 transition-colors"><Search className="h-6 w-6 text-gray-600" /></button>
           <CartIcon />
           <div className="hidden md:flex items-center gap-4">
+            <a
+              href="/astrologer/auth/"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#FF8C00] to-[#6A0DAD] text-white font-semibold hover:from-[#6A0DAD] hover:to-[#FF8C00] transition-all whitespace-nowrap shadow"
+              style={{ textDecoration: 'none' }}
+            >
+              Join us
+            </a>
             {session?.user ? (
               <div className="relative" ref={userMenuRef}>
                 <button onClick={() => setIsUserMenuOpen(prev => !prev)} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-transparent bg-clip-text bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] hover:bg-gray-100 transition-all font-semibold whitespace-nowrap"><User className="w-4 h-4" /> {session.user.name || 'User'} <ChevronDown className="w-4 h-4" /></button>
