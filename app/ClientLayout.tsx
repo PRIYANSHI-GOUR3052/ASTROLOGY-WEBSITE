@@ -42,12 +42,12 @@ export default function ClientLayout({
   //   "/astrologer/register",
   //   "/astrologer/auth",
   //   "/astrologer/forgot-password",
-  //   "/admin/astrologers/[email]"
+  //   "/admin/astrologers/",
   // ].includes(pathname ?? '');
 
-  const shouldHideLayout = ["/admin", "/astrologer", "/signin"].some((prefix) =>
-    pathname?.startsWith(prefix)
-  );
+ const shouldHideLayout = ["/admin", "/astrologer", "/signin"].some((prefix) =>
+   pathname?.startsWith(prefix)
+ );
 
   const [isClient, setIsClient] = useState(false);
 
