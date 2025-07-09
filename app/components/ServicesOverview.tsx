@@ -54,7 +54,7 @@ const snapshotContent = {
       ar: "احصل على توقعات يومية دقيقة مصممة خصيصاً لك. ابدأ يومك بتوجيه كوني.",
       ru: "Получайте точные ежедневные прогнозы, составленные специально для вас. Начните свой день с космического руководства."
     },
-    imageUrl: "/images/horoscope_daily.jpg"
+    imageUrl: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042875/horoscopedaily_txnsuj.jpg"
   },
   fitsForCatlovers: {
     title: {
@@ -100,7 +100,7 @@ const snapshotContent = {
       ar: "اختبر قراءات شخصية ورؤى يومية أثناء التنقل مع تطبيقنا المحمول.",
       ru: "Получайте персональные прогнозы и ежедневные советы в нашем мобильном приложении."
     },
-    appScreenshot: "/images/astrology_app_mockup.jpg"
+    appScreenshot: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042871/astrology_app_eoszbs.jpg"
   },
   equipATeam: {
     title: {
@@ -211,7 +211,7 @@ const snapshotContent = {
       ar: "أدوات تفاعلية لرؤية خريطتك الفلكية وعبور الكواكب تنبض بالحياة.",
       ru: "Интерактивные инструменты для визуализации вашей натальной карты и транзитов планет."
     },
-    laptopScreenshot: "/images/birth_chart_mockup.jpg"
+    laptopScreenshot: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/birth_chart_mockup_beesbo.jpg"
   }
 };
 

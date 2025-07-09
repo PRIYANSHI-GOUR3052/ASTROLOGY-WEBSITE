@@ -104,14 +104,14 @@ const itemVariants = {
 };
 
 const allGridImages = [
-  { src: '/images/birth_chart_mockup.jpg', alt: 'Birth Chart Analysis' },
+  { src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/birth_chart_mockup_beesbo.jpg', alt: 'Birth Chart Analysis' },
   { src: '/images/horoscope_daily.jpg', alt: 'Daily Horoscope' },
   { src: '/images/astrology_app_mockup.jpg', alt: 'Astrology Consultation' },
   { src: '/images/tarot-banner.jpg', alt: 'Tarot Reading' },
-  { src: '/images/blog/gemstones.jpg', alt: 'Gemstone Powers' },
-  { src: '/images/blog/planets.jpg', alt: 'Planetary Influence' },
-  { src: '/images/course-1.webp', alt: 'Astrology Course' },
-  { src: '/images/course-3.webp', alt: 'Numerology Course' },
+  { src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752049127/gemstones_wztxzb.jpg', alt: 'Gemstone Powers' },
+  { src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752049128/planets_aeujo5.jpg', alt: 'Planetary Influence' },
+  { src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/course-1_lwqxsr.jpg', alt: 'Astrology Course' },
+  { src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/course-3_h9xwl3.jpg', alt: 'Numerology Course' },
 ];
 
 const illustrationsData = [
@@ -167,7 +167,7 @@ export default function HeroSection() {
               <p className="text-gray-700 text-base">Stay attuned to the universe with daily celestial highlights, auspicious timings, and planetary movements that shape your day.</p>
               <Link href="/panchang">
                 <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/images/cosmiccalendar.png" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042873/cosmiccalendar_v8ndoq.png" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -176,7 +176,7 @@ export default function HeroSection() {
               <p className="text-gray-700 text-base">Uncover the hidden layers of your zodiac sign—traits, strengths, and quirks that make you uniquely you.</p>
               <Link href="/astrology">
                 <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/images/zodiac_decoder.avif" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042879/zodiac_decoder_aphuoz.avif" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -188,7 +188,7 @@ export default function HeroSection() {
               <p className="text-gray-700 text-base">Receive practical, holistic wellness advice inspired by the stars, blending ancient wisdom with modern living.</p>
               <Link href="/blog/astrology-remedies-for-life">
                 <motion.div whileHover={{ scale: 1.07, boxShadow: '0 6px 32px #77A65633' }} className="relative w-full aspect-video rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/images/astrowellness.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042871/astrowellness_qltouz.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -200,7 +200,7 @@ export default function HeroSection() {
               <p className="text-gray-700 text-base">Explore guided meditations, affirmations, and spiritual practices to elevate your mind, body, and soul.</p>
               <Link href="/courses">
                 <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/images/spiritualpathway.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042878/spiritualpathway_afll4p.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -209,7 +209,7 @@ export default function HeroSection() {
               <p className="text-gray-700 text-base">Journey through fascinating stories and legends from Vedic astrology, bringing ancient myths to life for today's seeker.</p>
               <Link href="/blog/astrology-remedies-for-life">
                 <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="/images/myth.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
+                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042876/myth_h93fku.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
                 </motion.div>
               </Link>
             </motion.div>

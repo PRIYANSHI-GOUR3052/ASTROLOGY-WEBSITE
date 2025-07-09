@@ -1,9 +1,9 @@
 import Image from 'next/image';
 
 const images = [
-  '/images/blog/planets.jpg',
+  'https://res.cloudinary.com/dxwspucxw/image/upload/v1752049128/planets_aeujo5.jpg',
   '/images/blog/vedic-astrology.jpg',
-  '/images/blog/gemstones.jpg',
+  'https://res.cloudinary.com/dxwspucxw/image/upload/v1752049127/gemstones_wztxzb.jpg',
 ];
 
 export default function CardStack() {
