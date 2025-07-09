@@ -1,78 +1,34 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Filter } from "lucide-react";
 
-const mockAstrologers = [
-  {
-    name: "Dr. Narendra Sharma",
-    email: "narendra@nakshatra.com",
-    phone: "+91 90000 11111",
-    expertise: "Vedic, Tarot",
-    experience: 15,
-    documentStatus: "Verified",
-    joined: "Jan 10, 2024",
-  },
-  {
-    name: "Priya Joshi",
-    email: "priya@nakshatra.com",
-    phone: "+91 90000 22222",
-    expertise: "Numerology",
-    experience: 7,
-    documentStatus: "Pending",
-    joined: "Feb 2, 2024",
-  },
-  {
-    name: "Rajesh Verma",
-    email: "rajesh@nakshatra.com",
-    phone: "+91 90000 33333",
-    expertise: "Palmistry",
-    experience: 10,
-    documentStatus: "Rejected",
-    joined: "Mar 5, 2024",
-  },
-  {
-    name: "Anjali Mehta",
-    email: "anjali@nakshatra.com",
-    phone: "+91 90000 44444",
-    expertise: "Horoscope, Numerology",
-    experience: 12,
-    documentStatus: "Verified",
-    joined: "Apr 12, 2024",
-  },
-  {
-    name: "Siddharth Roy",
-    email: "siddharth@nakshatra.com",
-    phone: "+91 90000 55555",
-    expertise: "Tarot",
-    experience: 5,
-    documentStatus: "Pending",
-    joined: "May 22, 2024",
-  },
-  {
-    name: "Meera Desai",
-    email: "meera@nakshatra.com",
-    phone: "+91 90000 66666",
-    expertise: "Kundli Matching",
-    experience: 8,
-    documentStatus: "Rejected",
-    joined: "Jun 14, 2024",
-  },
-  {
-    name: "Arjun Kapoor",
-    email: "arjun@nakshatra.com",
-    phone: "+91 90000 77777",
-    expertise: "Vastu Shastra",
-    experience: 9,
-    documentStatus: "Verified",
-    joined: "Jul 1, 2024",
-  },
-];
-
-
 export default function AstrologersPage() {
   const router = useRouter();
+  const [astrologers, setAstrologers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAstrologers = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch("/api/astrologer/verifications-pending", {
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error("Failed to fetch astrologers");
+        const data = await res.json();
+        setAstrologers(data.pending || []);
+      } catch (err: any) {
+        setError(err.message || "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAstrologers();
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -97,59 +53,72 @@ export default function AstrologersPage() {
         </button>
       </div>
 
+      {/* Loading/Error */}
+      {loading && <div className="text-center py-8">Loading...</div>}
+      {error && <div className="text-center text-red-500 py-8">{error}</div>}
+
       {/* Astrologers Table */}
-      <div className="bg-white dark:bg-[#0B1120] rounded-lg shadow-sm overflow-x-auto border border-gray-200 dark:border-[#1f2937]">
-        <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-[#1e293b]">
-            <tr>
-              {['Name', 'Phone', 'Experience', 'Status', 'Joined'].map((heading, index) => (
-                <th
-                  key={index}
-                  className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400`}
-                >
-                  {heading}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-[#1f2937]">
-            {mockAstrologers.map((astro, index) => (
-              <tr
-                key={index}
-                className="hover:bg-gray-50 dark:hover:bg-[#1e293b] transition-colors cursor-pointer"
-                onClick={() => router.push(`/admin/astrologers/${encodeURIComponent(astro.email)}`)}
-              >
-                <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {astro.name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-200">
-                  {astro.phone}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-200">
-                  {astro.experience} yrs
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                      ${
-                        astro.documentStatus === "Verified"
-                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                          : astro.documentStatus === "Pending"
-                          ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-                          : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-                      }`}
+      {!loading && !error && (
+        <div className="bg-white dark:bg-[#0B1120] rounded-lg shadow-sm overflow-x-auto border border-gray-200 dark:border-[#1f2937]">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-[#1e293b]">
+              <tr>
+                {["Name", "Phone", "Experience", "Status", "Joined"].map((heading, index) => (
+                  <th
+                    key={index}
+                    className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400`}
                   >
-                    {astro.documentStatus}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400">
-                  {astro.joined}
-                </td>
+                    {heading}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-[#1f2937]">
+              {astrologers.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    No astrologers pending verification.
+                  </td>
+                </tr>
+              )}
+              {astrologers.map((astro, index) => (
+                <tr
+                  key={astro.id || index}
+                  className="hover:bg-gray-50 dark:hover:bg-[#1e293b] transition-colors cursor-pointer"
+                  onClick={() => router.push(`/admin/astrologers/${encodeURIComponent(astro.astrologer?.email || '')}`)}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    {astro.astrologer?.firstName || ''} {astro.astrologer?.lastName || ''}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-200">
+                    {astro.astrologer?.phone || "-"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-200">
+                    {astro.astrologer?.yearsOfExperience ?? "-"} yrs
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                        ${
+                          astro.astrologer?.verificationStatus === "approved"
+                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                            : astro.astrologer?.verificationStatus === "pending"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+                            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                        }`}
+                    >
+                      {astro.astrologer?.verificationStatus?.charAt(0).toUpperCase() + astro.astrologer?.verificationStatus?.slice(1) || "-"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400">
+                    {astro.astrologer?.createdAt ? new Date(astro.astrologer.createdAt).toLocaleDateString() : "-"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

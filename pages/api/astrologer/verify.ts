@@ -25,6 +25,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Invalid request' });
     }
     try {
+      await prisma.astrologer.update({
+        where: { id: Number(astrologerId) },
+        data: { verificationStatus: status },
+      });
       await prisma.astrologerVerification.update({
         where: { astrologerId: Number(astrologerId) },
         data: { status, adminRemarks },

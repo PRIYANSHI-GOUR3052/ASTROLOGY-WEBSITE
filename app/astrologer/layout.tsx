@@ -7,8 +7,6 @@ import AstrologerSidebar from "@/components/astrologer/Sidebar";
 import dynamic from "next/dynamic";
 import { useAuthToken } from '@/hooks/useAuthToken';
 
-// Dynamically import the verification form to avoid SSR issues
-const AstrologerVerificationPage = dynamic(() => import("./verify/page"), { ssr: false });
 
 const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -58,9 +56,10 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
       })
         .then(res => res.json())
         .then(data => {
-          if (data.verification && data.verification.status !== "approved") {
+          const status = data.verification?.status || 'unverified';
+          if (data.verification && status !== "approved") {
+            router.push("/astrologer/profile")
             setIsVerified(false);
-            router.push("/astrologer/verify");
           } else {
             setIsVerified(true);
           }
@@ -84,6 +83,9 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // Map status to allowed values for AstrologerSidebar
+  const sidebarStatus = isVerified ? 'verified' : (isProfilePage ? 'pending' : undefined);
+
   // 🔁 If it's an auth-related page, skip layout
   if (isAuthRoute) {
     return <main className="min-h-screen">{children}</main>;
@@ -101,7 +103,7 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100">
       {/* Sidebar - Only show if verified or on profile page */}
-      {(isVerified || isProfilePage) && <AstrologerSidebar approvalStatus={isVerified ? 'verified' : 'pending'} />}
+      {(isVerified || isProfilePage) && <AstrologerSidebar approvalStatus={sidebarStatus} />}
       
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
@@ -138,9 +140,7 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
         
         {/* Page Content */}
         <main className="md:pl-72 flex-1 overflow-y-auto bg-amber-50 dark:bg-midnight-black p-4 sm:p-6">
-          {/* If not verified and not on /verify, show verification form instead of children */}
           {children}
-          {/* {!isVerified && !isVerifyRoute ? <AstrologerVerificationPage /> : children} */}
         </main>
       </div>
     </div>

@@ -21,33 +21,43 @@ export default function ClientLayout({
   const isAdminRoute = pathname?.startsWith("/admin");
   const isSignInRoute = pathname === "/signin";
 
-  // const shouldHideLayout = [
-  //   "/admin/dashboard",
-  //   "/admin/clients",
-  //   "/admin/astrologers",
-  //   "/admin/courses",
-  //   "/admin/products",
-  //   "/admin/services",
-  //   "/admin/reviews",
-  //   "/admin/settings",
-  //   "/admin/login",
-  //   "/signin",
-  //   "/admin/stone",
-  //   "/astrologer/profile",
-  //   "/astrologer/availability",
-  //   "/astrologer/bookings",
-  //   "/astrologer/consultations",
-  //   "/astrologer/reviews",
-  //   "/astrologer/withdraw",
-  //   "/astrologer/register",
-  //   "/astrologer/auth",
-  //   "/astrologer/forgot-password",
-  //   "/admin/astrologers/",
-  // ].includes(pathname ?? '');
+  const shouldHideLayout = (() => {
+    const path = pathname ?? "";
 
- const shouldHideLayout = ["/admin", "/astrologer", "/signin"].some((prefix) =>
-   pathname?.startsWith(prefix)
- );
+    const exactPaths = [
+      "/admin/dashboard",
+      "/admin/clients",
+      "/admin/astrologers",
+      "/admin/courses",
+      "/admin/products",
+      "/admin/services",
+      "/admin/reviews",
+      "/admin/settings",
+      "/admin/login",
+      "/signin",
+      "/admin/stone",
+      "/astrologer/profile",
+      "/astrologer/availability",
+      "/astrologer/bookings",
+      "/astrologer/consultations",
+      "/astrologer/reviews",
+      "/astrologer/withdraw",
+      "/astrologer/register",
+      "/astrologer/auth",
+      "/astrologer/forgot-password",
+    ];
+
+    const dynamicPatterns: RegExp[] = [
+      /^\/admin\/astrologers\/[^/]+$/, // matches /admin/astrologers/anything
+    ];
+
+    return (
+      exactPaths.includes(path) ||
+      dynamicPatterns.some((regex) => regex.test(path))
+    );
+  })();
+
+
 
   const [isClient, setIsClient] = useState(false);
 

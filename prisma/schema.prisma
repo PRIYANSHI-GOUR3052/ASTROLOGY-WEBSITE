@@ -191,7 +191,7 @@ model Astrologer {
   createdAt          DateTime                @default(now())
   resetToken         String? // For password reset
   resetTokenExpiry   DateTime? // For password reset expiry
-  verificationStatus String                  @default("pending") // pending, approved, rejected
+  verificationStatus String                  @default("unverified") // unverified, pending, approved, rejected
   verification       AstrologerVerification?
 }
 
@@ -204,7 +204,7 @@ model AstrologerVerification {
   workProof       String? // File URL (experience letter, screenshots, etc.)
   declarationForm String? // File URL
   addressProof    String? // File URL (optional)
-  status          String                    @default("pending") // pending, approved, rejected
+  status          String                    @default("unverified") // unverified, pending, approved, rejected
   adminRemarks    String?
   createdAt       DateTime                  @default(now())
   updatedAt       DateTime                  @updatedAt

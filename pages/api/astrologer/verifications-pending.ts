@@ -20,9 +20,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const admin = await getAdminFromRequest(req);
   if (!admin) return res.status(401).json({ error: 'Unauthorized' });
   if (req.method === 'GET') {
+    const { status } = req.query;
     try {
+      const validStatuses = ['pending', 'approved', 'rejected'];
+      const filter = validStatuses.includes(String(status))
+        ? { status: String(status) }
+        : {};
+
       const pending = await prisma.astrologerVerification.findMany({
-        where: { status: 'pending' },
+        where: filter,
         include: {
           astrologer: true,
           certifications: true,
