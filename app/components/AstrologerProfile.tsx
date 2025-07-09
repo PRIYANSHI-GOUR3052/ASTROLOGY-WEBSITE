@@ -7,12 +7,12 @@ const credentials = [
   {
     title: 'Vedic Astrology Expert',
     description: 'Dr. Narendra is a renowned Vedic Astrologer with over 15 years of experience in traditional Indian astrology. He specializes in birth chart analysis, planetary remedies, and life guidance through ancient Vedic wisdom.',
-    image: '/images/astro.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042880/astro_ca0pkb.jpg',
   },
   {
     title: 'PhD in Astrology & Philosophy',
     description: 'With a PhD in Astrology and Philosophy, Dr. Narendra combines traditional knowledge with modern understanding to provide comprehensive astrological consultations and spiritual guidance.',
-    image: '/images/phd.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042876/phd_klwwvl.jpg',
   },
 ]
 

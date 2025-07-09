@@ -353,7 +353,7 @@ export function DailyHoroscope() {
             <Card className="bg-white rounded-xl shadow-lg p-6 text-center border border-gray-100">
               <div className="relative w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
                 <Image
-                  src="/images/placeholder-author.jpg"
+                  src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042877/placeholder-author_utggms.jpg"
                   alt="Dr. Narendra Kumar Sharma"
                   fill
                   style={{ objectFit: 'cover' }}

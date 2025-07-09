@@ -16,42 +16,48 @@ const solutions = [
     titleKey: "lifeChangingSolutions.solutions.0.title",
     href: "/services/career-guidance",
     descriptionKey: "lifeChangingSolutions.solutions.0.description",
-    themeColor: '#e0e7ff' // Light blue
+    themeColor: '#e0e7ff', // Light blue
+    imageUrl: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/course-1_lwqxsr.jpg"
   },
   {
     icon: <Heart className="w-12 h-12 text-black" />,
     titleKey: "lifeChangingSolutions.solutions.1.title",
     href: "/services/love-relationship",
     descriptionKey: "lifeChangingSolutions.solutions.1.description",
-    themeColor: '#ffe0e0' // Light red
+    themeColor: '#ffe0e0', // Light red
+    imageUrl: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/course-2_ribcdu.jpg"
   },
   {
     icon: <Activity className="w-12 h-12 text-black" />,
     titleKey: "lifeChangingSolutions.solutions.2.title",
     href: "/services/health-astrology",
     descriptionKey: "lifeChangingSolutions.solutions.2.description",
-    themeColor: '#e6ffe0' // Light green
+    themeColor: '#e6ffe0', // Light green
+    imageUrl: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/course-3_h9xwl3.jpg"
   },
   {
     icon: <Briefcase className="w-12 h-12 text-black" />,
     titleKey: "lifeChangingSolutions.solutions.3.title",
     href: "/services/business-astrology",
     descriptionKey: "lifeChangingSolutions.solutions.3.description",
-    themeColor: '#fff5e0' // Light orange
+    themeColor: '#fff5e0', // Light orange
+    imageUrl: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042873/course-4_vkpzzg.jpg"
   },
   {
     icon: <Users className="w-12 h-12 text-black" />,
     titleKey: "lifeChangingSolutions.solutions.4.title",
     href: "/kundali-matching",
     descriptionKey: "lifeChangingSolutions.solutions.4.description",
-    themeColor: '#e0e0ff' // Light purple
+    themeColor: '#e0e0ff', // Light purple
+    imageUrl : "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042874/course-5_uvm6d2.jpg"
   },
   {
     icon: <Baby className="w-12 h-12 text-black" />,
     titleKey: "lifeChangingSolutions.solutions.5.title",
     href: "/services/child-astrology",
     descriptionKey: "lifeChangingSolutions.solutions.5.description",
-    themeColor: '#e0ffea' // Light aqua
+    themeColor: '#e0ffea', // Light aqua
+    imageUrl : "https://res.cloudinary.com/dxwspucxw/image/upload/v1752047576/course-6_mpzxwv.jpg"
   }
 ]
 
@@ -95,7 +101,7 @@ export function LifeChangingSolutions() {
                 >
                   <div className={`relative h-48 w-full ` + (solution.themeColor ? `bg-[${solution.themeColor}]` : 'bg-gray-200')}>
                     <Image
-                      src={`/images/course-${index + 1}.webp`}
+                      src={solution.imageUrl}
                       alt={t(solution.titleKey)}
                       fill
                       style={{ objectFit: 'cover' }}
@@ -130,7 +136,7 @@ export function LifeChangingSolutions() {
             >
               <div className="relative h-48 md:h-auto md:w-1/2 w-full bg-gray-200">
                 <Image 
-                  src="/images/continue-learning.webp"
+                  src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042871/continue-learning_mtpgqr.jpg"
                   alt={t('lifeChangingSolutions.continueLearningAlt')}
                   fill
                   style={{ objectFit: 'cover' }}
