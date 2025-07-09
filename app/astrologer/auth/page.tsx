@@ -14,9 +14,20 @@ const AstrologerAuthPage = () => {
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push('/astrologer/profile/');
+    try {
+      const res = await axios.post('/api/astrologer/login', { email, password });
+      if (res.data.token) {
+        localStorage.setItem('astrologerToken', res.data.token);
+        toast({ title: 'Login successful', description: 'Welcome!' });
+        router.push('/astrologer/profile/');
+      } else {
+        toast({ title: 'Login failed', description: 'No token received', variant: 'destructive' });
+      }
+    } catch (err: any) {
+      toast({ title: 'Login failed', description: err?.response?.data?.message || 'Invalid credentials', variant: 'destructive' });
+    }
   };
 
   return (

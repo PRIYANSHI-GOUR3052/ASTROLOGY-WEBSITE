@@ -31,14 +31,11 @@ interface AstrologerJWTPayload {
 // Astrologer authentication using Authorization header only
 async function getAstrologerFromRequest(req: NextApiRequest): Promise<AstrologerJWTPayload | null> {
   const authHeader = req.headers['authorization'];
-  console.log('Authorization header:', authHeader);
   const token = authHeader?.replace('Bearer ', '');
-  console.log('Extracted token:', token);
   if (!token) return null;
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key');
     const { payload } = await jwtVerify(token, secret);
-    console.log('Decoded payload:', payload);
     if (
       typeof payload === 'object' &&
       payload !== null &&
@@ -62,6 +59,7 @@ export const config = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  
   const user = await getAstrologerFromRequest(req);
   if (!user) {
     return res.status(401).json({ error: 'Unauthorized' });
