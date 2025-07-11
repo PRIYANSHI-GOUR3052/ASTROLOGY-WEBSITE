@@ -39,7 +39,42 @@
         "link": "/blog/the-influence-of-planets",
         "linkText": "Read more"
       }
-    }
+    },
+    "celestialJourney": "Celestial Journey",
+    "celestialJourneyDesc": "Let the stars illuminate your path to self-discovery and fulfillment.",
+    "cosmicCalendarTitle": "Cosmic Calendar",
+    "cosmicCalendarDesc": "Your daily Vedic almanac for cosmic alignment, auspicious timings, and spiritual clarity. Discover the five limbs of time, planetary positions, and sacred rituals to harmonize your day with the universe.",
+    "astroWellnessTitle": "Astro Wellness",
+    "astroWellnessDesc": "Receive practical, holistic wellness tips inspired by the stars, blending ancient wisdom with modern living.",
+    "spiritualGrowthTitle": "Spiritual Growth",
+    "spiritualGrowthDesc": "Explore guided meditations, affirmations, and spiritual practices to elevate your mind, body, and soul.",
+    "mythLegendTitle": "Myth & Legend Spotlight",
+    "mythLegendDesc": "Journey through fascinating stories and legends of Vedic astrology, bringing ancient myths to life for today's seeker.",
+    "zodiacDecoderTitle": "Zodiac Decoder",
+    "zodiacDecoderDesc": "Uncover the hidden layers of your zodiac sign—traits, strengths, and quirks that make you unique.",
+    "exploreServices": "Explore Our Services",
+    "discoverCosmicJourney": "Discover Your Cosmic Journey",
+    "learnMore": "Learn More",
+    "card0Title": "Career & Job Guidance",
+    "card0Desc": "Navigate your professional path with cosmic clarity. Our expert astrologers provide personalized guidance to help you make informed career decisions, identify opportunities, and overcome workplace challenges.",
+    "card1Title": "Grah Shanti Puja",
+    "card1Desc": "Harmonize planetary energies and mitigate negative influences with a traditional Grah Shanti Puja. This sacred ritual is performed to bring peace, prosperity, and balance to your life.",
+    "card2Title": "Kundali Matching",
+    "card2Desc": "Discover the science and sacred art of Vedic compatibility. Our expert astrologers blend tradition and modern insight to guide you toward a harmonious, blessed union.",
+    "card3Title": "Numerology Analysis",
+    "card3Desc": "Discover the power of numbers in your life with personalized numerology reading.",
+    "card4Title": "Online Puja Services",
+    "card4Desc": "Experience the sacred power of Vedic rituals from the comfort of your home. Our online puja services connect you with expert priests, authentic traditions, and divine blessings—no matter where you are in the world.",
+    "card5Title": "Palmistry Consultation",
+    "card5Desc": "Unlock the secrets hidden in your hands. Our palmistry experts provide insightful readings on your life path, character, and future.",
+    "card6Title": "Today's Panchang",
+    "card6Desc": "Your daily Vedic almanac for cosmic alignment, auspicious timings, and spiritual clarity. Discover the five limbs of time, planetary positions, and sacred rituals to harmonize your day with the universe.",
+    "card7Title": "Personal Astrology Reading",
+    "card7Desc": "Our personal astrology reading service offers an in-depth analysis of your natal chart, providing insights into your personality, life path, career, relationships, and more.",
+    "card8Title": "Tantra Consultation",
+    "card8Desc": "Explore the transformative path of Tantra with expert guidance. Our consultations focus on spiritual growth, healing, and meditation practices.",
+    "card9Title": "Tarot Reading",
+    "card9Desc": "Unlock the mystical secrets of the cards and gain profound insight into your life's journey."
   },
   "header": {
     "logo": {
@@ -53,7 +88,12 @@
       "contact": "Contact",
       "blog": "Blog",
       "study": "Study",
-      "consultations": "Consultations"
+      "consultations": "Consultations",
+      "talk_to_astrologer": "Talk to Astrologer",
+      "chat_with_astrologer": "Chat with Astrologer",
+      "buy_products": "Buy Products",
+      "our_services": "Our Services",
+      "join_us": "Join Us"
     },
     "cart": "Cart",
     "mega_menu": {
@@ -739,5 +779,20 @@
         "cta": "Join us in awakening the cosmic wisdom within you.\nYour path is written in the stars—and we're here to help you read it."
       }
     }
+  },
+  "join_us": "Join Us",
+  "cart": {
+    "yourCart": "Your Cart",
+    "description": "View and manage items in your cart. Proceed to checkout when you're ready to complete your purchase.",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "shippingFree": "Free",
+    "total": "Total",
+    "proceedToCheckout": "Proceed to Checkout",
+    "quantity": "Quantity",
+    "remove": "Remove"
   }
 } 

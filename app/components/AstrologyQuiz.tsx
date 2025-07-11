@@ -85,7 +85,7 @@ export function AstrologyQuiz() {
       {randomCards.map((cardContent: {title: string, description: string}, index: number) => (
         <motion.div
           key={index}
-          className={`absolute rounded-xl shadow-lg p-4 text-white z-0 ${staticRandomCardsData[index].gradient}`}
+          className={`absolute rounded-xl shadow-lg p-4 text-black z-0 ${staticRandomCardsData[index].gradient}`}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1, rotate: staticRandomCardsData[index].position.rotate || '0deg' }}
           transition={{ duration: 0.5, delay: 0.5 + index * 0.2 }}
@@ -96,9 +96,9 @@ export function AstrologyQuiz() {
             bottom: staticRandomCardsData[index].position.bottom,
           }}
         >
-          {React.createElement(staticRandomCardsData[index].icon, { className: "w-8 h-8 mb-2" })}
-          <h5 className="font-bold mb-1 text-sm">{cardContent.title}</h5>
-          <p className="text-xs">{cardContent.description}</p>
+          {React.createElement(staticRandomCardsData[index].icon, { className: "w-8 h-8 mb-2 text-black" })}
+          <h5 className="font-bold mb-1 text-sm text-black">{cardContent.title}</h5>
+          <p className="text-xs text-black">{cardContent.description}</p>
         </motion.div>
       ))}
 
@@ -181,7 +181,7 @@ export function AstrologyQuiz() {
           <p className="text-lg font-semibold uppercase mb-2 bg-gradient-to-r from-purple-700 via-fuchsia-500 to-rose-400 text-transparent bg-clip-text">
             {quizData.moreQuizText}
           </p>
-          <Link href="/quiz" className="text-white underline text-xl">
+          <Link href="/quiz" className="text-black underline text-xl">
             www.nakshatragyaan.com/quiz
           </Link>
         </div>

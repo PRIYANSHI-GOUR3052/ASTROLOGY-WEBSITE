@@ -129,30 +129,30 @@ export default function ClientLayout({
   return (
     <AuthProvider>
       <LanguageProvider>
-        <MysticBackground>
-          <div className="min-h-screen bg-white">
-            <Header />
-            <PageTransition>{children}</PageTransition>
-            <Footer />
-            <Chatbot />
-            <Toaster
-              position="top-center"
-              toastOptions={{
-                unstyled: true,
-                style: {
-                  backgroundColor: "#1C1C1C",
-                  color: "white",
-                  border: "1px solid #333",
-                  boxShadow: "0 4px 14px rgba(0, 0, 0, 0.6)",
-                  padding: "16px",
-                  borderRadius: "12px",
-                  fontSize: "14px",
-                },
-                className: "",
-              }}
-            />
-          </div>
-        </MysticBackground>
+        {/* <MysticBackground> */}
+        <div className="min-h-screen bg-white">
+          <Header />
+          <PageTransition>{children}</PageTransition>
+          <Footer />
+          <Chatbot />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              unstyled: true,
+              style: {
+                backgroundColor: "#1C1C1C",
+                color: "white",
+                border: "1px solid #333",
+                boxShadow: "0 4px 14px rgba(0, 0, 0, 0.6)",
+                padding: "16px",
+                borderRadius: "12px",
+                fontSize: "14px",
+              },
+              className: "",
+            }}
+          />
+        </div>
+        {/* </MysticBackground> */}
       </LanguageProvider>
     </AuthProvider>
   );

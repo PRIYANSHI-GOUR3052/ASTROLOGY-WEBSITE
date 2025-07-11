@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,10 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useLanguage } from '../contexts/useLanguage'
 import { Sparkles, ArrowRight, Facebook, Instagram, Twitter, ChevronDown } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { horoscopeCards } from '@/app/data/horoscopeCards'
+import { useRef } from 'react';
+import { AnimatePresence } from 'framer-motion';
 
 const zodiacSigns = [
   { label: { en: 'Aries', hi: 'मेष', es: 'Bélier', fr: 'Bélier', de: 'Widder', zh: '白羊座', ar: 'الحمل', ru: 'Овен' }, value: 'Aries' },
@@ -103,7 +106,7 @@ const dailyPredictions = {
     de: "Umarme die Veränderung, Skorpion. Heute ist ein kraftvoller Tag für inneres Wachstum und das Loslassen von Dingen, die dir nicht mehr dienen. Vertraue dem Prozess und heiße positive Veränderungen willkommen.",
     fr: "Accueillez la transformation, Scorpion. Aujourd'hui est un jour puissant pour la croissance intérieure et pour laisser partir ce qui ne vous sert plus. Faites confiance au processus et accueillez le changement positif.",
     zh: "天蝎座，拥抱转变。今天是内在成长和放下无用事物的强大日子。相信过程，迎接积极变化。",
-    ar: "احتضن التحول اليوم، برج العقرب. اليوم هو يوم قوي للنمو الداخلي والتخلي عما لم يعد يخدمك. ثق في العملية ورحب بالتغيير الإيجابي.",
+    ar: "احتضن التحول اليوم، برج العقرب. اليوم هو يوم قوي للنمو الداخلي والتخلي عما لم يعد يخدمك. ثق بحدسك ورحب بالتغيير الإيجابي.",
     ru: "Примите перемены, Скорпион. Сегодня мощный день для внутреннего роста и отпускания того, что больше не служит вам. Доверьтесь процессу и приветствуйте позитивные изменения."
   },
   Sagittarius: {
@@ -250,11 +253,10 @@ function getLocalizedText(obj: { [key: string]: string }, lang: string) {
 }
 
 export function DailyHoroscope() {
-  const [selectedSign, setSelectedSign] = useState<string>('')
-  const [horoscope, setHoroscope] = useState<string>('')
-  const [openFAQIndex, setOpenFAQIndex] = useState<number | null>(null)
-  const { lang, t } = useLanguage()
-
+  const { lang, t } = useLanguage();
+  const [selectedSign, setSelectedSign] = useState<string>('');
+  const [horoscope, setHoroscope] = useState<string>('');
+  const [openFAQIndex, setOpenFAQIndex] = useState<number | null>(null);
   const getHoroscope = () => {
     if (selectedSign) {
       const prediction = dailyPredictions[selectedSign as keyof typeof dailyPredictions];
@@ -262,14 +264,26 @@ export function DailyHoroscope() {
         setHoroscope(getLocalizedText(prediction, lang));
       }
     }
-  }
-
-  const toggleFAQ = (index: number) => {
-    setOpenFAQIndex(openFAQIndex === index ? null : index)
-  }
+  };
+  const productCardImages = [
+    ['/images/gemstone1.jpg', '/images/gemstone2.jpg', '/images/astrology_app.jpg', '/images/astrowellness.jpg'],
+    ['/images/yantra1.jpg', '/images/yantra2.jpg', '/images/myth.jpg', '/images/horoscopedaily.jpg'],
+    ['/images/rudraksha1.jpg', '/images/rudraksha2.jpg', '/images/astro.jpg', '/images/astrology_understanding.jpg'],
+  ];
+  const [imgIdxs, setImgIdxs] = useState([0, 0, 0]);
+  useEffect(() => {
+    const timers = productCardImages.map((imgs, i) => setInterval(() => {
+      setImgIdxs(prev => {
+        const next = [...prev];
+        next[i] = (next[i] + 1) % imgs.length;
+        return next;
+      });
+    }, 3500 + i * 300)); // slight stagger for visual effect
+    return () => timers.forEach(timer => clearInterval(timer));
+  }, []);
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-white to-[#F8F8F8] pt-8 pb-16 font-sans">
+    <section className="min-h-screen bg-white pt-8 pb-16 font-sans">
       <div className="container mx-auto px-4">
         {/* Banner Heading */}
         <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-10 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
@@ -284,7 +298,7 @@ export function DailyHoroscope() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="md:col-span-2 bg-white shadow-lg border border-orange-200 rounded-2xl p-6">
+              <Card className="md:col-span-2 bg-white shadow-lg border border-gray-200 rounded-2xl p-6">
                 <h3 className="text-2xl font-bold text-black mb-4">
                   {t('dailyHoroscope.knowYourSign')}
                 </h3>
@@ -293,15 +307,15 @@ export function DailyHoroscope() {
                     {t('dailyHoroscope.selectSign')}
                   </label>
                   <Select onValueChange={setSelectedSign}>
-                    <SelectTrigger className="w-full bg-orange-100 text-black border border-orange-400 rounded-xl px-4 py-2 hover:bg-orange-200 transition-all">
+                    <SelectTrigger className="w-full bg-gray-100 text-black border border-gray-300 rounded-xl px-4 py-2 hover:bg-gray-200 transition-all">
                       <SelectValue placeholder={t('dailyHoroscope.chooseSign')} />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border border-orange-300 rounded-xl shadow-lg">
+                    <SelectContent className="bg-white border border-gray-200 rounded-xl shadow-lg">
                       {zodiacSigns.map((sign) => (
                         <SelectItem
                           key={sign.value}
                           value={sign.value}
-                          className="px-4 py-2 text-sm text-black hover:bg-orange-100 cursor-pointer rounded-xl"
+                          className="px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer rounded-xl"
                         >
                           {getLocalizedText(sign.label, lang)}
                         </SelectItem>
@@ -316,7 +330,7 @@ export function DailyHoroscope() {
                   className={`w-full px-4 py-2 rounded-xl border text-sm font-semibold mb-4 transition-all
                   ${!selectedSign
                     ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
-                    : 'bg-[#F3E8FF] text-[#7C3AED] border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24]'}
+                    : 'bg-black text-white border-[#E0E0E0] hover:bg-gray-800'}
                   shadow-md`}
                 >
                   {t('dailyHoroscope.viewHoroscope')}
@@ -328,23 +342,33 @@ export function DailyHoroscope() {
               </Card>
 
               {horoscopeCards.map((card, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className={`rounded-xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300 ${
-                    index % 4 === 0 ? 'bg-[#FFF5E6]' :
-                    index % 4 === 1 ? 'bg-[#F0F7FF]' :
-                    index % 4 === 2 ? 'bg-[#F5FFF0]' :
-                    'bg-[#FFF0F5]'
-                  }`}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  whileHover={{ scale: 1.04, boxShadow: '0 8px 32px rgba(0,0,0,0.10)' }}
+                  className="rounded-xl shadow-lg border border-gray-200 flex flex-col justify-between bg-white max-w-[420px] mx-auto p-0"
                 >
-                  <h3 className="text-xl font-bold text-black mb-2">{getLocalizedText(card.title, lang)}</h3>
-                  <p className="text-gray-700 mb-4 line-clamp-3">{getLocalizedText(card.description, lang)}</p>
-                  <Link href={card.href} passHref>
-                    <Button className="bg-[#F3E8FF] text-[#7C3AED] rounded-lg py-2 px-6 shadow-md transition-all duration-300 border border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24]">
-                      {t('dailyHoroscope.learnMore')}
-                    </Button>
-                  </Link>
-                </div>
+                  <div className="w-full h-56 relative">
+                    <Image
+                      src={card.image}
+                      alt={getLocalizedText(card.title, lang)}
+                      fill
+                      className="object-cover rounded-t-xl"
+                      priority={index < 2}
+                    />
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="text-xl font-bold text-black mb-2">{getLocalizedText(card.title, lang)}</h3>
+                    <p className="text-gray-700 mb-4 line-clamp-3">{getLocalizedText(card.description, lang)}</p>
+                    <Link href={card.href} passHref>
+                      <Button className="bg-black text-white rounded-lg py-2 px-6 shadow-md transition-all duration-300 border border-[#E0E0E0] hover:bg-gray-800">
+                        {t('dailyHoroscope.learnMore')}
+                      </Button>
+                    </Link>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -367,7 +391,7 @@ export function DailyHoroscope() {
                 {t('dailyHoroscope.authorBio')}
               </p>
               <Link href="/contact" passHref>
-                <Button className="w-full bg-[#F3E8FF] text-[#7C3AED] rounded-full py-2 px-4 shadow-md transition duration-300 border border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24] mb-4">
+                <Button className="w-full bg-black text-white rounded-full py-2 px-4 shadow-md transition duration-300 border border-[#E0E0E0] hover:bg-gray-800 mb-4">
                   {t('dailyHoroscope.contactMe')}
                 </Button>
               </Link>
@@ -379,7 +403,7 @@ export function DailyHoroscope() {
               </div>
             </Card>
 
-            <Card className="bg-[#FFF5E6] rounded-xl shadow-lg p-6 border border-gray-100">
+            <Card className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
               <h3 className="text-2xl font-bold text-black mb-4">
                 {t('dailyHoroscope.faqHeading')}
               </h3>
@@ -387,7 +411,7 @@ export function DailyHoroscope() {
                 {horoscopeFAQs.map((faq, index) => (
                   <div key={index} className="border-b border-gray-200 last:border-b-0 pb-2 mb-2">
                     <button
-                      onClick={() => toggleFAQ(index)}
+                      onClick={() => setOpenFAQIndex(openFAQIndex === index ? null : index)}
                       className="w-full text-left flex justify-between items-center text-base font-semibold text-gray-900 focus:outline-none py-2"
                     >
                       {getLocalizedText(faq.question, lang)}
@@ -402,6 +426,38 @@ export function DailyHoroscope() {
                 ))}
               </div>
             </Card>
+            {/* Product Image Cards: vertical column below FAQ */}
+            <div className="flex flex-col gap-6 mt-6 w-full max-w-[420px] mx-auto">
+              {[0, 1, 2].map((cardIdx) => {
+                const variants = [
+                  { initial: { y: -80, opacity: 0 }, animate: { y: 0, opacity: 1 }, exit: { y: 80, opacity: 0 } },
+                  { initial: { x: -80, opacity: 0 }, animate: { x: 0, opacity: 1 }, exit: { x: 80, opacity: 0 } },
+                  { initial: { y: 80, opacity: 0 }, animate: { y: 0, opacity: 1 }, exit: { y: -80, opacity: 0 } },
+                ];
+                return (
+                  <motion.div
+                    key={cardIdx}
+                    className="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col justify-between w-full h-56 overflow-hidden"
+                  >
+                    <div className="relative w-full h-full">
+                      <AnimatePresence mode="wait" initial={false}>
+                        <motion.img
+                          key={imgIdxs[cardIdx]}
+                          src={productCardImages[cardIdx][imgIdxs[cardIdx]]}
+                          alt="Product"
+                          className="object-cover w-full h-full"
+                          initial={variants[cardIdx].initial}
+                          animate={variants[cardIdx].animate}
+                          exit={variants[cardIdx].exit}
+                          transition={{ duration: 1.2, ease: 'easeInOut' }}
+                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                        />
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

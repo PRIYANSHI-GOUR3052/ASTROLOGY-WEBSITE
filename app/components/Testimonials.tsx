@@ -86,22 +86,19 @@ export function Testimonials() {
   const testimonials = getTestimonials();
 
   return (
-    <section className="relative w-full min-h-screen bg-[#F0F2F5] overflow-hidden py-20">
-      {/* Abstract background shapes */}
-      <div className="absolute top-10 left-0 w-64 h-64 bg-[#F0F2E5] rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#E0F0DB] rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-      <div className="absolute top-1/4 left-1/2 w-80 h-80 bg-[#F5E2DA] rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+    <section className="relative w-full min-h-screen bg-white overflow-hidden py-20">
+      
 
       <div className="relative z-10 container mx-auto px-4 flex flex-col items-center">
-        <motion.h2
+        <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-6xl md:text-7xl font-extrabold text-[#FCAAA4] mb-16 transform -rotate-6 origin-bottom-left"
-          style={{ fontFamily: 'Georgia, serif' }}
+          className="w-full max-w-6xl mx-auto mb-12 rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 flex flex-col items-center justify-center shadow-lg"
         >
-          {t('testimonials.heading')}
-        </motion.h2>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight font-sans">Client Reviews</h1>
+          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl font-sans">Read what our clients say about their experiences with our astrology services.</p>
+        </motion.div>
 
         <div className="flex flex-wrap justify-center gap-4 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => {
@@ -110,12 +107,14 @@ export function Testimonials() {
             return (
               <motion.div
                 key={index}
-                className={`${bgColor} rounded-xl shadow-md p-5 relative overflow-hidden
-                  ${testimonial.type === 'quote_top' ? 'w-full md:w-[48%] lg:w-[31%]' : ''}
-                  ${testimonial.type === 'avatar_top' ? 'w-full md:w-[48%] lg:w-[31%]' : ''}
-                  ${testimonial.type === 'simple_with_stars' ? 'w-full md:w-[48%] lg:w-[65%]' : ''}
-                  ${testimonial.type === 'large_avatar_quote' ? 'w-full md:w-[48%] lg:w-[31%] flex flex-col justify-between' : ''}
-                `}
+                className={
+                  `${bgColor} rounded-xl shadow-md p-3 sm:p-5 relative overflow-hidden
+                  ${testimonial.type === 'quote_top' ? 'w-5/6 sm:w-full md:w-[48%] lg:w-[31%]' : ''}
+                  ${testimonial.type === 'avatar_top' ? 'w-5/6 sm:w-full md:w-[48%] lg:w-[31%]' : ''}
+                  ${testimonial.type === 'simple_with_stars' ? 'w-5/6 sm:w-full md:w-[48%] lg:w-[65%]' : ''}
+                  ${testimonial.type === 'large_avatar_quote' ? 'w-5/6 sm:w-full md:w-[48%] lg:w-[31%] flex flex-col justify-between' : ''}
+                  `
+                }
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
@@ -125,15 +124,15 @@ export function Testimonials() {
               >
                 {testimonial.type === 'quote_top' && (
                   <div className="flex flex-col items-start">
-                    <span className="text-5xl font-extrabold text-gray-300 mb-2">&ldquo;</span>
-                    <p className="text-gray-700 text-sm mb-4 leading-relaxed opacity-70 text-black">{testimonial.text}</p>
+                    <span className="text-3xl sm:text-5xl font-extrabold text-gray-300 mb-2">&ldquo;</span>
+                    <p className="text-gray-700 text-xs sm:text-sm mb-4 leading-relaxed opacity-70 text-black">{testimonial.text}</p>
                     <div className="flex items-center w-full">
-                      <div className="relative w-12 h-12 rounded-full overflow-hidden mr-3 border-2 border-gray-100 shadow">
+                      <div className="relative w-8 h-8 sm:w-12 sm:h-12 rounded-full overflow-hidden mr-3 border-2 border-gray-100 shadow">
                         <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
                       </div>
                       <div className="flex-grow">
-                        <h3 className="text-sm font-semibold text-gray-800">{testimonial.name}</h3>
-                        <p className="text-xs text-gray-600">{testimonial.occupation}</p>
+                        <h3 className="text-xs sm:text-sm font-semibold text-gray-800">{testimonial.name}</h3>
+                        <p className="text-[10px] sm:text-xs text-gray-600">{testimonial.occupation}</p>
                       </div>
                       {renderStars(testimonial.rating)}
                     </div>
@@ -142,26 +141,26 @@ export function Testimonials() {
 
                 {testimonial.type === 'avatar_top' && (
                   <div className="flex flex-col items-center text-center">
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-gray-100 shadow">
+                    <div className="relative w-10 h-10 sm:w-16 sm:h-16 rounded-full overflow-hidden mb-3 border-2 border-gray-100 shadow">
                       <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
                     </div>
-                    <h3 className="text-base font-bold text-gray-800 mb-1">{testimonial.name}</h3>
-                    <p className="text-xs text-gray-600 mb-2">{testimonial.occupation}</p>
+                    <h3 className="text-sm sm:text-base font-bold text-gray-800 mb-1">{testimonial.name}</h3>
+                    <p className="text-[10px] sm:text-xs text-gray-600 mb-2">{testimonial.occupation}</p>
                     {renderStars(testimonial.rating)}
-                    <p className="text-gray-700 text-sm mt-3 leading-relaxed opacity-70 text-black">"{testimonial.text}"</p>
+                    <p className="text-gray-700 text-xs sm:text-sm mt-3 leading-relaxed opacity-70 text-black">"{testimonial.text}"</p>
                   </div>
                 )}
 
                 {testimonial.type === 'simple_with_stars' && (
                   <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                    <p className="text-gray-700 text-sm mb-3 leading-relaxed opacity-70 text-black">"{testimonial.text}"</p>
+                    <p className="text-gray-700 text-xs sm:text-sm mb-3 leading-relaxed opacity-70 text-black">"{testimonial.text}"</p>
                     <div className="flex items-center w-full justify-center md:justify-start">
-                      <div className="relative w-12 h-12 rounded-full overflow-hidden mr-3 border-2 border-gray-100 shadow">
+                      <div className="relative w-8 h-8 sm:w-12 sm:h-12 rounded-full overflow-hidden mr-3 border-2 border-gray-100 shadow">
                         <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
                       </div>
                       <div className="flex flex-col items-start">
-                        <h3 className="text-sm font-semibold text-gray-800">{testimonial.name}</h3>
-                        <p className="text-xs text-gray-600">{testimonial.occupation}</p>
+                        <h3 className="text-xs sm:text-sm font-semibold text-gray-800">{testimonial.name}</h3>
+                        <p className="text-[10px] sm:text-xs text-gray-600">{testimonial.occupation}</p>
                         {renderStars(testimonial.rating)}
                       </div>
                     </div>
@@ -170,16 +169,16 @@ export function Testimonials() {
 
                 {testimonial.type === 'large_avatar_quote' && (
                   <div className="flex flex-col items-center h-full justify-between">
-                    <div className="relative w-24 h-24 rounded-full overflow-hidden mb-4 border-4 border-white shadow-lg">
+                    <div className="relative w-14 h-14 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-4 border-4 border-white shadow-lg">
                       <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-1">{testimonial.name}</h3>
-                    <p className="text-sm text-gray-600 mb-3">{testimonial.occupation}</p>
+                    <h3 className="text-sm sm:text-lg font-bold text-gray-800 mb-1">{testimonial.name}</h3>
+                    <p className="text-[10px] sm:text-sm text-gray-600 mb-3">{testimonial.occupation}</p>
                     {renderStars(testimonial.rating)}
-                    <p className="text-gray-700 text-sm mt-4 text-center leading-relaxed opacity-70 text-black">
-                      <span className="text-4xl font-serif text-gray-300 mr-1">&ldquo;</span>
+                    <p className="text-gray-700 text-xs sm:text-sm mt-4 text-center leading-relaxed opacity-70 text-black">
+                      <span className="text-2xl sm:text-4xl font-serif text-gray-300 mr-1">&ldquo;</span>
                       {testimonial.text}
-                      <span className="text-4xl font-serif text-gray-300 ml-1">&rdquo;</span>
+                      <span className="text-2xl sm:text-4xl font-serif text-gray-300 ml-1">&rdquo;</span>
                     </p>
                   </div>
                 )}

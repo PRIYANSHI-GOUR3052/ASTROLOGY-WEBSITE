@@ -18,18 +18,16 @@ const credentials = [
 
 export function AstrologerProfile() {
   return (
-    <section className="py-16 relative bg-[#fef6f2]">
+    <section className="py-16 relative bg-white">
       <div className="absolute inset-0"></div>
       <div className="container mx-auto px-4 relative z-10 mt-20">
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-4 text-black">
-          Meet Dr. Narendra - Your Trusted Astrologer
-        </h2>
-        <h3 className="text-2xl md:text-3xl font-serif text-center mb-12 text-black">
-          Expert Vedic Astrologer with Decades of Experience
-        </h3>
+        <div className="w-full max-w-6xl mx-auto mb-12 rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 flex flex-col items-center justify-center shadow-lg">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight font-sans">Meet Dr. Narendra - Your Trusted Astrologer</h1>
+          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl font-sans">Expert Vedic Astrologer with Decades of Experience</p>
+        </div>
         <div className="space-y-8">
           {credentials.map((credential, index) => (
-            <Card key={index} className="bg-white border border-black/30">
+            <Card key={index} className="bg-[#fef6f2] border border-black/30">
               <CardContent className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div className="space-y-4">
@@ -43,7 +41,7 @@ export function AstrologerProfile() {
                       src={credential.image}
                       alt={credential.title}
                       fill
-                      className="object-cover [object-position:0_14.285%]"
+                      className="object-cover"
                     />
                   </div>
                 </div>
@@ -74,4 +72,3 @@ export function AstrologerProfile() {
     </section>
   )
 }
-

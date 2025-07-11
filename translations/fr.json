@@ -33,7 +33,42 @@
         "link": "/blog/the-influence-of-planets",
         "linkText": "Lire plus"
       }
-    }
+    },
+    "celestialJourney": "Embarquez pour votre voyage céleste",
+    "celestialJourneyDesc": "Laissez les étoiles illuminer votre chemin vers la découverte de soi et l'épanouissement.",
+    "cosmicCalendarTitle": "Calendrier Cosmique",
+    "cosmicCalendarDesc": "Restez en phase avec l'univers grâce aux faits saillants célestes quotidiens, aux horaires propices et aux mouvements planétaires qui façonnent votre journée.",
+    "zodiacDecoderTitle": "Décodeur de personnalité du zodiaque",
+    "zodiacDecoderDesc": "Découvrez les couches cachées de votre signe du zodiaque : traits, forces et particularités qui font de vous quelqu'un d'unique.",
+    "astroWellnessTitle": "Conseils de bien-être astrologique",
+    "astroWellnessDesc": "Recevez des conseils de bien-être pratiques et holistiques inspirés par les étoiles, alliant sagesse ancienne et vie moderne.",
+    "spiritualGrowthTitle": "Chemins de croissance spirituelle",
+    "spiritualGrowthDesc": "Explorez des méditations guidées, des affirmations et des pratiques spirituelles pour élever votre esprit, votre corps et votre âme.",
+    "mythLegendTitle": "Projecteur sur les mythes et légendes",
+    "mythLegendDesc": "Voyagez à travers des histoires et des légendes fascinantes de l'astrologie védique, donnant vie aux mythes anciens pour le chercheur d'aujourd'hui.",
+    "exploreServices": "Découvrez nos services",
+    "discoverCosmicJourney": "Découvrez votre voyage cosmique",
+    "learnMore": "En savoir plus",
+    "card0Title": "Conseils de carrière et d'emploi",
+    "card0Desc": "Naviguez sur votre chemin professionnel avec une clarté cosmique. Nos astrologues experts fournissent des conseils personnalisés pour vous aider à prendre des décisions éclairées, à identifier des opportunités et à surmonter les défis professionnels.",
+    "card1Title": "Grah Shanti Puja",
+    "card1Desc": "Harmonisez les énergies planétaires et atténuez les influences négatives avec une Grah Shanti Puja traditionnelle. Ce rituel sacré est effectué pour apporter paix, prospérité et équilibre à votre vie.",
+    "card2Title": "Compatibilité de Kundali",
+    "card2Desc": "Découvrez la science et l'art sacré de la compatibilité védique. Nos astrologues experts allient tradition et vision moderne pour vous guider vers une union harmonieuse et bénie.",
+    "card3Title": "Analyse de numérologie",
+    "card3Desc": "Découvrez le pouvoir des nombres dans votre vie grâce à une lecture personnalisée de la numérologie.",
+    "card4Title": "Services de Puja en ligne",
+    "card4Desc": "Découvrez la puissance sacrée des rituels védiques depuis le confort de votre maison. Nos services de puja en ligne vous connectent à des prêtres experts, des traditions authentiques et des bénédictions divines, où que vous soyez dans le monde.",
+    "card5Title": "Consultation de chiromancie",
+    "card5Desc": "Découvrez les secrets cachés dans vos mains. Nos experts en chiromancie fournissent des lectures perspicaces sur votre chemin de vie, votre caractère et votre avenir.",
+    "card6Title": "Panchang du jour",
+    "card6Desc": "Votre almanach védique quotidien pour l'alignement cosmique, les horaires propices et la clarté spirituelle. Découvrez les cinq membres du temps, les positions planétaires et les rituels sacrés pour harmoniser votre journée avec l'univers.",
+    "card7Title": "Lecture d'astrologie personnelle",
+    "card7Desc": "Notre service de lecture d'astrologie personnelle offre une analyse approfondie de votre thème natal, fournissant des informations sur votre personnalité, votre chemin de vie, votre carrière, vos relations et plus encore.",
+    "card8Title": "Consultation de tantra",
+    "card8Desc": "Explorez le chemin transformateur du tantra avec des conseils d'experts. Nos consultations se concentrent sur la croissance spirituelle, la guérison et les pratiques de méditation.",
+    "card9Title": "Lecture de tarot",
+    "card9Desc": "Découvrez les secrets mystiques des cartes et obtenez un aperçu profond de votre parcours de vie."
   },
   "header": {
     "logo": {
@@ -47,9 +82,14 @@
       "contact": "Contact",
       "blog": "Bloguer",
       "study": "Étude",
-      "consultations": "Consultations"
+      "consultations": "Consultations",
+      "talk_to_astrologer": "Parler à un astrologue",
+      "chat_with_astrologer": "Discuter avec un astrologue",
+      "buy_products": "Acheter des produits",
+      "our_services": "Nos services"
     },
     "cart": "Chariot",
+    "join_us": "Rejoignez-nous",
     "mega_menu": {
       "consultations": {
         "title": "Consultations",
@@ -618,5 +658,19 @@
       "language": "🌍 FR Français"
     },
     "scrollToTop": "Retour en haut"
+  },
+  "cart": {
+    "yourCart": "Votre Panier",
+    "description": "Consultez et gérez les articles dans votre panier. Procédez au paiement lorsque vous êtes prêt à finaliser votre achat.",
+    "empty": "Votre panier est vide",
+    "continueShopping": "Continuer vos achats",
+    "orderSummary": "Résumé de la commande",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "shippingFree": "Gratuit",
+    "total": "Total",
+    "proceedToCheckout": "Procéder au paiement",
+    "quantity": "Quantité",
+    "remove": "Retirer"
   }
 }

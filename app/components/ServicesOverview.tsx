@@ -54,7 +54,7 @@ const snapshotContent = {
       ar: "احصل على توقعات يومية دقيقة مصممة خصيصاً لك. ابدأ يومك بتوجيه كوني.",
       ru: "Получайте точные ежедневные прогнозы, составленные специально для вас. Начните свой день с космического руководства."
     },
-    imageUrl: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042875/horoscopedaily_txnsuj.jpg"
+    imageUrl: "/images/horoscope_daily.jpg"
   },
   fitsForCatlovers: {
     title: {
@@ -100,7 +100,7 @@ const snapshotContent = {
       ar: "اختبر قراءات شخصية ورؤى يومية أثناء التنقل مع تطبيقنا المحمول.",
       ru: "Получайте персональные прогнозы и ежедневные советы в нашем мобильном приложении."
     },
-    appScreenshot: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042871/astrology_app_eoszbs.jpg"
+    appScreenshot: "/images/astrology_app_mockup.jpg"
   },
   equipATeam: {
     title: {
@@ -211,7 +211,7 @@ const snapshotContent = {
       ar: "أدوات تفاعلية لرؤية خريطتك الفلكية وعبور الكواكب تنبض بالحياة.",
       ru: "Интерактивные инструменты для визуализации вашей натальной карты и транзитов планет."
     },
-    laptopScreenshot: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/birth_chart_mockup_beesbo.jpg"
+    laptopScreenshot: "/images/birth_chart_mockup.jpg"
   }
 };
 
@@ -225,16 +225,16 @@ const floatingShapes = [
 ];
 
 const cuteGradients = [
-  "bg-gradient-to-br from-pink-300 to-purple-400", // Stronger Pink to Purple
-  "bg-gradient-to-br from-blue-300 to-green-400",  // Stronger Blue to Green
-  "bg-gradient-to-br from-yellow-300 to-orange-400", // Stronger Yellow to Orange
-  "bg-gradient-to-br from-teal-300 to-cyan-400",   // Stronger Teal to Cyan
-  "bg-gradient-to-br from-red-300 to-pink-400",    // Stronger Red to Pink
-  "bg-gradient-to-br from-indigo-300 to-blue-400", // Stronger Indigo to Blue
-  "bg-gradient-to-br from-purple-300 to-fuchsia-400", // Stronger Purple to Fuchsia
-  "bg-gradient-to-br from-lime-300 to-emerald-400", // Stronger Lime to Emerald
-  "bg-gradient-to-br from-rose-300 to-red-400",    // Stronger Rose to Red
-  "bg-gradient-to-br from-violet-300 to-indigo-400", // Stronger Violet to Indigo
+  "bg-white",
+  "bg-white",
+  "bg-white",
+  "bg-white",
+  "bg-white",
+  "bg-white",
+  "bg-white",
+  "bg-white",
+  "bg-white",
+  "bg-white",
 ];
 
 interface Service {
@@ -437,16 +437,7 @@ export function ServicesOverview() {
   };
 
   return (
-    <section className="relative min-h-screen py-16 bg-white font-sans overflow-hidden">
-      {/* Floating background shapes */}
-      {floatingShapes.map((shape, index) => (
-        <div
-          key={index}
-          className={`absolute ${shape.className}`}
-          style={shape.style}
-        ></div>
-      ))}
-
+    <section className="min-h-screen py-16 bg-white font-sans">
       <div className="container mx-auto px-4 relative z-10">
         {/* Top Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
@@ -486,8 +477,11 @@ export function ServicesOverview() {
                   <div className="mb-4 mt-2">
                     <span className="text-3xl font-bold text-black">₹{services[0].price}</span>
                   </div>
-                  <div className="space-y-2 w-full">
-                    <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
+                  <div className="relative w-full flex justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center z-0">
+                      <div className="rounded-full bg-black w-full h-14"></div>
+                    </div>
+                    <Button className="relative z-10 w-full bg-black text-white rounded-full py-4 shadow-lg hover:bg-gray-800 transition duration-300">
                       {lang === 'en' ? 'Buy Now' : t('buyNow')}
                     </Button>
                   </div>
@@ -501,9 +495,14 @@ export function ServicesOverview() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-1 flex items-center justify-center"
           >
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 text-center">
-              {t('exploreKeyOfferings')}
-            </h2>
+            <div className="flex justify-center items-center w-full py-8 my-8">
+              <span className="relative inline-flex items-center">
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-8 md:px-16 py-14 bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] rounded-full w-auto h-auto z-0" style={{ minWidth: 'calc(100% + 64px)' }}></span>
+                <h1 className="relative z-10 text-4xl md:text-5xl font-extrabold font-serif text-gray-900 text-center tracking-tight drop-shadow-lg px-8">
+                  {t('Explore Key Offerings')}
+                </h1>
+              </span>
+            </div>
           </motion.div>
 
           {/* Paste cool photos! / Daily Horoscope Insights */}
@@ -564,8 +563,11 @@ export function ServicesOverview() {
                   <div className="mb-4 mt-2">
                     <span className="text-3xl font-bold text-black">₹{services[1].price}</span>
                   </div>
-                  <div className="space-y-2 w-full">
-                    <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
+                  <div className="relative w-full flex justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center z-0">
+                      <div className="rounded-full bg-black w-full h-14"></div>
+                    </div>
+                    <Button className="relative z-10 w-full bg-black text-white rounded-full py-4 shadow-lg hover:bg-gray-800 transition duration-300">
                       {lang === 'en' ? 'Buy Now' : t('buyNow')}
                     </Button>
                   </div>
@@ -585,7 +587,7 @@ export function ServicesOverview() {
               <Image src={snapshotContent.coffeinia.appScreenshot} alt="App Screenshot" fill style={{ objectFit: 'contain' }} />
             </div>
             <div className="space-y-2 w-full mt-4">
-                <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
+                <Button className="btn-grad rounded-full text-sm font-semibold">
                   {lang === 'en' ? 'Buy Now' : t('buyNow')}
                 </Button>
             </div>
@@ -668,8 +670,11 @@ export function ServicesOverview() {
                   <div className="mb-4 mt-2">
                     <span className="text-3xl font-bold text-black">₹{services[2].price}</span>
                   </div>
-                  <div className="space-y-2 w-full">
-                    <Button className="w-full bg-[#E6F3FF] hover:bg-[#D1E7FF] text-[#2B6CB0] rounded-full py-2 shadow-md transition duration-300">
+                  <div className="relative w-full flex justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center z-0">
+                      <div className="rounded-full bg-black w-full h-14"></div>
+                    </div>
+                    <Button className="relative z-10 w-full bg-black text-white rounded-full py-4 shadow-lg hover:bg-gray-800 transition duration-300">
                       {lang === 'en' ? 'Buy Now' : t('buyNow')}
                     </Button>
                   </div>

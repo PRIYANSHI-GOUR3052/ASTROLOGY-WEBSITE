@@ -39,7 +39,42 @@
         "link": "/blog/the-influence-of-planets",
         "linkText": "Mehr lesen"
       }
-    }
+    },
+    "celestialJourney": "Beginne deine himmlische Reise",
+    "celestialJourneyDesc": "Lass die Sterne deinen Weg zur Selbstfindung und Erfüllung erleuchten.",
+    "cosmicCalendarTitle": "Kosmischer Kalender",
+    "cosmicCalendarDesc": "Bleibe mit dem Universum verbunden durch tägliche himmlische Höhepunkte, günstige Zeiten und planetare Bewegungen, die deinen Tag prägen.",
+    "zodiacDecoderTitle": "Tierkreis-Persönlichkeitsdecoder",
+    "zodiacDecoderDesc": "Entdecke die verborgenen Schichten deines Sternzeichens – Eigenschaften, Stärken und Eigenheiten, die dich einzigartig machen.",
+    "astroWellnessTitle": "Astro-Wellness-Tipps",
+    "astroWellnessDesc": "Erhalte praktische, ganzheitliche Wellness-Tipps, inspiriert von den Sternen, die altes Wissen mit modernem Leben verbinden.",
+    "spiritualGrowthTitle": "Wege spirituellen Wachstums",
+    "spiritualGrowthDesc": "Erkunde geführte Meditationen, Affirmationen und spirituelle Praktiken, um deinen Geist, Körper und deine Seele zu erheben.",
+    "mythLegendTitle": "Mythen- & Legenden-Spotlight",
+    "mythLegendDesc": "Reise durch faszinierende Geschichten und Legenden der vedischen Astrologie und erwecke alte Mythen für den Suchenden von heute zum Leben.",
+    "exploreServices": "Unsere Dienstleistungen entdecken",
+    "discoverCosmicJourney": "Entdecke deine kosmische Reise",
+    "learnMore": "Mehr erfahren",
+    "card0Title": "Karriere- & Berufsberatung",
+    "card0Desc": "Navigiere deinen beruflichen Weg mit kosmischer Klarheit. Unsere erfahrenen Astrologen bieten persönliche Beratung, um dir zu helfen, fundierte Karriereentscheidungen zu treffen, Chancen zu erkennen und Herausforderungen am Arbeitsplatz zu meistern.",
+    "card1Title": "Grah Shanti Puja",
+    "card1Desc": "Harmonisiere planetare Energien und milder negative Einflüsse mit einer traditionellen Grah Shanti Puja. Dieses heilige Ritual wird durchgeführt, um Frieden, Wohlstand und Gleichgewicht in dein Leben zu bringen.",
+    "card2Title": "Kundali-Abgleich",
+    "card2Desc": "Entdecke die Wissenschaft und die heilige Kunst der vedischen Kompatibilität. Unsere erfahrenen Astrologen verbinden Tradition und moderne Erkenntnisse, um dich zu einer harmonischen, gesegneten Vereinigung zu führen.",
+    "card3Title": "Numerologie-Analyse",
+    "card3Desc": "Entdecke die Kraft der Zahlen in deinem Leben mit einer persönlichen Numerologie-Lesung.",
+    "card4Title": "Online-Puja-Dienste",
+    "card4Desc": "Erlebe die heilige Kraft vedischer Rituale bequem von zu Hause aus. Unsere Online-Puja-Dienste verbinden dich mit erfahrenen Priestern, authentischen Traditionen und göttlichen Segnungen – egal, wo du auf der Welt bist.",
+    "card5Title": "Handlesen-Beratung",
+    "card5Desc": "Entdecke die Geheimnisse, die in deinen Händen verborgen sind. Unsere Handlese-Experten bieten aufschlussreiche Lesungen zu deinem Lebensweg, Charakter und deiner Zukunft.",
+    "card6Title": "Heutiger Panchang",
+    "card6Desc": "Dein täglicher vedischer Almanach für kosmische Ausrichtung, günstige Zeiten und spirituelle Klarheit. Entdecke die fünf Glieder der Zeit, Planetenpositionen und heilige Rituale, um deinen Tag mit dem Universum in Einklang zu bringen.",
+    "card7Title": "Persönliche astrologische Lesung",
+    "card7Desc": "Unser Service für persönliche astrologische Lesungen bietet eine eingehende Analyse deines Geburtshoroskops und liefert Einblicke in deine Persönlichkeit, deinen Lebensweg, deine Karriere, Beziehungen und mehr.",
+    "card8Title": "Tantra-Beratung",
+    "card8Desc": "Erkunde den transformativen Weg des Tantra mit fachkundiger Anleitung. Unsere Beratungen konzentrieren sich auf spirituelles Wachstum, Heilung und Meditationspraktiken.",
+    "card9Title": "Tarot-Lesung",
+    "card9Desc": "Entdecke die mystischen Geheimnisse der Karten und erhalte tiefe Einblicke in deine Lebensreise."
   },
   "header": {
     "logo": {
@@ -53,9 +88,15 @@
       "contact": "Kontakt",
       "blog": "Blog",
       "study": "Studie",
-      "consultations": "Konsultationen"
+      "consultations": "Konsultationen",
+      "talk_to_astrologer": "Mit Astrologen sprechen",
+      "chat_with_astrologer": "Mit Astrologen chatten",
+      "buy_products": "Produkte kaufen",
+      "our_services": "Unsere Dienstleistungen",
+      "join_us": "Mach mit"
     },
     "cart": "Wagen",
+    "join_us": "Mach mit",
     "mega_menu": {
       "consultations": {
         "title": "Konsultationen",
@@ -595,5 +636,19 @@
       "error": "Etwas ist schief gelaufen. Bitte versuchen Sie es erneut."
     },
     "brand": "nakshatra"
+  },
+  "cart": {
+    "yourCart": "Ihr Warenkorb",
+    "description": "Sehen und verwalten Sie die Artikel in Ihrem Warenkorb. Gehen Sie zur Kasse, wenn Sie Ihren Einkauf abschließen möchten.",
+    "empty": "Ihr Warenkorb ist leer",
+    "continueShopping": "Weiter einkaufen",
+    "orderSummary": "Bestellübersicht",
+    "subtotal": "Zwischensumme",
+    "shipping": "Versand",
+    "shippingFree": "Kostenlos",
+    "total": "Gesamt",
+    "proceedToCheckout": "Zur Kasse gehen",
+    "quantity": "Menge",
+    "remove": "Entfernen"
   }
 }

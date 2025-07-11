@@ -3,7 +3,6 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { useLanguage } from '../contexts/useLanguage'
 import { Star, Calendar, Gem, BookOpen, HeartPulse } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
@@ -17,6 +16,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Marquee from 'react-fast-marquee';
+import { useLanguage } from '../contexts/useLanguage';
 
 const cardData = [
   {
@@ -122,24 +123,100 @@ const illustrationsData = [
   { size: 25, top: '50%', left: '50%', rotate: 120, path: 'M50,2A48,48,0,1,0,50,98A48,48,0,0,0,50,2Zm0,88A40,40,0,1,1,90,50,40,40,0,0,1,50,90Z' }, // Ring
 ];
 
+// Ticker content
+const shloka = 'ॐ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः। सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत्॥';
+const meanings: Record<string, string> = {
+  en: 'May all beings be happy. May all be free from illness. May all see what is auspicious. May none suffer in any way.',
+  hi: 'सभी सुखी रहें। सभी निरोगी रहें। सभी शुभ देखें। और कोई भी दुख का भागी न बने।',
+  es: 'Que todos sean felices. Que todos estén libres de enfermedad. Que todos vean lo auspicioso. Que nadie sufra de ninguna manera.',
+  fr: 'Que tous soient heureux. Que tous soient exempts de maladie. Que tous voient ce qui est de bon augure. Que personne ne souffre en aucune façon.',
+  de: 'Mögen alle glücklich sein. Mögen alle frei von Krankheit sein. Mögen alle das Glückliche sehen. Möge niemand auf irgendeine Weise leiden.',
+  zh: '愿众生幸福。愿众生无病。愿众生见吉祥。愿无人受苦。',
+  ru: 'Пусть все будут счастливы. Пусть все будут свободны от болезней. Пусть все видят благоприятное. Пусть никто не страдает.',
+  ar: 'ليكن الجميع سعداء. ليكن الجميع خاليين من المرض. ليكن الجميع يرون ما هو خير. لا يعاني أحد بأي شكل من الأشكال.',
+};
+
 export default function HeroSection() {
+  // Carousel images
+  const images = [
+    '/images/astro.jpg',
+    '/images/astrology_app.jpg',
+    '/images/astrowellness.jpg',
+    '/images/spiritualpathway.jpg',
+    '/images/myth.jpg',
+    '/images/horoscopedaily.jpg',
+  ];
+  const [current, setCurrent] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [images.length]);
+
+  const { t } = useLanguage();
+  const { lang } = useLanguage();
   return (
     <>
       {/* Prominent Banner - visually bold, green gradient, with CTA, always below nav */}
-      <section className="pt-28 w-full flex items-center justify-center bg-[#FEFBF2] py-7 px-4 shadow-2xl relative z-30">
-        <div className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8">
+      <section className="pt-28 w-full flex items-center justify-center bg-[#FEFBF2] py-7 px-4 shadow-2xl relative z-30 overflow-hidden" style={{ minHeight: '320px', minWidth: '100%' }}>
+        {/* Background carousel */}
+        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+          {images.map((img, idx) => (
+            <img
+              key={img}
+              src={img}
+              alt="Astrology background"
+              className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-1000 ${idx === current ? 'opacity-100' : 'opacity-0'}`}
+              style={{ transition: 'opacity 1s ease-in-out' }}
+              draggable={false}
+            />
+          ))}
+          {/* Overlay for readability */}
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+        {/* Content on top */}
+        <div className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 relative z-10">
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#5fa143] via-[#77A656] to-[#357a1a] bg-clip-text text-transparent drop-shadow-lg mb-2">
-  Unlock Your Destiny with Nakshatra Gyan</h2>
-            <p className="text-lg md:text-xl font-medium drop-shadow-sm bg-gradient-to-r from-[#5fa143] via-[#77A656] to-[#357a1a] bg-clip-text text-transparent">Experience authentic Vedic astrology, remedies, and guidance for your life journey.</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white drop-shadow-lg mb-2">
+              {t('hero.mainHeading')}
+            </h2>
+            <p className="text-lg md:text-xl font-bold text-white drop-shadow-sm">
+              {t('hero.subHeading')}
+            </p>
           </div>
           <div className="mt-6 md:mt-0 flex-shrink-0">
             <Link href="/services">
-              <span className="inline-block bg-[#FEFBF2] text-[#23244a] font-bold px-8 py-4 rounded-full shadow-lg hover:bg-white hover:text-amber-700 transition-colors text-xl border-2 border-[#e5e5e5] tracking-wide">Explore Our Services</span>
+              <span className="inline-block bg-[#FEFBF2] text-[#23244a] font-bold px-8 py-4 rounded-full shadow-lg hover:bg-white hover:text-amber-700 transition-colors text-xl border-2 border-[#e5e5e5] tracking-wide">
+                {t('hero.ctaButton')}
+              </span>
             </Link>
           </div>
         </div>
       </section>
+      {/* Ticker between hero and next section */}
+      <div className="w-full bg-[#F2E5DA] py-6 px-2 flex items-center justify-center min-h-[72px]">
+        <Marquee gradient={false} speed={40} pauseOnHover={true} direction="right" className="w-full">
+          <div className="flex flex-row items-center w-full gap-4">
+            <div className="flex flex-col justify-center items-end min-w-[220px] mr-8">
+              <span className="font-[\'Noto Serif Devanagari\',serif] text-base md:text-lg font-semibold leading-tight tracking-wide" style={{ fontFamily: 'Noto Serif Devanagari, serif', color: '#2C3A4B' }}>
+                ॐ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः।
+              </span>
+              <span className="font-[\'Noto Serif Devanagari\',serif] text-base md:text-lg font-semibold leading-tight tracking-wide" style={{ fontFamily: 'Noto Serif Devanagari, serif', color: '#2C3A4B' }}>
+                सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत्॥
+              </span>
+            </div>
+            <div className="flex flex-col justify-center items-start min-w-[260px] ml-8">
+              <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2C3A4B' }}>
+                {meanings[lang]?.split('. ').slice(0,2).join('. ')}
+              </span>
+              <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2C3A4B' }}>
+                {meanings[lang]?.split('. ').slice(2).join('. ')}
+              </span>
+            </div>
+          </div>
+        </Marquee>
+      </div>
       <section className="w-full min-h-[80vh] flex flex-col items-center justify-center bg-[#F8FAF5] pt-6 md:pt-10 pb-12 md:pb-16 px-2 md:px-0">
         {/* Main Heading */}
         <motion.h1
@@ -148,7 +225,7 @@ export default function HeroSection() {
           transition={{ duration: 0.7 }}
           className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-marcellus text-center mb-4 bg-gradient-to-r from-[#23244a] via-[#23244a] to-[#77A656] bg-clip-text text-transparent drop-shadow-lg tracking-tight"
         >
-          <span className="inline-block"> Embark on Your Celestial Journey</span>
+          <span className="inline-block">{t('hero.celestialJourney')}</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -156,15 +233,15 @@ export default function HeroSection() {
           transition={{ duration: 0.9, delay: 0.2 }}
           className="text-lg sm:text-xl md:text-2xl font-cormorant text-center text-[#77A656] tracking-wide italic mb-8"
         >
-          Let the stars illuminate your path to self-discovery and fulfillment.
+          {t('hero.celestialJourneyDesc')}
         </motion.p>
         {/* Astrology Grid Layout */}
         <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Left Column */}
           <div className="flex flex-col gap-8">
             <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
-              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">Cosmic Calendar</h2>
-              <p className="text-gray-700 text-base">Stay attuned to the universe with daily celestial highlights, auspicious timings, and planetary movements that shape your day.</p>
+              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">{t('hero.cosmicCalendarTitle')}</h2>
+              <p className="text-gray-700 text-base">{t('hero.cosmicCalendarDesc')}</p>
               <Link href="/panchang">
                 <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
                   <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042873/cosmiccalendar_v8ndoq.png" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
@@ -172,8 +249,8 @@ export default function HeroSection() {
               </Link>
             </motion.div>
             <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
-              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">Zodiac Personality Decoder</h2>
-              <p className="text-gray-700 text-base">Uncover the hidden layers of your zodiac sign—traits, strengths, and quirks that make you uniquely you.</p>
+              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">{t('hero.zodiacDecoderTitle')}</h2>
+              <p className="text-gray-700 text-base">{t('hero.zodiacDecoderDesc')}</p>
               <Link href="/astrology">
                 <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
                   <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042879/zodiac_decoder_aphuoz.avif" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
@@ -184,8 +261,8 @@ export default function HeroSection() {
           {/* Center Column */}
           <div className="flex flex-col gap-8">
             <motion.div whileHover={{ scale: 1.04 }} className="bg-white rounded-xl shadow p-8 flex flex-col gap-4">
-              <h2 className="text-3xl font-bold font-marcellus text-[#23244a]">Astro Wellness Tips</h2>
-              <p className="text-gray-700 text-base">Receive practical, holistic wellness advice inspired by the stars, blending ancient wisdom with modern living.</p>
+              <h2 className="text-3xl font-bold font-marcellus text-[#23244a]">{t('hero.astroWellnessTitle')}</h2>
+              <p className="text-gray-700 text-base">{t('hero.astroWellnessDesc')}</p>
               <Link href="/blog/astrology-remedies-for-life">
                 <motion.div whileHover={{ scale: 1.07, boxShadow: '0 6px 32px #77A65633' }} className="relative w-full aspect-video rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
                   <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042871/astrowellness_qltouz.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
@@ -196,8 +273,8 @@ export default function HeroSection() {
           {/* Right Column */}
           <div className="flex flex-col gap-8">
             <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
-              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">Spiritual Growth Pathways</h2>
-              <p className="text-gray-700 text-base">Explore guided meditations, affirmations, and spiritual practices to elevate your mind, body, and soul.</p>
+              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">{t('hero.spiritualGrowthTitle')}</h2>
+              <p className="text-gray-700 text-base">{t('hero.spiritualGrowthDesc')}</p>
               <Link href="/courses">
                 <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
                   <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042878/spiritualpathway_afll4p.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
@@ -205,8 +282,8 @@ export default function HeroSection() {
               </Link>
             </motion.div>
             <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
-              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">Myth & Legend Spotlight</h2>
-              <p className="text-gray-700 text-base">Journey through fascinating stories and legends from Vedic astrology, bringing ancient myths to life for today's seeker.</p>
+              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">{t('hero.mythLegendTitle')}</h2>
+              <p className="text-gray-700 text-base">{t('hero.mythLegendDesc')}</p>
               <Link href="/blog/astrology-remedies-for-life">
                 <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
                   <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042876/myth_h93fku.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
@@ -240,7 +317,7 @@ export default function HeroSection() {
                   variants={itemVariants}
                   className="font-cinzel uppercase text-lg tracking-[0.3em] text-[#77A656] font-bold text-center"
                 >
-                  Explore Our Services
+                  {t('hero.exploreServices')}
                 </motion.span>
               </div>
             </div>
@@ -248,7 +325,7 @@ export default function HeroSection() {
               variants={itemVariants}
               className="font-marcellus text-4xl font-bold text-[#23244a] mt-2"
             >
-              Discover Your Cosmic Journey
+              {t('hero.discoverCosmicJourney')}
             </motion.h2>
           </div>
           <Carousel 
@@ -295,19 +372,11 @@ export default function HeroSection() {
                             <svg className="w-14 h-14 text-[#bdbdbd]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="4"/><circle cx="18" cy="18" r="3"/><path d="M6 34l10-10 7 7 9-9 10 10"/></svg>
                           </div>
                           <h3 className="text-2xl font-bold text-black mb-4 group-hover:text-black font-marcellus tracking-wide">
-                            {card.title}
+                            {t(`hero.card${index}Title`)}
                           </h3>
                           <p className="text-black text-sm leading-relaxed group-hover:opacity-100 transition-opacity font-cormorant">
-                            {card.description}
+                            {t(`hero.card${index}Desc`)}
                           </p>
-                          <div className="mt-auto pt-6">
-                            <span className="inline-flex items-center text-[#2A2A2A] text-sm font-medium group-hover:translate-x-1 transition-transform">
-                              <span className="mr-2">Learn More</span>
-                              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              </svg>
-                            </span>
-                          </div>
                         </div>
                       </div>
                     </Link>
@@ -315,22 +384,9 @@ export default function HeroSection() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="-left-8 z-20 text-black" />
-            <CarouselNext className="-right-8 z-20 text-black" />
           </Carousel>
-        </div>
-        {/* Add back the left and right SVG circles in the service section, with updated green colors */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-[300px] h-[300px] opacity-20">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-            <path fill="#5fa143" d="M44.1,-76.3C58.4,-69.8,71.9,-59.6,79.9,-46.2C87.9,-32.8,90.4,-16.4,89.6,-0.5C88.7,15.5,84.5,31,76.3,44.2C68.1,57.4,56,68.3,42,75.8C28,83.3,14,87.4,-0.6,88.4C-15.1,89.5,-30.2,87.5,-44.7,81.1C-59.1,74.7,-72.9,64,-81.5,49.8C-90.1,35.6,-93.5,17.8,-92.1,0.8C-90.7,-16.2,-84.5,-32.3,-75.1,-45.8C-65.7,-59.2,-53,-69.9,-39,-75.8C-25,-81.7,-12.5,-82.8,1.6,-85.6C15.7,-88.4,31.4,-93,44.1,-76.3Z" transform="translate(100 100)" />
-          </svg>
-        </div>
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-[300px] h-[300px] opacity-20">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-            <path fill="#357a1a" d="M42.7,-73.4C56.9,-67.3,71.2,-58.6,78.9,-45.8C86.6,-33,87.7,-16.5,86.5,-0.7C85.3,15.1,81.8,30.2,74.7,43.5C67.6,56.8,56.9,68.3,43.7,75.6C30.5,82.9,15.3,86,-0.2,86.3C-15.6,86.6,-31.2,84.1,-45.1,77.2C-59,70.3,-71.2,59,-79.4,45C-87.6,31,-91.8,15.5,-90.8,0.6C-89.7,-14.3,-83.4,-28.6,-75.1,-41.5C-66.8,-54.4,-56.5,-65.9,-43.5,-72.8C-30.5,-79.7,-15.2,-82,0.9,-83.6C17,-85.2,34,-85,42.7,-73.4Z" transform="translate(100 100)" />
-          </svg>
         </div>
       </motion.div>
     </>
   );
-} 
+}

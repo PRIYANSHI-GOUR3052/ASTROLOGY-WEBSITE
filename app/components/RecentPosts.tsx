@@ -16,10 +16,10 @@ export default function RecentPosts() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
         {/* Left: Featured Blog */}
         <div className="md:col-span-2 flex flex-col gap-6">
-          <div className="bg-[#FFF5E1] rounded-2xl shadow-lg overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
             <div className="relative w-full h-72 md:h-80 flex items-center justify-center" style={{ background: posts[0].themeColor, transition: 'background 0.3s' }}>
               <Image src={posts[0].imageUrl} alt={posts[0].title.en} fill className="object-cover rounded-2xl" />
-              <span className="absolute top-4 left-4 bg-[#FFF5E1] text-gray-800 text-sm font-semibold px-4 py-1 rounded-lg shadow">{posts[0].category}</span>
+              <span className="absolute top-4 left-4 bg-white text-gray-800 text-sm font-semibold px-4 py-1 rounded-lg shadow">{posts[0].category}</span>
             </div>
             <div className="p-6 md:p-8">
               {(() => {
@@ -47,10 +47,10 @@ export default function RecentPosts() {
           {posts.slice(1).map((post, i) => {
             const safeLang = post.title?.[lang] ? lang : 'en';
             return (
-              <div key={post.title.en} className="flex flex-row bg-[#FFF5E1] rounded-2xl shadow-lg overflow-hidden min-h-[160px] md:min-h-[200px] w-full md:w-[420px] mx-auto">
+              <div key={post.title.en} className="flex flex-row bg-white rounded-2xl shadow-lg overflow-hidden min-h-[160px] md:min-h-[200px] w-full md:w-[420px] mx-auto">
                 <div className="relative w-40 h-40 md:w-48 md:h-48 flex-shrink-0 flex items-center justify-center" style={{ background: post.themeColor, transition: 'background 0.3s' }}>
                   <Image src={post.imageUrl} alt={post.title.en} fill className="object-cover rounded-2xl" />
-                  <span className="absolute top-4 left-4 bg-[#FFF5E1] text-gray-800 text-sm font-semibold px-4 py-1 rounded shadow">{post.category}</span>
+                  <span className="absolute top-4 left-4 bg-white text-gray-800 text-sm font-semibold px-4 py-1 rounded shadow">{post.category}</span>
                 </div>
                 <div className="flex-1 p-6 flex flex-col justify-center">
                   <h4 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{post.title?.[safeLang] || post.title?.['en']}</h4>

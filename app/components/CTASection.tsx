@@ -12,7 +12,7 @@ export function CTASection() {
       <p className="text-xl font-semibold mb-8 max-w-2xl mx-auto text-black">
         {t('blog.cta.subheading')}
       </p>
-      <Button asChild size="lg" className="bg-black text-white hover:bg-gray-900 font-bold shadow-md">
+      <Button asChild size="lg" className="bg-black text-white rounded-full py-3 px-8 font-semibold shadow-lg hover:bg-gray-800 border border-black transition-all duration-300">
         <Link href="/contact">{t('blog.cta.button')}</Link>
       </Button>
     </section>
