@@ -31,22 +31,6 @@ model cart {
   @@index([user_id], map: "user_id")
 }
 
-model order_addresses {
-  id            Int       @id @default(autoincrement())
-  order_id      Int
-  full_name     String    @db.VarChar(255)
-  address_line1 String    @db.VarChar(255)
-  address_line2 String?   @db.VarChar(255)
-  city          String    @db.VarChar(100)
-  state         String    @db.VarChar(100)
-  pincode       String    @db.VarChar(20)
-  phone         String    @db.VarChar(20)
-  created_at    DateTime? @default(now()) @db.Timestamp(0)
-  orders        orders    @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "order_addresses_ibfk_1")
-
-  @@index([order_id], map: "order_id")
-}
-
 model order_items {
   id         Int       @id @default(autoincrement())
   order_id   Int
@@ -57,26 +41,25 @@ model order_items {
   carats     Decimal?  @db.Decimal(10, 2)
   price      Decimal   @db.Decimal(10, 2)
   created_at DateTime? @default(now()) @db.Timestamp(0)
-  orders     orders    @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "order_items_ibfk_1")
+  orders     orders    @relation(fields: [order_id], references: [order_id], onDelete: Cascade, onUpdate: NoAction, map: "order_items_ibfk_1")
 
   @@index([order_id], map: "order_id")
 }
 
 model orders {
-  id                Int               @id @default(autoincrement())
+  order_id          Int             @id @default(autoincrement())
   user_id           Int
-  stripe_session_id String            @db.VarChar(255)
-  total_amount      Decimal           @db.Decimal(10, 2)
-  status            String            @default("pending") @db.VarChar(50)
-  payment_method    String            @default("online") @db.VarChar(50)
-  shipping_status   String?           @default("pending") @db.VarChar(50)
+  stripe_session_id String          @db.VarChar(255)
+  total_amount      Decimal         @db.Decimal(10, 2)
+  status            String          @default("pending") @db.VarChar(50)
+  payment_method    String          @default("online") @db.VarChar(50)
+  shipping_status   String?         @default("pending") @db.VarChar(50)
   address_id        Int?
-  created_at        DateTime?         @default(now()) @db.Timestamp(0)
-  updated_at        DateTime?         @default(now()) @db.Timestamp(0)
-  order_addresses   order_addresses[]
+  created_at        DateTime?       @default(now()) @db.Timestamp(0)
+  updated_at        DateTime?       @default(now()) @db.Timestamp(0)
   order_items       order_items[]
-  users             users             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "orders_ibfk_1")
-  user_addresses    user_addresses?   @relation(fields: [address_id], references: [id], onUpdate: NoAction, map: "orders_ibfk_2")
+  users             users           @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "orders_ibfk_1")
+  user_addresses    user_addresses? @relation(fields: [address_id], references: [id], onUpdate: NoAction, map: "orders_ibfk_2")
 
   @@index([address_id], map: "address_id")
   @@index([user_id], map: "user_id")
@@ -94,14 +77,16 @@ model page_visits {
 }
 
 model products {
-  id          Int       @id @default(autoincrement())
-  name        String    @db.VarChar(255)
-  description String    @db.Text
-  price       Decimal   @db.Decimal(10, 2)
-  slug        String    @unique(map: "slug") @db.VarChar(255)
-  available   Int?      @default(0)
-  created_at  DateTime? @default(now()) @db.Timestamp(0)
-  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+  product_id   Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
+  description  String         @db.Text
+  price        Decimal        @db.Decimal(10, 2)
+  slug         String         @unique(map: "slug") @db.VarChar(255)
+  available    Int?           @default(0)
+  created_at   DateTime?      @default(now()) @db.Timestamp(0)
+  updated_at   DateTime?      @default(now()) @db.Timestamp(0)
+  cart_items   cart_items[]
+  live_streams live_streams[]
 }
 
 model services {
@@ -154,16 +139,28 @@ model user_addresses {
 }
 
 model users {
-  id             Int              @id @default(autoincrement())
-  name           String           @db.VarChar(255)
-  email          String           @unique(map: "email") @db.VarChar(255)
-  password       String           @db.VarChar(255)
-  created_at     DateTime?        @default(now()) @db.Timestamp(0)
-  updated_at     DateTime?        @default(now()) @db.Timestamp(0)
-  google_id      String           @db.VarChar(255)
-  cart           cart[]
-  orders         orders[]
-  user_addresses user_addresses[]
+  id                                  Int                    @id @default(autoincrement())
+  name                                String                 @db.VarChar(255)
+  email                               String                 @unique(map: "email") @db.VarChar(255)
+  password                            String                 @db.VarChar(255)
+  created_at                          DateTime?              @default(now()) @db.Timestamp(0)
+  updated_at                          DateTime?              @default(now()) @db.Timestamp(0)
+  google_id                           String                 @db.VarChar(255)
+  brand_requests                      brand_requests[]
+  brands                              brands[]
+  cart                                cart[]
+  carts                               carts[]
+  customer_profiles                   customer_profiles?
+  email_verifications                 email_verifications[]
+  game_plays                          game_plays[]
+  gst_rule_gst_rule_created_byTousers gst_rule[]             @relation("gst_rule_created_byTousers")
+  gst_rule_gst_rule_updated_byTousers gst_rule[]             @relation("gst_rule_updated_byTousers")
+  live_stream_comments                live_stream_comments[]
+  live_stream_viewers                 live_stream_viewers[]
+  merchant_documents                  merchant_documents[]
+  merchant_profiles                   merchant_profiles?
+  orders                              orders[]
+  user_addresses                      user_addresses[]
 }
 
 model visitors {
@@ -175,76 +172,519 @@ model visitors {
   page_visits page_visits[]
 }
 
-model Astrologer {
-  id                 Int                     @id @default(autoincrement())
-  firstName          String
-  lastName           String
-  email              String                  @unique
-  phone              String                  @unique
-  password           String
-  areasOfExpertise   String // Comma-separated
-  yearsOfExperience  Int?
-  bankName           String?
-  accountNumber      String?
-  ifscCode           String?
-  profileImage       String?
-  createdAt          DateTime                @default(now())
-  resetToken         String? // For password reset
-  resetTokenExpiry   DateTime? // For password reset expiry
-  verificationStatus String                  @default("unverified") // unverified, pending, approved, rejected
-  verification       AstrologerVerification?
+model astrologer {
+  id                     Int                     @id @default(autoincrement())
+  firstName              String
+  lastName               String
+  email                  String                  @unique(map: "Astrologer_email_key")
+  phone                  String                  @unique(map: "Astrologer_phone_key")
+  password               String
+  areasOfExpertise       String
+  yearsOfExperience      Int?
+  bankName               String?
+  accountNumber          String?
+  ifscCode               String?
+  profileImage           String?
+  createdAt              DateTime                @default(now())
+  resetToken             String?
+  resetTokenExpiry       DateTime?
+  verificationStatus     String                  @default("unverified")
+  astrologerverification astrologerverification?
 }
 
-model AstrologerVerification {
-  id              Int                       @id @default(autoincrement())
-  astrologerId    Int                       @unique
-  aadharCard      String? // File URL
-  aadharStatus    String? @default("unverified") // unverified, pending, accepted, rejected
-  aadharRemarks   String?
-  panCard         String? // File URL
-  panStatus       String? @default("unverified")
-  panRemarks      String?
-  selfie          String? // File URL
-  selfieStatus    String? @default("unverified")
-  selfieRemarks   String?
-  workProof       String? // File URL (experience letter, screenshots, etc.)
-  workProofStatus String? @default("unverified")
-  workProofRemarks String?
-  declarationForm String? // File URL
-  declarationStatus String? @default("unverified")
-  declarationRemarks String?
-  addressProof    String? // File URL (optional)
-  addressStatus   String? @default("unverified")
-  addressRemarks  String?
-  status          String                    @default("unverified") // unverified, pending, approved, rejected
-  adminRemarks    String?
-  createdAt       DateTime                  @default(now())
-  updatedAt       DateTime                  @updatedAt
-  astrologer      Astrologer                @relation(fields: [astrologerId], references: [id])
-  certifications  AstrologerCertification[]
-  educations      AstrologerEducation[]
+model astrologercertification {
+  id                     Int                    @id @default(autoincrement())
+  verificationId         Int
+  courseName             String
+  instituteName          String
+  yearOfCompletion       String
+  certificateFile        String
+  remarks                String?
+  status                 String?                @default("unverified")
+  astrologerverification astrologerverification @relation(fields: [verificationId], references: [id], map: "AstrologerCertification_verificationId_fkey")
+
+  @@index([verificationId], map: "AstrologerCertification_verificationId_fkey")
 }
 
-model AstrologerCertification {
-  id               Int                    @id @default(autoincrement())
-  verificationId   Int
-  courseName       String
-  instituteName    String
-  yearOfCompletion String
-  certificateFile  String // File URL (PDF/JPG)
-  status           String? @default("unverified") // unverified, pending, accepted, rejected
-  remarks          String?
-  verification     AstrologerVerification @relation(fields: [verificationId], references: [id])
+model astrologereducation {
+  id                     Int                    @id @default(autoincrement())
+  verificationId         Int
+  qualification          String
+  fieldOfStudy           String
+  universityName         String
+  degreeFile             String
+  remarks                String?
+  status                 String?                @default("unverified")
+  astrologerverification astrologerverification @relation(fields: [verificationId], references: [id], map: "AstrologerEducation_verificationId_fkey")
+
+  @@index([verificationId], map: "AstrologerEducation_verificationId_fkey")
 }
 
-model AstrologerEducation {
-  id             Int                    @id @default(autoincrement())
-  verificationId Int
-  qualification  String
-  fieldOfStudy   String
-  universityName String
-  degreeFile     String // File URL (PDF/JPG)
-  status         String? @default("unverified") // unverified, pending, accepted, rejected
-  remarks        String?
-  verification   AstrologerVerification @relation(fields: [verificationId], references: [id])
+model astrologerverification {
+  id                      Int                       @id @default(autoincrement())
+  astrologerId            Int                       @unique(map: "AstrologerVerification_astrologerId_key")
+  aadharCard              String?
+  panCard                 String?
+  selfie                  String?
+  workProof               String?
+  declarationForm         String?
+  addressProof            String?
+  status                  String                    @default("unverified")
+  adminRemarks            String?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime
+  aadharRemarks           String?
+  aadharStatus            String?                   @default("unverified")
+  addressRemarks          String?
+  addressStatus           String?                   @default("unverified")
+  declarationRemarks      String?
+  declarationStatus       String?                   @default("unverified")
+  panRemarks              String?
+  panStatus               String?                   @default("unverified")
+  selfieRemarks           String?
+  selfieStatus            String?                   @default("unverified")
+  workProofRemarks        String?
+  workProofStatus         String?                   @default("unverified")
+  astrologercertification astrologercertification[]
+  astrologereducation     astrologereducation[]
+  astrologer              astrologer                @relation(fields: [astrologerId], references: [id], map: "AstrologerVerification_astrologerId_fkey")
+}
+
+model attribute_values {
+  attribute_id Int
+  value_code   String     @db.VarChar(50)
+  value_label  String     @db.VarChar(100)
+  created_at   DateTime?  @db.DateTime(0)
+  updated_at   DateTime?  @db.DateTime(0)
+  attributes   attributes @relation(fields: [attribute_id], references: [attribute_id], onDelete: NoAction, onUpdate: NoAction, map: "attribute_values_ibfk_1")
+
+  @@id([attribute_id, value_code])
+}
+
+model attributes {
+  attribute_id        Int                   @id @default(autoincrement())
+  code                String                @unique(map: "code") @db.VarChar(50)
+  name                String                @db.VarChar(100)
+  input_type          attributes_input_type
+  created_at          DateTime              @db.DateTime(0)
+  updated_at          DateTime?             @db.DateTime(0)
+  attribute_values    attribute_values[]
+  category_attributes category_attributes[]
+}
+
+model brand_categories {
+  brand_id    Int
+  category_id Int
+  created_at  DateTime   @db.DateTime(0)
+  updated_at  DateTime   @db.DateTime(0)
+  brands      brands     @relation(fields: [brand_id], references: [brand_id], onDelete: Cascade, onUpdate: NoAction, map: "brand_categories_ibfk_1")
+  categories  categories @relation(fields: [category_id], references: [category_id], onDelete: Cascade, onUpdate: NoAction, map: "brand_categories_ibfk_2")
+
+  @@id([brand_id, category_id])
+  @@index([category_id], map: "category_id")
+}
+
+model brand_requests {
+  request_id        Int                   @id @default(autoincrement())
+  merchant_id       Int
+  name              String                @db.VarChar(100)
+  status            brand_requests_status
+  reviewer_id       Int?
+  requested_at      DateTime              @db.DateTime(0)
+  reviewed_at       DateTime?             @db.DateTime(0)
+  created_at        DateTime              @db.DateTime(0)
+  updated_at        DateTime              @db.DateTime(0)
+  deleted_at        DateTime?             @db.DateTime(0)
+  merchant_profiles merchant_profiles     @relation(fields: [merchant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "brand_requests_ibfk_1")
+  users             users?                @relation(fields: [reviewer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "brand_requests_ibfk_2")
+
+  @@index([merchant_id], map: "merchant_id")
+  @@index([reviewer_id], map: "reviewer_id")
+}
+
+model brands {
+  brand_id         Int                @id @default(autoincrement())
+  name             String             @unique(map: "name") @db.VarChar(100)
+  slug             String             @unique(map: "slug") @db.VarChar(100)
+  icon_url         String?            @db.VarChar(255)
+  approved_by      Int?
+  approved_at      DateTime?          @db.DateTime(0)
+  created_at       DateTime           @db.DateTime(0)
+  updated_at       DateTime           @db.DateTime(0)
+  deleted_at       DateTime?          @db.DateTime(0)
+  brand_categories brand_categories[]
+  users            users?             @relation(fields: [approved_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "brands_ibfk_1")
+
+  @@index([approved_by], map: "approved_by")
+}
+
+model carousels {
+  id             Int       @id @default(autoincrement())
+  type           String    @db.VarChar(50)
+  image_url      String    @db.VarChar(255)
+  target_id      Int
+  display_order  Int?
+  is_active      Boolean?
+  shareable_link String?   @db.VarChar(255)
+  created_at     DateTime? @db.DateTime(0)
+  updated_at     DateTime? @db.DateTime(0)
+  deleted_at     DateTime? @db.DateTime(0)
+}
+
+model cart_items {
+  cart_item_id          Int      @id @default(autoincrement())
+  cart_id               Int
+  product_id            Int
+  quantity              Int
+  product_name          String   @db.VarChar(255)
+  product_sku           String   @db.VarChar(50)
+  product_price         Decimal  @db.Decimal(10, 2)
+  product_discount_pct  Decimal  @db.Decimal(5, 2)
+  product_special_price Decimal? @db.Decimal(10, 2)
+  product_image_url     String?  @db.VarChar(255)
+  product_stock_qty     Int
+  merchant_id           Int
+  selected_attributes   String?  @db.Text
+  shipping_weight_kg    Decimal? @db.Decimal(10, 2)
+  shipping_length_cm    Decimal? @db.Decimal(10, 2)
+  shipping_width_cm     Decimal? @db.Decimal(10, 2)
+  shipping_height_cm    Decimal? @db.Decimal(10, 2)
+  created_at            DateTime @db.DateTime(0)
+  updated_at            DateTime @db.DateTime(0)
+  is_deleted            Boolean
+  carts                 carts    @relation(fields: [cart_id], references: [cart_id], onDelete: NoAction, onUpdate: NoAction, map: "cart_items_ibfk_1")
+  products              products @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "cart_items_ibfk_2")
+
+  @@index([cart_id], map: "cart_id")
+  @@index([product_id], map: "product_id")
+}
+
+model carts {
+  cart_id    Int          @id @default(autoincrement())
+  user_id    Int
+  created_at DateTime     @db.DateTime(0)
+  updated_at DateTime     @db.DateTime(0)
+  is_deleted Boolean
+  cart_items cart_items[]
+  users      users        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "carts_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
+model categories {
+  category_id         Int                   @id @default(autoincrement())
+  parent_id           Int?
+  name                String                @unique(map: "name") @db.VarChar(100)
+  slug                String                @unique(map: "slug") @db.VarChar(100)
+  icon_url            String?               @db.VarChar(255)
+  created_at          DateTime              @db.DateTime(0)
+  updated_at          DateTime              @db.DateTime(0)
+  deleted_at          DateTime?             @db.DateTime(0)
+  brand_categories    brand_categories[]
+  categories          categories?           @relation("categoriesTocategories", fields: [parent_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "categories_ibfk_1")
+  other_categories    categories[]          @relation("categoriesTocategories")
+  category_attributes category_attributes[]
+  gst_rule            gst_rule[]
+  homepage_categories homepage_categories[]
+
+  @@index([parent_id], map: "parent_id")
+}
+
+model category_attributes {
+  category_id   Int
+  attribute_id  Int
+  required_flag Boolean
+  created_at    DateTime?  @db.DateTime(0)
+  updated_at    DateTime?  @db.DateTime(0)
+  categories    categories @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "category_attributes_ibfk_1")
+  attributes    attributes @relation(fields: [attribute_id], references: [attribute_id], onDelete: NoAction, onUpdate: NoAction, map: "category_attributes_ibfk_2")
+
+  @@id([category_id, attribute_id])
+  @@index([attribute_id], map: "attribute_id")
+}
+
+model customer_profiles {
+  user_id        Int       @id
+  date_of_birth  DateTime? @db.Date
+  loyalty_points Int       @default(0)
+  preferences    Json?
+  created_at     DateTime? @db.DateTime(0)
+  updated_at     DateTime? @db.DateTime(0)
+  users          users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "customer_profiles_ibfk_1")
+}
+
+model email_verifications {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  token      String    @unique(map: "token") @db.VarChar(255)
+  expires_at DateTime  @db.DateTime(0)
+  is_used    Boolean
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+  users      users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "email_verifications_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
+model game_plays {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  game_type    String    @db.VarChar(50)
+  promotion_id Int?
+  played_at    DateTime  @db.DateTime(0)
+  created_at   DateTime? @db.DateTime(0)
+  updated_at   DateTime? @db.DateTime(0)
+  users        users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "game_plays_ibfk_1")
+
+  @@index([promotion_id], map: "promotion_id")
+  @@index([user_id], map: "user_id")
+}
+
+model gst_rule {
+  id                               Int                           @id @default(autoincrement())
+  name                             String                        @unique(map: "name") @db.VarChar(100)
+  category_id                      Int
+  price_condition_type             gst_rule_price_condition_type
+  price_condition_value            Decimal?                      @db.Decimal(10, 2)
+  gst_rate_percentage              Decimal                       @db.Decimal(5, 2)
+  is_active                        Boolean
+  start_date                       DateTime?                     @db.Date
+  end_date                         DateTime?                     @db.Date
+  created_by                       Int?
+  updated_by                       Int?
+  created_at                       DateTime?                     @db.DateTime(0)
+  updated_at                       DateTime?                     @db.DateTime(0)
+  categories                       categories                    @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "gst_rule_ibfk_1")
+  users_gst_rule_created_byTousers users?                        @relation("gst_rule_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "gst_rule_ibfk_2")
+  users_gst_rule_updated_byTousers users?                        @relation("gst_rule_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "gst_rule_ibfk_3")
+
+  @@index([created_by], map: "created_by")
+  @@index([category_id], map: "ix_gst_rule_category_id")
+  @@index([updated_by], map: "updated_by")
+}
+
+model homepage_categories {
+  id            Int        @id @default(autoincrement())
+  category_id   Int
+  display_order Int
+  is_active     Boolean
+  created_at    DateTime   @db.DateTime(0)
+  updated_at    DateTime   @db.DateTime(0)
+  categories    categories @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "homepage_categories_ibfk_1")
+
+  @@index([category_id], map: "category_id")
+}
+
+model live_stream_comments {
+  comment_id   Int          @id @default(autoincrement())
+  stream_id    Int
+  user_id      Int
+  content      String       @db.Text
+  created_at   DateTime     @db.DateTime(0)
+  updated_at   DateTime     @db.DateTime(0)
+  deleted_at   DateTime?    @db.DateTime(0)
+  live_streams live_streams @relation(fields: [stream_id], references: [stream_id], onDelete: NoAction, onUpdate: NoAction, map: "live_stream_comments_ibfk_1")
+  users        users        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "live_stream_comments_ibfk_2")
+
+  @@index([stream_id], map: "stream_id")
+  @@index([user_id], map: "user_id")
+}
+
+model live_stream_viewers {
+  viewer_id    Int          @id @default(autoincrement())
+  stream_id    Int
+  user_id      Int
+  joined_at    DateTime     @db.DateTime(0)
+  left_at      DateTime?    @db.DateTime(0)
+  created_at   DateTime?    @db.DateTime(0)
+  updated_at   DateTime?    @db.DateTime(0)
+  live_streams live_streams @relation(fields: [stream_id], references: [stream_id], onDelete: NoAction, onUpdate: NoAction, map: "live_stream_viewers_ibfk_1")
+  users        users        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "live_stream_viewers_ibfk_2")
+
+  @@index([stream_id], map: "stream_id")
+  @@index([user_id], map: "user_id")
+}
+
+model live_streams {
+  stream_id            Int                    @id @default(autoincrement())
+  merchant_id          Int
+  product_id           Int
+  title                String                 @db.VarChar(255)
+  description          String?                @db.Text
+  thumbnail_url        String?                @db.VarChar(255)
+  thumbnail_public_id  String?                @db.VarChar(255)
+  scheduled_time       DateTime?              @db.DateTime(0)
+  start_time           DateTime?              @db.DateTime(0)
+  end_time             DateTime?              @db.DateTime(0)
+  is_live              Boolean
+  status               live_streams_status    @default(scheduled)
+  viewers_count        Int
+  likes_count          Int
+  stream_key           String                 @unique(map: "stream_key") @db.VarChar(255)
+  stream_url           String?                @db.VarChar(255)
+  created_at           DateTime               @db.DateTime(0)
+  updated_at           DateTime               @db.DateTime(0)
+  deleted_at           DateTime?              @db.DateTime(0)
+  live_stream_comments live_stream_comments[]
+  live_stream_viewers  live_stream_viewers[]
+  merchant_profiles    merchant_profiles      @relation(fields: [merchant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "live_streams_ibfk_1")
+  products             products               @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "live_streams_ibfk_2")
+
+  @@index([merchant_id], map: "merchant_id")
+  @@index([product_id], map: "product_id")
+}
+
+model merchant_documents {
+  id                Int                              @id @default(autoincrement())
+  merchant_id       Int
+  document_type     merchant_documents_document_type
+  public_id         String                           @db.VarChar(255)
+  file_url          String                           @db.VarChar(255)
+  file_name         String                           @db.VarChar(255)
+  file_size         Int
+  mime_type         String                           @db.VarChar(100)
+  status            merchant_documents_status
+  admin_notes       String?                          @db.Text
+  verified_at       DateTime?                        @db.DateTime(0)
+  verified_by       Int?
+  created_at        DateTime?                        @db.DateTime(0)
+  updated_at        DateTime?                        @db.DateTime(0)
+  merchant_profiles merchant_profiles                @relation(fields: [merchant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "merchant_documents_ibfk_1")
+  users             users?                           @relation(fields: [verified_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "merchant_documents_ibfk_2")
+
+  @@index([merchant_id], map: "ix_merchant_documents_merchant_id")
+  @@index([verified_by], map: "verified_by")
+}
+
+model merchant_profiles {
+  id                              Int                                   @id @default(autoincrement())
+  user_id                         Int                                   @unique(map: "user_id")
+  business_name                   String                                @db.VarChar(200)
+  business_description            String?                               @db.Text
+  business_email                  String                                @db.VarChar(120)
+  business_phone                  String                                @db.VarChar(20)
+  business_address                String                                @db.Text
+  country_code                    String                                @db.VarChar(10)
+  state_province                  String                                @db.VarChar(100)
+  city                            String                                @db.VarChar(100)
+  postal_code                     String                                @db.VarChar(20)
+  tax_id                          String?                               @db.VarChar(50)
+  gstin                           String?                               @db.VarChar(15)
+  pan_number                      String?                               @db.VarChar(10)
+  vat_number                      String?                               @db.VarChar(50)
+  sales_tax_number                String?                               @db.VarChar(50)
+  bank_account_number             String?                               @db.VarChar(50)
+  bank_name                       String?                               @db.VarChar(100)
+  bank_branch                     String?                               @db.VarChar(100)
+  bank_ifsc_code                  String?                               @db.VarChar(11)
+  bank_swift_code                 String?                               @db.VarChar(11)
+  bank_iban                       String?                               @db.VarChar(34)
+  bank_routing_number             String?                               @db.VarChar(20)
+  verification_status             merchant_profiles_verification_status
+  verification_submitted_at       DateTime?                             @db.DateTime(0)
+  verification_completed_at       DateTime?                             @db.DateTime(0)
+  verification_notes              String?                               @db.Text
+  is_verified                     Boolean
+  required_documents              Json?
+  submitted_documents             Json?
+  is_subscribed                   Boolean                               @default(false)
+  subscription_plan_id            Int?
+  subscription_started_at         DateTime?                             @db.DateTime(0)
+  subscription_expires_at         DateTime?                             @db.DateTime(0)
+  can_place_premium               Boolean                               @default(false)
+  shiprocket_pickup_location_id   Int?
+  shiprocket_pickup_location_name String?                               @db.VarChar(100)
+  contact_person_name             String?                               @db.VarChar(100)
+  created_at                      DateTime?                             @db.DateTime(0)
+  updated_at                      DateTime?                             @db.DateTime(0)
+  brand_requests                  brand_requests[]
+  live_streams                    live_streams[]
+  merchant_documents              merchant_documents[]
+  users                           users                                 @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "merchant_profiles_ibfk_1")
+
+  @@index([shiprocket_pickup_location_id], map: "ix_merchant_profiles_shiprocket_pickup_location_id")
+  @@index([subscription_plan_id], map: "subscription_plan_id")
+}
+
+enum merchant_documents_document_type {
+  BUSINESS_REGISTRATION_IN
+  BUSINESS_REGISTRATION_GLOBAL
+  PAN_CARD
+  TAX_ID_GLOBAL
+  GSTIN
+  VAT_ID
+  SALES_TAX_REG
+  IMPORT_EXPORT_LICENSE
+  AADHAR
+  VOTER_ID
+  PASSPORT
+  NATIONAL_ID
+  DRIVING_LICENSE
+  BUSINESS_ADDRESS_PROOF_IN
+  BUSINESS_ADDRESS_PROOF_GLOBAL
+  CANCELLED_CHEQUE
+  BANK_STATEMENT
+  VOID_CHEQUE
+  BANK_LETTER
+  BANK_ACCOUNT_IN
+  BANK_ACCOUNT_GLOBAL
+  GST_CERTIFICATE
+  VAT_CERTIFICATE
+  SALES_TAX_PERMIT
+  MSME_CERTIFICATE
+  SMALL_BUSINESS_CERT
+  DSC
+  ESIGN_CERTIFICATE
+  RETURN_POLICY
+  SHIPPING_DETAILS
+  PRODUCT_LIST
+  CATEGORY_LIST
+  BRAND_APPROVAL
+  BRAND_AUTHORIZATION
+  OTHER
+}
+
+enum attributes_input_type {
+  TEXT
+  NUMBER
+  SELECT
+  MULTISELECT
+  BOOLEAN
+}
+
+enum brand_requests_status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum gst_rule_price_condition_type {
+  LESS_THAN
+  LESS_THAN_OR_EQUAL_TO
+  GREATER_THAN
+  GREATER_THAN_OR_EQUAL_TO
+  EQUAL_TO
+  ANY
+}
+
+enum merchant_documents_status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum live_streams_status {
+  scheduled
+  live
+  ended
+  cancelled
+}
+
+enum merchant_profiles_verification_status {
+  PENDING
+  EMAIL_VERIFIED
+  DOCUMENTS_SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
 }

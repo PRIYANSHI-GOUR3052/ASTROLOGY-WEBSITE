@@ -194,6 +194,7 @@ export default function HeroSection() {
           </div>
         </div>
       </section>
+
       {/* Ticker between hero and next section */}
       <div className="w-full bg-[#F2E5DA] py-6 px-2 flex items-center justify-center min-h-[72px]">
         <Marquee gradient={false} speed={40} pauseOnHover={true} direction="right" className="w-full">
@@ -217,82 +218,170 @@ export default function HeroSection() {
           </div>
         </Marquee>
       </div>
-      <section className="w-full min-h-[80vh] flex flex-col items-center justify-center bg-[#F8FAF5] pt-6 md:pt-10 pb-12 md:pb-16 px-2 md:px-0">
-        {/* Main Heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-marcellus text-center mb-4 bg-gradient-to-r from-[#23244a] via-[#23244a] to-[#77A656] bg-clip-text text-transparent drop-shadow-lg tracking-tight"
-        >
-          <span className="inline-block">{t('hero.celestialJourney')}</span>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2 }}
-          className="text-lg sm:text-xl md:text-2xl font-cormorant text-center text-[#77A656] tracking-wide italic mb-8"
-        >
-          {t('hero.celestialJourneyDesc')}
-        </motion.p>
-        {/* Astrology Grid Layout */}
-        <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-          {/* Left Column */}
-          <div className="flex flex-col gap-8">
-            <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
-              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">{t('hero.cosmicCalendarTitle')}</h2>
-              <p className="text-gray-700 text-base">{t('hero.cosmicCalendarDesc')}</p>
+
+      {/* New AUIN-style section */}
+      <section className="w-full bg-[#FEFBF2] px-2 py-9">
+        {/* Heading and subtitle block */}
+        <div className="max-w-3xl mx-auto text-center mb-9">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-marcellus text-center mb-2 bg-gradient-to-r from-[#23244a] via-[#23244a] to-[#77A656] bg-clip-text text-transparent drop-shadow-lg tracking-tight">
+            Celestial Journey
+          </h1>
+          <p className="text-xl sm:text-2xl md:text-2xl font-cormorant text-center text-[#77A656] tracking-wide italic mt-2">
+            Let the stars illuminate your path to self-discovery and fulfillment.
+          </p>
+        </div>
+        {/* Existing grid starts here */}
+        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {/* Left Tall Card */}
+          <div className="lg:col-span-3 xl:col-span-3">
+            <div className="bg-white rounded-xl shadow p-4 flex flex-col gap-2 h-full min-h-[450px] justify-between">
+              <h2 className="text-xl font-bold font-marcellus text-[#23244a]">
+                Cosmic Calendar
+              </h2>
+              <p className="text-sm text-gray-700">
+                Track celestial events and align your life with the universe's
+                rhythm.
+              </p>
               <Link href="/panchang">
-                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042873/cosmiccalendar_v8ndoq.png" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
-                </motion.div>
+                <div className="relative w-full aspect-[9/16] rounded-lg overflow-hidden">
+                  <Image
+                    src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752494996/A_realistic_cosmic_calendar_illustration_showing_the_planets_of_the_solar_system_orbiting_around_the_sun_with_soft_lighting_galaxy_background_visible_constellations_moon_phases_and_astrological_zodiac_symbols_s_1_uxgzjk.jpg"
+                    alt="Cosmic Calendar"
+                    fill
+                    className="object-cover rounded-lg"
+                  />
+                </div>
               </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
-              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">{t('hero.zodiacDecoderTitle')}</h2>
-              <p className="text-gray-700 text-base">{t('hero.zodiacDecoderDesc')}</p>
-              <Link href="/astrology">
-                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042879/zodiac_decoder_aphuoz.avif" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
-                </motion.div>
-              </Link>
-            </motion.div>
+            </div>
           </div>
-          {/* Center Column */}
-          <div className="flex flex-col gap-8">
-            <motion.div whileHover={{ scale: 1.04 }} className="bg-white rounded-xl shadow p-8 flex flex-col gap-4">
-              <h2 className="text-3xl font-bold font-marcellus text-[#23244a]">{t('hero.astroWellnessTitle')}</h2>
-              <p className="text-gray-700 text-base">{t('hero.astroWellnessDesc')}</p>
-              <Link href="/blog/astrology-remedies-for-life">
-                <motion.div whileHover={{ scale: 1.07, boxShadow: '0 6px 32px #77A65633' }} className="relative w-full aspect-video rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042871/astrowellness_qltouz.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
-                </motion.div>
-              </Link>
-            </motion.div>
+
+          {/* Center: Carousel with two small blocks below */}
+          <div className="lg:col-span-6 flex flex-col gap-5">
+            {/* Carousel */}
+            <div className="bg-white rounded-xl shadow overflow-hidden h-[450px]">
+              <Carousel
+                opts={{ loop: true, align: "center", skipSnaps: false }}
+                plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
+                className="w-full h-full"
+              >
+                <CarouselContent>
+                  {[
+                    {
+                      img: "/images/astro.jpg",
+                      title: "Your Stars Today",
+                      desc: "Get real-time guidance for your zodiac sign.",
+                      href: "/daily-horoscope",
+                    },
+                    {
+                      img: "/images/spiritualpathway.jpg",
+                      title: "Spiritual Cleanse",
+                      desc: "Discover powerful astrology-based remedies.",
+                      href: "/blog/astrology-remedies-for-life",
+                    },
+                    {
+                      img: "/images/myth.jpg",
+                      title: "Myth & Legends",
+                      desc: "Learn about ancient Vedic myths and rituals.",
+                      href: "/blog/vedic-myths",
+                    },
+                  ].map((item, i) => (
+                    <CarouselItem key={i} className="p-3">
+                      <Link href={item.href}>
+                        <div className="rounded-xl overflow-hidden shadow bg-white hover:scale-[1.02] transition-all cursor-pointer h-[396px] flex flex-col">
+                          <div className="relative h-56 w-full">
+                            <Image
+                              src={item.img}
+                              alt={item.title}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="p-3">
+                            <h3 className="text-xl font-bold font-marcellus text-[#23244a] mb-2">
+                              {item.title}
+                            </h3>
+                            <p className="text-sm text-gray-600 font-cormorant">
+                              {item.desc}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </div>
+
+            {/* Below: Zodiac + Myth blocks */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* Zodiac Decoder */}
+              <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-3">
+                <h2 className="text-xl font-bold font-marcellus text-[#23244a]">
+                  Zodiac Decoder
+                </h2>
+                <p className="text-sm text-gray-700">
+                  Understand your sign's traits and how they impact your life.
+                </p>
+                <Link href="/astrology">
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden">
+                    <Image
+                      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042879/zodiac_decoder_aphuoz.avif"
+                      alt="Zodiac Decoder"
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
+                </Link>
+              </div>
+
+              {/* Myth & Legends */}
+              <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-3">
+                <h2 className="text-xl font-bold font-marcellus text-[#23244a]">
+                  Myth & Legends
+                </h2>
+                <p className="text-sm text-gray-700">
+                  Explore timeless stories that shaped astrology.
+                </p>
+                <Link href="/blog/astrology-remedies-for-life">
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden">
+                    <Image
+                      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042876/myth_h93fku.jpg"
+                      alt="Myth"
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
+                </Link>
+              </div>
+            </div>
           </div>
-          {/* Right Column */}
-          <div className="flex flex-col gap-8">
-            <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
-              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">{t('hero.spiritualGrowthTitle')}</h2>
-              <p className="text-gray-700 text-base">{t('hero.spiritualGrowthDesc')}</p>
+
+          {/* Right Tall Card */}
+          <div className="lg:col-span-3 xl:col-span-3">
+            <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-3 h-full min-h-[450px] justify-between">
+              <h2 className="text-xl font-bold font-marcellus text-[#23244a]">
+                Spiritual Growth
+              </h2>
+              <p className="text-sm text-gray-700">
+                Elevate your journey with curated courses & rituals.
+              </p>
               <Link href="/courses">
-                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042878/spiritualpathway_afll4p.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
-                </motion.div>
+                <div className="relative w-full aspect-[9/16] rounded-lg overflow-hidden">
+                  <Image
+                    src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752497900/A_highly_realistic_image_of_a_calm_person_meditating_in_lotus_pose_on_a_flat_rock_bathed_in_soft_golden_sunrise_light._The_background_features_misty_hills_and_subtle_spiritual_symbols_like_chakra_icons_or_Om_sign_faint_zetsen.jpg"
+                    alt="Spiritual Growth"
+                    fill
+                    className="object-cover rounded-lg"
+                  />
+                </div>
               </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
-              <h2 className="text-2xl font-bold font-marcellus text-[#23244a]">{t('hero.mythLegendTitle')}</h2>
-              <p className="text-gray-700 text-base">{t('hero.mythLegendDesc')}</p>
-              <Link href="/blog/astrology-remedies-for-life">
-                <motion.div whileHover={{ scale: 1.05, boxShadow: '0 4px 24px #77A65633' }} className="relative w-full aspect-square rounded-lg flex items-center justify-center cursor-pointer bg-gray-100 overflow-hidden transition-all">
-                  <Image src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042876/myth_h93fku.jpg" alt="Placeholder" fill style={{ objectFit: 'cover' }} className="rounded-lg" />
-                </motion.div>
-              </Link>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
+
       {/* Restore Popular Services Section below hero */}
       <motion.div 
         variants={itemVariants}
