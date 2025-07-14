@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { useLanguage } from '../contexts/useLanguage'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { CTASection } from './CTASection'
 
 const solutions = [
   {
@@ -124,10 +125,10 @@ export function LifeChangingSolutions() {
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-black">{t('lifeChangingSolutions.exploreMoreTitle')}</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             {/* Continue Learning Content Card */}
             <motion.div
-              className="bg-gradient-to-br from-blue-100 to-green-100 rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row transition-all duration-300 ease-in-out transform hover:scale-105"
+              className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row transition-all duration-300 ease-in-out transform hover:scale-105 h-full"
               whileHover={{ scale: 1.05, y: -5, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
               whileTap={{ scale: 0.98, rotate: 0 }}
               initial={{ opacity: 0, y: 50 }}
@@ -142,57 +143,30 @@ export function LifeChangingSolutions() {
                   style={{ objectFit: 'cover' }}
                 />
               </div>
-              <CardContent className="p-6 md:w-1/2 flex flex-col justify-center">
-                <h3 className="text-xl font-bold mb-2 text-black">{t('lifeChangingSolutions.continueLearningTitle')}</h3>
-                <p className="text-base text-gray-700 mb-4 leading-relaxed tracking-wide font-serif">{t('lifeChangingSolutions.continueLearningDescription')}</p>
+              <CardContent className="p-6 md:w-1/2 flex flex-col flex-1 justify-between">
+                <div>
+                  <h3 className="text-xl font-bold mb-2 text-black">{t('lifeChangingSolutions.continueLearningTitle')}</h3>
+                  <p className="text-base text-gray-700 mb-4 leading-relaxed tracking-wide font-serif">
+                    {t('lifeChangingSolutions.continueLearningDescription')}
+                    <br />
+                    Explore guides on birth charts, planetary influences, and practical remedies.<br />
+                    Access exclusive articles, video lessons, and tools to help you unlock the wisdom of the stars.
+                  </p>
+                </div>
+                <div className="flex items-end flex-1">
+                  <Link href="/study" passHref>
+                    <button
+                      className="bg-black text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-800 border border-[#E0E0E0] transition-all duration-300 transform hover:scale-105 mt-2"
+                    >
+                      {t('lifeChangingSolutions.exploreMoreButton')}
+                    </button>
+                  </Link>
+                </div>
               </CardContent>
             </motion.div>
 
-            {/* Book Your Call Now! Card */}
-            <motion.div
-              className="bg-[#F5F2ED] rounded-xl shadow-xl p-6 flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-105"
-              whileHover={{ scale: 1.05, y: -5, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
-              whileTap={{ scale: 0.98, rotate: 0 }}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
-              {/* Decorative elements */}
-              <div className="absolute top-4 left-4 text-[#D4C7B5] opacity-70"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-              <div className="absolute top-6 right-6 text-[#D4C7B5] opacity-70"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-              <div className="absolute bottom-4 left-4 text-[#D4C7B5] opacity-70"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-              <div className="absolute bottom-6 right-6 text-[#D4C7B5] opacity-70"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-
-              <h3 className="text-3xl font-bold mb-6 text-black relative z-10">{t('lifeChangingSolutions.bookCallTitle')}</h3>
-              <p className="text-gray-600 mb-6 text-center max-w-sm relative z-10">{t('lifeChangingSolutions.bookCallDescription')}</p>
-              <motion.button
-                onClick={scrollToContact}
-                className="bg-[#F3E8FF] text-[#7C3AED] font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-[#E0F2FE] hover:text-[#FBBF24] border border-[#E0E0E0] transition-all duration-300 transform hover:scale-105 relative z-10"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t('lifeChangingSolutions.goToContact')}
-              </motion.button>
-            </motion.div>
-
-            <motion.div
-              className="relative bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 shadow-xl flex flex-col items-center text-center"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.7 }}
-            >
-              <h3 className="text-3xl font-bold mb-6 text-black relative z-10">{t('lifeChangingSolutions.progressTitle')}</h3>
-              <p className="text-gray-600 mb-6 text-center max-w-sm relative z-10">{t('lifeChangingSolutions.progressDescription')}</p>
-              <Link href="/blog" passHref>
-                <motion.button
-                  className="bg-[#F3E8FF] text-[#7C3AED] font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-[#E0F2FE] hover:text-[#FBBF24] border border-[#E0E0E0] transition-all duration-300 transform hover:scale-105 relative z-10"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {t('lifeChangingSolutions.exploreMoreButton')}
-                </motion.button>
-              </Link>
-            </motion.div>
+            {/* CTA Section Card (replaces Book Your Call Now!) */}
+            <div className="flex items-end w-full h-full"><CTASection /></div>
           </div>
         </div>
       </div>

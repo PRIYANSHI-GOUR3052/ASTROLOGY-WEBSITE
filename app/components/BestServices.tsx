@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Star, CheckCircle, ShoppingBag } from 'lucide-react'
 import { ArrowRight } from 'lucide-react'
+import { CTASection } from './CTASection'
 
 // New set of card backgrounds inspired by the snapshot
 const cardBackgrounds = [
@@ -104,7 +105,7 @@ export function BestServices() {
   const largeCards = services.filter(service => service.cardSize === 'large');
 
   return (
-    <section className="min-h-screen py-16 bg-[#FDF7ED] font-sans overflow-hidden">
+    <section className="min-h-screen py-16 bg-white font-sans overflow-hidden">
       <div className="container mx-auto px-4">
 
         <div className="flex justify-between items-center py-4 mb-12">
@@ -138,9 +139,9 @@ export function BestServices() {
           {smallCards.slice(0, 2).map((service, index) => (
             <motion.div
               key={service.slug}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 + index * 0.1 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25, delay: 0.05 + index * 0.07, type: 'spring', stiffness: 300 }}
               className={`relative rounded-2xl shadow-lg p-6 flex flex-col justify-between ${cardBackgrounds[index]}`}
               style={{ height: '220px' }}
             >
@@ -168,9 +169,9 @@ export function BestServices() {
           {largeCards.slice(0, 1).map((service, index) => (
             <motion.div
               key={service.slug}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25, delay: 0.19, type: 'spring', stiffness: 300 }}
               className={`relative rounded-2xl shadow-lg p-8 flex flex-col justify-between ${cardBackgrounds[2]}`}
               style={{ minHeight: '380px' }}
             >
@@ -198,9 +199,9 @@ export function BestServices() {
           {largeCards.slice(1, 2).map((service, index) => (
             <motion.div
               key={service.slug}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25, delay: 0.26, type: 'spring', stiffness: 300 }}
               className={`relative rounded-2xl shadow-lg p-8 flex flex-col justify-between ${cardBackgrounds[3]}`}
               style={{ minHeight: '380px' }}
             >
@@ -228,9 +229,9 @@ export function BestServices() {
           {smallCards.slice(2, 4).map((service, index) => (
             <motion.div
               key={service.slug}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 + index * 0.1 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25, delay: 0.33 + index * 0.07, type: 'spring', stiffness: 300 }}
               className={`relative rounded-2xl shadow-lg p-6 flex flex-col justify-between ${cardBackgrounds[index + 4]}`}
               style={{ height: '220px' }}
             >
@@ -256,49 +257,13 @@ export function BestServices() {
           ))}
         </div>
 
-        <div className="text-center mb-12">
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-3xl md:text-4xl font-extrabold mb-4 text-black"
-          >
-            {t('bestServices.exploreHeading')}
-          </motion.h3>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-            className="text-lg text-gray-700 max-w-3xl mx-auto mb-8"
-          >
-            {t('bestServices.exploreDescription')}
-          </motion.p>
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <Link href="/services/daily-horoscope">
-              <Button className="btn-grad rounded-full text-lg font-semibold">
-                <span className="text-black">{t('bestServices.popularServices')}</span>
-              </Button>
-            </Link>
-            <Link href="/blog">
-              <Button className="btn-grad rounded-full text-lg font-semibold">
-                <span className="text-black">{t('bestServices.consultation')}</span>
-              </Button>
-            </Link>
-            <Link href="/about">
-              <Button className="btn-grad rounded-full text-lg font-semibold">
-                <span className="text-black">{t('bestServices.learnMore')}</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {smallCards.slice(4, 6).map((service, index) => (
             <motion.div
               key={service.slug}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25, delay: 0.47 + index * 0.07, type: 'spring', stiffness: 300 }}
               className={`relative rounded-2xl shadow-lg p-6 flex flex-col justify-between ${cardBackgrounds[index + 4]}`}
               style={{ height: '220px' }}
             >

@@ -33,7 +33,42 @@
         "link": "/blog/the-influence-of-planets",
         "linkText": "阅读更多"
       }
-    }
+    },
+    "celestialJourney": "开启你的星际之旅",
+    "celestialJourneyDesc": "让星星照亮你自我发现与实现的道路。",
+    "cosmicCalendarTitle": "宇宙日历",
+    "cosmicCalendarDesc": "通过每日天象亮点、吉时和行星运动与宇宙保持同步，这些都影响着你的一天。",
+    "zodiacDecoderTitle": "星座性格解码器",
+    "zodiacDecoderDesc": "揭示你星座的隐藏层面——特质、优点和让你与众不同的特点。",
+    "astroWellnessTitle": "星象健康贴士",
+    "astroWellnessDesc": "获得受星星启发的实用整体健康建议，融合古老智慧与现代生活。",
+    "spiritualGrowthTitle": "灵性成长之路",
+    "spiritualGrowthDesc": "探索引导冥想、肯定语和灵性实践，提升你的身心灵。",
+    "mythLegendTitle": "神话与传说聚焦",
+    "mythLegendDesc": "穿越吠陀占星学中迷人的故事和传说，让古老的神话在当今探索者心中复活。",
+    "exploreServices": "探索我们的服务",
+    "discoverCosmicJourney": "发现你的宇宙之旅",
+    "learnMore": "了解更多",
+    "card0Title": "职业与工作指导",
+    "card0Desc": "以宇宙的清晰度引导你的职业道路。我们的专家占星师为你提供个性化指导，帮助你做出明智的职业决策，发现机会并克服职场挑战。",
+    "card1Title": "格拉·尚提法会",
+    "card1Desc": "通过传统的格拉·尚提法会调和行星能量，减轻负面影响。这个神圣的仪式旨在为你的生活带来和平、繁荣与平衡。",
+    "card2Title": "昆达利匹配",
+    "card2Desc": "探索吠陀兼容性的科学与神圣艺术。我们的专家占星师融合传统与现代见解，引导你走向和谐、幸福的结合。",
+    "card3Title": "数字命理分析",
+    "card3Desc": "通过个性化的数字命理解读，发现你生活中数字的力量。",
+    "card4Title": "在线法会服务",
+    "card4Desc": "在家中舒适地体验吠陀仪式的神圣力量。我们的在线法会服务将你与专家祭司、正统传统和神圣祝福连接起来——无论你身在何处。",
+    "card5Title": "手相咨询",
+    "card5Desc": "揭示你手中隐藏的秘密。我们的手相专家为你的生命道路、性格和未来提供深刻解读。",
+    "card6Title": "今日潘查恩",
+    "card6Desc": "你的每日吠陀历书，助你宇宙对齐、吉时与灵性清晰。探索时间的五个组成部分、行星位置和神圣仪式，让你的一天与宇宙和谐共振。",
+    "card7Title": "个人占星解读",
+    "card7Desc": "我们的个人占星解读服务为你的本命盘提供深入分析，带来关于你的个性、人生道路、事业、关系等方面的洞见。",
+    "card8Title": "坦陀罗咨询",
+    "card8Desc": "在专家指导下探索坦陀罗的转化之路。我们的咨询专注于灵性成长、疗愈和冥想实践。",
+    "card9Title": "塔罗牌解读",
+    "card9Desc": "揭开牌面的神秘秘密，深入洞察你的人生旅程。"
   },
   "header": {
     "logo": {
@@ -47,9 +82,14 @@
       "contact": "接触",
       "blog": "博客",
       "study": "学习",
-      "consultations": "咨询"
+      "consultations": "咨询",
+      "talk_to_astrologer": "与占星师交谈",
+      "chat_with_astrologer": "与占星师聊天",
+      "buy_products": "购买产品",
+      "our_services": "我们的服务",
+      "join_us": "加入我们"
     },
-    "cart": "大车",
+    "cart": "购物车",
     "mega_menu": {
       "consultations": {
         "title": "咨询",
@@ -549,5 +589,19 @@
       "error": "出现问题。请再试一次。"
     },
     "brand": "纳克沙特拉"
+  },
+  "cart": {
+    "yourCart": "您的购物车",
+    "description": "查看和管理您的购物车中的商品。准备好完成购买时请结账。",
+    "empty": "您的购物车是空的",
+    "continueShopping": "继续购物",
+    "orderSummary": "订单摘要",
+    "subtotal": "小计",
+    "shipping": "运费",
+    "shippingFree": "免费",
+    "total": "总计",
+    "proceedToCheckout": "去结账",
+    "quantity": "数量",
+    "remove": "移除"
   }
 }

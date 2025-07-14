@@ -159,7 +159,7 @@ export function ContactForm() {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-1">{t('contact.info.emailTitle')}</h3>
-                  <p className="text-gray-300 text-lg">support@anytimeastro.com</p>
+                  <p className="text-gray-300 text-lg">support@anytimenakshatra.com</p>
                   <p className="text-sm text-gray-400">{t('contact.info.emailNote')}</p>
                 </div>
               </div>

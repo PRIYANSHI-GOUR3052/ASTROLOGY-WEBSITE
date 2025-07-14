@@ -12,7 +12,7 @@ export default function RecentBlogs() {
   const { lang, t } = useLanguage();
 
   return (
-    <aside className="bg-[#FFF5E1] rounded-3xl p-6 shadow-lg w-full max-w-xs">
+    <aside className="bg-white rounded-3xl p-6 shadow-lg w-full max-w-xs">
       <div className="flex items-center gap-2 mb-6">
         <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
         <h3 className="text-xl font-bold text-gray-900">Recent Post</h3>

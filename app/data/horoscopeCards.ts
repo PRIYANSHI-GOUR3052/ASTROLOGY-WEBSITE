@@ -2,6 +2,7 @@ export interface HoroscopeCard {
   title: { en: string; hi: string; es: string; fr: string; de: string; zh: string; ar: string; ru: string; };
   description: { en: string; hi: string; es: string; fr: string; de: string; zh: string; ar: string; ru: string; };
   href: string;
+  image: string; // NEW FIELD
 }
 
 export const horoscopeCards: HoroscopeCard[] = [
@@ -27,6 +28,7 @@ export const horoscopeCards: HoroscopeCard[] = [
       ru: "Ваши ежедневные советы для Овна, с акцентом на карьеру и финансы."
     },
     href: "/daily-horoscope/aries",
+    image: "/images/astro.jpg",
   },
   {
     title: {
@@ -50,6 +52,7 @@ export const horoscopeCards: HoroscopeCard[] = [
       ru: "Узнайте, что звезды готовят Тельцу в любви и отношениях."
     },
     href: "/daily-horoscope/taurus",
+    image: "/images/astrology_app.jpg",
   },
   {
     title: {
@@ -73,6 +76,7 @@ export const horoscopeCards: HoroscopeCard[] = [
       ru: "Советы для Близнецов по здоровью и благополучию на сегодня."
     },
     href: "/daily-horoscope/gemini",
+    image: "/images/astrowellness.jpg",
   },
   {
     title: {
@@ -96,6 +100,7 @@ export const horoscopeCards: HoroscopeCard[] = [
       ru: "Советы по карьерному росту и личному развитию для Раков."
     },
     href: "/daily-horoscope/cancer",
+    image: "/images/myth.jpg",
   },
   {
     title: {
@@ -119,6 +124,7 @@ export const horoscopeCards: HoroscopeCard[] = [
       ru: "Финансовые прогнозы и счастливые числа для Льва на сегодня."
     },
     href: "/daily-horoscope/leo",
+    image: "/images/horoscopedaily.jpg",
   },
   {
     title: {
@@ -142,5 +148,6 @@ export const horoscopeCards: HoroscopeCard[] = [
       ru: "Любовная жизнь и социальные взаимодействия Девы на этой неделе."
     },
     href: "/daily-horoscope/virgo",
+    image: "/images/astrology_understanding.jpg",
   },
 ]; 

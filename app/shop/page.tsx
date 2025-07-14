@@ -1,3 +1,5 @@
+'use client';
+
 import { AnimatedStars } from '../components/AnimatedStars'
 import { MysticBackground } from '../components/MysticBackground'
 import { FeaturedProducts } from '../components/FeaturedProducts'
@@ -5,77 +7,172 @@ import { ProductGrid } from '../components/ProductGrid'
 import { AstrologyStones } from '../components/AstrologyStones'
 import { ShopCTA } from '../components/ShopCTA'
 import Link from 'next/link'
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
+import ProductOfTheDay from '../components/ProductOfTheDay';
+import AllProductsGrid from '../components/AllProductsGrid';
+import { AstrologerProfile } from '../components/AstrologerProfile';
+import { Statistics } from '../components/Statistics';
+import { Testimonials } from '../components/Testimonials';
+
+// Move plugin initialization outside the component
+const autoplayPlugin = Autoplay({ delay: 3500, stopOnInteraction: false });
+
+const ShopProductCarousel = dynamic(() => import('../components/ShopProductCarousel'), { ssr: false });
 
 const products = [
   {
-    title: 'Retinol Serum',
-    description: 'Achieve your healthiest, smoothest, clearest and most luminous skin yet',
-    price: 'IDR 270,000.00',
-    slug: 'retinol-serum',
+    title: 'Natural Gemstone Collection',
+    description: 'Authentic, lab-certified gemstones for planetary remedies and spiritual growth.',
+    price: '₹2,499',
+    slug: 'gemstone-collection',
   },
   {
-    title: 'Cherry Lip Balm',
-    description: 'Achieve your healthiest, smoothest, clearest and most luminous skin yet',
-    price: 'IDR 270,000.00',
-    slug: 'cherry-lip-balm',
+    title: 'Rudraksha Mala & Beads',
+    description: 'Energized Rudraksha beads and malas for protection, peace, and spiritual power.',
+    price: '₹1,199',
+    slug: 'rudraksha-collection',
   },
   {
-    title: 'Hyaluronic Acid Serum',
-    description: 'Achieve your healthiest, smoothest, clearest and most luminous skin yet',
-    price: 'IDR 270,000.00',
-    slug: 'hyaluronic-acid-serum',
+    title: 'Energized Yantras',
+    description: 'Sacred spiritual diagrams (Yantras) energized for prosperity, health, and harmony.',
+    price: '₹799',
+    slug: 'yantras',
   },
   {
-    title: 'Vitamin C Serum',
-    description: 'Achieve your healthiest, smoothest, clearest and most luminous skin yet',
-    price: 'IDR 270,000.00',
-    slug: 'vitamin-c-serum',
+    title: 'Puja Samagri & Ritual Kits',
+    description: 'Complete kits for home puja, havan, and Vedic rituals, including all essentials.',
+    price: '₹999',
+    slug: 'puja-samagri-kits',
   },
-]
+  {
+    title: 'Astrology Reports & Kundli Services',
+    description: 'Personalized astrology reports, Janam Kundli, and detailed horoscope analysis.',
+    price: '₹499',
+    slug: 'astrology-reports-kundli',
+  },
+  {
+    title: 'Spiritual Accessories',
+    description: 'Incense holders, copper bottles, meditation mats, and more for your spiritual space.',
+    price: '₹399',
+    slug: 'spiritual-accessories',
+  },
+  {
+    title: 'Personalized Astrology Tools',
+    description: 'Custom-engraved pendants, name plates, and tools based on your birth chart.',
+    price: '₹1,499',
+    slug: 'personalized-astrology-tools',
+  },
+];
 
 export default function ShopPage() {
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.shop-purpose-card').forEach(card => {
+      observer.observe(card);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
       <AnimatedStars />
       <MysticBackground>
         <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold mb-12 text-center text-black">
-            आध्यात्मिक दुकान<br />
-            <span className="text-3xl md:text-5xl text-black">Spiritual Shop</span>
-          </h1>
-          <p className="text-xl text-black text-center mb-16 max-w-3xl mx-auto">
-            Discover a curated collection of spiritual tools, gemstones, and artifacts to enhance your spiritual journey and daily practices.
-          </p>
-          <FeaturedProducts />
-          <AstrologyStones />
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 px-0">
-            {products.map((product) => (
-              <div key={product.slug} className="relative bg-[#f7f5ed] shadow-sm p-6 flex flex-col items-center group transition hover:shadow-md border border-[#e0e0e0]">
-                {/* View Button */}
-                <Link href={`/shop/${product.slug}`} className="absolute top-4 left-4 bg-[#23244a] text-white text-xs px-3 py-1 font-semibold opacity-0 group-hover:opacity-100 transition">View</Link>
-                {/* Favorite Icon */}
-                <button className="absolute top-4 right-4 text-[#bdbdbd] hover:text-[#77A656] transition">
-                  <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                </button>
-                {/* Product Image Placeholder */}
-                <div className="w-24 h-24 bg-[#edece6] flex items-center justify-center mb-6 mt-4">
-                  <svg className="w-10 h-10 text-[#bdbdbd]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="4"/><circle cx="18" cy="18" r="3"/><path d="M6 34l10-10 7 7 9-9 10 10"/></svg>
-                </div>
-                {/* Title */}
-                <div className="w-full text-left">
-                  <h3 className="text-lg font-bold text-[#23244a] mb-1">{product.title}</h3>
-                  <p className="text-xs text-[#888] italic mb-4">{product.description}</p>
-                </div>
-                {/* Price and Rating */}
-                <div className="w-full flex items-center justify-between mt-auto pt-2">
-                  <span className="text-base font-bold text-[#77A656]">{product.price}</span>
-                  <span className="text-xs text-[#bdbdbd]">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
-                </div>
-              </div>
-            ))}
+          {/* Main Page Heading */}
+          <div className="w-full flex flex-col items-center justify-center mb-8 mt-4">
+            <h1
+              className="text-5xl md:text-7xl mb-2 text-center font-normal text-black"
+              style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400, letterSpacing: '0.01em' }}
+            >
+              Spiritual Shop
+            </h1>
           </div>
-          <ProductGrid />
-          <ShopCTA />
+          {/* Full-width Product Carousel (dynamically imported) */}
+          <ShopProductCarousel products={products} />
+          {/* <FeaturedProducts /> */}
+          {/* Shop by Purpose Section */}
+          <div className="w-full flex flex-col items-center my-16">
+            <h2 className="text-3xl md:text-4xl mb-10 text-center font-normal text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400, letterSpacing: '0.01em' }}>Shop by Purpose</h2>
+            <div className="flex flex-row flex-wrap justify-center gap-8 w-full max-w-6xl">
+              {/* Money */}
+              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
+                <Link href="#money" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
+                  <img src="/images/course-1.jpg" alt="Money" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
+                </Link>
+                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Money</span>
+              </div>
+              {/* Love */}
+              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
+                <Link href="#love" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
+                  <img src="/images/course-2.jpg" alt="Love" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
+                </Link>
+                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Love</span>
+              </div>
+              {/* Career */}
+              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
+                <Link href="#career" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
+                  <img src="/images/course-3.jpg" alt="Career" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
+                </Link>
+                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Career</span>
+              </div>
+              {/* Evil Eye */}
+              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
+                <Link href="#evil-eye" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
+                  <img src="/images/astrology.svg" alt="Evil Eye" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
+                </Link>
+                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Evil Eye</span>
+              </div>
+              {/* Health */}
+              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
+                <Link href="#health" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
+                  <img src="/images/astrowellness.jpg" alt="Health" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
+                </Link>
+                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Health</span>
+              </div>
+            </div>
+          </div>
+          {/* Product Of The Day Section */}
+          <ProductOfTheDay />
+          {/* All Products Grid Section */}
+          <AllProductsGrid />
+          {/* Astrologer Profile, Statistics, Testimonials */}
+          <AstrologerProfile />
+          <Statistics />
+          <Testimonials />
+          <style jsx global>{`
+            .shop-purpose-card {
+              opacity: 0;
+              transform: translateY(40px);
+              animation: shopPurposeFadeIn 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            }
+            .shop-purpose-card:nth-child(1) { animation-delay: 0.05s; }
+            .shop-purpose-card:nth-child(2) { animation-delay: 0.15s; }
+            .shop-purpose-card:nth-child(3) { animation-delay: 0.25s; }
+            .shop-purpose-card:nth-child(4) { animation-delay: 0.35s; }
+            .shop-purpose-card:nth-child(5) { animation-delay: 0.45s; }
+            .shop-purpose-card:nth-child(6) { animation-delay: 0.55s; }
+            @keyframes shopPurposeFadeIn {
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+          `}</style>
+          {/* AstrologyStones */}
+          {/* <AstrologyStones /> */}
         </div>
       </MysticBackground>
     </div>

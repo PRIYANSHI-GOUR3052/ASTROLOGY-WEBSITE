@@ -38,8 +38,8 @@ export function MysticBackground({ children }: { children?: React.ReactNode }) {
       if (!canvas || !ctx) return;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#fef6f2'; // Explicitly set background to hero color
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // ctx.fillStyle = '#fef6f2'; // Explicitly set background to hero color
+      // ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.globalCompositeOperation = 'lighter'; // Revert to lighter blend mode for glowing effect
 
