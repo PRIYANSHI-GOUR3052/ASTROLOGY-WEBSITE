@@ -199,11 +199,23 @@ model AstrologerVerification {
   id              Int                       @id @default(autoincrement())
   astrologerId    Int                       @unique
   aadharCard      String? // File URL
+  aadharStatus    String? @default("unverified") // unverified, pending, accepted, rejected
+  aadharRemarks   String?
   panCard         String? // File URL
+  panStatus       String? @default("unverified")
+  panRemarks      String?
   selfie          String? // File URL
+  selfieStatus    String? @default("unverified")
+  selfieRemarks   String?
   workProof       String? // File URL (experience letter, screenshots, etc.)
+  workProofStatus String? @default("unverified")
+  workProofRemarks String?
   declarationForm String? // File URL
+  declarationStatus String? @default("unverified")
+  declarationRemarks String?
   addressProof    String? // File URL (optional)
+  addressStatus   String? @default("unverified")
+  addressRemarks  String?
   status          String                    @default("unverified") // unverified, pending, approved, rejected
   adminRemarks    String?
   createdAt       DateTime                  @default(now())
@@ -220,6 +232,8 @@ model AstrologerCertification {
   instituteName    String
   yearOfCompletion String
   certificateFile  String // File URL (PDF/JPG)
+  status           String? @default("unverified") // unverified, pending, accepted, rejected
+  remarks          String?
   verification     AstrologerVerification @relation(fields: [verificationId], references: [id])
 }
 
@@ -230,5 +244,7 @@ model AstrologerEducation {
   fieldOfStudy   String
   universityName String
   degreeFile     String // File URL (PDF/JPG)
+  status         String? @default("unverified") // unverified, pending, accepted, rejected
+  remarks        String?
   verification   AstrologerVerification @relation(fields: [verificationId], references: [id])
 }
