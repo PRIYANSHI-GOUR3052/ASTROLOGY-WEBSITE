@@ -1,9 +1,11 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { Star } from 'lucide-react'
 import { useLanguage } from '../contexts/useLanguage'
+import Link from 'next/link'
 
 interface Testimonial {
   name: string;
@@ -12,11 +14,12 @@ interface Testimonial {
   text: string;
   rating: number;
   type: 'quote_top' | 'avatar_top' | 'simple_with_stars' | 'large_avatar_quote';
+  productUrl?: string;
 }
 
 const testimonialTypes = [
   'quote_top',
-  'avatar_top', 
+  'avatar_top',
   'avatar_top',
   'simple_with_stars',
   'avatar_top',
@@ -27,7 +30,8 @@ const testimonialTypes = [
 ];
 
 const testimonialImages = [
-  "/images/placeholder_male.webp",
+  // Use a real product image from Cloudinary for the first testimonial
+  "https://res.cloudinary.com/dxwspucxw/image/upload/v1752049127/gemstones_wztxzb.jpg",
   "/images/placeholder_female.webp",
   "/images/placeholder_couple.webp",
   "/images/placeholder_male.webp",
@@ -39,6 +43,19 @@ const testimonialImages = [
 ];
 
 const testimonialRatings = [5, 5, 4, 5, 5, 4, 4, 5, 5];
+
+// Add productUrl to the first testimonial as an example
+const testimonialProductUrls = [
+  "/shop/product/gemstone-1", // Example product URL for the first testimonial
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+];
 
 export const pastelColors = [
   'bg-[#FDE2E4]', // light pink
@@ -53,16 +70,9 @@ export const pastelColors = [
 
 export function Testimonials() {
   const { t, lang } = useLanguage()
+  const [current, setCurrent] = useState(0)
 
-  const renderStars = (rating: number) => (
-    <div className="flex">
-      {[...Array(rating)].map((_, i) => (
-        <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
-      ))}
-    </div>
-  )
-
-  // Get testimonials from translation
+  // Restore getTestimonials function
   const getTestimonials = (): Testimonial[] => {
     const testimonialsData = [];
     for (let i = 0; i < 9; i++) {
@@ -70,121 +80,164 @@ export function Testimonials() {
       const name = t(`${testimonialKey}.name`);
       const occupation = t(`${testimonialKey}.occupation`);
       const text = t(`${testimonialKey}.text`);
-      
       testimonialsData.push({
         name,
         occupation,
         image: testimonialImages[i],
         text,
         rating: testimonialRatings[i],
-        type: testimonialTypes[i] as any
+        type: testimonialTypes[i] as any,
+        productUrl: testimonialProductUrls[i],
       });
     }
     return testimonialsData;
   };
 
   const testimonials = getTestimonials();
+  const total = testimonials.length;
+
+  const handlePrev = () => setCurrent((prev) => (prev - 1 + total) % total);
+  const handleNext = () => setCurrent((prev) => (prev + 1) % total);
+
+  // Animation variants for slide/fade
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 100 : -100,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      transition: { duration: 0.6, ease: 'easeInOut' },
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? 100 : -100,
+      opacity: 0,
+      transition: { duration: 0.6, ease: 'easeInOut' },
+    }),
+  };
+  const [direction, setDirection] = useState(0);
+
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection);
+    setCurrent((prev) => (prev + newDirection + total) % total);
+  };
+
+  const testimonial = testimonials[current];
 
   return (
-    <section className="relative w-full min-h-screen bg-white overflow-hidden py-20">
-      
-
-      <div className="relative z-10 container mx-auto px-4 flex flex-col items-center">
+    <section className="relative w-full min-h-[60vh] bg-white overflow-hidden py-20 flex flex-col items-center justify-center">
+      <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
         <motion.div
-          initial={{ opacity: 0, y: -50 }}
+          initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="w-full max-w-6xl mx-auto mb-12 rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 flex flex-col items-center justify-center shadow-lg"
+          transition={{ duration: 0.7 }}
+          className="w-full mb-12 flex flex-col items-center"
         >
-          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight font-sans">Client Reviews</h1>
-          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl font-sans">Read what our clients say about their experiences with our astrology services.</p>
+          <div className="w-full rounded-2xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] shadow-lg px-4 py-8 md:py-10 flex flex-col items-center">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-black text-center font-playfair mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{t('testimonials.heading') || 'Client Reviews'}</h1>
+            <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl font-cormorant" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{t('testimonials.subheading') || 'Read what our clients say about their experiences with our astrology services.'}</p>
+          </div>
         </motion.div>
-
-        <div className="flex flex-wrap justify-center gap-4 max-w-6xl mx-auto">
-          {testimonials.map((testimonial, index) => {
-            const bgColor = pastelColors[index % pastelColors.length]
-
-            return (
+        <div className="relative w-full flex items-center justify-center">
+          {/* Left Arrow */}
+          <button
+            aria-label="Previous testimonial"
+            onClick={() => paginate(-1)}
+            className="hidden md:flex absolute -left-24 z-10 h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all"
+            style={{ top: '50%', transform: 'translateY(-50%)' }}
+          >
+            <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          {/* Testimonial Card */}
+          <div className="w-full md:w-[1000px] min-h-[650px] bg-[#f7f7f7] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden items-stretch">
+            <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
-                key={index}
-                className={
-                  `${bgColor} rounded-xl shadow-md p-3 sm:p-5 relative overflow-hidden
-                  ${testimonial.type === 'quote_top' ? 'w-5/6 sm:w-full md:w-[48%] lg:w-[31%]' : ''}
-                  ${testimonial.type === 'avatar_top' ? 'w-5/6 sm:w-full md:w-[48%] lg:w-[31%]' : ''}
-                  ${testimonial.type === 'simple_with_stars' ? 'w-5/6 sm:w-full md:w-[48%] lg:w-[65%]' : ''}
-                  ${testimonial.type === 'large_avatar_quote' ? 'w-5/6 sm:w-full md:w-[48%] lg:w-[31%] flex flex-col justify-between' : ''}
-                  `
-                }
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-                whileHover={{ y: -5, boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.1)" }}
-
-                whileTap={{ rotate: 2, scale: 0.98 }}
+                key={current}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+                className="flex-1 flex flex-col justify-center px-10 py-24 md:py-32 md:pr-0 md:pl-20"
+                style={{ minWidth: 0 }}
               >
-                {testimonial.type === 'quote_top' && (
-                  <div className="flex flex-col items-start">
-                    <span className="text-3xl sm:text-5xl font-extrabold text-gray-300 mb-2">&ldquo;</span>
-                    <p className="text-gray-700 text-xs sm:text-sm mb-4 leading-relaxed opacity-70 text-black">{testimonial.text}</p>
-                    <div className="flex items-center w-full">
-                      <div className="relative w-8 h-8 sm:w-12 sm:h-12 rounded-full overflow-hidden mr-3 border-2 border-gray-100 shadow">
-                        <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
-                      </div>
-                      <div className="flex-grow">
-                        <h3 className="text-xs sm:text-sm font-semibold text-gray-800">{testimonial.name}</h3>
-                        <p className="text-[10px] sm:text-xs text-gray-600">{testimonial.occupation}</p>
-                      </div>
-                      {renderStars(testimonial.rating)}
-                    </div>
-                  </div>
-                )}
-
-                {testimonial.type === 'avatar_top' && (
-                  <div className="flex flex-col items-center text-center">
-                    <div className="relative w-10 h-10 sm:w-16 sm:h-16 rounded-full overflow-hidden mb-3 border-2 border-gray-100 shadow">
-                      <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
-                    </div>
-                    <h3 className="text-sm sm:text-base font-bold text-gray-800 mb-1">{testimonial.name}</h3>
-                    <p className="text-[10px] sm:text-xs text-gray-600 mb-2">{testimonial.occupation}</p>
-                    {renderStars(testimonial.rating)}
-                    <p className="text-gray-700 text-xs sm:text-sm mt-3 leading-relaxed opacity-70 text-black">"{testimonial.text}"</p>
-                  </div>
-                )}
-
-                {testimonial.type === 'simple_with_stars' && (
-                  <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                    <p className="text-gray-700 text-xs sm:text-sm mb-3 leading-relaxed opacity-70 text-black">"{testimonial.text}"</p>
-                    <div className="flex items-center w-full justify-center md:justify-start">
-                      <div className="relative w-8 h-8 sm:w-12 sm:h-12 rounded-full overflow-hidden mr-3 border-2 border-gray-100 shadow">
-                        <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
-                      </div>
-                      <div className="flex flex-col items-start">
-                        <h3 className="text-xs sm:text-sm font-semibold text-gray-800">{testimonial.name}</h3>
-                        <p className="text-[10px] sm:text-xs text-gray-600">{testimonial.occupation}</p>
-                        {renderStars(testimonial.rating)}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {testimonial.type === 'large_avatar_quote' && (
-                  <div className="flex flex-col items-center h-full justify-between">
-                    <div className="relative w-14 h-14 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-4 border-4 border-white shadow-lg">
-                      <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
-                    </div>
-                    <h3 className="text-sm sm:text-lg font-bold text-gray-800 mb-1">{testimonial.name}</h3>
-                    <p className="text-[10px] sm:text-sm text-gray-600 mb-3">{testimonial.occupation}</p>
-                    {renderStars(testimonial.rating)}
-                    <p className="text-gray-700 text-xs sm:text-sm mt-4 text-center leading-relaxed opacity-70 text-black">
-                      <span className="text-2xl sm:text-4xl font-serif text-gray-300 mr-1">&ldquo;</span>
-                      {testimonial.text}
-                      <span className="text-2xl sm:text-4xl font-serif text-gray-300 ml-1">&rdquo;</span>
-                    </p>
-                  </div>
-                )}
+                {/* Prominent stars */}
+                <div className="flex items-center mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-7 w-7 text-yellow-400 drop-shadow-lg mr-1" style={{ filter: 'drop-shadow(0 2px 4px #eab30888)' }} fill="#facc15" />
+                  ))}
+                </div>
+                <p className="text-gray-800 text-base md:text-lg mb-2 leading-relaxed font-cormorant" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{testimonial.text}</p>
+                <div className="font-semibold text-black text-lg mb-2">{testimonial.name}</div>
               </motion.div>
-            )
-          })}
+              <motion.div
+                key={current + '-img'}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+                className="flex-1 flex items-center justify-center bg-white md:rounded-none md:rounded-r-2xl overflow-hidden"
+                style={{ minWidth: 0 }}
+              >
+                <motion.div
+                  className="relative w-[85%] h-[92%] max-w-[380px] max-h-[540px] flex items-center justify-center"
+                  style={{ minHeight: '380px' }}
+                  whileHover={{ scale: 1.04 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                >
+                  {testimonial.productUrl ? (
+                    <Link href={testimonial.productUrl} className="block w-full h-full">
+                      <motion.div
+                        className="relative w-full h-full overflow-hidden cursor-pointer"
+                        whileHover={{ scale: 1.08 }}
+                        transition={{ duration: 0.5, ease: 'easeInOut' }}
+                      >
+                        <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" style={{ background: '#f7f7f7' }} />
+                      </motion.div>
+                    </Link>
+                  ) : (
+                    <motion.div
+                      className="relative w-full h-full overflow-hidden"
+                      whileHover={{ scale: 1.08 }}
+                      transition={{ duration: 0.5, ease: 'easeInOut' }}
+                    >
+                      <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" style={{ background: '#f7f7f7' }} />
+                    </motion.div>
+                  )}
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          {/* Right Arrow */}
+          <button
+            aria-label="Next testimonial"
+            onClick={() => paginate(1)}
+            className="hidden md:flex absolute -right-24 z-10 h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all"
+            style={{ top: '50%', transform: 'translateY(-50%)' }}
+          >
+            <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+        {/* Mobile navigation */}
+        <div className="flex md:hidden justify-center gap-4 mt-6">
+          <button
+            aria-label="Previous testimonial"
+            onClick={() => paginate(-1)}
+            className="h-10 w-10 rounded-full bg-gray-300 hover:bg-gray-400 shadow flex items-center justify-center transition-all"
+          >
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <button
+            aria-label="Next testimonial"
+            onClick={() => paginate(1)}
+            className="h-10 w-10 rounded-full bg-gray-300 hover:bg-gray-400 shadow flex items-center justify-center transition-all"
+          >
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
+          </button>
         </div>
       </div>
     </section>

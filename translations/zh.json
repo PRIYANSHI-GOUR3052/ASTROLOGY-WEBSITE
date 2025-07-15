@@ -72,8 +72,8 @@
   },
   "header": {
     "logo": {
-      "line1": "नक्षत्र ज्ञान",
-      "line2": "Nakshatra Gyaan"
+      "line1": "纳克沙特拉吉安",
+      "line2": "纳克沙特拉吉安"
     },
     "nav": {
       "home": "家",
@@ -87,9 +87,11 @@
       "chat_with_astrologer": "与占星师聊天",
       "buy_products": "购买产品",
       "our_services": "我们的服务",
-      "join_us": "加入我们"
+      "join_us": "加入我们",
+      "orders": "订单"
     },
     "cart": "购物车",
+    "orders": "订单",
     "mega_menu": {
       "consultations": {
         "title": "咨询",
@@ -138,7 +140,9 @@
     "language_selector": {
       "button": "选择语言",
       "dropdown_title": "选择您的语言"
-    }
+    },
+    "search_placeholder": "查找产品、服务或文章...",
+    "search_button": "搜索"
   },
   "about": {
     "banner": {
@@ -295,7 +299,7 @@
   },
   "testimonials": {
     "heading": "客户评价",
-    "headingHi": "客户评价",
+    "subheading": "阅读我们的客户对我们占星服务的真实体验评价。",
     "testimonials": {
       "0": { "name": "王伟", "occupation": "软件工程师", "text": "我的星座职业指导非常准确！它帮助我做出了关键的换工作决定。真是一次改变人生的体验。" },
       "1": { "name": "李娜", "occupation": "大学生", "text": "非常感谢！个性化的数字命理课程让我更加清晰自信，帮助我更有目标地完成学业。" },

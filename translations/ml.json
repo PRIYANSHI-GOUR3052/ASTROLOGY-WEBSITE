@@ -1,0 +1,76 @@
+{
+  "header": {
+    "logo": {
+      "line1": "നക്ഷത്ര ജ്ഞാൻ",
+      "line2": "നക്ഷത്ര ജ്ഞാൻ"
+    },
+    "nav": {
+      "home": "ഹോം",
+      "about": "ഞങ്ങളേക്കുറിച്ച്",
+      "courses": "കോഴ്സുകൾ",
+      "contact": "ബന്ധപ്പെടുക",
+      "blog": "ബ്ലോഗ്",
+      "study": "പഠനം",
+      "consultations": "ആലോചനകൾ",
+      "talk_to_astrologer": "ജ്യോതിഷിയുമായി സംസാരിക്കുക",
+      "chat_with_astrologer": "ജ്യോതിഷിയുമായി ചാറ്റ് ചെയ്യുക",
+      "buy_products": "ഉൽപ്പന്നങ്ങൾ വാങ്ങുക",
+      "our_services": "ഞങ്ങളുടെ സേവനങ്ങൾ",
+      "join_us": "ചേരുക",
+      "orders": "ഓർഡറുകൾ"
+    },
+    "cart": "കാർട്ട്",
+    "orders": "ഓർഡറുകൾ",
+    "search_placeholder": "ഉൽപ്പന്നം, സേവനം അല്ലെങ്കിൽ ലേഖനം തിരയുക...",
+    "search_button": "തിരയുക",
+    "mega_menu": {
+      "consultations": {
+        "title": "ആലോചനകൾ",
+        "items": {
+          "panchang": "ഇന്നത്തെ പഞ്ചാംഗം",
+          "kundali_matching": "കുണ്ടലി മാച്ചിംഗ്",
+          "buy_products": "ഉൽപ്പന്നങ്ങൾ വാങ്ങുക",
+          "free_daily_horoscope": "ഉചിതമായ ദൈനംദിന ജ്യോതിഷഫലം",
+          "astrology": "ജ്യോതിഷം",
+          "chat_with_astrologer": "ജ്യോതിഷിയുമായി ചാറ്റ് ചെയ്യുക",
+          "love_relationship": "പ്രണയവും ബന്ധവും",
+          "career_guidance": "കരിയർ & ജോലി",
+          "numerology": "സംഖ്യാശാസ്ത്രം"
+        }
+      },
+      "puja_rituals": {
+        "title": "പൂജയും ചടങ്ങുകളും",
+        "items": {
+          "online_puja": "ഓൺലൈൻ പൂജ",
+          "grah_shanti": "ഗ്രഹ ശാന്തി",
+          "manokamna_pooja": "മനോകാമന പൂജ"
+        }
+      },
+      "horoscopes": {
+        "title": "ജ്യോതിഷഫലം",
+        "items": {
+          "daily_horoscope": "ദൈനംദിന ജ്യോതിഷഫലം",
+          "monthly_horoscope": "മാസിക ജ്യോതിഷഫലം",
+          "yearly_horoscope": "വാർഷിക ജ്യോതിഷഫലം"
+        }
+      },
+      "learning": {
+        "title": "പഠനം",
+        "items": {
+          "astrology_courses": "ജ്യോതിഷ കോഴ്സുകൾ",
+          "blog": "ബ്ലോഗ്"
+        }
+      }
+    },
+    "auth": {
+      "signin": "സൈൻ ഇൻ",
+      "my_profile": "എന്റെ പ്രൊഫൈൽ",
+      "my_orders": "എന്റെ ഓർഡറുകൾ",
+      "logout": "ലോഗ് ഔട്ട്"
+    },
+    "language_selector": {
+      "button": "ഭാഷ തിരഞ്ഞെടുക്കുക",
+      "dropdown_title": "നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കുക"
+    }
+  }
+} 

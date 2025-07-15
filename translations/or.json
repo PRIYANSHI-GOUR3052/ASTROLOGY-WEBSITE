@@ -1,0 +1,76 @@
+{
+  "header": {
+    "logo": {
+      "line1": "ନକ୍ଷତ୍ର ଜ୍ଞାନ",
+      "line2": "ନକ୍ଷତ୍ର ଜ୍ଞାନ"
+    },
+    "nav": {
+      "home": "ହୋମ୍",
+      "about": "ଆମ ବିଷୟରେ",
+      "courses": "କୋର୍ସଗୁଡିକ",
+      "contact": "ଯୋଗାଯୋଗ",
+      "blog": "ବ୍ଲଗ୍",
+      "study": "ଅଧ୍ୟୟନ",
+      "consultations": "ପରାମର୍ଶ",
+      "talk_to_astrologer": "ଜ୍ୟୋତିଷୀ ସହ କଥାବାର୍ତ୍ତା",
+      "chat_with_astrologer": "ଜ୍ୟୋତିଷୀ ସହ ଚାଟ୍",
+      "buy_products": "ପ୍ରଯୁକ୍ତି କିଣନ୍ତୁ",
+      "our_services": "ଆମ ସେବାଗୁଡିକ",
+      "join_us": "ଯୋଗଦିଅନ୍ତୁ",
+      "orders": "ଅର୍ଡର୍ସ"
+    },
+    "cart": "କାର୍ଟ୍",
+    "orders": "ଅର୍ଡର୍ସ",
+    "search_placeholder": "ପ୍ରଯୁକ୍ତି, ସେବା କିମ୍ବା ଲେଖା ଖୋଜନ୍ତୁ...",
+    "search_button": "ଖୋଜନ୍ତୁ",
+    "mega_menu": {
+      "consultations": {
+        "title": "ପରାମର୍ଶ",
+        "items": {
+          "panchang": "ଆଜିର ପଞ୍ଚାଙ୍ଗ",
+          "kundali_matching": "କୁଣ୍ଡଳି ମିଳନ",
+          "buy_products": "ପ୍ରଯୁକ୍ତି କିଣନ୍ତୁ",
+          "free_daily_horoscope": "ନି:ଶୁଳ୍କ ଦୈନିକ ରାଶିଫଳ",
+          "astrology": "ଜ୍ୟୋତିଷ",
+          "chat_with_astrologer": "ଜ୍ୟୋତିଷୀ ସହ ଚାଟ୍",
+          "love_relationship": "ପ୍ରେମ ଏବଂ ସମ୍ପର୍କ",
+          "career_guidance": "କ୍ୟାରିଅର୍ ଏବଂ ଚାକିରି",
+          "numerology": "ସଂଖ୍ୟାଶାସ୍ତ୍ର"
+        }
+      },
+      "puja_rituals": {
+        "title": "ପୂଜା ଏବଂ ରିତିନିତି",
+        "items": {
+          "online_puja": "ଅନଲାଇନ୍ ପୂଜା",
+          "grah_shanti": "ଗ୍ରହ ଶାନ୍ତି",
+          "manokamna_pooja": "ମନୋକାମନା ପୂଜା"
+        }
+      },
+      "horoscopes": {
+        "title": "ରାଶିଫଳ",
+        "items": {
+          "daily_horoscope": "ଦୈନିକ ରାଶିଫଳ",
+          "monthly_horoscope": "ମାସିକ ରାଶିଫଳ",
+          "yearly_horoscope": "ବାର୍ଷିକ ରାଶିଫଳ"
+        }
+      },
+      "learning": {
+        "title": "ଶିକ୍ଷା",
+        "items": {
+          "astrology_courses": "ଜ୍ୟୋତିଷ କୋର୍ସଗୁଡିକ",
+          "blog": "ବ୍ଲଗ୍"
+        }
+      }
+    },
+    "auth": {
+      "signin": "ସାଇନ୍ ଇନ୍",
+      "my_profile": "ମୋର ପ୍ରୋଫାଇଲ୍",
+      "my_orders": "ମୋର ଅର୍ଡର୍ସ",
+      "logout": "ଲଗ୍ ଆଉଟ୍"
+    },
+    "language_selector": {
+      "button": "ଭାଷା ଚୟନ କରନ୍ତୁ",
+      "dropdown_title": "ଆପଣଙ୍କର ଭାଷା ଚୟନ କରନ୍ତୁ"
+    }
+  }
+} 

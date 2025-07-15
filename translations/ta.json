@@ -1,0 +1,76 @@
+{
+  "header": {
+    "logo": {
+      "line1": "நக்ஷத்ர ஜ்ஞான்",
+      "line2": "நக்ஷத்ர ஜ்ஞான்"
+    },
+    "nav": {
+      "home": "முகப்பு",
+      "about": "எங்களை பற்றி",
+      "courses": "பாடநெறிகள்",
+      "contact": "தொடர்பு",
+      "blog": "வலைப்பதிவு",
+      "study": "படிப்பு",
+      "consultations": "ஆலோசனைகள்",
+      "talk_to_astrologer": "ஜோதிடருடன் பேசுங்கள்",
+      "chat_with_astrologer": "ஜோதிடருடன் அரட்டை",
+      "buy_products": "தயாரிப்புகளை வாங்குங்கள்",
+      "our_services": "எங்கள் சேவைகள்",
+      "join_us": "சேருங்கள்",
+      "orders": "ஆணைகள்"
+    },
+    "cart": "வண்டி",
+    "orders": "ஆணைகள்",
+    "search_placeholder": "தயாரிப்பு, சேவை அல்லது கட்டுரையைத் தேடுங்கள்...",
+    "search_button": "தேடு",
+    "mega_menu": {
+      "consultations": {
+        "title": "ஆலோசனைகள்",
+        "items": {
+          "panchang": "இன்றைய பஞ்சாங்கம்",
+          "kundali_matching": "குண்டலி பொருத்தம்",
+          "buy_products": "தயாரிப்புகளை வாங்குங்கள்",
+          "free_daily_horoscope": "இலவச தினசரி ராசிபலன்",
+          "astrology": "ஜோதிடம்",
+          "chat_with_astrologer": "ஜோதிடருடன் அரட்டை",
+          "love_relationship": "காதலும் உறவுகளும்",
+          "career_guidance": "தொழில் வழிகாட்டி",
+          "numerology": "எண்கணிதம்"
+        }
+      },
+      "puja_rituals": {
+        "title": "பூஜை மற்றும் சடங்குகள்",
+        "items": {
+          "online_puja": "ஆன்லைன் பூஜை",
+          "grah_shanti": "கிரஹ சாந்தி",
+          "manokamna_pooja": "மனோக்காம்னா பூஜை"
+        }
+      },
+      "horoscopes": {
+        "title": "ராசிபலன்",
+        "items": {
+          "daily_horoscope": "தினசரி ராசிபலன்",
+          "monthly_horoscope": "மாத ராசிபலன்",
+          "yearly_horoscope": "வருட ராசிபலன்"
+        }
+      },
+      "learning": {
+        "title": "கற்றல்",
+        "items": {
+          "astrology_courses": "ஜோதிட பாடநெறிகள்",
+          "blog": "வலைப்பதிவு"
+        }
+      }
+    },
+    "auth": {
+      "signin": "உள்நுழைய",
+      "my_profile": "என் சுயவிவரம்",
+      "my_orders": "என் ஆணைகள்",
+      "logout": "வெளியேறு"
+    },
+    "language_selector": {
+      "button": "மொழியைத் தேர்ந்தெடுக்கவும்",
+      "dropdown_title": "உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்"
+    }
+  }
+} 
