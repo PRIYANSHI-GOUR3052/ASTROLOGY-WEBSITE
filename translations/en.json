@@ -96,6 +96,9 @@
       "join_us": "Join Us"
     },
     "cart": "Cart",
+    "search_placeholder": "Search for products, services, or articles...",
+    "search_button": "Search",
+    "orders": "Orders",
     "mega_menu": {
       "consultations": {
         "title": "Consultations",
