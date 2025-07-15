@@ -83,12 +83,12 @@ const ProfilePage = () => {
   const [modalDoc, setModalDoc] = useState<{ url: string; label: string } | null>(null);
 
   const requiredDocs = [
-    { name: 'aadharCard', label: 'Aadhar Card' },
-    { name: 'panCard', label: 'PAN Card' },
-    { name: 'selfie', label: 'Selfie' },
-    { name: 'workProof', label: 'Work Proof' },
-    { name: 'declarationForm', label: 'Declaration Form' },
-    { name: 'addressProof', label: 'Address Proof' },
+    { name: 'aadharCard', label: 'Aadhar Card', statusKey: 'aadharStatus', remarksKey: 'aadharRemarks' },
+    { name: 'panCard', label: 'PAN Card', statusKey: 'panStatus', remarksKey: 'panRemarks' },
+    { name: 'selfie', label: 'Selfie', statusKey: 'selfieStatus', remarksKey: 'selfieRemarks' },
+    { name: 'workProof', label: 'Work Proof', statusKey: 'workProofStatus', remarksKey: 'workProofRemarks' },
+    { name: 'declarationForm', label: 'Declaration Form', statusKey: 'declarationStatus', remarksKey: 'declarationRemarks' },
+    { name: 'addressProof', label: 'Address Proof', statusKey: 'addressStatus', remarksKey: 'addressRemarks' },
   ];
 
   useEffect(() => {
@@ -373,14 +373,16 @@ const ProfilePage = () => {
   const hasAnyNotAccepted = () => {
     // Check documents
     const docRejectedOrPending = requiredDocs.some(doc => {
-      const statusKey = doc.name.replace('Card', 'Status').replace('Proof', 'Status').replace('Form', 'Status');
-      const status = verification?.[statusKey] || 'unverified';
+      const status = verification?.[doc.statusKey] || 'unverified';
       return status !== 'accepted';
     });
+    
     // Check certifications
     const certRejectedOrPending = certifications.some(cert => cert.status !== 'accepted');
+    
     // Check educations
     const eduRejectedOrPending = educations.some(edu => edu.status !== 'accepted');
+    
     return docRejectedOrPending || certRejectedOrPending || eduRejectedOrPending;
   };
 
@@ -388,14 +390,16 @@ const ProfilePage = () => {
   const isFullyVerified = () => {
     // Check documents
     const allDocsAccepted = requiredDocs.every(doc => {
-      const statusKey = doc.name.replace('Card', 'Status').replace('Proof', 'Status').replace('Form', 'Status');
-      const status = verification?.[statusKey] || 'unverified';
+      const status = verification?.[doc.statusKey] || 'unverified';
       return status === 'accepted';
     });
+    
     // Check certifications
     const allCertsAccepted = certifications.every(cert => cert.status === 'accepted');
+    
     // Check educations
     const allEdusAccepted = educations.every(edu => edu.status === 'accepted');
+    
     return allDocsAccepted && allCertsAccepted && allEdusAccepted;
   };
 
@@ -533,25 +537,43 @@ const ProfilePage = () => {
                   {/* Documents Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {requiredDocs.map(doc => {
-                      const statusKey = doc.name.replace('Card', 'Status').replace('Proof', 'Status').replace('Form', 'Status');
-                      const remarksKey = doc.name.replace('Card', 'Remarks').replace('Proof', 'Remarks').replace('Form', 'Remarks');
-                      const status = verification?.[statusKey] || 'unverified';
-                      const remarks = verification?.[remarksKey] || '';
+                      const status = verification?.[doc.statusKey] || 'unverified';
+                      const remarks = verification?.[doc.remarksKey] || '';
                       const url = verification?.[doc.name] || '';
+                      
                       return (
                         <div key={doc.name} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{doc.label}</span>
-                            <span className={`px-2 py-1 rounded text-xs font-semibold ${status === 'accepted' ? 'bg-green-100 text-green-800' : status === 'pending' ? 'bg-yellow-100 text-yellow-800' : status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-gray-200 text-gray-800'}`}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                            <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                              status === 'accepted' ? 'bg-green-100 text-green-800' : 
+                              status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                              status === 'rejected' ? 'bg-red-100 text-red-800' : 
+                              'bg-gray-200 text-gray-800'
+                            }`}>
+                              {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </span>
                           </div>
                           {url && (
-                            <button type="button" className="text-blue-600 underline text-sm w-fit" onClick={() => setModalDoc({ url, label: doc.label })}>View</button>
+                            <button 
+                              type="button" 
+                              className="text-blue-600 underline text-sm w-fit" 
+                              onClick={() => setModalDoc({ url, label: doc.label })}
+                            >
+                              View
+                            </button>
                           )}
                           {status === 'rejected' && remarks && (
                             <div className="text-xs text-red-600 mt-1">Remarks: {remarks}</div>
                           )}
-                          {status === 'rejected' && (
-                            <input type="file" name={doc.name} accept="application/pdf,image/*" onChange={handleDocFileChange} className="w-full mt-2" />
+                          {(status === 'rejected' || status === 'unverified') && (
+                            <input 
+                              type="file" 
+                              name={doc.name} 
+                              accept="application/pdf,image/*" 
+                              onChange={handleDocFileChange} 
+                              className="w-full mt-2" 
+                            />
                           )}
                         </div>
                       );
@@ -614,10 +636,8 @@ const ProfilePage = () => {
                   {/* Documents Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {requiredDocs.map(doc => {
-                      const statusKey = doc.name.replace('Card', 'Status').replace('Proof', 'Status').replace('Form', 'Status');
-                      const remarksKey = doc.name.replace('Card', 'Remarks').replace('Proof', 'Remarks').replace('Form', 'Remarks');
-                      const status = verification?.[statusKey] || 'unverified';
-                      const remarks = verification?.[remarksKey] || '';
+                      const status = verification?.[doc.statusKey] || 'unverified';
+                      const remarks = verification?.[doc.remarksKey] || '';
                       const url = verification?.[doc.name] || '';
                       return (
                         <div key={doc.name} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">

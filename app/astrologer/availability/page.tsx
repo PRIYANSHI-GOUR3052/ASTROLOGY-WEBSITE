@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
 
 interface Slot {
+  id?: number;
   date: string;
   start: string;
   end: string;
@@ -16,36 +18,105 @@ const AvailabilityPage = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [form, setForm] = useState<Slot>({ date: "", start: "", end: "", repeat: "None" });
   const [showForm, setShowForm] = useState(true);
-  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Fetch slots on mount
+  React.useEffect(() => {
+    const token = localStorage.getItem('astrologerToken');
+    if (!token) return;
+    setLoading(true);
+    fetch('/api/astrologer/availability', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setSlots(data.map(slot => ({ ...slot, date: slot.date.slice(0, 10) })));
+        else setError(data.error || 'Failed to load slots');
+      })
+      .catch(() => setError('Failed to load slots'))
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddOrUpdateSlot = (e: React.FormEvent) => {
+  const handleAddOrUpdateSlot = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    const token = localStorage.getItem('astrologerToken');
+    if (!token) return setError('Not authenticated');
     if (!form.date || !form.start || !form.end) return;
-    if (editIndex !== null) {
-      // Update existing slot
-      setSlots((prev) =>
-        prev.map((slot, idx) => (idx === editIndex ? form : slot))
-      );
-      setEditIndex(null);
-    } else {
-      // Add new slot
-      setSlots((prev) => [...prev, form]);
+    setLoading(true);
+    try {
+      let res: Response, data: any;
+      if (editId !== null) {
+        // Update existing slot
+        res = await fetch('/api/astrologer/availability', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ ...form, id: editId })
+        });
+        data = await res.json();
+        if (res.ok) {
+          setSlots(prev => prev.map(slot => slot.id === editId ? { ...data, date: data.date.slice(0, 10) } : slot));
+          setEditId(null);
+        } else {
+          setError(data.error || 'Failed to update slot');
+        }
+      } else {
+        // Add new slot
+        res = await fetch('/api/astrologer/availability', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify(form)
+        });
+        data = await res.json();
+        if (res.ok) {
+          setSlots(prev => [...prev, { ...data, date: data.date.slice(0, 10) }]);
+        } else {
+          setError(data.error || 'Failed to add slot');
+        }
+      }
+      setForm({ date: "", start: "", end: "", repeat: "None" });
+    } catch {
+      setError('Failed to save slot');
+    } finally {
+      setLoading(false);
     }
-    setForm({ date: "", start: "", end: "", repeat: "None" });
   };
 
-  const handleRemoveSlot = (idx: number) => {
-    setSlots((prev) => prev.filter((_, i) => i !== idx));
+  const handleRemoveSlot = async (id?: number) => {
+    if (!id) return;
+    setError("");
+    const token = localStorage.getItem('astrologerToken');
+    if (!token) return setError('Not authenticated');
+    setLoading(true);
+    try {
+      const res: Response = await fetch('/api/astrologer/availability', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ id })
+      });
+      if (res.status === 204) {
+        setSlots(prev => prev.filter(slot => slot.id !== id));
+      } else {
+        const data: any = await res.json();
+        setError(data.error || 'Failed to delete slot');
+      }
+    } catch {
+      setError('Failed to delete slot');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleEditSlot = (idx: number) => {
-    setForm(slots[idx]);
-    setEditIndex(idx);
+  const handleEditSlot = (slot: Slot) => {
+    setForm({ date: slot.date, start: slot.start, end: slot.end, repeat: slot.repeat });
+    setEditId(slot.id!);
     setShowForm(true);
   };
 
@@ -58,6 +129,8 @@ const AvailabilityPage = () => {
     >
       <h1 className="text-2xl font-bold mb-4">Availability Schedule</h1>
       <p className="mb-6 text-gray-600 dark:text-gray-300">Set your available slots for consultations here.</p>
+      {error && <div className="text-red-500 mb-2">{error}</div>}
+      {loading && <div className="text-gray-500 mb-2">Loading...</div>}
       <AnimatePresence>
         {showForm && (
           <motion.form
@@ -94,17 +167,19 @@ const AvailabilityPage = () => {
                 whileTap={{ scale: 0.97 }}
                 type="submit"
                 className="py-2 px-6 bg-amber-500 dark:bg-purple-700 text-white font-bold rounded-lg mt-2 shadow"
+                disabled={loading}
               >
-                {editIndex !== null ? "Update Slot" : "Add Slot"}
+                {editId !== null ? "Update Slot" : "Add Slot"}
               </motion.button>
-              {editIndex !== null && (
+              {editId !== null && (
                 <button
                   type="button"
                   className="ml-4 py-2 px-4 bg-gray-300 dark:bg-gray-600 text-black dark:text-white rounded-lg mt-2"
                   onClick={() => {
-                    setEditIndex(null);
+                    setEditId(null);
                     setForm({ date: "", start: "", end: "", repeat: "None" });
                   }}
+                  disabled={loading}
                 >
                   Cancel
                 </button>
@@ -117,7 +192,7 @@ const AvailabilityPage = () => {
         <h2 className="text-lg font-semibold mb-2">Your Slots</h2>
         <div className="space-y-3">
           <AnimatePresence>
-            {slots.length === 0 && (
+            {(!loading && slots.length === 0) && (
               <motion.div
                 className="text-gray-400 text-center py-6"
                 initial={{ opacity: 0 }}
@@ -127,9 +202,9 @@ const AvailabilityPage = () => {
                 No slots added yet.
               </motion.div>
             )}
-            {slots.map((slot, idx) => (
+            {slots.map((slot) => (
               <motion.div
-                key={idx}
+                key={slot.id}
                 className="flex flex-col sm:flex-row items-center justify-between bg-white dark:bg-midnight-black border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 shadow-sm gap-2"
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -147,7 +222,8 @@ const AvailabilityPage = () => {
                     whileHover={{ scale: 1.1, backgroundColor: '#ef4444', color: '#fff' }}
                     whileTap={{ scale: 0.95 }}
                     className="px-3 py-1 rounded bg-red-100 text-red-600 font-semibold text-xs transition-colors"
-                    onClick={() => handleRemoveSlot(idx)}
+                    onClick={() => handleRemoveSlot(slot.id)}
+                    disabled={loading}
                   >
                     Remove
                   </motion.button>
@@ -155,7 +231,8 @@ const AvailabilityPage = () => {
                     whileHover={{ scale: 1.1, backgroundColor: '#f59e42', color: '#fff' }}
                     whileTap={{ scale: 0.95 }}
                     className="px-3 py-1 rounded bg-amber-100 text-amber-700 font-semibold text-xs transition-colors"
-                    onClick={() => handleEditSlot(idx)}
+                    onClick={() => handleEditSlot(slot)}
+                    disabled={loading}
                   >
                     Edit
                   </motion.button>
