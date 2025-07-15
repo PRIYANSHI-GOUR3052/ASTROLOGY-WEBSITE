@@ -78,9 +78,10 @@
   },
   "header": {
     "logo": {
-      "line1": "नकषतर जञन",
-      "line2": "Nakshatra Gyaan"
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Nakshatra Wissen"
     },
+    "orders": "Bestellungen",
     "nav": {
       "home": "Heim",
       "about": "Um",
@@ -93,7 +94,8 @@
       "chat_with_astrologer": "Mit Astrologen chatten",
       "buy_products": "Produkte kaufen",
       "our_services": "Unsere Dienstleistungen",
-      "join_us": "Mach mit"
+      "join_us": "Mach mit",
+      "orders": "Bestellungen"
     },
     "cart": "Wagen",
     "join_us": "Mach mit",
@@ -146,6 +148,8 @@
       "button": "Sprache auswählen",
       "dropdown_title": "Wählen Sie Ihre Sprache aus"
     },
+    "search_placeholder": "Produkt, Dienstleistung oder Artikel finden...",
+    "search_button": "Suchen",
     "description": "Haben Sie eine Frage an nakshatra gyan private limited, benötigen Sie Beratung oder möchten Sie eine Beratung buchen? Kontaktieren Sie uns. Ihr kosmisches Gespräch erwartet Sie."
   },
   "lifeChangingSolutions": {
@@ -430,7 +434,7 @@
   },
   "testimonials": {
     "heading": "Kundenrezensionen",
-    "headingHi": "Kundenrezensionen",
+    "subheading": "Lesen Sie, was unsere Kunden über ihre Erfahrungen mit unseren Astrologiediensten sagen.",
     "testimonials": {
       "0": { "name": "Lukas S.", "occupation": "Software-Ingenieur", "text": "Die Berufsberatung aus meinem Horoskop war goldrichtig! Sie hat mir geholfen, eine entscheidende Entscheidung über meinen Jobwechsel zu treffen. Eine wirklich transformative Erfahrung." },
       "1": { "name": "Hanna M.", "occupation": "Studentin", "text": "Ich schätze es wirklich!! Die personalisierte Numerologie-Sitzung hat mir Klarheit verschafft und mein Selbstvertrauen gestärkt, sodass ich meine akademische Reise zielgerichteter gestalten konnte." },

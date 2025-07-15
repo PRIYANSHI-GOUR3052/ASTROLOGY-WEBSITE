@@ -1,0 +1,76 @@
+{
+  "header": {
+    "logo": {
+      "line1": "নক্ষত্র জ্ঞান",
+      "line2": "নক্ষত্র জ্ঞান"
+    },
+    "nav": {
+      "home": "হোম",
+      "about": "আমাদের সম্পর্কে",
+      "courses": "কোর্স",
+      "contact": "যোগাযোগ",
+      "blog": "ব্লগ",
+      "study": "অধ্যয়ন",
+      "consultations": "পরামর্শ",
+      "talk_to_astrologer": "জ্যোতিষীর সাথে কথা বলুন",
+      "chat_with_astrologer": "জ্যোতিষীর সাথে চ্যাট",
+      "buy_products": "পণ্য কিনুন",
+      "our_services": "আমাদের পরিষেবা",
+      "join_us": "যোগ দিন",
+      "orders": "অর্ডার"
+    },
+    "cart": "কার্ট",
+    "orders": "অর্ডার",
+    "search_placeholder": "পণ্য, পরিষেবা বা নিবন্ধ খুঁজুন...",
+    "search_button": "অনুসন্ধান",
+    "mega_menu": {
+      "consultations": {
+        "title": "পরামর্শ",
+        "items": {
+          "panchang": "আজকের পঞ্চাং",
+          "kundali_matching": "কুণ্ডলী মিল",
+          "buy_products": "পণ্য কিনুন",
+          "free_daily_horoscope": "বিনামূল্যে দৈনিক রাশিফল",
+          "astrology": "জ্যোতিষ",
+          "chat_with_astrologer": "জ্যোতিষীর সাথে চ্যাট",
+          "love_relationship": "ভালবাসা ও সম্পর্ক",
+          "career_guidance": "ক্যারিয়ার ও চাকরি",
+          "numerology": "সংখ্যাতত্ত্ব"
+        }
+      },
+      "puja_rituals": {
+        "title": "পূজা ও আচার",
+        "items": {
+          "online_puja": "অনলাইন পূজা",
+          "grah_shanti": "গ্রহ শান্তি",
+          "manokamna_pooja": "মনোকামনা পূজা"
+        }
+      },
+      "horoscopes": {
+        "title": "রাশিফল",
+        "items": {
+          "daily_horoscope": "দৈনিক রাশিফল",
+          "monthly_horoscope": "মাসিক রাশিফল",
+          "yearly_horoscope": "বার্ষিক রাশিফল"
+        }
+      },
+      "learning": {
+        "title": "শেখা",
+        "items": {
+          "astrology_courses": "জ্যোতিষ কোর্স",
+          "blog": "ব্লগ"
+        }
+      }
+    },
+    "auth": {
+      "signin": "সাইন ইন",
+      "my_profile": "আমার প্রোফাইল",
+      "my_orders": "আমার অর্ডারসমূহ",
+      "logout": "লগ আউট"
+    },
+    "language_selector": {
+      "button": "ভাষা নির্বাচন করুন",
+      "dropdown_title": "আপনার ভাষা নির্বাচন করুন"
+    }
+  }
+} 

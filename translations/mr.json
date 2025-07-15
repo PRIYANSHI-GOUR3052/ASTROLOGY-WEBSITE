@@ -1,0 +1,76 @@
+{
+  "header": {
+    "logo": {
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "नक्षत्र ज्ञान"
+    },
+    "nav": {
+      "home": "मुख्यपृष्ठ",
+      "about": "आमच्याबद्दल",
+      "courses": "कोर्सेस",
+      "contact": "संपर्क",
+      "blog": "ब्लॉग",
+      "study": "अभ्यास",
+      "consultations": "सल्ला",
+      "talk_to_astrologer": "ज्योतिषाशी बोला",
+      "chat_with_astrologer": "ज्योतिषाशी चॅट",
+      "buy_products": "उत्पादने खरेदी करा",
+      "our_services": "आमच्या सेवा",
+      "join_us": "सामील व्हा",
+      "orders": "ऑर्डर्स"
+    },
+    "cart": "कार्ट",
+    "orders": "ऑर्डर्स",
+    "search_placeholder": "उत्पादन, सेवा किंवा लेख शोधा...",
+    "search_button": "शोधा",
+    "mega_menu": {
+      "consultations": {
+        "title": "सल्ला",
+        "items": {
+          "panchang": "आजचे पंचांग",
+          "kundali_matching": "कुंडली जुळवा",
+          "buy_products": "उत्पादने खरेदी करा",
+          "free_daily_horoscope": "मोफत दैनिक राशीभविष्य",
+          "astrology": "ज्योतिष",
+          "chat_with_astrologer": "ज्योतिषाशी चॅट",
+          "love_relationship": "प्रेम व संबंध",
+          "career_guidance": "करिअर व नोकरी",
+          "numerology": "अंकशास्त्र"
+        }
+      },
+      "puja_rituals": {
+        "title": "पूजा व विधी",
+        "items": {
+          "online_puja": "ऑनलाइन पूजा",
+          "grah_shanti": "ग्रह शांती",
+          "manokamna_pooja": "मनोकामना पूजा"
+        }
+      },
+      "horoscopes": {
+        "title": "राशीभविष्य",
+        "items": {
+          "daily_horoscope": "दैनिक राशीभविष्य",
+          "monthly_horoscope": "मासिक राशीभविष्य",
+          "yearly_horoscope": "वार्षिक राशीभविष्य"
+        }
+      },
+      "learning": {
+        "title": "शिकणे",
+        "items": {
+          "astrology_courses": "ज्योतिष कोर्सेस",
+          "blog": "ब्लॉग"
+        }
+      }
+    },
+    "auth": {
+      "signin": "साइन इन",
+      "my_profile": "माझे प्रोफाइल",
+      "my_orders": "माझ्या ऑर्डर्स",
+      "logout": "लॉग आउट"
+    },
+    "language_selector": {
+      "button": "भाषा निवडा",
+      "dropdown_title": "आपली भाषा निवडा"
+    }
+  }
+} 

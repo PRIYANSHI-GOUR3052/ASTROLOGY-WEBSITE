@@ -11,6 +11,15 @@ import de from '../../translations/de.json';
 import zh from '../../translations/zh.json';
 import ar from '../../translations/ar.json';
 import ru from '../../translations/ru.json';
+import bn from '../../translations/bn.json';
+import ta from '../../translations/ta.json';
+import te from '../../translations/te.json';
+import mr from '../../translations/mr.json';
+import gu from '../../translations/gu.json';
+import ml from '../../translations/ml.json';
+import kn from '../../translations/kn.json';
+import or from '../../translations/or.json';
+import pa from '../../translations/pa.json';
 // Import other languages as they are created
 // import es from '../../translations/es.json';
 // import fr from '../../translations/fr.json';
@@ -19,12 +28,38 @@ import ru from '../../translations/ru.json';
 // import ar from '../../translations/ar.json';
 // import ru from '../../translations/ru.json';
 
-export type SupportedLang = 'en' | 'hi' | 'es' | 'fr' | 'de' | 'zh' | 'ar' | 'ru';
+export type SupportedLang =
+  | 'en'
+  | 'hi'
+  | 'bn'
+  | 'ta'
+  | 'te'
+  | 'mr'
+  | 'gu'
+  | 'ml'
+  | 'kn'
+  | 'or'
+  | 'pa'
+  | 'es'
+  | 'fr'
+  | 'de'
+  | 'zh'
+  | 'ar'
+  | 'ru';
 
 // Map language codes to their JSON data
 const translations = {
   en,
   hi,
+  bn,
+  ta,
+  te,
+  mr,
+  gu,
+  ml,
+  kn,
+  or,
+  pa,
   es,
   fr,
   de,
@@ -36,6 +71,15 @@ const translations = {
 export const LANGUAGE_NAMES: Record<SupportedLang, string> = {
   en: 'English',
   hi: 'हिन्दी (Hindi)',
+  bn: 'বাংলা (Bengali)',
+  ta: 'தமிழ் (Tamil)',
+  te: 'తెలుగు (Telugu)',
+  mr: 'मराठी (Marathi)',
+  gu: 'ગુજરાતી (Gujarati)',
+  ml: 'മലയാളം (Malayalam)',
+  kn: 'ಕನ್ನಡ (Kannada)',
+  or: 'ଓଡ଼ିଆ (Odia)',
+  pa: 'ਪੰਜਾਬੀ (Punjabi)',
   es: 'Español (Spanish)',
   fr: 'Français (French)',
   de: 'Deutsch (German)',
@@ -56,6 +100,15 @@ export const LanguageContext = createContext<LanguageContextType | undefined>(un
 function normalizeLang(code: string): SupportedLang {
   if (code.startsWith('en')) return 'en';
   if (code.startsWith('hi')) return 'hi';
+  if (code.startsWith('bn')) return 'bn';
+  if (code.startsWith('ta')) return 'ta';
+  if (code.startsWith('te')) return 'te';
+  if (code.startsWith('mr')) return 'mr';
+  if (code.startsWith('gu')) return 'gu';
+  if (code.startsWith('ml')) return 'ml';
+  if (code.startsWith('kn')) return 'kn';
+  if (code.startsWith('or')) return 'or';
+  if (code.startsWith('pa')) return 'pa';
   if (code.startsWith('es')) return 'es';
   if (code.startsWith('fr')) return 'fr';
   if (code.startsWith('de')) return 'de';
