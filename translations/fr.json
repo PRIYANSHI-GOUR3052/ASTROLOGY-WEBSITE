@@ -73,8 +73,9 @@
   "header": {
     "logo": {
       "line1": "नक्षत्र ज्ञान",
-      "line2": "Nakshatra gyaan"
+      "line2": "Savoir Nakshatra"
     },
+    "orders": "Commandes",
     "nav": {
       "home": "Maison",
       "about": "À propos",
@@ -86,7 +87,9 @@
       "talk_to_astrologer": "Parler à un astrologue",
       "chat_with_astrologer": "Discuter avec un astrologue",
       "buy_products": "Acheter des produits",
-      "our_services": "Nos services"
+      "our_services": "Nos services",
+      "join_us": "Rejoignez-nous",
+      "orders": "Commandes"
     },
     "cart": "Chariot",
     "join_us": "Rejoignez-nous",
@@ -141,7 +144,9 @@
     },
     "title1": "Connectez-vous avec le",
     "title2": "royaume cosmique",
-    "description": "Vous avez une question pour nakshatra gyan private limited, besoin de conseils ou souhaitez réserver une consultation ? Contactez-nous. Votre conversation cosmique vous attend."
+    "description": "Vous avez une question pour nakshatra gyan private limited, besoin de conseils ou souhaitez réserver une consultation ? Contactez-nous. Votre conversation cosmique vous attend.",
+    "search_placeholder": "Rechercher un produit, un service ou un article...",
+    "search_button": "Rechercher"
   },
   "about": {
     "banner": {
@@ -299,7 +304,7 @@
   },
   "testimonials": {
     "heading": "Avis des clients",
-    "headingHi": "Avis des clients",
+    "subheading": "Lisez ce que nos clients disent de leur expérience avec nos services d’astrologie.",
     "testimonials": {
       "0": { "name": "Lucas S.", "occupation": "Ingénieur logiciel", "text": "Les conseils de carrière de ma lecture d'horoscope étaient parfaits ! Cela m'a aidé à prendre une décision cruciale concernant mon changement d'emploi. Une expérience vraiment transformatrice." },
       "1": { "name": "Chloé M.", "occupation": "Étudiante", "text": "J'ai vraiment apprécié ! La séance de numérologie personnalisée m'a donné de la clarté et a renforcé ma confiance, m'aidant à naviguer mon parcours académique avec plus de but." },

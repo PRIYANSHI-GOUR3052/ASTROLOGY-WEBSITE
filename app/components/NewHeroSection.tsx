@@ -196,22 +196,22 @@ export default function HeroSection() {
       </section>
 
       {/* Ticker between hero and next section */}
-      <div className="w-full bg-[#F2E5DA] py-6 px-2 flex items-center justify-center min-h-[72px]">
+      <div className="w-full py-6 px-2 flex items-center justify-center min-h-[72px]" style={{ background: 'linear-gradient(90deg, #f7f7fa 0%, #e9eafc 100%)', color: '#232323' }}>
         <Marquee gradient={false} speed={40} pauseOnHover={true} direction="right" className="w-full">
           <div className="flex flex-row items-center w-full gap-4">
             <div className="flex flex-col justify-center items-end min-w-[220px] mr-8">
-              <span className="font-[\'Noto Serif Devanagari\',serif] text-base md:text-lg font-semibold leading-tight tracking-wide" style={{ fontFamily: 'Noto Serif Devanagari, serif', color: '#2C3A4B' }}>
+              <span className="font-[\'Noto Serif Devanagari\',serif] text-base md:text-lg font-semibold leading-tight tracking-wide" style={{ fontFamily: 'Noto Serif Devanagari, serif', color: '#232323' }}>
                 ॐ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः।
               </span>
-              <span className="font-[\'Noto Serif Devanagari\',serif] text-base md:text-lg font-semibold leading-tight tracking-wide" style={{ fontFamily: 'Noto Serif Devanagari, serif', color: '#2C3A4B' }}>
+              <span className="font-[\'Noto Serif Devanagari\',serif] text-base md:text-lg font-semibold leading-tight tracking-wide" style={{ fontFamily: 'Noto Serif Devanagari, serif', color: '#232323' }}>
                 सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत्॥
               </span>
             </div>
             <div className="flex flex-col justify-center items-start min-w-[260px] ml-8">
-              <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2C3A4B' }}>
+              <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#232323' }}>
                 {meanings[lang]?.split('. ').slice(0,2).join('. ')}
               </span>
-              <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2C3A4B' }}>
+              <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#232323' }}>
                 {meanings[lang]?.split('. ').slice(2).join('. ')}
               </span>
             </div>

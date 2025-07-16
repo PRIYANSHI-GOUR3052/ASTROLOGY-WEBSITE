@@ -1,0 +1,76 @@
+{
+  "header": {
+    "logo": {
+      "line1": "નક્ષત્ર જ્ઞાન",
+      "line2": "નક્ષત્ર જ્ઞાન"
+    },
+    "nav": {
+      "home": "હોમ",
+      "about": "અમારા વિશે",
+      "courses": "કોર્સિસ",
+      "contact": "સંપર્ક કરો",
+      "blog": "બ્લોગ",
+      "study": "અભ્યાસ",
+      "consultations": "પરામર્શ",
+      "talk_to_astrologer": "જ્યોતિષી સાથે વાત કરો",
+      "chat_with_astrologer": "જ્યોતિષી સાથે ચેટ",
+      "buy_products": "ઉત્પાદનો ખરીદો",
+      "our_services": "અમારી સેવાઓ",
+      "join_us": "જોડાઓ",
+      "orders": "ઓર્ડર્સ"
+    },
+    "cart": "કાર્ટ",
+    "orders": "ઓર્ડર્સ",
+    "search_placeholder": "ઉત્પાદન, સેવા અથવા લેખ શોધો...",
+    "search_button": "શોધો",
+    "mega_menu": {
+      "consultations": {
+        "title": "પરામર્શ",
+        "items": {
+          "panchang": "આજનું પંચાંગ",
+          "kundali_matching": "કુંડળી મેળવો",
+          "buy_products": "ઉત્પાદનો ખરીદો",
+          "free_daily_horoscope": "મફત દૈનિક રાશિફળ",
+          "astrology": "જ્યોતિષ",
+          "chat_with_astrologer": "જ્યોતિષી સાથે ચેટ",
+          "love_relationship": "પ્રેમ અને સંબંધ",
+          "career_guidance": "કેરિયર અને નોકરી",
+          "numerology": "અંકશાસ્ત્ર"
+        }
+      },
+      "puja_rituals": {
+        "title": "પૂજા અને વિધિઓ",
+        "items": {
+          "online_puja": "ઓનલાઇન પૂજા",
+          "grah_shanti": "ગ્રહ શાંતિ",
+          "manokamna_pooja": "મનોકામના પૂજા"
+        }
+      },
+      "horoscopes": {
+        "title": "રાશિફળ",
+        "items": {
+          "daily_horoscope": "દૈનિક રાશિફળ",
+          "monthly_horoscope": "માસિક રાશિફળ",
+          "yearly_horoscope": "વાર્ષિક રાશિફળ"
+        }
+      },
+      "learning": {
+        "title": "શીખવું",
+        "items": {
+          "astrology_courses": "જ્યોતિષ કોર્સિસ",
+          "blog": "બ્લોગ"
+        }
+      }
+    },
+    "auth": {
+      "signin": "સાઇન ઇન",
+      "my_profile": "મારું પ્રોફાઇલ",
+      "my_orders": "મારા ઓર્ડર્સ",
+      "logout": "લૉગ આઉટ"
+    },
+    "language_selector": {
+      "button": "ભાષા પસંદ કરો",
+      "dropdown_title": "તમારી ભાષા પસંદ કરો"
+    }
+  }
+} 
