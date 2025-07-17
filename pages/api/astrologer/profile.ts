@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/lib/prisma';
 import { jwtVerify } from 'jose';
+import multer from 'multer';
+import { uploadAstrologerProfileImageBuffer } from '@/lib/cloudinary';
 
 // Type for JWT payload
 interface AstrologerJWTPayload {
@@ -34,6 +36,25 @@ async function getAstrologerFromRequest(req: NextApiRequest): Promise<Astrologer
   }
 }
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+const upload = multer();
+
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     // Fetch astrologer basic details
@@ -62,15 +83,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
   if (req.method === 'PUT') {
-    // Update astrologer basic details
+    // Update astrologer basic details, support multipart/form-data
     const user = await getAstrologerFromRequest(req);
     if (!user) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
+    await runMiddleware(req, res, upload.single('profileImage'));
+    const file = (req as any).file;
+    let body: any = req.body;
+    // If body fields are sent as JSON string (from FormData), parse them
+    if (typeof body === 'string') {
+      body = JSON.parse(body);
+    }
+    // If fields are sent as FormData, they are strings
+    const { firstName, lastName, phone, yearsOfExperience, areasOfExpertise, avatar } = body;
+    let profileImageUrl = '';
+    if (file && file.buffer) {
+      // Upload the file to Cloudinary
+      profileImageUrl = await uploadAstrologerProfileImageBuffer(file.buffer, user.email);
+    } else if (avatar) {
+      // Use avatar URL if provided
+      profileImageUrl = avatar;
+    } else if (body.profileImage) {
+      // Use existing profileImage if provided
+      profileImageUrl = body.profileImage;
+    }
     try {
-      const body = req.body;
-      const { firstName, lastName, phone, yearsOfExperience, areasOfExpertise, profileImage } =
-        typeof body === 'string' ? JSON.parse(body) : body;
       const updated = await prisma.astrologer.update({
         where: { id: user.id },
         data: {
@@ -79,7 +117,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           phone,
           yearsOfExperience: yearsOfExperience ? Number(yearsOfExperience) : undefined,
           areasOfExpertise,
-          profileImage,
+          profileImage: profileImageUrl,
         },
         select: {
           id: true,
