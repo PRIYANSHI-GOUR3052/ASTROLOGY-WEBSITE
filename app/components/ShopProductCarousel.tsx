@@ -63,7 +63,7 @@ export default function ShopProductCarousel({ products }: ShopProductCarouselPro
           {products.map((product: Product, idx: number) => (
             <CarouselItem key={product.slug} className="basis-[320px] max-w-[320px] px-4 flex items-stretch">
               <ProductServiceCard
-                image={product.image}
+                image={product.image || '/images/placeholder.jpg'}
                 title={product.title}
                 description={product.description}
                 badge={product.oldPrice ? 'BEST SELLER' : ''}

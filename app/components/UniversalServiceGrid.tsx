@@ -4,6 +4,14 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
+interface ProductServiceCardProps {
+  image: string;
+  title: string;
+  description: string;
+  badge?: string;
+  href: string;
+}
+
 const services = [
   {
     slug: 'kundali-matching',
@@ -236,7 +244,7 @@ export function UniversalServicesGrid({ className = '' }) {
 }
 
 // Extracted Card Component for reuse
-export function ProductServiceCard({ image, title, description, badge, href }) {
+export function ProductServiceCard({ image, title, description, badge, href }: ProductServiceCardProps) {
   return (
     <Link href={href} className="block group h-full" style={{ textDecoration: 'none' }}>
       <div className="relative rounded-2xl overflow-hidden shadow-lg h-[340px] flex flex-col justify-end group-hover:scale-[1.02] group-hover:shadow-2xl duration-200 bg-[#f7f5ed]">

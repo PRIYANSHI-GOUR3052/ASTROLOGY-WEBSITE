@@ -10,6 +10,11 @@ const posts = Object.values(blogPosts).slice(0, 4); // 1 featured + 3 side
 export default function RecentPosts() {
   const { lang, t } = useLanguage();
 
+  // Helper to get author in the correct language
+  function getAuthor(authorObj: Record<string, string>, lang: string) {
+    return authorObj[lang] || authorObj['en'];
+  }
+
   return (
     <section className="w-full max-w-7xl mx-auto px-4 py-16">
       <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-8">{t('blog.recent.heading')}</h2>
@@ -23,12 +28,12 @@ export default function RecentPosts() {
             </div>
             <div className="p-6 md:p-8">
               {(() => {
-                const safeLang = posts[0].title?.[lang] ? lang : 'en';
+                const safeTitleLang = posts[0].title?.[lang] ? lang : 'en';
                 return (
                   <>
-                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{posts[0].title?.[safeLang] || posts[0].title?.['en']}</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{posts[0].title?.[safeTitleLang] || posts[0].title?.['en']}</h3>
                     <div className="flex items-center text-sm text-gray-500 mb-4 gap-4 flex-wrap">
-                      <span>👤 {posts[0].author?.[safeLang] || posts[0].author?.['en']}</span>
+                      <span>👤 {getAuthor(posts[0].author, lang)}</span>
                       <span>📅 {posts[0].date}</span>
                       <span>⏱ 2 {t('blog.featured.minRead')}</span>
                     </div>
@@ -55,6 +60,7 @@ export default function RecentPosts() {
                 <div className="flex-1 p-6 flex flex-col justify-center">
                   <h4 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{post.title?.[safeLang] || post.title?.['en']}</h4>
                   <div className="flex items-center text-sm text-gray-500 mb-3 gap-3 flex-wrap">
+                    <span>👤 {getAuthor(post.author, lang)}</span>
                     <span>📅 {post.date}</span>
                     <span>⏱ {4 + i} {t('blog.featured.minRead')}</span>
                   </div>
