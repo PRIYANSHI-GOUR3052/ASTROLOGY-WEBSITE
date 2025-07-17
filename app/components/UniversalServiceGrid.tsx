@@ -4,6 +4,14 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
+interface ProductServiceCardProps {
+  image: string;
+  title: string;
+  description: string;
+  badge?: string;
+  href: string;
+}
+
 const services = [
   {
     slug: 'kundali-matching',
@@ -89,6 +97,69 @@ const services = [
     image: '/images/spiritualpathway.jpg',
     badge: '',
   },
+  {
+    slug: 'vedic-astrology',
+    title: 'Vedic Astrology',
+    description: 'Get deep insights into your life, career, and relationships with traditional Vedic astrology readings from expert astrologers.',
+    image: '/images/astrology_understanding.jpg', // reused
+    badge: 'POPULAR',
+  },
+  {
+    slug: 'child-astrology',
+    title: 'Child Astrology',
+    description: 'Discover your child’s unique strengths, talents, and life path with a personalized astrological analysis.',
+    image: '/images/birth_chart_mockup.jpg', // reused
+    badge: '',
+  },
+  {
+    slug: 'business-astrology',
+    title: 'Business Astrology',
+    description: 'Unlock business success and growth with astrological guidance for entrepreneurs and business owners.',
+    image: '/images/course-3.jpg', // reused
+    badge: 'NEW',
+  },
+  {
+    slug: 'health-wellness',
+    title: 'Health & Wellness',
+    description: 'Receive holistic health and wellness advice based on your birth chart and planetary influences.',
+    image: '/images/astrowellness.jpg', // reused
+    badge: '',
+  },
+  {
+    slug: 'marriage-matching',
+    title: 'Marriage Matching',
+    description: 'Ensure a harmonious marriage with detailed horoscope matching and compatibility analysis.',
+    image: '/images/kundali-matching.jpg', // fallback to kundali-matching if available, else reuse another
+    badge: 'RECOMMENDED',
+  },
+  {
+    slug: 'remedial-consultation',
+    title: 'Remedial Consultation',
+    description: 'Get personalized remedies for doshas and planetary afflictions to bring peace and prosperity.',
+    image: '/images/grah-shanti.jpg', // fallback to grah-shanti if available, else reuse another
+    badge: '',
+  },
+  {
+    slug: 'yearly-predictions',
+    title: 'Yearly Predictions',
+    description: 'Plan your year ahead with detailed astrological predictions and guidance for every aspect of life.',
+    image: '/images/course-4.jpg', // reused
+    badge: '2024',
+  },
+  {
+    slug: 'gemstone-recommendation',
+    title: 'Gemstone Recommendation',
+    description: 'Find the right gemstones to enhance your luck, health, and success based on your horoscope.',
+    image: '/images/gemstones.jpg', // reused
+    badge: '',
+  },
+  {
+    slug: 'vastu-consultation',
+    title: 'Vastu Consultation',
+    description: 'Harmonize your home and workspace with Vastu Shastra principles for peace and prosperity.',
+    image: '/images/astrology.svg', // reused
+    badge: '',
+  },
 ];
 
 export function UniversalServicesGrid({ className = '' }) {
@@ -158,29 +229,49 @@ export function UniversalServicesGrid({ className = '' }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <Link href={`/services/${service.slug}`} className="block group h-full" style={{ textDecoration: 'none' }}>
-              <div className="relative rounded-2xl overflow-hidden shadow-lg h-[340px] flex flex-col justify-end group-hover:scale-[1.02] group-hover:shadow-2xl duration-200 bg-[#f7f5ed]">
-                {/* Service Image */}
-                <img
-                  src={service.image}
-                  alt={service.title}
-                  className="absolute inset-0 w-full h-full object-cover object-center z-0"
-                  style={{ minHeight: 220, maxHeight: 340, opacity: 0.92 }}
-                />
-                {/* Badge */}
-                {service.badge && (
-                  <span className="absolute top-4 left-4 bg-[#e74c3c] text-white text-xs px-3 py-1 rounded-full z-10 shadow" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, letterSpacing: '0.01em' }}>{service.badge}</span>
-                )}
-                {/* Overlay for text */}
-                <div className="relative z-10 w-full px-6 py-5 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end min-h-[120px]">
-                  <h3 className="text-xl mb-2 text-white text-left" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400 }}>{service.title}</h3>
-                  <p className="text-sm text-white text-left" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400 }}>{service.description}</p>
-                </div>
-              </div>
-            </Link>
+            <ProductServiceCard
+              image={service.image}
+              title={service.title}
+              description={service.description}
+              badge={service.badge}
+              href={`/services/${service.slug}`}
+            />
           </motion.div>
         ))}
       </div>
     </>
+  );
+}
+
+// Extracted Card Component for reuse
+export function ProductServiceCard({ image, title, description, badge, href }: ProductServiceCardProps) {
+  return (
+    <Link href={href} className="block group h-full" style={{ textDecoration: 'none' }}>
+      <div className="relative rounded-2xl overflow-hidden shadow-lg h-[340px] flex flex-col justify-end group-hover:scale-[1.02] group-hover:shadow-2xl duration-200 bg-[#f7f5ed]">
+        {/* Service/Product Image */}
+        <motion.div
+          className="absolute inset-0 w-full h-full z-0"
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          style={{ minHeight: 220, maxHeight: 340 }}
+        >
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover object-center"
+            style={{ opacity: 0.92 }}
+          />
+        </motion.div>
+        {/* Badge */}
+        {badge && (
+          <span className="absolute top-4 left-4 bg-[#e74c3c] text-white text-xs px-3 py-1 rounded-full z-10 shadow" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, letterSpacing: '0.01em' }}>{badge}</span>
+        )}
+        {/* Overlay for text */}
+        <div className="relative z-10 w-full px-6 py-5 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end min-h-[120px]">
+          <h3 className="text-xl mb-2 text-white text-left" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400 }}>{title}</h3>
+          <p className="text-sm text-white text-left" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400 }}>{description}</p>
+        </div>
+      </div>
+    </Link>
   );
 }

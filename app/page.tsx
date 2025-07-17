@@ -1,4 +1,5 @@
-import NewHeroSection from './components/NewHeroSection'
+
+import NewHeroSection from './components/NewHeroSection';
 import { LifeChangingSolutions } from './components/LifeChangingSolutions'
 import { AstrologerProfile } from './components/AstrologerProfile'
 import  { BestServices }  from './components/BestServices'
@@ -19,9 +20,8 @@ import FeaturedBlogs from './components/FeaturedBlogs'
 export default function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-white">
-    
-      
       <NewHeroSection />
+    
       <div className="pt-32 relative z-10">
         <ScrollAnimation>
           <Statistics />

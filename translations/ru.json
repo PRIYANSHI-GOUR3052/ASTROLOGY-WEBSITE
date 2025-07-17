@@ -119,6 +119,7 @@
         "title": "Гороскопы",
         "items": {
           "daily_horoscope": "Ежедневный гороскоп",
+          "free_daily_horoscope": "Бесплатный ежедневный гороскоп",
           "monthly_horoscope": "Ежемесячный гороскоп",
           "yearly_horoscope": "Ежегодный гороскоп"
         }

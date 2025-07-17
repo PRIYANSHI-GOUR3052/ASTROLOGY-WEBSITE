@@ -120,6 +120,7 @@
         "title": "Horoscopes",
         "items": {
           "daily_horoscope": "Horoscope quotidien",
+          "free_daily_horoscope": "Horoscope quotidien gratuit",
           "monthly_horoscope": "Horoscope mensuel",
           "yearly_horoscope": "Horoscope annuel"
         }

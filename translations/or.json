@@ -50,6 +50,7 @@
         "title": "ରାଶିଫଳ",
         "items": {
           "daily_horoscope": "ଦୈନିକ ରାଶିଫଳ",
+          "free_daily_horoscope": "ମାଗଣା ଦୈନିକ ରାଶିଫଳ",
           "monthly_horoscope": "ମାସିକ ରାଶିଫଳ",
           "yearly_horoscope": "ବାର୍ଷିକ ରାଶିଫଳ"
         }

@@ -16,11 +16,12 @@ export default function PanchangPage() {
     t('panchangPage.tabs.overview'),
     t('panchangPage.tabs.coreElements'),
     t('panchangPage.tabs.timings'),
-    t('panchangPage.tabs.about')
+    t('panchangPage.tabs.about'),
+    t('panchangPage.tabs.purchase')
   ];
 
   return (
-    <div className="min-h-screen bg-white pt-20 md:pt-32">
+    <div className="min-h-screen bg-white pt-0 md:pt-2">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Banner Heading */}
         <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
@@ -152,6 +153,11 @@ export default function PanchangPage() {
                     {t('panchangPage.about.legacy.cta')}
                   </p>
                 </div>
+              </section>
+            )}
+            {activeTab === t('panchangPage.tabs.purchase') && (
+              <section className="mb-12">
+                <h2 className="text-3xl font-bold text-indigo-900 mb-8 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Purchase</h2>
               </section>
             )}
             {/* Astrologer Profile below main content */}

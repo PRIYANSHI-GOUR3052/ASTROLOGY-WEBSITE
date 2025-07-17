@@ -1,147 +1,152 @@
-'use client'
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { useLanguage } from '../contexts/useLanguage'
-import { Star, Calendar, Gem, BookOpen, HeartPulse } from 'lucide-react'
+// Example images (replace with your own Cloudinary/local images as needed)
+const productImg = 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80';
+const serviceImg = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80';
+const profile1 = 'https://randomuser.me/api/portraits/men/32.jpg';
+const profile2 = 'https://randomuser.me/api/portraits/women/44.jpg';
+const profile3 = 'https://randomuser.me/api/portraits/men/54.jpg';
 
+// Card Components with fixed sizes
+const LogoCard = () => (
+  <div className="card logo-card bg-[#F4C542] rounded-2xl transition-transform hover:scale-105 w-full h-full min-h-[330px] min-w-[210px] overflow-hidden relative aspect-square">
+    <Image
+      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752049127/gemstones_wztxzb.jpg"
+      alt="Gemstone Powers"
+      fill
+      style={{ objectFit: 'cover' }}
+      className="rounded-2xl"
+      priority
+    />
+  </div>
+);
+
+const PostTaskCard = () => (
+  <div className="card post-task-card bg-[#B3D0FF] rounded-2xl transition-transform hover:scale-105 w-full h-full min-h-[180px] min-w-[290px] overflow-hidden relative aspect-square">
+    <Image
+      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042873/cosmiccalendar_v8ndoq.png"
+      alt="Cosmic Calendar"
+      fill
+      style={{ objectFit: 'cover' }}
+      className="rounded-2xl"
+      priority
+    />
+  </div>
+);
+
+const IconCard = () => (
+  <div className="card icon-card bg-[#FF7F3F] rounded-2xl transition-transform hover:scale-105 w-full h-full min-h-[180px] min-w-[210px] overflow-hidden relative aspect-square">
+    <Image
+      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042879/zodiac_decoder_aphuoz.avif"
+      alt="Zodiac Decoder"
+      fill
+      style={{ objectFit: 'cover' }}
+      className="rounded-2xl"
+      priority
+    />
+  </div>
+);
+
+const CenterImageCard = () => (
+  <div className="card center-image-card bg-[#F7B7D7] rounded-2xl transition-transform hover:scale-105 w-full h-full min-h-[180px] min-w-[290px] overflow-hidden relative aspect-square">
+    <Image
+      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042871/astrowellness_qltouz.jpg"
+      alt="Astro Wellness"
+      fill
+      style={{ objectFit: 'cover' }}
+      className="rounded-2xl"
+      priority
+    />
+  </div>
+);
+
+const ProfileCard = () => (
+  <div className="card profile-card bg-[#5B2A00] rounded-2xl p-4 mx-2 transition-transform hover:scale-105 w-full h-full min-h-[300px] min-w-[210px] overflow-hidden relative aspect-square">
+    <Image
+      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/birth_chart_mockup_beesbo.jpg"
+      alt="Profile Card"
+      fill
+      style={{ objectFit: 'cover' }}
+      className="rounded-2xl"
+      priority
+    />
+  </div>
+);
+
+const PriceCard = () => (
+  <div className="card price-card bg-[#5B2A00] rounded-2xl transition-transform hover:scale-105 w-full h-full min-h-[180px] min-w-[210px] overflow-hidden relative aspect-square">
+    <Image
+      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/course-1_lwqxsr.jpg"
+      alt="Astrology Course"
+      fill
+      style={{ objectFit: 'cover' }}
+      className="rounded-2xl"
+      priority
+    />
+  </div>
+);
+
+const ServiceListCard = () => (
+  <div className="card service-list-card bg-[#D6E86A] rounded-2xl transition-transform hover:scale-105 w-full h-full min-h-[180px] min-w-[210px] overflow-hidden relative aspect-square">
+    <Image
+      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/course-3_h9xwl3.jpg"
+      alt="Numerology Course"
+      fill
+      style={{ objectFit: 'cover' }}
+      className="rounded-2xl"
+      priority
+    />
+  </div>
+);
+
+const SloganCard = () => (
+  <div className="card slogan-card bg-[#F4C542] rounded-2xl transition-transform hover:scale-105 w-full h-full min-h-[320px] min-w-[500px] overflow-hidden relative aspect-square">
+    <Image
+      src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042876/myth_h93fku.jpg"
+      alt="Myth Legend"
+      fill
+      style={{ objectFit: 'cover' }}
+      className="rounded-2xl"
+      priority
+    />
+  </div>
+);
+
+const BlankCard = () => (
+  <div className="card blank-card bg-[#F3F1EB] rounded-2xl"></div>
+);
+
+// Main Grid Layout with improved spans and sizing
 export function HeroSection() {
-  const { t } = useLanguage();
-
   return (
-    <section className="relative bg-black text-white py-20 overflow-hidden min-h-screen flex items-center justify-center">
-      {/* Floating decorative cards similar to footer */}
-      <Link href="/services/astrology" className="hidden lg:block absolute top-10 left-10 rotate-[-12deg] opacity-90 z-10 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out">
-        <div className="bg-gradient-to-br from-violet-500 via-pink-500 to-orange-400 rounded-2xl p-6 w-72 shadow-2xl">
-          <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">{t('hero.corner_cards.0.tag')}</div>
-          <h3 className="text-white font-bold text-lg mb-2 leading-snug">{t('hero.corner_cards.0.title')}</h3>
-          <div className="flex items-center text-white/80 text-sm mb-4">
-            <span className="mr-2">🌟</span>
-            <span>{t('hero.corner_cards.0.subtext')}</span>
-          </div>
-          <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30 inline-block">{t('hero.corner_cards.0.linkText')}</span>
-        </div>
-      </Link>
-      
-      <Link href="/services/career-guidance" className="hidden lg:block absolute top-16 right-10 rotate-[12deg] opacity-90 z-10 cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out">
-        <div className="bg-gradient-to-br from-blue-500 via-teal-400 to-green-400 rounded-2xl p-6 w-72 shadow-2xl">
-          <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">{t('hero.corner_cards.1.tag')}</div>
-          <h3 className="text-white font-bold text-lg mb-2 leading-snug">{t('hero.corner_cards.1.title')}</h3>
-          <div className="flex items-center text-white/80 text-sm mb-4">
-            <span className="mr-2">📅</span>
-            <span>{t('hero.corner_cards.1.subtext')}</span>
-          </div>
-          <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all hover:bg-white/30 inline-block">{t('hero.corner_cards.1.linkText')}</span>
-        </div>
-      </Link>
-
-      <div className="max-w-6xl mx-auto px-5 relative z-20">
-        {/* Main hero content */}
-        <div className="text-center mb-16">
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
-          >
-            {t('hero.mainHeading')}<br />
-            <span className="bg-gradient-to-r from-violet-500 to-pink-500 bg-clip-text text-transparent">
-              {t('hero.subHeading')}
-            </span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-gray-400 text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed"
-          >
-            {t('hero.secondaryText')}
-          </motion.p>
-
-          {/* CTA Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-6 max-w-md mx-auto mb-12 justify-center"
-          >
-            <Link 
-              href="/kundali-matching"
-              className="bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold px-8 py-4 rounded-full text-lg transition-transform hover:scale-105 shadow-xl"
-            >
-              {t('hero.ctaButton')}
-            </Link>
-            <Link 
-              href="/services"
-              className="bg-white/10 border border-white/20 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all hover:bg-white/20"
-            >
-              {t('learnMore')}
-            </Link>
-          </motion.div>
-
-          {/* Categories Grid */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto mb-12"
-          >
-            {[
-              { icon: Star, label: t('hero.categories.nakshatras') },
-              { icon: Calendar, label: t('hero.categories.horoscopes') },
-              { icon: Gem, label: t('hero.categories.remedies') },
-              { icon: BookOpen, label: t('hero.categories.vedicTexts') },
-              { icon: HeartPulse, label: t('hero.categories.astroWellness') }
-            ].map((category, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
-                className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all cursor-pointer group"
-              >
-                <category.icon className="w-8 h-8 mx-auto mb-2 text-violet-400 group-hover:text-violet-300 transition-colors" />
-                <p className="text-white/80 text-sm text-center font-medium">{category.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Search Tags */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto"
-          >
-            {[
-              t('hero.searchTags.predictive'),
-              t('hero.searchTags.compatibility'),
-              t('hero.searchTags.transits'),
-              t('hero.searchTags.remedies'),
-              t('hero.searchTags.dasha')
-            ].map((tag, index) => (
-              <span 
-                key={index}
-                className="bg-white/10 border border-white/20 text-white/80 px-4 py-2 rounded-full text-sm hover:bg-white/20 transition-all cursor-pointer"
-              >
-                {tag}
-              </span>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Large brand name at bottom */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.4 }}
-          className="text-center"
+    <section className="w-full flex justify-center items-center bg-white py-0 mt-[-32px]">
+      <div className="flex justify-center w-full">
+        <div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 rounded-3xl shadow-lg mx-auto max-w-5xl w-full overflow-hidden bg-white p-12"
         >
-          <h2 className="text-[64px] md:text-[80px] font-bold text-white/10 tracking-wider m-0 select-none">
-            {t('footer.brand.name')}
-          </h2>
-        </motion.div>
+          {/* Top left: Logo */}
+          <div style={{ gridColumn: '1', gridRow: '1 / span 2' }}><LogoCard /></div>
+          {/* Top right: Post your task (taller) */}
+          <div style={{ gridColumn: '2', gridRow: '1' }}><PostTaskCard /></div>
+          {/* Middle right: Pink card, starts where post task ends, taller */}
+          <div style={{ gridColumn: '2', gridRow: '2' }}><CenterImageCard /></div>
+          {/* Top/mid left: Icon card, same height as pink card */}
+          <div style={{ gridColumn: '1', gridRow: '3' }}><IconCard /></div>
+          {/* Bottom left: Price card, same height as green card */}
+          <div style={{ gridColumn: '1', gridRow: '3' }}><PriceCard /></div>
+          {/* Bottom middle: Service list, same height as price card */}
+          <div style={{ gridColumn: '2', gridRow: '3' }}><ServiceListCard /></div>
+          {/* Right: Profile cards (taller, wider) */}
+          <div style={{ gridColumn: '3', gridRow: '1 / span 2', display: 'flex', flexDirection: 'row', gap: '12px', alignItems: 'stretch', justifyContent: 'center' }}>
+            <ProfileCard />
+            <ProfileCard />
+            <ProfileCard />
+          </div>
+          {/* Bottom right: Slogan card, larger */}
+          <div style={{ gridColumn: '3', gridRow: '3' }}><SloganCard /></div>
+        </div>
       </div>
     </section>
   );

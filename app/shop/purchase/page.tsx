@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
+import KundaliMatchingForm from '../../components/KundaliMatchingForm';
 
 interface Product {
   name: string;
@@ -42,7 +43,10 @@ function PurchaseContent() {
 export default function PurchasePage() {
   return (
     <Suspense fallback={<div className="text-center p-8">Loading...</div>}>
-      <PurchaseContent />
+      <div className="flex flex-col gap-8">
+        <KundaliMatchingForm />
+        <PurchaseContent />
+      </div>
     </Suspense>
   );
 }

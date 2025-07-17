@@ -16,6 +16,8 @@ import AllProductsGrid from '../components/AllProductsGrid';
 import { AstrologerProfile } from '../components/AstrologerProfile';
 import { Statistics } from '../components/Statistics';
 import { Testimonials } from '../components/Testimonials';
+import { ProductServiceCard } from '../components/UniversalServiceGrid';
+import { defaultProducts } from '../components/AllProductsGrid';
 
 // Move plugin initialization outside the component
 const autoplayPlugin = Autoplay({ delay: 3500, stopOnInteraction: false });
@@ -67,6 +69,36 @@ const products = [
   },
 ];
 
+// Helper function to format product keys to readable titles
+function formatProductTitle(key: string) {
+  return key
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, str => str.toUpperCase())
+    .replace('Bracelet', ' Bracelet')
+    .replace('Combo', ' Combo')
+    .replace('Plate', ' Plate')
+    .replace('Stone', ' Stone')
+    .replace('Mala', ' Mala')
+    .replace('Yantras', ' Yantras')
+    .replace('Rudraksha', ' Rudraksha')
+    .replace('Pyrite', ' Pyrite')
+    .replace('Dhan Yog', 'Dhan Yog')
+    .replace('Navgraha', 'Navgraha')
+    .replace('Shanti', 'Shanti')
+    .replace('Evil Eye', 'Evil Eye')
+    .replace('Richie Rich', 'Richie Rich')
+    .replace('Success', 'Success')
+    .replace('Health Wellness', 'Health & Wellness')
+    .replace('Career Booster', 'Career Booster')
+    .replace('Protection', 'Protection')
+    .replace('Peace Harmony', 'Peace & Harmony')
+    .replace('Spiritual Growth', 'Spiritual Growth')
+    .replace('Focus Clarity', 'Focus & Clarity')
+    .replace('Confidence Booster', 'Confidence Booster')
+    .replace('Calm Mind', 'Calm Mind')
+    .trim();
+}
+
 export default function ShopPage() {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -88,68 +120,197 @@ export default function ShopPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
+      {/* Top Banner Section */}
+      <div className="w-full flex items-center justify-between" style={{ background: '#FFFDF8', minHeight: '320px', padding: '0 48px' }}>
+        {/* Product Image Left */}
+        <div className="flex-shrink-0 flex items-center justify-center" style={{ minWidth: 480 }}>
+          <img
+            src="/images/astrowellness.jpg"
+            alt="Featured Product"
+            className="object-contain rounded-xl shadow-md"
+            style={{ maxHeight: 220, maxWidth: 520 }}
+          />
+        </div>
+        {/* Heading Right */}
+        <div className="flex-1 flex items-center justify-end">
+          <h1
+            className="text-5xl md:text-7xl font-normal"
+            style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 400, letterSpacing: '0.01em' }}
+          >
+            Spiritual Shop
+          </h1>
+        </div>
+      </div>
+      {/* Existing Content */}
       <AnimatedStars />
       <MysticBackground>
-        <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
+        <div className="container mx-auto px-4 py-16 relative z-10">
           {/* Main Page Heading */}
-          <div className="w-full flex flex-col items-center justify-center mb-8 mt-4">
-            <h1
-              className="text-5xl md:text-7xl mb-2 text-center font-normal text-black"
+          {/* Removed duplicate <h1>Spiritual Shop</h1> here */}
+          {/* Full-width Product Carousel (dynamically imported) */}
+          <div className="w-full flex flex-col items-center justify-center mb-2 mt-8">
+            <h2
+              className="text-3xl md:text-4xl mb-8 text-center font-normal text-black"
               style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400, letterSpacing: '0.01em' }}
             >
-              Spiritual Shop
-            </h1>
-          </div>
-          {/* Full-width Product Carousel (dynamically imported) */}
-          <ShopProductCarousel products={products} />
-          {/* <FeaturedProducts /> */}
-          {/* Shop by Purpose Section */}
-          <div className="w-full flex flex-col items-center my-16">
-            <h2 className="text-3xl md:text-4xl mb-10 text-center font-normal text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400, letterSpacing: '0.01em' }}>Shop by Purpose</h2>
-            <div className="flex flex-row flex-wrap justify-center gap-8 w-full max-w-6xl">
-              {/* Money */}
-              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
-                <Link href="#money" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
-                  <img src="/images/course-1.jpg" alt="Money" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
-                </Link>
-                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Money</span>
-              </div>
-              {/* Love */}
-              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
-                <Link href="#love" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
-                  <img src="/images/course-2.jpg" alt="Love" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
-                </Link>
-                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Love</span>
-              </div>
-              {/* Career */}
-              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
-                <Link href="#career" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
-                  <img src="/images/course-3.jpg" alt="Career" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
-                </Link>
-                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Career</span>
-              </div>
-              {/* Evil Eye */}
-              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
-                <Link href="#evil-eye" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
-                  <img src="/images/astrology.svg" alt="Evil Eye" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
-                </Link>
-                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Evil Eye</span>
-              </div>
-              {/* Health */}
-              <div className="shop-purpose-card flex flex-col items-center bg-[#f7f5ed] rounded-xl shadow-sm p-6 w-48 h-56 justify-center">
-                <Link href="#health" className="block w-full h-36 flex items-center justify-center mb-4" style={{ aspectRatio: '1/1' }}>
-                  <img src="/images/astrowellness.jpg" alt="Health" className="w-full h-full object-contain rounded-md" style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }} />
-                </Link>
-                <span className="text-base mt-2" style={{ fontFamily: 'Playfair Display, serif', color: '#23244a' }}>Health</span>
-              </div>
+              Best Seller
+            </h2>
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-16">
+              {products.map((product, idx) => (
+                <ProductServiceCard
+                  key={product.slug}
+                  image={'/images/placeholder.jpg'}
+                  title={product.title}
+                  description={product.description}
+                  badge={'BEST SELLER'}
+                  href={`/shop/${product.slug}`}
+                />
+              ))}
+              {/* Shop by Purpose Cards */}
+              <ProductServiceCard
+                image="/images/course-1.jpg"
+                title="Money"
+                description="Shop products to attract wealth, prosperity, and abundance."
+                badge=""
+                href="#money"
+              />
+              <ProductServiceCard
+                image="/images/course-2.jpg"
+                title="Love"
+                description="Shop products to enhance love, relationships, and harmony."
+                badge=""
+                href="#love"
+              />
+              <ProductServiceCard
+                image="/images/course-3.jpg"
+                title="Career"
+                description="Shop products for career growth, success, and new opportunities."
+                badge=""
+                href="#career"
+              />
+              <ProductServiceCard
+                image="/images/astrology.svg"
+                title="Evil Eye"
+                description="Shop products for protection from negativity and evil eye."
+                badge=""
+                href="#evil-eye"
+              />
+              <ProductServiceCard
+                image="/images/astrowellness.jpg"
+                title="Health"
+                description="Shop products for health, wellness, and healing."
+                badge=""
+                href="#health"
+              />
+              {/* All ProductsGrid cards */}
+              {defaultProducts.map((product: any, idx: number) => (
+                <ProductServiceCard
+                  key={product.key}
+                  image={product.image}
+                  title={formatProductTitle(product.key)}
+                  description={`₹${product.price} (was ₹${product.oldPrice})`}
+                  badge={product.discountKey || ''}
+                  href={`/shop/${product.key}`}
+                />
+              ))}
+              {/* Astrology product card for even layout */}
+              <ProductServiceCard
+                image="/images/birth_chart_mockup.jpg"
+                title="Personalized Birth Chart Report"
+                description="Get your detailed, personalized birth chart analysis from expert astrologers."
+                badge="NEW"
+                href="/shop/birth-chart-report"
+              />
+              <ProductServiceCard
+                image="/images/gemstones.jpg"
+                title="Gemstone Recommendation"
+                description="Find the perfect gemstone for your astrological needs."
+                badge="POPULAR"
+                href="/shop/gemstone-recommendation"
+              />
+              <ProductServiceCard
+                image="/images/7mukhi-rudraksha.jpg"
+                title="Rudraksha Mala"
+                description="Energized Rudraksha mala for spiritual growth and protection."
+                badge="LIMITED"
+                href="/shop/rudraksha-mala"
+              />
+              <ProductServiceCard
+                image="/images/tarot-banner.jpg"
+                title="Tarot Reading Kit"
+                description="Unlock the secrets of tarot with this complete reading kit."
+                badge="NEW"
+                href="/shop/tarot-reading-kit"
+              />
+              <ProductServiceCard
+                image="/images/astrowellness.jpg"
+                title="Crystal Healing Set"
+                description="A curated set of healing crystals for balance and wellness."
+                badge=""
+                href="/shop/crystal-healing-set"
+              />
+              <ProductServiceCard
+                image="/images/astrology.svg"
+                title="Yantra for Prosperity"
+                description="Sacred yantra to attract prosperity and remove obstacles."
+                badge="RECOMMENDED"
+                href="/shop/yantra-prosperity"
+              />
+              <ProductServiceCard
+                image="/images/pyrite.jpg"
+                title="Pyrite Stone"
+                description="Pyrite for abundance, protection, and positive energy."
+                badge=""
+                href="/shop/pyrite-stone"
+              />
+              <ProductServiceCard
+                image="/images/evil-eye-obsidian.jpg"
+                title="Evil Eye Protection Bracelet"
+                description="Wear this bracelet to ward off negativity and evil eye."
+                badge="BESTSELLER"
+                href="/shop/evil-eye-bracelet"
+              />
+              <ProductServiceCard
+                image="/images/maha-dhan-yog.jpg"
+                title="Maha Dhan Yog Combo"
+                description="A powerful combo for wealth and prosperity."
+                badge="COMBO"
+                href="/shop/maha-dhan-yog-combo"
+              />
+              <ProductServiceCard
+                image="/images/selenite-plate.jpg"
+                title="Selenite Charging Plate"
+                description="Cleanse and charge your crystals with selenite."
+                badge="NEW"
+                href="/shop/selenite-charging-plate"
+              />
+              <ProductServiceCard
+                image="/images/love-attraction.jpg"
+                title="Love Attraction Bracelet"
+                description="Attract love and harmony into your life."
+                badge=""
+                href="/shop/love-attraction-bracelet"
+              />
+              <ProductServiceCard
+                image="/images/peace-harmony.jpg"
+                title="Peace & Harmony Bracelet"
+                description="Promote peace and harmony with this special bracelet."
+                badge=""
+                href="/shop/peace-harmony-bracelet"
+              />
+              <ProductServiceCard
+                image="/images/spiritual-growth.jpg"
+                title="Spiritual Growth Bracelet"
+                description="Enhance your spiritual journey with this bracelet."
+                badge=""
+                href="/shop/spiritual-growth-bracelet"
+              />
             </div>
           </div>
+          {/* <FeaturedProducts /> */}
           {/* Product Of The Day Section */}
           <ProductOfTheDay />
-          {/* All Products Grid Section */}
-          <AllProductsGrid />
           {/* Astrologer Profile, Statistics, Testimonials */}
-          <AstrologerProfile />
           <Statistics />
           <Testimonials />
           <style jsx global>{`

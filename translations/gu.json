@@ -50,6 +50,7 @@
         "title": "રાશિફળ",
         "items": {
           "daily_horoscope": "દૈનિક રાશિફળ",
+          "free_daily_horoscope": "મફત દૈનિક રાશિફળ",
           "monthly_horoscope": "માસિક રાશિફળ",
           "yearly_horoscope": "વાર્ષિક રાશિફળ"
         }

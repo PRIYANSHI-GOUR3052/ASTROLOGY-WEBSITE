@@ -93,9 +93,12 @@
       "chat_with_astrologer": "Chat with Astrologer",
       "buy_products": "Buy Products",
       "our_services": "Our Services",
-      "join_us": "Join Us"
+      "join_us": "Join Us",
+      "orders": "Orders"
     },
     "cart": "Cart",
+    "search_placeholder": "Search for products, services, or articles...",
+    "search_button": "Search",
     "mega_menu": {
       "consultations": {
         "title": "Consultations",
@@ -123,6 +126,7 @@
         "title": "Horoscopes",
         "items": {
           "daily_horoscope": "Daily Horoscope",
+          "free_daily_horoscope": "Free Daily Horoscope",
           "monthly_horoscope": "Monthly Horoscope",
           "yearly_horoscope": "Yearly Horoscope"
         }
@@ -794,5 +798,82 @@
     "proceedToCheckout": "Proceed to Checkout",
     "quantity": "Quantity",
     "remove": "Remove"
+  },
+  "kundali": {
+    "heading": "Kundali Matching",
+    "subheading": "Kundali Matching is an ancient Vedic practice to ensure compatibility between two individuals for marriage. It analyzes the birth charts of both partners to predict harmony, health, and prosperity in married life. Our expert astrologers use traditional methods and modern insights for the most accurate results. Avoid future problems and ensure a blissful married life with our trusted Kundali Matching service. Get detailed reports, remedies, and personalized guidance. Start your journey to a happy marriage today!",
+    "tabs": {
+      "overview": "Overview",
+      "whatIs": "What is Kundali Matching?",
+      "benefits": "Benefits",
+      "faqs": "FAQs",
+      "purchase": "Purchase"
+    },
+    "overview": {
+      "heading": "Why Kundali Matching?",
+      "p1": "Kundali Matching is an ancient Vedic practice to ensure compatibility between two individuals for marriage.",
+      "p2": "It analyzes the birth charts of both partners to predict harmony, health, and prosperity in married life.",
+      "p3": "Our expert astrologers use traditional methods and modern insights for the most accurate results.",
+      "p4": "Avoid future problems and ensure a blissful married life with our trusted Kundali Matching service.",
+      "p5": "Get detailed reports, remedies, and personalized guidance.",
+      "p6": "Start your journey to a happy marriage today!"
+    },
+    "whatIs": {
+      "heading": "What is Kundali Matching?",
+      "p1": "Kundali Matching, also known as Gun Milan, is the process of matching horoscopes of the bride and groom.",
+      "p2": "It checks for compatibility in various aspects like health, wealth, family, and longevity.",
+      "p3": "A good match ensures a harmonious and prosperous married life."
+    },
+    "benefits": {
+      "heading": "Benefits of Kundali Matching",
+      "card1": {"title": "Compatibility Analysis", "desc": "Get a detailed analysis of compatibility between partners."},
+      "card2": {"title": "Dosha Check", "desc": "Identify Manglik and other doshas that may affect marriage."},
+      "card3": {"title": "Remedies & Solutions", "desc": "Receive effective remedies for any detected doshas or issues."},
+      "card4": {"title": "Personalized Report", "desc": "Get a comprehensive, easy-to-understand report."},
+      "card5": {"title": "Expert Guidance", "desc": "Consult with experienced astrologers for advice."},
+      "card6": {"title": "Confidential & Trusted", "desc": "Your details and reports are kept 100% confidential."}
+    },
+    "faqs": {
+      "heading": "Frequently Asked Questions",
+      "q1": "What is Kundali Matching?",
+      "a1": "Kundali Matching is the process of matching horoscopes to check compatibility for marriage.",
+      "q2": "Is Kundali Matching necessary for marriage?",
+      "a2": "It is highly recommended in Vedic tradition to ensure a harmonious married life.",
+      "q3": "What if doshas are found?",
+      "a3": "Our astrologers provide effective remedies for any doshas found during matching.",
+      "q4": "How long does the process take?",
+      "a4": "You get your detailed report within 24 hours of submitting details.",
+      "q5": "Is my information safe?",
+      "a5": "Yes, all your data is kept strictly confidential."
+    },
+    "purchase": {
+      "heading": "Purchase Kundali Matching Report",
+      "imgAlt": "Kundali Matching Report",
+      "imgAltThumb1": "Kundali Matching Sample Thumbnail 1",
+      "imgAltThumb2": "Kundali Matching Sample Thumbnail 2",
+      "reportTitle": "Premium Kundali Matching Report",
+      "reviews": "4.9 (1,200+ reviews)",
+      "tag1": "Most Accurate",
+      "tag2": "Trusted by 10,000+ couples",
+      "discount": "16% OFF",
+      "offerEnds": "Limited time offer!",
+      "feature1": "Detailed compatibility analysis",
+      "feature2": "Manglik & dosha check",
+      "feature3": "Personalized remedies",
+      "feature4": "PDF report delivered to your email",
+      "feature5": "Consultation with expert astrologer",
+      "quantity": "Quantity",
+      "reportsDelivered": "10,000+ reports delivered",
+      "pincodePlaceholder": "Enter pincode",
+      "checkBtn": "Check",
+      "productName": "Kundali Matching Service",
+      "addToCart": "Add to Cart",
+      "buyNow": "Buy Now"
+    },
+    "cta": {
+      "heading": "Ready for a Happy Married Life?",
+      "subheading": "Get your Kundali matched by experts. Accurate, confidential, and fast!",
+      "button": "Get Started"
+    }
   }
 } 

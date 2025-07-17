@@ -49,7 +49,8 @@
       "horoscopes": {
         "title": "ജ്യോതിഷഫലം",
         "items": {
-          "daily_horoscope": "ദൈനംദിന ജ്യോതിഷഫലം",
+          "daily_horoscope": "ദിനസരി ജ്യോതിഷഫലം",
+          "free_daily_horoscope": "ഉചിത ദിനസരി ജ്യോതിഷഫലം",
           "monthly_horoscope": "മാസിക ജ്യോതിഷഫലം",
           "yearly_horoscope": "വാർഷിക ജ്യോതിഷഫലം"
         }

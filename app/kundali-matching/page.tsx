@@ -4,12 +4,11 @@ import React, { useState } from "react";
 import { Button } from "../../components/ui/button";
 import { motion } from 'framer-motion';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-
 import { ZodiacWheel } from "../components/ZodiacWheel";
 import { Statistics } from "../components/Statistics";
-import { DrNarendraProfile } from "../components/DrNarendraProfile";
 import { AboutSummary } from "../components/AboutSummary";
 import { UniversalCartButton } from "../components/UniversalCartButton";
+import KundaliMatchingForm from "../components/KundaliMatchingForm";
 
 export default function KundaliMatchingPage() {
   const [activeTab, setActiveTab] = useState('Overview');
@@ -17,7 +16,7 @@ export default function KundaliMatchingPage() {
   const servicePrice = 2100; // Example price, update as needed
 
   return (
-    <div className="min-h-screen bg-white pt-20 md:pt-32">
+    <div className="min-h-screen bg-white pt-4 md:pt-8">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Banner Heading */}
         <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
@@ -26,6 +25,7 @@ export default function KundaliMatchingPage() {
             Discover the science and sacred art of Vedic compatibility. Our expert astrologers blend tradition and modern insight to guide you toward a harmonious, blessed union.
           </p>
         </div>
+        {/* Main Content Grid */}
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
@@ -59,9 +59,6 @@ export default function KundaliMatchingPage() {
                 </p>
                 <p className="text-black text-justify" style={{ fontFamily: 'Lato, Open Sans, sans-serif' }}>
                   What sets our approach apart is our dedication to personalized interpretation. Unlike automated tools that generate impersonal scores, our astrologers invest time in understanding the complete astrological profile of both individuals. We aim to provide context, not just data—guiding couples toward self-awareness, mutual understanding, and conscious decision-making. Whether the marriage is arranged or a result of personal choice, our Kundali Matching service offers a bridge between ancient tradition and the realities of modern relationships.
-                </p>
-                <p className="text-black text-justify" style={{ fontFamily: 'Lato, Open Sans, sans-serif' }}>
-                  At Nakshatra Gyaan, we consider this process not just a service, but a responsibility. Marriage is a sacred commitment, and we approach every match with the care, accuracy, and spiritual sensitivity it deserves. Our commitment is to help you embark on your marital journey with confidence, guided by cosmic insight and grounded wisdom.
                 </p>
               </section>
             )}
@@ -237,23 +234,15 @@ export default function KundaliMatchingPage() {
                 </div>
               </section>
             )}
-            {/* Astrologer Profile below main content */}
-            <div className="mt-12">
-              <DrNarendraProfile />
-            </div>
-            {/* Call to Action */}
-            <div className="text-center mt-12">
-              <h2 className="text-3xl font-bold mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Match Your Kundali Now</h2>
-              <p className="text-lg mb-4 text-gray-700" style={{ fontFamily: 'Lato, Open Sans, sans-serif' }}>Get a detailed compatibility report from our expert astrologers.</p>
-              <Button className="bg-gold text-black text-lg px-8 py-3 hover:bg-yellow-400 transition">
-                Start Matching
-              </Button>
-            </div>
           </div>
           {/* Sidebar */}
           <div className="lg:col-span-1 flex flex-col gap-8">
             <AboutSummary />
           </div>
+        </div>
+        {/* Kundali Matching Form after main content, before footer */}
+        <div className="mt-16 mb-8">
+          <KundaliMatchingForm />
         </div>
       </div>
     </div>

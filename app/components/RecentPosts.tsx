@@ -27,6 +27,10 @@ const additionalPosts = [
   }
 ];
 
+function getSafe(obj: Record<string, string>, lang: string) {
+  return obj[lang] || obj['en'];
+}
+
 export default function RecentPosts() {
   const { lang, t } = useLanguage();
 

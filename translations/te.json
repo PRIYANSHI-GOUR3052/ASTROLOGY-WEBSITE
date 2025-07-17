@@ -50,6 +50,7 @@
         "title": "రాశిఫలాలు",
         "items": {
           "daily_horoscope": "దినసరి రాశిఫలం",
+          "free_daily_horoscope": "ఉచిత దినసరి రాశిఫలం",
           "monthly_horoscope": "మాస రాశిఫలం",
           "yearly_horoscope": "వార్షిక రాశిఫలం"
         }
