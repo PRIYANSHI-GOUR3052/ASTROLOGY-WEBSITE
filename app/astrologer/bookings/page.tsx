@@ -5,10 +5,9 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Check, X, CalendarClock, Calendar } from 'lucide-react';
+import { Check, X, CalendarClock } from 'lucide-react';
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -25,6 +24,14 @@ interface TimePickerNoSecondsProps {
   setDate: (date: Date | undefined) => void;
 }
 
+type Booking = {
+  id: number;
+  type: string;
+  client: string;
+  date: string;
+  [key: string]: unknown;
+};
+
 const BookingsPage = () => {
   const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
   const [filterDate, setFilterDate] = useState('');
@@ -34,7 +41,7 @@ const BookingsPage = () => {
   const [rejectOpen, setRejectOpen] = useState(false);
   const [rejectBookingId, setRejectBookingId] = useState<number | null>(null);
   const [rejectRemarks, setRejectRemarks] = useState("");
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState(false); // for accept/reject/reschedule only
@@ -60,8 +67,8 @@ const BookingsPage = () => {
       if (fetchId === fetchIdRef.current) {
         setBookings(data.bookings || []);
       }
-    } catch (e: any) {
-      if (fetchId === fetchIdRef.current) setError(e.message || 'Error fetching bookings');
+    } catch (e: unknown) {
+      if (fetchId === fetchIdRef.current) setError(e instanceof Error ? e.message : 'Error fetching bookings');
     } finally {
       if (fetchId === fetchIdRef.current) setLoading(false);
     }
@@ -89,14 +96,14 @@ const BookingsPage = () => {
       });
       if (!res.ok) throw new Error('Failed to accept booking');
       await fetchBookings();
-    } catch (e: any) {
-      setError(e.message || 'Error accepting booking');
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Error accepting booking');
     } finally {
       setActionLoading(false);
     }
   };
 
-  const handleOpenReschedule = (booking: any) => {
+  const handleOpenReschedule = (booking: Booking) => {
     setRescheduleBookingId(booking.id);
     setRescheduleDate(new Date(booking.date));
     setRescheduleOpen(true);
@@ -123,14 +130,14 @@ const BookingsPage = () => {
       if (!res.ok) throw new Error('Failed to reschedule booking');
       await fetchBookings();
       handleCloseReschedule();
-    } catch (e: any) {
-      setError(e.message || 'Error rescheduling booking');
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Error rescheduling booking');
     } finally {
       setActionLoading(false);
     }
   };
 
-  const handleOpenReject = (booking: any) => {
+  const handleOpenReject = (booking: Booking) => {
     setRejectBookingId(booking.id);
     setRejectRemarks("");
     setRejectOpen(true);
@@ -157,8 +164,8 @@ const BookingsPage = () => {
       if (!res.ok) throw new Error('Failed to reject booking');
       await fetchBookings();
       handleCloseReject();
-    } catch (e: any) {
-      setError(e.message || 'Error rejecting booking');
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Error rejecting booking');
     } finally {
       setActionLoading(false);
     }
@@ -342,8 +349,6 @@ const BookingsPage = () => {
 
 // Custom TimePicker without seconds
 function TimePickerNoSeconds({ date, setDate }: TimePickerNoSecondsProps) {
-  const minuteRef = React.useRef(null);
-  const periodRef = React.useRef(null);
   return (
     <div className="flex items-center gap-2">
       <div className="flex flex-col items-center">
@@ -355,11 +360,11 @@ function TimePickerNoSeconds({ date, setDate }: TimePickerNoSecondsProps) {
           value={date ? ((date.getHours() % 12) || 12).toString().padStart(2, '0') : ''}
           onChange={e => {
             if (!date) return;
-            let newDate = new Date(date);
+            const newDate = new Date(date);
             let hours = parseInt(e.target.value);
             if (isNaN(hours) || hours < 1 || hours > 12) return;
-            let currentHours = newDate.getHours();
-            let isPM = currentHours >= 12;
+            const currentHours = newDate.getHours();
+            const isPM = currentHours >= 12;
             if (isPM) hours = (hours % 12) + 12;
             else hours = hours % 12;
             newDate.setHours(hours);
@@ -378,8 +383,8 @@ function TimePickerNoSeconds({ date, setDate }: TimePickerNoSecondsProps) {
           value={date ? date.getMinutes().toString().padStart(2, '0') : ''}
           onChange={e => {
             if (!date) return;
-            let newDate = new Date(date);
-            let minutes = parseInt(e.target.value);
+            const newDate = new Date(date);
+            const minutes = parseInt(e.target.value);
             if (isNaN(minutes) || minutes < 0 || minutes > 59) return;
             newDate.setMinutes(minutes);
             setDate(newDate);
@@ -393,8 +398,8 @@ function TimePickerNoSeconds({ date, setDate }: TimePickerNoSecondsProps) {
           value={date ? (date.getHours() >= 12 ? 'PM' : 'AM') : 'AM'}
           onChange={e => {
             if (!date) return;
-            let newDate = new Date(date);
-            let hours = newDate.getHours();
+            const newDate = new Date(date);
+            const hours = newDate.getHours();
             if (e.target.value === 'PM' && hours < 12) newDate.setHours(hours + 12);
             if (e.target.value === 'AM' && hours >= 12) newDate.setHours(hours - 12);
             setDate(newDate);

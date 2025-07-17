@@ -35,10 +35,10 @@ const ResetPasswordPage = () => {
       await axios.post("/api/astrologer/reset-password", { token, newPassword });
       toast({ title: "Success", description: "Password has been reset!", variant: "default" });
       router.push("/astrologer/auth");
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Error",
-        description: err?.response?.data?.message || "Failed to reset password.",
+        description: (err && typeof err === 'object' && 'response' in err && (err as any)?.response?.data?.message) ? (err as any).response.data.message : "Failed to reset password.",
         variant: "destructive",
       });
     } finally {

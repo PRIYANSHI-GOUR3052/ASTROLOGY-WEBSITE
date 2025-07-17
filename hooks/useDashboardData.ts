@@ -17,7 +17,7 @@ export function useDashboardData() {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data: unknown = await response.json();
 
       // Ensure data is properly formatted for charts
       if (data?.storePerformance?.performanceData) {

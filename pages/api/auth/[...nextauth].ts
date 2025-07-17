@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptions = {
             [credentials.email]
           )
           
-          const user = (users as any[])[0]
+          const user = (users as unknown[])[0] as { id: number; name: string; email: string; password: string };
           
           if (!user) {
             console.error('User not found')
@@ -98,7 +98,7 @@ export const authOptions: NextAuthOptions = {
             [user.email!]
           )
 
-          if ((existingUsers as any[]).length === 0) {
+          if ((existingUsers as unknown[]).length === 0) {
             await connection.execute(
               'INSERT INTO users (name, email, google_id,password) VALUES (?, ?, ?, ?)',
               [

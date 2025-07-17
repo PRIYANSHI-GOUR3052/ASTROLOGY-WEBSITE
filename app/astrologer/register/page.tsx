@@ -6,6 +6,7 @@ import { AnimatedStars } from '../../components/AnimatedStars';
 import { MysticBackground } from '../../components/MysticBackground';
 import axios from 'axios';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
 
 const areas = ['Vedic', 'Tarot', 'Numerology', 'Palmistry', 'Western'];
 
@@ -99,8 +100,8 @@ const AstrologerRegisterPage = () => {
       setSelectedAreas([]);
       setProfileImage(null);
       setProfileImagePreview(null);
-    } catch (err: any) {
-      toast({ title: 'Error', description: err?.response?.data?.message || 'Registration failed', variant: 'destructive' });
+    } catch (err: unknown) {
+      toast({ title: 'Error', description: (err && typeof err === 'object' && 'response' in err && (err as any)?.response?.data?.message) ? (err as any).response.data.message : 'Registration failed', variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -150,7 +151,7 @@ const AstrologerRegisterPage = () => {
               <label htmlFor="profilePic" className="cursor-pointer relative inline-block">
                 <div className="w-20 h-20 rounded-full border-4 border-[#a084ee] overflow-hidden bg-[#1C1C1C] flex items-center justify-center">
                   {profileImagePreview ? (
-                    <img src={profileImagePreview} alt="Profile" className="object-cover w-full h-full" />
+                    <Image src={profileImagePreview} alt="Profile" width={80} height={80} className="object-cover w-full h-full" />
                   ) : (
                     <span className="text-sm text-gray-400">Upload</span>
                   )}

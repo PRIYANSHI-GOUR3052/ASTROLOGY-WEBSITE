@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/lib/prisma';
+import type { Prisma } from '@prisma/client';
 import { jwtVerify } from 'jose';
 
 // Helper: Extract astrologer from JWT
@@ -20,7 +21,7 @@ async function getAstrologerFromRequest(req: NextApiRequest) {
       return payload;
     }
     return null;
-  } catch (err) {
+  } catch {
     return null;
   }
 }
@@ -36,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     try {
       const { status, date } = req.query;
-      const where: any = { astrologerId };
+      const where: Prisma.BookingWhereInput = { astrologerId: Number(astrologerId) };
       if (status) {
         if (status === 'upcoming') {
           where.date = { gte: new Date() };

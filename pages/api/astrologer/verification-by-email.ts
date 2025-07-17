@@ -80,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const astrologer = await prisma.astrologer.findUnique({ where: { email } });
       if (!astrologer) return res.status(404).json({ error: 'Astrologer not found' });
       if (type === 'document') {
-        if (!documentKeys.includes(key)) {
+        if (!documentKeys.includes(key as string)) {
           return res.status(400).json({ error: 'Invalid document key' });
         }
         // Explicitly type key for TypeScript
@@ -99,7 +99,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const updateData = {
           status,
           remarks: remarks || null,
-        } as any; // Type assertion to satisfy Prisma
+        } as unknown as Prisma.AstrologerEducationUpdateArgs; // Type assertion to satisfy Prisma
         const updated = await prisma.astrologerEducation.update({
           where: { id: Number(key) },
           data: updateData,
@@ -110,7 +110,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const updateData = {
           status,
           remarks: remarks || null,
-        } as any; // Type assertion to satisfy Prisma
+        } as unknown as Prisma.AstrologerCertificationUpdateArgs; // Type assertion to satisfy Prisma
         const updated = await prisma.astrologerCertification.update({
           where: { id: Number(key) },
           data: updateData,
