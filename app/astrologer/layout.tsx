@@ -12,7 +12,7 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(false);
   const [checkingVerification, setCheckingVerification] = useState(false);
-  const [isVerified, setIsVerified] = useState(true); // default true for auth pages
+  const [isVerified, setIsVerified] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
   const token = useAuthToken();
@@ -58,8 +58,8 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
         .then(data => {
           const status = data.verification?.status || 'unverified';
           if (data.verification && status !== "approved") {
-            router.push("/astrologer/profile")
             setIsVerified(false);
+            router.push("/astrologer/profile")
           } else {
             setIsVerified(true);
           }

@@ -58,4 +58,4 @@ export default function UnlockCosmosBanner() {
       </div>
     </section>
   );
-} 
+}

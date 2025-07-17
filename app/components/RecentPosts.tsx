@@ -54,7 +54,7 @@ export default function RecentPosts() {
                     <div>
                       <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{posts[0].title?.[safeLang] || posts[0].title?.['en']}</h3>
                       <div className="flex items-center text-sm text-gray-500 mb-4 gap-4 flex-wrap">
-                        <span>👤 {getSafe(posts[0].author, safeLang)}</span>
+                        <span>👤 {posts[0].author?.[safeLang] || posts[0].author?.['en']}</span>
                         <span>📅 {posts[0].date}</span>
                         <span>⏱ 2 {t('blog.featured.minRead')}</span>
                       </div>
@@ -77,13 +77,13 @@ export default function RecentPosts() {
             </div>
             <div className="p-6 flex flex-col justify-between h-[164px]">
               {(() => {
-                // const safeLang = additionalPosts[0].title?.[lang] ? lang : 'en';
+                const safeLang = additionalPosts[0].title?.[lang] ? lang : 'en';
                 return (
                   <>
                     <div>
-                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{getSafe(additionalPosts[0].title, lang)}</h3>
+                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{additionalPosts[0].title?.[safeLang] || additionalPosts[0].title?.['en']}</h3>
                       <div className="flex items-center text-sm text-gray-500 mb-4 gap-4 flex-wrap">
-                        <span>👤 {getSafe(additionalPosts[0].author, lang)}</span>
+                        <span>👤 {additionalPosts[0].author?.[safeLang] || additionalPosts[0].author?.['en']}</span>
                         <span>📅 {additionalPosts[0].date}</span>
                         <span>⏱ 3 {t('blog.featured.minRead')}</span>
                       </div>
@@ -131,7 +131,7 @@ export default function RecentPosts() {
               <span className="absolute top-2 left-2 bg-white text-gray-800 text-xs font-semibold px-3 py-1 rounded shadow">{additionalPosts[1].category}</span>
             </div>
             <div className="flex-1 p-4 flex flex-col justify-center">
-              <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{getSafe(additionalPosts[1].title, lang)}</h4>
+              <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{additionalPosts[1].title?.[lang] || additionalPosts[1].title?.['en']}</h4>
               <div className="flex items-center text-sm text-gray-500 mb-3 gap-3 flex-wrap">
                 <span>📅 {additionalPosts[1].date}</span>
                 <span>⏱ 7 {t('blog.featured.minRead')}</span>
