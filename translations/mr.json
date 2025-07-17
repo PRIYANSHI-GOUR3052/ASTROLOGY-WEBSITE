@@ -50,6 +50,7 @@
         "title": "राशीभविष्य",
         "items": {
           "daily_horoscope": "दैनिक राशीभविष्य",
+          "free_daily_horoscope": "मोफत दैनिक राशिभविष्य",
           "monthly_horoscope": "मासिक राशीभविष्य",
           "yearly_horoscope": "वार्षिक राशीभविष्य"
         }

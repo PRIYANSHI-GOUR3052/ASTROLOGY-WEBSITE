@@ -99,7 +99,7 @@
           "panchang": "今天的Panchang",
           "kundali_matching": "昆达利匹配",
           "buy_products": "购买产品",
-          "free_daily_horoscope": "免费的每日星座",
+          "free_daily_horoscope": "免费的每日星座运势",
           "astrology": "占星术",
           "chat_with_astrologer": "与占星家聊天",
           "love_relationship": "爱与关系",
@@ -118,7 +118,8 @@
       "horoscopes": {
         "title": "星座运势",
         "items": {
-          "daily_horoscope": "每日星座",
+          "daily_horoscope": "每日星座运势",
+          "free_daily_horoscope": "免费的每日星座运势",
           "monthly_horoscope": "每月星座",
           "yearly_horoscope": "年度星座"
         }

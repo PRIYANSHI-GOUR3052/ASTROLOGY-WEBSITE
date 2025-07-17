@@ -13,9 +13,9 @@ export default function CartPage() {
 
   return (
     <div className="container mx-auto pt-10 px-4 py-16">
-      <div className="text-center">
-        <h2 className="text-4xl lg:text-5xl font-serif font-medium mb-6 text-black">{t('cart.yourCart')}</h2>
-        <p className="text-lg max-w-3xl mx-auto mb-8" style={{ color: '#000' }}>
+      <div className="text-center mb-10">
+        <h2 className="text-4xl lg:text-5xl font-serif font-medium mb-4 text-black">{t('cart.yourCart')}</h2>
+        <p className="text-lg max-w-3xl mx-auto mb-8 text-gray-700">
           {t('cart.description')}
         </p>
       </div>
@@ -28,87 +28,67 @@ export default function CartPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="space-y-4">
-              {items.map((item) => (
-                <Card key={item.id} className="bg-celestial-cream/90 shadow-md">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between">
-                      <div>
-                        <h3 className="text-xl font-serif font-semibold text-mystic-brown">
-                          {item.name}
-                        </h3>
-                        <p className="text-mystic-brown/80">
-                          ₹{Number(item.price).toLocaleString('en-IN')}
-                        </p>
-                      </div>
-                      <button 
-                        onClick={() => removeItem(item.id)}
-                        className="text-red-500 hover:text-red-700"
-                        title={t('cart.remove')}
-                      >
-                        <Trash2 size={20} />
-                      </button>
-                    </div>
-                    <div className="mt-4 flex items-center">
-                      <label className="text-mystic-brown/80 mr-2">{t('cart.quantity')}:</label>
-                      <input
-                        type="number"
-                        min="1"
-                        value={item.quantity}
-                        onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-                        className="w-16 p-2 text-center border border-mystic-brown/30 rounded"
-                      />
-                    </div>
-                    <div className="mt-4 text-right">
-                      <p className="text-lg font-medium text-mystic-brown">
-                        Subtotal: ₹{Number(item.price * item.quantity).toLocaleString('en-IN')}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* Cart Items */}
+          <div className="lg:col-span-2 space-y-6">
+            {items.map((item) => (
+              <div key={item.id} className="flex items-center bg-white rounded-xl shadow-md p-6 gap-6 border border-gray-200">
+                {item.image && (
+                  <img src={item.image} alt={item.name} className="w-24 h-24 object-cover rounded-lg border" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xl font-serif font-semibold text-mystic-brown truncate">{item.name}</h3>
+                  <p className="text-mystic-brown/80 text-lg mt-1">₹{Number(item.price).toLocaleString('en-IN')}</p>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <label className="text-mystic-brown/80 text-sm">{t('cart.quantity')}</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={item.quantity}
+                    onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                    className="w-16 p-2 text-center border border-mystic-brown/30 rounded"
+                  />
+                  <button
+                    onClick={() => removeItem(item.id)}
+                    className="text-red-500 hover:text-red-700 mt-2"
+                    title={t('cart.remove')}
+                  >
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+                <div className="ml-8 text-right min-w-[120px]">
+                  <p className="text-lg font-medium text-mystic-brown">Subtotal:</p>
+                  <p className="text-xl font-bold text-mystic-brown">₹{Number(item.price * item.quantity).toLocaleString('en-IN')}</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="lg:col-span-1">
-            <Card className="bg-celestial-cream/90 shadow-md sticky top-4">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-serif font-semibold mb-4 text-mystic-brown">
-                  {t('cart.orderSummary')}
-                </h3>
-                <div className="space-y-2 mb-4">
-                  <div className="flex justify-between">
-                    <span className="text-mystic-brown/80">{t('cart.subtotal')}</span>
-                    <span className="text-mystic-brown font-medium">
-                      ₹{Number(total).toLocaleString('en-IN')}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-mystic-brown/80">{t('cart.shipping')}</span>
-                    <span className="text-mystic-brown font-medium">{t('cart.shippingFree')}</span>
-                  </div>
-                </div>
-                <div className="border-t border-mystic-brown/20 pt-4 mb-6">
-                  <div className="flex justify-between">
-                    <span className="text-mystic-brown font-medium">{t('cart.total')}</span>
-                    <span className="text-mystic-brown font-bold text-xl">
-                      ₹{Number(total).toLocaleString('en-IN')}
-                    </span>
-                  </div>
-                </div>
-                <Button className="w-full bg-black text-white hover:bg-gray-800" disabled>
-                  {t('cart.proceedToCheckout')}
-                </Button>
-                <div className="mt-4">
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href="/">
-                      {t('cart.continueShopping')}
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Order Summary */}
+          <div className="bg-white rounded-xl shadow-md p-8 border border-gray-200 sticky top-4 h-fit flex flex-col gap-6">
+            <h3 className="text-2xl font-serif font-semibold mb-2 text-mystic-brown">{t('cart.orderSummary')}</h3>
+            <div className="flex justify-between text-lg">
+              <span className="text-mystic-brown/80">{t('cart.subtotal')}</span>
+              <span className="text-mystic-brown font-medium">₹{Number(total).toLocaleString('en-IN')}</span>
+            </div>
+            <div className="flex justify-between text-lg">
+              <span className="text-mystic-brown/80">{t('cart.shipping')}</span>
+              <span className="text-mystic-brown font-medium">{t('cart.shippingFree')}</span>
+            </div>
+            <div className="border-t border-mystic-brown/20 pt-4 mb-2">
+              <div className="flex justify-between text-xl">
+                <span className="text-mystic-brown font-medium">{t('cart.total')}</span>
+                <span className="text-mystic-brown font-bold text-2xl">₹{Number(total).toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+            <Button className="w-full bg-black text-white hover:bg-gray-800" disabled>
+              {t('cart.proceedToCheckout')}
+            </Button>
+            <Button asChild variant="outline" className="w-full">
+              <Link href="/">
+                {t('cart.continueShopping')}
+              </Link>
+            </Button>
           </div>
         </div>
       )}

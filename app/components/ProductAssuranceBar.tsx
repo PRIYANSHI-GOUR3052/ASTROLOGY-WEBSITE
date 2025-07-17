@@ -1,0 +1,64 @@
+import React, { ReactNode } from 'react';
+
+const ICON_COLOR = '#FFD600';
+const LINE_COLOR = '#FFD600';
+
+const assurances = [
+  {
+    icon: (
+      <svg width="44" height="44" fill="none" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" stroke={ICON_COLOR} strokeWidth="2" fill="none"/><path d="M15 25l5 5 9-13" stroke={ICON_COLOR} strokeWidth="2" fill="none"/><path d="M22 14l3 6h-6l3-6z" stroke={ICON_COLOR} strokeWidth="1.5" fill="none"/></svg>
+    ),
+    label: 'PURITY PROMISE',
+  },
+  {
+    icon: (
+      <svg width="44" height="44" fill="none" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" stroke={ICON_COLOR} strokeWidth="2" fill="none"/><path d="M22 14v12" stroke={ICON_COLOR} strokeWidth="2"/><circle cx="22" cy="32" r="2.5" fill={ICON_COLOR}/></svg>
+    ),
+    label: 'CERTIFIED NATURAL',
+  },
+  {
+    icon: (
+      <svg width="44" height="44" fill="none" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" stroke={ICON_COLOR} strokeWidth="2" fill="none"/><circle cx="22" cy="22" r="7" stroke={ICON_COLOR} strokeWidth="1.5" fill="none"/></svg>
+    ),
+    label: 'ETHICAL SOURCING',
+  },
+  {
+    icon: (
+      <svg width="44" height="44" fill="none" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" stroke={ICON_COLOR} strokeWidth="2" fill="none"/><rect x="16" y="16" width="12" height="12" stroke={ICON_COLOR} strokeWidth="1.5" fill="none"/></svg>
+    ),
+    label: 'AURA TUNED',
+  },
+  {
+    icon: (
+      <svg width="44" height="44" fill="none" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" stroke={ICON_COLOR} strokeWidth="2" fill="none"/><path d="M15 32h14M22 14v18" stroke={ICON_COLOR} strokeWidth="1.5"/></svg>
+    ),
+    label: 'FREE DELIVERY',
+  },
+];
+
+export default function ProductAssuranceBar() {
+  return (
+    <div className="w-screen flex justify-center items-center py-14" style={{background:'#F9F6F2', marginLeft:'calc(50% - 50vw)', marginRight:'calc(50% - 50vw)'}}>
+      <div className="flex w-full max-w-none justify-between items-stretch px-0 md:px-4" style={{gap:0}}>
+        {assurances.reduce<ReactNode[]>((acc, a, idx) => {
+          acc.push(
+            <div key={a.label} className="flex flex-col items-center flex-1 min-w-0" style={{minWidth:0, flex:'1 1 0%', paddingLeft:0, paddingRight:0}}>
+              <div className="flex flex-col items-center">
+                {a.icon}
+                <span className="mt-5 text-lg font-bold text-black tracking-wide uppercase whitespace-nowrap" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>{a.label}</span>
+              </div>
+            </div>
+          );
+          if (idx < assurances.length - 1) {
+            acc.push(
+              <div key={`sep-${idx}`} className="hidden md:flex items-center" style={{height:140, width:0, marginLeft:0, marginRight:0}}>
+                <div className="h-24 border-r" style={{borderColor: LINE_COLOR, marginLeft:0, marginRight:0}} />
+              </div>
+            );
+          }
+          return acc;
+        }, [])}
+      </div>
+    </div>
+  );
+} 

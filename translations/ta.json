@@ -50,6 +50,7 @@
         "title": "ராசிபலன்",
         "items": {
           "daily_horoscope": "தினசரி ராசிபலன்",
+          "free_daily_horoscope": "இலவச தினசரி ராசிபலன்",
           "monthly_horoscope": "மாத ராசிபலன்",
           "yearly_horoscope": "வருட ராசிபலன்"
         }

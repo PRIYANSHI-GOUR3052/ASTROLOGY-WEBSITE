@@ -608,5 +608,14 @@
   },
   "auth": {
     "signin": "تسجيل الدخول"
+  },
+  "horoscopes": {
+    "title": "الأبراج",
+    "items": {
+      "daily_horoscope": "برجك اليومي",
+      "free_daily_horoscope": "برجك اليومي المجاني",
+      "monthly_horoscope": "برجك الشهري",
+      "yearly_horoscope": "برجك السنوي"
+    }
   }
 }

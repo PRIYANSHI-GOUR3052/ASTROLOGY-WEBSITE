@@ -50,6 +50,7 @@
         "title": "ਰਾਸ਼ੀਫਲ",
         "items": {
           "daily_horoscope": "ਰੋਜ਼ਾਨਾ ਰਾਸ਼ੀਫਲ",
+          "free_daily_horoscope": "ਮੁਫ਼ਤ ਰੋਜ਼ਾਨਾ ਰਾਸ਼ੀਫਲ",
           "monthly_horoscope": "ਮਾਸਿਕ ਰਾਸ਼ੀਫਲ",
           "yearly_horoscope": "ਸਾਲਾਨਾ ਰਾਸ਼ੀਫਲ"
         }

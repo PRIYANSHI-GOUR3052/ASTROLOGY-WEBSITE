@@ -1,5 +1,6 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 const topSelling = [
   {
@@ -49,6 +50,7 @@ const newlyLaunched = [
     name: 'Pitra Dosh Shanti Pooja',
     image: '/images/course-1.jpg',
     slug: 'pitra-dosh-shanti-pooja',
+    
   },
   {
     name: 'Vivah Badha Nivaran Pooja',
@@ -59,25 +61,25 @@ const newlyLaunched = [
 
 function CarouselSection({ title, items, headingColor = '#232323' }: { title: string; items: any[]; headingColor?: string }) {
   return (
-    <section className="w-full my-12">
-      <h2 className="text-2xl md:text-3xl font-bold uppercase text-center mb-8 tracking-wide" style={{ letterSpacing: '0.04em', color: headingColor }}>{title}</h2>
-      <div className="relative w-full px-0">
-        <Carousel opts={{ align: 'start', loop: true }}>
-          <CarouselPrevious />
-          <CarouselContent className="flex items-center justify-center">
-            {items.map((item, idx) => (
-              <CarouselItem key={item.slug} className="basis-[180px] max-w-[180px] px-2 flex flex-col items-center">
-                <Link href={`/${item.slug}`} className="flex flex-col items-center group">
-                  <div className="rounded-full border-4 border-yellow-400 w-36 h-36 flex items-center justify-center overflow-hidden bg-white shadow-md group-hover:scale-105 transition-transform duration-200">
-                    <img src={item.image} alt={item.name} className="object-cover w-full h-full" />
-                  </div>
-                  <span className="mt-3 text-center text-base font-medium text-black leading-tight" style={{ fontFamily: 'Inter, sans-serif' }}>{item.name}</span>
-                </Link>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselNext />
-        </Carousel>
+    <section className="w-screen overflow-x-clip my-12" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
+      <h2 className="text-2xl md:text-3xl font-bold uppercase mb-8 tracking-wide text-center w-full" style={{ letterSpacing: '0.04em', color: headingColor }}>{title}</h2>
+      <div className="w-screen overflow-x-clip" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
+        <div className="flex flex-row justify-evenly items-stretch w-screen gap-0">
+          {items.map((item) => (
+            <div key={item.slug} className="flex flex-col items-center justify-center flex-1 min-w-0" style={{ maxWidth: '240px' }}>
+              <Link href={`/${item.slug}`} className="flex flex-col items-center group w-full">
+                <motion.div
+                  whileHover={{ scale: 1.08 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className="rounded-full border-4 border-yellow-400 w-36 h-36 flex items-center justify-center overflow-hidden bg-white shadow-md"
+                >
+                  <img src={item.image} alt={item.name} className="object-cover w-full h-full" />
+                </motion.div>
+                <span className="mt-4 text-center text-lg font-semibold text-black leading-tight w-full" style={{ fontFamily: 'Inter, sans-serif' }}>{item.name}</span>
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -85,7 +87,7 @@ function CarouselSection({ title, items, headingColor = '#232323' }: { title: st
 
 export default function ServiceCarousels() {
   return (
-    <div className="w-full">
+    <div className="w-screen overflow-x-clip" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
       <CarouselSection title="TOP SELLING" items={topSelling} headingColor="#232323" />
       <CarouselSection title="NEWLY LAUNCHED" items={newlyLaunched} />
     </div>
