@@ -1,0 +1,76 @@
+{
+  "header": {
+    "logo": {
+      "line1": "నక్షత్ర జ్ఞాన్",
+      "line2": "నక్షత్ర జ్ఞాన్"
+    },
+    "nav": {
+      "home": "హోమ్",
+      "about": "మా గురించి",
+      "courses": "కోర్సులు",
+      "contact": "సంప్రదించండి",
+      "blog": "బ్లాగ్",
+      "study": "అధ్యయనం",
+      "consultations": "సలహాలు",
+      "talk_to_astrologer": "జ్యోతిష్యుడితో మాట్లాడండి",
+      "chat_with_astrologer": "జ్యోతిష్యుడితో చాట్",
+      "buy_products": "ఉత్పత్తులు కొనండి",
+      "our_services": "మా సేవలు",
+      "join_us": "చేరండి",
+      "orders": "ఆర్డర్లు"
+    },
+    "cart": "కార్ట్",
+    "orders": "ఆర్డర్లు",
+    "search_placeholder": "ఉత్పత్తి, సేవ లేదా వ్యాసాన్ని వెతకండి...",
+    "search_button": "వెతకండి",
+    "mega_menu": {
+      "consultations": {
+        "title": "సలహాలు",
+        "items": {
+          "panchang": "ఈరోజు పంచాంగం",
+          "kundali_matching": "కుండలి మ్యాచ్",
+          "buy_products": "ఉత్పత్తులు కొనండి",
+          "free_daily_horoscope": "ఉచిత దినసరి రాశిఫలం",
+          "astrology": "జ్యోతిష్యం",
+          "chat_with_astrologer": "జ్యోతిష్యుడితో చాట్",
+          "love_relationship": "ప్రేమ & సంబంధం",
+          "career_guidance": "కెరీర్ & ఉద్యోగం",
+          "numerology": "సంఖ్యాశాస్త్రం"
+        }
+      },
+      "puja_rituals": {
+        "title": "పూజ & పద్ధతులు",
+        "items": {
+          "online_puja": "ఆన్‌లైన్ పూజ",
+          "grah_shanti": "గ్రహ శాంతి",
+          "manokamna_pooja": "మనోకామన పూజ"
+        }
+      },
+      "horoscopes": {
+        "title": "రాశిఫలాలు",
+        "items": {
+          "daily_horoscope": "దినసరి రాశిఫలం",
+          "monthly_horoscope": "మాస రాశిఫలం",
+          "yearly_horoscope": "వార్షిక రాశిఫలం"
+        }
+      },
+      "learning": {
+        "title": "నెర్చుకోవడం",
+        "items": {
+          "astrology_courses": "జ్యోతిష్య కోర్సులు",
+          "blog": "బ్లాగ్"
+        }
+      }
+    },
+    "auth": {
+      "signin": "సైన్ ఇన్",
+      "my_profile": "నా ప్రొఫైల్",
+      "my_orders": "నా ఆర్డర్లు",
+      "logout": "లాగ్ అవుట్"
+    },
+    "language_selector": {
+      "button": "భాషను ఎంచుకోండి",
+      "dropdown_title": "మీ భాషను ఎంచుకోండి"
+    }
+  }
+} 

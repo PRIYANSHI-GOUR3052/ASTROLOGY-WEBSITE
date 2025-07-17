@@ -78,8 +78,8 @@
   },
   "header": {
     "logo": {
-      "line1": "नकषतर जञन",
-      "line2": "Nakshatra Gyaan"
+      "line1": "नक्षत्र ज्ञान",
+      "line2": "Conocimiento de Nakshatra"
     },
     "nav": {
       "home": "Hogar",
@@ -93,9 +93,11 @@
       "chat_with_astrologer": "Chatea con un astrólogo",
       "buy_products": "Comprar productos",
       "our_services": "Nuestros servicios",
-      "join_us": "Únete a nosotros"
+      "join_us": "Únete a nosotros",
+      "orders": "Pedidos"
     },
     "cart": "Carro",
+    "orders": "Pedidos",
     "mega_menu": {
       "consultations": {
         "title": "Consultas",
@@ -147,7 +149,9 @@
     },
     "title1": "Conéctate con el",
     "title2": "reino cósmico",
-    "description": "¿Tienes una pregunta para nakshatra gyan private limited, necesitas orientación o deseas reservar una consulta? Contáctanos. Tu conversación cósmica te espera."
+    "description": "¿Tienes una pregunta para nakshatra gyan private limited, necesitas orientación o deseas reservar una consulta? Contáctanos. Tu conversación cósmica te espera.",
+    "search_placeholder": "Buscar producto, servicio o artículo...",
+    "search_button": "Buscar"
   },
   "lifeChangingSolutions": {
     "bannerTitle": "Soluciones que cambian la vida en una sola llamada",
@@ -431,7 +435,7 @@
   },
   "testimonials": {
     "heading": "Reseñas de clientes",
-    "headingHi": "Reseñas de clientes",
+    "subheading": "Lee lo que nuestros clientes dicen sobre sus experiencias con nuestros servicios de astrología.",
     "testimonials": {
       "0": { "name": "Carlos S.", "occupation": "Ingeniero de software", "text": "¡La orientación profesional de mi horóscopo fue acertada! Me ayudó a tomar una decisión crucial sobre mi cambio de trabajo. Una experiencia verdaderamente transformadora." },
       "1": { "name": "Sofía M.", "occupation": "Estudiante universitaria", "text": "¡Realmente lo aprecio! La sesión de numerología personalizada me dio claridad y aumentó mi confianza, ayudándome a navegar mi viaje académico con más propósito." },

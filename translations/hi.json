@@ -111,7 +111,7 @@
   "header": {
     "logo": {
       "line1": "नक्षत्र ज्ञान",
-      "line2": "Nakshatra Gyaan"
+      "line2": "नक्षत्र ज्ञान"
     },
     "nav": {
       "home": "होम",
@@ -125,7 +125,8 @@
       "chat_with_astrologer": "ज्योतिषी से चैट करें",
       "buy_products": "उत्पाद खरीदें",
       "our_services": "हमारी सेवाएँ",
-      "join_us": "हमसे जुड़ें"
+      "join_us": "हमसे जुड़ें",
+      "orders": "आदेश"
     },
     "cart": "कार्ट",
     "join_us": "हमसे जुड़ें",
@@ -177,7 +178,10 @@
     "language_selector": {
       "button": "भाषा चुनें",
       "dropdown_title": "अपनी भाषा चुनें"
-    }
+    },
+    "search_placeholder": "उत्पाद, सेवा या लेख खोजें...",
+    "search_button": "खोजें",
+    "orders": "आदेश"
   },
   "about": {
     "banner": {
@@ -276,6 +280,12 @@
       "link1": { "title": "रत्न और उनकी शक्तियाँ", "url": "/blog/gemstones-and-their-powers" },
       "link2": { "title": "अंक ज्योतिष की मूल बातें", "url": "/blog/numerology-basics" },
       "link3": { "title": "ग्रहों का प्रभाव", "url": "/blog/the-influence-of-planets" }
+    },
+    "statistics": {
+      "kundli_served": "कुंडली सेवा की गई",
+      "years_legacy": "वर्षों की विरासत",
+      "consultations_given": "परामर्श दिए गए",
+      "awards_occult": "गूढ़ विज्ञान में पुरस्कार"
     }
   },
   "astrologyQuiz": {
@@ -334,7 +344,7 @@
   },
   "testimonials": {
     "heading": "ग्राहक समीक्षाएं",
-    "headingHi": "ग्राहक समीक्षाएं",
+    "subheading": "हमारे ज्योतिष सेवाओं के साथ अपने अनुभवों के बारे में हमारे ग्राहकों की राय पढ़ें।",
     "testimonials": {
       "0": {
         "name": "राहुल एस.",

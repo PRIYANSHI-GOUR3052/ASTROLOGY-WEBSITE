@@ -1,0 +1,76 @@
+{
+  "header": {
+    "logo": {
+      "line1": "ನಕ್ಷತ್ರ ಜ್ಞಾನ",
+      "line2": "ನಕ್ಷತ್ರ ಜ್ಞಾನ"
+    },
+    "nav": {
+      "home": "ಮುಖಪುಟ",
+      "about": "ನಮ್ಮ ಬಗ್ಗೆ",
+      "courses": "ಕೋರ್ಸುಗಳು",
+      "contact": "ಸಂಪರ್ಕಿಸಿ",
+      "blog": "ಬ್ಲಾಗ್",
+      "study": "ಅಧ್ಯಯನ",
+      "consultations": "ಸಲಹೆಗಳು",
+      "talk_to_astrologer": "ಜ್ಯೋತಿಷ್ಯರೊಂದಿಗೆ ಮಾತನಾಡಿ",
+      "chat_with_astrologer": "ಜ್ಯೋತಿಷ್ಯರೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ",
+      "buy_products": "ಉತ್ಪನ್ನಗಳನ್ನು ಖರೀದಿಸಿ",
+      "our_services": "ನಮ್ಮ ಸೇವೆಗಳು",
+      "join_us": "ಸೇರಿರಿ",
+      "orders": "ಆರ್ಡರ್‌ಗಳು"
+    },
+    "cart": "ಕಾರ್ಟ್",
+    "orders": "ಆರ್ಡರ್‌ಗಳು",
+    "search_placeholder": "ಉತ್ಪನ್ನ, ಸೇವೆ ಅಥವಾ ಲೇಖನವನ್ನು ಹುಡುಕಿ...",
+    "search_button": "ಹುಡುಕಿ",
+    "mega_menu": {
+      "consultations": {
+        "title": "ಸಲಹೆಗಳು",
+        "items": {
+          "panchang": "ಇಂದಿನ ಪಂಚಾಂಗ",
+          "kundali_matching": "ಕುಂಡಲಿ ಹೊಂದಿಕೆ",
+          "buy_products": "ಉತ್ಪನ್ನಗಳನ್ನು ಖರೀದಿಸಿ",
+          "free_daily_horoscope": "ಉಚಿತ ದೈನಂದಿನ ರಾಶಿಫಲ",
+          "astrology": "ಜ್ಯೋತಿಷ್ಯ",
+          "chat_with_astrologer": "ಜ್ಯೋತಿಷ್ಯರೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ",
+          "love_relationship": "ಪ್ರೇಮ ಮತ್ತು ಸಂಬಂಧ",
+          "career_guidance": "ವೃತ್ತಿ ಮತ್ತು ಉದ್ಯೋಗ",
+          "numerology": "ಅಂಕಶಾಸ್ತ್ರ"
+        }
+      },
+      "puja_rituals": {
+        "title": "ಪೂಜೆ ಮತ್ತು ವಿಧಿಗಳು",
+        "items": {
+          "online_puja": "ಆನ್‌ಲೈನ್ ಪೂಜೆ",
+          "grah_shanti": "ಗ್ರಹ ಶಾಂತಿ",
+          "manokamna_pooja": "ಮನೋವಾಂಛೆ ಪೂಜೆ"
+        }
+      },
+      "horoscopes": {
+        "title": "ರಾಶಿಫಲಗಳು",
+        "items": {
+          "daily_horoscope": "ದೈನಂದಿನ ರಾಶಿಫಲ",
+          "monthly_horoscope": "ಮಾಸಿಕ ರಾಶಿಫಲ",
+          "yearly_horoscope": "ವಾರ್ಷಿಕ ರಾಶಿಫಲ"
+        }
+      },
+      "learning": {
+        "title": "ಕಲಿಕೆ",
+        "items": {
+          "astrology_courses": "ಜ್ಯೋತಿಷ್ಯ ಕೋರ್ಸುಗಳು",
+          "blog": "ಬ್ಲಾಗ್"
+        }
+      }
+    },
+    "auth": {
+      "signin": "ಸೈನ್ ಇನ್",
+      "my_profile": "ನನ್ನ ಪ್ರೊಫೈಲ್",
+      "my_orders": "ನನ್ನ ಆರ್ಡರ್‌ಗಳು",
+      "logout": "ಲಾಗ್ ಔಟ್"
+    },
+    "language_selector": {
+      "button": "ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ",
+      "dropdown_title": "ನಿಮ್ಮ ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ"
+    }
+  }
+} 

@@ -26,7 +26,26 @@ interface BlogPostProps {
   cardBg?: string;
 }
 
-const localeMap = { en: undefined, hi: undefined, es, fr, de, zh: zhCN, ar: arSA, ru };
+// Extend localeMap to cover all SupportedLang values, even if undefined
+const localeMap = {
+  en: undefined,
+  hi: undefined,
+  bn: undefined,
+  ta: undefined,
+  te: undefined,
+  mr: undefined,
+  gu: undefined,
+  ml: undefined,
+  kn: undefined,
+  or: undefined,
+  pa: undefined,
+  es,
+  fr,
+  de,
+  zh: zhCN,
+  ar: arSA,
+  ru,
+};
 
 export function BlogPreview({ post, className, cardBg }: BlogPostProps) {
   const { lang, t } = useLanguage();

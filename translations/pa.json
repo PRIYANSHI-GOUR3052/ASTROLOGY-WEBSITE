@@ -1,0 +1,76 @@
+{
+  "header": {
+    "logo": {
+      "line1": "ਨਕਸ਼ਤਰ ਗਿਆਨ",
+      "line2": "ਨਕਸ਼ਤਰ ਗਿਆਨ"
+    },
+    "nav": {
+      "home": "ਮੁੱਖ ਪੰਨਾ",
+      "about": "ਸਾਡੇ ਬਾਰੇ",
+      "courses": "ਕੋਰਸ",
+      "contact": "ਸੰਪਰਕ ਕਰੋ",
+      "blog": "ਬਲੌਗ",
+      "study": "ਅਧਿਐਨ",
+      "consultations": "ਸਲਾਹ",
+      "talk_to_astrologer": "ਜੋਤਿਸ਼ੀ ਨਾਲ ਗੱਲ ਕਰੋ",
+      "chat_with_astrologer": "ਜੋਤਿਸ਼ੀ ਨਾਲ ਚੈਟ ਕਰੋ",
+      "buy_products": "ਉਤਪਾਦ ਖਰੀਦੋ",
+      "our_services": "ਸਾਡੀਆਂ ਸੇਵਾਵਾਂ",
+      "join_us": "ਸਾਡੇ ਨਾਲ ਜੁੜੋ",
+      "orders": "ਆਰਡਰ"
+    },
+    "cart": "ਕਾਰਟ",
+    "orders": "ਆਰਡਰ",
+    "search_placeholder": "ਉਤਪਾਦ, ਸੇਵਾ ਜਾਂ ਲੇਖ ਖੋਜੋ...",
+    "search_button": "ਖੋਜੋ",
+    "mega_menu": {
+      "consultations": {
+        "title": "ਸਲਾਹ",
+        "items": {
+          "panchang": "ਅੱਜ ਦਾ ਪੰਚਾਂਗ",
+          "kundali_matching": "ਕੁੰਡਲੀ ਮਿਲਾਉਣੀ",
+          "buy_products": "ਉਤਪਾਦ ਖਰੀਦੋ",
+          "free_daily_horoscope": "ਮੁਫ਼ਤ ਰੋਜ਼ਾਨਾ ਰਾਸ਼ੀਫਲ",
+          "astrology": "ਜੋਤਿਸ਼",
+          "chat_with_astrologer": "ਜੋਤਿਸ਼ੀ ਨਾਲ ਚੈਟ ਕਰੋ",
+          "love_relationship": "ਪਿਆਰ ਅਤੇ ਰਿਸ਼ਤੇ",
+          "career_guidance": "ਕੈਰੀਅਰ ਅਤੇ ਨੌਕਰੀ",
+          "numerology": "ਅੰਕ ਸ਼ਾਸਤਰ"
+        }
+      },
+      "puja_rituals": {
+        "title": "ਪੂਜਾ ਅਤੇ ਰਸਮਾਂ",
+        "items": {
+          "online_puja": "ਆਨਲਾਈਨ ਪੂਜਾ",
+          "grah_shanti": "ਗ੍ਰਹਿ ਸ਼ਾਂਤੀ",
+          "manokamna_pooja": "ਮਨੋਕਾਮਨਾ ਪੂਜਾ"
+        }
+      },
+      "horoscopes": {
+        "title": "ਰਾਸ਼ੀਫਲ",
+        "items": {
+          "daily_horoscope": "ਰੋਜ਼ਾਨਾ ਰਾਸ਼ੀਫਲ",
+          "monthly_horoscope": "ਮਾਸਿਕ ਰਾਸ਼ੀਫਲ",
+          "yearly_horoscope": "ਸਾਲਾਨਾ ਰਾਸ਼ੀਫਲ"
+        }
+      },
+      "learning": {
+        "title": "ਸਿੱਖਣਾ",
+        "items": {
+          "astrology_courses": "ਜੋਤਿਸ਼ ਕੋਰਸ",
+          "blog": "ਬਲੌਗ"
+        }
+      }
+    },
+    "auth": {
+      "signin": "ਸਾਈਨ ਇਨ",
+      "my_profile": "ਮੇਰਾ ਪ੍ਰੋਫਾਈਲ",
+      "my_orders": "ਮੇਰੇ ਆਰਡਰ",
+      "logout": "ਲੌਗ ਆਉਟ"
+    },
+    "language_selector": {
+      "button": "ਭਾਸ਼ਾ ਚੁਣੋ",
+      "dropdown_title": "ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ"
+    }
+  }
+} 
