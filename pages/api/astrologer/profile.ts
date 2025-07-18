@@ -9,7 +9,7 @@ interface AstrologerJWTPayload {
   id: number;
   email: string;
   role: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Astrologer authentication using Authorization header only
@@ -44,9 +44,9 @@ export const config = {
 
 const upload = multer();
 
-function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: (...args: unknown[]) => void) {
   return new Promise((resolve, reject) => {
-    fn(req, res, (result: any) => {
+    fn(req, res, (result: unknown) => {
       if (result instanceof Error) {
         return reject(result);
       }
@@ -89,8 +89,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ error: 'Unauthorized' });
     }
     await runMiddleware(req, res, upload.single('profileImage'));
-    const file = (req as any).file;
-    let body: any = req.body;
+    const file = (req as unknown as { file?: { buffer: Buffer } }).file;
+    let body: Record<string, unknown> = req.body;
     // If body fields are sent as JSON string (from FormData), parse them
     if (typeof body === 'string') {
       body = JSON.parse(body);

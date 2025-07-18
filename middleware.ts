@@ -60,7 +60,7 @@ export async function middleware(request: NextRequest) {
       
       // Token is valid, continue to protected route
       return NextResponse.next();
-    } catch (error) {
+    } catch {
       // Token verification failed, redirect to login
       const url = new URL('/admin/login', request.url);
       url.searchParams.set('callbackUrl', path);
@@ -84,7 +84,7 @@ export async function middleware(request: NextRequest) {
     try {
       await verifyAstrologerJwt(token);
       return NextResponse.next();
-    } catch (error) {
+    } catch {
       const url = new URL('/astrologer/auth', request.url);
       url.searchParams.set('callbackUrl', path);
       return NextResponse.redirect(url);

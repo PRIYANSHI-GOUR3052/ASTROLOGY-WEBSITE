@@ -87,7 +87,7 @@ const ConsultationsPage = () => {
               <h3 className="text-purple-700 dark:text-purple-400 font-semibold">{chat.client}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 italic truncate">{lastMsg?.text}</p>
               <span className="text-xs text-gray-500 dark:text-gray-500">
-                {new Date(lastMsg?.timestamp).toLocaleString()}
+                {lastMsg?.timestamp ? new Date(lastMsg.timestamp).toLocaleString() : ''}
               </span>
             </div>
           );

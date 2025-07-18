@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 import AstrologerSidebar from "@/components/astrologer/Sidebar";
-import dynamic from "next/dynamic";
 import { useAuthToken } from '@/hooks/useAuthToken';
 
 
@@ -22,7 +21,6 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     pathname?.includes("/astrologer/register") ||
     pathname?.includes("/astrologer/reset-password") ||
     pathname?.includes("/astrologer/forgot-password");
-  const isVerifyRoute = pathname?.includes("/astrologer/verify");
 
   const isProfilePage = pathname === "/astrologer/profile";
 

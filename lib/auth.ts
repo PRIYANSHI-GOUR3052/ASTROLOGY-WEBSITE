@@ -2,7 +2,6 @@ import { NextAuthOptions } from 'next-auth';
 import { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import pool from '@/lib/db';
-import { getToken } from 'next-auth/jwt';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import bcrypt from 'bcryptjs';
@@ -39,7 +38,7 @@ export interface AuthenticatedRequest extends NextApiRequest {
 }
 
 // Create the withAuth middleware
-export function withAuth(handler: any) {
+export function withAuth(handler: (req: AuthenticatedRequest, res: NextApiResponse) => Promise<void>) {
   return async (req: AuthenticatedRequest, res: NextApiResponse) => {
     try {
       const session = await getServerSession(req, res, authOptions);
@@ -56,9 +55,12 @@ export function withAuth(handler: any) {
       };
       
       return handler(req, res);
-    } catch (error) {
-      console.error('Auth error:', error);
-      return res.status(401).json({ message: 'Unauthorized' });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Auth error:', error);
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      throw error;
     }
   };
 }
@@ -83,7 +85,7 @@ export const authOptions: NextAuthOptions = {
             [credentials.email]
           );
 
-          const user = (users as any[])[0];
+          const user = (users as unknown as { id: number; email: string; role: string; password: string }[])[0];
           
           if (!user) {
             throw new Error('No user found with this email');
@@ -95,11 +97,7 @@ export const authOptions: NextAuthOptions = {
             throw new Error('Invalid password');
           }
 
-          return {
-            id: user.id,
-            email: user.email,
-            role: user.role
-          };
+          return { id: String(user.id), email: user.email, role: user.role };
         } finally {
           connection.release();
         }
@@ -148,7 +146,8 @@ function getAstrologerSecretKey() {
   return new TextEncoder().encode(ASTROLOGER_JWT_SECRET);
 }
 
-export async function signAstrologerJwt(payload: object, expiresIn = '7d') {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function signAstrologerJwt(payload: object, _expiresIn = '7d') {
   // jose does not support '7d' directly, so we convert to seconds (7*24*60*60)
   const iat = Math.floor(Date.now() / 1000);
   const exp = iat + 7 * 24 * 60 * 60;

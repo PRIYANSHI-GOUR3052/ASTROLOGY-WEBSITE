@@ -7,7 +7,7 @@ interface AstrologerJWTPayload {
   id: number;
   email: string;
   role: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Auth helper (from profile.ts)
@@ -94,7 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       default:
         return res.status(405).json({ error: 'Method not allowed' });
     }
-  } catch (e: any) {
-    return res.status(500).json({ error: 'Internal server error', details: e.message });
+  } catch (e: unknown) {
+    return res.status(500).json({ error: 'Internal server error', details: (e as Error).message });
   }
 } 
