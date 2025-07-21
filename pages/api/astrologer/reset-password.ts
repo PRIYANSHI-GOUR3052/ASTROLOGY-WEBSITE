@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     return res.status(200).json({ message: 'Password has been reset successfully.' });
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message || 'Failed to reset password.' });
+  } catch (error: unknown) {
+    return res.status(500).json({ message: (error as Error).message || 'Failed to reset password.' });
   }
 } 

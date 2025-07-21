@@ -6,7 +6,8 @@ function getAstrologerSecretKey() {
   return new TextEncoder().encode(ASTROLOGER_JWT_SECRET);
 }
 
-export async function signAstrologerJwt(payload: object, expiresIn = '7d') {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function signAstrologerJwt(payload: object, _expiresIn = '7d') {
   const iat = Math.floor(Date.now() / 1000);
   const exp = iat + 7 * 24 * 60 * 60;
   return await new SignJWT({ ...payload })

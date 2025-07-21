@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         orderBy: { date: 'asc' }
       });
       return res.status(200).json({ slots });
-    } catch (e) {
+    } catch {
       return res.status(500).json({ error: 'Failed to fetch availability' });
     }
   }

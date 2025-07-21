@@ -1,6 +1,5 @@
 'use client';
 
-
 import { FeaturedProducts } from '../components/FeaturedProducts'
 import { ProductGrid } from '../components/ProductGrid'
 import { AstrologyStones } from '../components/AstrologyStones'
@@ -29,7 +28,6 @@ import ProductAnnouncementTicker from '../components/ProductAnnouncementTicker';
 import BestSellerCards from '../components/BestSellerCards';
 import ProductAssuranceBar from '../components/ProductAssuranceBar';
 
-
 // Move plugin initialization outside the component
 const autoplayPlugin = Autoplay({ delay: 3500, stopOnInteraction: false });
 
@@ -42,7 +40,7 @@ const products = [
     price: '₹2,499',
     originalPrice: '₹4,999',
     slug: 'gemstone-collection',
-    image: '/images/gemstone-1.jpg',
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752753177/naturalstones_xsst5z.jpg",
     category: 'Gemstones',
     rating: 4.8,
   },
@@ -52,7 +50,7 @@ const products = [
     price: '₹1,199',
     originalPrice: '₹2,399',
     slug: 'rudraksha-collection',
-    image: '/images/rudraksha-beads.jpg',
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752753830/rudrakshamala_pibmxj.jpg",
     category: 'Spiritual',
     rating: 4.9,
   },
@@ -62,7 +60,7 @@ const products = [
     price: '₹799',
     originalPrice: '₹1,599',
     slug: 'yantras',
-    image: '/images/yantra.jpg',
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754014/yantra_kppksi.jpg",
     category: 'Yantras',
     rating: 4.7,
   },
@@ -72,7 +70,7 @@ const products = [
     price: '₹999',
     originalPrice: '₹1,999',
     slug: 'puja-samagri-kits',
-    image: '/images/puja-samagri.jpg',
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754218/puja_samagri_sc0vpt.jpg",
     category: 'Ritual Kits',
     rating: 4.6,
   },
@@ -82,7 +80,7 @@ const products = [
     price: '₹499',
     originalPrice: '₹999',
     slug: 'astrology-reports-kundli',
-    image: '/images/kundli-report.jpg',
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754647/kundli_h5hiqg.jpg",
     category: 'Reports',
     rating: 4.8,
   },
@@ -92,7 +90,7 @@ const products = [
     price: '₹399',
     originalPrice: '₹799',
     slug: 'spiritual-accessories',
-    image: '/images/spiritual-accessories.jpg',
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754784/accessory_viwtit.jpg",
     category: 'Accessories',
     rating: 4.5,
   },
@@ -102,7 +100,7 @@ const products = [
     price: '₹1,499',
     originalPrice: '₹2,999',
     slug: 'personalized-astrology-tools',
-    image: '/images/personalized-tools.jpg',
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754941/personalized_astrology_tools_mj3501.jpg",
     category: 'Custom',
     rating: 4.9,
   },

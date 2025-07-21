@@ -30,13 +30,13 @@ export default async function handler(
         [email]
       );
       
-      const admins = rows as any[];
+      const admins = rows as unknown[];
       
       if (admins.length === 0) {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
       
-      const admin = admins[0];
+      const admin = admins[0] as { id: number; email: string; password: string; role: string };
       
       // Compare the provided password with the hashed password
       const passwordMatch = await bcrypt.compare(password, admin.password);

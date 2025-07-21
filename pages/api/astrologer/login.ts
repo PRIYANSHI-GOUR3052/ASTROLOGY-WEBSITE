@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     const token = await signAstrologerJwt({ id: astrologer.id, email: astrologer.email, role: 'astrologer' });
     return res.status(200).json({ token, astrologer: { id: astrologer.id, email: astrologer.email, firstName: astrologer.firstName } });
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message || 'Login failed' });
+  } catch (error: unknown) {
+    return res.status(500).json({ message: (error as Error).message || 'Login failed' });
   }
 } 

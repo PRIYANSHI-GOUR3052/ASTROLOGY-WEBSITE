@@ -1,20 +1,17 @@
 'use client';
 
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { CheckCircle, Clock, XCircle, AlertCircle, Plus, Trash } from "lucide-react";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
-
-
+import Image from 'next/image';
 
 
 const expertiseOptions = [
@@ -64,11 +61,9 @@ const ProfilePage = () => {
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [educations, setEducations] = useState<Education[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [verification, setVerification] = useState<any>(null);
+  const [verification, setVerification] = useState<Record<string, unknown> | null>(null);
   const [docFiles, setDocFiles] = useState<{ [key: string]: File | null }>({});
-  const [astrologer, setAstrologer] = useState<any>(null);
+  const [astrologer, setAstrologer] = useState<Record<string, unknown> | null>(null);
 
 
   // Basic details form state
@@ -425,28 +420,11 @@ const ProfilePage = () => {
       } else {
         setError(data.error || 'Failed to update profile');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to update profile');
     } finally {
       setLoading(false);
     }
-  };
-
-  // Helper to check if any doc/cert/edu is not accepted
-  const hasAnyNotAccepted = () => {
-    // Check documents
-    const docRejectedOrPending = requiredDocs.some(doc => {
-      const status = verification?.[doc.statusKey] || 'unverified';
-      return status !== 'accepted';
-    });
-
-    // Check certifications
-    const certRejectedOrPending = certifications.some(cert => cert.status !== 'accepted');
-
-    // Check educations
-    const eduRejectedOrPending = educations.some(edu => edu.status !== 'accepted');
-
-    return docRejectedOrPending || certRejectedOrPending || eduRejectedOrPending;
   };
 
   // Helper to check if all docs/certs/edus are accepted (i.e., verified)
@@ -493,9 +471,11 @@ const ProfilePage = () => {
             <h2 className="text-lg font-bold mb-4">Manage Profile</h2>
             <div className="flex flex-col items-center mb-6">
               <div className="relative w-28 h-28 mb-2">
-                <img
+                <Image
                   src={profileImagePreview || basicForm.profileImage || selectedAvatar || "/images/placeholder-user.jpg"}
                   alt="Profile Preview"
+                  width={112}
+                  height={112}
                   className="w-28 h-28 object-cover rounded-full border-4 border-amber-400 dark:border-purple-400 shadow"
                 />
                 <label className="absolute bottom-0 right-0 bg-amber-500 dark:bg-purple-600 text-white rounded-full p-2 cursor-pointer shadow-lg hover:bg-amber-600 dark:hover:bg-purple-700 transition-colors">
@@ -519,7 +499,7 @@ const ProfilePage = () => {
                     className={`w-10 h-10 rounded-full border-2 ${selectedAvatar === avatar ? "border-amber-600 dark:border-purple-600" : "border-gray-300"} overflow-hidden focus:outline-none focus:ring-2 focus:ring-purple-500`}
                     onClick={() => handleAvatarSelect(avatar)}
                   >
-                    <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
+                    <Image src={avatar} alt="Avatar" width={40} height={40} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -646,7 +626,7 @@ const ProfilePage = () => {
                   <div className="mt-8">
                     <div className="flex items-center gap-2 mb-4">
                       <h3 className="font-semibold">Certifications</h3>
-                      {(approvalStatus === 'unverified' || approvalStatus === 'rejected') && (
+                      {['unverified', 'rejected'].includes(approvalStatus) && (
                         <button
                           type="button"
                           onClick={addCert}
@@ -673,7 +653,7 @@ const ProfilePage = () => {
                                 </span>
                               )}
                             </div>
-                            {(approvalStatus === 'unverified' || approvalStatus === 'rejected') && (
+                            {(['unverified', 'rejected'].includes(approvalStatus)) && (
                               <button
                                 type="button"
                                 onClick={() => removeCert(idx)}
@@ -754,7 +734,7 @@ const ProfilePage = () => {
                   <div className="mt-8">
                     <div className="flex items-center gap-2 mb-4">
                       <h3 className="font-semibold">Education</h3>
-                      {(approvalStatus === 'unverified' || approvalStatus === 'rejected') && (
+                      {['unverified', 'rejected'].includes(approvalStatus) && (
                         <button
                           type="button"
                           onClick={addEdu}
@@ -781,7 +761,7 @@ const ProfilePage = () => {
                                 </span>
                               )}
                             </div>
-                            {(approvalStatus === 'unverified' || approvalStatus === 'rejected') && (
+                            {(['unverified', 'rejected'].includes(approvalStatus)) && (
                               <button
                                 type="button"
                                 onClick={() => removeEdu(idx)}
@@ -857,11 +837,11 @@ const ProfilePage = () => {
                       ))}
                     </div>
                   </div>
-                {approvalStatus === 'rejected' && (
-                  <button type="submit" className="mt-6 py-2 px-6 bg-amber-500 text-white font-bold rounded-lg">
-                    Resubmit for Verification
-                  </button>
-                )}
+                  {approvalStatus === 'rejected' && (
+                    <button type="submit" className="mt-6 py-2 px-6 bg-amber-500 text-white font-bold rounded-lg">
+                      Resubmit for Verification
+                    </button>
+                  )}
                 </form>
               ) : (
                 <form onSubmit={handleSubmit}>
@@ -913,7 +893,7 @@ const ProfilePage = () => {
                   <div className="mt-8">
                     <div className="flex items-center gap-2 mb-4">
                       <h3 className="font-semibold">Certifications</h3>
-                      {(approvalStatus === 'unverified' || approvalStatus === 'rejected') && (
+                      {['unverified', 'rejected'].includes(approvalStatus) && (
                         <button
                           type="button"
                           onClick={addCert}
@@ -940,7 +920,7 @@ const ProfilePage = () => {
                                 </span>
                               )}
                             </div>
-                            {(approvalStatus === 'unverified' || approvalStatus === 'rejected') && (
+                            {(['unverified', 'rejected'].includes(approvalStatus)) && (
                               <button
                                 type="button"
                                 onClick={() => removeCert(idx)}
@@ -1021,7 +1001,7 @@ const ProfilePage = () => {
                   <div className="mt-8">
                     <div className="flex items-center gap-2 mb-4">
                       <h3 className="font-semibold">Education</h3>
-                      {(approvalStatus === 'unverified' || approvalStatus === 'rejected') && (
+                      {['unverified', 'rejected'].includes(approvalStatus) && (
                         <button
                           type="button"
                           onClick={addEdu}
@@ -1048,7 +1028,7 @@ const ProfilePage = () => {
                                 </span>
                               )}
                             </div>
-                            {(approvalStatus === 'unverified' || approvalStatus === 'rejected') && (
+                            {(['unverified', 'rejected'].includes(approvalStatus)) && (
                               <button
                                 type="button"
                                 onClick={() => removeEdu(idx)}
@@ -1124,10 +1104,10 @@ const ProfilePage = () => {
                       ))}
                     </div>
                   </div>
-                  {(approvalStatus === 'unverified' || approvalStatus === 'rejected') && (
-                  <button type="submit" className="mt-6 py-2 px-6 bg-amber-500 text-white font-bold rounded-lg">
-                    Submit for Verification
-                  </button>
+                  {(['unverified', 'rejected'].includes(approvalStatus)) && (
+                    <button type="submit" className="mt-6 py-2 px-6 bg-amber-500 text-white font-bold rounded-lg">
+                      Submit for Verification
+                    </button>
                   )}
                 </form>
               )}
@@ -1145,7 +1125,7 @@ const ProfilePage = () => {
                   {modalDoc.url.endsWith('.pdf') ? (
                     <iframe src={modalDoc.url} title={modalDoc.label} className="w-full h-96 rounded border" />
                   ) : (
-                    <img src={modalDoc.url} alt={modalDoc.label} className="max-w-full max-h-96 rounded border" />
+                    <Image src={modalDoc.url} alt={modalDoc.label} width={384} height={384} className="max-w-full max-h-96 rounded border" />
                   )}
                   <div className="text-sm text-gray-600">{modalDoc.label}</div>
                   <a href={modalDoc.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Open in new tab</a>

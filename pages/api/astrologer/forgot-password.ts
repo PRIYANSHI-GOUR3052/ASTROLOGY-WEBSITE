@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     return res.status(200).json({ message: 'Reset instructions sent to your email.' });
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message || 'Failed to process request' });
+  } catch (error: unknown) {
+    return res.status(500).json({ message: (error as Error).message || 'Failed to process request' });
   }
 } 

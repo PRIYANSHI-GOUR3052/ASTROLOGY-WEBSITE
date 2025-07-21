@@ -1,7 +1,7 @@
 let userConfig;
 try {
   userConfig = await import('./v0-user-next.config.mjs'); // Ensure correct file extension
-} catch (e) {
+} catch {
   userConfig = {}; // Provide a default empty object to avoid errors
 }
 
