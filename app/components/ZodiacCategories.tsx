@@ -9,54 +9,54 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 const mainZodiacSigns = [
   {
     name: 'Aries',
-    symbol: '♈',
+    symbol: '',
     dates: 'Mar 21 - Apr 19',
-    image: '/images/course-1.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092662/2a9a8fad-602c-4a8b-b0a2-a2acee74386d.png',
     slug: 'aries',
     color: 'from-red-300 via-orange-300 to-red-400',
     shadowColor: 'shadow-red-400/40'
   },
   {
     name: 'Taurus',
-    symbol: '♉',
+    symbol: '',
     dates: 'Apr 20 - May 20',
-    image: '/images/course-2.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095187/taurus_2_bbgbls.jpg',
     slug: 'taurus',
     color: 'from-green-300 via-emerald-300 to-green-400',
     shadowColor: 'shadow-green-400/40'
   },
   {
     name: 'Gemini',
-    symbol: '♊',
+    symbol: '',
     dates: 'May 21 - Jun 20',
-    image: '/images/course-3.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095191/gemini_usaz4b.jpg',
     slug: 'gemini',
     color: 'from-yellow-300 via-amber-300 to-yellow-400',
     shadowColor: 'shadow-yellow-400/40'
   },
   {
     name: 'Cancer',
-    symbol: '♋',
+    symbol: '',
     dates: 'Jun 21 - Jul 22',
-    image: '/images/course-4.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095191/cancer_ihdhhi.jpg',
     slug: 'cancer',
     color: 'from-blue-300 via-cyan-300 to-blue-400',
     shadowColor: 'shadow-blue-400/40'
   },
   {
     name: 'Leo',
-    symbol: '♌',
+    symbol: '',
     dates: 'Jul 23 - Aug 22',
-    image: '/images/course-5.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095189/leo_ieeqpu.jpg',
     slug: 'leo',
     color: 'from-orange-300 via-amber-300 to-orange-400',
     shadowColor: 'shadow-orange-400/40'
   },
   {
     name: 'Virgo',
-    symbol: '♍',
+    symbol: '',
     dates: 'Aug 23 - Sep 22',
-    image: '/images/course-6.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095189/virgo_iirwhi.jpg',
     slug: 'virgo',
     color: 'from-emerald-300 via-teal-300 to-emerald-400',
     shadowColor: 'shadow-emerald-400/40'

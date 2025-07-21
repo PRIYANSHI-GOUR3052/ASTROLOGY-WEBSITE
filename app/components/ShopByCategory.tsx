@@ -6,7 +6,7 @@ import { useRef, useState, useEffect } from 'react';
 const categories = [
   {
     name: 'Gemstones & Crystals',
-    image: '/images/astrowellness.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752753177/naturalstones_xsst5z.jpg',
     slug: 'gemstones-crystals',
     description: 'Healing stones & sacred crystals',
     color: 'from-emerald-500 to-teal-600',
@@ -14,7 +14,7 @@ const categories = [
   },
   {
     name: 'Rudraksha & Malas',
-    image: '/images/course-2.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752753830/rudrakshamala_pibmxj.jpg',
     slug: 'rudraksha-malas',
     description: 'Sacred beads & prayer malas',
     color: 'from-amber-500 to-orange-600',
@@ -30,7 +30,7 @@ const categories = [
   },
   {
     name: 'Sacred Yantras',
-    image: '/images/birth_chart_mockup.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754014/yantra_kppksi.jpg',
     slug: 'yantras-plates',
     description: 'Mystical diagrams & plates',
     color: 'from-yellow-500 to-amber-600',
@@ -46,7 +46,7 @@ const categories = [
   },
   {
     name: 'Puja Essentials',
-    image: '/images/course-3.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754218/puja_samagri_sc0vpt.jpg',
     slug: 'puja-essentials',
     description: 'Complete ritual kits',
     color: 'from-rose-500 to-pink-600',
