@@ -1,7 +1,5 @@
 'use client';
 
-import { AnimatedStars } from '../components/AnimatedStars'
-import { MysticBackground } from '../components/MysticBackground'
 import { FeaturedProducts } from '../components/FeaturedProducts'
 import { ProductGrid } from '../components/ProductGrid'
 import { AstrologyStones } from '../components/AstrologyStones'
@@ -15,9 +13,20 @@ import ProductOfTheDay from '../components/ProductOfTheDay';
 import AllProductsGrid from '../components/AllProductsGrid';
 import { AstrologerProfile } from '../components/AstrologerProfile';
 import { Statistics } from '../components/Statistics';
-import { Testimonials } from '../components/Testimonials';
+
 import { ProductServiceCard } from '../components/UniversalServiceGrid';
 import { defaultProducts } from '../components/AllProductsGrid';
+import CelestialJourneyMainGrid from '../components/Hero/CelestialJourneyMainGrid';
+import ShopByCategory from '../components/ShopByCategory';
+import ShopCategoriesMinimal from '../components/ShopCategoriesMinimal';
+import ShopByAudience from '../components/ShopByAudience';
+import NakshatraTicker from '../components/NakshatraTicker';
+import ShopBanner from '../components/ShopBanner';
+import ZodiacCategories from '../components/ZodiacCategories';
+import SimpleHorizontalBanner from '../components/SimpleHorizontalBanner';
+import ProductAnnouncementTicker from '../components/ProductAnnouncementTicker';
+import BestSellerCards from '../components/BestSellerCards';
+import ProductAssuranceBar from '../components/ProductAssuranceBar';
 
 // Move plugin initialization outside the component
 const autoplayPlugin = Autoplay({ delay: 3500, stopOnInteraction: false });
@@ -27,52 +36,163 @@ const ShopProductCarousel = dynamic(() => import('../components/ShopProductCarou
 const products = [
   {
     title: 'Natural Gemstone Collection',
-    description: 'Authentic, lab-certified gemstones for planetary remedies and spiritual growth.',
+    description: 'Authentic, lab-certified gemstones for planetary remedies and spiritual growth. Includes Ruby, Emerald, Blue Sapphire, and more precious stones.',
     price: '₹2,499',
+    originalPrice: '₹4,999',
     slug: 'gemstone-collection',
-    image:"https://res.cloudinary.com/dxwspucxw/image/upload/v1752753177/naturalstones_xsst5z.jpg"
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752753177/naturalstones_xsst5z.jpg",
+    category: 'Gemstones',
+    rating: 4.8,
   },
   {
     title: 'Rudraksha Mala & Beads',
-    description: 'Energized Rudraksha beads and malas for protection, peace, and spiritual power.',
+    description: 'Energized Rudraksha beads and malas for protection, peace, and spiritual power. Handpicked from Nepal for maximum benefits.',
     price: '₹1,199',
+    originalPrice: '₹2,399',
     slug: 'rudraksha-collection',
-    image:"https://res.cloudinary.com/dxwspucxw/image/upload/v1752753830/rudrakshamala_pibmxj.jpg"
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752753830/rudrakshamala_pibmxj.jpg",
+    category: 'Spiritual',
+    rating: 4.9,
   },
   {
     title: 'Energized Yantras',
-    description: 'Sacred spiritual diagrams (Yantras) energized for prosperity, health, and harmony.',
+    description: 'Sacred spiritual diagrams (Yantras) energized for prosperity, health, and harmony. Copper and brass varieties available.',
     price: '₹799',
+    originalPrice: '₹1,599',
     slug: 'yantras',
-    image:"https://res.cloudinary.com/dxwspucxw/image/upload/v1752754014/yantra_kppksi.jpg"
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754014/yantra_kppksi.jpg",
+    category: 'Yantras',
+    rating: 4.7,
   },
   {
     title: 'Puja Samagri & Ritual Kits',
-    description: 'Complete kits for home puja, havan, and Vedic rituals, including all essentials.',
+    description: 'Complete kits for home puja, havan, and Vedic rituals, including all essentials. Perfect for daily worship and special occasions.',
     price: '₹999',
+    originalPrice: '₹1,999',
     slug: 'puja-samagri-kits',
-    image:"https://res.cloudinary.com/dxwspucxw/image/upload/v1752754218/puja_samagri_sc0vpt.jpg"
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754218/puja_samagri_sc0vpt.jpg",
+    category: 'Ritual Kits',
+    rating: 4.6,
   },
   {
     title: 'Astrology Reports & Kundli Services',
-    description: 'Personalized astrology reports, Janam Kundli, and detailed horoscope analysis.',
+    description: 'Personalized astrology reports, Janam Kundli, and detailed horoscope analysis by expert astrologers.',
     price: '₹499',
+    originalPrice: '₹999',
     slug: 'astrology-reports-kundli',
-    image:"https://res.cloudinary.com/dxwspucxw/image/upload/v1752754647/kundli_h5hiqg.jpg"
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754647/kundli_h5hiqg.jpg",
+    category: 'Reports',
+    rating: 4.8,
   },
   {
     title: 'Spiritual Accessories',
-    description: 'Incense holders, copper bottles, meditation mats, and more for your spiritual space.',
+    description: 'Incense holders, copper bottles, meditation mats, and more for your spiritual space. Premium quality materials.',
     price: '₹399',
+    originalPrice: '₹799',
     slug: 'spiritual-accessories',
-    image:"https://res.cloudinary.com/dxwspucxw/image/upload/v1752754784/accessory_viwtit.jpg"
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754784/accessory_viwtit.jpg",
+    category: 'Accessories',
+    rating: 4.5,
   },
   {
     title: 'Personalized Astrology Tools',
-    description: 'Custom-engraved pendants, name plates, and tools based on your birth chart.',
+    description: 'Custom-engraved pendants, name plates, and tools based on your birth chart. Made to order with astrological precision.',
     price: '₹1,499',
+    originalPrice: '₹2,999',
     slug: 'personalized-astrology-tools',
-    image:"https://res.cloudinary.com/dxwspucxw/image/upload/v1752754941/personalized_astrology_tools_mj3501.jpg"
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752754941/personalized_astrology_tools_mj3501.jpg",
+    category: 'Custom',
+    rating: 4.9,
+  },
+  {
+    title: 'Crystal Healing Collection',
+    description: 'Premium healing crystals including Amethyst, Rose Quartz, and Clear Quartz for energy cleansing and spiritual healing.',
+    price: '₹899',
+    originalPrice: '₹1,799',
+    slug: 'crystal-healing-collection',
+    image: '/images/crystal-collection.jpg',
+    category: 'Crystals',
+    rating: 4.8,
+  },
+  {
+    title: 'Sacred Malas & Prayer Beads',
+    description: 'Traditional 108-bead malas made from sandalwood, tulsi, and other sacred materials for meditation and chanting.',
+    price: '₹699',
+    originalPrice: '₹1,399',
+    slug: 'sacred-malas',
+    image: '/images/sacred-malas.jpg',
+    category: 'Meditation',
+    rating: 4.7,
+  },
+  {
+    title: 'Vedic Incense & Dhoop',
+    description: 'Pure, natural incense sticks and dhoop cones made from traditional Vedic ingredients for purification rituals.',
+    price: '₹299',
+    originalPrice: '₹599',
+    slug: 'vedic-incense',
+    image: '/images/incense-collection.jpg',
+    category: 'Aromatherapy',
+    rating: 4.5,
+  },
+  {
+    title: 'Copper Vessels & Utensils',
+    description: 'Handcrafted copper water bottles, glasses, and ritual vessels for health benefits and spiritual practices.',
+    price: '₹1,299',
+    originalPrice: '₹2,599',
+    slug: 'copper-vessels',
+    image: '/images/copper-vessels.jpg',
+    category: 'Wellness',
+    rating: 4.6,
+  },
+  {
+    title: 'Meditation Cushions & Mats',
+    description: 'Comfortable meditation cushions and yoga mats made from organic materials for your spiritual practice.',
+    price: '₹1,999',
+    originalPrice: '₹3,999',
+    slug: 'meditation-accessories',
+    image: '/images/meditation-mat.jpg',
+    category: 'Meditation',
+    rating: 4.8,
+  },
+  {
+    title: 'Spiritual Books & Mantras',
+    description: 'Sacred texts, mantra books, and spiritual guides including Bhagavad Gita, Vedic scriptures, and more.',
+    price: '₹599',
+    originalPrice: '₹1,199',
+    slug: 'spiritual-books',
+    image: '/images/spiritual-books.jpg',
+    category: 'Books',
+    rating: 4.9,
+  },
+  {
+    title: 'Feng Shui & Vastu Items',
+    description: 'Feng Shui crystals, Vastu pyramids, and harmony items to balance energy in your home and workplace.',
+    price: '₹799',
+    originalPrice: '₹1,599',
+    slug: 'feng-shui-vastu',
+    image: '/images/feng-shui.jpg',
+    category: 'Energy',
+    rating: 4.7,
+  },
+  {
+    title: 'Divine Statues & Idols',
+    description: 'Beautiful brass and marble statues of Hindu deities, Buddha, and spiritual figures for your home temple.',
+    price: '₹1,999',
+    originalPrice: '₹3,999',
+    slug: 'divine-statues',
+    image: '/images/divine-statues.jpg',
+    category: 'Devotional',
+    rating: 4.8,
+  },
+  {
+    title: 'Healing Bracelets & Jewelry',
+    description: 'Gemstone bracelets, healing pendants, and spiritual jewelry for protection, love, and prosperity.',
+    price: '₹1,199',
+    originalPrice: '₹2,399',
+    slug: 'healing-jewelry',
+    image: '/images/healing-jewelry.jpg',
+    category: 'Jewelry',
+    rating: 4.9,
   },
 ];
 
@@ -126,200 +246,43 @@ export default function ShopPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
-      {/* Top Banner Section */}
-      <div className="w-full flex items-center justify-between" style={{ background: '#FFFDF8', minHeight: '320px', padding: '0 48px' }}>
-        {/* Product Image Left */}
-        <div className="flex-shrink-0 flex items-center justify-center" style={{ minWidth: 480 }}>
-          <img
-            src="/images/astrowellness.jpg"
-            alt="Featured Product"
-            className="object-contain rounded-xl shadow-md"
-            style={{ maxHeight: 220, maxWidth: 520 }}
-          />
-        </div>
-        {/* Heading Right */}
-        <div className="flex-1 flex items-center justify-end">
-          <h1
-            className="text-5xl md:text-7xl font-normal"
-            style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 400, letterSpacing: '0.01em' }}
-          >
-            Spiritual Shop
-          </h1>
-        </div>
-      </div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <ShopBanner />
+      {/* NakshatraTicker - Moved right after banner for better flow */}
+      <NakshatraTicker />
+      {/* Zodiac Categories - ALL 12 ZODIAC SIGNS */}
+      <ZodiacCategories />
+      {/* CelestialJourneyMainGrid Section */}
+      <CelestialJourneyMainGrid />
+      {/* Shop Categories Minimal - CINEMATIC VERSION */}
+      <ShopCategoriesMinimal />
+      
+      {/* Simple Horizontal Banner - 3 GRID LAYOUT AFTER SACRED CATEGORIES */}
+      <SimpleHorizontalBanner />
+
+      {/* Product Announcements Ticker - RIGHT AFTER BANNER */}
+      <ProductAnnouncementTicker />
+
+      {/* Shop by Audience - AFTER BANNER */}
+      <ShopByAudience />
+
+      {/* Product Assurance Bar - AFTER SHOP BY AUDIENCE */}
+      <ProductAssuranceBar />
+
       {/* Existing Content */}
-      <AnimatedStars />
-      <MysticBackground>
+      
         <div className="container mx-auto px-4 py-16 relative z-10">
           {/* Main Page Heading */}
           {/* Removed duplicate <h1>Spiritual Shop</h1> here */}
           {/* Full-width Product Carousel (dynamically imported) */}
-          <div className="w-full flex flex-col items-center justify-center mb-2 mt-8">
-            <h2
-              className="text-3xl md:text-4xl mb-8 text-center font-normal text-black"
-              style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400, letterSpacing: '0.01em' }}
-            >
-              Best Seller
-            </h2>
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-16">
-              {products.map((product, idx) => (
-                <ProductServiceCard
-                  key={product.slug}
-                  image={product.image}
-                  title={product.title}
-                  description={product.description}
-                  badge={'BEST SELLER'}
-                  href={`/shop/${product.slug}`}
-                />
-              ))}
-              {/* Shop by Purpose Cards */}
-              <ProductServiceCard
-                image="/images/course-1.jpg"
-                title="Money"
-                description="Shop products to attract wealth, prosperity, and abundance."
-                badge=""
-                href="#money"
-              />
-              <ProductServiceCard
-                image="/images/course-2.jpg"
-                title="Love"
-                description="Shop products to enhance love, relationships, and harmony."
-                badge=""
-                href="#love"
-              />
-              <ProductServiceCard
-                image="/images/course-3.jpg"
-                title="Career"
-                description="Shop products for career growth, success, and new opportunities."
-                badge=""
-                href="#career"
-              />
-              <ProductServiceCard
-                image="/images/astrology.svg"
-                title="Evil Eye"
-                description="Shop products for protection from negativity and evil eye."
-                badge=""
-                href="#evil-eye"
-              />
-              <ProductServiceCard
-                image="/images/astrowellness.jpg"
-                title="Health"
-                description="Shop products for health, wellness, and healing."
-                badge=""
-                href="#health"
-              />
-              {/* All ProductsGrid cards */}
-              {defaultProducts.map((product: any, idx: number) => (
-                <ProductServiceCard
-                  key={product.key}
-                  image={product.image}
-                  title={formatProductTitle(product.key)}
-                  description={`₹${product.price} (was ₹${product.oldPrice})`}
-                  badge={product.discountKey || ''}
-                  href={`/shop/${product.key}`}
-                />
-              ))}
-              {/* Astrology product card for even layout */}
-              <ProductServiceCard
-                image="/images/birth_chart_mockup.jpg"
-                title="Personalized Birth Chart Report"
-                description="Get your detailed, personalized birth chart analysis from expert astrologers."
-                badge="NEW"
-                href="/shop/birth-chart-report"
-              />
-              <ProductServiceCard
-                image="/images/gemstones.jpg"
-                title="Gemstone Recommendation"
-                description="Find the perfect gemstone for your astrological needs."
-                badge="POPULAR"
-                href="/shop/gemstone-recommendation"
-              />
-              <ProductServiceCard
-                image="/images/7mukhi-rudraksha.jpg"
-                title="Rudraksha Mala"
-                description="Energized Rudraksha mala for spiritual growth and protection."
-                badge="LIMITED"
-                href="/shop/rudraksha-mala"
-              />
-              <ProductServiceCard
-                image="/images/tarot-banner.jpg"
-                title="Tarot Reading Kit"
-                description="Unlock the secrets of tarot with this complete reading kit."
-                badge="NEW"
-                href="/shop/tarot-reading-kit"
-              />
-              <ProductServiceCard
-                image="/images/astrowellness.jpg"
-                title="Crystal Healing Set"
-                description="A curated set of healing crystals for balance and wellness."
-                badge=""
-                href="/shop/crystal-healing-set"
-              />
-              <ProductServiceCard
-                image="/images/astrology.svg"
-                title="Yantra for Prosperity"
-                description="Sacred yantra to attract prosperity and remove obstacles."
-                badge="RECOMMENDED"
-                href="/shop/yantra-prosperity"
-              />
-              <ProductServiceCard
-                image="/images/pyrite.jpg"
-                title="Pyrite Stone"
-                description="Pyrite for abundance, protection, and positive energy."
-                badge=""
-                href="/shop/pyrite-stone"
-              />
-              <ProductServiceCard
-                image="/images/evil-eye-obsidian.jpg"
-                title="Evil Eye Protection Bracelet"
-                description="Wear this bracelet to ward off negativity and evil eye."
-                badge="BESTSELLER"
-                href="/shop/evil-eye-bracelet"
-              />
-              <ProductServiceCard
-                image="/images/maha-dhan-yog.jpg"
-                title="Maha Dhan Yog Combo"
-                description="A powerful combo for wealth and prosperity."
-                badge="COMBO"
-                href="/shop/maha-dhan-yog-combo"
-              />
-              <ProductServiceCard
-                image="/images/selenite-plate.jpg"
-                title="Selenite Charging Plate"
-                description="Cleanse and charge your crystals with selenite."
-                badge="NEW"
-                href="/shop/selenite-charging-plate"
-              />
-              <ProductServiceCard
-                image="/images/love-attraction.jpg"
-                title="Love Attraction Bracelet"
-                description="Attract love and harmony into your life."
-                badge=""
-                href="/shop/love-attraction-bracelet"
-              />
-              <ProductServiceCard
-                image="/images/peace-harmony.jpg"
-                title="Peace & Harmony Bracelet"
-                description="Promote peace and harmony with this special bracelet."
-                badge=""
-                href="/shop/peace-harmony-bracelet"
-              />
-              <ProductServiceCard
-                image="/images/spiritual-growth.jpg"
-                title="Spiritual Growth Bracelet"
-                description="Enhance your spiritual journey with this bracelet."
-                badge=""
-                href="/shop/spiritual-growth-bracelet"
-              />
-            </div>
-          </div>
+          {/* New Best Seller Cards with RecentPosts Layout */}
+          <BestSellerCards products={products} />
           {/* <FeaturedProducts /> */}
           {/* Product Of The Day Section */}
           <ProductOfTheDay />
           {/* Astrologer Profile, Statistics, Testimonials */}
           <Statistics />
-          <Testimonials />
+          
           <style jsx global>{`
             .shop-purpose-card {
               opacity: 0;
@@ -342,7 +305,7 @@ export default function ShopPage() {
           {/* AstrologyStones */}
           {/* <AstrologyStones /> */}
         </div>
-      </MysticBackground>
+     
     </div>
   )
 }

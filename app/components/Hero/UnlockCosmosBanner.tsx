@@ -22,7 +22,7 @@ export default function UnlockCosmosBanner() {
 
   const { t } = useLanguage();
   return (
-    <section className="pt-28 w-full flex items-center justify-center bg-[#FEFBF2] py-7 px-4 shadow-2xl relative z-30 overflow-hidden" style={{ minHeight: '320px', minWidth: '100%' }}>
+    <section className="pt-28 w-full flex items-center justify-center bg-[#FEFBF2] py-7 px-4 relative z-30 overflow-hidden" style={{ minHeight: '320px', minWidth: '100%' }}>
       {/* Background carousel */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
         {images.map((img, idx) => (

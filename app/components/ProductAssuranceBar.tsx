@@ -38,7 +38,7 @@ const assurances = [
 
 export default function ProductAssuranceBar() {
   return (
-    <div className="w-screen flex justify-center items-center py-14" style={{background:'#F9F6F2', marginLeft:'calc(50% - 50vw)', marginRight:'calc(50% - 50vw)'}}>
+    <div className="w-screen flex justify-center items-center pt-8 pb-14" style={{background:'#F9F6F2', marginLeft:'calc(50% - 50vw)', marginRight:'calc(50% - 50vw)'}}>
       <div className="flex w-full max-w-none justify-between items-stretch px-0 md:px-4" style={{gap:0}}>
         {assurances.reduce<ReactNode[]>((acc, a, idx) => {
           acc.push(
