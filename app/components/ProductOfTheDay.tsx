@@ -8,7 +8,7 @@ export default function ProductOfTheDay() {
         {/* Product Image - Much Bigger and Prominent */}
         <div className="relative flex-shrink-0 w-full lg:w-[55vw] min-h-[500px] lg:min-h-[800px] flex items-center justify-center overflow-hidden" style={{ background: '#f7f5ed' }}>
           <img
-            src="/images/gemstone-1.jpg"
+            src="https://res.cloudinary.com/dxwspucxw/image/upload/v1753092333/natural_gemstones_kstmb8.jpg"
             alt="Natural Gemstone Collection"
             className="w-full h-full object-cover object-center rounded-none lg:rounded-r-3xl shadow-xl"
             style={{ minHeight: '500px', maxHeight: '800px' }}

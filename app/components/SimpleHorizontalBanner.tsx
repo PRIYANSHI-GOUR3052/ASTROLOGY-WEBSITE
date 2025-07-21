@@ -19,25 +19,25 @@ const SimpleHorizontalBanner = () => {
     {
       id: 1,
       title: 'Best Sellers',
-      image: '/images/astrowellness.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092133/feng_shui_vzelik.jpg',
       link: '/shop'
     },
     {
       id: 2,
       title: 'New Arrivals', 
-      image: '/images/astro.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092333/natural_gemstones_kstmb8.jpg',
       link: '/shop'
     },
     {
       id: 3,
       title: 'Premium Collection',
-      image: '/images/ASTRO.webp',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092131/copper_items_nnae1n.jpg',
       link: '/shop'
     },
     {
       id: 4,
       title: 'Sacred Tools',
-      image: '/images/myth.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754014/yantra_kppksi.jpg',
       link: '/shop'
     }
   ];
@@ -48,28 +48,28 @@ const SimpleHorizontalBanner = () => {
       id: 1,
       title: 'Featured Collections',
       subtitle: 'Premium Astrology Products',
-      image: '/images/birth_chart_mockup.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752750566/evil_eye_f5ztpo.jpg',
       link: '/shop'
     },
     {
       id: 2,
       title: 'Sacred Yantras',
       subtitle: 'Powerful Spiritual Tools',
-      image: '/images/blog/vedic-astrology.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754014/yantra_kppksi.jpg',
       link: '/shop/categories'
     },
     {
       id: 3,
       title: 'Gemstone Collection',
       subtitle: 'Natural Healing Stones',
-      image: '/images/blog/gemstones.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752753177/naturalstones_xsst5z.jpg',
       link: '/shop'
     },
     {
       id: 4,
       title: 'Meditation Kit',
       subtitle: 'Complete Spiritual Practice',
-      image: '/images/blog/meditation.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752750895/health_khmljy.jpg',
       link: '/shop'
     }
   ];
@@ -79,25 +79,25 @@ const SimpleHorizontalBanner = () => {
     {
       id: 1,
       title: 'Special Offers',
-      image: '/images/blog/numerology.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752750453/career_ns8gnt.jpg',
       link: '/shop'
     },
     {
       id: 2,
       title: 'Featured Items',
-      image: '/images/horoscopedaily.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092130/natural_incense_sticks_xa8jr6.jpg',
       link: '/shop'
     },
     {
       id: 3,
       title: 'Trending Now',
-      image: '/images/astrology_understanding.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092333/natural_gemstones_kstmb8.jpg',
       link: '/shop'
     },
     {
       id: 4,
       title: 'Limited Edition',
-      image: '/images/spiritualpathway.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753091688/mala_svpxn3.jpg',
       link: '/shop'
     }
   ];
@@ -108,7 +108,7 @@ const SimpleHorizontalBanner = () => {
       id: 1,
       title: 'Unlock Your Cosmic Destiny',
       subtitle: 'Premium Astrology Collection',
-      image: '/images/astrology_app.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042871/continue-learning_mtpgqr.jpg',
       link: '/shop',
       direction: 'rightToLeft'
     },
@@ -116,7 +116,7 @@ const SimpleHorizontalBanner = () => {
       id: 2,
       title: 'Sacred Gemstone Collection',
       subtitle: 'Transform Your Energy',
-      image: '/images/gemstones.jpg',
+      image: 'https://res.cloudinary.com/dxwspucxw/image/upload/c_crop,ar_4:3/v1752753177/naturalstones_xsst5z.jpg',
       link: '/shop',
       direction: 'leftToRight'
     }
@@ -224,7 +224,7 @@ const SimpleHorizontalBanner = () => {
           {animationState === 'grid' && (
             <motion.div
               key={`grid-${animationKey}`}
-              className="absolute inset-0 grid grid-cols-1 lg:grid-cols-5 gap-1 px-2"
+              className="absolute inset-0 grid grid-cols-1 lg:grid-cols-5 gap-1 px-2 h-full"
               initial="hidden"
               animate="visible"
               exit="exit"

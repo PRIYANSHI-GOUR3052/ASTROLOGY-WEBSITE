@@ -11,7 +11,7 @@ const mainCategories = [
   {
     name: 'Gemstones & Crystals',
     icon: '💎',
-    image: '/images/astrowellness.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752753177/naturalstones_xsst5z.jpg',
     slug: 'gemstones-crystals',
     color: 'from-emerald-300 via-green-400 to-teal-400',
     shadowColor: 'shadow-emerald-400/40',
@@ -20,7 +20,7 @@ const mainCategories = [
   {
     name: 'Rudraksha & Malas',
     icon: '📿',
-    image: '/images/course-2.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752753830/rudrakshamala_pibmxj.jpg',
     slug: 'rudraksha-malas', 
     color: 'from-amber-300 via-orange-300 to-yellow-400',
     shadowColor: 'shadow-amber-400/40',
@@ -29,7 +29,7 @@ const mainCategories = [
   {
     name: 'Spiritual Bracelets',
     icon: '⚡',
-    image: '/images/course-1.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754784/accessory_viwtit.jpg',
     slug: 'bracelets',
     color: 'from-rose-300 via-pink-300 to-rose-400',
     shadowColor: 'shadow-rose-400/40',
@@ -38,7 +38,7 @@ const mainCategories = [
   {
     name: 'Sacred Yantras',
     icon: '🔯',
-    image: '/images/birth_chart_mockup.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754014/yantra_kppksi.jpg',
     slug: 'yantras-plates',
     color: 'from-yellow-300 via-amber-300 to-orange-300',
     shadowColor: 'shadow-yellow-400/40',
@@ -47,7 +47,7 @@ const mainCategories = [
   {
     name: 'Puja Essentials',
     icon: '🕯️',
-    image: '/images/course-3.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754218/puja_samagri_sc0vpt.jpg',
     slug: 'puja-essentials',
     color: 'from-blue-300 via-cyan-300 to-teal-300',
     shadowColor: 'shadow-blue-400/40',
