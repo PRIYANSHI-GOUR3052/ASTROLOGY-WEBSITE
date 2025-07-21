@@ -284,57 +284,59 @@ export function DailyHoroscope() {
 
   return (
     <section className="min-h-screen bg-white pt-8 pb-16 font-sans">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 py-6 md:px-8 md:py-10">
         {/* Banner Heading */}
-        <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-10 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight">
+        <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-8 md:py-10 px-4 md:px-16 mb-8 md:mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl md:text-6xl font-extrabold text-black mb-3 md:mb-4 text-center drop-shadow-lg tracking-tight">
             {t('dailyHoroscope.heading')}
           </h1>
-          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl">
+          <p className="text-base sm:text-lg md:text-2xl text-gray-700 text-center max-w-2xl">
             {t('dailyHoroscope.subheading')}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="w-full md:w-2/3 flex flex-col">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="md:col-span-2 bg-white shadow-lg border border-gray-200 rounded-2xl p-6">
-                <h3 className="text-2xl font-bold text-black mb-4">
+              <Card className="md:col-span-2 bg-white shadow-lg border border-gray-200 rounded-2xl p-4 sm:p-6">
+                <h3 className="text-xl sm:text-2xl font-bold text-black mb-3 md:mb-4">
                   {t('dailyHoroscope.knowYourSign')}
                 </h3>
-                <div className="mb-4">
+                <div className="mb-4 w-full">
                   <label htmlFor="zodiac-sign" className="block text-sm font-medium mb-2 text-black">
                     {t('dailyHoroscope.selectSign')}
                   </label>
-                  <Select onValueChange={setSelectedSign}>
-                    <SelectTrigger className="w-full bg-gray-100 text-black border border-gray-300 rounded-xl px-4 py-2 hover:bg-gray-200 transition-all">
-                      <SelectValue placeholder={t('dailyHoroscope.chooseSign')} />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border border-gray-200 rounded-xl shadow-lg">
-                      {zodiacSigns.map((sign) => (
-                        <SelectItem
-                          key={sign.value}
-                          value={sign.value}
-                          className="px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer rounded-xl"
-                        >
-                          {getLocalizedText(sign.label, lang)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="flex flex-col md:flex-row gap-3 md:gap-4 w-full">
+                    <Select onValueChange={setSelectedSign}>
+                      <SelectTrigger className="w-full bg-gray-100 text-black border border-gray-300 rounded-xl px-4 py-2 hover:bg-gray-200 transition-all">
+                        <SelectValue placeholder={t('dailyHoroscope.chooseSign')} />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border border-gray-200 rounded-xl shadow-lg">
+                        {zodiacSigns.map((sign) => (
+                          <SelectItem
+                            key={sign.value}
+                            value={sign.value}
+                            className="px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer rounded-xl"
+                          >
+                            {getLocalizedText(sign.label, lang)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      onClick={getHoroscope}
+                      disabled={!selectedSign}
+                      className={`w-full md:w-auto px-4 py-2 rounded-xl border text-sm font-semibold transition-all
+                      ${!selectedSign
+                        ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                        : 'bg-black text-white border-[#E0E0E0] hover:bg-gray-800'}
+                      shadow-md`}
+                      style={{ marginTop: '0', marginBottom: '0' }}
+                    >
+                      {t('dailyHoroscope.viewHoroscope')}
+                    </Button>
+                  </div>
                 </div>
-
-                <Button
-                  onClick={getHoroscope}
-                  disabled={!selectedSign}
-                  className={`w-full px-4 py-2 rounded-xl border text-sm font-semibold mb-4 transition-all
-                  ${!selectedSign
-                    ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
-                    : 'bg-black text-white border-[#E0E0E0] hover:bg-gray-800'}
-                  shadow-md`}
-                >
-                  {t('dailyHoroscope.viewHoroscope')}
-                </Button>
 
                 {horoscope && (
                   <p className="text-black whitespace-pre-wrap mt-4 font-serif text-base">{horoscope}</p>
@@ -348,9 +350,9 @@ export function DailyHoroscope() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.08 }}
                   whileHover={{ scale: 1.04, boxShadow: '0 8px 32px rgba(0,0,0,0.10)' }}
-                  className="rounded-xl shadow-lg border border-gray-200 flex flex-col justify-between bg-white max-w-[420px] mx-auto p-0"
+                  className="rounded-xl shadow-lg border border-gray-200 flex flex-col justify-between bg-white w-full max-w-sm mx-auto p-0"
                 >
-                  <div className="w-full h-56 relative">
+                  <div className="w-full h-48 sm:h-56 relative">
                     <Image
                       src={card.image}
                       alt={getLocalizedText(card.title, lang)}
@@ -359,8 +361,8 @@ export function DailyHoroscope() {
                       priority={index < 2}
                     />
                   </div>
-                  <div className="p-6 flex flex-col flex-1">
-                    <h3 className="text-xl font-bold text-black mb-2">{getLocalizedText(card.title, lang)}</h3>
+                  <div className="p-4 sm:p-6 flex flex-col flex-1">
+                    <h3 className="text-lg sm:text-xl font-bold text-black mb-2">{getLocalizedText(card.title, lang)}</h3>
                     <p className="text-gray-700 mb-4 line-clamp-3">{getLocalizedText(card.description, lang)}</p>
                     <Link href={card.href} passHref>
                       <Button className="bg-black text-white rounded-lg py-2 px-6 shadow-md transition-all duration-300 border border-[#E0E0E0] hover:bg-gray-800">
@@ -373,9 +375,9 @@ export function DailyHoroscope() {
             </div>
           </div>
 
-          <div className="lg:col-span-1 space-y-8">
-            <Card className="bg-white rounded-xl shadow-lg p-6 text-center border border-gray-100">
-              <div className="relative w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
+          <div className="w-full md:w-1/3 flex flex-col space-y-8">
+            <Card className="bg-white rounded-xl shadow-lg p-4 sm:p-6 text-center border border-gray-100">
+              <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 rounded-full overflow-hidden">
                 <Image
                   src="https://res.cloudinary.com/dxwspucxw/image/upload/v1752042877/placeholder-author_utggms.jpg"
                   alt="Dr. Narendra Kumar Sharma"
@@ -383,11 +385,11 @@ export function DailyHoroscope() {
                   style={{ objectFit: 'cover' }}
                 />
               </div>
-              <h3 className="text-2xl font-bold text-black mb-2">
+              <h3 className="text-lg sm:text-2xl font-bold text-black mb-2">
                 {t('dailyHoroscope.authorName')}
               </h3>
-              <p className="text-purple-600 text-sm mb-4">{t('dailyHoroscope.authorTitle')}</p>
-              <p className="text-gray-600 text-sm mb-6">
+              <p className="text-purple-600 text-xs sm:text-sm mb-4">{t('dailyHoroscope.authorTitle')}</p>
+              <p className="text-gray-600 text-xs sm:text-sm mb-6">
                 {t('dailyHoroscope.authorBio')}
               </p>
               <Link href="/contact" passHref>
@@ -396,15 +398,15 @@ export function DailyHoroscope() {
                 </Button>
               </Link>
               <div className="flex justify-center items-center space-x-4">
-                <span className="text-gray-600">{t('dailyHoroscope.follow')}</span>
-                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors"><Facebook className="w-6 h-6" /></a>
-                <a href="#" className="text-gray-600 hover:text-pink-600 transition-colors"><Instagram className="w-6 h-6" /></a>
-                <a href="#" className="text-gray-600 hover:text-blue-400 transition-colors"><Twitter className="w-6 h-6" /></a>
+                <span className="text-gray-600 text-xs sm:text-base">{t('dailyHoroscope.follow')}</span>
+                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors"><Facebook className="w-5 h-5 sm:w-6 sm:h-6" /></a>
+                <a href="#" className="text-gray-600 hover:text-pink-600 transition-colors"><Instagram className="w-5 h-5 sm:w-6 sm:h-6" /></a>
+                <a href="#" className="text-gray-600 hover:text-blue-400 transition-colors"><Twitter className="w-5 h-5 sm:w-6 sm:h-6" /></a>
               </div>
             </Card>
 
-            <Card className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-              <h3 className="text-2xl font-bold text-black mb-4">
+            <Card className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100">
+              <h3 className="text-lg sm:text-2xl font-bold text-black mb-4">
                 {t('dailyHoroscope.faqHeading')}
               </h3>
               <div className="space-y-4">
@@ -427,7 +429,7 @@ export function DailyHoroscope() {
               </div>
             </Card>
             {/* Product Image Cards: vertical column below FAQ */}
-            <div className="flex flex-col gap-6 mt-6 w-full max-w-[420px] mx-auto">
+            <div className="flex flex-col gap-6 mt-6 w-full max-w-sm mx-auto">
               {[0, 1, 2].map((cardIdx) => {
                 const variants = [
                   { initial: { y: -80, opacity: 0 }, animate: { y: 0, opacity: 1 }, exit: { y: 80, opacity: 0 } },
@@ -437,7 +439,7 @@ export function DailyHoroscope() {
                 return (
                   <motion.div
                     key={cardIdx}
-                    className="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col justify-between w-full h-56 overflow-hidden"
+                    className="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col justify-between w-full h-40 sm:h-56 overflow-hidden mx-auto"
                   >
                     <div className="relative w-full h-full">
                       <AnimatePresence mode="wait" initial={false}>

@@ -14,7 +14,7 @@ const additionalPosts = [
     author: { en: "Acharya Raj Kumar", hi: "आचार्य राज कुमार" },
     date: "2024-04-14",
     category: "Astrology",
-    imageUrl: "/api/placeholder/400/300", // Replace with actual image
+    imageUrl: "https://res.cloudinary.com/dxwspucxw/image/upload/v1753079351/Mercury_Retrograde_ngktou.jpg",
     themeColor: "#4F46E5"
   },
   {
@@ -22,7 +22,7 @@ const additionalPosts = [
     author: { en: "Pandit Suresh Sharma", hi: "पंडित सुरेश शर्मा" },
     date: "2024-04-13",
     category: "Vastu",
-    imageUrl: "/api/placeholder/400/300", // Replace with actual image
+    imageUrl: "https://res.cloudinary.com/dxwspucxw/image/upload/v1753079524/Vastu_Shastra_f0haqy.jpg",
     themeColor: "#059669"
   }
 ];
