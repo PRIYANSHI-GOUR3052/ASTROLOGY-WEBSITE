@@ -66,6 +66,6 @@ export function AnimatedStars() {
     }
   }, [])
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0" />
+  return <canvas ref={canvasRef} className="fixed inset-0 z-0" style={{ pointerEvents: 'none' }} />
 }
 
