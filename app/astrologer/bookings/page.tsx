@@ -48,7 +48,7 @@ const BookingsPage = () => {
   const fetchIdRef = useRef(0);
 
   // Get JWT token (adjust as per your auth storage)
-  const token = typeof window !== 'undefined' ? localStorage.getItem('astrologer_token') : null;
+  const token = typeof window !== 'undefined' ? localStorage.getItem('astrologerToken') : null;
 
   // Robust fetchBookings with race condition prevention
   const fetchBookings = useCallback(async () => {
@@ -246,7 +246,7 @@ const BookingsPage = () => {
                 </span>
               </div>
               <div className="text-gray-700 dark:text-gray-200">
-                <span className="font-semibold">Client:</span> {booking.client}
+                <span className="font-semibold">Client:</span> {booking.client?.name} ({booking.client?.email})
               </div>
               <div className="text-gray-700 dark:text-gray-200">
                 <span className="font-semibold">Date:</span> {new Date(booking.date).toLocaleString()}

@@ -71,7 +71,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
   const [showRejectionInput, setShowRejectionInput] = useState<ShowRejectionInput>({})
   const [astrologer, setAstrologer] = useState<Astrologer | null>(null)
   const [loading, setLoading] = useState(true)
-
   const decodedEmail = decodeURIComponent(params?.email || "")
 
   // Add after fetching verification in useEffect
@@ -124,7 +123,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
           return
         }
         const { verification } = await res.json()
-
         // Compose astrologer object from backend data
         const astro: Astrologer = {
           name: verification.astrologer.firstName + " " + verification.astrologer.lastName,
@@ -158,18 +156,16 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
         // Set document statuses and rejection reasons from backend - FIXED
         const docStatuses: DocumentStatuses = {}
         const docReasons: RejectionReasons = {}
-        ;(["aadharCard", "panCard", "selfie", "workProof", "declarationForm", "addressProof"] as DocumentKey[]).forEach(
-          (key) => {
-            const statusField = statusFieldMapping[key]
-            const remarksField = remarksFieldMapping[key]
-
-            const backendStatus = verification[statusField]
-            const backendRemarks = verification[remarksField]
-
-            docStatuses[key] = normalizeStatus(backendStatus)
-            docReasons[key] = backendRemarks || ""
-          },
-        )
+          ; (["aadharCard", "panCard", "selfie", "workProof", "declarationForm", "addressProof"] as DocumentKey[]).forEach(
+            (key) => {
+              const statusField = statusFieldMapping[key]
+              const remarksField = remarksFieldMapping[key]
+              const backendStatus = verification[statusField]
+              const backendRemarks = verification[remarksField]
+              docStatuses[key] = normalizeStatus(backendStatus)
+              docReasons[key] = backendRemarks || ""
+            },
+          )
 
         setDocumentStatuses(docStatuses)
         setRejectionReasons(docReasons)
@@ -179,19 +175,19 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
 
         const eduStat: { [id: number]: DocumentStatus } = {}
         const eduRem: { [id: number]: string } = {}
-        ;(verification.educations || []).forEach((e: any) => {
-          eduStat[e.id] = normalizeStatus(e.status)
-          eduRem[e.id] = e.remarks || ""
-        })
+          ; (verification.educations || []).forEach((e: any) => {
+            eduStat[e.id] = normalizeStatus(e.status)
+            eduRem[e.id] = e.remarks || ""
+          })
         setEduStatuses(eduStat)
         setEduRemarks(eduRem)
 
         const certStat: { [id: number]: DocumentStatus } = {}
         const certRem: { [id: number]: string } = {}
-        ;(verification.certifications || []).forEach((c: any) => {
-          certStat[c.id] = normalizeStatus(c.status)
-          certRem[c.id] = c.remarks || ""
-        })
+          ; (verification.certifications || []).forEach((c: any) => {
+            certStat[c.id] = normalizeStatus(c.status)
+            certRem[c.id] = c.remarks || ""
+          })
         setCertStatuses(certStat)
         setCertRemarks(certRem)
 
@@ -260,7 +256,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
     if (allAccepted) {
       setProcessingStatus("Auto-approving: All documents accepted")
       setAutoProcessing(true)
-
       fetch("/api/astrologer/verification-by-email", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -301,7 +296,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
     else if (anyRejected) {
       setProcessingStatus("Auto-rejecting: Some documents rejected")
       setAutoProcessing(true)
-
       fetch("/api/astrologer/verification-by-email", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -366,8 +360,8 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
     setCurrentDocIndex((prev) => (prev - 1 + documentKeys.length) % documentKeys.length)
   }
 
-  // Remove all calls to checkAndUpdateProfileStatus from handlers
-  const handleAccept = async (docKey: DocumentKey) => {
+  // FIXED: Profile document handlers
+  const handleAcceptProfileDocument = async (docKey: string) => {
     try {
       setDocumentStatuses((prev) => ({ ...prev, [docKey]: "accepted" }))
       setShowRejectionInput((prev) => ({ ...prev, [docKey]: false }))
@@ -385,18 +379,17 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
           remarks: "",
         }),
       })
-
       await refetchVerification()
     } catch (error) {
-      console.error("Error accepting document:", error)
+      console.error("Error accepting profile document:", error)
     }
   }
 
-  const handleReject = (docKey: DocumentKey) => {
+  const handleRejectProfileDocument = (docKey: string) => {
     setShowRejectionInput((prev) => ({ ...prev, [docKey]: true }))
   }
 
-  const handleRejectConfirm = async (docKey: DocumentKey) => {
+  const handleRejectConfirmProfileDocument = async (docKey: string) => {
     if (rejectionReasons[docKey]?.trim()) {
       try {
         setDocumentStatuses((prev) => ({ ...prev, [docKey]: "rejected" }))
@@ -414,15 +407,14 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
             remarks: rejectionReasons[docKey],
           }),
         })
-
         await refetchVerification()
       } catch (error) {
-        console.error("Error rejecting document:", error)
+        console.error("Error rejecting profile document:", error)
       }
     }
   }
 
-  const handleRejectCancel = (docKey: DocumentKey) => {
+  const handleRejectCancelProfileDocument = (docKey: string) => {
     setShowRejectionInput((prev) => ({ ...prev, [docKey]: false }))
     setRejectionReasons((prev) => ({ ...prev, [docKey]: "" }))
   }
@@ -433,7 +425,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
       setEduStatuses((prev) => ({ ...prev, [id]: "accepted" }))
       setEduShowReject((prev) => ({ ...prev, [id]: false }))
       setEduRemarks((prev) => ({ ...prev, [id]: "" }))
-
       await fetch("/api/astrologer/verification-by-email", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -446,7 +437,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
           remarks: "",
         }),
       })
-
       await refetchVerification()
     } catch (error) {
       console.error("Error accepting education:", error)
@@ -462,7 +452,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
       try {
         setEduStatuses((prev) => ({ ...prev, [id]: "rejected" }))
         setEduShowReject((prev) => ({ ...prev, [id]: false }))
-
         await fetch("/api/astrologer/verification-by-email", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -475,7 +464,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
             remarks: eduRemarks[id],
           }),
         })
-
         await refetchVerification()
       } catch (error) {
         console.error("Error rejecting education:", error)
@@ -493,7 +481,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
       setCertStatuses((prev) => ({ ...prev, [id]: "accepted" }))
       setCertShowReject((prev) => ({ ...prev, [id]: false }))
       setCertRemarks((prev) => ({ ...prev, [id]: "" }))
-
       await fetch("/api/astrologer/verification-by-email", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -506,7 +493,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
           remarks: "",
         }),
       })
-
       await refetchVerification()
     } catch (error) {
       console.error("Error accepting certification:", error)
@@ -522,7 +508,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
       try {
         setCertStatuses((prev) => ({ ...prev, [id]: "rejected" }))
         setCertShowReject((prev) => ({ ...prev, [id]: false }))
-
         await fetch("/api/astrologer/verification-by-email", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -535,7 +520,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
             remarks: certRemarks[id],
           }),
         })
-
         await refetchVerification()
       } catch (error) {
         console.error("Error rejecting certification:", error)
@@ -561,9 +545,7 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
         credentials: "include",
       })
       if (!res.ok) return
-
       const { verification } = await res.json()
-
       const astro: Astrologer = {
         name: verification.astrologer.firstName + " " + verification.astrologer.lastName,
         email: verification.astrologer.email,
@@ -590,28 +572,24 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
           ifsc: verification.astrologer.ifscCode || "",
         },
       }
-
       setAstrologer(astro)
 
       // Update document statuses after refetch - FIXED
       const docStatuses: DocumentStatuses = {}
       const docReasons: RejectionReasons = {}
-      ;(["aadharCard", "panCard", "selfie", "workProof", "declarationForm", "addressProof"] as DocumentKey[]).forEach(
-        (key) => {
-          const statusField = statusFieldMapping[key]
-          const remarksField = remarksFieldMapping[key]
-
-          const backendStatus = verification[statusField]
-          const backendRemarks = verification[remarksField]
-
-          docStatuses[key] = normalizeStatus(backendStatus)
-          docReasons[key] = backendRemarks || ""
-        },
-      )
+        ; (["aadharCard", "panCard", "selfie", "workProof", "declarationForm", "addressProof"] as DocumentKey[]).forEach(
+          (key) => {
+            const statusField = statusFieldMapping[key]
+            const remarksField = remarksFieldMapping[key]
+            const backendStatus = verification[statusField]
+            const backendRemarks = verification[remarksField]
+            docStatuses[key] = normalizeStatus(backendStatus)
+            docReasons[key] = backendRemarks || ""
+          },
+        )
 
       setDocumentStatuses(docStatuses)
       setRejectionReasons(docReasons)
-
       setAdminRemarks(verification.adminRemarks || "")
     } finally {
       setLoading(false)
@@ -621,10 +599,8 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
   const getDocumentStatusSummary = () => {
     const documentEntries = Object.entries(astrologer.documents).filter(([_, url]) => url && url.trim() !== "")
     const docStatuses = documentEntries.map(([key, _]) => documentStatuses[key] || "unverified")
-
     const eduStatusList = educations.map((edu) => eduStatuses[edu.id] || "unverified")
     const certStatusList = certifications.map((cert) => certStatuses[cert.id] || "unverified")
-
     const allStatuses = [...docStatuses, ...eduStatusList, ...certStatusList]
 
     const accepted = allStatuses.filter((s) => s === "accepted").length
@@ -633,6 +609,168 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
     const unverified = allStatuses.filter((s) => s === "unverified").length
 
     return { accepted, rejected, pending, unverified, total: allStatuses.length }
+  }
+
+  // FIXED: Get all documents function
+  const getAllDocuments = () => {
+    const allDocs: any[] = []
+
+    // Add profile documents
+    Object.entries(astrologer.documents).forEach(([key, url]) => {
+      if (url && url.trim() !== "") {
+        allDocs.push({
+          id: key,
+          label: documentLabels[key as DocumentKey] || key,
+          url: url,
+          category: "Profile Document",
+          status: documentStatuses[key] || "unverified",
+          remarks: rejectionReasons[key] || null,
+        })
+      }
+    })
+
+    // Add education documents
+    educations.forEach((edu) => {
+      if (edu.degreeFile) {
+        allDocs.push({
+          id: edu.id,
+          label: `${edu.qualification} - ${edu.universityName}`,
+          url: edu.degreeFile,
+          category: "Education Document",
+          status: eduStatuses[edu.id] || "unverified",
+          remarks: eduRemarks[edu.id] || null,
+        })
+      }
+    })
+
+    // Add certification documents
+    certifications.forEach((cert) => {
+      if (cert.certificateFile) {
+        allDocs.push({
+          id: cert.id,
+          label: `${cert.courseName} - ${cert.instituteName}`,
+          url: cert.certificateFile,
+          category: "Certification Document",
+          status: certStatuses[cert.id] || "unverified",
+          remarks: certRemarks[cert.id] || null,
+        })
+      }
+    })
+
+    return allDocs
+  }
+
+  // FIXED: Unified accept/reject handlers
+  const handleAccept = (docId: string | number) => {
+    const allDocs = getAllDocuments()
+    const doc = allDocs.find((d) => d.id === docId)
+
+    if (!doc) return
+
+    if (doc.category === "Profile Document") {
+      handleAcceptProfileDocument(docId as string)
+    } else if (doc.category === "Education Document") {
+      handleAcceptEducation(docId as number)
+    } else if (doc.category === "Certification Document") {
+      handleAcceptCertification(docId as number)
+    }
+  }
+
+  const handleReject = (docId: string | number) => {
+    const allDocs = getAllDocuments()
+    const doc = allDocs.find((d) => d.id === docId)
+
+    if (!doc) return
+
+    if (doc.category === "Profile Document") {
+      handleRejectProfileDocument(docId as string)
+    } else if (doc.category === "Education Document") {
+      handleRejectEducation(docId as number)
+    } else if (doc.category === "Certification Document") {
+      handleRejectCertification(docId as number)
+    }
+  }
+
+  const handleRejectCancel = (docId: string | number) => {
+    const allDocs = getAllDocuments()
+    const doc = allDocs.find((d) => d.id === docId)
+
+    if (!doc) return
+
+    if (doc.category === "Profile Document") {
+      handleRejectCancelProfileDocument(docId as string)
+    } else if (doc.category === "Education Document") {
+      handleRejectCancelEducation(docId as number)
+    } else if (doc.category === "Certification Document") {
+      handleRejectCancelCertification(docId as number)
+    }
+  }
+
+  const handleRejectConfirm = (docId: string | number) => {
+    const allDocs = getAllDocuments()
+    const doc = allDocs.find((d) => d.id === docId)
+
+    if (!doc) return
+
+    if (doc.category === "Profile Document") {
+      handleRejectConfirmProfileDocument(docId as string)
+    } else if (doc.category === "Education Document") {
+      handleRejectConfirmEducation(docId as number)
+    } else if (doc.category === "Certification Document") {
+      handleRejectConfirmCertification(docId as number)
+    }
+  }
+
+  // FIXED: Get current rejection reason based on document type
+  const getCurrentRejectionReason = (docId: string | number) => {
+    const allDocs = getAllDocuments()
+    const doc = allDocs.find((d) => d.id === docId)
+
+    if (!doc) return ""
+
+    if (doc.category === "Profile Document") {
+      return rejectionReasons[docId as string] || ""
+    } else if (doc.category === "Education Document") {
+      return eduRemarks[docId as number] || ""
+    } else if (doc.category === "Certification Document") {
+      return certRemarks[docId as number] || ""
+    }
+
+    return ""
+  }
+
+  // FIXED: Set current rejection reason based on document type
+  const setCurrentRejectionReason = (docId: string | number, reason: string) => {
+    const allDocs = getAllDocuments()
+    const doc = allDocs.find((d) => d.id === docId)
+
+    if (!doc) return
+
+    if (doc.category === "Profile Document") {
+      setRejectionReasons((prev) => ({ ...prev, [docId as string]: reason }))
+    } else if (doc.category === "Education Document") {
+      setEduRemarks((prev) => ({ ...prev, [docId as number]: reason }))
+    } else if (doc.category === "Certification Document") {
+      setCertRemarks((prev) => ({ ...prev, [docId as number]: reason }))
+    }
+  }
+
+  // FIXED: Check if rejection input is shown
+  const isRejectionInputShown = (docId: string | number) => {
+    const allDocs = getAllDocuments()
+    const doc = allDocs.find((d) => d.id === docId)
+
+    if (!doc) return false
+
+    if (doc.category === "Profile Document") {
+      return showRejectionInput[docId as string] || false
+    } else if (doc.category === "Education Document") {
+      return eduShowReject[docId as number] || false
+    } else if (doc.category === "Certification Document") {
+      return certShowReject[docId as number] || false
+    }
+
+    return false
   }
 
   return (
@@ -801,15 +939,14 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Status</p>
                 <span
-                  className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                    astrologer.documentStatus === "approved"
+                  className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${astrologer.documentStatus === "approved"
                       ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
                       : astrologer.documentStatus === "rejected"
                         ? "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
                         : astrologer.documentStatus === "pending"
                           ? "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
                           : "bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
-                  }`}
+                    }`}
                 >
                   {astrologer.documentStatus}
                 </span>
@@ -822,216 +959,10 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
               </div>
             </div>
           </div>
-
-          <div className="mt-10">
-            <h2 className="text-2xl font-bold mb-4">Education Documents</h2>
-            {educations.length === 0 && <p className="text-gray-500">No education documents submitted.</p>}
-            {educations.map((edu) => (
-              <div
-                key={edu.id}
-                className="mb-6 p-4 border rounded-xl bg-white dark:bg-gray-800 flex flex-col md:flex-row md:items-center md:space-x-6"
-              >
-                <div className="flex-1">
-                  <div className="mb-2 font-semibold">
-                    {edu.qualification} in {edu.fieldOfStudy}
-                  </div>
-                  <div className="mb-2 text-sm text-gray-500">{edu.universityName}</div>
-                  <div className="mb-2 text-sm text-gray-500">
-                    Degree File:{" "}
-                    {edu.degreeFile ? (
-                      <button
-                        onClick={() =>
-                          setEduModal({
-                            open: true,
-                            file: edu.degreeFile,
-                            label: `${edu.qualification} - ${edu.universityName}`,
-                          })
-                        }
-                        className="text-blue-600 underline"
-                      >
-                        View Document
-                      </button>
-                    ) : (
-                      "Not uploaded"
-                    )}
-                  </div>
-                </div>
-                <div className="flex flex-col items-end">
-                  {/* Always show current status badge */}
-                  {eduStatuses[edu.id] === "accepted" && (
-                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-800">Accepted</span>
-                  )}
-                  {eduStatuses[edu.id] === "rejected" && (
-                    <span className="px-3 py-1 rounded-full bg-red-100 text-red-800">Rejected</span>
-                  )}
-                  {eduStatuses[edu.id] === "pending" && (
-                    <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                  )}
-                  {eduStatuses[edu.id] === "unverified" && (
-                    <span className="px-3 py-1 rounded-full bg-gray-100 text-gray-800">Unverified</span>
-                  )}
-
-                  {/* Show rejection reason if rejected */}
-                  {eduStatuses[edu.id] === "rejected" && eduRemarks[edu.id] && (
-                    <div className="mt-2 text-sm text-red-700">Reason: {eduRemarks[edu.id]}</div>
-                  )}
-
-                  {/* Rejection input */}
-                  {eduShowReject[edu.id] && (
-                    <div className="mt-2 space-y-2">
-                      <input
-                        type="text"
-                        value={eduRemarks[edu.id] || ""}
-                        onChange={(e) => setEduRemarks((prev) => ({ ...prev, [edu.id]: e.target.value }))}
-                        placeholder="Rejection reason..."
-                        className="px-2 py-1 border rounded"
-                      />
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => handleRejectCancelEducation(edu.id)}
-                          className="px-3 py-1 bg-gray-200 rounded"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => handleRejectConfirmEducation(edu.id)}
-                          disabled={!eduRemarks[edu.id]?.trim()}
-                          className="px-3 py-1 bg-red-600 text-white rounded disabled:bg-gray-400"
-                        >
-                          Confirm
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Always show Accept/Reject buttons, always enabled */}
-                  {!eduShowReject[edu.id] && (
-                    <div className="flex space-x-2 mt-2">
-                      <button
-                        onClick={() => handleAcceptEducation(edu.id)}
-                        className="px-4 py-2 bg-green-600 text-white rounded-lg"
-                      >
-                        Accept
-                      </button>
-                      <button
-                        onClick={() => handleRejectEducation(edu.id)}
-                        className="px-4 py-2 bg-red-600 text-white rounded-lg"
-                      >
-                        Reject
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10">
-            <h2 className="text-2xl font-bold mb-4">Certification Documents</h2>
-            {certifications.length === 0 && <p className="text-gray-500">No certification documents submitted.</p>}
-            {certifications.map((cert) => (
-              <div
-                key={cert.id}
-                className="mb-6 p-4 border rounded-xl bg-white dark:bg-gray-800 flex flex-col md:flex-row md:items-center md:space-x-6"
-              >
-                <div className="flex-1">
-                  <div className="mb-2 font-semibold">
-                    {cert.courseName} ({cert.yearOfCompletion})
-                  </div>
-                  <div className="mb-2 text-sm text-gray-500">{cert.instituteName}</div>
-                  <div className="mb-2 text-sm text-gray-500">
-                    Certificate File:{" "}
-                    {cert.certificateFile ? (
-                      <button
-                        onClick={() =>
-                          setCertModal({
-                            open: true,
-                            file: cert.certificateFile,
-                            label: `${cert.courseName} - ${cert.instituteName}`,
-                          })
-                        }
-                        className="text-blue-600 underline"
-                      >
-                        View Document
-                      </button>
-                    ) : (
-                      "Not uploaded"
-                    )}
-                  </div>
-                </div>
-                <div className="flex flex-col items-end">
-                  {/* Always show current status badge */}
-                  {certStatuses[cert.id] === "accepted" && (
-                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-800">Accepted</span>
-                  )}
-                  {certStatuses[cert.id] === "rejected" && (
-                    <span className="px-3 py-1 rounded-full bg-red-100 text-red-800">Rejected</span>
-                  )}
-                  {certStatuses[cert.id] === "pending" && (
-                    <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                  )}
-                  {certStatuses[cert.id] === "unverified" && (
-                    <span className="px-3 py-1 rounded-full bg-gray-100 text-gray-800">Unverified</span>
-                  )}
-
-                  {/* Show rejection reason if rejected */}
-                  {certStatuses[cert.id] === "rejected" && certRemarks[cert.id] && (
-                    <div className="mt-2 text-sm text-red-700">Reason: {certRemarks[cert.id]}</div>
-                  )}
-
-                  {/* Rejection input */}
-                  {certShowReject[cert.id] && (
-                    <div className="mt-2 space-y-2">
-                      <input
-                        type="text"
-                        value={certRemarks[cert.id] || ""}
-                        onChange={(e) => setCertRemarks((prev) => ({ ...prev, [cert.id]: e.target.value }))}
-                        placeholder="Rejection reason..."
-                        className="px-2 py-1 border rounded"
-                      />
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => handleRejectCancelCertification(cert.id)}
-                          className="px-3 py-1 bg-gray-200 rounded"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => handleRejectConfirmCertification(cert.id)}
-                          disabled={!certRemarks[cert.id]?.trim()}
-                          className="px-3 py-1 bg-red-600 text-white rounded disabled:bg-gray-400"
-                        >
-                          Confirm
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Always show Accept/Reject buttons, always enabled */}
-                  {!certShowReject[cert.id] && (
-                    <div className="flex space-x-2 mt-2">
-                      <button
-                        onClick={() => handleAcceptCertification(cert.id)}
-                        className="px-4 py-2 bg-green-600 text-white rounded-lg"
-                      >
-                        Accept
-                      </button>
-                      <button
-                        onClick={() => handleRejectCertification(cert.id)}
-                        className="px-4 py-2 bg-red-600 text-white rounded-lg"
-                      >
-                        Reject
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Enhanced Profile Verification Control */}
-        <div className="mt-12 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 max-w-4xl mx-auto">
+        <div className="mt-12 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700  mx-auto">
           <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100 flex items-center">
             <svg
               className="w-5 h-5 mr-2 text-yellow-600 dark:text-yellow-400"
@@ -1110,15 +1041,14 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Current Status</p>
               <span
-                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                  astrologer.documentStatus === "approved"
+                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${astrologer.documentStatus === "approved"
                     ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
                     : astrologer.documentStatus === "rejected"
                       ? "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
                       : astrologer.documentStatus === "pending"
                         ? "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
                         : "bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
-                }`}
+                  }`}
               >
                 {astrologer.documentStatus}
               </span>
@@ -1186,7 +1116,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
                 </p>
               </div>
             </div>
-
             <div className="flex flex-col gap-4">
               <button
                 className="px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
@@ -1238,7 +1167,6 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
                   "Manually Approve Astrologer"
                 )}
               </button>
-
               <div>
                 <textarea
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 mb-2"
@@ -1322,18 +1250,40 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
       {/* Document Viewer Popup */}
       {isPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-scroll">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-7xl w-full max-h-[95vh] overflow-y-scroll">
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
               <div className="flex items-center space-x-4">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{documentLabels[currentDocKey]}</h3>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {currentDocIndex + 1} of {documentKeys.length}
-                </span>
+                <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    {(() => {
+                      const allDocs = getAllDocuments()
+                      const currentDoc = allDocs[currentDocIndex]
+                      return currentDoc ? currentDoc.label : "Document"
+                    })()}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {(() => {
+                      const allDocs = getAllDocuments()
+                      const currentDoc = allDocs[currentDocIndex]
+                      return currentDoc ? currentDoc.category : "Document"
+                    })()} • {currentDocIndex + 1} of {getAllDocuments().length}
+                  </p>
+                </div>
               </div>
               <button
                 onClick={() => setIsPopupOpen(false)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1341,14 +1291,44 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
               </button>
             </div>
 
+            {/* Document Navigation Pills */}
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+              <div className="flex space-x-2 overflow-x-auto pb-2">
+                {getAllDocuments().map((doc, index) => (
+                  <button
+                    key={doc.id}
+                    onClick={() => setCurrentDocIndex(index)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${index === currentDocIndex
+                        ? "bg-blue-500 text-white shadow-lg"
+                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600"
+                      }`}
+                  >
+                    <span className="flex items-center space-x-2">
+                      <span
+                        className={`w-2 h-2 rounded-full ${doc.status === "accepted"
+                            ? "bg-green-400"
+                            : doc.status === "rejected"
+                              ? "bg-red-400"
+                              : doc.status === "pending"
+                                ? "bg-yellow-400"
+                                : "bg-gray-400"
+                          }`}
+                      ></span>
+                      <span>{doc.label}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Content */}
-            <div className="flex h-[calc(95vh-200px)]">
+            <div className="flex h-[calc(95vh-280px)]">
               {/* Navigation */}
               <div className="flex flex-col justify-center p-4">
                 <button
-                  onClick={handlePrevDoc}
-                  className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                  disabled={documentKeys.length <= 1}
+                  onClick={() => setCurrentDocIndex(Math.max(0, currentDocIndex - 1))}
+                  className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
+                  disabled={currentDocIndex === 0}
                 >
                   <svg
                     className="w-6 h-6 text-gray-600 dark:text-gray-300"
@@ -1363,29 +1343,53 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
 
               {/* Document Display */}
               <div className="flex-1 p-6 flex items-center justify-center">
-                <div className="w-full h-full bg-gray-50 dark:bg-gray-900 rounded-lg flex items-center justify-center">
-                  {getFileType(currentDocUrl) === "image" ? (
-                    <img
-                      src={currentDocUrl || "/placeholder.svg"}
-                      alt={documentLabels[currentDocKey]}
-                      className="max-w-full max-h-full object-contain rounded-lg"
-                    />
-                  ) : (
-                    <iframe
-                      src={currentDocUrl}
-                      className="w-full h-full rounded-lg"
-                      title={documentLabels[currentDocKey]}
-                    />
-                  )}
+                <div className="w-full h-full bg-gray-50 dark:bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-700">
+                  {(() => {
+                    const allDocs = getAllDocuments()
+                    const currentDoc = allDocs[currentDocIndex]
+                    if (!currentDoc || !currentDoc.url) {
+                      return (
+                        <div className="text-center">
+                          <svg
+                            className="w-16 h-16 text-gray-400 mx-auto mb-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                          <p className="text-gray-500 dark:text-gray-400">No document available</p>
+                        </div>
+                      )
+                    }
+                    return getFileType(currentDoc.url) === "image" ? (
+                      <img
+                        src={currentDoc.url || "/placeholder.svg"}
+                        alt={currentDoc.label}
+                        className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+                      />
+                    ) : (
+                      <iframe
+                        src={currentDoc.url}
+                        className="w-full h-full rounded-lg shadow-lg"
+                        title={currentDoc.label}
+                      />
+                    )
+                  })()}
                 </div>
               </div>
 
               {/* Navigation */}
               <div className="flex flex-col justify-center p-4">
                 <button
-                  onClick={handleNextDoc}
-                  className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                  disabled={documentKeys.length <= 1}
+                  onClick={() => setCurrentDocIndex(Math.min(getAllDocuments().length - 1, currentDocIndex + 1))}
+                  className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
+                  disabled={currentDocIndex === getAllDocuments().length - 1}
                 >
                   <svg
                     className="w-6 h-6 text-gray-600 dark:text-gray-300"
@@ -1400,147 +1404,160 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
             </div>
 
             {/* Action Buttons */}
-            <div className="p-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20">
               <div className="flex flex-col space-y-4">
-                {/* Always show current status badge */}
-                <div className="flex items-center justify-center">
-                  {documentStatuses[currentDocKey] === "accepted" && (
-                    <span className="px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                      Accepted
-                    </span>
-                  )}
-                  {documentStatuses[currentDocKey] === "rejected" && (
-                    <span className="px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                      Rejected
-                    </span>
-                  )}
-                  {documentStatuses[currentDocKey] === "pending" && (
-                    <span className="px-4 py-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                      Pending
-                    </span>
-                  )}
-                  {documentStatuses[currentDocKey] === "unverified" && (
-                    <span className="px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
-                      Unverified
-                    </span>
-                  )}
+                {/* Document Info Card */}
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {(() => {
+                          const allDocs = getAllDocuments()
+                          const currentDoc = allDocs[currentDocIndex]
+                          return currentDoc ? currentDoc.category : "Document"
+                        })()}
+                      </div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {(() => {
+                          const allDocs = getAllDocuments()
+                          const currentDoc = allDocs[currentDocIndex]
+                          return currentDoc ? currentDoc.label : "Document"
+                        })()}
+                      </div>
+                    </div>
+                    {/* Status Badge */}
+                    <div className="flex items-center space-x-2">
+                      {(() => {
+                        const allDocs = getAllDocuments()
+                        const currentDoc = allDocs[currentDocIndex]
+                        if (!currentDoc) return null
+                        const statusColors = {
+                          accepted: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+                          rejected: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+                          pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+                          unverified: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200",
+                        }
+                        return (
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[currentDoc.status] || statusColors.unverified}`}
+                          >
+                            {currentDoc.status}
+                          </span>
+                        )
+                      })()}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Show rejection reason if rejected */}
-                {documentStatuses[currentDocKey] === "rejected" && rejectionReasons[currentDocKey] && (
-                  <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <p className="text-sm text-red-800 dark:text-red-200">
-                      <strong>Rejection Reason:</strong> {rejectionReasons[currentDocKey]}
-                    </p>
-                  </div>
-                )}
+                {(() => {
+                  const allDocs = getAllDocuments()
+                  const currentDoc = allDocs[currentDocIndex]
+                  if (currentDoc && currentDoc.status === "rejected" && currentDoc.remarks) {
+                    return (
+                      <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 border border-red-200 dark:border-red-800">
+                        <div className="flex items-start space-x-3">
+                          <svg
+                            className="w-5 h-5 text-red-500 mt-0.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                            />
+                          </svg>
+                          <div>
+                            <p className="font-medium text-red-800 dark:text-red-200">Rejection Reason</p>
+                            <p className="text-sm text-red-700 dark:text-red-300">{currentDoc.remarks}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  }
+                })()}
 
                 {/* Rejection Reason Input */}
-                {showRejectionInput[currentDocKey] && (
-                  <div className="space-y-3">
-                    <input
-                      type="text"
-                      value={rejectionReasons[currentDocKey] || ""}
-                      onChange={(e) => setRejectionReasons((prev) => ({ ...prev, [currentDocKey]: e.target.value }))}
-                      placeholder="Please enter the reason for rejection..."
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    />
-                    <div className="flex justify-end space-x-3">
-                      <button
-                        onClick={() => handleRejectCancel(currentDocKey)}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={() => handleRejectConfirm(currentDocKey)}
-                        disabled={!rejectionReasons[currentDocKey]?.trim()}
-                        className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-                      >
-                        Confirm Rejection
-                      </button>
-                    </div>
-                  </div>
-                )}
+                {(() => {
+                  const allDocs = getAllDocuments()
+                  const currentDoc = allDocs[currentDocIndex]
+                  if (currentDoc && isRejectionInputShown(currentDoc.id)) {
+                    return (
+                      <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                        <div className="space-y-3">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Rejection Reason
+                          </label>
+                          <textarea
+                            value={getCurrentRejectionReason(currentDoc.id)}
+                            onChange={(e) => setCurrentRejectionReason(currentDoc.id, e.target.value)}
+                            placeholder="Please provide a detailed reason for rejection..."
+                            rows={3}
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100 resize-none"
+                          />
+                          <div className="flex justify-end space-x-3">
+                            <button
+                              onClick={() => handleRejectCancel(currentDoc.id)}
+                              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={() => handleRejectConfirm(currentDoc.id)}
+                              disabled={!getCurrentRejectionReason(currentDoc.id)?.trim()}
+                              className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                            >
+                              Confirm Rejection
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  }
+                })()}
 
-                {/* Always show Accept/Reject buttons, always enabled */}
-                {!showRejectionInput[currentDocKey] && (
-                  <div className="flex justify-center space-x-4">
-                    <button
-                      onClick={() => handleAccept(currentDocKey)}
-                      className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-                    >
-                      Accept Document
-                    </button>
-                    <button
-                      onClick={() => handleReject(currentDocKey)}
-                      className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
-                    >
-                      Reject Document
-                    </button>
-                  </div>
-                )}
+                {/* Action Buttons */}
+                {(() => {
+                  const allDocs = getAllDocuments()
+                  const currentDoc = allDocs[currentDocIndex]
+                  if (currentDoc && !isRejectionInputShown(currentDoc.id)) {
+                    return (
+                      <div className="flex justify-center space-x-4">
+                        <button
+                          onClick={() => handleAccept(currentDoc.id)}
+                          className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
+                        >
+                          <span className="flex items-center space-x-2">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Accept Document</span>
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => handleReject(currentDoc.id)}
+                          className="px-8 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
+                        >
+                          <span className="flex items-center space-x-2">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                            <span>Reject Document</span>
+                          </span>
+                        </button>
+                      </div>
+                    )
+                  }
+                })()}
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Education Modal */}
-      {eduModal && eduModal.open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{eduModal.label}</h3>
-              <button
-                onClick={() => setEduModal(null)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="flex items-center justify-center p-6">
-              {getFileType(eduModal.file) === "image" ? (
-                <img
-                  src={eduModal.file || "/placeholder.svg"}
-                  alt={eduModal.label}
-                  className="max-w-full max-h-[70vh] object-contain rounded-lg"
-                />
-              ) : (
-                <iframe src={eduModal.file} className="w-full h-[70vh] rounded-lg" title={eduModal.label} />
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Certification Modal */}
-      {certModal && certModal.open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{certModal.label}</h3>
-              <button
-                onClick={() => setCertModal(null)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="flex items-center justify-center p-6">
-              {getFileType(certModal.file) === "image" ? (
-                <img
-                  src={certModal.file || "/placeholder.svg"}
-                  alt={certModal.label}
-                  className="max-w-full max-h-[70vh] object-contain rounded-lg"
-                />
-              ) : (
-                <iframe src={certModal.file} className="w-full h-[70vh] rounded-lg" title={certModal.label} />
-              )}
             </div>
           </div>
         </div>
