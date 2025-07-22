@@ -21,7 +21,7 @@ export default function CartPage() {
       </div>
       {items.length === 0 ? (
         <div className="text-center py-16">
-          <ShoppingBag className="mx-auto h-16 w-16 text-mystic-brown/50 mb-4" />
+          <ShoppingBag className="mx-auto h-16 w-16 text-black mb-4" />
           <p className="text-xl mb-6 text-black">{t('cart.empty')}</p>
           <Button asChild>
             <Link href="/">{t('cart.continueShopping')}</Link>
@@ -37,17 +37,17 @@ export default function CartPage() {
                   <img src={item.image} alt={item.name} className="w-24 h-24 object-cover rounded-lg border" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-xl font-serif font-semibold text-mystic-brown truncate">{item.name}</h3>
-                  <p className="text-mystic-brown/80 text-lg mt-1">₹{Number(item.price).toLocaleString('en-IN')}</p>
+                  <h3 className="text-xl font-serif font-semibold text-black truncate">{item.name}</h3>
+                  <p className="text-black text-lg mt-1">₹{Number(item.price).toLocaleString('en-IN')}</p>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <label className="text-mystic-brown/80 text-sm">{t('cart.quantity')}</label>
+                  <label className="text-black text-sm">{t('cart.quantity')}</label>
                   <input
                     type="number"
                     min="1"
                     value={item.quantity}
                     onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-                    className="w-16 p-2 text-center border border-mystic-brown/30 rounded"
+                    className="w-16 p-2 text-center border border-black rounded text-black"
                   />
                   <button
                     onClick={() => removeItem(item.id)}
@@ -58,27 +58,27 @@ export default function CartPage() {
                   </button>
                 </div>
                 <div className="ml-8 text-right min-w-[120px]">
-                  <p className="text-lg font-medium text-mystic-brown">Subtotal:</p>
-                  <p className="text-xl font-bold text-mystic-brown">₹{Number(item.price * item.quantity).toLocaleString('en-IN')}</p>
+                  <p className="text-lg font-medium text-black">Subtotal:</p>
+                  <p className="text-xl font-bold text-black">₹{Number(item.price * item.quantity).toLocaleString('en-IN')}</p>
                 </div>
               </div>
             ))}
           </div>
           {/* Order Summary */}
           <div className="bg-white rounded-xl shadow-md p-8 border border-gray-200 sticky top-4 h-fit flex flex-col gap-6">
-            <h3 className="text-2xl font-serif font-semibold mb-2 text-mystic-brown">{t('cart.orderSummary')}</h3>
+            <h3 className="text-2xl font-serif font-semibold mb-2 text-black">{t('cart.orderSummary')}</h3>
             <div className="flex justify-between text-lg">
-              <span className="text-mystic-brown/80">{t('cart.subtotal')}</span>
-              <span className="text-mystic-brown font-medium">₹{Number(total).toLocaleString('en-IN')}</span>
+              <span className="text-black">{t('cart.subtotal')}</span>
+              <span className="text-black font-medium">₹{Number(total).toLocaleString('en-IN')}</span>
             </div>
             <div className="flex justify-between text-lg">
-              <span className="text-mystic-brown/80">{t('cart.shipping')}</span>
-              <span className="text-mystic-brown font-medium">{t('cart.shippingFree')}</span>
+              <span className="text-black">{t('cart.shipping')}</span>
+              <span className="text-black font-medium">{t('cart.shippingFree')}</span>
             </div>
-            <div className="border-t border-mystic-brown/20 pt-4 mb-2">
+            <div className="border-t border-black pt-4 mb-2">
               <div className="flex justify-between text-xl">
-                <span className="text-mystic-brown font-medium">{t('cart.total')}</span>
-                <span className="text-mystic-brown font-bold text-2xl">₹{Number(total).toLocaleString('en-IN')}</span>
+                <span className="text-black font-medium">{t('cart.total')}</span>
+                <span className="text-black font-bold text-2xl">₹{Number(total).toLocaleString('en-IN')}</span>
               </div>
             </div>
             <Button className="w-full bg-black text-white hover:bg-gray-800" disabled>
