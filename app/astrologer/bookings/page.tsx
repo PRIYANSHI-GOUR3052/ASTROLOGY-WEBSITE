@@ -26,7 +26,10 @@ interface TimePickerNoSecondsProps {
 type Booking = {
   id: number;
   type: string;
-  client: string;
+  client: {
+    name: string;
+    email: string;
+  };
   date: string;
   [key: string]: unknown;
 };

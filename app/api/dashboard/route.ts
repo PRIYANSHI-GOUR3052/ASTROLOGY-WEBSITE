@@ -489,6 +489,7 @@ async function getStorePerformance() {
     // Create a dataset with continuous dates
     console.log('[DEBUG] Creating combined dataset with continuous dates');
     const combinedData = [];
+    // eslint-disable-next-line prefer-const
     let currentDate = new Date(thirtyDaysAgo);
 
     while (currentDate <= today) {

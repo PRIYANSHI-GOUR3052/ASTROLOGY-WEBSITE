@@ -66,10 +66,10 @@ const AvailabilityPage = () => {
         });
         data = await res.json();
         if (res.ok) {
-          setSlots(prev => prev.map(slot => slot.id === editId ? { ...data, date: data.date.slice(0, 10) } : slot));
+          setSlots(prev => prev.map(slot => slot.id === editId ? { ...(data as Slot), date: (data as Slot).date.slice(0, 10) } : slot));
           setEditId(null);
         } else {
-          setError(data.error || 'Failed to update slot');
+          setError((data as APIErrorResponse).error || 'Failed to update slot');
         }
       } else {
         // Add new slot
@@ -80,9 +80,9 @@ const AvailabilityPage = () => {
         });
         data = await res.json();
         if (res.ok) {
-          setSlots(prev => [...prev, { ...data, date: data.date.slice(0, 10) }]);
+          setSlots(prev => [...prev, { ...(data as Slot), date: (data as Slot).date.slice(0, 10) }]);
         } else {
-          setError(data.error || 'Failed to add slot');
+          setError((data as APIErrorResponse).error || 'Failed to add slot');
         }
       }
       setForm({ date: "", start: "", end: "", repeat: "None" });

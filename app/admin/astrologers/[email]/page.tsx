@@ -1,7 +1,30 @@
 "use client"
 import { useState, useEffect, useCallback } from "react"
 import { notFound } from "next/navigation"
-import type { Certification, Education } from "../../astrologer/profile/page";
+// Define types locally since the import path doesn't exist
+interface Certification {
+  id: number;
+  courseName: string;
+  instituteName: string;
+  issue_date: string;
+  expiry_date?: string;
+  credential_id?: string;
+  credential_url?: string;
+  certificateFile?: string;
+}
+
+interface Education {
+  id: number;
+  qualification: string;
+  universityName: string;
+  field_of_study: string;
+  start_date: string;
+  end_date?: string;
+  grade?: string;
+  activities?: string;
+  description?: string;
+  degreeFile?: string;
+}
 import Image from 'next/image'
 
 const documentLabels = {
