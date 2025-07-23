@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Head from 'next/head';
 
 // Create a separate component for the part that uses useSearchParams
@@ -11,10 +11,8 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   
-  // Import useSearchParams in a component that will be wrapped in Suspense
-  const { useSearchParams } = require('next/navigation');
+  // Use useSearchParams directly
   const searchParams = useSearchParams();
-  
   // Get callback URL if available
   const callbackUrl = searchParams?.get('callbackUrl') || '/admin/dashboard';
 

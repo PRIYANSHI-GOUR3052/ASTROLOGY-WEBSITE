@@ -46,7 +46,7 @@ const TimePickerInput = React.forwardRef<HTMLInputElement | HTMLButtonElement, T
       const value = e.target.value
       if (!date) return
 
-      let newDate = new Date(date)
+      const newDate = new Date(date)
       if (picker === 'hours') {
         const hours = parseInt(value)
         if (!isNaN(hours) && hours >= 0 && hours <= 23) {
@@ -126,6 +126,7 @@ const TimePickerInput = React.forwardRef<HTMLInputElement | HTMLButtonElement, T
     )
   }
 )
+TimePickerInput.displayName = 'TimePickerInput'
 
 interface TimePickerProps {
   date: Date | undefined
@@ -175,4 +176,4 @@ export function TimePicker({
       />
     </div>
   )
-} 
+}

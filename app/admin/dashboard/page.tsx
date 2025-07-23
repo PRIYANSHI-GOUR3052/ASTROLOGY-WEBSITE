@@ -140,10 +140,17 @@ export default function AdminDashboard() {
 }
 
 // Reusable Section Component
+// Define types for product, stone, and service items
+type ProductItem = { name?: string; name_en?: string; sku?: string; price: number | string; stock?: number };
+type StoneItem = { name: string; name_en: string; sku?: string; zodiac?: string; price: number | string; stock?: number };
+type ServiceItem = { name?: string; name_en?: string; sku?: string; price: number | string; stock?: number };
+
+type SectionItem = ProductItem | StoneItem | ServiceItem;
+
 function Section({ title, color, items, type }: {
   title: string,
   color: string,
-  items: any[],
+  items: SectionItem[],
   type: 'product' | 'stone' | 'service'
 }) {
   return (
@@ -158,7 +165,7 @@ function Section({ title, color, items, type }: {
               </p>
               <p className="text-xs text-gray-500">
                 {type === 'product' && `SKU: ${item.sku}`}
-                {type === 'stone' && `SKU: ${item.sku} | Zodiac: ${item.zodiac}`}
+                {type === 'stone' && `SKU: ${item.sku}${'zodiac' in item && item.zodiac ? ` | Zodiac: ${item.zodiac}` : ''}`}
                 {type === 'service' && `SKU: ${item.sku}`}
               </p>
             </div>

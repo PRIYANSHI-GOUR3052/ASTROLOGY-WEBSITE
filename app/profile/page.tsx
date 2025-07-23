@@ -181,7 +181,7 @@ export default function ProfilePage() {
     return (
       <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
         <AnimatedStars />
-        <MysticBackground children={undefined} />
+        <MysticBackground />
         <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gold"></div>
@@ -194,7 +194,7 @@ export default function ProfilePage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
       <AnimatedStars />
-      <MysticBackground children={undefined} />
+      <MysticBackground />
       <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
         <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-center text-mystic-brown">
           My Profile
@@ -360,7 +360,7 @@ export default function ProfilePage() {
                 
                 {addresses.length === 0 ? (
                   <Card className="bg-midnight-blue-light/80 border border-gold/30 p-6">
-                    <p className="text-center text-lavender">You don't have any saved addresses yet.</p>
+                    <p className="text-center text-lavender">You don&apos;t have any saved addresses yet.</p>
                   </Card>
                 ) : (
                   addresses.map((address, index) => (
@@ -412,7 +412,7 @@ export default function ProfilePage() {
               <CardContent>
                 {orders.length === 0 ? (
                   <div className="text-center p-8">
-                    <p className="text-lg text-lavender mb-4">You haven't placed any orders yet</p>
+                    <p className="text-lg text-lavender mb-4">You haven&apos;t placed any orders yet</p>
                     <Button 
                       onClick={() => router.push('/shop')}
                       className="bg-black text-white hover:bg-gray-800"
