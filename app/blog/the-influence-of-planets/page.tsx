@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { User, Calendar, Star, BookOpen, HelpCircle } from 'lucide-react';
+import { User, Calendar, BookOpen, HelpCircle } from 'lucide-react';
 import { blogPosts } from '../../data/blogPosts';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CTASection } from '../../components/CTASection';
 import { motion } from 'framer-motion';
 
@@ -73,15 +74,15 @@ export default function InfluenceOfPlanetsPage() {
                 <li><span className="font-semibold text-indigo-700">Career & Ambitions:</span> The Sun, Saturn, and Mercury influence your ambitions, discipline, and communication. The Sun represents your core purpose and leadership qualities, Saturn brings structure, perseverance, and lessons through challenges, while Mercury governs intellect, adaptability, and business acumen. Favorable alignments can signal promotions, new ventures, or recognition, while challenging periods may require patience, skill-building, or strategic planning.</li>
                 <li><span className="font-semibold text-indigo-700">Health & Well-being:</span> The Moon and ascendant sign affect your physical and emotional health. The Moon governs your mind, moods, and habits, while the ascendant and its ruler influence your body type and vitality. Planetary afflictions may point to areas needing extra care, such as stress management, dietary changes, or spiritual remedies. Regularly tracking lunar cycles and planetary transits can help you maintain balance and well-being.</li>
                 <li><span className="font-semibold text-indigo-700">Spiritual Growth:</span> Jupiter and Ketu are associated with wisdom, detachment, and spiritual evolution. Jupiter inspires learning, generosity, and faith, while Ketu encourages letting go of material attachments and seeking higher truths. Their influence can inspire meditation, study of sacred texts, and transformative spiritual practices. Times of strong Jupiter or Ketu influence are ideal for retreats, pilgrimages, or deepening your spiritual path.</li>
-                <li><span className="font-semibold text-indigo-700">Financial Prosperity:</span> Jupiter and Venus can bring abundance, wealth, and opportunities for financial growth when well-placed in your chart. Jupiter's blessings may manifest as luck, expansion, or wise investments, while Venus attracts luxury, comfort, and creative income. Challenging placements may require prudent budgeting, charitable giving, or seeking expert advice to improve your financial situation.</li>
+                <li><span className="font-semibold text-indigo-700">Financial Prosperity:</span> Jupiter and Venus can bring abundance, wealth, and opportunities for financial growth when well-placed in your chart. Jupiter&apos;s blessings may manifest as luck, expansion, or wise investments, while Venus attracts luxury, comfort, and creative income. Challenging placements may require prudent budgeting, charitable giving, or seeking expert advice to improve your financial situation.</li>
                 <li><span className="font-semibold text-indigo-700">Family & Home:</span> The Moon and fourth house planets influence your sense of belonging, emotional security, and harmony at home. A strong Moon fosters nurturing relationships, a peaceful home environment, and supportive family ties. Malefic influences may bring misunderstandings or instability, but remedies such as family rituals, home blessings, or fostering open communication can restore harmony.</li>
                 <li><span className="font-semibold text-indigo-700">Personal Transformation:</span> Rahu and Ketu drive major life changes, spiritual awakenings, and the breaking of old patterns for soul growth. Rahu pushes you toward new experiences, ambitions, and sometimes obsessions, while Ketu helps you release what no longer serves you. Their cycles often coincide with turning points, breakthroughs, or the need to embrace change and trust your inner guidance.</li>
               </ul>
               <p>
-                <span className="font-semibold text-indigo-700">Spiritual Journey:</span> Astrology is not just about prediction—it's a tool for self-awareness and spiritual growth. By tuning into the rhythms of the cosmos, you can cultivate mindfulness, embrace change, and walk your path with greater confidence and peace.
+                <span className="font-semibold text-indigo-700">Spiritual Journey:</span> Astrology is not just about prediction—it&apos;s a tool for self-awareness and spiritual growth. By tuning into the rhythms of the cosmos, you can cultivate mindfulness, embrace change, and walk your path with greater confidence and peace.
               </p>
               <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg">
-                <span className="text-indigo-600 font-medium">Tip:</span> Keep a daily journal of your moods, experiences, and planetary transits. Over time, you'll notice patterns that help you harness positive energies and navigate challenges with wisdom.
+                <span className="text-indigo-600 font-medium">Tip:</span> Keep a daily journal of your moods, experiences, and planetary transits. Over time, you&apos;ll notice patterns that help you harness positive energies and navigate challenges with wisdom.
               </div>
             </div>
             {/* Tab Content */}
@@ -98,12 +99,12 @@ export default function InfluenceOfPlanetsPage() {
                     ['Venus (Shukra)', 'Love, beauty, luxury, creativity', 'Taurus, Libra'],
                     ['Saturn (Shani)', 'Discipline, karma, challenges, longevity', 'Capricorn, Aquarius'],
                     ['Rahu (North Node)', 'Ambition, obsession, foreign influences', 'Co-rules Aquarius'],
-                    ['Ketu (South Node)', 'Spirituality, detachment, past karma', 'Co-rules Scorpio'],
-                  ].map(([planet, influence, sign]) => (
-                    <div key={planet} className="bg-white rounded-xl shadow p-6 text-center hover:shadow-xl transition-shadow">
-                      <h4 className="text-xl font-bold text-black mb-2">{planet}</h4>
-                      <p className="text-gray-700 mb-2 text-justify">{influence}</p>
-                      <p className="text-indigo-600 font-semibold">Zodiac: {sign}</p>
+                    ['Ketu (South Node)', 'Detachment, spirituality, past karma', 'Co-rules Scorpio'],
+                  ].map(([planet, qualities, signs]) => (
+                    <div key={planet} className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow">
+                      <h3 className="font-bold text-indigo-900 text-lg mb-2">{planet}</h3>
+                      <p className="text-gray-700 text-sm mb-2"><strong>Qualities:</strong> {qualities}</p>
+                      <p className="text-gray-600 text-sm"><strong>Rulership:</strong> {signs}</p>
                     </div>
                   ))}
                 </div>
@@ -111,35 +112,70 @@ export default function InfluenceOfPlanetsPage() {
             )}
             {activeTab === 'Effects' && (
               <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Common Misconceptions</h2>
-                <ul className="list-disc list-inside ml-4 text-gray-700 space-y-2 mb-4 text-justify">
-                  <li>Planets are not "good" or "bad"; their influence depends on their placement in your chart.</li>
-                  <li>Astrology is a guide, not a fixed verdict. Your choices matter.</li>
-                  <li>Remedies are not magic; they require faith and consistent effort.</li>
-                </ul>
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">How Planets Affect Daily Life</h2>
+                <div className="space-y-6">
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
+                    <h3 className="font-bold text-blue-900 text-lg mb-3">Positive Planetary Effects</h3>
+                    <ul className="text-blue-800 space-y-2">
+                      <li>• Jupiter brings wisdom, opportunities, and spiritual growth</li>
+                      <li>• Venus enhances love, creativity, and harmony</li>
+                      <li>• Mercury improves communication and learning</li>
+                      <li>• Sun boosts confidence and leadership abilities</li>
+                      <li>• Moon provides emotional stability and intuition</li>
+                    </ul>
+                  </div>
+                  <div className="bg-gradient-to-r from-red-50 to-pink-50 p-6 rounded-xl border border-red-200">
+                    <h3 className="font-bold text-red-900 text-lg mb-3">Challenging Planetary Effects</h3>
+                    <ul className="text-red-800 space-y-2">
+                      <li>• Saturn brings delays, lessons, and necessary challenges</li>
+                      <li>• Mars can cause conflicts, impulsiveness, and accidents</li>
+                      <li>• Rahu creates confusion, obsessions, and unexpected events</li>
+                      <li>• Ketu brings detachment, losses, and spiritual tests</li>
+                      <li>• Afflicted planets may cause health or relationship issues</li>
+                    </ul>
+                  </div>
+                </div>
               </motion.section>
             )}
             {activeTab === 'Remedies' && (
               <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Remedies for Planetary Imbalances</h2>
-                <ul className="space-y-3 text-gray-700 text-justify">
-                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Sun:</span> Offer water to the Sun (Surya Arghya), chant Gayatri Mantra.</li>
-                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Moon:</span> Wear a pearl, donate milk, meditate on Mondays.</li>
-                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Saturn:</span> Chant Hanuman Chalisa, donate black items on Saturdays, serve the needy.</li>
-                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Rahu/Ketu:</span> Worship Lord Ganesha and Durga, donate to leprosy patients.</li>
-                </ul>
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Planetary Remedies and Solutions</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+                    <h3 className="font-bold text-black text-lg mb-3">Gemstone Remedies</h3>
+                    <ul className="text-gray-700 space-y-2">
+                      <li>• Ruby for Sun (confidence and vitality)</li>
+                      <li>• Pearl for Moon (emotional balance)</li>
+                      <li>• Red Coral for Mars (courage and energy)</li>
+                      <li>• Emerald for Mercury (intellect and communication)</li>
+                      <li>• Yellow Sapphire for Jupiter (wisdom and luck)</li>
+                      <li>• Diamond for Venus (love and beauty)</li>
+                      <li>• Blue Sapphire for Saturn (discipline and protection)</li>
+                    </ul>
+                  </div>
+                  <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+                    <h3 className="font-bold text-black text-lg mb-3">Mantra and Prayer Remedies</h3>
+                    <ul className="text-gray-700 space-y-2">
+                      <li>• Chant planetary mantras daily</li>
+                      <li>• Perform specific pujas and rituals</li>
+                      <li>• Practice charity and service</li>
+                      <li>• Fast on specific planetary days</li>
+                      <li>• Meditate on planetary energies</li>
+                    </ul>
+                  </div>
+                </div>
               </motion.section>
             )}
             {activeTab === 'FAQs' && (
               <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Frequently Asked Questions</h2>
-                <div className="space-y-6 text-justify">
+                <div className="space-y-6">
                   {[
-                    ['Are planets "good" or "bad"?', 'No planet is inherently good or bad. Their effect depends on their placement in your chart and the karma you are working through.'],
-                    ['What is Sade Sati?', 'It is a challenging 7.5-year period of Saturn\'s transit over your natal Moon, meant for discipline, introspection, and spiritual growth.'],
-                    ['How do planetary transits affect me?', 'As planets move, they activate different parts of your chart, bringing new opportunities and challenges. An astrologer can help you navigate these cycles.'],
-                    ['Can I change my planetary influences?', 'While you cannot change your chart, you can work with the energies through remedies, conscious action, and spiritual practices to improve outcomes.'],
-                  ].map(([q, a], i) => (
+                    ['Can planets really affect my life?', 'Yes, planetary energies influence our thoughts, emotions, and life events. Understanding these influences helps us make better choices.'],
+                    ['What if I have challenging planetary placements?', 'Every challenge is an opportunity for growth. Remedies, awareness, and conscious effort can help navigate difficult periods.'],
+                    ['How do I know which planets are affecting me?', 'A birth chart analysis by a qualified astrologer can reveal your planetary influences and current transits.'],
+                    ['Are planetary remedies effective?', 'When practiced with faith and consistency, remedies can help balance planetary energies and improve life circumstances.'],
+                  ].map(([q, a]) => (
                     <div key={q} className="border-b border-gray-200 pb-6">
                       <h3 className="text-lg font-bold text-indigo-900 mb-2 flex items-center"><HelpCircle className="w-5 h-5 mr-2 text-indigo-400" />{q}</h3>
                       <p className="text-gray-700">{a}</p>
@@ -154,7 +190,7 @@ export default function InfluenceOfPlanetsPage() {
             <section className="mt-16 pt-8 border-t border-gray-200">
               <h2 className="text-2xl font-bold text-black mb-6">Continue Your Astrological Journey</h2>
               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-100 hover:shadow-lg transition-all cursor-pointer">
-                <a href="/blog/understanding-vedic-astrology" className="block">
+                <Link href="/blog/understanding-vedic-astrology" className="block">
                   <div className="flex items-center gap-4">
                     <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-indigo-100">
                       <Image src="/images/astrology.svg" alt="Vedic Astrology" fill className="object-cover" />
@@ -180,7 +216,7 @@ export default function InfluenceOfPlanetsPage() {
                       </svg>
                     </div>
                   </div>
-                </a>
+                </Link>
               </motion.div>
             </section>
           </div>
@@ -231,7 +267,7 @@ export default function InfluenceOfPlanetsPage() {
               <ul className="list-disc list-inside text-gray-700 space-y-2">
                 <li>All bad events are due to planets (karma matters too)</li>
                 <li>Gemstones work for everyone (consult an expert)</li>
-                <li>Astrology is only prediction (it's also guidance)</li>
+                <li>Astrology is only prediction (it&apos;s also guidance)</li>
                 <li>Remedies are instant (patience is key)</li>
               </ul>
             </div>
@@ -244,12 +280,12 @@ export default function InfluenceOfPlanetsPage() {
                   ['Gemstones and Their Powers', '/blog/gemstones-and-powers'],
                   ['Numerology Basics', '/blog/numerology-basics'],
                   ['Guide to Crystal Healing', '/blog/crystal-healing'],
-                ].map(([title, link], i) => (
+                ].map(([title, link]) => (
                   <li key={title}>
-                    <a href={link} className="text-indigo-700 hover:underline flex items-start">
+                    <Link href={link} className="text-indigo-700 hover:underline flex items-start">
                       <span className="text-indigo-500 mr-2">→</span>
                       <span>{title}</span>
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

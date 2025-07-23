@@ -246,7 +246,7 @@ export default function StonesPage() {
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           {stones.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              No stones found. Add your first stone by clicking the "Add New Stone" button.
+              No stones found. Add your first stone by clicking the &quot;Add New Stone&quot; button.
             </div>
           ) : (
             <table className="w-full">

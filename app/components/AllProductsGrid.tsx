@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../contexts/useLanguage';
+import { ProductServiceCard } from './UniversalServiceGrid';
 
 const productKeys = [
   'dhanYogBracelet',
@@ -54,43 +55,24 @@ const products = [
   { key: 'calmMindBracelet', image: '/images/calm-mind.jpg', price: 599, oldPrice: 1999, discountKey: 'discount70' },
 ];
 
+export const defaultProducts = products;
+
 export default function AllProductsGrid() {
   const { t } = useLanguage();
   return (
     <section className="w-full flex flex-col items-center py-12">
       <h2 className="text-4xl font-normal mb-8 text-black text-center" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400 }}>{t('shop.products.heading')}</h2>
       <p className="mb-8 text-lg text-gray-700 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>{t('shop.products.description')}</p>
-      <div className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-8">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-16">
         {products.slice(0, 21).map((product, idx) => (
-          <div
+          <ProductServiceCard
             key={product.key}
-            className="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-xl animate-fadeIn"
-            style={{ minHeight: 340 }}
-          >
-            <div className="w-full h-40 flex items-center justify-center mb-4 overflow-hidden rounded-xl bg-[#f7f5ed]">
-              <img
-                src={product.image}
-                alt={t(`shop.products.${product.key}.name`)}
-                className="object-contain w-full h-full"
-                style={{ maxHeight: 140, maxWidth: '100%' }}
-              />
-            </div>
-            <div className="w-full text-left mb-2">
-              <h3 className="text-lg" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400 }}>{t(`shop.products.${product.key}.name`)}</h3>
-            </div>
-            <div className="w-full flex items-center gap-2 mb-4">
-              <span className="text-black text-lg font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>₹{product.price}</span>
-              <span className="text-gray-400 line-through text-base" style={{ fontFamily: 'Inter, sans-serif' }}>₹{product.oldPrice}</span>
-              <span className="text-green-600 text-base font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>{t(`shop.products.${product.key}.discount`)}</span>
-            </div>
-            <button
-              className="w-full mt-auto py-2 rounded-lg bg-black text-white font-semibold text-base transition hover:bg-gray-900"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-              onClick={() => alert(`${t(`shop.products.${product.key}.name`)} ${t('shop.products.addToCartAlert')}`)}
-            >
-              {t('shop.products.addToCart')}
-            </button>
-          </div>
+            image={product.image}
+            title={product.key}
+            description={`₹${product.price} (was ₹${product.oldPrice})`}
+            badge={product.discountKey || ''}
+            href={`/shop/${product.key}`}
+          />
         ))}
       </div>
       <style jsx global>{`

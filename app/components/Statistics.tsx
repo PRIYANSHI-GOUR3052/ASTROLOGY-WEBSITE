@@ -1,4 +1,3 @@
-import Image from 'next/image'; 
 
 export function Statistics() {
   const stats = [
@@ -8,7 +7,7 @@ export function Statistics() {
     },
     {
       value: "40+",
-      label: "Year's Of Legacy",
+      label: "Years Of Legacy",
     },
     {
       value: "100k+",
@@ -16,36 +15,26 @@ export function Statistics() {
     },
     {
       value: "20+",
-      label: 'Awards in the field of Occult',
+      label: 'Awards in Occult',
     }
   ];
 
   return (
-    <section 
-      className="py-16 relative overflow-hidden"
-      style={{ background: 'linear-gradient(90deg, #f7f7fa 0%, #e9eafc 100%)' }}
-    >
-      <div className="px-8 md:px-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 items-center">
-          {/* Stats */}
-          <div className="col-span-1 md:col-span-2 lg:col-span-4 grid grid-cols-2 md:grid-cols-4 divide-x divide-black/10">
-            {stats.map((stat, index) => (
-              <div key={index} className="flex flex-col items-center justify-center px-4">
-                <span className="text-6xl font-bold mb-2 text-black">
-                  {stat.value}
-                </span>
-                <span className="text-base text-center font-medium text-black/80">
-                  {stat.label}
-                </span>
+    <section className="w-full py-8 md:py-16" style={{ backgroundColor: '#F5F5DC' }}>
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="flex flex-row justify-between items-center gap-2 md:gap-8">
+          {stats.map((stat, index) => (
+            <div key={index} className="text-center flex-1">
+              <div className="text-2xl md:text-4xl lg:text-6xl font-bold text-green-800 mb-1 md:mb-2" 
+                   style={{ fontFamily: 'Inter, sans-serif' }}>
+                {stat.value}
               </div>
-            ))}
-          </div>
-          {/* Illustration Placeholder replaces description/CTA */}
-         <div className="col-span-1 flex flex-col items-center justify-center h-full">
-           <div className="w-40 h-40 flex items-center justify-center border-2 border-dashed border-[#5fa143] bg-[#e9f5e1]">
-             <span className="text-xs text-[#5fa143] font-semibold">Add GIF here</span>
-           </div>
-         </div>
+              <p className="text-xs md:text-sm lg:text-base text-green-700 font-medium uppercase tracking-wide leading-tight"
+                 style={{ fontFamily: 'Inter, sans-serif' }}>
+                {stat.label}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

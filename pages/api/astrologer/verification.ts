@@ -3,15 +3,17 @@ import prisma from '@/lib/prisma';
 import multer from 'multer';
 import { uploadAstrologerProfileImageBuffer } from '@/lib/cloudinary';
 import { jwtVerify } from 'jose';
+import type { RequestHandler } from 'express';
+import type express from 'express';
 
 // Multer setup for memory storage
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Helper to run multer in API route
-function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: RequestHandler) {
   return new Promise((resolve, reject) => {
-    fn(req, res, (result: any) => {
+    fn(req as express.Request, res as express.Response, (result: unknown) => {
       if (result instanceof Error) {
         return reject(result);
       }
@@ -25,7 +27,7 @@ interface AstrologerJWTPayload {
   id: number;
   email: string;
   role: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Astrologer authentication using Authorization header only
@@ -88,9 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ])
     );
     try {
-      const files = (req as any).files as {
-        [fieldname: string]: Express.Multer.File[];
-      };
+      const files = (req as unknown as { files: { [fieldname: string]: Express.Multer.File[] } }).files;
       const body = req.body;
       // Add logging for received data
       console.log('Received certifications:', body.certifications);
@@ -120,9 +120,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             { name: 'degreeFiles', maxCount: 10 },
           ])
         );
-        const newFiles = (req as any).files as {
-          [fieldname: string]: Express.Multer.File[];
-        };
+        const newFiles = (req as unknown as { files: { [fieldname: string]: Express.Multer.File[] } }).files;
         const newBody = req.body;
         // Upload single files to Cloudinary
         async function uploadFile(field: string) {
@@ -269,7 +267,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       } else {
         console.log('Verification already exists, only updating re-uploaded fields and adding new certifications/educations if present...');
         // Only update fields that are re-uploaded
-        const updateData: any = {};
+        const updateData: Record<string, unknown> = {};
         // Document fields
         const docFields = [
           { name: 'aadharCard', status: 'aadharStatus', remarks: 'aadharRemarks' },
@@ -291,10 +289,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let anyDocUpdated = Object.keys(updateData).length > 0;
         // Certifications: update existing and create new if no id
         const certs = body.certifications ? JSON.parse(body.certifications) : [];
-        let certFiles = files['certificationFiles'] || [];
+        const certFiles = files['certificationFiles'] || [];
         for (let i = 0; i < certs.length; i++) {
           const cert = certs[i];
-          const existing = verification.certifications.find((c: any) => c.id === cert.id);
+          const existing = verification.certifications.find((c: Record<string, unknown>) => c.id === cert.id);
           if (existing && (existing.status === 'rejected' || existing.status === 'unverified')) {
             // If file is re-uploaded
             let certFileUrl = existing.certificateFile;
@@ -342,10 +340,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         // Educations: update existing and create new if no id
         const edus = body.educations ? JSON.parse(body.educations) : [];
-        let eduFiles = files['degreeFiles'] || [];
+        const eduFiles = files['degreeFiles'] || [];
         for (let i = 0; i < edus.length; i++) {
           const edu = edus[i];
-          const existing = verification.educations.find((e: any) => e.id === edu.id);
+          const existing = verification.educations.find((e: Record<string, unknown>) => e.id === edu.id);
           if (existing && (existing.status === 'rejected' || existing.status === 'unverified')) {
             let degreeFileUrl = existing.degreeFile;
             if (eduFiles[i]) {

@@ -160,10 +160,11 @@ model users {
   password       String           @db.VarChar(255)
   created_at     DateTime?        @default(now()) @db.Timestamp(0)
   updated_at     DateTime?        @default(now()) @db.Timestamp(0)
-  google_id      String           @db.VarChar(255)
+  google_id      String?          @db.VarChar(255)
   cart           cart[]
   orders         orders[]
   user_addresses user_addresses[]
+  Booking        Booking[]
 }
 
 model visitors {
@@ -194,6 +195,7 @@ model Astrologer {
   verificationStatus     String                   @default("unverified") // unverified, pending, approved, rejected
   verification           AstrologerVerification?
   AstrologerAvailability AstrologerAvailability[]
+  Booking                Booking[]
 }
 
 model AstrologerVerification {
@@ -233,7 +235,7 @@ model AstrologerCertification {
   instituteName    String
   yearOfCompletion String
   certificateFile  String // File URL (PDF/JPG)
-  status           String?                @default("unverified") // unverified, pending, accepted, rejected
+  status           String?                @default("pending") // unverified, pending, accepted, rejected
   remarks          String?
   verification     AstrologerVerification @relation(fields: [verificationId], references: [id])
 }
@@ -245,7 +247,7 @@ model AstrologerEducation {
   fieldOfStudy   String
   universityName String
   degreeFile     String // File URL (PDF/JPG)
-  status         String?                @default("unverified") // unverified, pending, accepted, rejected
+  status         String?                @default("pending") // unverified, pending, accepted, rejected
   remarks        String?
   verification   AstrologerVerification @relation(fields: [verificationId], references: [id])
 }
@@ -260,4 +262,19 @@ model AstrologerAvailability {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   astrologer   Astrologer @relation(fields: [astrologerId], references: [id])
+}
+
+model Booking {
+  id           Int      @id @default(autoincrement())
+  astrologerId Int
+  clientId     Int
+  date         DateTime
+  type         String
+  status       String // 'upcoming', 'past', 'accepted', 'rejected', 'rescheduled'
+  remarks      String? // For rejection or reschedule notes
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  astrologer Astrologer @relation(fields: [astrologerId], references: [id])
+  client     users      @relation(fields: [clientId], references: [id])
 }

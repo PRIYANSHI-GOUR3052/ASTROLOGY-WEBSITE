@@ -50,6 +50,7 @@
         "title": "ರಾಶಿಫಲಗಳು",
         "items": {
           "daily_horoscope": "ದೈನಂದಿನ ರಾಶಿಫಲ",
+          "free_daily_horoscope": "ಉಚಿತ ದೈನಂದಿನ ರಾಶಿಫಲ",
           "monthly_horoscope": "ಮಾಸಿಕ ರಾಶಿಫಲ",
           "yearly_horoscope": "ವಾರ್ಷಿಕ ರಾಶಿಫಲ"
         }

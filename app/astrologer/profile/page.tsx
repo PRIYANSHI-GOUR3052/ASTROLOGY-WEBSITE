@@ -1,18 +1,18 @@
 'use client';
 
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { CheckCircle, Clock, XCircle, AlertCircle, Plus, Trash } from "lucide-react";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
+import Image from 'next/image';
+
 
 const expertiseOptions = [
   "Vedic Astrology",
@@ -61,11 +61,13 @@ const ProfilePage = () => {
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [educations, setEducations] = useState<Education[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [verification, setVerification] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [verification, setVerification] = useState<Record<string, unknown> | null>(null);
   const [docFiles, setDocFiles] = useState<{ [key: string]: File | null }>({});
-  const [astrologer, setAstrologer] = useState<any>(null);
+  // const [astrologer, setAstrologer] = useState<Record<string, unknown> | null>(null);
+
+
   // Basic details form state
   const [basicForm, setBasicForm] = useState({
     firstName: '',
@@ -91,7 +93,7 @@ const ProfilePage = () => {
     { name: 'addressProof', label: 'Address Proof', statusKey: 'addressStatus', remarksKey: 'addressRemarks' },
   ];
 
-  useEffect(() => {
+  useEffect(() => { 
     const token = localStorage.getItem('astrologerToken');
     if (!token) return;
     setLoading(true);
@@ -135,7 +137,7 @@ const ProfilePage = () => {
           setVerification(data.verification);
           setCertifications(data.verification.certifications || []);
           setEducations(data.verification.educations || []);
-          setAstrologer(data.verification.astrologer || null);
+          // setAstrologer(data.verification.astrologer || null);
           // Pre-fill basic form if astrologer info exists
           if (data.verification.astrologer) {
             setBasicForm({
@@ -207,6 +209,31 @@ const ProfilePage = () => {
   const statusConfig = getStatusConfig(approvalStatus);
   const StatusIcon = statusConfig.icon;
 
+  // Add fetchVerification function
+  const fetchVerification = async () => {
+    const token = localStorage.getItem('astrologerToken');
+    if (!token) return;
+    setLoading(true);
+    try {
+      const res = await fetch('/api/astrologer/verification', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.verification) {
+        setApprovalStatus(data.verification.status);
+        setAdminRemarks(data.verification.adminRemarks || '');
+        setVerification(data.verification);
+        setCertifications(data.verification.certifications || []);
+        setEducations(data.verification.educations || []);
+        // setAstrologer(data.verification.astrologer || null);
+      }
+    } catch {
+      setError('Failed to fetch verification data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(""); setSuccess("");
@@ -248,7 +275,7 @@ const ProfilePage = () => {
       .then(data => {
         if (data.message) {
           setSuccess('Verification submitted successfully!');
-          setVerification({ status: 'pending', ...data });
+          fetchVerification(); // Fetch latest data from backend
         } else {
           setError(data.error || 'Submission failed');
         }
@@ -282,7 +309,7 @@ const ProfilePage = () => {
   const removeEdu = (idx: number) => setEducations(educations.filter((_, i) => i !== idx));
 
   // Show basic details (from verification.astrologer or a separate fetch)
-  const details = astrologer || verification?.astrologer || {};
+  // const details = astrologer || verification?.astrologer || {};
 
   // Basic details form handlers
   const handleBasicChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -321,69 +348,85 @@ const ProfilePage = () => {
     const token = localStorage.getItem('astrologerToken');
     if (!token) return setError('Not authenticated');
     setLoading(true);
-    // Prepare data
-    let profileImageUrl = basicForm.profileImage;
-    if (selectedAvatar) {
-      profileImageUrl = selectedAvatar;
+    try {
+      let formData: FormData | null = null;
+      let useFormData = false;
+      // If a new profile image file is selected, use FormData
+      if (profileImageFile) {
+        useFormData = true;
+        formData = new FormData();
+        formData.append('firstName', basicForm.firstName);
+        formData.append('lastName', basicForm.lastName);
+        formData.append('email', basicForm.email);
+        formData.append('phone', basicForm.phone);
+        formData.append('yearsOfExperience', basicForm.yearsOfExperience);
+        formData.append('areasOfExpertise', basicForm.areasOfExpertise.join(','));
+        formData.append('profileImage', profileImageFile);
+      } else if (selectedAvatar) {
+        useFormData = true;
+        formData = new FormData();
+        formData.append('firstName', basicForm.firstName);
+        formData.append('lastName', basicForm.lastName);
+        formData.append('email', basicForm.email);
+        formData.append('phone', basicForm.phone);
+        formData.append('yearsOfExperience', basicForm.yearsOfExperience);
+        formData.append('areasOfExpertise', basicForm.areasOfExpertise.join(','));
+        formData.append('avatar', selectedAvatar);
+      }
+      let fetchOptions: RequestInit;
+      if (useFormData && formData) {
+        fetchOptions = {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        };
+      } else {
+        // Fallback to JSON if neither file nor avatar is selected
+        const payload = {
+          firstName: basicForm.firstName,
+          lastName: basicForm.lastName,
+          email: basicForm.email, // not editable, but sent for completeness
+          phone: basicForm.phone,
+          yearsOfExperience: basicForm.yearsOfExperience,
+          areasOfExpertise: basicForm.areasOfExpertise.join(','),
+          profileImage: basicForm.profileImage,
+        };
+        fetchOptions = {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        };
+      }
+      const res = await fetch('/api/astrologer/profile', fetchOptions);
+      const data = await res.json();
+      if (data.astrologer) {
+        setSuccess('Profile details updated!');
+        setBasicForm({
+          firstName: data.astrologer.firstName || '',
+          lastName: data.astrologer.lastName || '',
+          email: data.astrologer.email || '',
+          phone: data.astrologer.phone || '',
+          yearsOfExperience: data.astrologer.yearsOfExperience?.toString() || '',
+          areasOfExpertise: data.astrologer.areasOfExpertise ? data.astrologer.areasOfExpertise.split(',').map((s: string) => s.trim()) : [],
+          profileImage: data.astrologer.profileImage || '',
+          avatar: '',
+        });
+        setSelectedAvatar(null);
+        setProfileImagePreview(data.astrologer.profileImage || null);
+        setProfileImageFile(null);
+      } else {
+        setError(data.error || 'Failed to update profile');
+      }
+    } catch {
+      setError('Failed to update profile');
+    } finally {
+      setLoading(false);
     }
-    // If profileImageFile is set, you would upload it to cloudinary here and get the URL
-    // For now, skip upload and use avatar or existing URL
-    const payload = {
-      firstName: basicForm.firstName,
-      lastName: basicForm.lastName,
-      email: basicForm.email, // not editable, but sent for completeness
-      phone: basicForm.phone,
-      yearsOfExperience: basicForm.yearsOfExperience,
-      areasOfExpertise: basicForm.areasOfExpertise.join(','),
-      profileImage: profileImageUrl,
-    };
-    fetch('/api/astrologer/profile', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.astrologer) {
-          setSuccess('Profile details updated!');
-          setBasicForm({
-            firstName: data.astrologer.firstName || '',
-            lastName: data.astrologer.lastName || '',
-            email: data.astrologer.email || '',
-            phone: data.astrologer.phone || '',
-            yearsOfExperience: data.astrologer.yearsOfExperience?.toString() || '',
-            areasOfExpertise: data.astrologer.areasOfExpertise ? data.astrologer.areasOfExpertise.split(',').map((s: string) => s.trim()) : [],
-            profileImage: data.astrologer.profileImage || '',
-            avatar: '',
-          });
-          setSelectedAvatar(null);
-          setProfileImagePreview(data.astrologer.profileImage || null);
-        } else {
-          setError(data.error || 'Failed to update profile');
-        }
-      })
-      .catch(() => setError('Failed to update profile'))
-      .finally(() => setLoading(false));
-  };
-
-  // Helper to check if any doc/cert/edu is not accepted
-  const hasAnyNotAccepted = () => {
-    // Check documents
-    const docRejectedOrPending = requiredDocs.some(doc => {
-      const status = verification?.[doc.statusKey] || 'unverified';
-      return status !== 'accepted';
-    });
-    
-    // Check certifications
-    const certRejectedOrPending = certifications.some(cert => cert.status !== 'accepted');
-    
-    // Check educations
-    const eduRejectedOrPending = educations.some(edu => edu.status !== 'accepted');
-    
-    return docRejectedOrPending || certRejectedOrPending || eduRejectedOrPending;
   };
 
   // Helper to check if all docs/certs/edus are accepted (i.e., verified)
@@ -393,13 +436,13 @@ const ProfilePage = () => {
       const status = verification?.[doc.statusKey] || 'unverified';
       return status === 'accepted';
     });
-    
+
     // Check certifications
     const allCertsAccepted = certifications.every(cert => cert.status === 'accepted');
-    
+
     // Check educations
     const allEdusAccepted = educations.every(edu => edu.status === 'accepted');
-    
+
     return allDocsAccepted && allCertsAccepted && allEdusAccepted;
   };
 
@@ -430,9 +473,11 @@ const ProfilePage = () => {
             <h2 className="text-lg font-bold mb-4">Manage Profile</h2>
             <div className="flex flex-col items-center mb-6">
               <div className="relative w-28 h-28 mb-2">
-                <img
+                <Image
                   src={profileImagePreview || basicForm.profileImage || selectedAvatar || "/images/placeholder-user.jpg"}
                   alt="Profile Preview"
+                  width={112}
+                  height={112}
                   className="w-28 h-28 object-cover rounded-full border-4 border-amber-400 dark:border-purple-400 shadow"
                 />
                 <label className="absolute bottom-0 right-0 bg-amber-500 dark:bg-purple-600 text-white rounded-full p-2 cursor-pointer shadow-lg hover:bg-amber-600 dark:hover:bg-purple-700 transition-colors">
@@ -456,7 +501,7 @@ const ProfilePage = () => {
                     className={`w-10 h-10 rounded-full border-2 ${selectedAvatar === avatar ? "border-amber-600 dark:border-purple-600" : "border-gray-300"} overflow-hidden focus:outline-none focus:ring-2 focus:ring-purple-500`}
                     onClick={() => handleAvatarSelect(avatar)}
                   >
-                    <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
+                    <Image src={avatar} alt="Avatar" width={40} height={40} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -537,27 +582,26 @@ const ProfilePage = () => {
                   {/* Documents Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {requiredDocs.map(doc => {
-                      const status = verification?.[doc.statusKey] || 'unverified';
-                      const remarks = verification?.[doc.remarksKey] || '';
-                      const url = verification?.[doc.name] || '';
-                      
+                      const status = (verification?.[doc.statusKey] as string) || 'unverified';
+                      const remarks = (verification?.[doc.remarksKey] as string) || '';
+                      const url = (verification?.[doc.name] as string) || '';
+
                       return (
                         <div key={doc.name} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{doc.label}</span>
-                            <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                              status === 'accepted' ? 'bg-green-100 text-green-800' : 
-                              status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                              status === 'rejected' ? 'bg-red-100 text-red-800' : 
-                              'bg-gray-200 text-gray-800'
-                            }`}>
+                            <span className={`px-2 py-1 rounded text-xs font-semibold ${status === 'accepted' ? 'bg-green-100 text-green-800' :
+                                status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                  status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-200 text-gray-800'
+                              }`}>
                               {status.charAt(0).toUpperCase() + status.slice(1)}
                             </span>
                           </div>
                           {url && (
-                            <button 
-                              type="button" 
-                              className="text-blue-600 underline text-sm w-fit" 
+                            <button
+                              type="button"
+                              className="text-blue-600 underline text-sm w-fit"
                               onClick={() => setModalDoc({ url, label: doc.label })}
                             >
                               View
@@ -567,71 +611,241 @@ const ProfilePage = () => {
                             <div className="text-xs text-red-600 mt-1">Remarks: {remarks}</div>
                           )}
                           {(status === 'rejected' || status === 'unverified') && (
-                            <input 
-                              type="file" 
-                              name={doc.name} 
-                              accept="application/pdf,image/*" 
-                              onChange={handleDocFileChange} 
-                              className="w-full mt-2" 
+                            <input
+                              type="file"
+                              name={doc.name}
+                              accept="application/pdf,image/*"
+                              onChange={handleDocFileChange}
+                              className="w-full mt-2"
                             />
                           )}
                         </div>
                       );
                     })}
                   </div>
-                  {/* Certifications Grid */}
+
+                  {/* Certifications Section */}
                   <div className="mt-8">
-                    <h3 className="font-semibold mb-2">Certifications</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {certifications.length > 0 ? certifications.map((cert, idx) => (
-                        <div key={cert.id || idx} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{cert.courseName} ({cert.instituteName})</span>
-                            <span className={`px-2 py-1 rounded text-xs font-semibold ${cert.status === 'accepted' ? 'bg-green-100 text-green-800' : cert.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : cert.status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-gray-200 text-gray-800'}`}>{cert.status ? cert.status.charAt(0).toUpperCase() + cert.status.slice(1) : 'Unverified'}</span>
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="font-semibold">Certifications</h3>
+                      {['unverified', 'rejected'].includes(approvalStatus) && (
+                        <button
+                          type="button"
+                          onClick={addCert}
+                          className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+                        >
+                          <Plus className="w-4 h-4" />
+                          Add Certification
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-4">
+                      {certifications.map((cert, idx) => (
+                        <div key={cert.id || idx} className="p-4 rounded-lg border bg-gray-50 dark:bg-gray-900/40">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">Certification {idx + 1}</span>
+                              {cert.status && (
+                                <span className={`px-2 py-1 rounded text-xs font-semibold ${cert.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                                    cert.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                      cert.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                        'bg-gray-200 text-gray-800'
+                                  }`}>
+                                  {cert.status.charAt(0).toUpperCase() + cert.status.slice(1)}
+                                </span>
+                              )}
+                            </div>
+                            {(['unverified', 'rejected'].includes(approvalStatus)) && (
+                              <button
+                                type="button"
+                                onClick={() => removeCert(idx)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <Trash className="w-4 h-4" />
+                              </button>
+                            )}
                           </div>
-                          <div className="text-xs text-gray-500">Year: {cert.yearOfCompletion}</div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Course Name</label>
+                              <input
+                                type="text"
+                                value={cert.courseName}
+                                onChange={e => handleCertChange(idx, 'courseName', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Enter course name"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Institute Name</label>
+                              <input
+                                type="text"
+                                value={cert.instituteName}
+                                onChange={e => handleCertChange(idx, 'instituteName', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Enter institute name"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Year of Completion</label>
+                              <input
+                                type="number"
+                                value={cert.yearOfCompletion}
+                                onChange={e => handleCertChange(idx, 'yearOfCompletion', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="2023"
+                              />
+                            </div>
+                          </div>
+
                           {cert.certificateFile && (
-                            <button type="button" className="text-blue-600 underline text-sm w-fit" onClick={() => setModalDoc({ url: cert.certificateFile!, label: cert.courseName })}>View</button>
+                            <button
+                              type="button"
+                              className="text-blue-600 underline text-sm mb-2"
+                              onClick={() => setModalDoc({ url: cert.certificateFile!, label: cert.courseName })}
+                            >
+                              View Current Certificate
+                            </button>
                           )}
+
                           {cert.status === 'rejected' && cert.remarks && (
-                            <div className="text-xs text-red-600 mt-1">Remarks: {cert.remarks}</div>
+                            <div className="text-xs text-red-600 mb-2">Remarks: {cert.remarks}</div>
                           )}
-                          {cert.status === 'rejected' && (
-                            <input type="file" accept="application/pdf,image/*" onChange={e => { const file = e.target.files && e.target.files[0]; if (file) handleCertFile(idx, file); }} className="w-full mt-2" />
+
+                          {(cert.status === 'rejected' || cert.status === 'unverified' || !cert.status) && (
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Certificate File</label>
+                              <input
+                                type="file"
+                                accept="application/pdf,image/*"
+                                onChange={e => {
+                                  const file = e.target.files && e.target.files[0];
+                                  if (file) handleCertFile(idx, file);
+                                }}
+                                className="w-full"
+                              />
+                            </div>
                           )}
                         </div>
-                      )) : <div className="text-gray-500">No certifications uploaded.</div>}
+                      ))}
                     </div>
                   </div>
-                  {/* Educations Grid */}
+
+                  {/* Educations Section */}
                   <div className="mt-8">
-                    <h3 className="font-semibold mb-2">Educations</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {educations.length > 0 ? educations.map((edu, idx) => (
-                        <div key={edu.id || idx} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{edu.qualification} ({edu.universityName})</span>
-                            <span className={`px-2 py-1 rounded text-xs font-semibold ${edu.status === 'accepted' ? 'bg-green-100 text-green-800' : edu.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : edu.status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-gray-200 text-gray-800'}`}>{edu.status ? edu.status.charAt(0).toUpperCase() + edu.status.slice(1) : 'Unverified'}</span>
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="font-semibold">Education</h3>
+                      {['unverified', 'rejected'].includes(approvalStatus) && (
+                        <button
+                          type="button"
+                          onClick={addEdu}
+                          className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+                        >
+                          <Plus className="w-4 h-4" />
+                          Add Education
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-4">
+                      {educations.map((edu, idx) => (
+                        <div key={edu.id || idx} className="p-4 rounded-lg border bg-gray-50 dark:bg-gray-900/40">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">Education {idx + 1}</span>
+                              {edu.status && (
+                                <span className={`px-2 py-1 rounded text-xs font-semibold ${edu.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                                    edu.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                      edu.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                        'bg-gray-200 text-gray-800'
+                                  }`}>
+                                  {edu.status.charAt(0).toUpperCase() + edu.status.slice(1)}
+                                </span>
+                              )}
+                            </div>
+                            {(['unverified', 'rejected'].includes(approvalStatus)) && (
+                              <button
+                                type="button"
+                                onClick={() => removeEdu(idx)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <Trash className="w-4 h-4" />
+                              </button>
+                            )}
                           </div>
-                          <div className="text-xs text-gray-500">Field: {edu.fieldOfStudy}</div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Qualification</label>
+                              <input
+                                type="text"
+                                value={edu.qualification}
+                                onChange={e => handleEduChange(idx, 'qualification', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Bachelor's, Master's, etc."
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Field of Study</label>
+                              <input
+                                type="text"
+                                value={edu.fieldOfStudy}
+                                onChange={e => handleEduChange(idx, 'fieldOfStudy', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Computer Science, Astrology, etc."
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">University Name</label>
+                              <input
+                                type="text"
+                                value={edu.universityName}
+                                onChange={e => handleEduChange(idx, 'universityName', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Enter university name"
+                              />
+                            </div>
+                          </div>
+
                           {edu.degreeFile && (
-                            <button type="button" className="text-blue-600 underline text-sm w-fit" onClick={() => setModalDoc({ url: edu.degreeFile!, label: edu.qualification })}>View</button>
+                            <button
+                              type="button"
+                              className="text-blue-600 underline text-sm mb-2"
+                              onClick={() => setModalDoc({ url: edu.degreeFile!, label: edu.qualification })}
+                            >
+                              View Current Degree
+                            </button>
                           )}
+
                           {edu.status === 'rejected' && edu.remarks && (
-                            <div className="text-xs text-red-600 mt-1">Remarks: {edu.remarks}</div>
+                            <div className="text-xs text-red-600 mb-2">Remarks: {edu.remarks}</div>
                           )}
-                          {edu.status === 'rejected' && (
-                            <input type="file" accept="application/pdf,image/*" onChange={e => { const file = e.target.files && e.target.files[0]; if (file) handleEduFile(idx, file); }} className="w-full mt-2" />
+
+                          {(edu.status === 'rejected' || edu.status === 'unverified' || !edu.status) && (
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Degree File</label>
+                              <input
+                                type="file"
+                                accept="application/pdf,image/*"
+                                onChange={e => {
+                                  const file = e.target.files && e.target.files[0];
+                                  if (file) handleEduFile(idx, file);
+                                }}
+                                className="w-full"
+                              />
+                            </div>
                           )}
                         </div>
-                      )) : <div className="text-gray-500">No education documents uploaded.</div>}
+                      ))}
                     </div>
                   </div>
-                  <button type="submit" className="mt-6 py-2 px-6 bg-amber-500 text-white font-bold rounded-lg">Resubmit for Verification</button>
+                  {approvalStatus === 'rejected' && (
+                    <button type="submit" className="mt-6 py-2 px-6 bg-amber-500 text-white font-bold rounded-lg">
+                      Resubmit for Verification
+                    </button>
+                  )}
                 </form>
               ) : (
-                // ... existing modernized grid/modal UI for rejected/pending/accepted ...
-                // (leave as is from previous refactor)
                 <form onSubmit={handleSubmit}>
                   {/* Documents Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -643,70 +857,260 @@ const ProfilePage = () => {
                         <div key={doc.name} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{doc.label}</span>
-                            <span className={`px-2 py-1 rounded text-xs font-semibold ${status === 'accepted' ? 'bg-green-100 text-green-800' : status === 'pending' ? 'bg-yellow-100 text-yellow-800' : status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-gray-200 text-gray-800'}`}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                            <span className={`px-2 py-1 rounded text-xs font-semibold ${status === 'accepted' ? 'bg-green-100 text-green-800' :
+                                status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                  status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-200 text-gray-800'
+                              }`}>
+                              {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </span>
                           </div>
                           {url && (
-                            <button type="button" className="text-blue-600 underline text-sm w-fit" onClick={() => setModalDoc({ url, label: doc.label })}>View</button>
+                            <button
+                              type="button"
+                              className="text-blue-600 underline text-sm w-fit"
+                              onClick={() => setModalDoc({ url, label: doc.label })}
+                            >
+                              View
+                            </button>
                           )}
                           {status === 'rejected' && remarks && (
                             <div className="text-xs text-red-600 mt-1">Remarks: {remarks}</div>
                           )}
                           {(status === 'rejected' || status === 'unverified') && (
-                            <input type="file" name={doc.name} accept="application/pdf,image/*" onChange={handleDocFileChange} className="w-full mt-2" />
+                            <input
+                              type="file"
+                              name={doc.name}
+                              accept="application/pdf,image/*"
+                              onChange={handleDocFileChange}
+                              className="w-full mt-2"
+                            />
                           )}
                         </div>
                       );
                     })}
                   </div>
-                  {/* Certifications Grid */}
+
+                  {/* Certifications Section */}
                   <div className="mt-8">
-                    <h3 className="font-semibold mb-2">Certifications</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {certifications.length > 0 ? certifications.map((cert, idx) => (
-                        <div key={cert.id || idx} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{cert.courseName} ({cert.instituteName})</span>
-                            <span className={`px-2 py-1 rounded text-xs font-semibold ${cert.status === 'accepted' ? 'bg-green-100 text-green-800' : cert.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : cert.status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-gray-200 text-gray-800'}`}>{cert.status ? cert.status.charAt(0).toUpperCase() + cert.status.slice(1) : 'Unverified'}</span>
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="font-semibold">Certifications</h3>
+                      {['unverified', 'rejected'].includes(approvalStatus) && (
+                        <button
+                          type="button"
+                          onClick={addCert}
+                          className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+                        >
+                          <Plus className="w-4 h-4" />
+                          Add Certification
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-4">
+                      {certifications.map((cert, idx) => (
+                        <div key={cert.id || idx} className="p-4 rounded-lg border bg-gray-50 dark:bg-gray-900/40">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">Certification {idx + 1}</span>
+                              {cert.status && (
+                                <span className={`px-2 py-1 rounded text-xs font-semibold ${cert.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                                    cert.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                      cert.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                        'bg-gray-200 text-gray-800'
+                                  }`}>
+                                  {cert.status.charAt(0).toUpperCase() + cert.status.slice(1)}
+                                </span>
+                              )}
+                            </div>
+                            {(['unverified', 'rejected'].includes(approvalStatus)) && (
+                              <button
+                                type="button"
+                                onClick={() => removeCert(idx)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <Trash className="w-4 h-4" />
+                              </button>
+                            )}
                           </div>
-                          <div className="text-xs text-gray-500">Year: {cert.yearOfCompletion}</div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Course Name</label>
+                              <input
+                                type="text"
+                                value={cert.courseName}
+                                onChange={e => handleCertChange(idx, 'courseName', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Enter course name"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Institute Name</label>
+                              <input
+                                type="text"
+                                value={cert.instituteName}
+                                onChange={e => handleCertChange(idx, 'instituteName', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Enter institute name"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Year of Completion</label>
+                              <input
+                                type="number"
+                                value={cert.yearOfCompletion}
+                                onChange={e => handleCertChange(idx, 'yearOfCompletion', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="2023"
+                              />
+                            </div>
+                          </div>
+
                           {cert.certificateFile && (
-                            <button type="button" className="text-blue-600 underline text-sm w-fit" onClick={() => setModalDoc({ url: cert.certificateFile!, label: cert.courseName })}>View</button>
+                            <button
+                              type="button"
+                              className="text-blue-600 underline text-sm mb-2"
+                              onClick={() => setModalDoc({ url: cert.certificateFile!, label: cert.courseName })}
+                            >
+                              View Current Certificate
+                            </button>
                           )}
+
                           {cert.status === 'rejected' && cert.remarks && (
-                            <div className="text-xs text-red-600 mt-1">Remarks: {cert.remarks}</div>
+                            <div className="text-xs text-red-600 mb-2">Remarks: {cert.remarks}</div>
                           )}
-                          {(cert.status === 'rejected' || cert.status === 'unverified') && (
-                            <input type="file" accept="application/pdf,image/*" onChange={e => { const file = e.target.files && e.target.files[0]; if (file) handleCertFile(idx, file); }} className="w-full mt-2" />
+
+                          {(cert.status === 'rejected' || cert.status === 'unverified' || !cert.status) && (
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Certificate File</label>
+                              <input
+                                type="file"
+                                accept="application/pdf,image/*"
+                                onChange={e => {
+                                  const file = e.target.files && e.target.files[0];
+                                  if (file) handleCertFile(idx, file);
+                                }}
+                                className="w-full"
+                              />
+                            </div>
                           )}
                         </div>
-                      )) : <div className="text-gray-500">No certifications uploaded.</div>}
+                      ))}
                     </div>
                   </div>
-                  {/* Educations Grid */}
+
+                  {/* Educations Section */}
                   <div className="mt-8">
-                    <h3 className="font-semibold mb-2">Educations</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {educations.length > 0 ? educations.map((edu, idx) => (
-                        <div key={edu.id || idx} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{edu.qualification} ({edu.universityName})</span>
-                            <span className={`px-2 py-1 rounded text-xs font-semibold ${edu.status === 'accepted' ? 'bg-green-100 text-green-800' : edu.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : edu.status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-gray-200 text-gray-800'}`}>{edu.status ? edu.status.charAt(0).toUpperCase() + edu.status.slice(1) : 'Unverified'}</span>
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="font-semibold">Education</h3>
+                      {['unverified', 'rejected'].includes(approvalStatus) && (
+                        <button
+                          type="button"
+                          onClick={addEdu}
+                          className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+                        >
+                          <Plus className="w-4 h-4" />
+                          Add Education
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-4">
+                      {educations.map((edu, idx) => (
+                        <div key={edu.id || idx} className="p-4 rounded-lg border bg-gray-50 dark:bg-gray-900/40">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">Education {idx + 1}</span>
+                              {edu.status && (
+                                <span className={`px-2 py-1 rounded text-xs font-semibold ${edu.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                                    edu.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                      edu.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                        'bg-gray-200 text-gray-800'
+                                  }`}>
+                                  {edu.status.charAt(0).toUpperCase() + edu.status.slice(1)}
+                                </span>
+                              )}
+                            </div>
+                            {(['unverified', 'rejected'].includes(approvalStatus)) && (
+                              <button
+                                type="button"
+                                onClick={() => removeEdu(idx)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <Trash className="w-4 h-4" />
+                              </button>
+                            )}
                           </div>
-                          <div className="text-xs text-gray-500">Field: {edu.fieldOfStudy}</div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Qualification</label>
+                              <input
+                                type="text"
+                                value={edu.qualification}
+                                onChange={e => handleEduChange(idx, 'qualification', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Bachelor's, Master's, etc."
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Field of Study</label>
+                              <input
+                                type="text"
+                                value={edu.fieldOfStudy}
+                                onChange={e => handleEduChange(idx, 'fieldOfStudy', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Computer Science, Astrology, etc."
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">University Name</label>
+                              <input
+                                type="text"
+                                value={edu.universityName}
+                                onChange={e => handleEduChange(idx, 'universityName', e.target.value)}
+                                className="w-full px-3 py-2 border rounded"
+                                placeholder="Enter university name"
+                              />
+                            </div>
+                          </div>
+
                           {edu.degreeFile && (
-                            <button type="button" className="text-blue-600 underline text-sm w-fit" onClick={() => setModalDoc({ url: edu.degreeFile!, label: edu.qualification })}>View</button>
+                            <button
+                              type="button"
+                              className="text-blue-600 underline text-sm mb-2"
+                              onClick={() => setModalDoc({ url: edu.degreeFile!, label: edu.qualification })}
+                            >
+                              View Current Degree
+                            </button>
                           )}
+
                           {edu.status === 'rejected' && edu.remarks && (
-                            <div className="text-xs text-red-600 mt-1">Remarks: {edu.remarks}</div>
+                            <div className="text-xs text-red-600 mb-2">Remarks: {edu.remarks}</div>
                           )}
-                          {(edu.status === 'rejected' || edu.status === 'unverified') && (
-                            <input type="file" accept="application/pdf,image/*" onChange={e => { const file = e.target.files && e.target.files[0]; if (file) handleEduFile(idx, file); }} className="w-full mt-2" />
+
+                          {(edu.status === 'rejected' || edu.status === 'unverified' || !edu.status) && (
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Degree File</label>
+                              <input
+                                type="file"
+                                accept="application/pdf,image/*"
+                                onChange={e => {
+                                  const file = e.target.files && e.target.files[0];
+                                  if (file) handleEduFile(idx, file);
+                                }}
+                                className="w-full"
+                              />
+                            </div>
                           )}
                         </div>
-                      )) : <div className="text-gray-500">No education documents uploaded.</div>}
+                      ))}
                     </div>
                   </div>
-                  <button type="submit" className="mt-6 py-2 px-6 bg-amber-500 text-white font-bold rounded-lg">Submit for Verification</button>
+                  {(['unverified', 'rejected'].includes(approvalStatus)) && (
+                    <button type="submit" className="mt-6 py-2 px-6 bg-amber-500 text-white font-bold rounded-lg">
+                      Submit for Verification
+                    </button>
+                  )}
                 </form>
               )}
             </div>
@@ -723,7 +1127,7 @@ const ProfilePage = () => {
                   {modalDoc.url.endsWith('.pdf') ? (
                     <iframe src={modalDoc.url} title={modalDoc.label} className="w-full h-96 rounded border" />
                   ) : (
-                    <img src={modalDoc.url} alt={modalDoc.label} className="max-w-full max-h-96 rounded border" />
+                    <Image src={modalDoc.url} alt={modalDoc.label} width={384} height={384} className="max-w-full max-h-96 rounded border" />
                   )}
                   <div className="text-sm text-gray-600">{modalDoc.label}</div>
                   <a href={modalDoc.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Open in new tab</a>

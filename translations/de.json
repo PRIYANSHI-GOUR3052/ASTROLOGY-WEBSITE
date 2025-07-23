@@ -126,6 +126,7 @@
         "title": "Horoskope",
         "items": {
           "daily_horoscope": "Tägliches Horoskop",
+          "free_daily_horoscope": "Kostenloses tägliches Horoskop",
           "monthly_horoscope": "Monatliches Horoskop",
           "yearly_horoscope": "Jährliches Horoskop"
         }

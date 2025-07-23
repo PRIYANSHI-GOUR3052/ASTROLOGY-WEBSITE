@@ -6,6 +6,19 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../contexts/useLanguage';
 
+// Define proper types for blog data
+interface BlogContent {
+  [key: string]: string;
+}
+
+interface BlogPost {
+  title: BlogContent;
+  content: BlogContent;
+  description: BlogContent;
+  imageUrl: string;
+  date: string;
+}
+
 const getReadTime = (content: string) => {
   // Simple estimate: 200 words per minute
   const words = content.split(/\s+/).length;
@@ -29,7 +42,7 @@ const getBlogUrl = (title: string) => {
 export default function FeaturedBlogs() {
   const { lang, t } = useLanguage();
   // Get the first 6 blogs
-  const blogs = Object.values(blogPosts).slice(0, 6);
+  const blogs = Object.values(blogPosts).slice(0, 6) as BlogPost[];
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 md:px-8 py-10">
@@ -42,7 +55,7 @@ export default function FeaturedBlogs() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogs.map((blog, idx) => {
-          const safeLang = (blog.title as any)[lang] ? lang : 'en';
+          const safeLang = blog.title[lang] ? lang : 'en';
           return (
             <motion.div
               key={idx}
@@ -59,12 +72,12 @@ export default function FeaturedBlogs() {
                 </motion.div>
               </div>
               <div className="flex flex-col flex-1 p-5">
-                <h3 className="text-xl font-extrabold mb-2 leading-snug text-black">{(blog.title as any)[safeLang]}</h3>
+                <h3 className="text-xl font-extrabold mb-2 leading-snug text-black">{blog.title[safeLang]}</h3>
                 <div className="flex items-center text-gray-500 text-sm mb-3 gap-4">
                   <span>📅 {blog.date}</span>
-                  <span>⏱ {getReadTime((blog.content as any)[safeLang])} {t('blog.featured.minRead')}</span>
+                  <span>⏱ {getReadTime(blog.content[safeLang])} {t('blog.featured.minRead')}</span>
                 </div>
-                <p className="text-gray-700 mb-4 line-clamp-2">{(blog.description as any)[safeLang]}</p>
+                <p className="text-gray-700 mb-4 line-clamp-2">{blog.description[safeLang]}</p>
                 <motion.div whileHover={{ x: 5 }} className="mt-auto w-max">
                   <Link href={`/blog/${getBlogUrl(blog.title.en)}`} className="inline-flex items-center px-4 py-2 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 transition">
                     {t('blog.featured.readMore')}

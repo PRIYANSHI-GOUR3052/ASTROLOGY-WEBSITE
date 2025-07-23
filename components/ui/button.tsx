@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -41,24 +43,54 @@ export type ButtonProps = BaseProps | AnimatedProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, animated = false, ...props }, ref) => {
-    const Comp = asChild
-      ? Slot
-      : animated
-      ? require("framer-motion").motion.button
-      : "button"
+    // Always call hooks at the top level
+    const [MotionButton, setMotionButton] = React.useState<React.ElementType | null>(null);
+    React.useEffect(() => {
+      if (animated) {
+        let mounted = true;
+        import('framer-motion').then(mod => {
+          if (mounted) setMotionButton(() => mod.motion.button);
+        });
+        return () => { mounted = false; };
+      } else {
+        setMotionButton(null);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [animated]);
 
     // Filter out motion props when not using animation
     const filteredProps = animated ? props : Object.fromEntries(
       Object.entries(props).filter(([key]) => !key.startsWith('while') && !key.startsWith('animate') && !key.startsWith('initial') && !key.startsWith('transition'))
-    )
+    );
+
+    if (asChild) {
+      return (
+        <Slot
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          {...filteredProps}
+        />
+      );
+    }
+
+    if (animated) {
+      if (!MotionButton) return null;
+      return (
+        <MotionButton
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          {...filteredProps}
+        />
+      );
+    }
 
     return (
-      <Comp
+      <button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...filteredProps}
       />
-    )
+    );
   }
 )
 Button.displayName = "Button"

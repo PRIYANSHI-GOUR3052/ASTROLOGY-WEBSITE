@@ -1,235 +1,338 @@
-"use client"
+"use client";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { UniversalCartButton } from '../../components/UniversalCartButton';
+import ProductAssuranceBar from '../../components/ProductAssuranceBar';
+import ProductPurchaseInfo from '../../components/ProductPurchaseInfo';
+import { ProductServiceCard } from "../../components/UniversalServiceGrid";
+import ServiceCarousels from '../../components/ServiceCarousels';
+import NakshatraGyaanBanner from '../../components/NakshatraGyaanBanner';
+import SpiritualJourneyBanner from '../../components/SpiritualJourneyBanner';
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { useState } from "react"
-import { FaUser, FaCompass, FaHeart, FaShieldAlt, FaCalendarAlt, FaHeartbeat, FaInfinity, FaPrayingHands } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-import { DrNarendraProfile } from '../../../app/components/DrNarendraProfile';
-import { Statistics } from '../../../app/components/Statistics';
-import { ContactForm } from '../../../app/components/ContactForm';
+// FAQ Item Component
+function FAQItem({ faq, index }: { faq: { question: string; answer: string }; index: number }) {
+  const [open, setOpen] = useState(false);
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.07 }}
+      className="rounded-xl border border-gray-200 bg-white/80 shadow-md p-4 group hover:shadow-lg transition-all w-full"
+    >
+      <button
+        className="w-full text-left font-medium text-[#23244a] cursor-pointer text-base group-open:text-[#77A656] focus:outline-none flex justify-between items-center"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+      >
+        {faq.question}
+        <span className={`ml-2 transition-transform text-lg ${open ? 'rotate-90' : ''}`}>▶</span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35 }}
+            className="overflow-hidden"
+          >
+            <div className="mt-2 text-[#2C3A4B] text-sm leading-relaxed">{faq.answer}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
 
-const tabs = ['Overview', 'Benefits', 'FAQs', 'Purchase'];
+// Personal Reading Service Configuration
+const personalReadingService = {
+  title: "Personal Astrology Reading",
+  images: [
+    "/images/astrology_understanding.jpg",
+    "/images/birth_chart_mockup.jpg",
+    "/images/course-2.jpg",
+    "/images/spiritualpathway.jpg",
+  ],
+  variants: [
+    { label: "Basic Reading", image: "/images/astrology_understanding.jpg" },
+    { label: "Comprehensive Analysis", image: "/images/birth_chart_mockup.jpg" },
+  ],
+  features: ["Expert Astrologers", "Detailed Birth Chart", "Personalized Insights"],
+  price: "₹2,500",
+  oldPrice: "₹3,500",
+  discount: "28% OFF",
+  offerEnds: "04 hr : 15 min : 45 sec",
+  rating: 4.9,
+  reviews: 1247,
+  orders: 2103,
+};
 
-const benefits = [
+// Personal Reading FAQs
+const personalReadingFaqs = [
   {
-    icon: <FaUser className="text-teal-400 w-8 h-8 mb-2" />, title: 'Deep Self-Understanding', desc: 'Gain profound insights into your core personality, hidden strengths, and unique life patterns based on your natal chart.'
+    question: "What is a Personal Astrology Reading?",
+    answer: "A Personal Astrology Reading is a detailed analysis of your birth chart (natal chart) - a cosmic snapshot of the sky at your exact birth moment. It serves as your unique spiritual blueprint, revealing your personality, life path, strengths, challenges, and potential.",
   },
   {
-    icon: <FaCompass className="text-sky-400 w-8 h-8 mb-2" />, title: 'Life Path & Career Clarity', desc: 'Understand your true calling, identify your most promising career paths, and make informed decisions with confidence.'
+    question: "What information is required for an accurate reading?",
+    answer: "For the most precise reading, we need your full date of birth, exact time of birth (as recorded on your birth certificate), and the city and country of your birth. The more accurate the birth time, the more detailed and accurate your reading will be.",
   },
   {
-    icon: <FaHeart className="text-rose-400 w-8 h-8 mb-2" />, title: 'Relationship Harmony', desc: 'Uncover your relationship patterns, emotional needs, and compatibility factors to foster healthier, more fulfilling connections.'
+    question: "How is the reading delivered?",
+    answer: "Your personal reading is delivered as a comprehensive written report sent to your email, followed by an optional live consultation with our expert astrologer to discuss the findings and answer your specific questions.",
   },
   {
-    icon: <FaShieldAlt className="text-amber-400 w-8 h-8 mb-2" />, title: 'Navigate Life\'s Challenges', desc: 'Foresee potential challenges and receive cosmic guidance on how to navigate life\'s transitions with grace and resilience.'
+    question: "Does astrology predict a fixed future?",
+    answer: "No, astrology doesn't predict an unchangeable fate. Instead, it provides a roadmap of potentials, probabilities, and energetic influences. It's a powerful tool for self-awareness that empowers you to make conscious choices while respecting your free will.",
   },
   {
-    icon: <FaCalendarAlt className="text-cyan-400 w-8 h-8 mb-2" />, title: 'Optimal Timing (Muhurta)', desc: 'Leverage cosmic timing by understanding auspicious periods for major life events like marriage, career changes, or investments.'
+    question: "What if I don't know my exact birth time?",
+    answer: "While an exact birth time is ideal for the most accurate reading, we can still perform a reading using other rectification techniques. However, some specific details like your Ascendant and house placements may be less precise. We recommend trying to find your birth time from official records.",
   },
   {
-    icon: <FaHeartbeat className="text-lime-400 w-8 h-8 mb-2" />, title: 'Holistic Wellness Insights', desc: 'Explore the connection between planetary placements and your physical and mental well-being, receiving guidance on maintaining balance.'
+    question: "Can a reading help with urgent decisions?",
+    answer: "Yes! For specific questions, we use Horary Astrology (Prashna), which creates a chart for the moment a question is asked. This provides targeted, immediate insight into situations, complementing the broader life-path guidance of your natal chart reading.",
   },
   {
-    icon: <FaInfinity className="text-fuchsia-400 w-8 h-8 mb-2" />, title: 'Understand Karmic Journey', desc: 'Gain clarity on your soul\'s purpose and past-life patterns by exploring the significance of the lunar nodes (Rahu & Ketu) in your chart.'
+    question: "How is this different from generic horoscopes?",
+    answer: "Generic horoscopes are based only on your Sun sign and offer broad advice for millions of people. A personal reading analyzes your unique chart considering all planets, houses, and aspects. It's an entirely personalized guide to your specific life, making it infinitely more accurate and detailed.",
   },
   {
-    icon: <FaPrayingHands className="text-orange-400 w-8 h-8 mb-2" />, title: 'Personalized Spiritual Practices', desc: 'Receive recommendations for mantras, meditations, and rituals tailored to your unique astrological makeup to enhance your spiritual growth.'
-  }
+    question: "How should I prepare for my reading?",
+    answer: "Come with an open heart and reflect on key areas where you seek clarity. Jot down specific questions beforehand. Being in a quiet, private space during consultation will help you absorb the information fully and make the most of our time together.",
+  },
 ];
 
-const faqs = [
+// Related Services
+const relatedServices = [
   {
-    q: 'What is a personal astrology reading?',
-    a: 'A personal astrology reading is a highly detailed, one-on-one analysis of your birth chart (natal chart). This chart is a cosmic snapshot of the sky at the exact moment of your birth, and it serves as your unique spiritual blueprint.'
+    title: 'Kundali Matching',
+    image: '/images/birth_chart_mockup.jpg',
+    price: '₹2,100',
+    oldPrice: '₹4,500',
+    slug: 'kundali-matching',
   },
   {
-    q: 'What information is required for an accurate reading?',
-    a: 'For the most precise and insightful reading, we require your full date of birth, the exact time of birth (as recorded on your birth certificate), and the city and country of your birth.'
+    title: 'Grah Shanti Puja',
+    image: '/images/course-2.jpg',
+    price: '₹3,500',
+    oldPrice: '₹5,000',
+    slug: 'grah-shanti',
   },
   {
-    q: 'How is the reading delivered?',
-    a: 'Your personal reading is delivered as a comprehensive written report sent to your email, followed by an optional live consultation with our expert astrologer to discuss the findings and answer your questions.'
+    title: 'Numerology Analysis',
+    image: '/images/course-4.jpg',
+    price: '₹1,800',
+    oldPrice: '₹2,500',
+    slug: 'numerology',
   },
   {
-    q: 'Does astrology predict a fixed future?',
-    a: 'Astrology does not predict an unchangeable fate. Instead, it provides a roadmap of potentials, probabilities, and energetic influences. It is a powerful tool for self-awareness that empowers you to make conscious choices, but your free will is always paramount in shaping your destiny.'
+    title: 'Palmistry Consultation',
+    image: '/images/course-5.jpg',
+    price: '₹1,200',
+    oldPrice: '₹2,000',
+    slug: 'palmistry',
   },
-  {
-    q: 'What if I don\'t know my exact birth time?',
-    a: 'An exact birth time is crucial for the most accurate reading, especially for determining your Ascendant (Rising Sign) and house placements. If you don\'t know your time, we can still perform a reading based on other rectification techniques, though some specific details may be less precise. We recommend trying to find your birth time from official records for the best results.'
-  },
-  {
-    q: 'Can a reading help me with a specific, urgent decision?',
-    a: 'Yes. For specific questions, we often use Horary Astrology (Prashna), which creates a chart for the moment a question is asked. This provides targeted, immediate insight into a situation, complementing the broader life-path guidance of your natal chart reading.'
-  },
-  {
-    q: 'What is the difference between this and a generic sun-sign horoscope?',
-    a: 'Generic horoscopes are based only on your Sun sign and offer broad advice for millions of people. A personal reading is an in-depth analysis of your unique chart, considering all planets, houses, and aspects. It is an entirely personalized guide to your specific life, making it infinitely more accurate and detailed.'
-  },
-  {
-    q: 'How should I prepare for my personal reading?',
-    a: 'Come with an open heart and reflect on the key areas of your life where you are seeking clarity. It is helpful to jot down specific questions beforehand. Being in a quiet, private space during your consultation will also help you absorb the information fully and make the most of our time together.'
-  }
 ];
 
 export default function PersonalReadingPage() {
-  const [activeTab, setActiveTab] = useState('Overview');
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    dateOfBirth: "",
-    timeOfBirth: "",
-    placeOfBirth: "",
-    message: ""
-  });
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [pincode, setPincode] = useState("");
+  const [added, setAdded] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+  // Real-time offer timer
+  const OFFER_DURATION = 4 * 60 * 60 + 15 * 60 + 45; // 4 hr 15 min 45 sec in seconds
+  const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
+
+  useEffect(() => {
+    if (secondsLeft <= 0) return;
+    const interval = setInterval(() => {
+      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [secondsLeft]);
+
+  function formatTime(secs: number) {
+    const h = Math.floor(secs / 3600).toString().padStart(2, '0');
+    const m = Math.floor((secs % 3600) / 60).toString().padStart(2, '0');
+    const s = (secs % 60).toString().padStart(2, '0');
+    return `${h} hr : ${m} min : ${s} sec`;
+  }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-sky-50 to-white font-sans">
-      <div className="container mx-auto pt-8 pb-16 px-4 relative z-10">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl bg-gradient-to-r from-[#f0f9ff] via-[#f0f5ff] to-[#eef9ff] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e0f2fe]">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg font-serif" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Personal Astrology Reading</h1>
-          <p className="text-xl md:text-2xl text-center text-gray-700 max-w-2xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
-            Discover your cosmic blueprint with a personalized reading of your natal chart.
-          </p>
-        </motion.div>
-
-        <div className="flex flex-wrap gap-2 mb-8 border-b border-gray-200">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors font-sans ${activeTab === tab ? 'border-sky-500 text-sky-600 font-bold' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        {activeTab === 'Overview' && (
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-800 space-y-6 font-sans" style={{ textAlign: 'justify' }}>
-            <p><span className="font-bold text-sky-900">A Personal Astrology Reading</span> is your key to unlocking the sacred contract your soul made with the universe before you were born. By creating a natal chart—a precise map of the heavens at your exact moment of birth—we can reveal the profound cosmic influences that shape your personality, destiny, and life's purpose.</p>
-            <p>Our expert astrologers go beyond generic sun-sign horoscopes to provide a deeply personalized and nuanced interpretation of your unique chart. We analyze the positions and interactions of all the planets, houses, and important points (like your ascendant and moon sign) to create a holistic picture of who you are.</p>
-            <p>This reading is a powerful tool for self-discovery, empowerment, and strategic life planning. It can illuminate your innate talents, clarify your career path, explain your relationship dynamics, and help you understand your karmic lessons. Whether you are at a crossroads or simply wish to know yourself more deeply, a personal reading offers invaluable clarity and guidance.</p>
-            <p>The core components of your chart—the planets, signs, and houses—form a celestial tapestry that is uniquely yours. The planets represent different facets of your psyche (e.g., Mercury for communication, Venus for love), the zodiac signs color how these energies are expressed, and the twelve houses pinpoint the specific areas of life where these energies manifest, such as career, relationships, and home life. Understanding how these three elements interweave is the first step toward mastering your own personal astrology.</p>
-            <p>While many are familiar with their Sun sign, your Ascendant (or Rising sign) and Moon sign are equally, if not more, crucial for a complete self-portrait. The Ascendant represents the mask you wear, your outer personality, and how others perceive you. Your Moon sign, in contrast, governs your inner world—your emotions, instincts, and subconscious needs. A personal reading synthesizes these "big three" to offer a rich, multi-layered understanding of your internal and external self.</p>
-            <p>We also delve into the intricate web of planetary aspects—the geometric angles planets form with one another in your chart. These aspects, such as conjunctions, trines, squares, and oppositions, function like conversations between your inner drives. Some conversations are harmonious and create easy flow (trines), while others generate tension and challenges that push you toward growth (squares). Interpreting these aspects is critical for understanding your innate talents, internal conflicts, and the dynamic interplay of your personality.</p>
-            <p>A key part of our analysis involves exploring your karmic journey through the lunar nodes, Rahu (the North Node) and Ketu (the South Node). These mathematical points in your chart are not celestial bodies but are deeply significant, representing your past-life patterns and your soul's evolutionary purpose in this lifetime. Understanding your nodal axis can shed light on the baggage you've carried in and the new direction your soul is yearning to take, providing a profound sense of purpose and direction.</p>
-            <p>Ultimately, a personal reading is a collaborative and empowering experience. It is not about receiving rigid predictions but about gaining a practical toolkit for life. Armed with this cosmic self-knowledge, you can navigate your days with greater awareness, make choices that are in true alignment with your soul's purpose, anticipate cycles of challenge and opportunity, and cultivate more compassion for yourself and others. It is a guide to living more consciously, a confirmation of your unique place in the cosmos, and an invitation to become the most authentic version of yourself.</p>
-            <p>To deepen the analysis, we meticulously examine the twelve astrological houses, which represent distinct arenas of your life. The First House defines your identity and outward appearance, while the Seventh House governs marriage and partnerships. Your career and public reputation are illuminated by the Tenth House, and your innermost emotional foundations are revealed in the Fourth House. By observing which planets occupy which houses, we can pinpoint exactly where your life's major themes will play out, offering specific insights into your experiences with money, family, health, and spirituality. This provides a practical framework for understanding why certain areas of your life flow with ease while others may require more conscious effort and attention.</p>
-            <p>A natal chart is not a static document; it is a dynamic map that evolves with you. Our readings incorporate an analysis of current and upcoming transits—the ongoing movements of the planets in the sky as they interact with your birth chart. When a transiting planet like Jupiter or Saturn forms an aspect with one of your natal planets, it activates specific themes and presents unique opportunities or challenges. Understanding these transits allows you to work proactively with the prevailing cosmic energies, helping you to plan major life events, navigate difficult periods, and seize moments of opportune growth with strategic foresight.</p>
-            <p>Beyond the major planets, our readings often incorporate the wisdom of key asteroids and celestial points that add further layers of nuance. For instance, the asteroid Chiron, often called the "Wounded Healer," points to our deepest core wound and, paradoxically, our greatest gift for healing others once we have integrated its lessons. Analyzing Chiron's position by sign and house can reveal the nature of a recurring struggle in your life and illuminate the path toward transforming that pain into a source of profound strength and compassion for both yourself and others.</p>
-            <p>We also assess your chart's elemental and modal balance. The distribution of your planets among the four elements—Fire (action, spirit), Earth (practicality, grounding), Air (intellect, communication), and Water (emotion, intuition)—reveals your fundamental temperament and how you process life. Similarly, the balance of modalities—Cardinal (initiating), Fixed (sustaining), and Mutable (adapting)—shows how you approach tasks and respond to change. Understanding your unique elemental and modal signature provides a foundational grasp of your natural energetic style and helps you cultivate balance where it is needed.</p>
-            <p>The true magic of an astrological reading lies in the art of synthesis. It is not merely a checklist of planetary positions but a deeply intuitive process of weaving all these complex threads into a single, coherent narrative that tells your unique story. Our astrologers are skilled in this art, connecting the dots between your personality, your karmic path, your current challenges, and your highest potential. This holistic synthesis transforms complex astrological data into a meaningful, empowering, and practical guide that you can use to consciously co-create your most fulfilling life journey.</p>
-            <p>While transits show what the universe is bringing to you from the outside, we also use predictive techniques like Secondary Progressions to understand your internal evolution. Based on the "a day for a year" principle, your progressed chart reveals the slow, organic unfolding of your personality and soul's story over time. A progressed New Moon, for example, can signify the start of a major new 30-year chapter in your life. Analyzing progressions provides a profound timeline of your psychological development, highlighting periods of deep internal shifts, maturation, and the emergence of new facets of your identity.</p>
-            <p>A personal reading offers unparalleled insight into your relationship dynamics, primarily through the lens of the Descendant—the cusp of your Seventh House. This point in your chart describes the qualities you are unconsciously drawn to in a partner, often representing the traits you need to integrate within yourself. By analyzing the sign on the Descendant and any planets in the Seventh House, we can illuminate your patterns in one-to-one partnerships, the lessons you are meant to learn through them, and the kind of relationship that will ultimately bring you the most growth and fulfillment.</p>
-            <p>Many people express concern over retrograde planets in their birth chart, but these are not inherently negative. A natal retrograde planet simply suggests that its energy is turned inward, processed more subjectively, and may manifest in less conventional ways. It often points to a significant karmic theme or a talent that requires deep, personal exploration before it can be effectively expressed externally. A personal reading demystifies these placements, reframing them as invitations to develop a unique, masterful relationship with that planet's energy, turning a perceived challenge into a profound source of wisdom and strength.</p>
-            <p>For an even finer layer of detail, our analysis may incorporate the influence of major fixed stars that are in close alignment with your natal planets or angles. Unlike the planets, these distant suns are "fixed" in the zodiac and are imbued with ancient, potent mythological meaning. An alignment with a star like Regulus might indicate a potential for leadership and renown, while a conjunction with Algol could point to intense transformative experiences. These stellar connections add a powerful, mythic dimension to your personal narrative, often highlighting areas of extraordinary destiny or talent.</p>
-            <p>The role of the astrologer in a personal reading is not that of a psychic or a fortune-teller, but of a skilled translator and compassionate guide. We create a safe, non-judgmental space for you to explore your life's most pressing questions. We see ourselves as your partner in discovery, helping you decode the symbolic language of your own cosmic DNA. The goal is to facilitate a dialogue between you and your chart, fostering 'aha' moments and empowering you with the self-awareness needed to navigate your life with greater intention, confidence, and a deep sense of connection to your own sacred journey.</p>
-            <div className="bg-sky-50 border-l-4 border-sky-400 p-4 rounded-lg">
-              <span className="text-sky-600 font-medium">Key Takeaway:</span> Your natal chart is a cosmic blueprint, and a <span className="font-bold text-sky-900">Personal Reading</span> is the key to interpreting it and unlocking your true potential.
+    <>
+      <style jsx global>{`
+        *::-webkit-scrollbar {
+          display: none !important;
+          height: 0 !important;
+          width: 0 !important;
+          background: transparent !important;
+        }
+        * {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+        }
+      `}</style>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-start py-6 px-2 md:px-0 mt-8">
+        <div className="max-w-5xl w-full flex flex-col md:flex-row gap-8">
+          {/* Left: Main Image and Thumbnails */}
+          <div className="flex flex-col items-center md:w-1/2">
+            <div className="w-full rounded-xl overflow-hidden bg-[#f7f5ed] flex items-center justify-center mb-3" style={{ aspectRatio: '1/1', maxWidth: 340 }}>
+              <Image
+                src={personalReadingService.images[selectedImage]}
+                alt={personalReadingService.title}
+                width={320}
+                height={320}
+                className="object-cover w-full h-full"
+                priority
+              />
             </div>
-          </motion.div>
-        )}
-        {activeTab === 'Benefits' && (
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold text-sky-900 mb-8 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Benefits of a Personal Reading</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              {benefits.map((benefit, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 + idx * 0.1 }}
-                  viewport={{ once: true }}
-                  className="rounded-2xl bg-white/70 backdrop-blur-md shadow-lg p-8 flex flex-col items-center border border-sky-100 hover:scale-105 transition-transform duration-200"
+            <div className="flex flex-row gap-2 w-full overflow-x-auto pb-2">
+              {personalReadingService.images.map((img, idx) => (
+                <button
+                  key={img}
+                  onClick={() => setSelectedImage(idx)}
+                  className={`rounded-lg border-2 ${selectedImage === idx ? 'border-black' : 'border-transparent'} overflow-hidden focus:outline-none`}
+                  style={{ minWidth: 54, minHeight: 54 }}
                 >
-                  {benefit.icon}
-                  <h3 className="font-bold text-lg mb-2 text-sky-900 text-center" style={{ fontFamily: 'Playfair Display, serif' }}>{benefit.title}</h3>
-                  <p className="text-gray-700 text-center text-base">{benefit.desc}</p>
-                </motion.div>
+                  <Image src={img} alt={personalReadingService.title} width={54} height={54} className="object-cover w-full h-full" />
+                </button>
               ))}
             </div>
-          </section>
-        )}
-        {activeTab === 'FAQs' && (
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold text-sky-900 mb-8 border-b pb-2 text-left" style={{ fontFamily: 'Playfair Display, serif' }}>Frequently Asked Questions</h2>
-            <div className="space-y-6">
-              {faqs.map((faq, idx) => (
-                <div key={idx} className="bg-white p-6 rounded-xl shadow-md border border-sky-100">
-                  <div className="flex items-start mb-2">
-                    <span className="text-sky-600 mr-3 text-2xl font-bold">&#x3f;</span>
-                    <span className="font-bold text-lg text-sky-900" style={{ fontFamily: 'Playfair Display, serif' }}>{faq.q}</span>
-                  </div>
-                  <p className="text-gray-800 text-justify pl-9" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>{faq.a}</p>
-                </div>
+          </div>
+          {/* Right: Service Info */}
+          <div className="flex-1 flex flex-col gap-3">
+            <h1 className="text-2xl md:text-3xl font-semibold text-[#23244a]" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{personalReadingService.title}</h1>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-[#FFD700] text-lg">&#9733;</span>
+              <span className="text-base font-medium text-[#23244a]">{personalReadingService.rating}</span>
+              <span className="text-sm text-[#23244a]">{personalReadingService.reviews} reviews</span>
+            </div>
+            <div className="flex gap-2 mt-2">
+              {personalReadingService.features.map((f, i) => (
+                <span key={f} className={`px-3 py-0.5 rounded-full text-xs font-medium ${i === 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-indigo-100 text-indigo-800'}`}>{f}</span>
               ))}
             </div>
-          </section>
-        )}
-        {activeTab === 'Purchase' && (
-          <section className="mb-12">
-            <div className="rounded-3xl bg-gradient-to-r from-[#e0f7fa] via-[#f0f5ff] to-[#eef9ff] p-10 shadow-xl border border-sky-100 flex flex-col items-center">
-              <h2 className="text-3xl font-bold text-sky-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>Book Your Personal Reading</h2>
-              <p className="text-lg text-center mb-6 text-gray-700" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
-                Invest in yourself and unlock the wisdom of your personal cosmic code.
-              </p>
-              <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="text-sky-900 block mb-2 font-semibold">Name</label>
-                    <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="bg-white/80 text-sky-900 border border-sky-200 rounded-lg px-4 py-2 w-full" required />
-                  </div>
-                  <div>
-                    <label className="text-sky-900 block mb-2 font-semibold">Email</label>
-                    <input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="bg-white/80 text-sky-900 border border-sky-200 rounded-lg px-4 py-2 w-full" required />
-                  </div>
-                   <div>
-                    <label className="text-sky-900 block mb-2 font-semibold">Phone Number</label>
-                    <input type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="bg-white/80 text-sky-900 border border-sky-200 rounded-lg px-4 py-2 w-full" required />
-                  </div>
-                  <div>
-                    <label className="text-sky-900 block mb-2 font-semibold">Date of Birth</label>
-                    <input type="date" value={formData.dateOfBirth} onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})} className="bg-white/80 text-sky-900 border border-sky-200 rounded-lg px-4 py-2 w-full" required />
-                  </div>
-                  <div className="md:col-span-2">
-                     <label className="text-sky-900 block mb-2 font-semibold">Time of Birth (e.g., 03:45 PM)</label>
-                    <input type="time" value={formData.timeOfBirth} onChange={(e) => setFormData({...formData, timeOfBirth: e.target.value})} className="bg-white/80 text-sky-900 border border-sky-200 rounded-lg px-4 py-2 w-full" required />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="text-sky-900 block mb-2 font-semibold">Place of Birth (City, Country)</label>
-                    <input type="text" value={formData.placeOfBirth} onChange={(e) => setFormData({...formData, placeOfBirth: e.target.value})} className="bg-white/80 text-sky-900 border border-sky-200 rounded-lg px-4 py-2 w-full" required />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sky-900 block mb-2 font-semibold">Your Message or Specific Questions</label>
-                  <textarea value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} className="bg-white/80 text-sky-900 border border-sky-200 rounded-lg px-4 py-2 w-full h-32" />
-                </div>
-                <Button type="submit" className="w-full bg-sky-700 text-white hover:bg-sky-800 text-lg px-8 py-4 font-bold rounded-full shadow-lg transition-transform transform hover:scale-105">
-                  Book Your Reading
-                </Button>
-              </form>
+            <div className="flex items-end gap-3 mt-3">
+              {secondsLeft === 0 ? (
+                <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{personalReadingService.oldPrice}</span>
+              ) : (
+                <>
+                  <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{personalReadingService.price}</span>
+                  <span className="text-base text-gray-400 line-through">{personalReadingService.oldPrice}</span>
+                  <span className="text-base font-semibold text-green-700">{personalReadingService.discount}</span>
+                </>
+              )}
             </div>
-          </section>
-        )}
-
-        <div className="mt-20 space-y-20">
-          <DrNarendraProfile />
-          <Statistics />
+            <div className="text-red-600 font-medium text-sm mt-1">
+              {secondsLeft > 0 ? `Offer ends in ${formatTime(secondsLeft)}` : 'Offer ended'}
+            </div>
+            {/* Service Variants */}
+            <div className="flex gap-4 mt-3">
+              {personalReadingService.variants.map((v, idx) => (
+                <button
+                  key={v.label}
+                  onClick={() => setSelectedVariant(idx)}
+                  className={`flex flex-col items-center gap-1 focus:outline-none ${selectedVariant === idx ? 'ring-2 ring-black' : ''}`}
+                >
+                  <Image src={v.image} alt={v.label} width={40} height={40} className="rounded-full object-cover" />
+                  <span className="text-xs text-[#23244a] mt-1 font-normal">{v.label}</span>
+                </button>
+              ))}
+            </div>
+            {/* Quantity Selector */}
+            <div className="flex items-center gap-3 mt-3">
+              <span className="text-sm text-[#23244a]">Quantity</span>
+              <button
+                className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-lg font-bold text-[#23244a] bg-white"
+                onClick={() => setQuantity(q => Math.max(1, q - 1))}
+              >-</button>
+              <span className="text-base font-medium text-[#23244a] w-7 text-center">{quantity}</span>
+              <button
+                className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-lg font-bold text-[#23244a] bg-white"
+                onClick={() => setQuantity(q => q + 1)}
+              >+</button>
+            </div>
+            <div className="text-xs text-gray-600 mt-1">{personalReadingService.orders.toLocaleString()} orders placed in the last 24 hours</div>
+            {/* Delivery Date Input */}
+            <div className="mt-3 bg-gray-100 rounded-lg p-3 flex flex-col gap-2">
+              <span className="text-xs font-medium text-[#23244a]">ESTIMATED DELIVERY DATE</span>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Enter your pincode"
+                  value={pincode}
+                  onChange={e => setPincode(e.target.value)}
+                  className="rounded-md px-3 py-1.5 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#23244a] bg-white"
+                  style={{ maxWidth: 120 }}
+                />
+                <button className="bg-black text-white px-4 py-1.5 rounded-md font-semibold text-sm hover:bg-[#23244a] transition">CHECK</button>
+              </div>
+            </div>
+            {/* Add to Cart / Buy Now */}
+            <div className="flex gap-3 mt-5">
+              <UniversalCartButton
+                productId="personal-reading"
+                productName={personalReadingService.title}
+                price={Number(personalReadingService.price.replace(/[^\d]/g, ''))}
+                image={personalReadingService.images[0]}
+                quantity={quantity}
+                className="flex-1 bg-black text-white py-3 rounded-md font-semibold text-base hover:bg-[#23244a] transition"
+              >
+                ADD TO CART
+              </UniversalCartButton>
+              <button className="flex-1 bg-yellow-400 text-black py-3 rounded-md font-semibold text-base hover:bg-yellow-500 transition">BUY IT NOW</button>
+            </div>
+          </div>
+        </div>
+        {/* ProductAssuranceBar */}
+        <ProductAssuranceBar />
+        {/* FAQ Section */}
+        <div className="w-screen overflow-x-clip mt-14 mb-10" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
+          <div className="max-w-5xl w-full mx-auto px-2 md:px-0">
+            <h2 className="text-2xl md:text-3xl font-semibold mb-7 text-[#23244a] text-center" style={{ fontFamily: 'Playfair Display, serif', letterSpacing: '0.02em' }}>Frequently Asked Questions</h2>
+            <div className="space-y-5 w-full">
+              {personalReadingFaqs.map((faq, idx) => (
+                <FAQItem key={idx} faq={faq} index={idx} />
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* ProductPurchaseInfo */}
+        <ProductPurchaseInfo />
+        {/* Full-width ServiceCarousels */}
+        <div className="w-screen overflow-x-clip" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
+          <ServiceCarousels />
+        </div>
+        {/* Nakshatra Gyaan Banner */}
+        <NakshatraGyaanBanner />
+        {/* Related Services */}
+        <div className="w-screen overflow-x-clip mb-16" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-[#23244a] text-center" style={{ fontFamily: 'Playfair Display, serif' }}>Related Services</h2>
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 px-4 md:px-8">
+            {relatedServices.map(service => (
+              <div key={service.slug} className="group">
+                <ProductServiceCard
+                  image={service.image}
+                  title={service.title}
+                  description={service.oldPrice ? `${service.price} (was ${service.oldPrice})` : service.price}
+                  badge={service.oldPrice ? 'Recommended' : ''}
+                  href={`/services/${service.slug}`}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-20">
-          <ContactForm />
-        </div>
+        {/* Spiritual Journey Banner */}
+        <SpiritualJourneyBanner />
       </div>
-    </div>
-  )
+    </>
+  );
 } 

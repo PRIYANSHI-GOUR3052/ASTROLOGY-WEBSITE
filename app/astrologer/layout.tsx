@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 import AstrologerSidebar from "@/components/astrologer/Sidebar";
-import dynamic from "next/dynamic";
 import { useAuthToken } from '@/hooks/useAuthToken';
 
 
@@ -12,7 +11,7 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(false);
   const [checkingVerification, setCheckingVerification] = useState(false);
-  const [isVerified, setIsVerified] = useState(true); // default true for auth pages
+  const [isVerified, setIsVerified] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
   const token = useAuthToken();
@@ -22,7 +21,6 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     pathname?.includes("/astrologer/register") ||
     pathname?.includes("/astrologer/reset-password") ||
     pathname?.includes("/astrologer/forgot-password");
-  const isVerifyRoute = pathname?.includes("/astrologer/verify");
 
   const isProfilePage = pathname === "/astrologer/profile";
 
@@ -58,8 +56,8 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
         .then(data => {
           const status = data.verification?.status || 'unverified';
           if (data.verification && status !== "approved") {
-            router.push("/astrologer/profile")
             setIsVerified(false);
+            router.push("/astrologer/profile")
           } else {
             setIsVerified(true);
           }

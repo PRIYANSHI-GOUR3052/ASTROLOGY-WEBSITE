@@ -119,7 +119,7 @@ export default function OrderConfirmationPage({ params }: { params: { id: string
                   Order Confirmed!
                 </h1>
                 <p className="text-xl text-mystic-brown">
-                  Thank you for your purchase. We've received your order and will process it shortly.
+                  Thank you for your purchase. We&apos;ve received your order and will process it shortly.
                 </p>
               </div>
               

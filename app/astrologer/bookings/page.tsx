@@ -1,58 +1,35 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Check, X, CalendarClock, Calendar } from 'lucide-react';
+import { Check, X, CalendarClock } from 'lucide-react';
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Calendar as DateCalendar } from '@/components/ui/calendar';
-import { TimePicker } from '@/app/components/ui/time-picker';
 
 // Mock data for bookings
-const mockBookings = [
-  {
-    id: 1,
-    client: 'John Doe',
-    date: '2024-06-10T15:00:00',
-    type: 'Vedic Astrology',
-    status: 'upcoming',
-  },
-  {
-    id: 2,
-    client: 'Jane Smith',
-    date: '2024-05-20T11:00:00',
-    type: 'Tarot Reading',
-    status: 'past',
-  },
-  {
-    id: 3,
-    client: 'Amit Kumar',
-    date: '2024-06-12T18:30:00',
-    type: 'Numerology',
-    status: 'upcoming',
-  },
-  {
-    id: 4,
-    client: 'Priya Singh',
-    date: '2024-05-01T09:00:00',
-    type: 'Palmistry',
-    status: 'past',
-  },
-];
+// Remove mockBookings array
 
 interface TimePickerNoSecondsProps {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
 }
+
+type Booking = {
+  id: number;
+  type: string;
+  client: string;
+  date: string;
+  [key: string]: unknown;
+};
 
 const BookingsPage = () => {
   const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
@@ -63,15 +40,69 @@ const BookingsPage = () => {
   const [rejectOpen, setRejectOpen] = useState(false);
   const [rejectBookingId, setRejectBookingId] = useState<number | null>(null);
   const [rejectRemarks, setRejectRemarks] = useState("");
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState(false); // for accept/reject/reschedule only
+  const fetchIdRef = useRef(0);
 
-  const filteredBookings = mockBookings.filter(b => {
-    if (b.status !== tab) return false;
-    if (!filterDate) return true;
-    // Compare only the date part (YYYY-MM-DD)
-    return b.date.slice(0, 10) === filterDate;
-  });
+  // Get JWT token (adjust as per your auth storage)
+  const token = typeof window !== 'undefined' ? localStorage.getItem('astrologerToken') : null;
 
-  const handleOpenReschedule = (booking: typeof mockBookings[0]) => {
+  // Robust fetchBookings with race condition prevention
+  const fetchBookings = useCallback(async () => {
+    const fetchId = ++fetchIdRef.current;
+    setLoading(true);
+    setError(null);
+    try {
+      let url = `/api/astrologer/bookings?status=${tab}`;
+      if (filterDate) url += `&date=${filterDate}`;
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error('Failed to fetch bookings');
+      const data = await res.json();
+      // Only update if this is the latest fetch
+      if (fetchId === fetchIdRef.current) {
+        setBookings(data.bookings || []);
+      }
+    } catch (e: unknown) {
+      if (fetchId === fetchIdRef.current) setError(e instanceof Error ? e.message : 'Error fetching bookings');
+    } finally {
+      if (fetchId === fetchIdRef.current) setLoading(false);
+    }
+  }, [tab, filterDate, token]);
+
+  useEffect(() => {
+    if (token) fetchBookings();
+  }, [tab, filterDate, token, fetchBookings]);
+
+  // Manual reload
+  const handleReload = () => {
+    if (token) fetchBookings();
+  };
+
+  const handleAccept = async (bookingId: number) => {
+    setActionLoading(true);
+    try {
+      const res = await fetch('/api/astrologer/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ action: 'accept', bookingId }),
+      });
+      if (!res.ok) throw new Error('Failed to accept booking');
+      await fetchBookings();
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Error accepting booking');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleOpenReschedule = (booking: Booking) => {
     setRescheduleBookingId(booking.id);
     setRescheduleDate(new Date(booking.date));
     setRescheduleOpen(true);
@@ -83,14 +114,29 @@ const BookingsPage = () => {
     setRescheduleDate(undefined);
   };
 
-  const handleSaveReschedule = () => {
-    // Here you would update the booking with the new date/time
-    setRescheduleOpen(false);
-    setRescheduleBookingId(null);
-    setRescheduleDate(undefined);
+  const handleSaveReschedule = async () => {
+    if (!rescheduleBookingId || !rescheduleDate) return;
+    setActionLoading(true);
+    try {
+      const res = await fetch('/api/astrologer/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ action: 'reschedule', bookingId: rescheduleBookingId, newDate: rescheduleDate }),
+      });
+      if (!res.ok) throw new Error('Failed to reschedule booking');
+      await fetchBookings();
+      handleCloseReschedule();
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Error rescheduling booking');
+    } finally {
+      setActionLoading(false);
+    }
   };
 
-  const handleOpenReject = (booking: typeof mockBookings[0]) => {
+  const handleOpenReject = (booking: Booking) => {
     setRejectBookingId(booking.id);
     setRejectRemarks("");
     setRejectOpen(true);
@@ -102,12 +148,30 @@ const BookingsPage = () => {
     setRejectRemarks("");
   };
 
-  const handleConfirmReject = () => {
-    // Here you would handle the rejection logic, e.g., send remarks to backend
-    setRejectOpen(false);
-    setRejectBookingId(null);
-    setRejectRemarks("");
+  const handleConfirmReject = async () => {
+    if (!rejectBookingId) return;
+    setActionLoading(true);
+    try {
+      const res = await fetch('/api/astrologer/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ action: 'reject', bookingId: rejectBookingId, remarks: rejectRemarks }),
+      });
+      if (!res.ok) throw new Error('Failed to reject booking');
+      await fetchBookings();
+      handleCloseReject();
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Error rejecting booking');
+    } finally {
+      setActionLoading(false);
+    }
   };
+
+  // Filtered bookings for UI
+  const filteredBookings = bookings;
 
   return (
     <motion.div
@@ -116,7 +180,12 @@ const BookingsPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
-      <h1 className="text-2xl font-bold mb-4">View Bookings</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">View Bookings</h1>
+        <Button variant="outline" onClick={handleReload} disabled={loading || actionLoading}>
+          {loading ? 'Refreshing...' : 'Reload'}
+        </Button>
+      </div>
       <div className="flex flex-col sm:flex-row sm:items-end gap-4 mb-6">
         <div className="flex gap-4">
           <button
@@ -153,6 +222,8 @@ const BookingsPage = () => {
           </div>
         </div>
       </div>
+      {loading && <div className="text-center text-gray-500 dark:text-gray-300 py-10">Loading bookings...</div>}
+      {error && <div className="text-center text-red-500 dark:text-red-400 py-10">{error}</div>}
       {filteredBookings.length === 0 ? (
         <div className="text-center text-gray-500 dark:text-gray-300 py-10">
           No {tab} bookings found.
@@ -174,31 +245,33 @@ const BookingsPage = () => {
                 </span>
               </div>
               <div className="text-gray-700 dark:text-gray-200">
-                <span className="font-semibold">Client:</span> {booking.client}
+                <span className="font-semibold">Client:</span> {booking.client?.name} ({booking.client?.email})
               </div>
               <div className="text-gray-700 dark:text-gray-200">
                 <span className="font-semibold">Date:</span> {new Date(booking.date).toLocaleString()}
               </div>
               {tab === 'upcoming' && (
                 <div className="flex gap-2 mt-2">
-                  <Button variant="default" size="sm" className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-1">
-                    <Check className="w-4 h-4" /> Accept
+                  <Button variant="default" size="sm" className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-1" onClick={() => handleAccept(booking.id)} disabled={loading || actionLoading}>
+                    {loading || actionLoading ? 'Accepting...' : <Check className="w-4 h-4" />} Accept
                   </Button>
                   <Button
                     variant="destructive"
                     size="sm"
                     className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
                     onClick={() => handleOpenReject(booking)}
+                    disabled={loading || actionLoading}
                   >
-                    <X className="w-4 h-4" /> Reject
+                    {loading || actionLoading ? 'Rejecting...' : <X className="w-4 h-4" />} Reject
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     className="border-amber-500 dark:border-purple-500 text-amber-700 dark:text-purple-400 hover:bg-amber-50 dark:hover:bg-purple-950 flex items-center gap-1"
                     onClick={() => handleOpenReschedule(booking)}
+                    disabled={loading || actionLoading}
                   >
-                    <CalendarClock className="w-4 h-4" /> Reschedule
+                    {loading || actionLoading ? 'Rescheduling...' : <CalendarClock className="w-4 h-4" />} Reschedule
                   </Button>
                 </div>
               )}
@@ -242,8 +315,8 @@ const BookingsPage = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleCloseReschedule}>Cancel</Button>
-            <Button variant="outline" onClick={handleSaveReschedule}>Save</Button>
+            <Button variant="outline" onClick={handleCloseReschedule} disabled={loading || actionLoading}>Cancel</Button>
+            <Button variant="outline" onClick={handleSaveReschedule} disabled={loading || actionLoading}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -264,8 +337,8 @@ const BookingsPage = () => {
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleCloseReject}>Cancel</Button>
-            <Button variant="destructive" onClick={handleConfirmReject}>Confirm Reject</Button>
+            <Button variant="outline" onClick={handleCloseReject} disabled={loading || actionLoading}>Cancel</Button>
+            <Button variant="destructive" onClick={handleConfirmReject} disabled={loading || actionLoading}>Confirm Reject</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -275,8 +348,6 @@ const BookingsPage = () => {
 
 // Custom TimePicker without seconds
 function TimePickerNoSeconds({ date, setDate }: TimePickerNoSecondsProps) {
-  const minuteRef = React.useRef(null);
-  const periodRef = React.useRef(null);
   return (
     <div className="flex items-center gap-2">
       <div className="flex flex-col items-center">
@@ -288,11 +359,11 @@ function TimePickerNoSeconds({ date, setDate }: TimePickerNoSecondsProps) {
           value={date ? ((date.getHours() % 12) || 12).toString().padStart(2, '0') : ''}
           onChange={e => {
             if (!date) return;
-            let newDate = new Date(date);
+            const newDate = new Date(date);
             let hours = parseInt(e.target.value);
             if (isNaN(hours) || hours < 1 || hours > 12) return;
-            let currentHours = newDate.getHours();
-            let isPM = currentHours >= 12;
+            const currentHours = newDate.getHours();
+            const isPM = currentHours >= 12;
             if (isPM) hours = (hours % 12) + 12;
             else hours = hours % 12;
             newDate.setHours(hours);
@@ -311,8 +382,8 @@ function TimePickerNoSeconds({ date, setDate }: TimePickerNoSecondsProps) {
           value={date ? date.getMinutes().toString().padStart(2, '0') : ''}
           onChange={e => {
             if (!date) return;
-            let newDate = new Date(date);
-            let minutes = parseInt(e.target.value);
+            const newDate = new Date(date);
+            const minutes = parseInt(e.target.value);
             if (isNaN(minutes) || minutes < 0 || minutes > 59) return;
             newDate.setMinutes(minutes);
             setDate(newDate);
@@ -326,8 +397,8 @@ function TimePickerNoSeconds({ date, setDate }: TimePickerNoSecondsProps) {
           value={date ? (date.getHours() >= 12 ? 'PM' : 'AM') : 'AM'}
           onChange={e => {
             if (!date) return;
-            let newDate = new Date(date);
-            let hours = newDate.getHours();
+            const newDate = new Date(date);
+            const hours = newDate.getHours();
             if (e.target.value === 'PM' && hours < 12) newDate.setHours(hours + 12);
             if (e.target.value === 'AM' && hours >= 12) newDate.setHours(hours - 12);
             setDate(newDate);

@@ -5,10 +5,8 @@ import { usePathname } from "next/navigation";
 import { Header } from "./components/Header";
 import Footer from "./components/Footer";
 import { PageTransition } from "./components/PageTransition";
-import { MysticBackground } from "./components/MysticBackground";
 import Chatbot from "./components/Chatbot";
 import { AuthProvider } from "./contexts/AuthContext";
-import { LanguageProvider } from "./contexts/LanguageContext";
 import { v4 as uuidv4 } from "uuid";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -128,32 +126,30 @@ export default function ClientLayout({
 
   return (
     <AuthProvider>
-      <LanguageProvider>
-        {/* <MysticBackground> */}
-        <div className="min-h-screen bg-white">
-          <Header />
-          <PageTransition>{children}</PageTransition>
-          <Footer />
-          <Chatbot />
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              unstyled: true,
-              style: {
-                backgroundColor: "#1C1C1C",
-                color: "white",
-                border: "1px solid #333",
-                boxShadow: "0 4px 14px rgba(0, 0, 0, 0.6)",
-                padding: "16px",
-                borderRadius: "12px",
-                fontSize: "14px",
-              },
-              className: "",
-            }}
-          />
-        </div>
-        {/* </MysticBackground> */}
-      </LanguageProvider>
+      {/* <MysticBackground> */}
+      <div className="min-h-screen bg-white">
+        <Header />
+        <PageTransition>{children}</PageTransition>
+        <Footer />
+        <Chatbot />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            unstyled: true,
+            style: {
+              backgroundColor: "#1C1C1C",
+              color: "white",
+              border: "1px solid #333",
+              boxShadow: "0 4px 14px rgba(0, 0, 0, 0.6)",
+              padding: "16px",
+              borderRadius: "12px",
+              fontSize: "14px",
+            },
+            className: "",
+          }}
+        />
+      </div>
+      {/* </MysticBackground> */}
     </AuthProvider>
   );
 }

@@ -89,7 +89,7 @@ export function MysticBackground({ children }: { children?: React.ReactNode }) {
 
   return (
     <>
-      <canvas ref={canvasRef} className="fixed inset-0 z-[-1] opacity-100" />
+      <canvas ref={canvasRef} className="fixed inset-0 z-[-1] opacity-100" style={{ pointerEvents: 'none' }} />
       {children}
     </>
   )

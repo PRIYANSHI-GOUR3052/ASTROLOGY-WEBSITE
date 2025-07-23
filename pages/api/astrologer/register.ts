@@ -12,9 +12,9 @@ export const config = {
 
 const upload = multer();
 
-function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: (...args: unknown[]) => void) {
   return new Promise((resolve, reject) => {
-    fn(req, res, (result: any) => {
+    fn(req, res, (result: unknown) => {
       if (result instanceof Error) {
         return reject(result);
       }
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await runMiddleware(req, res, upload.single('profileImage'));
 
   const body = req.body;
-  const file = (req as any).file;
+  const file = (req as unknown as { file: Express.Multer.File }).file;
 
   const {
     firstName,
@@ -83,7 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
     return res.status(201).json({ message: 'Registration successful', astrologer: { id: astrologer.id, email: astrologer.email, profileImage: astrologer.profileImage } });
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message || 'Registration failed' });
+  } catch (error: unknown) {
+    return res.status(500).json({ message: error instanceof Error ? error.message : 'Registration failed' });
   }
 } 

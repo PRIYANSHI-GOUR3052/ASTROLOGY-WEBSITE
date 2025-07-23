@@ -1,4 +1,5 @@
-import NewHeroSection from './components/NewHeroSection'
+
+import NewHeroSection from './components/NewHeroSection';
 import { LifeChangingSolutions } from './components/LifeChangingSolutions'
 import { AstrologerProfile } from './components/AstrologerProfile'
 import  { BestServices }  from './components/BestServices'
@@ -13,15 +14,17 @@ import { Statistics } from './components/Statistics'
 import { ScrollAnimation } from './components/ScrollAnimation'
 import RecentPosts from './components/RecentPosts'
 import FeaturedBlogs from './components/FeaturedBlogs'
+import ShopCategoriesMinimal from './components/ShopCategoriesMinimal'
+import NakshatraGyaanBanner from './components/NakshatraGyaanBanner'
+import SpiritualJourneyBanner from './components/SpiritualJourneyBanner'
 
 
 
 export default function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-white">
-    
-      
       <NewHeroSection />
+    
       <div className="pt-32 relative z-10">
         <ScrollAnimation>
           <Statistics />
@@ -34,11 +37,19 @@ export default function HomePage() {
         </ScrollAnimation>
 
         <ScrollAnimation>
+          <ShopCategoriesMinimal />
+        </ScrollAnimation>
+
+        <ScrollAnimation>
           <LifeChangingSolutions />
         </ScrollAnimation>
 
         <ScrollAnimation>
           <BestServices />
+        </ScrollAnimation>
+
+        <ScrollAnimation>
+          <NakshatraGyaanBanner />
         </ScrollAnimation>
 
         <ScrollAnimation>
@@ -74,6 +85,10 @@ export default function HomePage() {
 
         <ScrollAnimation>
           <Testimonials />
+        </ScrollAnimation>
+
+        <ScrollAnimation>
+          <SpiritualJourneyBanner />
         </ScrollAnimation>
 
         <ScrollAnimation>

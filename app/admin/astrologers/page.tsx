@@ -4,9 +4,27 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Filter } from "lucide-react";
 
+// Define a type for the astrologers list items based on usage
+interface AstrologerListItem {
+  id?: string | number;
+  astrologer?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
+    yearsOfExperience?: number;
+    verificationStatus?: string;
+    createdAt?: string;
+    // Remove [key: string]: any; and use a safer index signature if needed
+    [key: string]: unknown;
+  };
+  // Remove [key: string]: any; and use a safer index signature if needed
+  [key: string]: unknown;
+}
+
 export default function AstrologersPage() {
   const router = useRouter();
-  const [astrologers, setAstrologers] = useState<any[]>([]);
+  const [astrologers, setAstrologers] = useState<AstrologerListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,14 +33,20 @@ export default function AstrologersPage() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("/api/astrologer/verifications-pending", {
+        const res = await fetc
+        
+        h("/api/astrologer/verifications-pending", {
           credentials: "include",
         });
         if (!res.ok) throw new Error("Failed to fetch astrologers");
         const data = await res.json();
         setAstrologers(data.pending || []);
-      } catch (err: any) {
-        setError(err.message || "Unknown error");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message || "Unknown error");
+        } else {
+          setError("Unknown error");
+        }
       } finally {
         setLoading(false);
       }
@@ -85,33 +109,37 @@ export default function AstrologersPage() {
                 <tr
                   key={astro.id || index}
                   className="hover:bg-gray-50 dark:hover:bg-[#1e293b] transition-colors cursor-pointer"
-                  onClick={() => router.push(`/admin/astrologers/${encodeURIComponent(astro.astrologer?.email || '')}`)}
+                  onClick={() => router.push(`/admin/astrologers/${encodeURIComponent((astro.astrologer && typeof astro.astrologer.email === 'string') ? astro.astrologer.email : '')}`)}
                 >
                   <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {astro.astrologer?.firstName || ''} {astro.astrologer?.lastName || ''}
+                    {(astro.astrologer && typeof astro.astrologer.firstName === 'string' ? astro.astrologer.firstName : '')} {(astro.astrologer && typeof astro.astrologer.lastName === 'string' ? astro.astrologer.lastName : '')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-200">
-                    {astro.astrologer?.phone || "-"}
+                    {(astro.astrologer && typeof astro.astrologer.phone === 'string' ? astro.astrologer.phone : '-')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-200">
-                    {astro.astrologer?.yearsOfExperience ?? "-"} yrs
+                    {(astro.astrologer && typeof astro.astrologer.yearsOfExperience === 'number' ? astro.astrologer.yearsOfExperience : '-')} yrs
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                         ${
-                          astro.astrologer?.verificationStatus === "approved"
+                          astro.astrologer && astro.astrologer.verificationStatus === "approved"
                             ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                            : astro.astrologer?.verificationStatus === "pending"
+                            : astro.astrologer && astro.astrologer.verificationStatus === "pending"
                             ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
                             : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
                         }`}
                     >
-                      {astro.astrologer?.verificationStatus?.charAt(0).toUpperCase() + astro.astrologer?.verificationStatus?.slice(1) || "-"}
+                      {(astro.astrologer && typeof astro.astrologer.verificationStatus === 'string' && astro.astrologer.verificationStatus)
+                        ? astro.astrologer.verificationStatus.charAt(0).toUpperCase() + astro.astrologer.verificationStatus.slice(1)
+                        : "-"}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400">
-                    {astro.astrologer?.createdAt ? new Date(astro.astrologer.createdAt).toLocaleDateString() : "-"}
+                    {(astro.astrologer && typeof astro.astrologer.createdAt === 'string' && astro.astrologer.createdAt)
+                      ? new Date(astro.astrologer.createdAt).toLocaleDateString()
+                      : "-"}
                   </td>
                 </tr>
               ))}

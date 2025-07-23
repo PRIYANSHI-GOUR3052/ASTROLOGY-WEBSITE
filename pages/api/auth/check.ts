@@ -24,7 +24,7 @@ export default async function handler(
     
     // Token is valid
     return res.status(200).json({ message: 'Authenticated' });
-  } catch (error) {
+  } catch {
     return res.status(401).json({ message: 'Invalid token' });
   }
 }

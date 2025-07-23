@@ -28,7 +28,7 @@ export default async function handler(
         [email]
       )
 
-      if ((existingUsers as any[]).length > 0) {
+      if ((existingUsers as unknown[]).length > 0) {
         await connection.end()
         return res.status(400).json({ error: 'User already exists' })
       }
@@ -38,14 +38,14 @@ export default async function handler(
 
       // Insert new user
       const [result] = await connection.execute(
-        'INSERT INTO users (name, email, password) VALUES (?, ?, ?)', 
-        [name, email, hashedPassword]
+        'INSERT INTO users (name, email, password, google_id) VALUES (?, ?, ?, ?)', 
+        [name, email, hashedPassword, null]
       )
 
       // Generate JWT token
       const token = jwt.sign(
         { 
-          id: (result as any).insertId, 
+          id: (result as { insertId: number }).insertId, 
           email,
           name 
         }, 
@@ -57,7 +57,7 @@ export default async function handler(
 
       return res.status(201).json({ 
         token, 
-        user: { id: (result as any).insertId, email, name } 
+        user: { id: (result as { insertId: number }).insertId, email, name } 
       })
 
     } else if (action === 'login') {
@@ -67,7 +67,7 @@ export default async function handler(
         [email]
       )
 
-      const user = (users as any[])[0]
+      const user = (users as unknown[])[0] as { id: number; email: string; name: string; password: string };
 
       if (!user) {
         await connection.end()
@@ -101,9 +101,9 @@ export default async function handler(
       })
     }
 
-  } catch (error) {
-    console.error('Authentication error:', error)
-    return res.status(500).json({ error: 'Internal Server Error' })
+  } catch (err) {
+    console.error('Signup/Login error:', err);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
@@ -141,8 +141,7 @@ export async function initializeDatabase() {
     await connection.end()
     
     return true
-  } catch (error) {
-    console.error('Database initialization error:', error)
+  } catch {
     return false
   }
 }
@@ -156,13 +155,13 @@ export async function checkTableExists() {
       // Try to describe the users table
       await connection.execute('DESCRIBE users')
       return true
-    } catch (error) {
+    } catch {
       return false
     } finally {
       await connection.end()
     }
-  } catch (error) {
-    console.error('Error checking table existence:', error)
+  } catch {
+    console.error('Error checking table existence:')
     return false
   }
 }

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useState, useRef } from 'react'
-import { Phone, Mail, MapPin, Send, Star, Sparkles, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MapPin, Star, Sparkles, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '../contexts/useLanguage';
 

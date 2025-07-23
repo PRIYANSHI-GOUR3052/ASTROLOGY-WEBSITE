@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { User, Calendar, Map, BookOpen, HelpCircle, Star, Compass } from 'lucide-react';
 import { blogPosts } from '../../data/blogPosts';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CTASection } from '../../components/CTASection';
 import { motion } from 'framer-motion';
 
@@ -27,7 +28,7 @@ export default function UnderstandingYourBirthChartPage() {
         {/* Banner Heading */}
         <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
           <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>Understanding Your Birth Chart</h1>
-          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-3xl leading-relaxed">Your birth chart is a cosmic blueprint—a snapshot of the heavens at the moment you took your first breath. Discover how this celestial map reveals your personality, potential, and life's journey.</p>
+          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-3xl leading-relaxed">Your birth chart is a cosmic blueprint—a snapshot of the heavens at the moment you took your first breath. Discover how this celestial map reveals your personality, potential, and life&apos;s journey.</p>
         </div>
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -47,7 +48,7 @@ export default function UnderstandingYourBirthChartPage() {
             {/* Key Takeaway */}
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="bg-gradient-to-r from-indigo-50 to-purple-50 border-l-4 border-indigo-400 p-6 mb-8 rounded-lg shadow-sm">
               <p className="text-gray-700 text-lg leading-relaxed text-justify">
-                <span className="text-indigo-600 font-bold text-xl">Key Takeaway:</span> Your birth chart is not a fixed destiny but a cosmic instruction manual. It reveals your natural talents, challenges, and the unique path you're designed to walk in this lifetime.
+                <span className="text-indigo-600 font-bold text-xl">Key Takeaway:</span> Your birth chart is not a fixed destiny but a cosmic instruction manual. It reveals your natural talents, challenges, and the unique path you&apos;re designed to walk in this lifetime.
               </p>
             </motion.div>
             {/* Hero Image */}
@@ -68,7 +69,7 @@ export default function UnderstandingYourBirthChartPage() {
                   The Cosmic Blueprint
                 </h3>
                 <p className="text-blue-800 leading-relaxed">
-                  Think of your birth chart as a cosmic fingerprint—no two charts are exactly alike, even for twins born minutes apart. This unique configuration of celestial bodies creates your personal energy signature, influencing everything from your personality traits to your life's major themes and challenges.
+                  Think of your birth chart as a cosmic fingerprint—no two charts are exactly alike, even for twins born minutes apart. This unique configuration of celestial bodies creates your personal energy signature, influencing everything from your personality traits to your life&apos;s major themes and challenges.
                 </p>
               </div>
               <h3 className="font-bold text-black text-2xl mt-8 mb-4" style={{ fontFamily: 'Georgia, serif' }}>Key Components of Your Birth Chart</h3>
@@ -76,10 +77,10 @@ export default function UnderstandingYourBirthChartPage() {
                 <li><span className="font-bold text-indigo-700">Ascendant (Rising Sign):</span> Your personal identity and how you present yourself to the world. This is the sign that was rising on the eastern horizon at your birth time.</li>
                 <li><span className="font-bold text-indigo-700">Sun Sign:</span> Your core essence, ego, and the fundamental qualities that make you who you are. This represents your conscious self and life purpose.</li>
                 <li><span className="font-bold text-indigo-700">Moon Sign:</span> Your emotional nature, inner world, and subconscious patterns. This reveals your deepest needs and how you process feelings.</li>
-                <li><span className="font-bold text-indigo-700">Planetary Positions:</span> Each planet's placement in specific signs and houses reveals different aspects of your personality and life areas.</li>
+                <li><span className="font-bold text-indigo-700">Planetary Positions:</span> Each planet&apos;s placement in specific signs and houses reveals different aspects of your personality and life areas.</li>
                 <li><span className="font-bold text-indigo-700">Houses:</span> The twelve divisions of your chart, each representing different life areas from career to relationships to spirituality.</li>
                 <li><span className="font-bold text-indigo-700">Aspects:</span> The geometric relationships between planets, showing how different energies interact and influence each other.</li>
-                <li><span className="font-bold text-indigo-700">Nodes:</span> The North and South Nodes reveal your soul's evolutionary path and karmic lessons.</li>
+                <li><span className="font-bold text-indigo-700">Nodes:</span> The North and South Nodes reveal your soul&apos;s evolutionary path and karmic lessons.</li>
                 <li><span className="font-bold text-indigo-700">Midheaven:</span> Your career path, public image, and highest aspirations in this lifetime.</li>
                 <li><span className="font-bold text-indigo-700">Part of Fortune:</span> Indicates areas of natural luck and where you can find joy and fulfillment.</li>
               </ul>
@@ -125,7 +126,7 @@ export default function UnderstandingYourBirthChartPage() {
                     ['Midheaven', 'Career Path', 'Your public image and highest aspirations'],
                     ['North Node', 'Soul Purpose', 'Your evolutionary path and life lessons'],
                     ['Part of Fortune', 'Natural Luck', 'Areas of joy and natural talent'],
-                  ].map(([name, title, description], i) => (
+                  ].map(([name, title, description]) => (
                     <div key={name as string} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:shadow-2xl transition-all cursor-pointer border">
                       <h4 className="text-2xl font-bold text-gray-800 mb-2">{name}</h4>
                       <p className="text-indigo-700 font-semibold mb-2">{title}</p>
@@ -173,8 +174,8 @@ export default function UnderstandingYourBirthChartPage() {
                         ['10th', 'Career & Reputation', 'Public image, career, authority'],
                         ['11th', 'Friends & Groups', 'Social circles, hopes, dreams'],
                         ['12th', 'Spirituality', 'Subconscious, spirituality, hidden things'],
-                      ].map(([house, area, themes], i) => (
-                        <tr key={house} className={i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      ].map(([house, area, themes]) => (
+                        <tr key={house} className="bg-gray-50">
                           <td className="py-3 px-4 border-b font-bold text-indigo-700">{house}</td>
                           <td className="py-3 px-4 border-b font-semibold text-gray-800">{area}</td>
                           <td className="py-3 px-4 border-b text-gray-700">{themes}</td>
@@ -194,7 +195,7 @@ export default function UnderstandingYourBirthChartPage() {
                     ['Can my birth chart change over time?', 'Your natal chart is fixed, but transiting planets continuously interact with it, activating different potentials and bringing new themes into your life.'],
                     ['What if I don\'t relate to my Sun sign?', 'This is common! Your personality is a complex blend of your Sun, Moon, and Ascendant signs, along with other planetary placements. A dominant Moon or Ascendant can sometimes feel more prominent than your Sun sign.'],
                     ['Can I change my birth chart?', 'No, your birth chart is a map of the sky at your birth. However, understanding it gives you the free will to work with its energies consciously, navigate challenges, and maximize your strengths.'],
-                  ].map(([q, a], i) => (
+                  ].map(([q, a]) => (
                     <div key={q} className="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl p-6">
                       <h3 className="text-lg font-bold text-indigo-900 mb-3 flex items-center"><HelpCircle className="w-5 h-5 mr-2 text-indigo-600" />{q}</h3>
                       <p className="text-gray-700 leading-relaxed ml-7">{a}</p>
@@ -209,7 +210,7 @@ export default function UnderstandingYourBirthChartPage() {
             <section className="mt-16 pt-8 border-t border-gray-200">
               <h2 className="text-2xl font-bold text-black mb-6">Continue Your Astrological Journey</h2>
               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-xl p-6 border border-teal-100 hover:shadow-lg transition-all cursor-pointer">
-                <a href="/blog/power-of-meditation" className="block">
+                <Link href="/blog/power-of-meditation" className="block">
                   <div className="flex items-center gap-4">
                     <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-teal-100">
                       <Image src="/images/astrology.svg" alt="Meditation" fill className="object-cover" />
@@ -235,7 +236,7 @@ export default function UnderstandingYourBirthChartPage() {
                       </svg>
                     </div>
                   </div>
-                </a>
+                </Link>
               </motion.div>
             </section>
           </div>
@@ -286,7 +287,7 @@ export default function UnderstandingYourBirthChartPage() {
               <ul className="list-disc list-inside text-gray-700 space-y-2">
                 <li>Birth charts determine your fate (you have free will)</li>
                 <li>Only your Sun sign matters (all components work together)</li>
-                <li>Astrology is just superstition (it's based on mathematical patterns)</li>
+                <li>Astrology is just superstition (it&apos;s based on mathematical patterns)</li>
                 <li>Charts can predict exact events (they show tendencies and potentials)</li>
               </ul>
             </div>

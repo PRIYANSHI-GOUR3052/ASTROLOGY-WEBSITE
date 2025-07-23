@@ -18,8 +18,11 @@ const ForgotPasswordPage = () => {
     try {
       const res = await axios.post('/api/astrologer/forgot-password', { email });
       toast({ title: 'Success', description: res.data.message, variant: 'default' });
-    } catch (err: any) {
-      toast({ title: 'Error', description: err?.response?.data?.message || 'Failed to send reset link', variant: 'destructive' });
+    } catch (err: unknown) {
+      const errorMessage = (err && typeof err === 'object' && 'response' in err && (err as { response?: { data?: { message?: string } } })?.response?.data?.message)
+        ? (err as { response?: { data?: { message?: string } } }).response!.data!.message
+        : 'Failed to send reset link';
+      toast({ title: 'Error', description: errorMessage, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -38,7 +41,7 @@ const ForgotPasswordPage = () => {
           Reset Password
         </h2>
         <p className="text-sm text-center text-gray-400 mb-6">
-          Enter your email address and we'll send you instructions to reset your password.
+          Enter your email address and we&apos;ll send you instructions to reset your password.
         </p>
 
         <form className="space-y-5" onSubmit={handleSubmit}>

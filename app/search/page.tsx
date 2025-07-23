@@ -162,7 +162,7 @@ function SearchComponent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Showing results for: <span className="font-semibold text-violet-400">"{query}"</span>
+              Showing results for: <span className="font-semibold text-violet-400">&quot;{query}&quot;</span>
             </motion.p>
           ) : (
              <p className="text-lg text-gray-400 mb-10 text-center">
@@ -210,7 +210,7 @@ function SearchComponent() {
                 >
                   <h2 className="text-3xl font-bold text-white">No Results Found</h2>
                   <p className="text-gray-400 mt-3 max-w-md mx-auto">
-                    We couldn't find anything matching your search. Please try a different celestial term.
+                    We couldn&apos;t find anything matching your search. Please try a different celestial term.
                   </p>
                 </motion.div>
               )

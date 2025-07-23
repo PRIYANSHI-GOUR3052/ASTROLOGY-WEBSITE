@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { format } from 'date-fns';
-import { HiOutlineStar } from 'react-icons/hi';
 
 const dummyReviews = [
   {
@@ -60,12 +59,15 @@ const ReviewsPage = () => {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [sortOption, setSortOption] = useState('Newest');
 
-  const handleSort = (a: any, b: any) => {
-    if (sortOption === 'Highest Rated') return b.rating - a.rating;
-    if (sortOption === 'Lowest Rated') return a.rating - b.rating;
+  const handleSort = (a: unknown, b: unknown) => {
+    const reviewA = a as { rating: number; date: string };
+    const reviewB = b as { rating: number; date: string };
+
+    if (sortOption === 'Highest Rated') return reviewB.rating - reviewA.rating;
+    if (sortOption === 'Lowest Rated') return reviewA.rating - reviewB.rating;
     if (sortOption === 'Newest')
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    return new Date(a.date).getTime() - new Date(b.date).getTime();
+      return new Date(reviewB.date).getTime() - new Date(reviewA.date).getTime();
+    return new Date(reviewA.date).getTime() - new Date(reviewB.date).getTime();
   };
 
   const filteredReviews = dummyReviews

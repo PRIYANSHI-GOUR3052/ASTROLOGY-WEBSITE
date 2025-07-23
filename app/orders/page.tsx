@@ -109,7 +109,7 @@ export default function OrdersPage() {
     return (
       <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
         <AnimatedStars />
-        <MysticBackground children={undefined} />
+        <MysticBackground />
         <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gold"></div>
@@ -122,7 +122,7 @@ export default function OrdersPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
       <AnimatedStars />
-      <MysticBackground children={undefined} />
+      <MysticBackground />
       <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
         <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-center text-mystic-brown">
           Your Orders
@@ -139,7 +139,7 @@ export default function OrdersPage() {
             <CardContent>
               {orders.length === 0 ? (
                 <div className="text-center p-8">
-                  <p className="text-lg text-lavender mb-4">You haven't placed any orders yet</p>
+                  <p className="text-lg text-lavender mb-4">You haven&apos;t placed any orders yet</p>
                   <Button 
                     onClick={() => router.push('/shop')}
                     className="bg-black text-white hover:bg-gray-800"

@@ -17,11 +17,11 @@ export function useDashboardData() {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as DashboardData;
 
       // Ensure data is properly formatted for charts
       if (data?.storePerformance?.performanceData) {
-        data.storePerformance.performanceData = data.storePerformance.performanceData.map((item: any) => ({
+        data.storePerformance.performanceData = data.storePerformance.performanceData.map((item: { date: string; visitors: string | number; unique_visitors: string | number; sales: string | number; orders: string | number; conversionRate: string | number }) => ({
           ...item,
           visitors: Number(item.visitors),
           unique_visitors: Number(item.unique_visitors),
@@ -29,7 +29,7 @@ export function useDashboardData() {
           orders: Number(item.orders),
           // Keep conversionRate as string, but ensure it's formatted as '55.56%'
           conversionRate: typeof item.conversionRate === 'number'
-            ? `${item.conversionRate.toFixed(2)}%`
+            ? `${Number(item.conversionRate).toFixed(2)}%`
             : item.conversionRate,
         }));
 
