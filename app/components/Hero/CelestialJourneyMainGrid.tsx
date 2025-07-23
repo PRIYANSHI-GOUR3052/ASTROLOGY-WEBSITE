@@ -18,7 +18,6 @@ export default function CelestialJourneyMainGrid() {
       <div className="lg:col-span-3 xl:col-span-3">
         <div className="bg-white rounded-xl shadow p-4 flex flex-col gap-2 h-full min-h-[450px] justify-between">
           <Carousel
-            dir="rtl"
             opts={{ loop: true, align: "center", skipSnaps: false }}
             plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
             className="w-full"
@@ -26,7 +25,7 @@ export default function CelestialJourneyMainGrid() {
             <CarouselContent>
               {[
                 "https://res.cloudinary.com/dxwspucxw/image/upload/v1752494996/A_realistic_cosmic_calendar_illustration_showing_the_planets_of_the_solar_system_orbiting_around_the_sun_with_soft_lighting_galaxy_background_visible_constellations_moon_phases_and_astrological_zodiac_symbols_s_1_uxgzjk.jpg",
-                "https://res.cloudinary.com/dxwspucxw/image/upload/v1752049127/birth-chart_zqq2nn.jpg",
+                "https://res.cloudinary.com/dxwspucxw/image/upload/c_crop,ar_9:16/v1753181211/bracelets_lqvtwk.png",
                 "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042874/course-5_uvm6d2.jpg"
               ].map((img, i) => (
                 <CarouselItem key={i}>
@@ -148,7 +147,7 @@ export default function CelestialJourneyMainGrid() {
       <div className="lg:col-span-3 xl:col-span-3">
         <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-3 h-full min-h-[450px] justify-between">
           <Carousel
-            opts={{direction: 'rtl', loop: true, align: "center", skipSnaps: false }}
+            opts={{ loop: true, align: "center", skipSnaps: false }}
             plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
             className="w-full"
           >
@@ -177,4 +176,4 @@ export default function CelestialJourneyMainGrid() {
       </div>
     </div>
   );
-} 
+}

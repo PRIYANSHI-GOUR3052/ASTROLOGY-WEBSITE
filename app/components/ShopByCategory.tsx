@@ -22,7 +22,7 @@ const categories = [
   },
   {
     name: 'Spiritual Bracelets',
-    image: '/images/course-1.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753181211/bracelets_lqvtwk.png',
     slug: 'bracelets',
     description: 'Energy bracelets & accessories',
     color: 'from-purple-500 to-indigo-600',
@@ -38,7 +38,7 @@ const categories = [
   },
   {
     name: 'Astrology Reports',
-    image: '/images/cosmiccalendar.png',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753178112/astrology_report_paqulv.png',
     slug: 'astrology-reports',
     description: 'Personalized cosmic insights',
     color: 'from-blue-500 to-cyan-600',
@@ -54,7 +54,7 @@ const categories = [
   },
   {
     name: 'Feng Shui Items',
-    image: '/images/course-4.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092133/feng_shui_vzelik.jpg',
     slug: 'feng-shui',
     description: 'Harmony & prosperity items',
     color: 'from-green-500 to-emerald-600',
@@ -62,7 +62,7 @@ const categories = [
   },
   {
     name: 'Meditation Tools',
-    image: '/images/course-5.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753181389/meditation_tools_vuwblt.png',
     slug: 'meditation-tools',
     description: 'Mindfulness & peace aids',
     color: 'from-violet-500 to-purple-600',
@@ -71,7 +71,7 @@ const categories = [
   // Additional categories (initially hidden)
   {
     name: 'Vastu Solutions',
-    image: '/images/course-6.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753079524/Vastu_Shastra_f0haqy.jpg',
     slug: 'vastu-solutions',
     description: 'Home harmony products',
     color: 'from-indigo-500 to-blue-600',
@@ -79,7 +79,7 @@ const categories = [
   },
   {
     name: 'Spiritual Books',
-    image: '/images/myth.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092132/book_collection_xmxrru.jpg',
     slug: 'spiritual-books',
     description: 'Sacred texts & wisdom',
     color: 'from-orange-500 to-red-600',
@@ -87,7 +87,7 @@ const categories = [
   },
   {
     name: 'Healing Remedies',
-    image: '/images/astro.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753178835/healing_d4zat3.png',
     slug: 'healing-remedies',
     description: 'Natural healing solutions',
     color: 'from-teal-500 to-green-600',
@@ -95,7 +95,7 @@ const categories = [
   },
   {
     name: 'Cosmic Jewelry',
-    image: '/images/astrology_app.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092130/jewelery_tbvrw1.jpg',
     slug: 'cosmic-jewelry',
     description: 'Celestial accessories',
     color: 'from-pink-500 to-rose-600',
@@ -103,7 +103,7 @@ const categories = [
   },
   {
     name: 'Tarot & Divination',
-    image: '/images/course-1.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753179851/tarot_bcbqeh.png',
     slug: 'tarot-divination',
     description: 'Cards & divination tools',
     color: 'from-purple-600 to-indigo-700',
@@ -111,7 +111,7 @@ const categories = [
   },
   {
     name: 'Incense & Aromatherapy',
-    image: '/images/course-2.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092130/natural_incense_sticks_xa8jr6.jpg',
     slug: 'incense-aromatherapy',
     description: 'Sacred scents & oils',
     color: 'from-amber-600 to-yellow-600',
@@ -119,7 +119,7 @@ const categories = [
   },
   {
     name: 'Protection Amulets',
-    image: '/images/course-3.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753179309/amulets_wsxif3.png',
     slug: 'protection-amulets',
     description: 'Shields & protective charms',
     color: 'from-red-500 to-pink-600',
@@ -127,7 +127,7 @@ const categories = [
   },
   {
     name: 'Chakra Healing',
-    image: '/images/course-4.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753179627/chakra_healing_zg9orn.png',
     slug: 'chakra-healing',
     description: 'Energy center alignment',
     color: 'from-rainbow-gradient',
