@@ -22,7 +22,7 @@ export function DrNarendraProfile() {
           <div className="text-center md:text-left">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white drop-shadow-lg">Dr. Narendra Kumar Sharma</h1>
             <p className="text-lg md:text-xl mb-4 text-white/90 max-w-2xl">
-              Dr. Narendra Kumar Sharma is a globally renowned astrologer with over 20 years of experience in Vedic astrology. He is celebrated for his accurate predictions, insightful guidance, and compassionate approach to helping individuals navigate life's challenges. His expertise spans across various astrological domains, including career, relationships, health, and finance.
+              Dr. Narendra Kumar Sharma is a globally renowned astrologer with over 20 years of experience in Vedic astrology. He is celebrated for his accurate predictions, insightful guidance, and compassionate approach to helping individuals navigate life&apos;s challenges. His expertise spans across various astrological domains, including career, relationships, health, and finance.
             </p>
             <div className="flex items-center justify-center md:justify-start space-x-2 text-pink-300 mb-2">
               {[...Array(5)].map((_, i) => (
@@ -71,7 +71,7 @@ export function DrNarendraProfile() {
             <h2 className="text-3xl font-bold text-white mb-6">Why Choose Dr. Narendra Kumar Sharma?</h2>
             <ul className="list-disc list-inside text-white/90 space-y-3 text-lg">
               <li><span className="font-semibold">Experience & Expertise:</span> With two decades in Vedic astrology, Dr. Sharma brings profound knowledge and proven solutions.</li>
-              <li><span className="font-semibold">Accurate Predictions:</span> His predictions are consistently precise, offering clear foresight for your life's journey.</li>
+              <li><span className="font-semibold">Accurate Predictions:</span> His predictions are consistently precise, offering clear foresight for your life&apos;s journey.</li>
               <li><span className="font-semibold">Holistic Approach:</span> He combines ancient wisdom with practical advice for comprehensive well-being.</li>
               <li><span className="font-semibold">Global Recognition:</span> Trusted by clients worldwide for his exceptional astrological insights.</li>
               <li><span className="font-semibold">Personalized Guidance:</span> Every consultation is tailored to your unique birth chart and specific concerns.</li>

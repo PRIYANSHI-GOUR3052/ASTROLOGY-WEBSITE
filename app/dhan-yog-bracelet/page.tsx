@@ -6,6 +6,43 @@ import { Testimonials } from '../components/Testimonials';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UniversalCartButton } from '../components/UniversalCartButton';
 
+// FAQ Item Component
+function FAQItem({ faq, index }: { faq: { question: string; answer: string }; index: number }) {
+  const [open, setOpen] = useState(false);
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.07 }}
+      className="rounded-md border border-gray-200 bg-gray-50 p-3 group"
+    >
+      <button
+        className="w-full text-left font-medium text-[#23244a] cursor-pointer text-base group-open:text-[#77A656] focus:outline-none flex justify-between items-center"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+      >
+        {faq.question}
+        <span className={`ml-2 transition-transform ${open ? 'rotate-90' : ''}`}>▶</span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35 }}
+            className="overflow-hidden"
+          >
+            <div className="mt-2 text-[#2C3A4B] text-sm">{faq.answer}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
 const productData = {
   title: "Dhan Yog Bracelet",
   images: [
@@ -210,41 +247,9 @@ export default function DhanYogBraceletPage() {
         <div className="max-w-2xl w-full mx-auto mt-12 mb-6">
           <h2 className="text-xl md:text-2xl font-semibold mb-4 text-[#23244a] text-center" style={{ fontFamily: 'Playfair Display, serif' }}>Frequently Asked Questions</h2>
           <div className="space-y-3">
-            {faqsToShow.map((faq, idx) => {
-              const [open, setOpen] = useState(false);
-              return (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: idx * 0.07 }}
-                  className="rounded-md border border-gray-200 bg-gray-50 p-3 group"
-                >
-                  <button
-                    className="w-full text-left font-medium text-[#23244a] cursor-pointer text-base group-open:text-[#77A656] focus:outline-none flex justify-between items-center"
-                    onClick={() => setOpen((v) => !v)}
-                    aria-expanded={open}
-                  >
-                    {faq.question}
-                    <span className={`ml-2 transition-transform ${open ? 'rotate-90' : ''}`}>▶</span>
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {open && (
-                      <motion.div
-                        key="content"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="mt-2 text-[#2C3A4B] text-sm">{faq.answer}</div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              );
-            })}
+            {faqsToShow.map((faq, idx) => (
+              <FAQItem key={idx} faq={faq} index={idx} />
+            ))}
           </div>
         </div>
         {/* Full-width Testimonials */}

@@ -66,7 +66,7 @@ export default function CheckoutPage() {
         const cartData = await cartRes.json();
         
         // Convert is_stone from number to boolean to match our interface
-        const formattedItems = cartData.cartItems?.map((item: any) => ({
+        const formattedItems = cartData.cartItems?.map((item: { id: number; product_name: string; unit_price: number; quantity: number; is_stone: number; carats?: number }) => ({
           ...item,
           is_stone: item.is_stone === 1
         })) || [];

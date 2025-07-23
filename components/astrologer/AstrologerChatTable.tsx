@@ -28,7 +28,7 @@ const AstrologerChatTable = ({ chats, onChatClick }: AstrologerChatTableProps) =
         {chats.map((chat) => (
           <TableRow key={chat.id}>
             <TableCell className="font-semibold text-amber-600 dark:text-purple-700">{chat.client}</TableCell>
-            <TableCell className="italic text-gray-700 dark:text-gray-200">"{chat.lastMessage}"</TableCell>
+            <TableCell className="italic text-gray-700 dark:text-gray-200">&quot;{chat.lastMessage}&quot;</TableCell>
             <TableCell className="text-gray-700 dark:text-gray-200">{new Date(chat.date).toLocaleString()}</TableCell>
             <TableCell>
               <button

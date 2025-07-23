@@ -14,6 +14,9 @@ import { Statistics } from './components/Statistics'
 import { ScrollAnimation } from './components/ScrollAnimation'
 import RecentPosts from './components/RecentPosts'
 import FeaturedBlogs from './components/FeaturedBlogs'
+import ShopCategoriesMinimal from './components/ShopCategoriesMinimal'
+import NakshatraGyaanBanner from './components/NakshatraGyaanBanner'
+import SpiritualJourneyBanner from './components/SpiritualJourneyBanner'
 
 
 
@@ -34,11 +37,19 @@ export default function HomePage() {
         </ScrollAnimation>
 
         <ScrollAnimation>
+          <ShopCategoriesMinimal />
+        </ScrollAnimation>
+
+        <ScrollAnimation>
           <LifeChangingSolutions />
         </ScrollAnimation>
 
         <ScrollAnimation>
           <BestServices />
+        </ScrollAnimation>
+
+        <ScrollAnimation>
+          <NakshatraGyaanBanner />
         </ScrollAnimation>
 
         <ScrollAnimation>
@@ -74,6 +85,10 @@ export default function HomePage() {
 
         <ScrollAnimation>
           <Testimonials />
+        </ScrollAnimation>
+
+        <ScrollAnimation>
+          <SpiritualJourneyBanner />
         </ScrollAnimation>
 
         <ScrollAnimation>

@@ -300,11 +300,10 @@ const ServiceCard = ({ service, index, children }: { service: Service; index: nu
 };
 
 export function ServicesOverview() {
-  const { t } = useLanguage();
   const cardData = services.slice(0, 4);
 
   // Card 2 click handler (excluding carousel)
-  const handleCard2Click = (e: React.MouseEvent) => {
+  const handleCard2Click = () => {
     // Only trigger if not clicking on the carousel image area
     // (carousel stops propagation on image and controls)
     window.location.href = 'http://localhost:3000/services';
@@ -357,7 +356,11 @@ export function ServicesOverview() {
         {/* Layout Section */}
         <div className="grid grid-cols-1 gap-8">
           {/* Card 1: Full Width */}
-          {cardData[0] && <ServiceCard service={cardData[0]} index={0} children={<Card1Marquee />} />}
+          {cardData[0] && (
+            <ServiceCard service={cardData[0]} index={0}>
+              <Card1Marquee />
+            </ServiceCard>
+          )}
 
           {/* 2-Column Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

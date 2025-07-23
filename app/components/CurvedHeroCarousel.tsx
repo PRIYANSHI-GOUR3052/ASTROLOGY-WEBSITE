@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -56,11 +57,11 @@ export default function CurvedHeroCarousel() {
         <p className="text-lg md:text-xl text-gray-600 mb-6">
           Experience authentic Vedic astrology, remedies, and guidance for your life journey.
         </p>
-        <a href="/services">
+        <Link href="/services">
           <button className="bg-[#6A0DAD] text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-[#4A3F2F] transition">
             Explore Our Services
           </button>
-        </a>
+        </Link>
       </div>
       {/* Swiper Carousel */}
       <div className="w-full flex flex-col items-center">

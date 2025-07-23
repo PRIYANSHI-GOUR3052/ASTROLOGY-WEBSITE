@@ -69,6 +69,7 @@ export default function MoneyMagnetBraceletPage() {
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState("");
+  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
   // Real-time offer timer (6 hours)
   const OFFER_DURATION = 6 * 60 * 60; // 6 hours in seconds
   const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
@@ -211,7 +212,7 @@ export default function MoneyMagnetBraceletPage() {
           <h2 className="text-xl md:text-2xl font-semibold mb-4 text-[#23244a] text-center" style={{ fontFamily: 'Playfair Display, serif' }}>Frequently Asked Questions</h2>
           <div className="space-y-3">
             {faqsToShow.map((faq, idx) => {
-              const [open, setOpen] = useState(false);
+              const isOpen = openFaqs.has(idx);
               return (
                 <motion.div
                   key={idx}
@@ -222,14 +223,22 @@ export default function MoneyMagnetBraceletPage() {
                 >
                   <button
                     className="w-full text-left font-medium text-[#23244a] cursor-pointer text-base group-open:text-[#77A656] focus:outline-none flex justify-between items-center"
-                    onClick={() => setOpen((v) => !v)}
-                    aria-expanded={open}
+                    onClick={() => {
+                      const newOpenFaqs = new Set(openFaqs);
+                      if (isOpen) {
+                        newOpenFaqs.delete(idx);
+                      } else {
+                        newOpenFaqs.add(idx);
+                      }
+                      setOpenFaqs(newOpenFaqs);
+                    }}
+                    aria-expanded={isOpen}
                   >
                     {faq.question}
-                    <span className={`ml-2 transition-transform ${open ? 'rotate-90' : ''}`}>▶</span>
+                    <span className={`ml-2 transition-transform ${isOpen ? 'rotate-90' : ''}`}>▶</span>
                   </button>
                   <AnimatePresence initial={false}>
-                    {open && (
+                    {isOpen && (
                       <motion.div
                         key="content"
                         initial={{ height: 0, opacity: 0 }}

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, HelpCircle, Shield, CreditCard, Truck } from 'lucide-react'
-import Link from 'next/link'
+
 import type { FC } from 'react'
 
 const defaultFaqs = [
@@ -37,11 +37,11 @@ const defaultFaqs = [
 type FAQ = {
   question: string;
   answer: string;
-  icon?: any;
+  icon?: React.ComponentType<{ className?: string }>;
 };
 
 interface FAQSectionProps {
-  faqs?: { q?: string; a?: string; question?: string; answer?: string; icon?: any }[];
+  faqs?: { q?: string; a?: string; question?: string; answer?: string; icon?: React.ComponentType<{ className?: string }> }[];
 }
 
 export const FAQSection: FC<FAQSectionProps> = ({ faqs }) => {
@@ -75,7 +75,7 @@ export const FAQSection: FC<FAQSectionProps> = ({ faqs }) => {
             Frequently Asked Questions
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Find answers to common questions about our study resources. Can't find what you're looking for?{' '}
+            Find answers to common questions about our study resources. Can&apos;t find what you&apos;re looking for?{' '}
             <span className="text-[#fe7b57] font-semibold">Contact our support team.</span>
           </p>
         </motion.div>

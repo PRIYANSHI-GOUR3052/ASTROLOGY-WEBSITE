@@ -19,7 +19,7 @@ interface UniversalCartButtonProps {
   variant?: 'addToCart' | 'buyNow';
   children: React.ReactNode;
   className?: string;
-  [key: string]: any;
+  [key: string]: string | number | boolean | null | undefined | React.ReactNode;
 }
 
 export function UniversalCartButton({

@@ -2,16 +2,17 @@
 
 import UnlockCosmosBanner from './Hero/UnlockCosmosBanner';
 import SpiritualTicker from './Hero/SpiritualTicker';
+import ZodiacCategories from './ZodiacCategories';
 import CelestialJourneyGrid from './Hero/CelestialJourneyGrid';
 import CelestialJourneyMainGrid from "./Hero/CelestialJourneyMainGrid";
-import ServiceCarousels from "./ServiceCarousels";
 
 export default function NewHeroSection() {
   return (
     <>
       <UnlockCosmosBanner />
       <SpiritualTicker />
-      <ServiceCarousels />
+      <ZodiacCategories />
+      
       <CelestialJourneyGrid />
       {/* Existing grid starts here */}
       <CelestialJourneyMainGrid />

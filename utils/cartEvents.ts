@@ -12,7 +12,7 @@ export const notifyCartUpdated = () => {
   /**
    * Helper function to add item to cart and trigger notification
    */
-  export const addToCart = async (productData: any) => {
+  export const addToCart = async (productData: { id: number; name: string; price: number; quantity?: number; carats?: number; is_stone?: number }) => {
     try {
       const response = await fetch('/api/cart', {
         method: 'POST',

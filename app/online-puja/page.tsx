@@ -216,10 +216,10 @@ export default function OnlinePujaPage() {
                 <div className="bg-white shadow-md p-8 rounded-2xl border border-neutral-200 mb-12">
                   <h3 className="font-bold text-2xl mb-6 text-neutral-800" style={{ fontFamily: 'Playfair Display, serif' }}>A Message from Our Founder</h3>
                   <p className="text-neutral-800 text-justify leading-relaxed mb-4" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', fontSize: '1.15rem' }}>
-                    "Astrology is not just about glimpsing the future—it is a sacred mirror that reflects the soul's journey. It empowers us to understand who we truly are, to make choices in alignment with our higher self, and to walk through life with intention, grace, and spiritual clarity.
+                    &quot;Astrology is not just about glimpsing the future—it is a sacred mirror that reflects the soul&apos;s journey. It empowers us to understand who we truly are, to make choices in alignment with our higher self, and to walk through life with intention, grace, and spiritual clarity.
                   </p>
                   <p className="text-neutral-800 text-justify leading-relaxed mb-4" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', fontSize: '1.15rem' }}>
-                    At Nakshatra Gyaan, our purpose is to bridge the ancient science of the stars with the evolving consciousness of today's world—so that every individual, no matter where they are, can find meaning, healing, and direction."
+                    At Nakshatra Gyaan, our purpose is to bridge the ancient science of the stars with the evolving consciousness of today&apos;s world—so that every individual, no matter where they are, can find meaning, healing, and direction.&quot;
                   </p>
                   <p className="text-neutral-700 font-semibold mt-6" style={{ fontFamily: 'Playfair Display, serif' }}>
                     — Dr. Narendra Kumar Sharma<br />Founder, Nakshatra Gyaan
@@ -242,7 +242,7 @@ export default function OnlinePujaPage() {
                     At Nakshatra Gyaan, we do not merely read charts—we listen to your soul, decode its celestial language, and guide you toward a life of alignment, fulfillment, and spiritual evolution. Our journey is fueled by love, our methods are guided by tradition, and our vision is illuminated by the stars.
                   </p>
                   <p className="text-neutral-900 text-justify font-semibold" style={{ fontFamily: 'Playfair Display, serif' }}>
-                    Join us in awakening the cosmic wisdom within you.<br />Your path is written in the stars—and we're here to help you read it.
+                    Join us in awakening the cosmic wisdom within you.<br />Your path is written in the stars—and we&apos;re here to help you read it.
                   </p>
                 </div>
               </section>

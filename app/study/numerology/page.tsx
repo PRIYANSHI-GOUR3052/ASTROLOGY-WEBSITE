@@ -72,11 +72,11 @@ export default function NumerologyPage() {
         {activeTab === 'Overview' && (
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
             <p><span className="font-bold text-indigo-900">Numerology</span> is the ancient metaphysical science of numbers, rooted in the belief that numbers carry unique vibrations and energies that influence every aspect of our lives. By analyzing the numbers present in your birth date and name, numerology reveals profound insights into your personality, strengths, challenges, and destiny.</p>
-            <p>Originating in ancient civilizations such as Egypt, Babylon, and India, numerology has evolved into a sophisticated system for self-discovery and spiritual growth. Each number, from 1 to 9, as well as the master numbers 11, 22, and 33, is associated with specific qualities and archetypes. These numbers form the foundation of your numerology chart, offering a cosmic blueprint for your life's journey.</p>
-            <p>Numerology is not just about prediction—it is a tool for empowerment. By understanding your core numbers, you can make informed decisions, align with your true purpose, and navigate life's transitions with greater clarity and confidence. Whether you seek guidance in relationships, career, or personal growth, numerology provides a timeless key to unlocking your highest potential.</p>
-            <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg">
-              <span className="text-indigo-600 font-medium">Key Takeaway:</span> <span className="font-bold text-indigo-900">Numerology</span> offers a unique lens to understand yourself and your life's path through the power of numbers.
-            </div>
+            <p>Originating in ancient civilizations such as Egypt, Babylon, and India, numerology has evolved into a sophisticated system for self-discovery and spiritual growth. Each number, from 1 to 9, as well as the master numbers 11, 22, and 33, is associated with specific qualities and archetypes. These numbers form the foundation of your numerology chart, offering a cosmic blueprint for your life&apos;s journey.</p>
+            <p>Numerology is not just about prediction—it is a tool for empowerment. By understanding your core numbers, you can make informed decisions, align with your true purpose, and navigate life&apos;s transitions with greater clarity and confidence. Whether you seek guidance in relationships, career, or personal growth, numerology provides a timeless key to unlocking your highest potential.</p>
+                          <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg">
+                <span className="text-indigo-600 font-medium">Key Takeaway:</span> <span className="font-bold text-indigo-900">Numerology</span> offers a unique lens to understand yourself and your life&apos;s path through the power of numbers.
+              </div>
           </motion.div>
         )}
         {activeTab === 'Benefits' && (

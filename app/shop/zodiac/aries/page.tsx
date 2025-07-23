@@ -1,98 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { useRef } from 'react';
-
-// ARIES-SPECIFIC PRODUCTS & SERVICES
-const ariesProducts = [
-  {
-    name: 'Mars Energy Bracelet',
-    description: 'Enhance leadership and courage with Mars-powered gemstone bracelet',
-    image: '/images/course-1.jpg',
-    price: '₹2,499',
-    slug: 'mars-energy-bracelet',
-    category: 'Jewelry'
-  },
-  {
-    name: 'Red Coral Ring',
-    description: 'Boost confidence and overcome obstacles with authentic red coral',
-    image: '/images/course-2.jpg',
-    price: '₹4,999',
-    slug: 'red-coral-ring',
-    category: 'Gemstones'
-  },
-  {
-    name: 'Career Success Yantra',
-    description: 'Accelerate professional growth with Mars yantra for Aries natives',
-    image: '/images/course-3.jpg',
-    price: '₹1,299',
-    slug: 'career-success-yantra',
-    category: 'Yantras'
-  },
-  {
-    name: 'Leadership Consultation',
-    description: 'One-on-one astrology session to unlock your natural leadership potential',
-    image: '/images/course-4.jpg',
-    price: '₹2,199',
-    slug: 'leadership-consultation',
-    category: 'Consultations'
-  },
-  {
-    name: 'Aries Birth Chart Reading',
-    description: 'Detailed natal chart analysis focused on Aries strengths and challenges',
-    image: '/images/course-5.jpg',
-    price: '₹1,799',
-    slug: 'aries-birth-chart',
-    category: 'Readings'
-  },
-  {
-    name: 'Mars Puja Kit',
-    description: 'Complete ritual kit to strengthen Mars energy and reduce aggression',
-    image: '/images/course-6.jpg',
-    price: '₹999',
-    slug: 'mars-puja-kit',
-    category: 'Puja Kits'
-  }
-];
-
-// ANIMATION VARIANTS
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  }
-};
-
-const cardVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 50,
-    scale: 0.9
-  },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    scale: 1,
-    transition: {
-      type: "spring",
-      damping: 20,
-      stiffness: 100,
-      duration: 0.8
-    }
-  }
-};
+import { motion, AnimatePresence } from 'framer-motion';
+import UniversalZodiacBanner from '../../../components/UniversalZodiacBanner';
+import AriesInfoNavigation from '../../../components/AriesInfoNavigation';
+import AriesProductRecommendations from '../../../components/AriesProductRecommendations';
+import { Statistics } from '../../../components/Statistics';
+import SimpleHorizontalBanner from '../../../components/SimpleHorizontalBanner';
 
 export default function AriesZodiacPage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isPageEntering, setIsPageEntering] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // PAGE ENTRANCE EFFECT
   useEffect(() => {
@@ -100,6 +18,7 @@ export default function AriesZodiacPage() {
     
     const timer = setTimeout(() => {
       setIsPageEntering(false);
+      setIsLoaded(true);
       document.body.style.overflow = 'auto';
     }, 100);
     
@@ -111,7 +30,7 @@ export default function AriesZodiacPage() {
 
   return (
     <>
-      {/* CINEMATIC PAGE ENTRANCE */}
+      {/* CINEMATIC PAGE ENTRANCE OVERLAY */}
       <AnimatePresence mode="wait">
         {isPageEntering && (
           <motion.div
@@ -124,192 +43,203 @@ export default function AriesZodiacPage() {
         )}
       </AnimatePresence>
 
+      {/* MAIN PAGE CONTENT */}
       <motion.div 
-        className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50"
-        initial={{ x: '-100vw', opacity: 0 }}
-        animate={{ 
-          x: 0, 
-          opacity: 1,
-          transition: { 
-            duration: 0.8, 
-            ease: [0.76, 0, 0.24, 1],
-            delay: 0.3 
-          }
-        }}
+        className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-yellow-50/40"
+        initial={{ opacity: 0 }}
+        animate={isLoaded ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6 }}
       >
-        {/* HERO SECTION */}
-        <section className="relative py-20 bg-gradient-to-br from-red-600 via-orange-600 to-red-700 overflow-hidden">
-          
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-              backgroundSize: '40px 40px'
-            }}></div>
-          </div>
+        
+            {/* UNIVERSAL ZODIAC BANNER */}
+    <UniversalZodiacBanner signKey="aries" />
 
-          <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.5 }}
-            >
-              <div className="flex items-center justify-center mb-6">
-                <span className="text-8xl mr-4">♈</span>
-                <div>
-                  <h1 className="text-5xl md:text-7xl font-light text-white mb-2">
-                    <span className="bg-gradient-to-r from-yellow-200 via-white to-yellow-200 bg-clip-text text-transparent font-bold">Aries</span>
-                  </h1>
-                  <p className="text-orange-200 text-lg">March 21 - April 19</p>
-                </div>
-              </div>
-              
-              <p className="text-xl md:text-2xl text-orange-100 max-w-3xl mx-auto mb-8 leading-relaxed">
-                Bold, ambitious, and energetic. Discover powerful astrology products crafted specifically for your fiery Aries nature.
-              </p>
-              
-              <motion.div
-                className="flex items-center justify-center space-x-6 text-orange-200"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
-              >
-                <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 bg-yellow-300 rounded-full animate-pulse"></span>
-                  <span>Fire Element</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 bg-yellow-300 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></span>
-                  <span>Mars Ruled</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 bg-yellow-300 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></span>
-                  <span>Cardinal Sign</span>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
+    {/* HORIZONTAL DROPDOWN NAVIGATION */}
+    <AriesInfoNavigation />
 
-          {/* Decorative Elements */}
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
-        </section>
+    {/* MAIN CONTENT AREA - FULL WIDTH */}
+    <motion.div 
+      className="w-full bg-white"
+      initial={{ opacity: 0, y: 30 }}
+      animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.8, delay: 0.4 }}
+    >
+      <div className="max-w-7xl mx-auto p-4 sm:p-8 pt-8 sm:pt-12">
+        <AriesProductRecommendations />
+      </div>
+    </motion.div>
 
-        {/* PRODUCTS SECTION */}
-        <section className="py-20">
+        {/* STATISTICS SECTION */}
+        <motion.div
+          className="bg-white py-16"
+          initial={{ opacity: 0, y: 50 }}
+          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
           <div className="max-w-7xl mx-auto px-4">
-            
-            {/* Section Header */}
-            <motion.div
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: -30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-4xl md:text-5xl font-light mb-4 text-slate-800">
-                Aries Collection
-              </h2>
-              <div className="w-32 h-1 bg-gradient-to-r from-red-400 via-orange-400 to-red-400 mx-auto rounded-full mb-6"></div>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                Specially curated products and services that align with your Aries energy and help you achieve your ambitious goals.
-              </p>
-            </motion.div>
-
-            {/* Products Grid */}
-            <motion.div
-              ref={ref}
-              variants={containerVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
-              {ariesProducts.map((product, index) => (
-                <motion.div
-                  key={product.slug}
-                  variants={cardVariants}
-                  custom={index}
-                >
-                  <Link href={`/shop/product/${product.slug}`}>
-                    <motion.div
-                      className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-orange-100"
-                      whileHover={{ scale: 1.02, y: -8 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      {/* Product Image */}
-                      <div className="relative h-48 overflow-hidden">
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
-                        
-                        {/* Category Badge */}
-                        <div className="absolute top-4 right-4 bg-red-500 text-white rounded-full px-3 py-1 text-sm font-semibold">
-                          {product.category}
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-red-600 transition-colors duration-300">
-                          {product.name}
-                        </h3>
-                        <p className="text-slate-600 text-sm leading-relaxed mb-4">
-                          {product.description}
-                        </p>
-
-                        {/* Price & CTA */}
-                        <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-red-600">
-                            {product.price}
-                          </span>
-                          <motion.button
-                            className="bg-gradient-to-r from-red-500 to-orange-500 text-white font-semibold px-4 py-2 rounded-full text-sm"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            Add to Cart
-                          </motion.button>
-                        </div>
-                      </div>
-
-                      {/* Border Glow */}
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-400 to-orange-400 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"></div>
-                    </motion.div>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Bottom CTA */}
-            <motion.div
-              className="text-center mt-16"
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 1, duration: 0.6 }}
-            >
-              <Link href="/shop/zodiac">
-                <motion.button
-                  className="bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold px-10 py-4 rounded-full shadow-xl hover:shadow-2xl hover:from-red-500 hover:to-orange-500 transition-all duration-300 mr-4"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  View All Zodiac Signs
-                </motion.button>
-              </Link>
-              
-              <Link href="/daily-horoscope/aries">
-                <motion.button
-                  className="bg-white text-red-600 font-semibold px-10 py-4 rounded-full shadow-xl hover:shadow-2xl border-2 border-red-600 hover:bg-red-50 transition-all duration-300"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Daily Aries Horoscope
-                </motion.button>
-              </Link>
-            </motion.div>
+            <Statistics />
           </div>
-        </section>
+        </motion.div>
+
+{/* SIMPLE HORIZONTAL BANNER */}
+<div className="-mt-8">
+  <SimpleHorizontalBanner />
+</div>
+
+        {/* FLOATING ACTION BUTTONS */}
+        <motion.div
+          className="fixed bottom-8 right-8 z-40 space-y-4"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={isLoaded ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.6, delay: 1 }}
+        >
+          {/* CHAT WITH ASTROLOGER */}
+          <motion.button
+            className="bg-black text-white p-4 rounded-full shadow-2xl hover:bg-gray-800 transition-all duration-300 group"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <span className="absolute right-16 bg-white text-black px-3 py-1 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-serif border border-gray-200">
+              Chat with Astrologer
+            </span>
+          </motion.button>
+
+          {/* DAILY HOROSCOPE */}
+          <motion.button
+            className="bg-white text-black p-4 rounded-full shadow-2xl hover:bg-gray-100 border border-gray-200 transition-all duration-300 group"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+            <span className="absolute right-16 bg-black text-white px-3 py-1 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-serif">
+              Daily Horoscope
+            </span>
+          </motion.button>
+        </motion.div>
+
+        {/* RESPONSIVE MOBILE BOTTOM NAVIGATION */}
+        <motion.div
+          className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-orange-200/30 px-4 py-3 z-30"
+          initial={{ opacity: 0, y: 100 }}
+          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.8 }}
+        >
+          <div className="flex justify-between items-center">
+            <button className="flex flex-col items-center py-2 px-4 text-orange-800">
+              <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white text-sm font-bold mb-1">
+                ♈
+              </div>
+              <span className="text-xs font-medium font-serif">Aries</span>
+            </button>
+            <button className="flex flex-col items-center py-2 px-4 text-slate-600">
+              <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              <span className="text-xs font-medium font-serif">Shop</span>
+            </button>
+            <button className="flex flex-col items-center py-2 px-4 text-slate-600">
+              <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              <span className="text-xs font-medium font-serif">Reading</span>
+            </button>
+            <button className="flex flex-col items-center py-2 px-4 text-slate-600">
+              <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <span className="text-xs font-medium font-serif">Consult</span>
+            </button>
+          </div>
+        </motion.div>
+
+        {/* GLOBAL STYLES FOR REFINED ARIES THEME */}
+        <style jsx global>{`
+          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&display=swap');
+          
+          .aries-glow {
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.15);
+          }
+          
+          .aries-warm-animation {
+            position: relative;
+            overflow: hidden;
+          }
+          
+          .aries-warm-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.05) 0%, transparent 70%);
+            animation: warmGlow 6s ease-in-out infinite alternate;
+          }
+          
+          @keyframes warmGlow {
+            0% { transform: scale(0.95) rotate(0deg); opacity: 0.3; }
+            100% { transform: scale(1.05) rotate(180deg); opacity: 0.6; }
+          }
+          
+          .mars-energy-pulse {
+            animation: marsEnergy 4s ease-in-out infinite;
+          }
+          
+          @keyframes marsEnergy {
+            0%, 100% { 
+              box-shadow: 0 0 20px rgba(249, 115, 22, 0.12);
+              transform: scale(1);
+            }
+            50% { 
+              box-shadow: 0 0 35px rgba(249, 115, 22, 0.25);
+              transform: scale(1.008);
+            }
+          }
+          
+          /* Custom scrollbar for warm Aries theme */
+          ::-webkit-scrollbar {
+            width: 10px;
+          }
+          
+          ::-webkit-scrollbar-track {
+            background: #fff7ed;
+            border-radius: 6px;
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #f97316, #fbbf24);
+            border-radius: 6px;
+            border: 2px solid #fff7ed;
+          }
+          
+          ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #ea580c, #f59e0b);
+          }
+          
+          /* Rich typography and sophisticated styling */
+          .font-serif {
+            font-family: 'Playfair Display', serif;
+          }
+          
+          .backdrop-blur-glass {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(249, 115, 22, 0.08);
+          }
+          
+          .warm-gradient {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
+          }
+          
+          .text-shadow-soft {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+          }
+        `}</style>
       </motion.div>
     </>
   );
