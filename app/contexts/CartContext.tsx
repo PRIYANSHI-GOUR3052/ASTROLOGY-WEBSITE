@@ -31,11 +31,16 @@ function loadCartFromStorage(): CartItem[] {
     if (Array.isArray(parsed)) {
       // Validate each item
       return parsed.filter(
-        (item: any): item is CartItem =>
-          typeof item.id === 'string' &&
-          typeof item.name === 'string' &&
-          typeof item.price === 'number' &&
-          typeof item.quantity === 'number'
+        (item: unknown): item is CartItem => {
+          if (typeof item !== 'object' || item === null) return false;
+          const obj = item as Record<string, unknown>;
+          return (
+            typeof obj.id === 'string' &&
+            typeof obj.name === 'string' &&
+            typeof obj.price === 'number' &&
+            typeof obj.quantity === 'number'
+          );
+        }
       );
     }
     return [];
