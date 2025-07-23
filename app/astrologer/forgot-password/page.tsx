@@ -19,7 +19,10 @@ const ForgotPasswordPage = () => {
       const res = await axios.post('/api/astrologer/forgot-password', { email });
       toast({ title: 'Success', description: res.data.message, variant: 'default' });
     } catch (err: unknown) {
-      toast({ title: 'Error', description: (err && typeof err === 'object' && 'response' in err && (err as any)?.response?.data?.message) ? (err as any).response.data.message : 'Failed to send reset link', variant: 'destructive' });
+      const errorMessage = (err && typeof err === 'object' && 'response' in err && (err as { response?: { data?: { message?: string } } })?.response?.data?.message)
+        ? (err as { response?: { data?: { message?: string } } }).response!.data!.message
+        : 'Failed to send reset link';
+      toast({ title: 'Error', description: errorMessage, variant: 'destructive' });
     } finally {
       setLoading(false);
     }

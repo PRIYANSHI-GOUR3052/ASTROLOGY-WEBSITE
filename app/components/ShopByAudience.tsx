@@ -299,4 +299,4 @@ export default function ShopByAudience({ variant = 'default' }: ShopByAudiencePr
       </div>
     </section>
   );
-} 
+}
