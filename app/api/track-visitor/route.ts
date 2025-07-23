@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
+// Define proper types for database results
+type Visitor = {
+  id: number;
+  visitor_id: string;
+  first_visit: string;
+  last_visit: string;
+  visit_count: number;
+};
+
 // Utility to convert JavaScript Date or ISO string to MySQL datetime format
 function formatDateForMySQL(dateInput: string | number | Date) {
   const date = new Date(dateInput);
@@ -33,11 +42,11 @@ export async function POST(request: Request) {
 
     try {
       // Check if visitor exists
-      const [rows] = await connection.query<any[]>(
+      const [rows] = await connection.query(
         'SELECT * FROM visitors WHERE visitor_id = ?',
         [visitorId]
       );
-      const existingVisitor = rows[0];
+      const existingVisitor = (rows as Visitor[])[0];
       
       console.log('Visitor exists:', !!existingVisitor);
 

@@ -1,7 +1,21 @@
 
 import ServiceModel from '@/backend/models/services';
 
-export default async function handler(req: { query: { slug: any; }; method: string; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message: string; error?: any; }): any; new(): any; }; }; }) {
+// Define proper types for request and response
+type RequestHandler = {
+  query: { 
+    slug: string; 
+  }; 
+  method: string; 
+};
+
+type ResponseHandler = {
+  status: (code: number) => {
+    json: (data: { message: string; error?: string }) => void;
+  };
+};
+
+export default async function handler(req: RequestHandler, res: ResponseHandler) {
   try {
     const { slug } = req.query;
     

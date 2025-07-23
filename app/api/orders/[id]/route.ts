@@ -4,6 +4,37 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import pool from '@/lib/db';
 
+// Define proper types for database results
+type UserResult = { id: number }[];
+type OrderResult = {
+  id: number;
+  order_number: string;
+  total_amount: number;
+  order_status: string;
+  order_date: string;
+  updated_at: string;
+}[];
+type OrderItem = {
+  id: number;
+  quantity: number;
+  carats: number | null;
+  total_price: number;
+  is_stone: number;
+  is_service: number;
+  product_name: string;
+  unit_price: number;
+};
+type OrderItems = OrderItem[];
+type AddressResult = {
+  fullName: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  pincode: string;
+  phone: string;
+}[];
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -34,11 +65,11 @@ export async function GET(
         [userGoogleId]
       );
       
-      if ((userResult as any[]).length === 0) {
+      if ((userResult as UserResult).length === 0) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       
-      const userId = (userResult as any[])[0].id;
+      const userId = (userResult as UserResult)[0].id;
       
       // Get the order and verify it belongs to this user
       const [orderResult] = await connection.query(
@@ -49,11 +80,11 @@ export async function GET(
         [orderId, userId]
       );
       
-      if ((orderResult as any[]).length === 0) {
+      if ((orderResult as OrderResult).length === 0) {
         return NextResponse.json({ error: 'Order not found' }, { status: 404 });
       }
       
-      const order = (orderResult as any[])[0];
+      const order = (orderResult as OrderResult)[0];
       
       // Get the order items with product details
       const [orderItems] = await connection.query(
@@ -92,12 +123,12 @@ export async function GET(
         [userId]
       );
       
-      const shippingAddress = (addressResult as any[]).length > 0 
-        ? (addressResult as any[])[0]
+      const shippingAddress = (addressResult as AddressResult).length > 0 
+        ? (addressResult as AddressResult)[0]
         : null;
       
       // Calculate subtotal
-      const subtotal = (orderItems as any[]).reduce((sum, item) => sum + parseFloat(item.total_price), 0);
+      const subtotal = (orderItems as OrderItems).reduce((sum, item) => sum + parseFloat(item.total_price.toString()), 0);
       
       // Determine payment method and status
       const paymentMethod = order.order_number.startsWith('cod_') 
@@ -128,7 +159,7 @@ export async function GET(
         }),
         items: orderItems,
         subtotal: subtotal,
-        total: parseFloat(order.total_amount),
+        total: order.total_amount,
         shipping_address: shippingAddress
       };
       

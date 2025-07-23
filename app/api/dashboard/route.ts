@@ -592,7 +592,7 @@ async function getTotalOrdersInDateRange(connection: PoolConnection, startDate: 
       SELECT COUNT(*) as order_count
       FROM orders
       WHERE created_at BETWEEN ? AND ?
-    `, [startDate, endDate]) as [OrderCountRow[], any];
+    `, [startDate, endDate]) as [OrderCountRow[], unknown];
     
     return rows[0].order_count || 0;
   } catch (error) {
