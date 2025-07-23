@@ -25,8 +25,13 @@ const AstrologerAuthPage = () => {
       } else {
         toast({ title: 'Login failed', description: 'No token received', variant: 'destructive' });
       }
-    } catch (err: any) {
-      toast({ title: 'Login failed', description: err?.response?.data?.message || 'Invalid credentials', variant: 'destructive' });
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      toast({
+        title: 'Login failed',
+        description: error?.response?.data?.message || 'Invalid credentials',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -94,7 +99,7 @@ const AstrologerAuthPage = () => {
 
         <div className="mt-6 text-center text-sm text-gray-400">
           <p>
-            Don't have an astrologer account?{" "}
+            Don&apos;t have an astrologer account?{" "}
             <Link
               href="/astrologer/register"
               className="text-[#f857a6] hover:underline font-medium"

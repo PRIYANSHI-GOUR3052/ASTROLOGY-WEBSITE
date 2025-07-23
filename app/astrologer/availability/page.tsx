@@ -12,6 +12,9 @@ interface Slot {
   repeat: string;
 }
 
+type APIErrorResponse = { error?: string };
+
+
 const repeatOptions = ["None", "Daily", "Weekly"];
 
 const AvailabilityPage = () => {
@@ -52,7 +55,8 @@ const AvailabilityPage = () => {
     if (!form.date || !form.start || !form.end) return;
     setLoading(true);
     try {
-      let res: Response, data: any;
+      let res: Response;
+      let data: unknown;
       if (editId !== null) {
         // Update existing slot
         res = await fetch('/api/astrologer/availability', {
@@ -104,7 +108,7 @@ const AvailabilityPage = () => {
       if (res.status === 204) {
         setSlots(prev => prev.filter(slot => slot.id !== id));
       } else {
-        const data: any = await res.json();
+        const data: APIErrorResponse = await res.json();
         setError(data.error || 'Failed to delete slot');
       }
     } catch {

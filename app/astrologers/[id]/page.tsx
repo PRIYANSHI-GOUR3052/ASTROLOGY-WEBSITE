@@ -6,7 +6,6 @@ import {
   CheckCircle,
   Shield,
   Award,
-  Globe,
   Star,
   MessageCircle,
   Calendar,
@@ -19,7 +18,8 @@ import {
   Heart
 } from 'lucide-react';
 import axios from 'axios';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import Image from 'next/image';
 
 // Add/strengthen types for all state and function parameters
 interface Booking {
@@ -30,20 +30,20 @@ interface Booking {
   canRate?: boolean;
   rating?: number;
   client?: { name?: string; email?: string };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 interface Slot {
   id: number;
   date: string;
   start: string;
   end: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 interface User {
   id: number | string;
   name?: string;
   email?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const initialMessages = [
@@ -120,7 +120,6 @@ const TabButton: React.FC<TabButtonProps> = ({ tab, icon: Icon, label, isActive,
 export default function AstrologerProfile() {
   // All hooks at the top
   const params = useParams<{ id: string }>();
-  const router = useRouter();
   const astrologerIdParam = params?.id || '';
   const [activeTab, setActiveTab] = useState('chat');
   const [messages, setMessages] = useState(initialMessages);
@@ -157,7 +156,6 @@ export default function AstrologerProfile() {
   const [astrologerError, setAstrologerError] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const [userLoading, setUserLoading] = useState(true);
-  const [clientId, setClientId] = useState('1');
   const [availableSlots, setAvailableSlots] = useState<Slot[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [slotsError, setSlotsError] = useState('');
@@ -172,8 +170,8 @@ export default function AstrologerProfile() {
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Failed to parse user data:', error);
+      } catch {
+        console.error('Failed to parse user data');
         localStorage.removeItem('user');
       }
     }
@@ -254,7 +252,7 @@ export default function AstrologerProfile() {
         if (!acc[dateStr]) acc[dateStr] = [];
         acc[dateStr].push(slot);
       } catch (error) {
-        console.error('Invalid slot date:', slot.date);
+        console.error('Invalid slot date:', slot.date, error);
       }
       return acc;
     }, {});
@@ -361,7 +359,7 @@ export default function AstrologerProfile() {
     try {
       // Parse the selectedSlot date and start time into a valid ISO string
       // selectedSlot.date is like 'Tuesday, Jul 22, 2025', selectedSlot.start is '09:37'
-      const [weekday, monthDay, year] = selectedSlot.date.split(',').map((s: string) => s.trim());
+      const [, monthDay, year] = selectedSlot.date.split(',').map((s: string) => s.trim());
       // monthDay: 'Jul 22', year: '2025', start: '09:37'
       const [monthStr, dayStr] = monthDay.split(' ');
       const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -370,7 +368,7 @@ export default function AstrologerProfile() {
       const [hour, minute] = selectedSlot.start.split(':').map(Number);
       const dateObj = new Date(Number(year), month, day, hour, minute);
       const isoDate = dateObj.toISOString();
-      const res = await axios.post('/api/user/booking', {
+      await axios.post('/api/user/booking', {
         astrologerId: astrologer?.id,
         clientId: user.id,
         date: isoDate,
@@ -379,24 +377,13 @@ export default function AstrologerProfile() {
       setBookingStatus('Slot booked successfully!');
       setSelectedSlot(null);
       fetchUserBookings(user.id);
-    } catch (e: any) {
-      setBookingError(e.response?.data?.error || 'Failed to book slot');
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { error?: string } } };
+      setBookingError(err.response?.data?.error || 'Failed to book slot');
     } finally {
       setBookingLoading(false);
       setTimeout(() => setBookingStatus(''), 3000);
     }
-  };
-
-  const handleRateSlot = (slotId: number, rating: number) => {
-    setBookedSlots(prev =>
-      prev.map(slot =>
-        slot.id === slotId
-          ? { ...slot, rating, canRate: false }
-          : slot
-      )
-    );
-    setRatingSlot(null);
-    setUserRating(0);
   };
 
   const handleCancelBooking = async (bookingId: number) => {
@@ -405,8 +392,9 @@ export default function AstrologerProfile() {
     try {
       await axios.patch('/api/user/booking', { bookingId, action: 'cancel' });
       fetchUserBookings(user?.id ?? '');
-    } catch (e: any) {
-      setCancelError(e.response?.data?.error || 'Failed to cancel booking');
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { error?: string } } };
+      setCancelError(err.response?.data?.error || 'Failed to cancel booking');
     } finally {
       setCancelLoading(false);
     }
@@ -421,8 +409,9 @@ export default function AstrologerProfile() {
       fetchUserBookings(user?.id ?? '');
       setRatingSlot(null);
       setUserRating(0);
-    } catch (e: any) {
-      setRateError(e.response?.data?.error || 'Failed to submit rating');
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { error?: string } } };
+      setRateError(err.response?.data?.error || 'Failed to submit rating');
     } finally {
       setRateLoading(false);
     }
@@ -458,9 +447,11 @@ export default function AstrologerProfile() {
             {/* Profile Info */}
             <div className="flex gap-4">
               <div className="relative">
-                <img
+                <Image
                   src={astrologer?.profileImage}
                   alt={`${astrologer?.firstName} ${astrologer?.lastName}`}
+                  width={96}
+                  height={96}
                   className="w-24 h-24 rounded-2xl object-cover border-4 border-amber-300"
                 />
                 <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full border-2 border-white"></div>
@@ -531,7 +522,7 @@ export default function AstrologerProfile() {
             <div className="h-96 flex flex-col">
               <div className="p-4 border-b bg-indigo-600 text-white rounded-t-2xl">
                 <div className="flex items-center gap-3">
-                  <img src={astrologer?.profileImage} alt={`${astrologer?.firstName} ${astrologer?.lastName}`} className="w-10 h-10 rounded-full" />
+                  <Image src={astrologer?.profileImage} alt={`${astrologer?.firstName} ${astrologer?.lastName}`} width={40} height={40} className="w-10 h-10 rounded-full" />
                   <div>
                     <h3 className="font-semibold">{`${astrologer?.firstName} ${astrologer?.lastName}`}</h3>
                     <p className="text-sm text-indigo-200">{astrologer?.availability}</p>
@@ -551,7 +542,7 @@ export default function AstrologerProfile() {
                 {messages.map(message => (
                   <div key={message.id} className={`flex gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
                     {message.sender === 'astrologer' && (
-                      <img src={message.avatar} alt="" className="w-8 h-8 rounded-full" />
+                      <Image src={message.avatar} alt="" width={32} height={32} className="w-8 h-8 rounded-full" />
                     )}
                     <div className={`max-w-xs lg:max-w-md ${message.sender === 'user'
                       ? 'bg-indigo-600 text-white'
@@ -564,14 +555,14 @@ export default function AstrologerProfile() {
                       </p>
                     </div>
                     {message.sender === 'user' && (
-                      <img src={message.avatar} alt="" className="w-8 h-8 rounded-full" />
+                      <Image src={message.avatar} alt="" width={32} height={32} className="w-8 h-8 rounded-full" />
                     )}
                   </div>
                 ))}
 
                 {isTyping && (
                   <div className="flex gap-3">
-                    <img src={astrologer?.profileImage} alt="" className="w-8 h-8 rounded-full" />
+                    <Image src={astrologer?.profileImage} alt="" width={32} height={32} className="w-8 h-8 rounded-full" />
                     <div className="bg-slate-100 rounded-2xl px-4 py-2">
                       <div className="flex space-x-1">
                         <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
@@ -726,7 +717,7 @@ export default function AstrologerProfile() {
                             {[1, 2, 3, 4, 5].map(star => (
                               <Star
                                 key={star}
-                                className={`w-4 h-4 ${star <= slot.rating ? 'text-amber-400 fill-current' : 'text-slate-300'}`}
+                                className={`w-4 h-4 ${star <= (slot.rating ?? 0) ? 'text-amber-400 fill-current' : 'text-slate-300'}`}
                               />
                             ))}
                           </div>

@@ -4,24 +4,34 @@ import jwt from 'jsonwebtoken';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // --- Helper to get clientId from JWT or body/query ---
-  function getClientId(req: NextApiRequest) {
+  function getClientId(req: NextApiRequest): number | null {
     const authHeader = req.headers['authorization'];
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.replace('Bearer ', '');
       try {
         const payload = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
-        if (typeof payload === 'object' && payload && 'id' in payload) {
-          return (payload as any).id;
+        if (typeof payload === 'object' && payload !== null && 'id' in payload) {
+          const id = (payload as { id: unknown }).id;
+          if (typeof id === 'number') return id;
+          if (typeof id === 'string' && !isNaN(Number(id))) return Number(id);
         }
-      } catch {}
+      } catch {
+        // ignore error
+      }
     }
-    // fallback to body/query
-    return req.body?.clientId || req.query?.clientId;
+    const idFromBody = req.body?.clientId ?? req.query?.clientId;
+    const id = typeof idFromBody === 'string' || typeof idFromBody === 'number' ? Number(idFromBody) : NaN;
+    return !isNaN(id) ? id : null;
   }
 
   // --- Input validation helper ---
-  function isValidBookingInput(astrologerId: any, clientId: any, date: any, type: any) {
-    if (!astrologerId || !clientId || !date || !type) return false;
+  function isValidBookingInput(
+    astrologerId: string | number,
+    clientId: number | null,
+    date: string,
+    type: unknown
+  ): boolean {
+    if (!astrologerId || clientId === null || !date || !type) return false;
     if (isNaN(Number(astrologerId)) || isNaN(Number(clientId))) return false;
     if (typeof type !== 'string') return false;
     const d = new Date(date);
@@ -37,7 +47,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Missing or invalid required fields' });
     }
     try {
-      // Slot availability check
       const slotTaken = await prisma.booking.findFirst({
         where: {
           astrologerId: Number(astrologerId),
@@ -66,7 +75,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // --- GET: List all bookings for a client ---
   if (req.method === 'GET' && !req.query.availableSlots) {
     const clientId = getClientId(req);
-    if (!clientId || isNaN(Number(clientId))) {
+    if (clientId === null || isNaN(Number(clientId))) {
       return res.status(400).json({ error: 'Missing or invalid clientId' });
     }
     try {
@@ -88,7 +97,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Missing or invalid astrologerId' });
     }
     try {
-      // Fetch all future slots for this astrologer
       const now = new Date();
       const slots = await prisma.astrologerAvailability.findMany({
         where: {
@@ -138,4 +146,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
-} 
+}

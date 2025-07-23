@@ -14,7 +14,6 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Calendar as DateCalendar } from '@/components/ui/calendar';
-import { TimePicker } from '@/app/components/ui/time-picker';
 
 // Mock data for bookings
 // Remove mockBookings array

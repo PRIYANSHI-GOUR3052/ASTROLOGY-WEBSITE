@@ -38,7 +38,9 @@ const ResetPasswordPage = () => {
     } catch (err: unknown) {
       toast({
         title: "Error",
-        description: (err && typeof err === 'object' && 'response' in err && (err as any)?.response?.data?.message) ? (err as any).response.data.message : "Failed to reset password.",
+        description: (err && typeof err === 'object' && 'response' in err && (err as { response?: { data?: { message?: string } } })?.response?.data?.message)
+          ? (err as { response?: { data?: { message?: string } } }).response!.data!.message
+          : "Failed to reset password.",
         variant: "destructive",
       });
     } finally {
