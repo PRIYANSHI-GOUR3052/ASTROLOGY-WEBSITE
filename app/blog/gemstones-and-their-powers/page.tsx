@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { User, Calendar, Gem, BookOpen, HelpCircle } from 'lucide-react';
+import { User, Calendar, BookOpen, HelpCircle } from 'lucide-react';
 import { blogPosts } from '../../data/blogPosts';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CTASection } from '../../components/CTASection';
 import { motion } from 'framer-motion';
 
@@ -91,8 +92,8 @@ export default function GemstonesAndPowersPage() {
                         ['Emerald', 'Mercury', 'Intellect, communication, creativity'],
                         ['Blue Sapphire', 'Saturn', 'Discipline, focus, protection'],
                         ['Coral', 'Mars', 'Courage, energy, determination'],
-                      ].map(([gem, planet, benefit], i) => (
-                        <tr key={gem} className={i % 2 === 0 ? 'bg-gray-50' : ''}>
+                      ].map(([gem, planet, benefit], index) => (
+                        <tr key={gem} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
                           <td className="py-3 px-4 border-b font-medium text-black">{gem}</td>
                           <td className="py-3 px-4 border-b font-medium text-black">{planet}</td>
                           <td className="py-3 px-4 border-b font-medium text-black">{benefit}</td>
@@ -105,24 +106,14 @@ export default function GemstonesAndPowersPage() {
             )}
             {activeTab === 'Remedies' && (
               <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Gemstone Remedies for Life's Challenges</h2>
-                <ul className="space-y-3 text-gray-700 text-justify">
-                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Yellow Sapphire:</span> For wisdom, prosperity, and overcoming obstacles in education or career.</li>
-                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Pearl:</span> For emotional healing, peace, and better relationships.</li>
-                  <li><span className="text-green-500 mr-2">•</span><span className="font-bold">Blue Sapphire:</span> For protection, discipline, and success during Saturn periods.</li>
-                </ul>
-              </motion.section>
-            )}
-            {activeTab === 'FAQs' && (
-              <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-16">
-                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Frequently Asked Questions</h2>
-                <div className="space-y-6 text-justify">
+                <h2 className="text-2xl font-bold text-indigo-900 mb-6 border-b pb-2">Gemstone Remedies and Practices</h2>
+                <div className="space-y-6">
                   {[
                     ['Can gemstones change my destiny?', 'They support your efforts and balance energies, but your actions are most important.'],
                     ['How long does it take for a gemstone to work?', 'Effects may be felt within weeks to months, depending on your chart and consistency.'],
                     ['Can I wear more than one gemstone?', 'Yes, but only after consulting an astrologer to avoid conflicting energies.'],
                     ['What if I feel discomfort after wearing a stone?', 'Remove it and consult your astrologer. Not every stone is suitable for everyone.'],
-                  ].map(([q, a], i) => (
+                  ].map(([q, a]) => (
                     <div key={q} className="border-b border-gray-200 pb-6">
                       <h3 className="text-lg font-bold text-indigo-900 mb-2 flex items-center"><HelpCircle className="w-5 h-5 mr-2 text-indigo-400" />{q}</h3>
                       <p className="text-gray-700">{a}</p>
@@ -137,7 +128,7 @@ export default function GemstonesAndPowersPage() {
             <section className="mt-16 pt-8 border-t border-gray-200">
               <h2 className="text-2xl font-bold text-black mb-6">Continue Your Astrological Journey</h2>
               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-6 border border-purple-100 hover:shadow-lg transition-all cursor-pointer">
-                <a href="/blog/numerology-basics" className="block">
+                <Link href="/blog/numerology-basics" className="block">
                   <div className="flex items-center gap-4">
                     <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-purple-100">
                       <Image src="/images/Numerology.svg" alt="Numerology" fill className="object-cover" />
@@ -163,14 +154,14 @@ export default function GemstonesAndPowersPage() {
                       </svg>
                     </div>
                   </div>
-                </a>
+                </Link>
               </motion.div>
             </section>
           </div>
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* Author Info */}
-            <a href="/about" className="block bg-indigo-50 rounded-lg p-6 mb-8 hover:shadow-lg transition-shadow cursor-pointer">
+            <Link href="/about" className="block bg-indigo-50 rounded-lg p-6 mb-8 hover:shadow-lg transition-shadow cursor-pointer">
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-16 h-16 bg-indigo-200 rounded-full flex items-center justify-center">
                   <User className="w-8 h-8 text-indigo-700" />
@@ -186,7 +177,7 @@ export default function GemstonesAndPowersPage() {
                   </p>
                 </div>
               </div>
-            </a>
+            </Link>
             {/* Newsletter */}
             <div className="bg-orange-50 rounded-lg p-6 mb-8">
               <h3 className="text-lg font-bold text-orange-900 mb-4">Get Weekly Astrology Insights</h3>
@@ -227,12 +218,12 @@ export default function GemstonesAndPowersPage() {
                   ['Understanding Vedic Astrology', '/blog/understanding-vedic-astrology'],
                   ['Numerology Basics', '/blog/numerology-basics'],
                   ['Guide to Crystal Healing', '/blog/crystal-healing'],
-                ].map(([title, link], i) => (
+                ].map(([title, link]) => (
                   <li key={title}>
-                    <a href={link} className="text-indigo-700 hover:underline flex items-start">
+                    <Link href={link} className="text-indigo-700 hover:underline flex items-start">
                       <span className="text-indigo-500 mr-2">→</span>
                       <span>{title}</span>
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

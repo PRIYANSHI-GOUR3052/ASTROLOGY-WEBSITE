@@ -17,7 +17,6 @@ interface Stone {
 }
 
 export function AstrologyStones() {
-  const router = useRouter()
   const [stones, setStones] = useState<Stone[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

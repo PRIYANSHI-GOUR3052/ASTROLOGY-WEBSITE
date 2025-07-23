@@ -1,6 +1,6 @@
-const fs = require('fs/promises');
-const path = require('path');
-const translate = require('translate-google');
+import fs from 'fs/promises';
+import path from 'path';
+import translate from 'translate-google';
 
 const LANGS_TO_TRANSLATE = {
   'es': 'es', 

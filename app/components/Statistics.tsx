@@ -20,16 +20,16 @@ export function Statistics() {
   ];
 
   return (
-    <section className="w-full py-16" style={{ backgroundColor: '#F5F5DC' }}>
+    <section className="w-full py-8 md:py-16" style={{ backgroundColor: '#F5F5DC' }}>
       <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="flex flex-row justify-between items-center gap-2 md:gap-8">
           {stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="text-4xl md:text-6xl font-bold text-green-800 mb-2" 
+            <div key={index} className="text-center flex-1">
+              <div className="text-2xl md:text-4xl lg:text-6xl font-bold text-green-800 mb-1 md:mb-2" 
                    style={{ fontFamily: 'Inter, sans-serif' }}>
                 {stat.value}
               </div>
-              <p className="text-sm md:text-base text-green-700 font-medium uppercase tracking-wide"
+              <p className="text-xs md:text-sm lg:text-base text-green-700 font-medium uppercase tracking-wide leading-tight"
                  style={{ fontFamily: 'Inter, sans-serif' }}>
                 {stat.label}
               </p>

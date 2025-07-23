@@ -17,7 +17,7 @@ interface Testimonial {
   productUrl?: string;
 }
 
-const testimonialTypes = [
+const testimonialTypes: Array<'quote_top' | 'avatar_top' | 'simple_with_stars' | 'large_avatar_quote'> = [
   'quote_top',
   'avatar_top',
   'avatar_top',
@@ -69,7 +69,7 @@ export const pastelColors = [
 ]
 
 export function Testimonials() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const [current, setCurrent] = useState(0)
 
   // Restore getTestimonials function
@@ -86,7 +86,7 @@ export function Testimonials() {
         image: testimonialImages[i],
         text,
         rating: testimonialRatings[i],
-        type: testimonialTypes[i] as any,
+        type: testimonialTypes[i],
         productUrl: testimonialProductUrls[i],
       });
     }
@@ -95,9 +95,6 @@ export function Testimonials() {
 
   const testimonials = getTestimonials();
   const total = testimonials.length;
-
-  const handlePrev = () => setCurrent((prev) => (prev - 1 + total) % total);
-  const handleNext = () => setCurrent((prev) => (prev + 1) % total);
 
   // Animation variants for slide/fade
   const variants = {
@@ -163,83 +160,70 @@ export function Testimonials() {
                 className="flex-1 flex flex-col justify-center px-10 py-24 md:py-32 md:pr-0 md:pl-20"
                 style={{ minWidth: 0 }}
               >
-                {/* Prominent stars */}
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-7 w-7 text-yellow-400 drop-shadow-lg mr-1" style={{ filter: 'drop-shadow(0 2px 4px #eab30888)' }} fill="#facc15" />
-                  ))}
-                </div>
-                <p className="text-gray-800 text-base md:text-lg mb-2 leading-relaxed font-cormorant" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{testimonial.text}</p>
-                <div className="font-semibold text-black text-lg mb-2">{testimonial.name}</div>
-              </motion.div>
-              <motion.div
-                key={current + '-img'}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-                className="flex-1 flex items-center justify-center bg-white md:rounded-none md:rounded-r-2xl overflow-hidden"
-                style={{ minWidth: 0 }}
-              >
-                <motion.div
-                  className="relative w-[85%] h-[92%] max-w-[380px] max-h-[540px] flex items-center justify-center"
-                  style={{ minHeight: '380px' }}
-                  whileHover={{ scale: 1.04 }}
-                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                >
-                  {testimonial.productUrl ? (
-                    <Link href={testimonial.productUrl} className="block w-full h-full">
-                      <motion.div
-                        className="relative w-full h-full overflow-hidden cursor-pointer"
-                        whileHover={{ scale: 1.08 }}
-                        transition={{ duration: 0.5, ease: 'easeInOut' }}
-                      >
-                        <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" style={{ background: '#f7f7f7' }} />
-                      </motion.div>
-                    </Link>
-                  ) : (
-                    <motion.div
-                      className="relative w-full h-full overflow-hidden"
-                      whileHover={{ scale: 1.08 }}
-                      transition={{ duration: 0.5, ease: 'easeInOut' }}
-                    >
-                      <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" style={{ background: '#f7f7f7' }} />
-                    </motion.div>
+                <div className="flex flex-col h-full justify-center">
+                  <div className="flex items-center mb-6">
+                    <div className="flex">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                  </div>
+                  <blockquote className="text-2xl md:text-3xl font-serif font-medium text-black leading-relaxed mb-8" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                    &ldquo;{testimonial.text}&rdquo;
+                  </blockquote>
+                  <div className="flex items-center">
+                    <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
+                      <Image
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <div className="font-serif font-bold text-black text-lg" style={{ fontFamily: 'Playfair Display, serif' }}>{testimonial.name}</div>
+                      <div className="text-gray-600 font-medium">{testimonial.occupation}</div>
+                    </div>
+                  </div>
+                  {testimonial.productUrl && (
+                    <div className="mt-6">
+                      <Link href={testimonial.productUrl} className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                        View Product →
+                      </Link>
+                    </div>
                   )}
-                </motion.div>
+                </div>
               </motion.div>
             </AnimatePresence>
+            {/* Right Arrow */}
+            <button
+              aria-label="Next testimonial"
+              onClick={() => paginate(1)}
+              className="hidden md:flex absolute -right-24 z-10 h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all"
+              style={{ top: '50%', transform: 'translateY(-50%)' }}
+            >
+              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
+            </button>
           </div>
-          {/* Right Arrow */}
-          <button
-            aria-label="Next testimonial"
-            onClick={() => paginate(1)}
-            className="hidden md:flex absolute -right-24 z-10 h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all"
-            style={{ top: '50%', transform: 'translateY(-50%)' }}
-          >
-            <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
-          </button>
         </div>
-        {/* Mobile navigation */}
-        <div className="flex md:hidden justify-center gap-4 mt-6">
-          <button
-            aria-label="Previous testimonial"
-            onClick={() => paginate(-1)}
-            className="h-10 w-10 rounded-full bg-gray-300 hover:bg-gray-400 shadow flex items-center justify-center transition-all"
-          >
-            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
-          </button>
-          <button
-            aria-label="Next testimonial"
-            onClick={() => paginate(1)}
-            className="h-10 w-10 rounded-full bg-gray-300 hover:bg-gray-400 shadow flex items-center justify-center transition-all"
-          >
-            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
-          </button>
+        {/* Mobile Navigation Dots */}
+        <div className="flex justify-center mt-8 space-x-2">
+          {testimonials.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setDirection(index > current ? 1 : -1);
+                setCurrent(index);
+              }}
+              className={`w-3 h-3 rounded-full transition-all ${
+                index === current ? 'bg-indigo-600' : 'bg-gray-300'
+              }`}
+              aria-label={`Go to testimonial ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

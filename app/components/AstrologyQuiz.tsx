@@ -33,6 +33,18 @@ const staticRandomCardsData = [
   }
 ]
 
+interface QuizData {
+  title: string;
+  subtitle: string;
+  questionHeader: string;
+  questions: {
+    question: string;
+    options: string[];
+    correctAnswerIndex: number;
+  }[];
+  randomCards: { title: string; description: string }[];
+}
+
 export function AstrologyQuiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -41,7 +53,7 @@ export function AstrologyQuiz() {
   const [showFeedback, setShowFeedback] = useState(false)
   const { t } = useLanguage()
 
-  const quizData: any = t('astrologyQuiz')
+  const quizData: QuizData = t('astrologyQuiz') as QuizData;
 
   if (!quizData || typeof quizData !== 'object' || !quizData.questions || quizData.questions.length === 0) {
     return <div className="min-h-screen flex items-center justify-center">Loading Quiz...</div>;

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useLanguage } from "../../contexts/useLanguage";
-import CelestialJourneyMainGrid from "./CelestialJourneyMainGrid";
+
 
 export default function CelestialJourneyGrid() {
   const { t } = useLanguage();

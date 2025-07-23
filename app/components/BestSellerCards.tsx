@@ -81,7 +81,7 @@ export default function BestSellerCards({ products }: BestSellerCardsProps) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-4xl md:text-5xl font-bold text-center mb-16 px-8"
+        className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 sm:mb-16 px-4 sm:px-8"
         style={{ 
           fontFamily: 'Playfair Display, serif', 
           fontWeight: 700,
@@ -99,7 +99,7 @@ Best Seller Collection
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full px-8 grid grid-cols-1 lg:grid-cols-3 gap-12 items-start mb-20"
+        className="w-full px-4 sm:px-8 grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-12 items-start mb-12 sm:mb-20"
       >
         {/* Left Column: Main Featured Product */}
         <motion.div 
@@ -110,7 +110,7 @@ Best Seller Collection
         >
           <Link href={`/shop/${firstSetMain.slug}`} className="block group">
             <motion.div 
-              className="bg-white rounded-3xl shadow-xl overflow-hidden h-[480px] relative"
+              className="bg-white rounded-3xl shadow-xl overflow-hidden h-[520px] sm:h-[480px] relative"
               whileHover={{ y: -8, boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" }}
               transition={{ duration: 0.3 }}
             >
@@ -138,26 +138,26 @@ Best Seller Collection
               </div>
 
               {/* Content */}
-              <div className="p-8 flex flex-col justify-between h-[208px]">
+              <div className="p-4 sm:p-8 flex flex-col justify-between h-[248px] sm:h-[208px]">
                 <div>
                   <motion.h3 
-                    className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-amber-700 transition-colors"
+                    className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 group-hover:text-amber-700 transition-colors"
                     style={{ fontFamily: 'Playfair Display, serif' }}
                   >
                     {firstSetMain.title}
                   </motion.h3>
                   
-                  <p className="text-gray-600 mb-4 line-clamp-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     {firstSetMain.description}
                   </p>
 
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl font-bold text-amber-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className="flex items-center justify-between mb-3 sm:mb-4">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <span className="text-2xl sm:text-3xl font-bold text-amber-600" style={{ fontFamily: 'Inter, sans-serif' }}>
                         {firstSetMain.price}
                       </span>
                       {firstSetMain.originalPrice && (
-                        <span className="text-lg text-gray-400 line-through">
+                        <span className="text-base sm:text-lg text-gray-400 line-through">
                           {firstSetMain.originalPrice}
                         </span>
                       )}
@@ -165,9 +165,9 @@ Best Seller Collection
                     
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
-                        <span key={i} className="text-amber-400 text-lg">★</span>
+                        <span key={i} className="text-amber-400 text-base sm:text-lg">★</span>
                       ))}
-                      <span className="text-gray-500 text-sm ml-1">(4.8)</span>
+                      <span className="text-gray-500 text-xs sm:text-sm ml-1">(4.8)</span>
                     </div>
                   </div>
                 </div>
@@ -175,9 +175,9 @@ Best Seller Collection
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-block"
+                  className="inline-block mt-2"
                 >
-                  <span className="inline-flex items-center px-8 py-3 rounded-full bg-black text-white font-bold shadow-lg hover:shadow-xl transition-all hover:bg-gray-800 border-2 border-black hover:border-gray-800">
+                  <span className="inline-flex items-center px-8 py-3 rounded-full bg-gray-700 text-white font-bold shadow-lg hover:shadow-xl transition-all hover:bg-gray-600 border-2 border-gray-700 hover:border-gray-600">
                     Shop Now
                   </span>
                 </motion.div>
@@ -219,6 +219,28 @@ Best Seller Collection
                     <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow">
                       HOT
                     </span>
+
+                    {/* Cart Icon - Mobile Only */}
+                    <motion.button
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.3 + index * 0.1, type: "spring", stiffness: 200 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="absolute top-2 right-2 bg-black text-white p-1.5 rounded-full shadow-lg hover:bg-gray-800 transition-all sm:hidden z-10"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Add to cart functionality
+                        console.log('Adding to cart:', product.title);
+                        // Here you can add your cart logic
+                        // Example: addToCart(product);
+                      }}
+                    >
+                      <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                      </svg>
+                    </motion.button>
                   </div>
 
                   {/* Content */}
@@ -240,7 +262,7 @@ Best Seller Collection
                       <motion.button
                         whileHover={{ scale: 1.1, backgroundColor: "#1f2937" }}
                         whileTap={{ scale: 0.9 }}
-                        className="px-5 py-2 bg-black text-white text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all border-2 border-black hover:border-gray-800"
+                        className="hidden sm:block px-5 py-2 bg-black text-white text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all border-2 border-black hover:border-gray-800"
                       >
                         Add to Cart
                       </motion.button>
@@ -258,7 +280,7 @@ Best Seller Collection
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full px-8 grid grid-cols-1 lg:grid-cols-3 gap-12 items-start"
+        className="w-full px-4 sm:px-8 grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-12 items-start"
       >
         {/* Left Column: Three Stacked Products */}
         <div className="flex flex-col gap-8">
@@ -293,6 +315,28 @@ Best Seller Collection
                     <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow">
                       HOT
                     </span>
+
+                    {/* Cart Icon - Mobile Only */}
+                    <motion.button
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.3 + index * 0.1, type: "spring", stiffness: 200 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="absolute top-2 right-2 bg-black text-white p-1.5 rounded-full shadow-lg hover:bg-gray-800 transition-all sm:hidden z-10"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Add to cart functionality
+                        console.log('Adding to cart:', product.title);
+                        // Here you can add your cart logic
+                        // Example: addToCart(product);
+                      }}
+                    >
+                      <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                      </svg>
+                    </motion.button>
                   </div>
 
                   {/* Content */}
@@ -314,7 +358,7 @@ Best Seller Collection
                       <motion.button
                         whileHover={{ scale: 1.1, backgroundColor: "#1f2937" }}
                         whileTap={{ scale: 0.9 }}
-                        className="px-5 py-2 bg-black text-white text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all border-2 border-black hover:border-gray-800"
+                        className="hidden sm:block px-5 py-2 bg-black text-white text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all border-2 border-black hover:border-gray-800"
                       >
                         Add to Cart
                       </motion.button>
@@ -335,7 +379,7 @@ Best Seller Collection
         >
           <Link href={`/shop/${secondSetMain.slug}`} className="block group">
             <motion.div 
-              className="bg-white rounded-3xl shadow-xl overflow-hidden h-[480px] relative"
+              className="bg-white rounded-3xl shadow-xl overflow-hidden h-[520px] sm:h-[480px] relative"
               whileHover={{ y: -8, boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" }}
               transition={{ duration: 0.3 }}
             >
@@ -363,26 +407,26 @@ Best Seller Collection
               </div>
 
               {/* Content */}
-              <div className="p-8 flex flex-col justify-between h-[208px]">
+              <div className="p-4 sm:p-8 flex flex-col justify-between h-[248px] sm:h-[208px]">
                 <div>
                   <motion.h3 
-                    className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-amber-700 transition-colors"
+                    className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 group-hover:text-amber-700 transition-colors"
                     style={{ fontFamily: 'Playfair Display, serif' }}
                   >
                     {secondSetMain.title}
                   </motion.h3>
                   
-                  <p className="text-gray-600 mb-4 line-clamp-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     {secondSetMain.description}
                   </p>
 
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl font-bold text-amber-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className="flex items-center justify-between mb-3 sm:mb-4">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <span className="text-2xl sm:text-3xl font-bold text-amber-600" style={{ fontFamily: 'Inter, sans-serif' }}>
                         {secondSetMain.price}
                       </span>
                       {secondSetMain.originalPrice && (
-                        <span className="text-lg text-gray-400 line-through">
+                        <span className="text-base sm:text-lg text-gray-400 line-through">
                           {secondSetMain.originalPrice}
                         </span>
                       )}
@@ -390,9 +434,9 @@ Best Seller Collection
                     
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
-                        <span key={i} className="text-amber-400 text-lg">★</span>
+                        <span key={i} className="text-amber-400 text-base sm:text-lg">★</span>
                       ))}
-                      <span className="text-gray-500 text-sm ml-1">(4.9)</span>
+                      <span className="text-gray-500 text-xs sm:text-sm ml-1">(4.9)</span>
                     </div>
                   </div>
                 </div>
@@ -400,9 +444,9 @@ Best Seller Collection
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-block"
+                  className="inline-block mt-2"
                 >
-                  <span className="inline-flex items-center px-8 py-3 rounded-full bg-black text-white font-bold shadow-lg hover:shadow-xl transition-all hover:bg-gray-800 border-2 border-black hover:border-gray-800">
+                  <span className="inline-flex items-center px-8 py-3 rounded-full bg-gray-700 text-white font-bold shadow-lg hover:shadow-xl transition-all hover:bg-gray-600 border-2 border-gray-700 hover:border-gray-600">
                     Shop Now
                   </span>
                 </motion.div>
@@ -441,7 +485,7 @@ Best Seller Collection
           More Products
         </motion.h3>
 
-        <div className="w-full px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="w-full px-4 sm:px-8 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-8">
           {gridProducts.map((product, index) => (
             <motion.div
               key={product.slug}
@@ -467,7 +511,7 @@ Best Seller Collection
             >
               <Link href={`/shop/${product.slug}`} className="block group">
                 <motion.div 
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden h-[380px] relative"
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden h-[360px] sm:h-[380px] relative"
                   whileHover={{ 
                     y: -12, 
                     boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
@@ -490,6 +534,26 @@ Best Seller Collection
                       />
                     </motion.div>
                     
+                    {/* Cart Icon - Mobile Only */}
+                    <motion.button
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.3 + index * 0.1, type: "spring", stiffness: 200 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="absolute top-3 left-3 bg-black text-white p-2 rounded-full shadow-lg hover:bg-gray-800 transition-all sm:hidden"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Add to cart functionality here
+                        console.log('Add to cart:', product.title);
+                      }}
+                    >
+                      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                      </svg>
+                    </motion.button>
+
                     {/* Badge */}
                     <motion.span 
                       initial={{ scale: 0 }}
@@ -538,7 +602,7 @@ Best Seller Collection
                           boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3)"
                         }}
                         whileTap={{ scale: 0.9 }}
-                        className="px-4 py-2 bg-black text-white text-xs font-bold rounded-full shadow-lg transition-all border border-black hover:border-gray-800"
+                        className="hidden sm:block px-2 sm:px-4 py-2 bg-black text-white text-xs font-bold rounded-full shadow-lg transition-all border border-black hover:border-gray-800"
                       >
                         Add to Cart
                       </motion.button>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode } from 'react';
 
 // Import translations
 import en from '../../translations/en.json';
@@ -66,7 +66,7 @@ const translations = {
   zh,
   ar,
   ru,
-};
+} as const;
 
 export const LANGUAGE_NAMES: Record<SupportedLang, string> = {
   en: 'English',
@@ -127,21 +127,34 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Function to get nested translation value
-  const t = (key: string): any => {
+  const t = (key: string): string => {
     const keys = key.split('.');
-    let result: any = (translations as Record<SupportedLang, any>)[normalizeLang(lang)];
+    let result: unknown = translations[normalizeLang(lang)];
+    
     for (const k of keys) {
-      result = result?.[k];
-      if (result === undefined) {
-        // Fallback to English if translation is missing
-        let fallbackResult: any = translations['en'];
-        for (const fk of keys) {
-            fallbackResult = fallbackResult?.[fk];
-        }
-        return fallbackResult || key;
+      if (typeof result === 'object' && result !== null && k in result) {
+        result = (result as Record<string, unknown>)[k];
+      } else {
+        result = undefined;
+        break;
       }
     }
-    return result;
+    
+    if (result === undefined) {
+      // Fallback to English if translation is missing
+      let fallbackResult: unknown = translations['en'];
+      for (const fk of keys) {
+        if (typeof fallbackResult === 'object' && fallbackResult !== null && fk in fallbackResult) {
+          fallbackResult = (fallbackResult as Record<string, unknown>)[fk];
+        } else {
+          fallbackResult = undefined;
+          break;
+        }
+      }
+      return typeof fallbackResult === 'string' ? fallbackResult : key;
+    }
+    
+    return typeof result === 'string' ? result : key;
   };
 
   const value = { lang: normalizeLang(lang), setLang, t };

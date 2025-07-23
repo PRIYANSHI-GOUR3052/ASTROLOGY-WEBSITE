@@ -54,7 +54,7 @@ export function AstrologerProfile() {
             मैं मानता हूं कि हर व्यक्ति का जीवन अनोखा है और हर समस्या का समाधान संभव है।
           </p>
           <p className="text-lg text-black">
-            I believe that every individual's life is unique and every problem has a solution.
+            I believe that every individual&apos;s life is unique and every problem has a solution.
           </p>
           <p className="text-lg text-black font-semibold">
             15+ वर्षों का अनुभव और हजारों संतुष्ट ग्राहक

@@ -1,18 +1,25 @@
 "use client";
 import { AnimatedStars } from '../components/AnimatedStars'
 import { MysticBackground } from '../components/MysticBackground'
-import { Testimonials } from '../components/Testimonials'
-import { FAQSection } from '../components/FAQSection'
 import { CTASection } from '../components/CTASection'
+import ShopBanner from '../components/ShopBanner'
+import NakshatraTicker from '../components/NakshatraTicker'
+import SpiritualJourneyBanner from '../components/SpiritualJourneyBanner'
 
 import { UniversalServicesGrid } from '../components/UniversalServiceGrid';
-import ServiceCarousels from '../components/ServiceCarousels';
 export default function ServicesPage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-golden-amber-dark via-sunburst-yellow to-golden-amber-dark">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-amber-50 via-white to-orange-50 -mt-4">
       <AnimatedStars />
       <MysticBackground>
-      <div className="container mx-auto pt-0 px-4 pb-16 relative z-10">
+      
+      {/* SHOP BANNER AT THE TOP */}
+      <ShopBanner />
+      
+      {/* NAKSHATRA TICKER */}
+      <NakshatraTicker />
+      
+      <div className="container mx-auto pt-8 px-4 pb-16 relative z-10">
         <h1
           className="text-5xl md:text-7xl mb-2 text-center font-normal text-black"
           style={{ fontFamily: 'Playfair Display, serif', fontWeight: 400, letterSpacing: '0.01em', marginTop: '0px' }}
@@ -28,12 +35,14 @@ export default function ServicesPage() {
 
       
         <UniversalServicesGrid />
-        <ServiceCarousels />
         
-        <Testimonials />
-        <FAQSection />
-        <CTASection />
+        <div className="mt-16">
+          <CTASection />
+        </div>
       </div>
+
+      {/* Spiritual Journey Banner */}
+      <SpiritualJourneyBanner />
         </MysticBackground>
     </div>
   )
