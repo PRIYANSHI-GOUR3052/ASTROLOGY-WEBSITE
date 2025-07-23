@@ -3,6 +3,15 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  slug: string;
+}
+
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const id = params.id;
@@ -10,11 +19,11 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const [rows] = await connection.query('SELECT * FROM products WHERE id = ?', [id]);
     connection.release();
     
-    if ((rows as any[]).length === 0) {
+    if ((rows as Product[]).length === 0) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
     
-    return NextResponse.json({ product: (rows as any[])[0] });
+    return NextResponse.json({ product: (rows as Product[])[0] });
   } catch (error) {
     console.error('Error fetching product:', error);
     return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 });
@@ -38,7 +47,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       'SELECT * FROM products WHERE slug = ? AND id != ?', 
       [slug, id]
     );
-    if ((existingProducts as any[]).length > 0) {
+    if ((existingProducts as Product[]).length > 0) {
       connection.release();
       return NextResponse.json({ error: 'Another product with this slug already exists' }, { status: 400 });
     }

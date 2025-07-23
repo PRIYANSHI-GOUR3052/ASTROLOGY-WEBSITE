@@ -56,7 +56,6 @@ const AvailabilityPage = () => {
     setLoading(true);
     try {
       let res: Response;
-      let data: unknown;
       if (editId !== null) {
         // Update existing slot
         res = await fetch('/api/astrologer/availability', {
@@ -64,12 +63,14 @@ const AvailabilityPage = () => {
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ ...form, id: editId })
         });
-        data = await res.json();
+        const data = await res.json();
         if (res.ok) {
-          setSlots(prev => prev.map(slot => slot.id === editId ? { ...data, date: data.date.slice(0, 10) } : slot));
+          const updatedSlot = data as Slot;
+          setSlots(prev => prev.map(slot => slot.id === editId ? { ...updatedSlot, date: updatedSlot.date.slice(0, 10) } : slot));
           setEditId(null);
         } else {
-          setError(data.error || 'Failed to update slot');
+          const errorData = data as APIErrorResponse;
+          setError(errorData.error || 'Failed to update slot');
         }
       } else {
         // Add new slot
@@ -78,11 +79,13 @@ const AvailabilityPage = () => {
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify(form)
         });
-        data = await res.json();
+        const data = await res.json();
         if (res.ok) {
-          setSlots(prev => [...prev, { ...data, date: data.date.slice(0, 10) }]);
+          const newSlot = data as Slot;
+          setSlots(prev => [...prev, { ...newSlot, date: newSlot.date.slice(0, 10) }]);
         } else {
-          setError(data.error || 'Failed to add slot');
+          const errorData = data as APIErrorResponse;
+          setError(errorData.error || 'Failed to add slot');
         }
       }
       setForm({ date: "", start: "", end: "", repeat: "None" });

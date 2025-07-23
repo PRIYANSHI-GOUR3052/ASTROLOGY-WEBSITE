@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
+// Type definitions
+interface Stone {
+  id: number;
+  name: string;
+  name_en: string;
+  zodiac: string;
+  zodiac_en: string;
+  benefits: string;
+  benefits_en: string;
+  price_per_carat: number;
+}
+
 // GET handler to fetch a specific stone by ID
 export async function GET(
   req: NextRequest,
@@ -13,7 +25,7 @@ export async function GET(
     const [rows] = await connection.query('SELECT * FROM stones WHERE id = ?', [id]);
     connection.release();
     
-    const stone = (rows as any)[0];
+    const stone = (rows as Stone[])[0];
     
     if (!stone) {
       return NextResponse.json(

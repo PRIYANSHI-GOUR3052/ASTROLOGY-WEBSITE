@@ -4,6 +4,42 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import pool from '@/lib/db';
 
+// Type definitions
+interface User {
+  id: number;
+  google_id: string;
+}
+
+interface Order {
+  id: number;
+  order_number: string;
+  total_amount: string;
+  order_status: string;
+  order_date: string;
+  updated_at: string;
+}
+
+interface OrderItem {
+  id: number;
+  quantity: number;
+  carats: number | null;
+  total_price: string;
+  is_stone: number;
+  is_service: number;
+  product_name: string;
+  unit_price: number;
+}
+
+interface ShippingAddress {
+  fullName: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  pincode: string;
+  phone: string;
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -34,11 +70,11 @@ export async function GET(
         [userGoogleId]
       );
       
-      if ((userResult as any[]).length === 0) {
+      if ((userResult as User[]).length === 0) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       
-      const userId = (userResult as any[])[0].id;
+      const userId = (userResult as User[])[0].id;
       
       // Get the order and verify it belongs to this user
       const [orderResult] = await connection.query(
@@ -49,11 +85,11 @@ export async function GET(
         [orderId, userId]
       );
       
-      if ((orderResult as any[]).length === 0) {
+      if ((orderResult as Order[]).length === 0) {
         return NextResponse.json({ error: 'Order not found' }, { status: 404 });
       }
       
-      const order = (orderResult as any[])[0];
+      const order = (orderResult as Order[])[0];
       
       // Get the order items with product details
       const [orderItems] = await connection.query(
@@ -92,12 +128,12 @@ export async function GET(
         [userId]
       );
       
-      const shippingAddress = (addressResult as any[]).length > 0 
-        ? (addressResult as any[])[0]
+      const shippingAddress = (addressResult as ShippingAddress[]).length > 0 
+        ? (addressResult as ShippingAddress[])[0]
         : null;
       
       // Calculate subtotal
-      const subtotal = (orderItems as any[]).reduce((sum, item) => sum + parseFloat(item.total_price), 0);
+      const subtotal = (orderItems as OrderItem[]).reduce((sum, item) => sum + parseFloat(item.total_price), 0);
       
       // Determine payment method and status
       const paymentMethod = order.order_number.startsWith('cod_') 

@@ -17,7 +17,23 @@ const categories = [
   { id: 'growth', label: 'Personal Growth', icon: TrendingUp }
 ];
 
-const leoRecommendations = {
+type RecommendationItem = {
+  id?: string;
+  name: string;
+  image: string;
+  price?: string;
+  originalPrice?: string;
+  category?: string;
+  leoBenefit?: string;
+  slug?: string;
+  benefit?: string;
+};
+
+type LeoRecommendations = {
+  [key: string]: RecommendationItem[];
+};
+
+const leoRecommendations: LeoRecommendations = {
   "Specially for Leo": [
     {
       id: 'ruby-leadership-ring',
@@ -237,7 +253,7 @@ export default function LeoProductRecommendations() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          {leoRecommendations[categories.find(c => c.id === activeCategory)?.label || ""]?.map((category, index) => (
+          {(leoRecommendations[categories.find(c => c.id === activeCategory)?.label || ""] || []).map((category, index) => (
             <motion.div
               key={index}
               className="bg-gradient-to-br from-white via-amber-50/30 to-orange-50/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group cursor-pointer"

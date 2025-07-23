@@ -2,6 +2,20 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  slug: string;
+}
+
+interface DatabaseInsertResult {
+  insertId: number;
+  affectedRows: number;
+}
+
 export async function GET() {
   try {
     const connection = await pool.getConnection();
@@ -28,7 +42,7 @@ export async function POST(request: Request) {
     
     // Check if slug already exists
     const [existingProducts] = await connection.query('SELECT * FROM products WHERE slug = ?', [slug]);
-    if ((existingProducts as any[]).length > 0) {
+    if ((existingProducts as Product[]).length > 0) {
       connection.release();
       return NextResponse.json({ error: 'Product with this slug already exists' }, { status: 400 });
     }
@@ -43,7 +57,7 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ 
       message: 'Product created successfully',
-      product: { id: (result as any).insertId, name, description, price, slug }
+      product: { id: (result as DatabaseInsertResult).insertId, name, description, price, slug }
     }, { status: 201 });
   } catch (error) {
     console.error('Error creating product:', error);

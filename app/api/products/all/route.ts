@@ -1,6 +1,26 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  slug: string;
+}
+
+interface Stone {
+  id: number;
+  name: string;
+  name_en: string;
+  benefits: string;
+  benefits_en: string;
+  price_per_carat: number;
+  zodiac: string;
+  zodiac_en: string;
+}
+
 export async function GET() {
   try {
     const connection = await pool.getConnection();
@@ -12,7 +32,7 @@ export async function GET() {
     const [stones] = await connection.query('SELECT * FROM stones');
     
     // Transform stones data to match the expected format
-    const formattedStones = (stones as any[]).map(stone => ({
+    const formattedStones = (stones as Stone[]).map(stone => ({
       name: stone.name,
       description: stone.benefits,
       pricePerCarat: stone.price_per_carat,
@@ -24,7 +44,7 @@ export async function GET() {
     }));
     
     // Transform products data to match the expected format
-    const formattedProducts = (products as any[]).map(product => ({
+    const formattedProducts = (products as Product[]).map(product => ({
       name: product.name,
       description: product.description,
       price: product.price,

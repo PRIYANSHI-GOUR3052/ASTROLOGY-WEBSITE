@@ -489,7 +489,7 @@ async function getStorePerformance() {
     // Create a dataset with continuous dates
     console.log('[DEBUG] Creating combined dataset with continuous dates');
     const combinedData = [];
-    let currentDate = new Date(thirtyDaysAgo);
+    const currentDate = new Date(thirtyDaysAgo);
 
     while (currentDate <= today) {
       const dateKey = currentDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
@@ -588,11 +588,11 @@ async function getTotalOrdersInDateRange(connection: PoolConnection, startDate: 
       order_count: number;
     }
     
-    const [rows] = await connection.query(`
+    const [rows] = await connection.query<OrderCountRow[]>(`
       SELECT COUNT(*) as order_count
       FROM orders
       WHERE created_at BETWEEN ? AND ?
-    `, [startDate, endDate]) as [OrderCountRow[], any];
+    `, [startDate, endDate]);
     
     return rows[0].order_count || 0;
   } catch (error) {

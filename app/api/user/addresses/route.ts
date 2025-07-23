@@ -4,6 +4,30 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import  pool  from '@/lib/db';
 
+// Type definitions
+interface User {
+  id: number;
+  google_id: string;
+}
+
+interface UserAddress {
+  id: number;
+  user_id: number;
+  full_name: string;
+  address_line1: string;
+  address_line2: string;
+  city: string;
+  state: string;
+  pincode: string;
+  phone: string;
+  is_default: number;
+  created_at: Date;
+}
+
+interface AddressCount {
+  count: number;
+}
+
 export async function GET(req: NextRequest) {
     try {
       const session = await getServerSession(authOptions);
@@ -26,11 +50,11 @@ export async function GET(req: NextRequest) {
           [userGoogleId]
         );
         
-        if ((userResult as any[]).length === 0) {
+        if ((userResult as User[]).length === 0) {
           return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
         
-        const userId = (userResult as any[])[0].id;
+        const userId = (userResult as User[])[0].id;
         
         // Query the database for user addresses using internal ID
         const [addresses] = await connection.query(
@@ -41,7 +65,7 @@ export async function GET(req: NextRequest) {
         );
   
         // Transform database field names to match frontend naming convention
-        const formattedAddresses = (addresses as any[]).map(address => ({
+        const formattedAddresses = (addresses as UserAddress[]).map(address => ({
           fullName: address.full_name,
           addressLine1: address.address_line1,
           addressLine2: address.address_line2,
@@ -87,11 +111,11 @@ export async function GET(req: NextRequest) {
           [userGoogleId]
         );
         
-        if ((userResult as any[]).length === 0) {
+        if ((userResult as User[]).length === 0) {
           return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
         
-        const userId = (userResult as any[])[0].id;
+        const userId = (userResult as User[])[0].id;
         
         // Get address data from request body
         const { address } = await req.json();
@@ -112,7 +136,7 @@ export async function GET(req: NextRequest) {
           [userId]
         );
         
-        if ((existingAddresses as any[])[0].count === 0) {
+        if ((existingAddresses as AddressCount[])[0].count === 0) {
           isDefault = true;
         }
   
@@ -179,11 +203,11 @@ export async function GET(req: NextRequest) {
           [userGoogleId]
         );
         
-        if ((userResult as any[]).length === 0) {
+        if ((userResult as User[]).length === 0) {
           return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
         
-        const userId = (userResult as any[])[0].id;
+        const userId = (userResult as User[])[0].id;
         
         // Get all addresses for this user to find the one to delete
         const [addresses] = await connection.query(
@@ -195,11 +219,11 @@ export async function GET(req: NextRequest) {
         const url = new URL(req.url);
         const index = parseInt(url.searchParams.get('index') || '0', 10);
         
-        if (isNaN(index) || index < 0 || index >= (addresses as any[]).length) {
+        if (isNaN(index) || index < 0 || index >= (addresses as UserAddress[]).length) {
           return NextResponse.json({ error: 'Invalid address index' }, { status: 400 });
         }
         
-        const addressId = (addresses as any[])[index].id;
+        const addressId = (addresses as UserAddress[])[index].id;
         
         // Delete the address
         await connection.query(

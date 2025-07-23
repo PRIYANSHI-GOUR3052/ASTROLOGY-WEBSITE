@@ -34,6 +34,9 @@ const staticRandomCardsData = [
 ]
 
 interface QuizData {
+  moreQuizText: React.ReactNode
+  tryAgainButton: React.ReactNode
+  completedTitle: React.ReactNode
   title: string;
   subtitle: string;
   questionHeader: string;
@@ -53,7 +56,7 @@ export function AstrologyQuiz() {
   const [showFeedback, setShowFeedback] = useState(false)
   const { t } = useLanguage()
 
-  const quizData: QuizData = t('astrologyQuiz') as QuizData;
+  const quizData: QuizData = t('astrologyQuiz') as unknown as QuizData;
 
   if (!quizData || typeof quizData !== 'object' || !quizData.questions || quizData.questions.length === 0) {
     return <div className="min-h-screen flex items-center justify-center">Loading Quiz...</div>;

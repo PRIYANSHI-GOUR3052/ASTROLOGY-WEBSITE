@@ -7,8 +7,22 @@ import { useLanguage } from '../contexts/useLanguage';
 
 const posts = Object.values(blogPosts).slice(0, 4); // 1 featured + 3 side
 
+type PostLanguages = {
+  en: string;
+  hi: string;
+};
+
+type AdditionalPost = {
+  title: PostLanguages;
+  author: PostLanguages;
+  date: string;
+  category: string;
+  imageUrl: string;
+  themeColor: string;
+};
+
 // Additional mock posts for the new blocks
-const additionalPosts = [
+const additionalPosts: AdditionalPost[] = [
   {
     title: { en: "Mercury Retrograde Guide", hi: "बुध वक्री गाइड" },
     author: { en: "Acharya Raj Kumar", hi: "आचार्य राज कुमार" },
@@ -31,6 +45,13 @@ function getSafe(obj: Record<string, string>, lang: string) {
   return obj[lang] || obj['en'];
 }
 
+function getSafePost(obj: PostLanguages, lang: string): string {
+  if (lang === 'en' || lang === 'hi') {
+    return obj[lang as keyof PostLanguages];
+  }
+  return obj.en;
+}
+
 export default function RecentPosts() {
   const { lang, t } = useLanguage();
 
@@ -48,13 +69,12 @@ export default function RecentPosts() {
             </div>
             <div className="p-6 flex flex-col justify-between h-[164px]">
               {(() => {
-                const safeLang = posts[0].title?.[lang] ? lang : 'en';
                 return (
                   <>
                     <div>
-                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{posts[0].title?.[safeLang] || posts[0].title?.['en']}</h3>
+                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{getSafe(posts[0].title, lang)}</h3>
                       <div className="flex items-center text-sm text-gray-500 mb-4 gap-4 flex-wrap">
-                        <span>👤 {posts[0].author?.[safeLang] || posts[0].author?.['en']}</span>
+                        <span>👤 {getSafe(posts[0].author, lang)}</span>
                         <span>📅 {posts[0].date}</span>
                         <span>⏱ 2 {t('blog.featured.minRead')}</span>
                       </div>
@@ -77,13 +97,12 @@ export default function RecentPosts() {
             </div>
             <div className="p-6 flex flex-col justify-between h-[164px]">
               {(() => {
-                const safeLang = additionalPosts[0].title?.[lang] ? lang : 'en';
                 return (
                   <>
                     <div>
-                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{additionalPosts[0].title?.[safeLang] || additionalPosts[0].title?.['en']}</h3>
+                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{getSafePost(additionalPosts[0].title, lang)}</h3>
                       <div className="flex items-center text-sm text-gray-500 mb-4 gap-4 flex-wrap">
-                        <span>👤 {additionalPosts[0].author?.[safeLang] || additionalPosts[0].author?.['en']}</span>
+                        <span>👤 {getSafePost(additionalPosts[0].author, lang)}</span>
                         <span>📅 {additionalPosts[0].date}</span>
                         <span>⏱ 3 {t('blog.featured.minRead')}</span>
                       </div>
@@ -102,7 +121,6 @@ export default function RecentPosts() {
         {/* Right Column: Four Stacked Blogs */}
         <div className="flex flex-col gap-6">
           {posts.slice(1).map((post, i) => {
-            const safeLang = post.title?.[lang] ? lang : 'en';
             return (
               <div key={post.title.en} className="flex flex-row bg-white rounded-2xl shadow-lg overflow-hidden h-[200px] md:h-[200px] w-full md:w-[420px] mx-auto">
                 <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 flex items-center justify-center my-auto mx-4" style={{ background: post.themeColor, transition: 'background 0.3s' }}>
@@ -110,7 +128,7 @@ export default function RecentPosts() {
                   <span className="absolute top-2 left-2 bg-white text-gray-800 text-xs font-semibold px-3 py-1 rounded shadow">{post.category}</span>
                 </div>
                 <div className="flex-1 p-4 flex flex-col justify-center">
-                  <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{post.title?.[safeLang] || post.title?.['en']}</h4>
+                  <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{getSafe(post.title, lang)}</h4>
                   <div className="flex items-center text-sm text-gray-500 mb-3 gap-3 flex-wrap">
                     <span>📅 {post.date}</span>
                     <span>⏱ {4 + i} {t('blog.featured.minRead')}</span>
@@ -131,7 +149,7 @@ export default function RecentPosts() {
               <span className="absolute top-2 left-2 bg-white text-gray-800 text-xs font-semibold px-3 py-1 rounded shadow">{additionalPosts[1].category}</span>
             </div>
             <div className="flex-1 p-4 flex flex-col justify-center">
-              <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{additionalPosts[1].title?.[lang] || additionalPosts[1].title?.['en']}</h4>
+              <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{getSafePost(additionalPosts[1].title, lang)}</h4>
               <div className="flex items-center text-sm text-gray-500 mb-3 gap-3 flex-wrap">
                 <span>📅 {additionalPosts[1].date}</span>
                 <span>⏱ 7 {t('blog.featured.minRead')}</span>

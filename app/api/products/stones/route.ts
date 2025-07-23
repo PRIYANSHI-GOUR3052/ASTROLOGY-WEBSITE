@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
+// Type definitions
+interface DatabaseInsertResult {
+  insertId: number;
+  affectedRows: number;
+}
+
 // GET handler to fetch all stones
 export async function GET(req: NextRequest) {
   try {
@@ -66,7 +72,7 @@ export async function POST(req: NextRequest) {
     
     return NextResponse.json({ 
       message: 'Stone added successfully',
-      stoneId: (result as any).insertId
+      stoneId: (result as DatabaseInsertResult).insertId
     });
   } catch (error) {
     console.error('Error adding stone:', error);

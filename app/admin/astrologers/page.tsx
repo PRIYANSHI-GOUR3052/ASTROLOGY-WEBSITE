@@ -33,9 +33,7 @@ export default function AstrologersPage() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetc
-        
-        h("/api/astrologer/verifications-pending", {
+        const res = await fetch("/api/astrologer/verifications-pending", {
           credentials: "include",
         });
         if (!res.ok) throw new Error("Failed to fetch astrologers");
