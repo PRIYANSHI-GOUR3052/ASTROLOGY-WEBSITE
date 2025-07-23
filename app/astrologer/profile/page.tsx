@@ -61,6 +61,8 @@ const ProfilePage = () => {
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [educations, setEducations] = useState<Education[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [verification, setVerification] = useState<Record<string, unknown> | null>(null);
   const [docFiles, setDocFiles] = useState<{ [key: string]: File | null }>({});
   const [astrologer, setAstrologer] = useState<Record<string, unknown> | null>(null);
@@ -580,9 +582,9 @@ const ProfilePage = () => {
                   {/* Documents Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {requiredDocs.map(doc => {
-                      const status = verification?.[doc.statusKey] || 'unverified';
-                      const remarks = verification?.[doc.remarksKey] || '';
-                      const url = verification?.[doc.name] || '';
+                      const status = (verification?.[doc.statusKey] as string) || 'unverified';
+                      const remarks = (verification?.[doc.remarksKey] as string) || '';
+                      const url = (verification?.[doc.name] as string) || '';
 
                       return (
                         <div key={doc.name} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">

@@ -1,25 +1,11 @@
 'use client';
 
-import { FeaturedProducts } from '../components/FeaturedProducts'
-import { ProductGrid } from '../components/ProductGrid'
-import { AstrologyStones } from '../components/AstrologyStones'
-import { ShopCTA } from '../components/ShopCTA'
-import Link from 'next/link'
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import Autoplay from 'embla-carousel-autoplay';
-import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import ProductOfTheDay from '../components/ProductOfTheDay';
-import AllProductsGrid from '../components/AllProductsGrid';
-import { AstrologerProfile } from '../components/AstrologerProfile';
 import { Statistics } from '../components/Statistics';
 
-import { ProductServiceCard } from '../components/UniversalServiceGrid';
-import { defaultProducts } from '../components/AllProductsGrid';
 import CelestialJourneyMainGrid from '../components/Hero/CelestialJourneyMainGrid';
-import ShopByCategory from '../components/ShopByCategory';
 import ShopCategoriesMinimal from '../components/ShopCategoriesMinimal';
-import ShopByAudience from '../components/ShopByAudience';
 import NakshatraTicker from '../components/NakshatraTicker';
 import ShopBanner from '../components/ShopBanner';
 import ZodiacCategories from '../components/ZodiacCategories';
@@ -27,11 +13,8 @@ import SimpleHorizontalBanner from '../components/SimpleHorizontalBanner';
 import ProductAnnouncementTicker from '../components/ProductAnnouncementTicker';
 import BestSellerCards from '../components/BestSellerCards';
 import ProductAssuranceBar from '../components/ProductAssuranceBar';
-
-// Move plugin initialization outside the component
-const autoplayPlugin = Autoplay({ delay: 3500, stopOnInteraction: false });
-
-const ShopProductCarousel = dynamic(() => import('../components/ShopProductCarousel'), { ssr: false });
+import NakshatraGyaanBanner from '../components/NakshatraGyaanBanner';
+import SpiritualJourneyBanner from '../components/SpiritualJourneyBanner';
 
 const products = [
   {
@@ -196,36 +179,6 @@ const products = [
   },
 ];
 
-// Helper function to format product keys to readable titles
-function formatProductTitle(key: string) {
-  return key
-    .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, str => str.toUpperCase())
-    .replace('Bracelet', ' Bracelet')
-    .replace('Combo', ' Combo')
-    .replace('Plate', ' Plate')
-    .replace('Stone', ' Stone')
-    .replace('Mala', ' Mala')
-    .replace('Yantras', ' Yantras')
-    .replace('Rudraksha', ' Rudraksha')
-    .replace('Pyrite', ' Pyrite')
-    .replace('Dhan Yog', 'Dhan Yog')
-    .replace('Navgraha', 'Navgraha')
-    .replace('Shanti', 'Shanti')
-    .replace('Evil Eye', 'Evil Eye')
-    .replace('Richie Rich', 'Richie Rich')
-    .replace('Success', 'Success')
-    .replace('Health Wellness', 'Health & Wellness')
-    .replace('Career Booster', 'Career Booster')
-    .replace('Protection', 'Protection')
-    .replace('Peace Harmony', 'Peace & Harmony')
-    .replace('Spiritual Growth', 'Spiritual Growth')
-    .replace('Focus Clarity', 'Focus & Clarity')
-    .replace('Confidence Booster', 'Confidence Booster')
-    .replace('Calm Mind', 'Calm Mind')
-    .trim();
-}
-
 export default function ShopPage() {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -254,6 +207,10 @@ export default function ShopPage() {
       <ZodiacCategories />
       {/* CelestialJourneyMainGrid Section */}
       <CelestialJourneyMainGrid />
+      
+      {/* Nakshatra Gyaan Banner */}
+      <NakshatraGyaanBanner />
+      
       {/* Shop Categories Minimal - CINEMATIC VERSION */}
       <ShopCategoriesMinimal />
       
@@ -262,9 +219,6 @@ export default function ShopPage() {
 
       {/* Product Announcements Ticker - RIGHT AFTER BANNER */}
       <ProductAnnouncementTicker />
-
-      {/* Shop by Audience - AFTER BANNER */}
-      <ShopByAudience />
 
       {/* Product Assurance Bar - AFTER SHOP BY AUDIENCE */}
       <ProductAssuranceBar />
@@ -283,6 +237,9 @@ export default function ShopPage() {
           {/* Astrologer Profile, Statistics, Testimonials */}
           <Statistics />
           
+          {/* Spiritual Journey Banner */}
+          <SpiritualJourneyBanner />
+
           <style jsx global>{`
             .shop-purpose-card {
               opacity: 0;

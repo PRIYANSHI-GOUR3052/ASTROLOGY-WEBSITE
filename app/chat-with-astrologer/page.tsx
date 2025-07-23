@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import { Search, Filter, ChevronDown, Star, CheckCircle } from "lucide-react";
+import { Search, Filter, Star, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/600.css";

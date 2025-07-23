@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+
 import { useAuth } from "../contexts/AuthContext";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "../../components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "../../components/ui/dialog";
 import { useRouter } from "next/navigation";
-import { Lock, User, X } from "lucide-react";
+import {  User, X } from "lucide-react";
 
 const months = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -69,7 +69,7 @@ function PersonForm({ prefix }: { prefix: string }) {
             <option value="PM">PM</option>
           </select>
           <label className="ml-3 text-sm text-[#4b3f2a] flex items-center gap-1">
-            <input type="checkbox" checked={dontKnowTime} onChange={e => setDontKnowTime(e.target.checked)} /> Don't Know Birth Time
+            <input type="checkbox" checked={dontKnowTime} onChange={e => setDontKnowTime(e.target.checked)} /> Don&apos;t Know Birth Time
           </label>
         </div>
       </div>
@@ -106,11 +106,11 @@ export default function KundaliMatchingForm() {
       <form onSubmit={handleSubmit} className="w-full max-w-5xl bg-[#f9f6f2] rounded-3xl shadow-xl border border-[#e6c77e] p-10 flex flex-col gap-10" style={{ boxShadow: '0 6px 32px 0 rgba(36,34,68,0.10)' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
           <div>
-            <div className="text-lg font-semibold text-[#4b3f2a] mb-6">Enter Boy's Detail</div>
+            <div className="text-lg font-semibold text-[#4b3f2a] mb-6">Enter Boy&apos;s Detail</div>
             <PersonForm prefix="Boy" />
           </div>
           <div>
-            <div className="text-lg font-semibold text-[#4b3f2a] mb-6">Enter Girl's Detail</div>
+            <div className="text-lg font-semibold text-[#4b3f2a] mb-6">Enter Girl&apos;s Detail</div>
             <PersonForm prefix="Girl" />
           </div>
         </div>

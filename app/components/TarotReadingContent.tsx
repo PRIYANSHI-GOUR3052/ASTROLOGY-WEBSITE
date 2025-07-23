@@ -44,11 +44,11 @@ const faqs = [
   },
   {
     q: 'Are Tarot readings accurate?',
-    a: 'Tarot readings are not about predicting a fixed future, but about exploring potential outcomes and influences. Their accuracy lies in the reader\'s ability to interpret the cards and the querent\'s openness to the insights provided.'
+    a: 'Tarot readings are not about predicting a fixed future, but about exploring potential outcomes and influences. Their accuracy lies in the reader&apos;s ability to interpret the cards and the querent&apos;s openness to the insights provided.'
   },
   {
     q: 'How should I prepare for my reading?',
-    a: 'Come with an open mind and a general idea of the areas in your life you\'d like to explore. It\'s helpful to think about a specific question, but not necessary. Being in a calm, quiet space during the reading can also enhance the experience.'
+    a: 'Come with an open mind and a general idea of the areas in your life you&apos;d like to explore. It&apos;s helpful to think about a specific question, but not necessary. Being in a calm, quiet space during the reading can also enhance the experience.'
   },
   {
     q: 'Can Tarot predict specific events like lottery numbers?',
@@ -83,7 +83,7 @@ export function TarotReadingContent() {
              Tarot Reading
           </h1>
           <p className="text-xl md:text-2xl text-center text-purple-200 max-w-2xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
-            Unlock the mystical secrets of the cards and gain profound insight into your life's journey.
+            Unlock the mystical secrets of the cards and gain profound insight into your life&apos;s journey.
           </p>
         </motion.div>
 

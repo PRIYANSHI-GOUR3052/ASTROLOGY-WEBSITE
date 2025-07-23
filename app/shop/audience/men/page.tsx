@@ -204,7 +204,7 @@ export default function MensAstrologyPage() {
               </h1>
               
               <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-                Discover powerful astrology solutions designed specifically for men's unique spiritual journey, career growth, and life goals.
+                Discover powerful astrology solutions designed specifically for men&apos;s unique spiritual journey, career growth, and life goals.
               </p>
               
               <motion.div
@@ -245,11 +245,11 @@ export default function MensAstrologyPage() {
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-4xl md:text-5xl font-light mb-4 text-slate-800">
-                Men's Astrology Categories
+                Men&apos;s Astrology Categories
               </h2>
               <div className="w-32 h-1 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 mx-auto rounded-full mb-6"></div>
               <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                Choose from categories specifically designed to address men's spiritual, professional, and personal growth needs.
+                Choose from categories specifically designed to address men&apos;s spiritual, professional, and personal growth needs.
               </p>
             </motion.div>
 

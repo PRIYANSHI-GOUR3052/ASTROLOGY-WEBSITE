@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import ServiceCarousels from './ServiceCarousels';
+import NakshatraGyaanBanner from './NakshatraGyaanBanner';
+import ProductAssuranceBar from './ProductAssuranceBar';
 
 interface ProductServiceCardProps {
   image: string;
@@ -38,14 +41,14 @@ const services = [
     slug: 'grah-shanti',
     title: 'Grah Shanti Puja',
     description: 'Harmonize planetary energies and mitigate negative influences with a traditional Grah Shanti Puja.',
-    image: '/images/astrology.svg',
+    image: '/images/course-2.jpg',
     badge: 'FIRST MONDAY SPECIAL',
   },
   {
     slug: 'numerology',
     title: 'Numerology Analysis',
     description: 'Discover the power of numbers in your life with personalized numerology reading.',
-    image: '/images/Numerology.svg',
+    image: '/images/course-4.jpg',
     badge: '',
   },
   {
@@ -59,7 +62,7 @@ const services = [
     slug: 'palmistry',
     title: 'Palmistry Consultation',
     description: 'Unlock the secrets hidden in your hands. Get insightful readings on your life path, character, and future.',
-    image: '/images/palm.svg',
+    image: '/images/course-5.jpg',
     badge: '',
   },
   {
@@ -170,6 +173,12 @@ export function UniversalServicesGrid({ className = '' }) {
     service.description.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Split services: first 3 for horizontal grid, next 4 for Featured Services, next 4 for Expert Consultations, next 4 for third special layout
+  const firstThreeServices = filteredServices.slice(0, 3);
+  const nextFourServices = filteredServices.slice(3, 7);
+  const nextFourServices2 = filteredServices.slice(7, 11);
+  const nextFourServices3 = filteredServices.slice(11, 15);
+
   return (
     <>
       <div className="flex justify-center md:justify-end mb-8">
@@ -221,8 +230,10 @@ export function UniversalServicesGrid({ className = '' }) {
           </button>
         </form>
       </div>
+
+      {/* First 3 cards in horizontal grid */}
       <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-16 ${className}`}>
-        {filteredServices.map((service, index) => (
+        {firstThreeServices.map((service, index) => (
           <motion.div
             key={service.slug}
             initial={{ opacity: 0, y: 20 }}
@@ -239,6 +250,352 @@ export function UniversalServicesGrid({ className = '' }) {
           </motion.div>
         ))}
       </div>
+
+      {/* Section Heading */}
+      <div className="mb-12">
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+          Featured Services
+        </h2>
+        <p className="text-xl text-gray-600 max-w-2xl" style={{ fontFamily: 'Playfair Display, serif' }}>
+          Discover our most popular spiritual services and expert consultations
+        </p>
+      </div>
+
+      {/* Next 4 cards in RecentPosts-style layout (3 small left, 1 large right) */}
+      {nextFourServices.length > 0 && (
+        <div className="mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+            {/* Left Column: Three Small Cards */}
+            <div className="flex flex-col gap-6">
+              {nextFourServices.slice(0, 3).map((service, index) => (
+                <motion.div
+                  key={service.slug}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Link href={`/services/${service.slug}`} className="block group" style={{ textDecoration: 'none' }}>
+                    <div className="flex flex-row bg-white rounded-2xl shadow-lg overflow-hidden h-[200px] w-full hover:shadow-xl transition-all duration-300">
+                      {/* Image on the left */}
+                      <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 flex items-center justify-center my-auto mx-4 overflow-hidden rounded-xl">
+                        <motion.img
+                          src={service.image}
+                          alt={service.title}
+                          className="w-full h-full object-cover"
+                          style={{ opacity: 0.9 }}
+                          whileHover={{ 
+                            scale: 1.15,
+                            transition: { duration: 0.4, ease: "easeOut" }
+                          }}
+                        />
+                        {service.badge && (
+                          <span className="absolute top-2 left-2 bg-[#e74c3c] text-white text-xs font-semibold px-3 py-1 rounded shadow z-10">
+                            {service.badge}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Content on the right */}
+                      <div className="flex-1 p-4 flex flex-col justify-center">
+                        <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {service.title}
+                        </h4>
+                        <p className="text-sm text-gray-600 mb-3 line-clamp-2 group-hover:text-gray-500 transition-colors" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {service.description}
+                        </p>
+                        <motion.span 
+                          className="inline-block px-4 py-2 rounded-lg bg-black text-white text-sm font-semibold shadow hover:bg-gray-800 transition-all w-max"
+                          whileHover={{ 
+                            scale: 1.05,
+                            transition: { duration: 0.2 }
+                          }}
+                        >
+                          Learn More →
+                        </motion.span>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Right Column: One Large Featured Card */}
+            <div className="md:col-span-2">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <Link href={`/services/${nextFourServices[3].slug}`} className="block group" style={{ textDecoration: 'none' }}>
+                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[428px] hover:shadow-xl transition-all duration-300">
+                    <div className="relative w-full h-64 flex items-center justify-center">
+                      <img
+                        src={nextFourServices[3].image}
+                        alt={nextFourServices[3].title}
+                        className="w-full h-full object-cover"
+                        style={{ opacity: 0.9 }}
+                      />
+                      {nextFourServices[3].badge && (
+                        <span className="absolute top-4 left-4 bg-[#e74c3c] text-white text-sm font-semibold px-4 py-1 rounded-lg shadow">
+                          {nextFourServices[3].badge}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-6 flex flex-col justify-between h-[164px]">
+                      <div>
+                        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {nextFourServices[3].title}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {nextFourServices[3].description}
+                        </p>
+                      </div>
+                      <span className="inline-block px-6 py-2 rounded-lg bg-black text-white text-base font-semibold shadow hover:bg-gray-800 transition-all w-max">
+                        Learn More →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Service Carousels (Top-Selling Section) */}
+      <div className="mt-16 mb-32">
+        <ServiceCarousels />
+      </div>
+
+      {/* Nakshatra Gyaan Banner */}
+      <div className="mt-16 mb-32">
+        <NakshatraGyaanBanner />
+      </div>
+
+      {/* Second Section Heading */}
+      <div className="mb-12">
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+          Expert Consultations
+        </h2>
+        <p className="text-xl text-gray-600 max-w-2xl" style={{ fontFamily: 'Playfair Display, serif' }}>
+          Deep insights and personalized guidance from our spiritual experts
+        </p>
+      </div>
+
+      {/* Next 4 cards in same layout (3 small left, 1 large right) */}
+      {nextFourServices2.length > 0 && (
+        <div className="mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+            {/* Left Column: Three Small Cards */}
+            <div className="flex flex-col gap-6">
+              {nextFourServices2.slice(0, 3).map((service, index) => (
+                <motion.div
+                  key={service.slug}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Link href={`/services/${service.slug}`} className="block group" style={{ textDecoration: 'none' }}>
+                    <div className="flex flex-row bg-white rounded-2xl shadow-lg overflow-hidden h-[240px] sm:h-[200px] w-full hover:shadow-xl transition-all duration-300">
+                      {/* Image on the left */}
+                      <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 flex items-center justify-center my-auto mx-4 overflow-hidden rounded-xl">
+                        <motion.img
+                          src={service.image}
+                          alt={service.title}
+                          className="w-full h-full object-cover"
+                          style={{ opacity: 0.9 }}
+                          whileHover={{ 
+                            scale: 1.15,
+                            transition: { duration: 0.4, ease: "easeOut" }
+                          }}
+                        />
+                        {service.badge && (
+                          <span className="absolute top-2 left-2 bg-[#e74c3c] text-white text-xs font-semibold px-3 py-1 rounded shadow z-10">
+                            {service.badge}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Content on the right */}
+                      <div className="flex-1 p-4 flex flex-col justify-center">
+                        <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {service.title}
+                        </h4>
+                        <p className="text-sm text-gray-600 mb-3 line-clamp-2 group-hover:text-gray-500 transition-colors" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {service.description}
+                        </p>
+                        <motion.span 
+                          className="inline-block px-4 py-2 rounded-lg bg-black text-white text-sm font-semibold shadow hover:bg-gray-800 transition-all w-max"
+                          whileHover={{ 
+                            scale: 1.05,
+                            transition: { duration: 0.2 }
+                          }}
+                        >
+                          Learn More →
+                        </motion.span>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Right Column: One Large Featured Card */}
+            <div className="md:col-span-2">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <Link href={`/services/${nextFourServices2[3].slug}`} className="block group" style={{ textDecoration: 'none' }}>
+                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[428px] hover:shadow-xl transition-all duration-300">
+                    <div className="relative w-full h-64 flex items-center justify-center">
+                      <img
+                        src={nextFourServices2[3].image}
+                        alt={nextFourServices2[3].title}
+                        className="w-full h-full object-cover"
+                        style={{ opacity: 0.9 }}
+                      />
+                      {nextFourServices2[3].badge && (
+                        <span className="absolute top-4 left-4 bg-[#e74c3c] text-white text-sm font-semibold px-4 py-1 rounded-lg shadow">
+                          {nextFourServices2[3].badge}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-6 flex flex-col justify-between h-[164px]">
+                      <div>
+                        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {nextFourServices2[3].title}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {nextFourServices2[3].description}
+                        </p>
+                      </div>
+                      <span className="inline-block px-6 py-2 rounded-lg bg-black text-white text-base font-semibold shadow hover:bg-gray-800 transition-all w-max">
+                        Learn More →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Third Section Heading */}
+      <div className="mb-12">
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+          Specialized Services
+        </h2>
+        <p className="text-xl text-gray-600 max-w-2xl" style={{ fontFamily: 'Playfair Display, serif' }}>
+          Tailored solutions for specific life areas and spiritual needs
+        </p>
+      </div>
+
+      {/* Next 4 cards in same layout (3 small left, 1 large right) */}
+      {nextFourServices3.length > 0 && (
+        <div className="mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+            {/* Left Column: Three Small Cards */}
+            <div className="flex flex-col gap-6">
+              {nextFourServices3.slice(0, 3).map((service, index) => (
+                <motion.div
+                  key={service.slug}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Link href={`/services/${service.slug}`} className="block group" style={{ textDecoration: 'none' }}>
+                    <div className="flex flex-row bg-white rounded-2xl shadow-lg overflow-hidden h-[200px] w-full hover:shadow-xl transition-all duration-300">
+                      {/* Image on the left */}
+                      <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 flex items-center justify-center my-auto mx-4 overflow-hidden rounded-xl">
+                        <motion.img
+                          src={service.image}
+                          alt={service.title}
+                          className="w-full h-full object-cover"
+                          style={{ opacity: 0.9 }}
+                          whileHover={{ 
+                            scale: 1.15,
+                            transition: { duration: 0.4, ease: "easeOut" }
+                          }}
+                        />
+                        {service.badge && (
+                          <span className="absolute top-2 left-2 bg-[#e74c3c] text-white text-xs font-semibold px-3 py-1 rounded shadow z-10">
+                            {service.badge}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Content on the right */}
+                      <div className="flex-1 p-4 flex flex-col justify-center">
+                        <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {service.title}
+                        </h4>
+                        <p className="text-sm text-gray-600 mb-3 line-clamp-2 group-hover:text-gray-500 transition-colors" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {service.description}
+                        </p>
+                        <motion.span 
+                          className="inline-block px-4 py-2 rounded-lg bg-black text-white text-sm font-semibold shadow hover:bg-gray-800 transition-all w-max"
+                          whileHover={{ 
+                            scale: 1.05,
+                            transition: { duration: 0.2 }
+                          }}
+                        >
+                          Learn More →
+                        </motion.span>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Right Column: One Large Featured Card */}
+            <div className="md:col-span-2">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <Link href={`/services/${nextFourServices3[3].slug}`} className="block group" style={{ textDecoration: 'none' }}>
+                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[428px] hover:shadow-xl transition-all duration-300">
+                    <div className="relative w-full h-64 flex items-center justify-center">
+                      <img
+                        src={nextFourServices3[3].image}
+                        alt={nextFourServices3[3].title}
+                        className="w-full h-full object-cover"
+                        style={{ opacity: 0.9 }}
+                      />
+                      {nextFourServices3[3].badge && (
+                        <span className="absolute top-4 left-4 bg-[#e74c3c] text-white text-sm font-semibold px-4 py-1 rounded-lg shadow">
+                          {nextFourServices3[3].badge}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-6 flex flex-col justify-between h-[164px]">
+                      <div>
+                        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {nextFourServices3[3].title}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {nextFourServices3[3].description}
+                        </p>
+                      </div>
+                      <span className="inline-block px-6 py-2 rounded-lg bg-black text-white text-base font-semibold shadow hover:bg-gray-800 transition-all w-max">
+                        Learn More →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Product Assurance Bar */}
+      <ProductAssuranceBar />
     </>
   );
 }

@@ -39,13 +39,15 @@ const assurances = [
 export default function ProductAssuranceBar() {
   return (
     <div className="w-screen flex justify-center items-center pt-8 pb-14" style={{background:'#F9F6F2', marginLeft:'calc(50% - 50vw)', marginRight:'calc(50% - 50vw)'}}>
-      <div className="flex w-full max-w-none justify-between items-stretch px-0 md:px-4" style={{gap:0}}>
+      <div className="flex w-full max-w-none justify-between items-stretch px-2 md:px-4" style={{gap:0}}>
         {assurances.reduce<ReactNode[]>((acc, a, idx) => {
           acc.push(
             <div key={a.label} className="flex flex-col items-center flex-1 min-w-0" style={{minWidth:0, flex:'1 1 0%', paddingLeft:0, paddingRight:0}}>
               <div className="flex flex-col items-center">
-                {a.icon}
-                <span className="mt-5 text-lg font-bold text-black tracking-wide uppercase whitespace-nowrap" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>{a.label}</span>
+                <div className="w-8 h-8 md:w-11 md:h-11">
+                  {a.icon}
+                </div>
+                <span className="mt-3 md:mt-5 text-xs md:text-lg font-bold text-black tracking-wide uppercase text-center leading-tight" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>{a.label}</span>
               </div>
             </div>
           );

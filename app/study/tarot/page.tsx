@@ -1,32 +1,31 @@
 'use client';
 import React, { useState } from 'react';
 import { AnimatedStars } from '../../components/AnimatedStars';
-import { MysticBackground } from '../../components/MysticBackground';
+import MysticBackground from '../../components/MysticBackground';
 import { motion } from 'framer-motion';
-import { FAQSection } from '../../components/FAQSection';
-import { DrNarendraProfile } from '../../components/DrNarendraProfile';
-import { Statistics } from '../../components/Statistics';
-import { ContactForm } from '../../components/ContactForm';
-import Image from 'next/image';
+import FAQSection from '../../components/FAQSection';
+import DrNarendraProfile from '../../components/DrNarendraProfile';
+import Statistics from '../../components/Statistics';
+import ContactForm from '../../components/ContactForm';
 
 const tabs = ['Overview', 'Card Meanings', 'Reading Techniques', 'FAQs'];
 
 const faqs = [
   {
-    q: 'What is the difference between Major and Minor Arcana?',
-    a: "The Major Arcana consists of 22 cards representing significant life events and spiritual lessons, while the Minor Arcana's 56 cards deal with day-to-day matters and mundane aspects of life. Together, they provide a comprehensive view of life's journey."
+    q: "What is Tarot reading?",
+    a: "Tarot reading is a form of divination that uses a deck of 78 cards to gain insights into the past, present, and future. It combines intuition with knowledge of archetypal symbols to provide guidance and clarity."
   },
   {
-    q: 'How accurate are tarot readings?',
-    a: "Tarot readings are tools for insight and guidance rather than definitive predictions. Their accuracy depends on the reader's skill, the querent's openness, and the understanding that cards offer possibilities rather than fixed outcomes."
+    q: "How accurate are Tarot readings?",
+    a: "The accuracy of Tarot readings depends on the reader's skill, intuition, and the querent's openness. Tarot serves as a tool for self-reflection and guidance rather than predicting fixed outcomes."
   },
   {
-    q: 'Can anyone learn to read tarot cards?',
-    a: "Yes, anyone can learn to read tarot cards with dedication and practice. It requires studying the card meanings, developing intuition, and understanding the various spreads and their interpretations."
+    q: "Can I learn to read Tarot cards?",
+    a: "Yes, anyone can learn to read Tarot cards with practice and dedication. It requires studying card meanings, developing intuition, and regular practice with readings."
   },
   {
-    q: 'How often should I get a tarot reading?',
-    a: "The frequency of readings depends on personal needs, but it's generally recommended to allow time between readings for situations to develop. Monthly or quarterly readings are common, while daily readings might lead to dependency."
+    q: "What's the difference between Major and Minor Arcana?",
+    a: "The Major Arcana (22 cards) represents life's spiritual and karmic lessons, while the Minor Arcana (56 cards) deals with everyday situations and practical matters."
   }
 ];
 
@@ -34,22 +33,8 @@ export default function TarotPage() {
   const [activeTab, setActiveTab] = useState('Overview');
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      <div className="flex justify-center items-center py-12">
-        <div className="w-full max-w-5xl rounded-3xl shadow-lg px-6 py-12 md:px-16 md:py-16 bg-gradient-to-r from-pink-50 via-purple-50 to-blue-100">
-          <h1 className="text-5xl md:text-6xl font-serif font-bold text-center mb-2 text-black" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Tarot Card Reading
-          </h1>
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 text-black" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            टैरो कार्ड रीडिंग
-          </h2>
-          <p className="text-lg md:text-xl text-center text-gray-600 max-w-3xl mx-auto">
-            Explore the ancient art of tarot and discover how the cards reveal your story, strengths, and destiny.
-          </p>
-        </div>
-      </div>
-      <div className="bg-gradient-to-b from-nebula-indigo via-cosmic-purple to-celestial-blue">
-        <AnimatedStars />
+    <div className="min-h-screen bg-gradient-to-b from-white via-indigo-50 to-white">
+      <div className="relative">
         <MysticBackground>
           <div className="container mx-auto px-4 py-16 relative z-10">
             {/* Tabs */}
@@ -69,12 +54,12 @@ export default function TarotPage() {
             {/* Tab Content */}
             {activeTab === 'Overview' && (
               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
-                <p><span className="font-bold text-indigo-900">Tarot</span> is an ancient divination practice that uses a deck of 78 cards to gain insights into the past, present, and future. Each card carries rich symbolism and meaning, serving as a mirror to our subconscious and a guide to understanding life's journey.</p>
+                <p><span className="font-bold text-indigo-900">Tarot</span> is an ancient divination practice that uses a deck of 78 cards to gain insights into the past, present, and future. Each card carries rich symbolism and meaning, serving as a mirror to our subconscious and a guide to understanding life&apos;s journey.</p>
                 
                 <p>The practice of <span className="font-bold text-indigo-900">Tarot reading</span> combines intuition with knowledge of archetypal symbols and their meanings. The cards act as a bridge between the conscious and unconscious mind, helping to reveal hidden truths and potential paths forward. Through the interpretation of these symbols, readers can provide guidance on relationships, career decisions, personal growth, and spiritual development.</p>
 
                 <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg">
-                  <span className="text-indigo-600 font-medium">Key Takeaway:</span> <span className="font-bold text-indigo-900">Tarot</span> serves as a powerful tool for self-discovery, guidance, and spiritual insight, offering a unique perspective on life's challenges and opportunities.
+                  <span className="text-indigo-600 font-medium">Key Takeaway:</span> <span className="font-bold text-indigo-900">Tarot</span> serves as a powerful tool for self-discovery, guidance, and spiritual insight, offering a unique perspective on life&apos;s challenges and opportunities.
                 </div>
 
                 <p className="text-lg mb-4 text-gray-600">
@@ -86,7 +71,7 @@ export default function TarotPage() {
             {activeTab === 'Card Meanings' && (
               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
                 <h3 className="text-xl font-semibold mb-4 font-serif text-indigo-900" style={{ fontFamily: 'Cormorant Garamond, serif' }}>The Major Arcana</h3>
-                <p>The <span className="font-bold text-indigo-900">Major Arcana</span> consists of 22 cards that represent life's spiritual and karmic lessons. These cards carry powerful messages about major life events and personal growth:</p>
+                <p>The <span className="font-bold text-indigo-900">Major Arcana</span> consists of 22 cards that represent life&apos;s spiritual and karmic lessons. These cards carry powerful messages about major life events and personal growth:</p>
                 <ul className="list-disc list-inside mb-4 space-y-2">
                   <li><span className="font-bold text-indigo-900">The Fool (0):</span> New beginnings, innocence, spontaneity</li>
                   <li><span className="font-bold text-indigo-900">The Magician (1):</span> Manifestation, resourcefulness, power</li>

@@ -2,18 +2,12 @@
 
 import { useState } from 'react';
 import { serviceContent } from '@/app/data/serviceContent';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import { Statistics } from '@/app/components/Statistics';
-import { AstrologerProfile } from '@/app/components/AstrologerProfile';
 import { AboutSummary } from '@/app/components/AboutSummary';
 import { motion } from 'framer-motion';
 import { FaRegLightbulb, FaRegHeart, FaRegStar, FaRegSmile, FaRegComments, FaRegSun, FaRegGem } from 'react-icons/fa';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { useLanguage } from '@/app/contexts/useLanguage';
-import { DrNarendraProfile } from '@/app/components/DrNarendraProfile';
 import { CTASection } from '@/app/components/CTASection';
 
 interface ServiceContent {
@@ -83,7 +77,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                 <section className="mb-12 text-lg leading-relaxed text-black space-y-6">
                   {/* User-provided editorial content without emojis */}
                   <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    In today's fast-paced, hyper-competitive world, choosing and navigating a career path can feel overwhelming. Amidst external expectations and internal doubts, how do you find the work that truly resonates with your soul? At Nakshatra Gyaan, we believe your profession is not just a means of livelihood—it is a sacred expression of your dharma, your higher purpose in this lifetime. Through the ancient science of Vedic astrology, we help you uncover your divine professional blueprint and align it with real-world opportunities and inner fulfillment.
+                    In today&apos;s fast-paced, hyper-competitive world, choosing and navigating a career path can feel overwhelming. Amidst external expectations and internal doubts, how do you find the work that truly resonates with your soul? At Nakshatra Gyaan, we believe your profession is not just a means of livelihood—it is a sacred expression of your dharma, your higher purpose in this lifetime. Through the ancient science of Vedic astrology, we help you uncover your divine professional blueprint and align it with real-world opportunities and inner fulfillment.
                   </p>
                   <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6 text-justify" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>Why Choose Astrological Career Guidance?</h3>
                   <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
@@ -104,14 +98,14 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                     <li>Planetary Yogas & Doshas: Karmic blocks or blessings impacting your career</li>
                     <li>Dasha-Bhukti Analysis: Your current and upcoming planetary periods</li>
                     <li>Transits (Gochar): External events and cosmic timings influencing your life decisions</li>
-                    <li>Nakshatras and Atmakaraka: Your soul's true desire and spiritual calling</li>
+                    <li>Nakshatras and Atmakaraka: Your soul&apos;s true desire and spiritual calling</li>
                   </ul>
                   <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6 text-justify" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>The Nakshatra Gyaan Experience</h3>
                   <ul className="list-disc ml-8 mb-5 text-justify" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    <li><b>Soulful Strategy:</b> Our guidance is not generic—it's spiritually attuned, emotionally aware, and strategically designed to help you grow, not just survive.</li>
+                    <li><b>Soulful Strategy:</b> Our guidance is not generic—it&apos;s spiritually attuned, emotionally aware, and strategically designed to help you grow, not just survive.</li>
                     <li><b>Holistic Remedies:</b> We offer personalized mantras, yantras, gemstones, affirmations, fasting techniques, and pujas to help you remove obstacles and amplify your career potential.</li>
                     <li><b>Actionable Insights:</b> You will receive practical recommendations on industries, roles, skill development, and timing—tailored to your chart, not trends.</li>
-                    <li><b>Confidential & Compassionate Space:</b> We understand the vulnerability in career transitions. Whether you're lost, stuck, or standing at a new threshold, we hold space with empathy, non-judgment, and divine intention.</li>
+                    <li><b>Confidential & Compassionate Space:</b> We understand the vulnerability in career transitions. Whether you&apos;re lost, stuck, or standing at a new threshold, we hold space with empathy, non-judgment, and divine intention.</li>
                   </ul>
                   <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6 text-justify" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>Who This Is For</h3>
                   <ul className="list-disc ml-8 mb-5 text-justify" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
@@ -137,7 +131,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                 <section className="mb-12">
                   <h2 className="text-3xl font-bold text-blue-900 mb-8 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>What is Career & Job Guidance?</h2>
                   <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    Career & Job Guidance at Nakshatra Gyaan is not merely a consultation—it is a sacred decoding of your professional destiny. In a world driven by competition, uncertainty, and ever-evolving opportunities, we offer a calm, cosmic perspective that reveals what your soul truly seeks in the realm of work, purpose, and prosperity. Our sessions are designed to guide you toward a career that doesn't just sustain you—but fulfills, inspires, and elevates you.
+                    Career & Job Guidance at Nakshatra Gyaan is not merely a consultation—it is a sacred decoding of your professional destiny. In a world driven by competition, uncertainty, and ever-evolving opportunities, we offer a calm, cosmic perspective that reveals what your soul truly seeks in the realm of work, purpose, and prosperity. Our sessions are designed to guide you toward a career that doesn&apos;t just sustain you—but fulfills, inspires, and elevates you.
                   </p>
                   <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
                     What sets our service apart is its deeply integrative approach—a blend of classical Vedic astrology, karmic insight, and modern career psychology. We begin by analyzing your birth chart, which acts as a divine blueprint of your professional inclinations, talents, lessons, and dharma (life purpose). We examine planetary placements, your 10th and 6th houses, nakshatras, dashas (planetary periods), and current transits to understand not just what you can do—but what you are destined to thrive in.
@@ -157,7 +151,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
                     <li>How can I overcome professional blocks, toxic environments, or inner resistance?</li>
                   </ul>
                   <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    But our role doesn't end at insight. Every consultation includes actionable guidance—we recommend personalized mantras, planetary remedies, spiritual rituals, gemstones, and lifestyle shifts to activate your professional success. Our astrologers empower you with awareness but also equip you with tools to shift the energies in your favor. We believe that real success comes not just from luck, but from alignment—with time, with dharma, and with inner truth.
+                    But our role doesn&apos;t end at insight. Every consultation includes actionable guidance—we recommend personalized mantras, planetary remedies, spiritual rituals, gemstones, and lifestyle shifts to activate your professional success. Our astrologers empower you with awareness but also equip you with tools to shift the energies in your favor. We believe that real success comes not just from luck, but from alignment—with time, with dharma, and with inner truth.
                   </p>
                   <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
                     More than just forecasting, we walk beside you in your career evolution journey. Whether you seek recognition, wealth, impact, or peace of mind—we help you define success on your own terms and reach it with clarity, grace, and inner strength. At Nakshatra Gyaan, your career is treated as your karma bhoomi—a sacred field of action—and our purpose is to help you fulfill it with intention and wisdom.
