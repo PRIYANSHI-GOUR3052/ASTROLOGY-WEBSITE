@@ -1,6 +1,8 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { notFound } from "next/navigation"
+import type { Certification, Education } from "../../astrologer/profile/page";
+import Image from 'next/image'
 
 const documentLabels = {
   aadharCard: "Aadhar Card",
@@ -74,8 +76,8 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
   const decodedEmail = decodeURIComponent(params?.email || "")
 
   // Add after fetching verification in useEffect
-  const [educations, setEducations] = useState<any[]>([])
-  const [certifications, setCertifications] = useState<any[]>([])
+  const [educations] = useState<Education[]>([])
+  const [certifications] = useState<Certification[]>([])
   const [eduStatuses, setEduStatuses] = useState<{ [id: number]: DocumentStatus }>({})
   const [eduRemarks, setEduRemarks] = useState<{ [id: number]: string }>({})
   const [eduShowReject, setEduShowReject] = useState<{ [id: number]: boolean }>({})
@@ -85,8 +87,8 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
   const [autoProcessing, setAutoProcessing] = useState(false)
 
   // Add state for modal
-  const [eduModal, setEduModal] = useState<{ open: boolean; file: string; label: string } | null>(null)
-  const [certModal, setCertModal] = useState<{ open: boolean; file: string; label: string } | null>(null)
+  // const [eduModal, setEduModal] = useState<{ open: boolean; file: string; label: string } | null>(null)
+  // const [certModal, setCertModal] = useState<{ open: boolean; file: string; label: string } | null>(null)
 
   // Add state for admin remarks
   const [adminRemarks, setAdminRemarks] = useState("")
@@ -99,107 +101,71 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
   const [processingStatus, setProcessingStatus] = useState<string | null>(null)
   const [lastAutoAction, setLastAutoAction] = useState<string | null>(null)
 
-  // Helper function to normalize status values
-  const normalizeStatus = (status: string): DocumentStatus => {
-    if (!status) return "unverified"
-    const lowerStatus = status.toLowerCase()
-    if (["accepted", "approved", "verified"].includes(lowerStatus)) return "accepted"
-    if (lowerStatus === "rejected") return "rejected"
-    if (lowerStatus === "pending") return "pending"
-    return "unverified"
-  }
+  // Wrap normalizeStatus in useCallback
+  const normalizeStatus = useCallback((status: string): DocumentStatus => {
+    if (!status) return "unverified";
+    const lowerStatus = status.toLowerCase();
+    if (["accepted", "approved", "verified"].includes(lowerStatus)) return "accepted";
+    if (lowerStatus === "rejected") return "rejected";
+    if (lowerStatus === "pending") return "pending";
+    return "unverified";
+  }, []);
 
-  // Fetch astrologer and verification data from backend on mount
-  useEffect(() => {
-    async function fetchAstrologer() {
-      setLoading(true)
-      try {
-        const res = await fetch(`/api/astrologer/verification-by-email?email=${encodeURIComponent(decodedEmail)}`, {
-          credentials: "include",
-        })
-        if (!res.ok) {
-          setAstrologer(null)
-          setLoading(false)
-          return
-        }
-        const { verification } = await res.json()
-        // Compose astrologer object from backend data
-        const astro: Astrologer = {
-          name: verification.astrologer.firstName + " " + verification.astrologer.lastName,
-          email: verification.astrologer.email,
-          phone: verification.astrologer.phone,
-          expertise: verification.astrologer.areasOfExpertise,
-          experience: verification.astrologer.yearsOfExperience || 0,
-          joined: verification.astrologer.createdAt
-            ? new Date(verification.astrologer.createdAt).toLocaleDateString()
-            : "",
-          documentStatus: verification.status,
-          description: verification.astrologer.description || "",
-          profilePicture: verification.astrologer.profileImage || "/placeholder-user.jpg",
-          documents: {
-            aadharCard: verification.aadharCard || "",
-            panCard: verification.panCard || "",
-            selfie: verification.selfie || "",
-            workProof: verification.workProof || "",
-            declarationForm: verification.declarationForm || "",
-            addressProof: verification.addressProof || "",
-          },
-          bankDetails: {
-            accountNo: verification.astrologer.accountNumber || "",
-            bankName: verification.astrologer.bankName || "",
-            ifsc: verification.astrologer.ifscCode || "",
-          },
-        }
-
-        setAstrologer(astro)
-
-        // Set document statuses and rejection reasons from backend - FIXED
-        const docStatuses: DocumentStatuses = {}
-        const docReasons: RejectionReasons = {}
-          ; (["aadharCard", "panCard", "selfie", "workProof", "declarationForm", "addressProof"] as DocumentKey[]).forEach(
-            (key) => {
-              const statusField = statusFieldMapping[key]
-              const remarksField = remarksFieldMapping[key]
-              const backendStatus = verification[statusField]
-              const backendRemarks = verification[remarksField]
-              docStatuses[key] = normalizeStatus(backendStatus)
-              docReasons[key] = backendRemarks || ""
-            },
-          )
-
-        setDocumentStatuses(docStatuses)
-        setRejectionReasons(docReasons)
-
-        setEducations(verification.educations || [])
-        setCertifications(verification.certifications || [])
-
-        const eduStat: { [id: number]: DocumentStatus } = {}
-        const eduRem: { [id: number]: string } = {}
-          ; (verification.educations || []).forEach((e: any) => {
-            eduStat[e.id] = normalizeStatus(e.status)
-            eduRem[e.id] = e.remarks || ""
-          })
-        setEduStatuses(eduStat)
-        setEduRemarks(eduRem)
-
-        const certStat: { [id: number]: DocumentStatus } = {}
-        const certRem: { [id: number]: string } = {}
-          ; (verification.certifications || []).forEach((c: any) => {
-            certStat[c.id] = normalizeStatus(c.status)
-            certRem[c.id] = c.remarks || ""
-          })
-        setCertStatuses(certStat)
-        setCertRemarks(certRem)
-
-        setAdminRemarks(verification.adminRemarks || "")
-      } catch {
-        setAstrologer(null)
-      }
-      setLoading(false)
+  // Wrap refetchVerification in useCallback and depend on normalizeStatus
+  const refetchVerification = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/astrologer/verification-by-email?email=${encodeURIComponent(decodedEmail)}`, {
+        credentials: "include",
+      });
+      if (!res.ok) return;
+      const { verification } = await res.json();
+      const astro: Astrologer = {
+        name: verification.astrologer.firstName + " " + verification.astrologer.lastName,
+        email: verification.astrologer.email,
+        phone: verification.astrologer.phone,
+        expertise: verification.astrologer.areasOfExpertise,
+        experience: verification.astrologer.yearsOfExperience || 0,
+        joined: verification.astrologer.createdAt
+          ? new Date(verification.astrologer.createdAt).toLocaleDateString()
+          : "",
+        documentStatus: verification.status,
+        description: verification.astrologer.description || "",
+        profilePicture: verification.astrologer.profileImage || "/placeholder-user.jpg",
+        documents: {
+          aadharCard: verification.aadharCard || "",
+          panCard: verification.panCard || "",
+          selfie: verification.selfie || "",
+          workProof: verification.workProof || "",
+          declarationForm: verification.declarationForm || "",
+          addressProof: verification.addressProof || "",
+        },
+        bankDetails: {
+          accountNo: verification.astrologer.accountNumber || "",
+          bankName: verification.astrologer.bankName || "",
+          ifsc: verification.astrologer.ifscCode || "",
+        },
+      };
+      setAstrologer(astro);
+      const docStatuses: DocumentStatuses = {};
+      const docReasons: RejectionReasons = {};
+      (["aadharCard", "panCard", "selfie", "workProof", "declarationForm", "addressProof"] as DocumentKey[]).forEach(
+        (key) => {
+          const statusField = statusFieldMapping[key];
+          const remarksField = remarksFieldMapping[key];
+          const backendStatus = verification[statusField];
+          const backendRemarks = verification[remarksField];
+          docStatuses[key] = normalizeStatus(backendStatus);
+          docReasons[key] = backendRemarks || "";
+        },
+      );
+      setDocumentStatuses(docStatuses);
+      setRejectionReasons(docReasons);
+      setAdminRemarks(verification.adminRemarks || "");
+    } finally {
+      setLoading(false);
     }
-
-    fetchAstrologer()
-  }, [decodedEmail])
+  }, [decodedEmail, normalizeStatus]);
 
   // Enhanced auto-processing logic
   useEffect(() => {
@@ -224,8 +190,8 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
     }
 
     // Check document statuses
-    const documentEntries = Object.entries(astrologer.documents).filter(([_, url]) => url && url.trim() !== "")
-    const docStatuses = documentEntries.map(([key, _]) => documentStatuses[key] || "unverified")
+    const documentEntries = Object.entries(astrologer.documents).filter(([, url]) => url && url.trim() !== "")
+    const docStatuses = documentEntries.map(([key]) => documentStatuses[key] || "unverified")
 
     // Check education/certification statuses
     const eduStatusList = educations.map((edu) => eduStatuses[edu.id] || "unverified")
@@ -343,22 +309,16 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
     decodedEmail,
     educations,
     certifications,
+    refetchVerification,
   ])
 
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>
   if (!astrologer) return notFound()
 
-  const documentKeys = Object.keys(astrologer.documents) as DocumentKey[]
-  const currentDocKey = documentKeys[currentDocIndex]
-  const currentDocUrl = astrologer.documents[currentDocKey]
-
-  const handleNextDoc = () => {
-    setCurrentDocIndex((prev) => (prev + 1) % documentKeys.length)
-  }
-
-  const handlePrevDoc = () => {
-    setCurrentDocIndex((prev) => (prev - 1 + documentKeys.length) % documentKeys.length)
-  }
+  // Remove setEducations and setCertifications if not used
+  // const [educations] = useState<Education[]>([])
+  // const [certifications] = useState<Certification[]>([])
+  // Remove documentKeys if not used
 
   // FIXED: Profile document handlers
   const handleAcceptProfileDocument = async (docKey: string) => {
@@ -538,67 +498,67 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
   }
 
   // Add function to refetch verification and update state - FIXED
-  const refetchVerification = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch(`/api/astrologer/verification-by-email?email=${encodeURIComponent(decodedEmail)}`, {
-        credentials: "include",
-      })
-      if (!res.ok) return
-      const { verification } = await res.json()
-      const astro: Astrologer = {
-        name: verification.astrologer.firstName + " " + verification.astrologer.lastName,
-        email: verification.astrologer.email,
-        phone: verification.astrologer.phone,
-        expertise: verification.astrologer.areasOfExpertise,
-        experience: verification.astrologer.yearsOfExperience || 0,
-        joined: verification.astrologer.createdAt
-          ? new Date(verification.astrologer.createdAt).toLocaleDateString()
-          : "",
-        documentStatus: verification.status,
-        description: verification.astrologer.description || "",
-        profilePicture: verification.astrologer.profileImage || "/placeholder-user.jpg",
-        documents: {
-          aadharCard: verification.aadharCard || "",
-          panCard: verification.panCard || "",
-          selfie: verification.selfie || "",
-          workProof: verification.workProof || "",
-          declarationForm: verification.declarationForm || "",
-          addressProof: verification.addressProof || "",
-        },
-        bankDetails: {
-          accountNo: verification.astrologer.accountNumber || "",
-          bankName: verification.astrologer.bankName || "",
-          ifsc: verification.astrologer.ifscCode || "",
-        },
-      }
-      setAstrologer(astro)
+  // const refetchVerification = useCallback(async () => {
+  //   setLoading(true)
+  //   try {
+  //     const res = await fetch(`/api/astrologer/verification-by-email?email=${encodeURIComponent(decodedEmail)}`, {
+  //       credentials: "include",
+  //     })
+  //     if (!res.ok) return
+  //     const { verification } = await res.json()
+  //     const astro: Astrologer = {
+  //       name: verification.astrologer.firstName + " " + verification.astrologer.lastName,
+  //       email: verification.astrologer.email,
+  //       phone: verification.astrologer.phone,
+  //       expertise: verification.astrologer.areasOfExpertise,
+  //       experience: verification.astrologer.yearsOfExperience || 0,
+  //       joined: verification.astrologer.createdAt
+  //         ? new Date(verification.astrologer.createdAt).toLocaleDateString()
+  //         : "",
+  //       documentStatus: verification.status,
+  //       description: verification.astrologer.description || "",
+  //       profilePicture: verification.astrologer.profileImage || "/placeholder-user.jpg",
+  //       documents: {
+  //         aadharCard: verification.aadharCard || "",
+  //         panCard: verification.panCard || "",
+  //         selfie: verification.selfie || "",
+  //         workProof: verification.workProof || "",
+  //         declarationForm: verification.declarationForm || "",
+  //         addressProof: verification.addressProof || "",
+  //       },
+  //       bankDetails: {
+  //         accountNo: verification.astrologer.accountNumber || "",
+  //         bankName: verification.astrologer.bankName || "",
+  //         ifsc: verification.astrologer.ifscCode || "",
+  //       },
+  //     }
+  //     setAstrologer(astro)
 
-      // Update document statuses after refetch - FIXED
-      const docStatuses: DocumentStatuses = {}
-      const docReasons: RejectionReasons = {}
-        ; (["aadharCard", "panCard", "selfie", "workProof", "declarationForm", "addressProof"] as DocumentKey[]).forEach(
-          (key) => {
-            const statusField = statusFieldMapping[key]
-            const remarksField = remarksFieldMapping[key]
-            const backendStatus = verification[statusField]
-            const backendRemarks = verification[remarksField]
-            docStatuses[key] = normalizeStatus(backendStatus)
-            docReasons[key] = backendRemarks || ""
-          },
-        )
+  //     // Update document statuses after refetch - FIXED
+  //     const docStatuses: DocumentStatuses = {}
+  //     const docReasons: RejectionReasons = {}
+  //       ; (["aadharCard", "panCard", "selfie", "workProof", "declarationForm", "addressProof"] as DocumentKey[]).forEach(
+  //         (key) => {
+  //           const statusField = statusFieldMapping[key]
+  //           const remarksField = remarksFieldMapping[key]
+  //           const backendStatus = verification[statusField]
+  //           const backendRemarks = verification[remarksField]
+  //           docStatuses[key] = normalizeStatus(backendStatus)
+  //           docReasons[key] = backendRemarks || ""
+  //         },
+  //       )
 
-      setDocumentStatuses(docStatuses)
-      setRejectionReasons(docReasons)
-      setAdminRemarks(verification.adminRemarks || "")
-    } finally {
-      setLoading(false)
-    }
-  }
+  //     setDocumentStatuses(docStatuses)
+  //     setRejectionReasons(docReasons)
+  //     setAdminRemarks(verification.adminRemarks || "")
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }, [decodedEmail, normalizeStatus, setAstrologer, setDocumentStatuses, setRejectionReasons, setAdminRemarks, setLoading]);
 
   const getDocumentStatusSummary = () => {
-    const documentEntries = Object.entries(astrologer.documents).filter(([_, url]) => url && url.trim() !== "")
-    const docStatuses = documentEntries.map(([key, _]) => documentStatuses[key] || "unverified")
+    const documentEntries = Object.entries(astrologer.documents).filter(([, url]) => url && url.trim() !== "")
+    const docStatuses = documentEntries.map(([key]) => documentStatuses[key] || "unverified")
     const eduStatusList = educations.map((edu) => eduStatuses[edu.id] || "unverified")
     const certStatusList = certifications.map((cert) => certStatuses[cert.id] || "unverified")
     const allStatuses = [...docStatuses, ...eduStatusList, ...certStatusList]
@@ -613,7 +573,14 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
 
   // FIXED: Get all documents function
   const getAllDocuments = () => {
-    const allDocs: any[] = []
+    const allDocs: Array<{
+      id: string | number;
+      label: string;
+      url: string;
+      category: string;
+      status: DocumentStatus;
+      remarks: string | null;
+    }> = [];
 
     // Add profile documents
     Object.entries(astrologer.documents).forEach(([key, url]) => {
@@ -780,11 +747,7 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-6">
             {astrologer.profilePicture && (
-              <img
-                src={astrologer.profilePicture || "/placeholder.svg"}
-                alt="Profile"
-                className="w-32 h-32 object-cover rounded-full border-4 border-gray-300 dark:border-gray-600"
-              />
+              <Image src={astrologer.profilePicture || "/placeholder.svg"} alt="Profile" width={128} height={128} className="w-32 h-32 object-cover rounded-full border-4 border-gray-300 dark:border-gray-600" />
             )}
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{astrologer.name}</h1>
@@ -1099,7 +1062,7 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
             <div className="mt-3 text-center">
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Total Documents:{" "}
-                {Object.entries(astrologer.documents).filter(([_, url]) => url && url.trim() !== "").length +
+                {Object.entries(astrologer.documents).filter(([, url]) => url && url.trim() !== "").length +
                   educations.length +
                   certifications.length}
               </span>
@@ -1368,9 +1331,11 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
                       )
                     }
                     return getFileType(currentDoc.url) === "image" ? (
-                      <img
+                      <Image
                         src={currentDoc.url || "/placeholder.svg"}
                         alt={currentDoc.label}
+                        width={400}
+                        height={400}
                         className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
                       />
                     ) : (
