@@ -67,54 +67,54 @@ const mainZodiacSigns = [
 const additionalZodiacSigns = [
   {
     name: 'Libra',
-    symbol: '♎',
+    symbol: '',
     dates: 'Sep 23 - Oct 22',
-    image: '/images/myth.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753183716/libra_qxomfb.png',
     slug: 'libra',
     color: 'from-pink-300 via-rose-300 to-pink-400',
     shadowColor: 'shadow-pink-400/40'
   },
   {
     name: 'Scorpio',
-    symbol: '♏',
+    symbol: '',
     dates: 'Oct 23 - Nov 21',
-    image: '/images/astrowellness.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753183870/Scorpio_njyib9.png',
     slug: 'scorpio',
     color: 'from-purple-300 via-violet-300 to-purple-400',
     shadowColor: 'shadow-purple-400/40'
   },
   {
     name: 'Sagittarius',
-    symbol: '♐',
+    symbol: '',
     dates: 'Nov 22 - Dec 21',
-    image: '/images/course-1.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184598/saggitaious_a9csap.png',
     slug: 'sagittarius',
     color: 'from-indigo-300 via-blue-300 to-indigo-400',
     shadowColor: 'shadow-indigo-400/40'
   },
   {
     name: 'Capricorn',
-    symbol: '♑',
+    symbol: '',
     dates: 'Dec 22 - Jan 19',
-    image: '/images/course-2.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184598/capricon_zpjvdq.png',
     slug: 'capricorn',
     color: 'from-gray-300 via-slate-300 to-gray-400',
     shadowColor: 'shadow-gray-400/40'
   },
   {
     name: 'Aquarius',
-    symbol: '♒',
+    symbol: '',
     dates: 'Jan 20 - Feb 18',
-    image: '/images/course-3.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184596/aquarius_wygprx.png',
     slug: 'aquarius',
     color: 'from-cyan-300 via-sky-300 to-cyan-400',
     shadowColor: 'shadow-cyan-400/40'
   },
   {
     name: 'Pisces',
-    symbol: '♓',
+    symbol: '',
     dates: 'Feb 19 - Mar 20',
-    image: '/images/course-4.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184597/Pisces_b2t4pu.png',
     slug: 'pisces',
     color: 'from-teal-300 via-green-300 to-teal-400',
     shadowColor: 'shadow-teal-400/40'
