@@ -38,8 +38,8 @@ export default async function handler(
 
       // Insert new user
       const [result] = await connection.execute(
-        'INSERT INTO users (name, email, password) VALUES (?, ?, ?)', 
-        [name, email, hashedPassword]
+        'INSERT INTO users (name, email, password, google_id) VALUES (?, ?, ?, ?)', 
+        [name, email, hashedPassword, null]
       )
 
       // Generate JWT token
@@ -101,8 +101,9 @@ export default async function handler(
       })
     }
 
-  } catch {
-    return res.status(500).json({ error: 'Internal Server Error' })
+  } catch (err) {
+    console.error('Signup/Login error:', err);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 

@@ -65,7 +65,7 @@ const ProfilePage = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [verification, setVerification] = useState<Record<string, unknown> | null>(null);
   const [docFiles, setDocFiles] = useState<{ [key: string]: File | null }>({});
-  const [astrologer, setAstrologer] = useState<Record<string, unknown> | null>(null);
+  // const [astrologer, setAstrologer] = useState<Record<string, unknown> | null>(null);
 
 
   // Basic details form state
@@ -137,7 +137,7 @@ const ProfilePage = () => {
           setVerification(data.verification);
           setCertifications(data.verification.certifications || []);
           setEducations(data.verification.educations || []);
-          setAstrologer(data.verification.astrologer || null);
+          // setAstrologer(data.verification.astrologer || null);
           // Pre-fill basic form if astrologer info exists
           if (data.verification.astrologer) {
             setBasicForm({
@@ -225,7 +225,7 @@ const ProfilePage = () => {
         setVerification(data.verification);
         setCertifications(data.verification.certifications || []);
         setEducations(data.verification.educations || []);
-        setAstrologer(data.verification.astrologer || null);
+        // setAstrologer(data.verification.astrologer || null);
       }
     } catch {
       setError('Failed to fetch verification data');
@@ -309,7 +309,7 @@ const ProfilePage = () => {
   const removeEdu = (idx: number) => setEducations(educations.filter((_, i) => i !== idx));
 
   // Show basic details (from verification.astrologer or a separate fetch)
-  const details = astrologer || verification?.astrologer || {};
+  // const details = astrologer || verification?.astrologer || {};
 
   // Basic details form handlers
   const handleBasicChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -373,7 +373,7 @@ const ProfilePage = () => {
         formData.append('areasOfExpertise', basicForm.areasOfExpertise.join(','));
         formData.append('avatar', selectedAvatar);
       }
-      let fetchOptions: any;
+      let fetchOptions: RequestInit;
       if (useFormData && formData) {
         fetchOptions = {
           method: 'PUT',

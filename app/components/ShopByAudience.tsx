@@ -10,7 +10,7 @@ const audienceCategories = [
   {
     name: 'For Men',
     icon: '👨',
-    image: '/images/course-5.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753089570/man_xbrq9o.jpg',
     slug: 'men',
     color: 'from-slate-300 via-gray-400 to-slate-400',
     shadowColor: 'shadow-slate-400/40',
@@ -19,7 +19,7 @@ const audienceCategories = [
   {
     name: 'For Women',
     icon: '👩',
-    image: '/images/course-4.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753089695/woman_ikkahn.jpg',
     slug: 'women', 
     color: 'from-rose-300 via-pink-300 to-rose-400',
     shadowColor: 'shadow-rose-400/40',
@@ -28,7 +28,7 @@ const audienceCategories = [
   {
     name: 'For Kids',
     icon: '🧒',
-    image: '/images/course-6.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753089804/kid_qnjq5g.jpg',
     slug: 'kids',
     color: 'from-yellow-300 via-amber-300 to-orange-300',
     shadowColor: 'shadow-yellow-400/40',
@@ -37,7 +37,7 @@ const audienceCategories = [
   {
     name: 'For Elders',
     icon: '👴',
-    image: '/images/myth.jpg',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753089897/elder_zqk4n7.jpg',
     slug: 'elders',
     color: 'from-emerald-300 via-green-400 to-teal-400',
     shadowColor: 'shadow-emerald-400/40',
@@ -299,4 +299,4 @@ export default function ShopByAudience({ variant = 'default' }: ShopByAudiencePr
       </div>
     </section>
   );
-} 
+}

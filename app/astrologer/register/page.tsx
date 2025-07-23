@@ -101,7 +101,7 @@ const AstrologerRegisterPage = () => {
       setProfileImage(null);
       setProfileImagePreview(null);
     } catch (err: unknown) {
-      toast({ title: 'Error', description: (err && typeof err === 'object' && 'response' in err && (err as any)?.response?.data?.message) ? (err as any).response.data.message : 'Registration failed', variant: 'destructive' });
+      toast({ title: 'Error', description: (err && typeof err === 'object' && 'response' in err && (err as { response?: { data?: { message?: string } } })?.response?.data?.message) ? (err as { response?: { data?: { message?: string } } }).response!.data!.message : 'Registration failed', variant: 'destructive' });
     } finally {
       setLoading(false);
     }
