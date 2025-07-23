@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { AnimatedStars } from '../../components/AnimatedStars';
 import MysticBackground from '../../components/MysticBackground';
 import { motion } from 'framer-motion';
 import FAQSection from '../../components/FAQSection';
