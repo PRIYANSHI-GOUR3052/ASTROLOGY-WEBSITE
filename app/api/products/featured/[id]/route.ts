@@ -3,14 +3,14 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
-// Define proper types for database results
-type Product = {
+// Type definitions
+interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
   slug: string;
-};
+}
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {

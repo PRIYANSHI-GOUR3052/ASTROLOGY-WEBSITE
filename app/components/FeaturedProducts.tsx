@@ -81,11 +81,6 @@ export function FeaturedProducts() {
                       price={product.price}
                       variant="buyNow"
                       className="bg-black text-white hover:bg-gray-800 w-full"
-                      onClick={() => {
-                        if (status === 'authenticated') {
-                          router.push('/checkout');
-                        }
-                      }}
                     >
                       खरीदें (Buy Now)
                     </UniversalCartButton>

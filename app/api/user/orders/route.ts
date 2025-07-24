@@ -6,29 +6,32 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import pool from '@/lib/db';
 
-// Define proper types for database results
-type UserResult = { id: number }[];
-type Order = {
+// Type definitions
+interface User {
   id: number;
-  total_amount: number;
+  google_id: string;
+}
+
+interface Order {
+  id: number;
+  total_amount: string;
   status: string;
   created_at: string;
-};
-type Orders = Order[];
-type OrderItem = {
+}
+
+interface OrderItem {
   id: number;
   order_id: number;
   product_id: number;
   quantity: number;
   carats: number | null;
-  price: number;
+  price: string;
   is_stone: number;
   is_service: number;
   product_name: string;
-};
-type OrderItems = OrderItem[];
+}
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
@@ -50,11 +53,11 @@ export async function GET(req: NextRequest) {
         [userGoogleId]
       );
       
-      if ((userResult as UserResult).length === 0) {
+      if ((userResult as User[]).length === 0) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       
-      const userId = (userResult as UserResult)[0].id;
+      const userId = (userResult as User[])[0].id;
       
       // Get all orders for this user
       const [orders] = await connection.query(
@@ -66,7 +69,7 @@ export async function GET(req: NextRequest) {
       );
       
       // For each order, get its items
-      const ordersWithItems = await Promise.all((orders as Orders).map(async (order) => {
+      const ordersWithItems = await Promise.all((orders as Order[]).map(async (order) => {
         const [items] = await connection.query(
           `SELECT oi.*, 
             CASE 
@@ -84,7 +87,7 @@ export async function GET(req: NextRequest) {
         
         return {
           ...order,
-          items: items as OrderItems,
+          items: items as OrderItem[],
         };
       }));
       

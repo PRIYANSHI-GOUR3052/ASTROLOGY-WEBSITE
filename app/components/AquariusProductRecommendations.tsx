@@ -237,35 +237,41 @@ export default function AquariusProductRecommendations() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          {aquariusRecommendations[categories.find(c => c.id === activeCategory)?.label || ""]?.map((category, index) => (
-            <motion.div
-              key={index}
-              className="bg-gradient-to-br from-white via-amber-50/30 to-orange-50/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group cursor-pointer"
-              whileHover={{ scale: 1.03, y: -12 }}
-            >
-              {/* CATEGORY IMAGE */}
-              <div className="relative h-48 w-full overflow-hidden">
-                <Image
-                  src={category.image}
-                  alt={category.name}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 25vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-              </div>
+          {(categories.find(c => c.id === activeCategory)?.label &&
+            aquariusRecommendations[
+              categories.find(c => c.id === activeCategory)!.label as keyof typeof aquariusRecommendations
+            ]?.map((category, index) => (
+              <motion.div
+                key={index}
+                className="bg-gradient-to-br from-white via-amber-50/30 to-orange-50/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group cursor-pointer"
+                whileHover={{ scale: 1.03, y: -12 }}
+              >
+                {/* CATEGORY IMAGE */}
+                <div className="relative h-48 w-full overflow-hidden">
+                  <Image
+                    src={category.image}
+                    alt={category.name}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
 
-              {/* CATEGORY INFO */}
-              <div className="p-6">
-                <h3 className="text-xl font-serif font-bold text-black mb-2">{category.name}</h3>
-                <p className="text-slate-700 font-medium mb-4 font-serif leading-relaxed">{category.benefit}</p>
-                <button className="w-full bg-gradient-to-r from-amber-100 to-orange-100 text-black font-serif font-bold py-3 rounded-xl shadow hover:from-orange-200 hover:to-amber-200 transition-all duration-300 flex items-center justify-center gap-2">
-                  <Sparkles className="w-5 h-5" />
-                  Explore Collection
-                </button>
-              </div>
-            </motion.div>
-          ))}
+                {/* CATEGORY INFO */}
+                <div className="p-6">
+                  <h3 className="text-xl font-serif font-bold text-black mb-2">{category.name}</h3>
+                  <p className="text-slate-700 font-medium mb-4 font-serif leading-relaxed">
+                    {'benefit' in category ? category.benefit : category.aquariusBenefit}
+                  </p>
+                  <button className="w-full bg-gradient-to-r from-amber-100 to-orange-100 text-black font-serif font-bold py-3 rounded-xl shadow hover:from-orange-200 hover:to-amber-200 transition-all duration-300 flex items-center justify-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    Explore Collection
+                  </button>
+                </div>
+              </motion.div>
+            ))
+          )}
         </motion.div>
       )}
 

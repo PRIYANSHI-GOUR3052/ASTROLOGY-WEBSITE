@@ -4,28 +4,33 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import pool from '@/lib/db';
 
-// Define proper types for database results
-type UserResult = { id: number }[];
-type OrderResult = {
+// Type definitions
+interface User {
+  id: number;
+  google_id: string;
+}
+
+interface Order {
   id: number;
   order_number: string;
-  total_amount: number;
+  total_amount: string;
   order_status: string;
   order_date: string;
   updated_at: string;
-}[];
-type OrderItem = {
+}
+
+interface OrderItem {
   id: number;
   quantity: number;
   carats: number | null;
-  total_price: number;
+  total_price: string;
   is_stone: number;
   is_service: number;
   product_name: string;
   unit_price: number;
-};
-type OrderItems = OrderItem[];
-type AddressResult = {
+}
+
+interface ShippingAddress {
   fullName: string;
   addressLine1: string;
   addressLine2: string;
@@ -33,7 +38,7 @@ type AddressResult = {
   state: string;
   pincode: string;
   phone: string;
-}[];
+}
 
 export async function GET(
   req: NextRequest,
@@ -65,11 +70,11 @@ export async function GET(
         [userGoogleId]
       );
       
-      if ((userResult as UserResult).length === 0) {
+      if ((userResult as User[]).length === 0) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       
-      const userId = (userResult as UserResult)[0].id;
+      const userId = (userResult as User[])[0].id;
       
       // Get the order and verify it belongs to this user
       const [orderResult] = await connection.query(
@@ -80,11 +85,11 @@ export async function GET(
         [orderId, userId]
       );
       
-      if ((orderResult as OrderResult).length === 0) {
+      if ((orderResult as Order[]).length === 0) {
         return NextResponse.json({ error: 'Order not found' }, { status: 404 });
       }
       
-      const order = (orderResult as OrderResult)[0];
+      const order = (orderResult as Order[])[0];
       
       // Get the order items with product details
       const [orderItems] = await connection.query(
@@ -123,12 +128,12 @@ export async function GET(
         [userId]
       );
       
-      const shippingAddress = (addressResult as AddressResult).length > 0 
-        ? (addressResult as AddressResult)[0]
+      const shippingAddress = (addressResult as ShippingAddress[]).length > 0 
+        ? (addressResult as ShippingAddress[])[0]
         : null;
       
       // Calculate subtotal
-      const subtotal = (orderItems as OrderItems).reduce((sum, item) => sum + parseFloat(item.total_price.toString()), 0);
+      const subtotal = (orderItems as OrderItem[]).reduce((sum, item) => sum + parseFloat(item.total_price), 0);
       
       // Determine payment method and status
       const paymentMethod = order.order_number.startsWith('cod_') 

@@ -2,18 +2,19 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
-// Define proper types for database results
-type Product = {
+// Type definitions
+interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
   slug: string;
-};
+}
 
-type InsertResult = {
+interface DatabaseInsertResult {
   insertId: number;
-};
+  affectedRows: number;
+}
 
 export async function GET() {
   try {
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ 
       message: 'Product created successfully',
-      product: { id: (result as InsertResult).insertId, name, description, price, slug }
+      product: { id: (result as DatabaseInsertResult).insertId, name, description, price, slug }
     }, { status: 201 });
   } catch (error) {
     console.error('Error creating product:', error);

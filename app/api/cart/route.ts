@@ -3,10 +3,13 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import pool from '@/lib/db';
 
-// Define proper types for database results
-type UserResult = { id: number }[];
-type ServiceResult = { id: number }[];
-type CartItem = {
+// Type definitions
+interface User {
+  id: number;
+  google_id: string;
+}
+
+interface CartItem {
   id: number;
   user_id: number;
   product_id: number;
@@ -14,9 +17,18 @@ type CartItem = {
   is_stone: number;
   is_service: number;
   carats: number | null;
-};
-type CartItems = CartItem[];
-type QueryResult = { affectedRows: number };
+  product_name: string;
+  unit_price: number;
+}
+
+interface Service {
+  id: number;
+  slug: string;
+}
+
+interface DatabaseResult {
+  affectedRows: number;
+}
 
 // GET handler to fetch cart items
 export async function GET(req: NextRequest) {
@@ -41,11 +53,11 @@ export async function GET(req: NextRequest) {
         [userGoogleId]
       );
       
-      if ((userResult as UserResult).length === 0) {
+      if ((userResult as User[]).length === 0) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       
-      const userId = (userResult as UserResult)[0].id;
+      const userId = (userResult as User[])[0].id;
       
       // Get cart items for the user with product details
       const [rows] = await connection.query(
@@ -109,11 +121,11 @@ export async function POST(req: NextRequest) {
         [userGoogleId]
       );
       
-      if ((userResult as UserResult).length === 0) {
+      if ((userResult as User[]).length === 0) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       
-      const userId = (userResult as UserResult)[0].id;
+      const userId = (userResult as User[])[0].id;
       
       // Determine the type of item and get the actual numeric ID
       let actualProductId: number;
@@ -138,11 +150,11 @@ export async function POST(req: NextRequest) {
             [productId]
           );
           
-          if ((serviceResult as ServiceResult).length === 0) {
+          if ((serviceResult as Service[]).length === 0) {
             return NextResponse.json({ error: `Service not found with slug: ${productId}` }, { status: 404 });
           }
           
-          actualProductId = (serviceResult as ServiceResult)[0].id;
+          actualProductId = (serviceResult as Service[])[0].id;
         }
       } 
       // Handle numeric IDs for regular products and stones
@@ -172,12 +184,12 @@ export async function POST(req: NextRequest) {
         [userId, actualProductId, resolvedIsStone ? 1 : 0, resolvedIsService ? 1 : 0]
       );
       
-      if ((existingItems as CartItems).length > 0) {
+      if ((existingItems as CartItem[]).length > 0) {
         // Update quantity/carats if item already exists
-        const existingItem = (existingItems as CartItems)[0];
+        const existingItem = (existingItems as CartItem[])[0];
         const newQuantity = resolvedIsStone 
-          ? parseFloat(existingItem.carats?.toString() || '0') + parseFloat(carats?.toString() || '1')
-          : parseInt(existingItem.quantity.toString()) + parseInt(quantity.toString());
+          ? (existingItem.carats || 0) + (carats || 1)
+          : existingItem.quantity + quantity;
           
         await connection.query(
           'UPDATE cart SET quantity = ?, carats = ? WHERE id = ?',
@@ -243,11 +255,11 @@ export async function DELETE(req: NextRequest) {
         [userGoogleId]
       );
       
-      if ((userResult as UserResult).length === 0) {
+      if ((userResult as User[]).length === 0) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       
-      const userId = (userResult as UserResult)[0].id;
+      const userId = (userResult as User[])[0].id;
       
       // Delete the cart item (ensuring it belongs to the correct user)
       const [result] = await connection.query(
@@ -255,7 +267,7 @@ export async function DELETE(req: NextRequest) {
         [cartItemId, userId]
       );
       
-      if ((result as QueryResult).affectedRows === 0) {
+      if ((result as DatabaseResult).affectedRows === 0) {
         return NextResponse.json({ error: 'Item not found in cart' }, { status: 404 });
       }
       
@@ -304,11 +316,11 @@ export async function PUT(req: NextRequest) {
         [userGoogleId]
       );
       
-      if ((userResult as UserResult).length === 0) {
+      if ((userResult as User[]).length === 0) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       
-      const userId = (userResult as UserResult)[0].id;
+      const userId = (userResult as User[])[0].id;
       
       // Get the cart item to check if it's a stone, service, or regular product
       const [cartItems] = await connection.query(
@@ -316,11 +328,11 @@ export async function PUT(req: NextRequest) {
         [cartItemId, userId]
       );
       
-      if ((cartItems as CartItems).length === 0) {
+      if ((cartItems as CartItem[]).length === 0) {
         return NextResponse.json({ error: 'Item not found in cart' }, { status: 404 });
       }
       
-      const cartItem = (cartItems as CartItems)[0];
+      const cartItem = (cartItems as CartItem[])[0];
       const isStone = cartItem.is_stone === 1;
       
       // Update the cart item

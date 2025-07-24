@@ -1,30 +1,7 @@
 "use client"
 import { useState, useEffect, useCallback } from "react"
 import { notFound } from "next/navigation"
-// Define types locally since the import path doesn't exist
-interface Certification {
-  id: number;
-  courseName: string;
-  instituteName: string;
-  issue_date: string;
-  expiry_date?: string;
-  credential_id?: string;
-  credential_url?: string;
-  certificateFile?: string;
-}
-
-interface Education {
-  id: number;
-  qualification: string;
-  universityName: string;
-  field_of_study: string;
-  start_date: string;
-  end_date?: string;
-  grade?: string;
-  activities?: string;
-  description?: string;
-  degreeFile?: string;
-}
+import { Certification, Education } from "../../../../types/astrologer";
 import Image from 'next/image'
 
 const documentLabels = {
@@ -217,8 +194,8 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
     const docStatuses = documentEntries.map(([key]) => documentStatuses[key] || "unverified")
 
     // Check education/certification statuses
-    const eduStatusList = educations.map((edu) => eduStatuses[edu.id] || "unverified")
-    const certStatusList = certifications.map((cert) => certStatuses[cert.id] || "unverified")
+    const eduStatusList = educations.map((edu) => edu.id ? eduStatuses[edu.id] || "unverified" : "unverified")
+    const certStatusList = certifications.map((cert) => cert.id ? certStatuses[cert.id] || "unverified" : "unverified")
 
     // Combine all statuses
     const allStatuses = [...docStatuses, ...eduStatusList, ...certStatusList]
@@ -582,8 +559,8 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
   const getDocumentStatusSummary = () => {
     const documentEntries = Object.entries(astrologer.documents).filter(([, url]) => url && url.trim() !== "")
     const docStatuses = documentEntries.map(([key]) => documentStatuses[key] || "unverified")
-    const eduStatusList = educations.map((edu) => eduStatuses[edu.id] || "unverified")
-    const certStatusList = certifications.map((cert) => certStatuses[cert.id] || "unverified")
+    const eduStatusList = educations.map((edu) => edu.id ? eduStatuses[edu.id] || "unverified" : "unverified")
+    const certStatusList = certifications.map((cert) => cert.id ? certStatuses[cert.id] || "unverified" : "unverified")
     const allStatuses = [...docStatuses, ...eduStatusList, ...certStatusList]
 
     const accepted = allStatuses.filter((s) => s === "accepted").length
@@ -621,7 +598,7 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
 
     // Add education documents
     educations.forEach((edu) => {
-      if (edu.degreeFile) {
+      if (edu.degreeFile && edu.id) {
         allDocs.push({
           id: edu.id,
           label: `${edu.qualification} - ${edu.universityName}`,
@@ -635,7 +612,7 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
 
     // Add certification documents
     certifications.forEach((cert) => {
-      if (cert.certificateFile) {
+      if (cert.certificateFile && cert.id) {
         allDocs.push({
           id: cert.id,
           label: `${cert.courseName} - ${cert.instituteName}`,

@@ -8,6 +8,12 @@ import { useAuth } from '../contexts/AuthContext'
 import { useRouter } from 'next/router'
 import CartIcon from './CartIcon'
 
+// Type definitions
+interface UserWithAdmin {
+  isAdmin?: boolean;
+  [key: string]: unknown;
+}
+
 export function Navigation() {
   const { user, logout } = useAuth()
   const router = useRouter()
@@ -56,11 +62,11 @@ export function Navigation() {
             <Link href="/study" className="text-white hover:text-gray-300">
               अध्ययन
             </Link>
-            {user && user.isAdmin && (
+            {user && Boolean((user as UserWithAdmin)?.isAdmin) ? (
               <Link href="/admin" className="text-white hover:text-gray-300">
                 Admin
               </Link>
-            )}
+            ) : null}
             <div className="h-5 w-px bg-gray-600/50" /> {/* Divider */}
             <CartIcon />
             <div className="h-5 w-px bg-gray-600/50" /> {/* Divider */}

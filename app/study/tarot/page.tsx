@@ -1,11 +1,12 @@
 'use client';
 import React, { useState } from 'react';
-import { MysticBackground } from '../../components/MysticBackground';
+import { AnimatedStars } from '../../components/AnimatedStars';
+import {MysticBackground} from '../../components/MysticBackground';
 import { motion } from 'framer-motion';
-import { FAQSection } from '../../components/FAQSection';
-import { DrNarendraProfile } from '../../components/DrNarendraProfile';
-import { Statistics } from '../../components/Statistics';
-import { ContactForm } from '../../components/ContactForm';
+import {FAQSection} from '../../components/FAQSection';
+import {DrNarendraProfile} from '../../components/DrNarendraProfile';
+import {Statistics} from '../../components/Statistics';
+import {ContactForm} from '../../components/ContactForm';
 
 const tabs = ['Overview', 'Card Meanings', 'Reading Techniques', 'FAQs'];
 

@@ -189,7 +189,13 @@ export default function KundaliMatchingPage() {
           <div className="lg:col-span-1">
             <div className="sticky top-8 space-y-8">
               <AboutSummary />
-              <UniversalCartButton />
+              <UniversalCartButton
+                productId="kundali-matching"
+                productName="Kundali Matching Report"
+                price={servicePrice}
+              >
+                Add to Cart
+              </UniversalCartButton>
             </div>
           </div>
         </div>

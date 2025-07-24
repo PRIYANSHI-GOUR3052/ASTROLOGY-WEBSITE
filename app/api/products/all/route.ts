@@ -1,25 +1,25 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
-// Define proper types for database results
-type Product = {
+// Type definitions
+interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
   slug: string;
-};
+}
 
-type Stone = {
+interface Stone {
   id: number;
   name: string;
-  benefits: string;
-  price_per_carat: number;
   name_en: string;
+  benefits: string;
+  benefits_en: string;
+  price_per_carat: number;
   zodiac: string;
   zodiac_en: string;
-  benefits_en: string;
-};
+}
 
 export async function GET() {
   try {

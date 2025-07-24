@@ -29,6 +29,7 @@ type Booking = {
   client: {
     name: string;
     email: string;
+    [key: string]: unknown;
   };
   date: string;
   [key: string]: unknown;

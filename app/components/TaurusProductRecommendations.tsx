@@ -1,5 +1,30 @@
 'use client';
 
+// Type definitions for category data
+type TaurusProduct = {
+  id: string;
+  name: string;
+  image: string;
+  price: string;
+  originalPrice: string;
+  category: string;
+  taurusBenefit: string;
+  slug: string;
+};
+type TaurusCategory = {
+  name: string;
+  benefit: string;
+  image: string;
+};
+
+function hasBenefit(obj: TaurusProduct | TaurusCategory): obj is TaurusCategory {
+  return (obj as TaurusCategory).benefit !== undefined;
+}
+
+function getCategoryLabelById(id: string): keyof typeof taurusRecommendations | undefined {
+  return categories.find(c => c.id === id)?.label as keyof typeof taurusRecommendations | undefined;
+}
+
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -237,7 +262,7 @@ export default function TaurusProductRecommendations() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          {taurusRecommendations[categories.find(c => c.id === activeCategory)?.label || ""]?.map((category, index) => (
+          {(taurusRecommendations[getCategoryLabelById(activeCategory) ?? "Gemstone Therapy"] ?? []).map((category, index) => (
             <motion.div
               key={index}
               className="bg-gradient-to-br from-white via-green-50/30 to-emerald-50/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group cursor-pointer"
@@ -258,7 +283,9 @@ export default function TaurusProductRecommendations() {
               {/* CATEGORY INFO */}
               <div className="p-6">
                 <h3 className="text-xl font-serif font-bold text-black mb-2">{category.name}</h3>
-                <p className="text-slate-700 font-medium mb-4 font-serif leading-relaxed">{category.benefit}</p>
+                {hasBenefit(category) && (
+                  <p className="text-slate-700 font-medium mb-4 font-serif leading-relaxed">{category.benefit}</p>
+                )}
                 <button className="w-full bg-gradient-to-r from-green-100 to-emerald-100 text-black font-serif font-bold py-3 rounded-xl shadow hover:from-emerald-200 hover:to-green-200 transition-all duration-300 flex items-center justify-center gap-2">
                   <Sparkles className="w-5 h-5" />
                   Explore Collection

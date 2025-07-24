@@ -12,6 +12,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import Image from 'next/image';
+import { Certification, Education } from "../../../types/astrologer";
 
 
 const expertiseOptions = [
@@ -31,28 +32,6 @@ const avatarOptions = [
 ];
 
 type ApprovalStatus = 'unverified' | 'pending' | 'approved' | 'rejected';
-
-// Add interfaces at the top
-interface Certification {
-  id?: number;
-  courseName: string;
-  instituteName: string;
-  yearOfCompletion: string;
-  certificateFile?: string;
-  file?: File;
-  status?: string;
-  remarks?: string;
-}
-interface Education {
-  id?: number;
-  qualification: string;
-  fieldOfStudy: string;
-  universityName: string;
-  degreeFile?: string;
-  file?: File;
-  status?: string;
-  remarks?: string;
-}
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -850,9 +829,9 @@ const ProfilePage = () => {
                   {/* Documents Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {requiredDocs.map(doc => {
-                      const status = verification?.[doc.statusKey] || 'unverified';
-                      const remarks = verification?.[doc.remarksKey] || '';
-                      const url = verification?.[doc.name] || '';
+                      const status = (verification?.[doc.statusKey] as string) || 'unverified';
+                      const remarks = (verification?.[doc.remarksKey] as string) || '';
+                      const url = (verification?.[doc.name] as string) || '';
                       return (
                         <div key={doc.name} className="p-4 rounded-lg border flex flex-col gap-2 bg-gray-50 dark:bg-gray-900/40">
                           <div className="flex items-center gap-2">

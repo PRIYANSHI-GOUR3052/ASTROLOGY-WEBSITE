@@ -3,9 +3,13 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import pool from '@/lib/db';
 
-// Define proper types for database results
-type UserResult = { id: number }[];
-type CartItem = {
+// Type definitions
+interface User {
+  id: number;
+  google_id: string;
+}
+
+interface CartItem {
   id: number;
   user_id: number;
   product_id: number;
@@ -14,9 +18,12 @@ type CartItem = {
   is_service: number;
   carats: number | null;
   unit_price: number;
-};
-type CartItems = CartItem[];
-type OrderResult = { insertId: number };
+}
+
+interface DatabaseInsertResult {
+  insertId: number;
+  affectedRows: number;
+}
 
 // POST handler for creating a Cash-on-Delivery order
 export async function POST(req: NextRequest) {
@@ -53,11 +60,11 @@ export async function POST(req: NextRequest) {
         [userGoogleId]
       );
       
-      if ((userResult as UserResult).length === 0) {
+      if ((userResult as User[]).length === 0) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
       
-      const userId = (userResult as UserResult)[0].id;
+      const userId = (userResult as User[])[0].id;
       
       // Fetch cart items with their prices
       const [cartItems] = await connection.query(
@@ -75,16 +82,16 @@ export async function POST(req: NextRequest) {
         [userId]
       );
       
-      if ((cartItems as CartItems).length === 0) {
+      if ((cartItems as CartItem[]).length === 0) {
         return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
       }
       
       // Calculate total amount
       let totalAmount = 0;
-      for (const item of cartItems as CartItems) {
+      for (const item of cartItems as CartItem[]) {
         const itemPrice = item.is_stone === 1
-          ? parseFloat(item.unit_price.toString()) * parseFloat((item.carats || 1).toString())
-          : parseFloat(item.unit_price.toString()) * parseInt(item.quantity.toString());
+          ? item.unit_price * (item.carats || 1)
+          : item.unit_price * item.quantity;
         totalAmount += itemPrice;
       }
       
@@ -107,7 +114,7 @@ export async function POST(req: NextRequest) {
         ]
       );
       
-      const orderId = (orderResult as OrderResult).insertId;
+      const orderId = (orderResult as DatabaseInsertResult).insertId;
       
       // Save shipping address
       await connection.query(
@@ -144,10 +151,10 @@ export async function POST(req: NextRequest) {
       );
       
       // Insert order items
-      for (const item of cartItems as CartItems) {
+      for (const item of cartItems as CartItem[]) {
         const itemPrice = item.is_stone === 1
-          ? parseFloat(item.unit_price.toString()) * parseFloat((item.carats || 1).toString())
-          : parseFloat(item.unit_price.toString()) * parseInt(item.quantity.toString());
+          ? item.unit_price * (item.carats || 1)
+          : item.unit_price * item.quantity;
         
         await connection.query(
           `INSERT INTO order_items (

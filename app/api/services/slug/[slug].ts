@@ -1,21 +1,24 @@
 
 import ServiceModel from '@/backend/models/services';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-// Define proper types for request and response
-type RequestHandler = {
-  query: { 
-    slug: string; 
-  }; 
-  method: string; 
-};
-
-type ResponseHandler = {
-  status: (code: number) => {
-    json: (data: { message: string; error?: string }) => void;
+// Type definitions
+interface ServiceRequest extends NextApiRequest {
+  query: {
+    slug: string;
   };
-};
+}
 
-export default async function handler(req: RequestHandler, res: ResponseHandler) {
+interface ErrorResponse {
+  message: string;
+  error?: string;
+}
+
+interface ServiceResponse {
+  [key: string]: unknown;
+}
+
+export default async function handler(req: ServiceRequest, res: NextApiResponse<ServiceResponse | ErrorResponse>) {
   try {
     const { slug } = req.query;
     

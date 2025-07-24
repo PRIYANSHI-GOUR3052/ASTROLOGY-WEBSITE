@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
-// Define proper types for database results
-type Stone = {
+// Type definitions
+interface Stone {
   id: number;
   name: string;
   name_en: string;
@@ -11,7 +11,7 @@ type Stone = {
   benefits: string;
   benefits_en: string;
   price_per_carat: number;
-};
+}
 
 // GET handler to fetch a specific stone by ID
 export async function GET(

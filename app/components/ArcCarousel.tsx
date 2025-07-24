@@ -27,7 +27,7 @@ export default function ArcCarousel() {
   const angle0 = useTransform(clampedT0, (tVal: number) => Math.PI * tVal);
   const x0 = useTransform(angle0, (a: number) => `calc(${(Math.cos(a) * ARC_RADIUS + ARC_WIDTH/2) / ARC_WIDTH * 100}% - ${IMAGE_SIZE/2}px)`);
   const y0 = useTransform(angle0, (a: number) => `${160 - Math.sin(a) * ARC_RADIUS}px`);
-  const scale0 = useTransform(angle0, (a: number) => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
+  const scale0 = useTransform(angle0, (a: number): number => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
 
   const baseT1 = 1 / (blogImages.length - 1);
   const t1 = useTransform(progress, (v: number) => baseT1 + v * 0.7);
@@ -35,7 +35,7 @@ export default function ArcCarousel() {
   const angle1 = useTransform(clampedT1, (tVal: number) => Math.PI * tVal);
   const x1 = useTransform(angle1, (a: number) => `calc(${(Math.cos(a) * ARC_RADIUS + ARC_WIDTH/2) / ARC_WIDTH * 100}% - ${IMAGE_SIZE/2}px)`);
   const y1 = useTransform(angle1, (a: number) => `${160 - Math.sin(a) * ARC_RADIUS}px`);
-  const scale1 = useTransform(angle1, (a: number) => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
+  const scale1 = useTransform(angle1, (a: number): number => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
 
   const baseT2 = 2 / (blogImages.length - 1);
   const t2 = useTransform(progress, (v: number) => baseT2 + v * 0.7);
@@ -43,7 +43,7 @@ export default function ArcCarousel() {
   const angle2 = useTransform(clampedT2, (tVal: number) => Math.PI * tVal);
   const x2 = useTransform(angle2, (a: number) => `calc(${(Math.cos(a) * ARC_RADIUS + ARC_WIDTH/2) / ARC_WIDTH * 100}% - ${IMAGE_SIZE/2}px)`);
   const y2 = useTransform(angle2, (a: number) => `${160 - Math.sin(a) * ARC_RADIUS}px`);
-  const scale2 = useTransform(angle2, (a: number) => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
+  const scale2 = useTransform(angle2, (a: number): number => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
 
   const baseT3 = 3 / (blogImages.length - 1);
   const t3 = useTransform(progress, (v: number) => baseT3 + v * 0.7);
@@ -51,7 +51,7 @@ export default function ArcCarousel() {
   const angle3 = useTransform(clampedT3, (tVal: number) => Math.PI * tVal);
   const x3 = useTransform(angle3, (a: number) => `calc(${(Math.cos(a) * ARC_RADIUS + ARC_WIDTH/2) / ARC_WIDTH * 100}% - ${IMAGE_SIZE/2}px)`);
   const y3 = useTransform(angle3, (a: number) => `${160 - Math.sin(a) * ARC_RADIUS}px`);
-  const scale3 = useTransform(angle3, (a: number) => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
+  const scale3 = useTransform(angle3, (a: number): number => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
 
   const baseT4 = 4 / (blogImages.length - 1);
   const t4 = useTransform(progress, (v: number) => baseT4 + v * 0.7);
@@ -59,7 +59,7 @@ export default function ArcCarousel() {
   const angle4 = useTransform(clampedT4, (tVal: number) => Math.PI * tVal);
   const x4 = useTransform(angle4, (a: number) => `calc(${(Math.cos(a) * ARC_RADIUS + ARC_WIDTH/2) / ARC_WIDTH * 100}% - ${IMAGE_SIZE/2}px)`);
   const y4 = useTransform(angle4, (a: number) => `${160 - Math.sin(a) * ARC_RADIUS}px`);
-  const scale4 = useTransform(angle4, (a: number) => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
+  const scale4 = useTransform(angle4, (a: number): number => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
 
   const baseT5 = 5 / (blogImages.length - 1);
   const t5 = useTransform(progress, (v: number) => baseT5 + v * 0.7);
@@ -67,7 +67,7 @@ export default function ArcCarousel() {
   const angle5 = useTransform(clampedT5, (tVal: number) => Math.PI * tVal);
   const x5 = useTransform(angle5, (a: number) => `calc(${(Math.cos(a) * ARC_RADIUS + ARC_WIDTH/2) / ARC_WIDTH * 100}% - ${IMAGE_SIZE/2}px)`);
   const y5 = useTransform(angle5, (a: number) => `${160 - Math.sin(a) * ARC_RADIUS}px`);
-  const scale5 = useTransform(angle5, (a: number) => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
+  const scale5 = useTransform(angle5, (a: number): number => Math.abs(a - Math.PI/2) < 0.2 ? 1.1 : 0.92);
 
   // Create array of transforms
   const imageTransforms: ImageTransform[] = [
