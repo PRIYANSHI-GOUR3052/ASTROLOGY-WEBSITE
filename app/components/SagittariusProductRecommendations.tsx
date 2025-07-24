@@ -1,5 +1,26 @@
 'use client';
 
+// Type definitions for category data
+type SagittariusProduct = {
+  id: string;
+  name: string;
+  image: string;
+  price: string;
+  originalPrice: string;
+  category: string;
+  sagittariusBenefit: string;
+  slug: string;
+};
+type SagittariusCategory = {
+  name: string;
+  benefit: string;
+  image: string;
+};
+
+function hasBenefit(obj: SagittariusProduct | SagittariusCategory): obj is SagittariusCategory {
+  return (obj as SagittariusCategory).benefit !== undefined;
+}
+
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -143,6 +164,10 @@ const sagittariusRecommendations = {
     { name: 'Travel Mindset', benefit: 'Adventure & Exploration', image: '/images/course-4.jpg' }
   ]
 };
+// Helper to map category id to label (key of sagittariusRecommendations)
+function getCategoryLabelById(id: string): keyof typeof sagittariusRecommendations | undefined {
+  return categories.find(c => c.id === id)?.label as keyof typeof sagittariusRecommendations | undefined;
+}
 
 export default function SagittariusProductRecommendations() {
   const [activeCategory, setActiveCategory] = useState('specially');
@@ -237,7 +262,7 @@ export default function SagittariusProductRecommendations() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          {sagittariusRecommendations[categories.find(c => c.id === activeCategory)?.label || ""]?.map((category, index) => (
+          {(sagittariusRecommendations[getCategoryLabelById(activeCategory) ?? "Gemstone Therapy"] ?? []).map((category, index) => (
             <motion.div
               key={index}
               className="bg-gradient-to-br from-white via-amber-50/30 to-orange-50/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group cursor-pointer"
@@ -258,7 +283,9 @@ export default function SagittariusProductRecommendations() {
               {/* CATEGORY INFO */}
               <div className="p-6">
                 <h3 className="text-xl font-serif font-bold text-black mb-2">{category.name}</h3>
-                <p className="text-slate-700 font-medium mb-4 font-serif leading-relaxed">{category.benefit}</p>
+                {hasBenefit(category) && (
+                  <p className="text-slate-700 font-medium mb-4 font-serif leading-relaxed">{category.benefit}</p>
+                )}
                 <button className="w-full bg-gradient-to-r from-amber-100 to-orange-100 text-black font-serif font-bold py-3 rounded-xl shadow hover:from-orange-200 hover:to-amber-200 transition-all duration-300 flex items-center justify-center gap-2">
                   <Sparkles className="w-5 h-5" />
                   Explore Collection
