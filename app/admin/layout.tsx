@@ -18,10 +18,13 @@ import {
   Bell,
   Grid,
   UserCircle2,
-  Orbit
+  Orbit,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -108,8 +111,27 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     {
       icon: Package,
       label: 'Products',
-      href: '/admin/products',
-      active: pathname === '/admin/products'
+      // No href for parent
+      children: [
+        {
+          label: 'Zodiac Sign',
+          href: '/admin/products/zodiac-sign',
+          active: pathname === '/admin/products/zodiac-sign',
+        },
+        {
+          label: 'Categories',
+          href: '/admin/products/categories',
+          active: pathname === '/admin/products/categories',
+        },
+        {
+          label: 'Product Creation',
+          href: '/admin/products/create',
+          active: pathname === '/admin/products/create',
+        },
+      ],
+      // Expanded if any child is active
+      expanded: ['/admin/products/zodiac-sign', '/admin/products/categories', '/admin/products/create'].includes(pathname || ''),
+      active: ['/admin/products/zodiac-sign', '/admin/products/categories', '/admin/products/create'].includes(pathname || ''),
     },
     {
       icon: Package,
@@ -157,22 +179,81 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         <nav className="p-4 space-y-2">
-          {navItems.map((item) => (
-            <Link 
-              key={item.href}
-              href={item.href}
-              className={`
-                flex items-center space-x-3 p-2 rounded-lg transition-colors
-                ${item.active 
-                  ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200' 
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-                }
-              `}
-            >
-              <item.icon className="w-5 h-5" />
-              <span className="text-sm font-medium">{item.label}</span>
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            // Products dropdown
+            if (item.label === 'Products' && item.children) {
+              const isAnyChildActive = item.children.some(child => child.active);
+              const isOpen = productsDropdownOpen || isAnyChildActive;
+              return (
+                <div key="products-dropdown">
+                  <button
+                    type="button"
+                    onClick={() => setProductsDropdownOpen((open) => !open)}
+                    className={`flex items-center justify-between w-full space-x-3 p-2 rounded-lg transition-colors cursor-pointer focus:outline-none
+                      ${isAnyChildActive
+                        ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200'
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}
+                    `}
+                  >
+                    <span className="flex items-center space-x-3">
+                      <item.icon className="w-5 h-5" />
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </span>
+                    {isOpen ? (
+                      <ChevronUp className="w-4 h-4" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4" />
+                    )}
+                  </button>
+                  {isOpen && (
+                    <div className="ml-8 mt-1 space-y-1">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className={`flex items-center space-x-2 p-2 rounded-lg transition-colors
+                            ${child.active
+                              ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200'
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}
+                          `}
+                        >
+                          <span className="text-sm font-medium">{child.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            // Regular nav item
+            return item.href ? (
+              <Link 
+                key={item.href}
+                href={item.href}
+                className={`
+                  flex items-center space-x-3 p-2 rounded-lg transition-colors
+                  ${item.active 
+                    ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200' 
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                  }
+                `}
+              >
+                <item.icon className="w-5 h-5" />
+                <span className="text-sm font-medium">{item.label}</span>
+              </Link>
+            ) : (
+              <div
+                className={`flex items-center space-x-3 p-2 rounded-lg transition-colors cursor-default
+                  ${item.active
+                    ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}
+                `}
+              >
+                <item.icon className="w-5 h-5" />
+                <span className="text-sm font-medium">{item.label}</span>
+              </div>
+            );
+          })}
         </nav>
       </div>
 
