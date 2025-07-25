@@ -10,6 +10,30 @@ import SpiritualTicker from "@/app/components/Hero/SpiritualTicker";
 import NakshatraGyaanBanner from "@/app/components/NakshatraGyaanBanner";
 import SpiritualJourneyBanner from "@/app/components/SpiritualJourneyBanner";
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  type: string;
+  material: string;
+  purpose: string[];
+  size: string;
+  price: string;
+  oldPrice: string;
+  image: string;
+  description: string;
+  path: string;
+}
+
+interface Filters {
+  type: string[];
+  material: string[];
+  purpose: string[];
+  size: string[];
+}
+
+type FilterCategory = keyof Filters;
+
 // Product Banner Component with Images
 const ProductBanner = () => (
   <div className="w-full bg-gradient-to-r from-orange-50 via-red-50 to-yellow-50 py-8 md:py-12 relative overflow-hidden">
@@ -55,7 +79,7 @@ const ProductBanner = () => (
 );
 
 // Products Data
-const products = [
+const products: Product[] = [
   {
     id: 1,
     name: "Sacred Kumkum",
@@ -220,16 +244,16 @@ const filterOptions = {
   material: ["Natural", "Sandalwood", "Natural Herbs", "Brass", "Cotton", "Holy Water"],
   purpose: ["Tilak", "Forehead Marking", "Cooling", "Purification", "Meditation", "Aarti", "Lighting", "Blessings", "Offerings", "Prasad", "Protection", "Decoration"],
   size: ["50g", "100g", "Pack of 12", "Medium", "500g", "250ml", "Pack of 50", "10m", "Pack of 21", "Mixed Pack", "500ml"]
-};
+} as const;
 
 export default function PujaEssentialsPage() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     type: [],
     material: [],
     purpose: [],
     size: []
   });
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState<FilterCategory | null>(null);
 
   // Filter products based on selected criteria
   const filteredProducts = products.filter(product => {
@@ -241,7 +265,7 @@ export default function PujaEssentialsPage() {
     return typeMatch && materialMatch && purposeMatch && sizeMatch;
   });
 
-  const toggleFilter = (category, value) => {
+  const toggleFilter = (category: FilterCategory, value: string): void => {
     setFilters(prev => ({
       ...prev,
       [category]: prev[category].includes(value)
@@ -250,7 +274,7 @@ export default function PujaEssentialsPage() {
     }));
   };
 
-  const clearAllFilters = () => {
+  const clearAllFilters = (): void => {
     setFilters({
       type: [],
       material: [],
@@ -259,7 +283,7 @@ export default function PujaEssentialsPage() {
     });
   };
 
-  const getActiveFiltersCount = () => {
+  const getActiveFiltersCount = (): number => {
     return Object.values(filters).reduce((sum, arr) => sum + arr.length, 0);
   };
 
@@ -397,14 +421,14 @@ export default function PujaEssentialsPage() {
           {getActiveFiltersCount() > 0 && (
             <div className="flex flex-wrap gap-2">
               {Object.entries(filters).map(([category, values]) =>
-                values.map(value => (
+                values.map((value: string) => (
                   <span
                     key={`${category}-${value}`}
                     className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium"
                   >
                     {value}
                     <button
-                      onClick={() => toggleFilter(category, value)}
+                      onClick={() => toggleFilter(category as FilterCategory, value)}
                       className="ml-2 text-gray-500 hover:text-gray-700"
                     >
                       ×
@@ -452,15 +476,14 @@ export default function PujaEssentialsPage() {
 
                     {/* Add to Cart Button - Simple */}
                     <UniversalCartButton
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image,
-                        path: product.path
-                      }}
+                      productId={product.id.toString()}
+                      productName={product.name}
+                      price={Number(product.price.replace(/[^\d]/g, ''))}
+                      image={product.image}
                       className="w-full bg-gray-900 text-white py-3 px-6 rounded-xl font-medium hover:bg-gray-800 transition-colors"
-                    />
+                    >
+                      Add to Cart
+                    </UniversalCartButton>
                   </div>
                 </motion.div>
               </Link>

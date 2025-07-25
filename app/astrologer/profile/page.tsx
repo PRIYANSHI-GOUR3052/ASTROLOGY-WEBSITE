@@ -63,7 +63,7 @@ const ProfilePage = () => {
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
   const [modalDoc, setModalDoc] = useState<{ url: string; label: string } | null>(null);
 
-  const requiredDocs = [
+  const requiredDocs: Array<{ name: string; label: string; statusKey: string; remarksKey: string }> = [
     { name: 'aadharCard', label: 'Aadhar Card', statusKey: 'aadharStatus', remarksKey: 'aadharRemarks' },
     { name: 'panCard', label: 'PAN Card', statusKey: 'panStatus', remarksKey: 'panRemarks' },
     { name: 'selfie', label: 'Selfie', statusKey: 'selfieStatus', remarksKey: 'selfieRemarks' },
@@ -841,7 +841,7 @@ const ProfilePage = () => {
                                   status === 'rejected' ? 'bg-red-100 text-red-800' :
                                     'bg-gray-200 text-gray-800'
                               }`}>
-                              {status.charAt(0).toUpperCase() + status.slice(1)}
+                              {(status as string).charAt(0).toUpperCase() + (status as string).slice(1)}
                             </span>
                           </div>
                           {url && (
@@ -897,7 +897,7 @@ const ProfilePage = () => {
                                       cert.status === 'rejected' ? 'bg-red-100 text-red-800' :
                                         'bg-gray-200 text-gray-800'
                                   }`}>
-                                  {cert.status.charAt(0).toUpperCase() + cert.status.slice(1)}
+                                  {(cert.status as string).charAt(0).toUpperCase() + (cert.status as string).slice(1)}
                                 </span>
                               )}
                             </div>

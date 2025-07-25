@@ -4,10 +4,33 @@ import Image from "next/image";
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ChevronDown, X, ShoppingCart } from 'lucide-react';
+import { UniversalCartButton } from "@/app/components/UniversalCartButton";
 import NakshatraGyaanBanner from '../../../components/NakshatraGyaanBanner';
 import SpiritualJourneyBanner from '../../../components/SpiritualJourneyBanner';
 import SpiritualTicker from '../../../components/Hero/SpiritualTicker';
-import { AnimatePresence } from 'framer-motion';
+
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  type: string;
+  mukhi: string;
+  beadCount: string;
+  purpose: string[];
+  price: string;
+  oldPrice: string;
+  image: string;
+  description: string;
+  path: string;
+}
+
+interface Filters {
+  type: string[];
+  mukhi: string[];
+  purpose: string[];
+}
+
+type FilterCategory = keyof Filters;
 
 // Product Banner Component with Images
 const ProductBanner = () => (
@@ -54,7 +77,7 @@ const ProductBanner = () => (
 );
 
 // Product Data with navigation paths
-const products = [
+const products: Product[] = [
   {
     id: 1,
     name: "5 Mukhi Rudraksha Mala",
@@ -98,53 +121,53 @@ const products = [
     id: 4,
     name: "Tulsi Mala",
     type: "Tulsi Mala",
-    mukhi: "N/A",
+    mukhi: "Tulsi",
     beadCount: "108 Beads",
-    purpose: ["For Daily Wear", "For Japa (Chanting)"],
+    purpose: ["For Japa (Chanting)", "For Daily Wear"],
     price: "₹800",
     oldPrice: "₹1,500",
     image: "/images/products/tulsi-mala.jpg",
-    description: "Sacred tulsi beads for daily spiritual practice",
+    description: "Sacred tulsi mala for daily chanting and spiritual practice",
     path: "/shop/tulsi-mala"
   },
   {
     id: 5,
-    name: "Sphatik Crystal Mala",
-    type: "Sphatik (Crystal) Mala",
-    mukhi: "N/A",
+    name: "3 Mukhi Rudraksha Mala",
+    type: "Rudraksha Mala",
+    mukhi: "3 Mukhi",
     beadCount: "108 Beads",
     purpose: ["For Meditation", "For Healing / Protection"],
-    price: "₹1,200",
-    oldPrice: "₹2,000",
-    image: "/images/products/sphatik-mala.jpg",
-    description: "Pure crystal mala for meditation and healing",
-    path: "/shop/sphatik-crystal-mala"
+    price: "₹2,000",
+    oldPrice: "₹3,500",
+    image: "/images/products/3-mukhi-rudraksha.jpg",
+    description: "Helps in meditation and provides spiritual protection",
+    path: "/shop/3-mukhi-rudraksha-mala"
   },
   {
     id: 6,
-    name: "9 Mukhi Rudraksha",
-    type: "Rudraksha",
-    mukhi: "9 Mukhi",
-    beadCount: "1 Bead",
-    purpose: ["For Healing / Protection", "Astrological Remedies"],
-    price: "₹8,000",
-    oldPrice: "₹12,000",
-    image: "/images/products/9-mukhi-rudraksha.jpg",
-    description: "Powerful protection and authority enhancement",
-    path: "/shop/9-mukhi-rudraksha"
+    name: "Sphatik Mala",
+    type: "Sphatik Mala",
+    mukhi: "Sphatik",
+    beadCount: "108 Beads",
+    purpose: ["For Meditation", "For Healing / Protection"],
+    price: "₹1,200",
+    oldPrice: "₹2,200",
+    image: "/images/products/sphatik-mala.jpg",
+    description: "Crystal mala for meditation and healing purposes",
+    path: "/shop/sphatik-mala"
   },
   {
     id: 7,
-    name: "Sandalwood Mala",
-    type: "Sandalwood (Chandan) Mala",
-    mukhi: "N/A",
+    name: "9 Mukhi Rudraksha Mala",
+    type: "Rudraksha Mala",
+    mukhi: "9 Mukhi",
     beadCount: "108 Beads",
-    purpose: ["For Daily Wear", "For Meditation"],
-    price: "₹600",
-    oldPrice: "₹1,200",
-    image: "/images/products/sandalwood-mala.jpg",
-    description: "Pure sandalwood mala for cooling and calming effects",
-    path: "/shop/sandalwood-mala"
+    purpose: ["For Japa (Chanting)", "For Healing / Protection"],
+    price: "₹4,500",
+    oldPrice: "₹7,000",
+    image: "/images/products/9-mukhi-rudraksha.jpg",
+    description: "Powerful rudraksha for protection and spiritual growth",
+    path: "/shop/9-mukhi-rudraksha-mala"
   },
   {
     id: 8,
@@ -152,95 +175,92 @@ const products = [
     type: "Rudraksha Mala",
     mukhi: "11 Mukhi",
     beadCount: "108 Beads",
-    purpose: ["For Meditation", "For Japa (Chanting)"],
-    price: "₹5,500",
-    oldPrice: "₹8,500",
+    purpose: ["For Meditation", "Astrological Remedies"],
+    price: "₹6,000",
+    oldPrice: "₹9,500",
     image: "/images/products/11-mukhi-rudraksha.jpg",
-    description: "Enhances meditation and spiritual focus",
+    description: "Rare rudraksha for meditation and astrological benefits",
     path: "/shop/11-mukhi-rudraksha-mala"
   },
   {
     id: 9,
-    name: "Lotus Seed Mala",
-    type: "Lotus Seed Mala (Kamal Gatta)",
-    mukhi: "N/A",
+    name: "Sandhya Mala",
+    type: "Sandhya Mala",
+    mukhi: "Sandhya",
     beadCount: "108 Beads",
-    purpose: ["For Daily Wear", "For Healing / Protection"],
-    price: "₹900",
-    oldPrice: "₹1,800",
-    image: "/images/products/lotus-seed-mala.jpg",
-    description: "Sacred lotus seeds for spiritual purity",
-    path: "/shop/lotus-seed-mala"
+    purpose: ["For Japa (Chanting)", "For Daily Wear"],
+    price: "₹600",
+    oldPrice: "₹1,200",
+    image: "/images/products/sandhya-mala.jpg",
+    description: "Traditional sandhya mala for daily chanting",
+    path: "/shop/sandhya-mala"
   },
   {
     id: 10,
-    name: "Navratna Mala",
-    type: "Navratna Mala (9 stones)",
-    mukhi: "N/A",
+    name: "13 Mukhi Rudraksha Mala",
+    type: "Rudraksha Mala",
+    mukhi: "13 Mukhi",
     beadCount: "108 Beads",
-    purpose: ["Astrological Remedies", "For Healing / Protection"],
-    price: "₹2,800",
-    oldPrice: "₹4,500",
-    image: "/images/products/navratna-mala.jpg",
-    description: "Nine precious stones for planetary balance",
-    path: "/shop/navratna-mala"
+    purpose: ["For Meditation", "For Healing / Protection"],
+    price: "₹8,000",
+    oldPrice: "₹12,000",
+    image: "/images/products/13-mukhi-rudraksha.jpg",
+    description: "Very rare rudraksha for deep meditation and protection",
+    path: "/shop/13-mukhi-rudraksha-mala"
   },
   {
     id: 11,
-    name: "27 Bead Rudraksha Mala",
-    type: "Rudraksha Mala",
-    mukhi: "5 Mukhi",
-    beadCount: "27 Beads",
-    purpose: ["For Daily Wear", "For Japa (Chanting)"],
-    price: "₹1,500",
-    oldPrice: "₹2,500",
-    image: "/images/products/27-bead-rudraksha.jpg",
-    description: "Compact mala for daily spiritual practice",
-    path: "/shop/27-bead-rudraksha-mala"
+    name: "Kamal Gatta Mala",
+    type: "Kamal Gatta Mala",
+    mukhi: "Kamal Gatta",
+    beadCount: "108 Beads",
+    purpose: ["For Japa (Chanting)", "For Daily Wear"],
+    price: "₹400",
+    oldPrice: "₹800",
+    image: "/images/products/kamal-gatta-mala.jpg",
+    description: "Sacred lotus seed mala for daily chanting",
+    path: "/shop/kamal-gatta-mala"
   },
   {
     id: 12,
-    name: "Parad Mala",
-    type: "Parad Mala (Mercury)",
-    mukhi: "N/A",
+    name: "21 Mukhi Rudraksha Mala",
+    type: "Rudraksha Mala",
+    mukhi: "21 Mukhi",
     beadCount: "108 Beads",
-    purpose: ["Astrological Remedies", "For Healing / Protection"],
-    price: "₹4,500",
-    oldPrice: "₹7,000",
-    image: "/images/products/parad-mala.jpg",
-    description: "Mercury beads for powerful astrological remedies",
-    path: "/shop/parad-mala"
+    purpose: ["For Meditation", "Astrological Remedies"],
+    price: "₹15,000",
+    oldPrice: "₹25,000",
+    image: "/images/products/21-mukhi-rudraksha.jpg",
+    description: "Extremely rare rudraksha for ultimate spiritual benefits",
+    path: "/shop/21-mukhi-rudraksha-mala"
   }
 ];
 
 // Filter Options
-const filterOptions = {
-  type: ["Rudraksha Mala", "Rudraksha", "Tulsi Mala", "Sphatik (Crystal) Mala", "Sandalwood (Chandan) Mala", "Lotus Seed Mala (Kamal Gatta)", "Parad Mala (Mercury)", "Navratna Mala (9 stones)"],
-  mukhi: ["1 Mukhi", "2 Mukhi", "3 Mukhi", "4 Mukhi", "5 Mukhi", "6 Mukhi", "7 Mukhi", "8 Mukhi", "9 Mukhi", "10 Mukhi", "11 Mukhi", "12 Mukhi", "13 Mukhi", "14 Mukhi", "N/A"],
-  beadCount: ["108 Beads", "54 Beads", "27 Beads", "1 Bead"],
+const filterOptions: Record<FilterCategory, string[]> = {
+  type: ["Rudraksha Mala", "Rudraksha", "Tulsi Mala", "Sphatik Mala", "Sandhya Mala", "Kamal Gatta Mala"],
+  mukhi: ["5 Mukhi", "1 Mukhi", "7 Mukhi", "Tulsi", "3 Mukhi", "Sphatik", "9 Mukhi", "11 Mukhi", "Sandhya", "13 Mukhi", "Kamal Gatta", "21 Mukhi"],
   purpose: ["For Meditation", "For Daily Wear", "For Japa (Chanting)", "For Healing / Protection", "Astrological Remedies"]
 };
 
 export default function RudrakshaMalasPage() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     type: [],
     mukhi: [],
-    beadCount: [],
     purpose: []
   });
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState<FilterCategory | null>(null);
 
   // Filter products based on selected criteria
   const filteredProducts = products.filter(product => {
     const typeMatch = filters.type.length === 0 || filters.type.includes(product.type);
     const mukhiMatch = filters.mukhi.length === 0 || filters.mukhi.includes(product.mukhi);
-    const beadCountMatch = filters.beadCount.length === 0 || filters.beadCount.includes(product.beadCount);
     const purposeMatch = filters.purpose.length === 0 || product.purpose.some(p => filters.purpose.includes(p));
 
-    return typeMatch && mukhiMatch && beadCountMatch && purposeMatch;
+    return typeMatch && mukhiMatch && purposeMatch;
   });
 
-  const toggleFilter = (category, value) => {
+  const toggleFilter = (category: FilterCategory, value: string): void => {
     setFilters(prev => ({
       ...prev,
       [category]: prev[category].includes(value)
@@ -249,16 +269,15 @@ export default function RudrakshaMalasPage() {
     }));
   };
 
-  const clearAllFilters = () => {
+  const clearAllFilters = (): void => {
     setFilters({
       type: [],
       mukhi: [],
-      beadCount: [],
       purpose: []
     });
   };
 
-  const getActiveFiltersCount = () => {
+  const getActiveFiltersCount = (): number => {
     return Object.values(filters).reduce((sum, arr) => sum + arr.length, 0);
   };
 
@@ -273,11 +292,11 @@ export default function RudrakshaMalasPage() {
       {/* Category Description */}
       <div className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-3xl md:text-4xl font-serif font-bold text-center mb-6 text-gray-800">
-          Sacred beads of divine energy
+          Connect with divine energy through sacred beads
         </h2>
         <p className="text-lg text-gray-600 text-center max-w-4xl mx-auto mb-12">
-          Discover authentic Rudraksha beads and sacred malas that connect you to divine energy. 
-          Each bead carries unique spiritual properties to enhance your meditation, protection, and spiritual growth.
+          Discover authentic rudraksha and mala collections that enhance your spiritual practice and meditation. 
+          Each bead carries unique vibrational energy to support your spiritual journey and provide divine protection.
         </p>
 
         {/* Filters Section */}
@@ -292,21 +311,23 @@ export default function RudrakshaMalasPage() {
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
               >
                 Type
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'type' ? 'rotate-180' : ''}`} />
+                <ChevronDown className="w-4 h-4" />
               </button>
-              <div className={`absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto transition-all duration-200 ease-out ${activeDropdown === 'type' ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-2 pointer-events-none'}`}>
-                {filterOptions.type.map(type => (
-                  <label key={type} className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={filters.type.includes(type)}
-                      onChange={() => toggleFilter('type', type)}
-                      className="mr-2"
-                    />
-                    {type}
-                  </label>
-                ))}
-              </div>
+              {activeDropdown === 'type' && (
+                <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto">
+                  {filterOptions.type.map(type => (
+                    <label key={type} className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={filters.type.includes(type)}
+                        onChange={() => toggleFilter('type', type)}
+                        className="mr-2"
+                      />
+                      {type}
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Mukhi Filter */}
@@ -316,45 +337,23 @@ export default function RudrakshaMalasPage() {
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
               >
                 Mukhi
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'mukhi' ? 'rotate-180' : ''}`} />
+                <ChevronDown className="w-4 h-4" />
               </button>
-              <div className={`absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto transition-all duration-200 ease-out ${activeDropdown === 'mukhi' ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-2 pointer-events-none'}`}>
-                {filterOptions.mukhi.map(mukhi => (
-                  <label key={mukhi} className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={filters.mukhi.includes(mukhi)}
-                      onChange={() => toggleFilter('mukhi', mukhi)}
-                      className="mr-2"
-                    />
-                    {mukhi}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Bead Count Filter */}
-            <div className="relative">
-              <button
-                onClick={() => setActiveDropdown(activeDropdown === 'beadCount' ? null : 'beadCount')}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-              >
-                Bead Count
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'beadCount' ? 'rotate-180' : ''}`} />
-              </button>
-              <div className={`absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto transition-all duration-200 ease-out ${activeDropdown === 'beadCount' ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-2 pointer-events-none'}`}>
-                {filterOptions.beadCount.map(count => (
-                  <label key={count} className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={filters.beadCount.includes(count)}
-                      onChange={() => toggleFilter('beadCount', count)}
-                      className="mr-2"
-                    />
-                    {count}
-                  </label>
-                ))}
-              </div>
+              {activeDropdown === 'mukhi' && (
+                <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto">
+                  {filterOptions.mukhi.map(mukhi => (
+                    <label key={mukhi} className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={filters.mukhi.includes(mukhi)}
+                        onChange={() => toggleFilter('mukhi', mukhi)}
+                        className="mr-2"
+                      />
+                      {mukhi}
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Purpose Filter */}
@@ -364,21 +363,23 @@ export default function RudrakshaMalasPage() {
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
               >
                 Purpose
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'purpose' ? 'rotate-180' : ''}`} />
+                <ChevronDown className="w-4 h-4" />
               </button>
-              <div className={`absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto transition-all duration-200 ease-out ${activeDropdown === 'purpose' ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-2 pointer-events-none'}`}>
-                {filterOptions.purpose.map(purpose => (
-                  <label key={purpose} className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={filters.purpose.includes(purpose)}
-                      onChange={() => toggleFilter('purpose', purpose)}
-                      className="mr-2"
-                    />
-                    {purpose}
-                  </label>
-                ))}
-              </div>
+              {activeDropdown === 'purpose' && (
+                <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto">
+                  {filterOptions.purpose.map(purpose => (
+                    <label key={purpose} className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={filters.purpose.includes(purpose)}
+                        onChange={() => toggleFilter('purpose', purpose)}
+                        className="mr-2"
+                      />
+                      {purpose}
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -387,14 +388,14 @@ export default function RudrakshaMalasPage() {
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm text-gray-600">Active filters:</span>
               {Object.entries(filters).map(([category, values]) =>
-                values.map(value => (
+                values.map((value: string) => (
                   <span
                     key={`${category}-${value}`}
                     className="flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm"
                   >
                     {value}
                     <button
-                      onClick={() => toggleFilter(category, value)}
+                      onClick={() => toggleFilter(category as FilterCategory, value)}
                       className="ml-1 hover:text-gray-600"
                     >
                       <X className="w-3 h-3" />
@@ -464,16 +465,16 @@ export default function RudrakshaMalasPage() {
                       </div>
                     </div>
                     <motion.div whileHover={{ x: 5 }} className="mt-auto w-max">
-                      <button 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // Add to cart logic here
-                        }}
+                      <UniversalCartButton
+                        productId={product.id.toString()}
+                        productName={product.name}
+                        price={Number(product.price.replace(/[^\d]/g, ''))}
+                        image={product.image}
                         className="inline-flex items-center px-4 py-2 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-800 transition"
                       >
                         Add to Cart
                         <span className="ml-2">→</span>
-                      </button>
+                      </UniversalCartButton>
                     </motion.div>
                   </div>
                 </motion.div>

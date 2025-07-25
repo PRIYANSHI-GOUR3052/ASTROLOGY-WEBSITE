@@ -164,7 +164,7 @@ export async function GET(
         }),
         items: orderItems,
         subtotal: subtotal,
-        total: parseFloat(order.total_amount),
+        total: order.total_amount,
         shipping_address: shippingAddress
       };
       

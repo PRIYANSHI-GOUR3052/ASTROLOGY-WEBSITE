@@ -10,6 +10,32 @@ import SpiritualTicker from "@/app/components/Hero/SpiritualTicker";
 import NakshatraGyaanBanner from "@/app/components/NakshatraGyaanBanner";
 import SpiritualJourneyBanner from "@/app/components/SpiritualJourneyBanner";
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  type: string;
+  duration: string;
+  format: string;
+  purpose: string[];
+  pages: string;
+  price: string;
+  oldPrice: string;
+  image: string;
+  description: string;
+  path: string;
+}
+
+interface Filters {
+  type: string[];
+  duration: string[];
+  format: string[];
+  purpose: string[];
+}
+
+type FilterCategory = keyof Filters;
+type DropdownType = FilterCategory | null;
+
 // Product Banner Component with Images
 const ProductBanner = () => (
   <div className="w-full bg-gradient-to-r from-teal-50 via-cyan-50 to-blue-50 py-8 md:py-12 relative overflow-hidden">
@@ -55,7 +81,7 @@ const ProductBanner = () => (
 );
 
 // Products Data
-const products = [
+const products: Product[] = [
   {
     id: 1,
     name: "Birth Chart Analysis",
@@ -232,16 +258,16 @@ const filterOptions = {
   duration: ["Lifetime", "1 Year", "6 Months", "2 Years", "Until 18 Years"],
   format: ["PDF Report", "Printed Report", "Digital Report"],
   purpose: ["Life Purpose", "Personality Analysis", "Career Path", "Professional Growth", "Love Life", "Compatibility", "Marriage", "Partner Compatibility", "Health", "Wellness", "Wealth", "Financial Success", "Education", "Learning", "Business", "Entrepreneurship", "Child Development", "Parenting", "Remedies", "Solutions", "Yearly Forecast", "Predictions", "Spiritual Growth"]
-};
+} as const;
 
 export default function AstrologyReportsPage() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     type: [],
     duration: [],
     format: [],
     purpose: []
   });
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState<DropdownType>(null);
 
   // Filter products based on selected criteria
   const filteredProducts = products.filter(product => {
@@ -253,7 +279,7 @@ export default function AstrologyReportsPage() {
     return typeMatch && durationMatch && formatMatch && purposeMatch;
   });
 
-  const toggleFilter = (category, value) => {
+  const toggleFilter = (category: FilterCategory, value: string): void => {
     setFilters(prev => ({
       ...prev,
       [category]: prev[category].includes(value)
@@ -262,7 +288,7 @@ export default function AstrologyReportsPage() {
     }));
   };
 
-  const clearAllFilters = () => {
+  const clearAllFilters = (): void => {
     setFilters({
       type: [],
       duration: [],
@@ -271,7 +297,7 @@ export default function AstrologyReportsPage() {
     });
   };
 
-  const getActiveFiltersCount = () => {
+  const getActiveFiltersCount = (): number => {
     return Object.values(filters).reduce((sum, arr) => sum + arr.length, 0);
   };
 
@@ -409,14 +435,14 @@ export default function AstrologyReportsPage() {
           {getActiveFiltersCount() > 0 && (
             <div className="flex flex-wrap gap-2">
               {Object.entries(filters).map(([category, values]) =>
-                values.map(value => (
+                values.map((value: string) => (
                   <span
                     key={`${category}-${value}`}
                     className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium"
                   >
                     {value}
                     <button
-                      onClick={() => toggleFilter(category, value)}
+                      onClick={() => toggleFilter(category as FilterCategory, value)}
                       className="ml-2 text-gray-500 hover:text-gray-700"
                     >
                       ×
@@ -464,15 +490,14 @@ export default function AstrologyReportsPage() {
 
                     {/* Add to Cart Button - Simple */}
                     <UniversalCartButton
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image,
-                        path: product.path
-                      }}
+                      productId={product.id.toString()}
+                      productName={product.name}
+                      price={Number(product.price.replace(/[^\d]/g, ''))}
+                      image={product.image}
                       className="w-full bg-gray-900 text-white py-3 px-6 rounded-xl font-medium hover:bg-gray-800 transition-colors"
-                    />
+                    >
+                      Add to Cart
+                    </UniversalCartButton>
                   </div>
                 </motion.div>
               </Link>

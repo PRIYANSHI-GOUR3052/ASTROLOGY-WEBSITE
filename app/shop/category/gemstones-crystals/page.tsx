@@ -4,7 +4,38 @@ import Image from "next/image";
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ChevronDown, X, ShoppingCart } from 'lucide-react';
+import { UniversalCartButton } from "@/app/components/UniversalCartButton";
 import NakshatraGyaanBanner from '../../../components/NakshatraGyaanBanner';
+
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  type: string;
+  color: string;
+  purpose: string[];
+  zodiac: string[];
+  chakra: string[];
+  planet: string;
+  price: string;
+  oldPrice: string;
+  image: string;
+  description: string;
+  path: string;
+  rating?: number;
+}
+
+interface Filters {
+  name: string[];
+  color: string[];
+  purpose: string[];
+  zodiac: string[];
+  chakra: string[];
+  planet: string[];
+}
+
+type FilterCategory = keyof Filters;
+type DropdownType = FilterCategory | null;
 
 // Product Banner Component with Images
 const ProductBanner = () => (
@@ -47,7 +78,7 @@ const ProductBanner = () => (
 );
 
 // Product Data with navigation paths
-const products = [
+const products: Product[] = [
   {
     id: 1,
     name: "Amethyst",
@@ -231,7 +262,7 @@ const products = [
 ];
 
 // Filter Options
-const filterOptions = {
+const filterOptions: Record<FilterCategory, string[]> = {
   name: ["Amethyst", "Rose Quartz", "Citrine", "Tiger's Eye", "Lapis Lazuli", "Clear Quartz", "Black Tourmaline", "Aventurine", "Carnelian", "Moonstone", "Labradorite", "Red Jasper"],
   color: ["Purple", "Pink", "Yellow", "Brown", "Blue", "Clear", "Black", "Green", "Orange", "White", "Multi", "Red"],
   purpose: ["Protection Stones", "Healing Crystals", "Love & Relationship", "Abundance / Wealth", "Chakra Balancing", "Meditation & Focus"],
@@ -241,7 +272,7 @@ const filterOptions = {
 };
 
 export default function GemstonesCrystalsPage() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     name: [],
     color: [],
     purpose: [],
@@ -249,7 +280,7 @@ export default function GemstonesCrystalsPage() {
     chakra: [],
     planet: []
   });
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState<FilterCategory | null>(null);
 
   // Filter products based on selected criteria
   const filteredProducts = products.filter(product => {
@@ -263,7 +294,7 @@ export default function GemstonesCrystalsPage() {
     return nameMatch && colorMatch && purposeMatch && zodiacMatch && chakraMatch && planetMatch;
   });
 
-  const toggleFilter = (category, value) => {
+  const toggleFilter = (category: FilterCategory, value: string): void => {
     setFilters(prev => ({
       ...prev,
       [category]: prev[category].includes(value)
@@ -272,7 +303,7 @@ export default function GemstonesCrystalsPage() {
     }));
   };
 
-  const clearAllFilters = () => {
+  const clearAllFilters = (): void => {
     setFilters({
       name: [],
       color: [],
@@ -283,7 +314,7 @@ export default function GemstonesCrystalsPage() {
     });
   };
 
-  const getActiveFiltersCount = () => {
+  const getActiveFiltersCount = (): number => {
     return Object.values(filters).reduce((sum, arr) => sum + arr.length, 0);
   };
 
@@ -469,14 +500,14 @@ export default function GemstonesCrystalsPage() {
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm text-gray-600">Active filters:</span>
               {Object.entries(filters).map(([category, values]) =>
-                values.map(value => (
+                values.map((value: string) => (
                   <span
                     key={`${category}-${value}`}
                     className="flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm"
                   >
                     {value}
                     <button
-                      onClick={() => toggleFilter(category, value)}
+                      onClick={() => toggleFilter(category as FilterCategory, value)}
                       className="ml-1 hover:text-gray-600"
                     >
                       <X className="w-3 h-3" />
@@ -546,16 +577,16 @@ export default function GemstonesCrystalsPage() {
                       </div>
                     </div>
                     <motion.div whileHover={{ x: 5 }} className="mt-auto w-max">
-                      <button 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // Add to cart logic here
-                        }}
+                      <UniversalCartButton
+                        productId={product.id.toString()}
+                        productName={product.name}
+                        price={Number(product.price.replace(/[^\d]/g, ''))}
+                        image={product.image}
                         className="inline-flex items-center px-4 py-2 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-800 transition"
                       >
                         Add to Cart
                         <span className="ml-2">→</span>
-                      </button>
+                      </UniversalCartButton>
                     </motion.div>
                   </div>
                 </motion.div>

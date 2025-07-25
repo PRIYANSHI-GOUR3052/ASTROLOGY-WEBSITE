@@ -10,6 +10,30 @@ import SpiritualTicker from "@/app/components/Hero/SpiritualTicker";
 import NakshatraGyaanBanner from "@/app/components/NakshatraGyaanBanner";
 import SpiritualJourneyBanner from "@/app/components/SpiritualJourneyBanner";
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  type: string;
+  material: string;
+  purpose: string[];
+  size: string;
+  price: string;
+  oldPrice: string;
+  image: string;
+  description: string;
+  path: string;
+}
+
+interface Filters {
+  type: string[];
+  material: string[];
+  purpose: string[];
+  size: string[];
+}
+
+type FilterCategory = keyof Filters;
+
 // Product Banner Component with Images
 const ProductBanner = () => (
   <div className="w-full bg-gradient-to-r from-violet-50 via-purple-50 to-indigo-50 py-8 md:py-12 relative overflow-hidden">
@@ -55,7 +79,7 @@ const ProductBanner = () => (
 );
 
 // Products Data
-const products = [
+const products: Product[] = [
   {
     id: 1,
     name: "Meditation Cushion",
@@ -102,10 +126,10 @@ const products = [
     material: "Rudraksha",
     purpose: ["Japa", "Focus"],
     size: "108 Beads",
-    price: "₹1,199",
-    oldPrice: "₹2,399",
+    price: "₹1,599",
+    oldPrice: "₹3,199",
     image: "/images/products/mala-beads.jpg",
-    description: "Sacred Rudraksha mala beads for japa meditation",
+    description: "Sacred rudraksha mala beads for japa meditation",
     path: "/shop/mala-beads"
   },
   {
@@ -114,9 +138,9 @@ const products = [
     type: "Accessory",
     material: "Brass",
     purpose: ["Aromatherapy", "Purification"],
-    size: "Medium",
-    price: "₹499",
-    oldPrice: "₹999",
+    size: "Standard",
+    price: "₹399",
+    oldPrice: "₹799",
     image: "/images/products/incense-holder.jpg",
     description: "Brass incense holder for aromatherapy and purification",
     path: "/shop/incense-holder"
@@ -126,39 +150,39 @@ const products = [
     name: "Meditation Timer",
     type: "Timer",
     material: "Wood",
-    purpose: ["Focus", "Discipline"],
+    purpose: ["Discipline", "Focus"],
     size: "Portable",
-    price: "₹799",
-    oldPrice: "₹1,599",
+    price: "₹699",
+    oldPrice: "₹1,399",
     image: "/images/products/meditation-timer.jpg",
-    description: "Wooden meditation timer for focused practice",
+    description: "Wooden meditation timer for disciplined practice",
     path: "/shop/meditation-timer"
   },
   {
     id: 7,
     name: "Eye Pillow",
-    type: "Accessory",
+    type: "Comfort",
     material: "Silk",
-    purpose: ["Relaxation", "Focus"],
-    size: "Standard",
-    price: "₹399",
-    oldPrice: "₹799",
+    purpose: ["Relaxation", "Awareness"],
+    size: "Small",
+    price: "₹299",
+    oldPrice: "₹599",
     image: "/images/products/eye-pillow.jpg",
-    description: "Silk eye pillow for deep relaxation and focus",
+    description: "Silk eye pillow for relaxation and awareness",
     path: "/shop/eye-pillow"
   },
   {
     id: 8,
-    name: "Tibetan Bells",
-    type: "Sound",
-    material: "Brass",
-    purpose: ["Awareness", "Mindfulness"],
-    size: "Small",
-    price: "₹699",
-    oldPrice: "₹1,399",
-    image: "/images/products/tibetan-bells.jpg",
-    description: "Tibetan bells for mindfulness and awareness",
-    path: "/shop/tibetan-bells"
+    name: "Crystal Grid",
+    type: "Crystal",
+    material: "Natural Stones",
+    purpose: ["Healing", "Balance"],
+    size: "Set of 7",
+    price: "₹1,999",
+    oldPrice: "₹3,999",
+    image: "/images/products/crystal-grid.jpg",
+    description: "Crystal grid for healing and energy balance",
+    path: "/shop/crystal-grid"
   },
   {
     id: 9,
@@ -167,10 +191,10 @@ const products = [
     material: "Wool",
     purpose: ["Warmth", "Comfort"],
     size: "Large",
-    price: "₹1,599",
-    oldPrice: "₹3,199",
+    price: "₹1,199",
+    oldPrice: "₹2,399",
     image: "/images/products/meditation-blanket.jpg",
-    description: "Warm wool blanket for comfortable meditation",
+    description: "Wool meditation blanket for warmth and comfort",
     path: "/shop/meditation-blanket"
   },
   {
@@ -180,10 +204,10 @@ const products = [
     material: "Natural Stones",
     purpose: ["Healing", "Balance"],
     size: "Set of 7",
-    price: "₹1,899",
-    oldPrice: "₹3,799",
+    price: "₹1,499",
+    oldPrice: "₹2,999",
     image: "/images/products/chakra-stones.jpg",
-    description: "Seven chakra stones for healing and balance",
+    description: "Chakra stones for healing and energy balance",
     path: "/shop/chakra-stones"
   },
   {
@@ -193,10 +217,10 @@ const products = [
     material: "Paper",
     purpose: ["Reflection", "Growth"],
     size: "A5",
-    price: "₹299",
-    oldPrice: "₹599",
+    price: "₹499",
+    oldPrice: "₹999",
     image: "/images/products/meditation-journal.jpg",
-    description: "Sacred journal for meditation reflections and growth",
+    description: "Meditation journal for reflection and spiritual growth",
     path: "/shop/meditation-journal"
   },
   {
@@ -215,7 +239,7 @@ const products = [
 ];
 
 // Filter Options
-const filterOptions = {
+const filterOptions: Record<FilterCategory, string[]> = {
   type: ["Seating", "Sound", "Prayer Beads", "Accessory", "Timer", "Comfort", "Crystal", "Writing"],
   material: ["Cotton", "Crystal", "Natural Fiber", "Rudraksha", "Brass", "Wood", "Silk", "Wool", "Natural Stones", "Paper"],
   purpose: ["Comfort", "Posture", "Healing", "Focus", "Grounding", "Japa", "Aromatherapy", "Purification", "Discipline", "Relaxation", "Awareness", "Mindfulness", "Warmth", "Balance", "Reflection", "Growth"],
@@ -223,13 +247,13 @@ const filterOptions = {
 };
 
 export default function MeditationToolsPage() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     type: [],
     material: [],
     purpose: [],
     size: []
   });
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState<FilterCategory | null>(null);
 
   // Filter products based on selected criteria
   const filteredProducts = products.filter(product => {
@@ -241,7 +265,7 @@ export default function MeditationToolsPage() {
     return typeMatch && materialMatch && purposeMatch && sizeMatch;
   });
 
-  const toggleFilter = (category, value) => {
+  const toggleFilter = (category: FilterCategory, value: string): void => {
     setFilters(prev => ({
       ...prev,
       [category]: prev[category].includes(value)
@@ -250,7 +274,7 @@ export default function MeditationToolsPage() {
     }));
   };
 
-  const clearAllFilters = () => {
+  const clearAllFilters = (): void => {
     setFilters({
       type: [],
       material: [],
@@ -259,7 +283,7 @@ export default function MeditationToolsPage() {
     });
   };
 
-  const getActiveFiltersCount = () => {
+  const getActiveFiltersCount = (): number => {
     return Object.values(filters).reduce((sum, arr) => sum + arr.length, 0);
   };
 
@@ -397,14 +421,14 @@ export default function MeditationToolsPage() {
           {getActiveFiltersCount() > 0 && (
             <div className="flex flex-wrap gap-2">
               {Object.entries(filters).map(([category, values]) =>
-                values.map(value => (
+                values.map((value: string) => (
                   <span
                     key={`${category}-${value}`}
                     className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium"
                   >
                     {value}
                     <button
-                      onClick={() => toggleFilter(category, value)}
+                      onClick={() => toggleFilter(category as FilterCategory, value)}
                       className="ml-2 text-gray-500 hover:text-gray-700"
                     >
                       ×
@@ -452,15 +476,14 @@ export default function MeditationToolsPage() {
 
                     {/* Add to Cart Button - Simple */}
                     <UniversalCartButton
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image,
-                        path: product.path
-                      }}
+                      productId={product.id.toString()}
+                      productName={product.name}
+                      price={Number(product.price.replace(/[^\d]/g, ''))}
+                      image={product.image}
                       className="w-full bg-gray-900 text-white py-3 px-6 rounded-xl font-medium hover:bg-gray-800 transition-colors"
-                    />
+                    >
+                      Add to Cart
+                    </UniversalCartButton>
                   </div>
                 </motion.div>
               </Link>
