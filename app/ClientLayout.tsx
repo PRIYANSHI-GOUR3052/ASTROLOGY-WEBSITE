@@ -28,6 +28,8 @@ export default function ClientLayout({
       "/admin/astrologers",
       "/admin/courses",
       "/admin/products",
+      "/admin/products/zodiac-sign",
+      "/admin/products/categories",
       "/admin/services",
       "/admin/reviews",
       "/admin/settings",
