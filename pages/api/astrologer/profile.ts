@@ -74,6 +74,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           yearsOfExperience: true,
           areasOfExpertise: true,
           profileImage: true,
+          about: true,
+          pricePerChat: true,
+          languages: true,
         },
       });
       if (!astrologer) return res.status(404).json({ error: 'Astrologer not found' });
@@ -95,30 +98,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (typeof body === 'string') {
       body = JSON.parse(body);
     }
+    if (!body || typeof body !== 'object') {
+      body = {};
+    }
     // If fields are sent as FormData, they are strings
-    const { firstName, lastName, phone, yearsOfExperience, areasOfExpertise, avatar } = body;
-    let profileImageUrl = '';
+    const { firstName, lastName, phone, yearsOfExperience, areasOfExpertise, avatar, about, pricePerChat, languages } = body as Record<string, any>;
+    let profileImageUrl: string | undefined;
     if (file && file.buffer) {
       // Upload the file to Cloudinary
       profileImageUrl = await uploadAstrologerProfileImageBuffer(file.buffer, user.email);
     } else if (avatar) {
       // Use avatar URL if provided
-      profileImageUrl = avatar;
+      profileImageUrl = avatar as string;
     } else if (body.profileImage) {
       // Use existing profileImage if provided
-      profileImageUrl = body.profileImage;
+      profileImageUrl = body.profileImage as string;
     }
+    // Normalize empty strings to null
+    const norm = (v: any) => (v === undefined || v === null || v === '' ? null : v);
+    // Only include fields in updateData if they are not undefined
+    const updateData: any = {};
+    if (firstName !== undefined) updateData.firstName = firstName;
+    if (lastName !== undefined) updateData.lastName = lastName;
+    if (phone !== undefined) updateData.phone = phone;
+    if (yearsOfExperience !== undefined && yearsOfExperience !== null && yearsOfExperience !== '') updateData.yearsOfExperience = Number(yearsOfExperience);
+    if (areasOfExpertise !== undefined) updateData.areasOfExpertise = areasOfExpertise;
+    if (profileImageUrl !== undefined && profileImageUrl !== '') updateData.profileImage = profileImageUrl;
+    if (about !== undefined) updateData.about = about === '' ? null : about;
+    if (pricePerChat !== undefined && pricePerChat !== null && pricePerChat !== '') updateData.pricePerChat = Number(pricePerChat);
+    if (languages !== undefined) updateData.languages = languages === '' ? null : languages;
+    
     try {
       const updated = await prisma.astrologer.update({
         where: { id: user.id },
-        data: {
-          firstName,
-          lastName,
-          phone,
-          yearsOfExperience: yearsOfExperience ? Number(yearsOfExperience) : undefined,
-          areasOfExpertise,
-          profileImage: profileImageUrl,
-        },
+        data: updateData,
         select: {
           id: true,
           firstName: true,
@@ -128,6 +141,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           yearsOfExperience: true,
           areasOfExpertise: true,
           profileImage: true,
+          about: true,
+          pricePerChat: true,
+          languages: true,
         },
       });
       return res.status(200).json({ astrologer: updated });

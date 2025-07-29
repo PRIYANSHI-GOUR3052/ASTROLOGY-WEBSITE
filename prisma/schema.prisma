@@ -189,6 +189,9 @@ model Astrologer {
   accountNumber          String?
   ifscCode               String?
   profileImage           String?
+  about                  String? // Astrologer about section
+  pricePerChat           Decimal?                 @db.Decimal(10, 2) // Price per chat
+  languages              String? // Comma-separated language codes
   createdAt              DateTime                 @default(now())
   resetToken             String? // For password reset
   resetTokenExpiry       DateTime? // For password reset expiry
@@ -265,16 +268,66 @@ model AstrologerAvailability {
 }
 
 model Booking {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   astrologerId Int
   clientId     Int
   date         DateTime
   type         String
   status       String // 'upcoming', 'past', 'accepted', 'rejected', 'rescheduled'
   remarks      String? // For rejection or reschedule notes
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  isPaid       Boolean   @default(false)
+  paymentId    String?   @unique
+  sessionId    String?   @unique
+  chatEnabled  Boolean   @default(false)
+  videoEnabled Boolean   @default(false)
+  sessionStart DateTime?
+  sessionEnd   DateTime?
 
-  astrologer Astrologer @relation(fields: [astrologerId], references: [id])
-  client     users      @relation(fields: [clientId], references: [id])
+  astrologer Astrologer    @relation(fields: [astrologerId], references: [id])
+  client     users         @relation(fields: [clientId], references: [id])
+  messages   ChatMessage[]
+  payments   Payment[]
+  Session    Session[]
+}
+
+model ChatMessage {
+  id          Int      @id @default(autoincrement())
+  bookingId   Int
+  senderId    Int
+  senderType  String // 'client' or 'astrologer'
+  message     String   @db.Text
+  messageType String   @default("text") // 'text', 'image', 'file'
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  bookingId     Int
+  amount        Decimal  @db.Decimal(10, 2)
+  currency      String   @default("INR")
+  status        String   @default("pending") // 'pending', 'completed', 'failed', 'refunded'
+  paymentMethod String   @default("mock") // 'mock', 'stripe', 'razorpay'
+  transactionId String?  @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id           Int       @id @default(autoincrement())
+  sessionId    String    @unique
+  bookingId    Int
+  type         String // 'chat', 'video', 'both'
+  status       String    @default("active") // 'active', 'ended', 'expired'
+  startTime    DateTime  @default(now())
+  endTime      DateTime?
+  participants Json? // Store participant info as JSON
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }

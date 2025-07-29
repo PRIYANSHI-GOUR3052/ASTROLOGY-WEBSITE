@@ -99,8 +99,9 @@ export const authOptions: NextAuthOptions = {
           )
 
           if ((existingUsers as unknown[]).length === 0) {
-            await connection.execute(
-              'INSERT INTO users (name, email, google_id,password) VALUES (?, ?, ?, ?)',
+            // Insert new user and get the auto-generated ID
+            const [result] = await connection.execute(
+              'INSERT INTO users (name, email, google_id, password) VALUES (?, ?, ?, ?)',
               [
                 user.name!, 
                 user.email!, 
@@ -108,6 +109,14 @@ export const authOptions: NextAuthOptions = {
                 'google_login'
               ]
             )
+            
+            // Get the inserted user's ID
+            const insertResult = result as any;
+            user.id = insertResult.insertId.toString();
+          } else {
+            // User exists, use their database ID
+            const existingUser = (existingUsers as unknown[])[0] as { id: number; name: string; email: string };
+            user.id = existingUser.id.toString();
           }
 
           return true

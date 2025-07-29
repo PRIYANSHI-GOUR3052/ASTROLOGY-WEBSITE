@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import Image from 'next/image';
 import { Certification, Education } from "../../../types/astrologer";
+import { LANGUAGE_NAMES, SupportedLang } from "../../contexts/LanguageContext";
 
 
 const expertiseOptions = [
@@ -57,6 +58,9 @@ const ProfilePage = () => {
     areasOfExpertise: [] as string[],
     profileImage: '',
     avatar: '',
+    about: '', // new
+    pricePerChat: '', // new
+    languages: [] as SupportedLang[], // new
   });
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
@@ -92,6 +96,9 @@ const ProfilePage = () => {
             areasOfExpertise: data.astrologer.areasOfExpertise ? data.astrologer.areasOfExpertise.split(',').map((s: string) => s.trim()) : [],
             profileImage: data.astrologer.profileImage || '',
             avatar: '',
+            about: data.astrologer.about || '',
+            pricePerChat: data.astrologer.pricePerChat?.toString() || '',
+            languages: data.astrologer.languages ? data.astrologer.languages.split(',').map((l: string) => l.trim()) : [],
           });
           setSelectedAvatar(null);
           setProfileImagePreview(data.astrologer.profileImage || null);
@@ -128,6 +135,9 @@ const ProfilePage = () => {
               areasOfExpertise: data.verification.astrologer.areasOfExpertise ? data.verification.astrologer.areasOfExpertise.split(',').map((s: string) => s.trim()) : [],
               profileImage: data.verification.astrologer.profileImage || '',
               avatar: '',
+              about: data.verification.astrologer.about || '',
+              pricePerChat: data.verification.astrologer.pricePerChat?.toString() || '',
+              languages: data.verification.astrologer.languages ? data.verification.astrologer.languages.split(',').map((l: string) => l.trim()) : [],
             });
             setSelectedAvatar(null);
             setProfileImagePreview(data.verification.astrologer.profileImage || null);
@@ -291,7 +301,7 @@ const ProfilePage = () => {
   // const details = astrologer || verification?.astrologer || {};
 
   // Basic details form handlers
-  const handleBasicChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleBasicChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setBasicForm(prev => ({ ...prev, [name]: value }));
   };
@@ -320,6 +330,10 @@ const ProfilePage = () => {
       setBasicForm(prev => ({ ...prev, avatar: '', profileImage: '' }));
     }
   };
+  const handleLanguagesChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selected = Array.from(e.target.selectedOptions).map(opt => opt.value as SupportedLang);
+    setBasicForm(prev => ({ ...prev, languages: selected }));
+  };
   // Placeholder for save details
   const handleSaveBasicDetails = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -328,59 +342,31 @@ const ProfilePage = () => {
     if (!token) return setError('Not authenticated');
     setLoading(true);
     try {
-      let formData: FormData | null = null;
-      let useFormData = false;
-      // If a new profile image file is selected, use FormData
+      // Always use FormData for profile updates
+      const formData = new FormData();
+      formData.append('firstName', basicForm.firstName);
+      formData.append('lastName', basicForm.lastName);
+      formData.append('email', basicForm.email);
+      formData.append('phone', basicForm.phone);
+      formData.append('yearsOfExperience', basicForm.yearsOfExperience);
+      formData.append('areasOfExpertise', basicForm.areasOfExpertise.join(','));
+      formData.append('about', basicForm.about);
+      formData.append('pricePerChat', basicForm.pricePerChat);
+      formData.append('languages', basicForm.languages.join(','));
       if (profileImageFile) {
-        useFormData = true;
-        formData = new FormData();
-        formData.append('firstName', basicForm.firstName);
-        formData.append('lastName', basicForm.lastName);
-        formData.append('email', basicForm.email);
-        formData.append('phone', basicForm.phone);
-        formData.append('yearsOfExperience', basicForm.yearsOfExperience);
-        formData.append('areasOfExpertise', basicForm.areasOfExpertise.join(','));
         formData.append('profileImage', profileImageFile);
       } else if (selectedAvatar) {
-        useFormData = true;
-        formData = new FormData();
-        formData.append('firstName', basicForm.firstName);
-        formData.append('lastName', basicForm.lastName);
-        formData.append('email', basicForm.email);
-        formData.append('phone', basicForm.phone);
-        formData.append('yearsOfExperience', basicForm.yearsOfExperience);
-        formData.append('areasOfExpertise', basicForm.areasOfExpertise.join(','));
         formData.append('avatar', selectedAvatar);
+      } else if (basicForm.profileImage) {
+        formData.append('profileImage', basicForm.profileImage);
       }
-      let fetchOptions: RequestInit;
-      if (useFormData && formData) {
-        fetchOptions = {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        };
-      } else {
-        // Fallback to JSON if neither file nor avatar is selected
-        const payload = {
-          firstName: basicForm.firstName,
-          lastName: basicForm.lastName,
-          email: basicForm.email, // not editable, but sent for completeness
-          phone: basicForm.phone,
-          yearsOfExperience: basicForm.yearsOfExperience,
-          areasOfExpertise: basicForm.areasOfExpertise.join(','),
-          profileImage: basicForm.profileImage,
-        };
-        fetchOptions = {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        };
-      }
+      const fetchOptions: RequestInit = {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      };
       const res = await fetch('/api/astrologer/profile', fetchOptions);
       const data = await res.json();
       if (data.astrologer) {
@@ -394,6 +380,9 @@ const ProfilePage = () => {
           areasOfExpertise: data.astrologer.areasOfExpertise ? data.astrologer.areasOfExpertise.split(',').map((s: string) => s.trim()) : [],
           profileImage: data.astrologer.profileImage || '',
           avatar: '',
+          about: data.astrologer.about || '',
+          pricePerChat: data.astrologer.pricePerChat?.toString() || '',
+          languages: data.astrologer.languages ? data.astrologer.languages.split(',').map((l: string) => l.trim()) : [],
         });
         setSelectedAvatar(null);
         setProfileImagePreview(data.astrologer.profileImage || null);
@@ -507,6 +496,14 @@ const ProfilePage = () => {
                 <label className="block font-semibold text-sm mb-1">Years of Experience</label>
                 <input type="number" name="yearsOfExperience" value={basicForm.yearsOfExperience} onChange={handleBasicChange} className="w-full px-4 py-2 rounded border" min="0" required />
               </div>
+              <div>
+                <label className="block font-semibold text-sm mb-1">Price Per Chat (₹)</label>
+                <input type="number" name="pricePerChat" value={basicForm.pricePerChat} onChange={handleBasicChange} className="w-full px-4 py-2 rounded border" min="0" step="0.01" />
+              </div>
+              <div className="col-span-2">
+                <label className="block font-semibold text-sm mb-1">About</label>
+                <textarea name="about" value={basicForm.about} onChange={handleBasicChange} className="w-full px-4 py-2 rounded border" rows={3} />
+              </div>
               <div className="col-span-2">
                 <label className="block font-semibold text-sm mb-1">Areas of Expertise</label>
                 <div className="flex flex-wrap gap-2">
@@ -521,6 +518,31 @@ const ProfilePage = () => {
                     </label>
                   ))}
                 </div>
+              </div>
+              <div className="col-span-2">
+                <label className="block font-semibold text-sm mb-1">Languages Known</label>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(LANGUAGE_NAMES).map(([code, name]) => (
+                    <label key={code} className="flex items-center gap-1">
+                      <input
+                        type="checkbox"
+                        value={code}
+                        checked={basicForm.languages.includes(code)}
+                        onChange={e => {
+                          const checked = e.target.checked;
+                          setBasicForm(prev => ({
+                            ...prev,
+                            languages: checked
+                              ? [...prev.languages, code]
+                              : prev.languages.filter(l => l !== code)
+                          }));
+                        }}
+                      />
+                      <span className="text-sm">{name}</span>
+                    </label>
+                  ))}
+                </div>
+                <div className="text-xs text-gray-500 mt-1">Select all languages you know</div>
               </div>
             </div>
             <div className="col-span-2 flex item-center justify-center">
