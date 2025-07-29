@@ -10,6 +10,32 @@ import SpiritualTicker from "@/app/components/Hero/SpiritualTicker";
 import NakshatraGyaanBanner from "@/app/components/NakshatraGyaanBanner";
 import SpiritualJourneyBanner from "@/app/components/SpiritualJourneyBanner";
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  type: string;
+  deity: string;
+  material: string;
+  purpose: string[];
+  size: string;
+  price: string;
+  oldPrice: string;
+  image: string;
+  description: string;
+  path: string;
+}
+
+interface Filters {
+  type: string[];
+  deity: string[];
+  material: string[];
+  purpose: string[];
+  size: string[];
+}
+
+type FilterCategory = keyof Filters;
+
 // Product Banner Component with Images
 const ProductBanner = () => (
   <div className="w-full bg-gradient-to-r from-indigo-50 via-purple-50 to-blue-50 py-8 md:py-12 relative overflow-hidden">
@@ -55,7 +81,7 @@ const ProductBanner = () => (
 );
 
 // Products Data
-const products = [
+const products: Product[] = [
   {
     id: 1,
     name: "Sri Yantra",
@@ -118,44 +144,16 @@ const products = [
     type: "Yantra",
     deity: "Lord Hanuman",
     material: "Copper",
-    purpose: ["Strength", "Devotion"],
+    purpose: ["Strength", "Protection"],
     size: "3x3 inches",
     price: "₹1,999",
     oldPrice: "₹3,999",
     image: "/images/products/hanuman-yantra.jpg",
-    description: "Hanuman Yantra for strength, courage and devotion",
+    description: "Hanuman Yantra for strength and divine protection",
     path: "/shop/hanuman-yantra"
   },
   {
     id: 6,
-    name: "Shiva Yantra",
-    type: "Yantra",
-    deity: "Lord Shiva",
-    material: "Copper",
-    purpose: ["Spiritual Growth", "Meditation"],
-    size: "3x3 inches",
-    price: "₹2,799",
-    oldPrice: "₹5,599",
-    image: "/images/products/shiva-yantra.jpg",
-    description: "Shiva Yantra for spiritual awakening and meditation",
-    path: "/shop/shiva-yantra"
-  },
-  {
-    id: 7,
-    name: "Vishnu Yantra",
-    type: "Yantra",
-    deity: "Lord Vishnu",
-    material: "Copper",
-    purpose: ["Preservation", "Peace"],
-    size: "3x3 inches",
-    price: "₹2,399",
-    oldPrice: "₹4,799",
-    image: "/images/products/vishnu-yantra.jpg",
-    description: "Vishnu Yantra for preservation and inner peace",
-    path: "/shop/vishnu-yantra"
-  },
-  {
-    id: 8,
     name: "Saraswati Yantra",
     type: "Yantra",
     deity: "Goddess Saraswati",
@@ -165,8 +163,36 @@ const products = [
     price: "₹2,199",
     oldPrice: "₹4,399",
     image: "/images/products/saraswati-yantra.jpg",
-    description: "Saraswati Yantra for knowledge, wisdom and learning",
+    description: "Saraswati Yantra for knowledge and wisdom",
     path: "/shop/saraswati-yantra"
+  },
+  {
+    id: 7,
+    name: "Shiva Yantra",
+    type: "Yantra",
+    deity: "Lord Shiva",
+    material: "Copper",
+    purpose: ["Spiritual Growth", "Meditation"],
+    size: "3x3 inches",
+    price: "₹2,499",
+    oldPrice: "₹4,999",
+    image: "/images/products/shiva-yantra.jpg",
+    description: "Shiva Yantra for spiritual growth and meditation",
+    path: "/shop/shiva-yantra"
+  },
+  {
+    id: 8,
+    name: "Vishnu Yantra",
+    type: "Yantra",
+    deity: "Lord Vishnu",
+    material: "Copper",
+    purpose: ["Preservation", "Peace"],
+    size: "3x3 inches",
+    price: "₹2,299",
+    oldPrice: "₹4,599",
+    image: "/images/products/vishnu-yantra.jpg",
+    description: "Vishnu Yantra for preservation and inner peace",
+    path: "/shop/vishnu-yantra"
   },
   {
     id: 9,
@@ -174,10 +200,10 @@ const products = [
     type: "Yantra",
     deity: "Lord Kuber",
     material: "Copper",
-    purpose: ["Wealth", "Financial Success"],
+    purpose: ["Wealth", "Prosperity"],
     size: "3x3 inches",
-    price: "₹2,599",
-    oldPrice: "₹5,199",
+    price: "₹2,199",
+    oldPrice: "₹4,399",
     image: "/images/products/kuber-yantra.jpg",
     description: "Kuber Yantra for wealth and financial prosperity",
     path: "/shop/kuber-yantra"
@@ -188,60 +214,62 @@ const products = [
     type: "Yantra",
     deity: "Nine Planets",
     material: "Copper",
-    purpose: ["Planetary Remedies", "Astrological Benefits"],
-    size: "4x4 inches",
-    price: "₹3,999",
-    oldPrice: "₹7,999",
+    purpose: ["Planetary Balance", "Astrological Remedies"],
+    size: "3x3 inches",
+    price: "₹2,999",
+    oldPrice: "₹5,999",
     image: "/images/products/navagraha-yantra.jpg",
-    description: "Navagraha Yantra for all planetary remedies and benefits",
+    description: "Navagraha Yantra for planetary balance and remedies",
     path: "/shop/navagraha-yantra"
   },
   {
     id: 11,
-    name: "Sacred Copper Plate",
-    type: "Plate",
-    deity: "Universal",
+    name: "Mahamrityunjaya Yantra",
+    type: "Yantra",
+    deity: "Lord Shiva",
     material: "Copper",
-    purpose: ["General Worship", "Energy Purification"],
-    size: "6x6 inches",
-    price: "₹1,499",
-    oldPrice: "₹2,999",
-    image: "/images/products/copper-plate.jpg",
-    description: "Sacred copper plate for general worship and energy purification",
-    path: "/shop/copper-plate"
+    purpose: ["Longevity", "Health"],
+    size: "3x3 inches",
+    price: "₹2,799",
+    oldPrice: "₹5,599",
+    image: "/images/products/mahamrityunjaya-yantra.jpg",
+    description: "Mahamrityunjaya Yantra for health and longevity",
+    path: "/shop/mahamrityunjaya-yantra"
   },
   {
     id: 12,
-    name: "Silver Puja Plate",
-    type: "Plate",
-    deity: "Universal",
-    material: "Silver",
-    purpose: ["Puja", "Offerings"],
-    size: "5x5 inches",
-    price: "₹2,999",
-    oldPrice: "₹5,999",
-    image: "/images/products/silver-plate.jpg",
-    description: "Pure silver plate for puja and sacred offerings",
-    path: "/shop/silver-plate"
+    name: "Baglamukhi Yantra",
+    type: "Yantra",
+    deity: "Goddess Baglamukhi",
+    material: "Copper",
+    purpose: ["Victory", "Control"],
+    size: "3x3 inches",
+    price: "₹2,599",
+    oldPrice: "₹5,199",
+    image: "/images/products/baglamukhi-yantra.jpg",
+    description: "Baglamukhi Yantra for victory and control over enemies",
+    path: "/shop/baglamukhi-yantra"
   }
 ];
 
 // Filter Options
-const filterOptions = {
+const filterOptions: Record<FilterCategory, string[]> = {
   type: ["Yantra", "Plate"],
-  deity: ["Goddess Lakshmi", "Goddess Kali", "Lord Ganesh", "Goddess Durga", "Lord Hanuman", "Lord Shiva", "Lord Vishnu", "Goddess Saraswati", "Lord Kuber", "Nine Planets", "Universal"],
-  material: ["Copper", "Silver", "Brass"],
-  purpose: ["Wealth & Prosperity", "Spiritual Growth", "Protection", "Destruction of Negativity", "Success", "Removing Obstacles", "Courage", "Strength", "Devotion", "Meditation", "Preservation", "Peace", "Knowledge", "Wisdom", "Financial Success", "Planetary Remedies", "Astrological Benefits", "General Worship", "Energy Purification", "Puja", "Offerings"]
+  deity: ["Goddess Lakshmi", "Goddess Kali", "Lord Ganesh", "Goddess Durga", "Lord Hanuman", "Goddess Saraswati", "Lord Shiva", "Lord Vishnu", "Lord Kuber", "Nine Planets", "Goddess Baglamukhi"],
+  material: ["Copper", "Silver", "Gold", "Brass"],
+  purpose: ["Wealth & Prosperity", "Spiritual Growth", "Protection", "Destruction of Negativity", "Success", "Removing Obstacles", "Courage", "Strength", "Knowledge", "Wisdom", "Meditation", "Preservation", "Peace", "Planetary Balance", "Astrological Remedies", "Longevity", "Health", "Victory", "Control"],
+  size: ["3x3 inches", "5x5 inches", "7x7 inches", "9x9 inches"]
 };
 
 export default function YantrasPlatesPage() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     type: [],
     deity: [],
     material: [],
-    purpose: []
+    purpose: [],
+    size: []
   });
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState<FilterCategory | null>(null);
 
   // Filter products based on selected criteria
   const filteredProducts = products.filter(product => {
@@ -249,11 +277,12 @@ export default function YantrasPlatesPage() {
     const deityMatch = filters.deity.length === 0 || filters.deity.includes(product.deity);
     const materialMatch = filters.material.length === 0 || filters.material.includes(product.material);
     const purposeMatch = filters.purpose.length === 0 || product.purpose.some(p => filters.purpose.includes(p));
+    const sizeMatch = filters.size.length === 0 || filters.size.includes(product.size);
 
-    return typeMatch && deityMatch && materialMatch && purposeMatch;
+    return typeMatch && deityMatch && materialMatch && purposeMatch && sizeMatch;
   });
 
-  const toggleFilter = (category, value) => {
+  const toggleFilter = (category: FilterCategory, value: string): void => {
     setFilters(prev => ({
       ...prev,
       [category]: prev[category].includes(value)
@@ -262,16 +291,17 @@ export default function YantrasPlatesPage() {
     }));
   };
 
-  const clearAllFilters = () => {
+  const clearAllFilters = (): void => {
     setFilters({
       type: [],
       deity: [],
       material: [],
-      purpose: []
+      purpose: [],
+      size: []
     });
   };
 
-  const getActiveFiltersCount = () => {
+  const getActiveFiltersCount = (): number => {
     return Object.values(filters).reduce((sum, arr) => sum + arr.length, 0);
   };
 
@@ -286,11 +316,11 @@ export default function YantrasPlatesPage() {
       {/* Category Description */}
       <div className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-3xl md:text-4xl font-serif font-bold text-center mb-6 text-gray-800">
-          Sacred geometric patterns of divine energy
+          Harness divine energy through sacred geometry
         </h2>
         <p className="text-lg text-gray-600 text-center max-w-4xl mx-auto mb-12">
-          Discover sacred yantras and divine plates that channel cosmic energy and provide spiritual protection. 
-          Each yantra carries the power of specific deities and cosmic forces for your spiritual journey.
+          Discover authentic yantras and sacred plates that channel divine energy and provide spiritual protection. 
+          Each yantra is carefully crafted to enhance your spiritual practice and bring positive energy into your life.
         </p>
 
         {/* Filters Section */}
@@ -394,6 +424,30 @@ export default function YantrasPlatesPage() {
               </div>
             </div>
 
+            {/* Size Filter */}
+            <div className="relative">
+              <button
+                onClick={() => setActiveDropdown(activeDropdown === 'size' ? null : 'size')}
+                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                Size
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'size' ? 'rotate-180' : ''}`} />
+              </button>
+              <div className={`absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto transition-all duration-200 ease-out ${activeDropdown === 'size' ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-2 pointer-events-none'}`}>
+                {filterOptions.size.map(size => (
+                  <label key={size} className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={filters.size.includes(size)}
+                      onChange={() => toggleFilter('size', size)}
+                      className="mr-2"
+                    />
+                    {size}
+                  </label>
+                ))}
+              </div>
+            </div>
+
             {/* Clear All Filters */}
             {getActiveFiltersCount() > 0 && (
               <button
@@ -409,14 +463,14 @@ export default function YantrasPlatesPage() {
           {getActiveFiltersCount() > 0 && (
             <div className="flex flex-wrap gap-2">
               {Object.entries(filters).map(([category, values]) =>
-                values.map(value => (
+                values.map((value: string) => (
                   <span
                     key={`${category}-${value}`}
                     className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium"
                   >
                     {value}
                     <button
-                      onClick={() => toggleFilter(category, value)}
+                      onClick={() => toggleFilter(category as FilterCategory, value)}
                       className="ml-2 text-gray-500 hover:text-gray-700"
                     >
                       ×
@@ -484,15 +538,14 @@ export default function YantrasPlatesPage() {
 
                     {/* Add to Cart Button */}
                     <UniversalCartButton
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image,
-                        path: product.path
-                      }}
+                      productId={product.id.toString()}
+                      productName={product.name}
+                      price={Number(product.price.replace(/[^\d]/g, ''))}
+                      image={product.image}
                       className="w-full bg-gray-900 text-white py-2 px-4 rounded-xl font-medium hover:bg-gray-800 transition-colors"
-                    />
+                    >
+                      Add to Cart
+                    </UniversalCartButton>
                   </div>
                 </motion.div>
               </Link>

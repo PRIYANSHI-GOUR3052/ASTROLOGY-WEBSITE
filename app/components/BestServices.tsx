@@ -1,13 +1,11 @@
 'use client'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+
+
 import { useLanguage } from '../contexts/useLanguage'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Star, CheckCircle, ShoppingBag } from 'lucide-react'
-import { ArrowRight } from 'lucide-react'
-import { CTASection } from './CTASection'
+
 
 // New set of card backgrounds inspired by the snapshot
 const cardBackgrounds = [

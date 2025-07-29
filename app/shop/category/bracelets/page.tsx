@@ -10,6 +10,31 @@ import SpiritualTicker from "@/app/components/Hero/SpiritualTicker";
 import NakshatraGyaanBanner from "@/app/components/NakshatraGyaanBanner";
 import SpiritualJourneyBanner from "@/app/components/SpiritualJourneyBanner";
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  material: string;
+  purpose: string[];
+  style: string;
+  gender: string;
+  price: string;
+  oldPrice: string;
+  image: string;
+  description: string;
+  path: string;
+}
+
+interface Filters {
+  material: string[];
+  purpose: string[];
+  style: string[];
+  gender: string[];
+}
+
+type FilterCategory = keyof Filters;
+type DropdownType = FilterCategory | null;
+
 // Product Banner Component with Images
 const ProductBanner = () => (
   <div className="w-full bg-gradient-to-r from-purple-50 via-pink-50 to-rose-50 py-8 md:py-12 relative overflow-hidden">
@@ -55,7 +80,7 @@ const ProductBanner = () => (
 );
 
 // Products Data
-const products = [
+const products: Product[] = [
   {
     id: 1,
     name: "Rudraksha Bracelet",
@@ -220,16 +245,16 @@ const filterOptions = {
   purpose: ["Protection", "Spiritual Growth", "Health & Energy", "Chakra Healing", "Stress Relief", "Grounding", "Meditation", "Wealth & Abundance", "Love & Relationship", "Emotional Healing", "Success"],
   style: ["Adjustable Thread", "Elastic Beaded", "Metal Charm", "Single Bead"],
   gender: ["Men's", "Women's", "Unisex"]
-};
+} satisfies Record<FilterCategory, string[]>;
 
 export default function BraceletsPage() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     material: [],
     purpose: [],
     style: [],
     gender: []
   });
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState<DropdownType>(null);
 
   // Filter products based on selected criteria
   const filteredProducts = products.filter(product => {
@@ -241,7 +266,7 @@ export default function BraceletsPage() {
     return materialMatch && purposeMatch && styleMatch && genderMatch;
   });
 
-  const toggleFilter = (category, value) => {
+  const toggleFilter = (category: FilterCategory, value: string): void => {
     setFilters(prev => ({
       ...prev,
       [category]: prev[category].includes(value)
@@ -250,7 +275,7 @@ export default function BraceletsPage() {
     }));
   };
 
-  const clearAllFilters = () => {
+  const clearAllFilters = (): void => {
     setFilters({
       material: [],
       purpose: [],
@@ -259,7 +284,7 @@ export default function BraceletsPage() {
     });
   };
 
-  const getActiveFiltersCount = () => {
+  const getActiveFiltersCount = (): number => {
     return Object.values(filters).reduce((sum, arr) => sum + arr.length, 0);
   };
 
@@ -397,14 +422,14 @@ export default function BraceletsPage() {
           {getActiveFiltersCount() > 0 && (
             <div className="flex flex-wrap gap-2">
               {Object.entries(filters).map(([category, values]) =>
-                values.map(value => (
+                values.map((value: string) => (
                   <span
                     key={`${category}-${value}`}
                     className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium"
                   >
                     {value}
                     <button
-                      onClick={() => toggleFilter(category, value)}
+                      onClick={() => toggleFilter(category as FilterCategory, value)}
                       className="ml-2 text-gray-500 hover:text-gray-700"
                     >
                       ×
@@ -472,15 +497,14 @@ export default function BraceletsPage() {
 
                     {/* Add to Cart Button */}
                     <UniversalCartButton
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image,
-                        path: product.path
-                      }}
+                      productId={product.id.toString()}
+                      productName={product.name}
+                      price={Number(product.price.replace(/[^\d]/g, ''))}
+                      image={product.image}
                       className="w-full bg-gray-900 text-white py-2 px-4 rounded-xl font-medium hover:bg-gray-800 transition-colors"
-                    />
+                    >
+                      Add to Cart
+                    </UniversalCartButton>
                   </div>
                 </motion.div>
               </Link>

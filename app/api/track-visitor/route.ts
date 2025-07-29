@@ -47,7 +47,7 @@ export async function POST(request: Request) {
         'SELECT * FROM visitors WHERE visitor_id = ?',
         [visitorId]
       );
-      const existingVisitor = rows[0];
+      const existingVisitor = (rows as Visitor[])[0];
       
       console.log('Visitor exists:', !!existingVisitor);
 
