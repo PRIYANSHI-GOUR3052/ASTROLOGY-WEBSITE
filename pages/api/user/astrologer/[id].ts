@@ -28,6 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       profileImage: astrologer.profileImage,
       verificationStatus: astrologer.verificationStatus,
       createdAt: astrologer.createdAt,
+      about: astrologer.about,
+      pricePerChat: astrologer.pricePerChat,
+      languages: astrologer.languages,
     };
     return res.status(200).json({ astrologer: publicAstrologer });
   } catch (e) {

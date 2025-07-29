@@ -15,11 +15,16 @@ import {
   Video,
   Send,
   Clock,
-  Heart
+  Heart,
+  Globe
 } from 'lucide-react';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
+import { LANGUAGE_NAMES } from '../../contexts/LanguageContext';
+import RealTimeChat from '../../components/RealTimeChat';
+import VideoCall from '../../components/VideoCall';
+import PaymentModal from '../../components/PaymentModal';
 
 // Add/strengthen types for all state and function parameters
 interface Booking {
@@ -30,6 +35,9 @@ interface Booking {
   canRate?: boolean;
   rating?: number;
   client?: { name?: string; email?: string };
+  isPaid?: boolean;
+  chatEnabled?: boolean;
+  videoEnabled?: boolean;
   [key: string]: unknown;
 }
 interface Slot {
@@ -44,6 +52,27 @@ interface User {
   name?: string;
   email?: string;
   [key: string]: unknown;
+}
+
+interface Astrologer {
+  id: string | number;
+  firstName: string;
+  lastName: string;
+  title: string;
+  profileImage: string;
+  verificationStatus: string;
+  yearsOfExperience: number;
+  rating: number;
+  totalRatings: number;
+  orders: number;
+  price: number;
+  pricePerChat: number;
+  areasOfExpertise: string;
+  availability: string;
+  about: string;
+  skills: string[];
+  languages: string | string[];
+  responseTime: string;
 }
 
 const initialMessages = [
@@ -122,18 +151,14 @@ export default function AstrologerProfile() {
   const params = useParams<{ id: string }>();
   const astrologerIdParam = params?.id || '';
   const [activeTab, setActiveTab] = useState('chat');
-  const [messages, setMessages] = useState(initialMessages);
-  const [newMessage, setNewMessage] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [bookedSlots, setBookedSlots] = useState<Booking[]>(initialBookedSlots as Booking[]);
   const [bookingStatus, setBookingStatus] = useState('');
   const [ratingSlot, setRatingSlot] = useState<number | null>(null);
   const [userRating, setUserRating] = useState(0);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingError, setBookingError] = useState('');
-  const [astrologer, setAstrologer] = useState({
+  const [astrologer, setAstrologer] = useState<Astrologer>({
     id: '1',
     firstName: 'Dr. Yogeshwara',
     lastName: 'Sharma',
@@ -145,6 +170,7 @@ export default function AstrologerProfile() {
     totalRatings: 1250,
     orders: 2500,
     price: 25,
+    pricePerChat: 25,
     areasOfExpertise: 'Career,Relationships,Health,Finance',
     availability: 'Online',
     about: 'With over 15 years of experience in Vedic astrology, I specialize in providing accurate predictions and spiritual guidance to help you navigate through life\'s challenges.',
@@ -163,21 +189,311 @@ export default function AstrologerProfile() {
   const [cancelError, setCancelError] = useState('');
   const [rateLoading, setRateLoading] = useState(false);
   const [rateError, setRateError] = useState('');
+  const [showChat, setShowChat] = useState(false);
+  const [showVideoCall, setShowVideoCall] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
+  const [socket, setSocket] = useState<any>(null);
+  const [currentBookingId, setCurrentBookingId] = useState<number | null>(null);
+  const [isFetchingBookings, setIsFetchingBookings] = useState(false);
 
-  // 4. Fetch user from localStorage
-  useEffect(() => {
-    const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch {
-        console.error('Failed to parse user data');
-        localStorage.removeItem('user');
-      }
+  // 6. fetchUserBookings as useCallback - moved here to avoid initialization error
+  const fetchUserBookings = useCallback(async (clientId: string | number) => {
+    if (!clientId || isNaN(Number(clientId))) {
+      console.log('Invalid clientId:', clientId);
+      return;
     }
-    setUserLoading(false);
+
+    if (!astrologer?.id) {
+      console.log('Astrologer ID not available yet');
+      return;
+    }
+
+    // Prevent multiple simultaneous calls
+    if (isFetchingBookings) {
+      console.log('Already fetching bookings, skipping...');
+      return;
+    }
+
+    setIsFetchingBookings(true);
+
+    // Add a small delay to prevent rapid successive calls
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    try {
+      console.log('Fetching bookings for clientId:', clientId, 'astrologerId:', astrologer.id);
+      const res = await axios.get(`/api/user/booking?clientId=${clientId}`);
+      const allBookings = res.data?.bookings || [];
+
+      console.log('All bookings fetched:', allBookings);
+      console.log('Current astrologer ID:', astrologer?.id);
+
+      // Filter bookings for the current astrologer and sort by date (latest first)
+      const currentAstrologerBookings = allBookings
+        .filter((booking: any) => booking.astrologerId === Number(astrologer?.id))
+        .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+      console.log('Filtered and sorted bookings for current astrologer:', currentAstrologerBookings);
+      console.log('Booking details:', currentAstrologerBookings.map((b: any) => ({
+        id: b.id,
+        date: b.date,
+        status: b.status,
+        isPaid: b.isPaid,
+        chatEnabled: b.chatEnabled,
+        videoEnabled: b.videoEnabled
+      })));
+
+      setBookedSlots(currentAstrologerBookings);
+
+      // Find the most recent active booking (paid and enabled)
+      const latestActiveBooking = currentAstrologerBookings.find((booking: any) =>
+        booking.isPaid && (booking.chatEnabled || booking.videoEnabled) &&
+        (booking.status === 'upcoming' || booking.status === 'accepted' || booking.status === 'active')
+      );
+
+      if (latestActiveBooking) {
+        setBookingStatus('You have an active booking. Chat and video features are available.');
+        // Set the current booking ID to the latest active booking
+        setCurrentBookingId(latestActiveBooking.id);
+      } else {
+        // Check if there's an unpaid booking that needs payment
+        const unpaidBooking = currentAstrologerBookings.find((booking: any) =>
+          (booking.status === 'upcoming' || booking.status === 'accepted') && !booking.isPaid
+        );
+        if (unpaidBooking) {
+          setCurrentBookingId(unpaidBooking.id);
+          setBookingStatus('Payment required to unlock chat and video features.');
+        } else {
+          setCurrentBookingId(null);
+          setBookingStatus('');
+        }
+      }
+
+    } catch (error) {
+      console.error('Failed to fetch user bookings:', error);
+      // Don't clear existing bookings on error
+    } finally {
+      setIsFetchingBookings(false);
+    }
+  }, [astrologer?.id, isFetchingBookings]);
+
+  // Define handlePaymentSuccess early to avoid scope issues
+  const handlePaymentSuccess = () => {
+    console.log('Payment successful, updating booking state...');
+    setShowPayment(false);
+    setCurrentBookingId(null);
+    setBookingStatus('Payment successful! Chat and video features are now unlocked.');
+
+    // Immediately update the bookedSlots state to reflect payment success
+    setBookedSlots(prevSlots =>
+      prevSlots.map(slot => {
+        if (slot.status === 'upcoming' || slot.status === 'active') {
+          return {
+            ...slot,
+            isPaid: true,
+            chatEnabled: true,
+            videoEnabled: true
+          };
+        }
+        return slot;
+      })
+    );
+
+    // Refresh user bookings to get updated payment status from database
+    if (user?.id) {
+      console.log('Refreshing bookings after payment success for user:', user.id);
+      // Add a small delay to ensure the payment API has updated the database
+      setTimeout(() => {
+        fetchUserBookings(user.id);
+      }, 1000);
+    }
+  };
+
+  // 4. Fetch user from localStorage or session
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        // First try to get from localStorage (for regular users)
+        const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+        if (storedUser) {
+          try {
+            const userData = JSON.parse(storedUser);
+            setUser(userData);
+            setUserLoading(false);
+            return;
+          } catch {
+            console.error('Failed to parse user data from localStorage');
+            localStorage.removeItem('user');
+          }
+        }
+
+        // If no localStorage user, try to get from session (for NextAuth users)
+        try {
+          const sessionRes = await fetch('/api/auth/session');
+          if (sessionRes.ok) {
+            const sessionData = await sessionRes.json();
+            if (sessionData.user) {
+              setUser({
+                id: sessionData.user.id,
+                name: sessionData.user.name,
+                email: sessionData.user.email
+              });
+
+              // Store the JWT token for socket authentication
+              if (sessionData.token) {
+                localStorage.setItem('token', sessionData.token);
+                console.log('Stored JWT token for NextAuth user');
+              }
+
+              setUserLoading(false);
+              return;
+            }
+          }
+        } catch (error) {
+          console.error('Failed to get session:', error);
+        }
+
+        // If neither works, user is not authenticated
+        setUser(null);
+        setUserLoading(false);
+      } catch (error) {
+        console.error('Error getting user:', error);
+        setUser(null);
+        setUserLoading(false);
+      }
+    };
+
+    getCurrentUser();
   }, []);
 
+  // Fetch user bookings when user is loaded
+  useEffect(() => {
+    let isMounted = true;
+
+    if (user?.id && astrologer?.id && !userLoading) {
+      console.log('Loading bookings on mount/update for user:', user.id, 'astrologer:', astrologer.id);
+      console.log('User data:', user);
+
+      // Use setTimeout to allow for cleanup
+      const timeoutId = setTimeout(() => {
+        if (isMounted) {
+          fetchUserBookings(user.id);
+        }
+      }, 100);
+
+      return () => {
+        isMounted = false;
+        clearTimeout(timeoutId);
+      };
+    } else if (!userLoading && !user?.id) {
+      console.log('No authenticated user found');
+    }
+  }, [user?.id, astrologer?.id, userLoading]); // Removed fetchUserBookings from dependencies
+
+  // Single effect to handle tab changes and refresh bookings when needed
+  useEffect(() => {
+    let isMounted = true;
+
+    if (user?.id && astrologer?.id && (activeTab === 'booked' || activeTab === 'chat')) {
+      console.log(`Tab changed to ${activeTab}, refreshing bookings...`);
+
+      // Use setTimeout to allow for cleanup
+      const timeoutId = setTimeout(() => {
+        if (isMounted) {
+          fetchUserBookings(user.id);
+        }
+      }, 100);
+
+      return () => {
+        isMounted = false;
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [activeTab, user?.id, astrologer?.id]); // Removed fetchUserBookings from dependencies
+
+  // Initialize socket for video calls
+  useEffect(() => {
+    // Wait for user loading to complete before initializing socket
+    if (userLoading) {
+      return;
+    }
+  
+    const initializeSocket = async () => {
+      try {
+        // Get user data and token
+        const storedUser = localStorage.getItem('user');
+        const token = localStorage.getItem('token');
+        
+        if (!storedUser || !token) {
+          console.log('No user or token found, skipping socket initialization');
+          return;
+        }
+  
+        let userData;
+        try {
+          userData = JSON.parse(storedUser);
+        } catch {
+          console.log('Failed to parse user data, skipping socket initialization');
+          return;
+        }
+  
+        if (!userData.id) {
+          console.log('No user ID found, skipping socket initialization');
+          return;
+        }
+  
+        console.log('Initializing socket connection for user:', userData.id);
+  
+        // Import socket.io-client dynamically
+        const { io } = await import('socket.io-client');
+        const socketInstance = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001', {
+          auth: { 
+            token,
+            userId: userData.id,
+            userRole: 'client'
+          },
+          transports: ['websocket', 'polling'],
+          timeout: 20000,
+          forceNew: true // Force a new connection
+        });
+  
+        socketInstance.on('connect', () => {
+          console.log('Connected to socket server with ID:', socketInstance.id);
+          setSocket(socketInstance); // Set socket only after successful connection
+        });
+  
+        socketInstance.on('connect_error', (error) => {
+          console.error('Socket connection error:', error);
+          setBookingError('Failed to connect to video service. Please refresh the page.');
+        });
+  
+        socketInstance.on('disconnect', (reason) => {
+          console.log('Disconnected from socket server:', reason);
+          setSocket(null);
+        });
+  
+        socketInstance.on('error', (error) => {
+          console.error('Socket error:', error);
+          setBookingError('Video service error. Please try again.');
+        });
+  
+      } catch (error) {
+        console.error('Failed to initialize socket:', error);
+        setBookingError('Failed to initialize video service.');
+      }
+    };
+  
+    initializeSocket();
+  
+    // Cleanup function
+    return () => {
+      if (socket) {
+        console.log('Cleaning up socket connection');
+        socket.disconnect();
+        setSocket(null);
+      }
+    };
+  }, [userLoading, user?.id]);
+  
   // 5. Fetch astrologer details
   useEffect(() => {
     if (!astrologerIdParam || !astrologerIdParam.trim()) return;
@@ -206,16 +522,15 @@ export default function AstrologerProfile() {
     return () => controller.abort();
   }, [astrologerIdParam]);
 
-  // 6. fetchUserBookings as useCallback
-  const fetchUserBookings = useCallback(async (clientId: string | number) => {
-    if (!clientId || isNaN(Number(clientId))) return;
-    try {
-      const res = await axios.get(`/api/user/booking?clientId=${clientId}`);
-      setBookedSlots(res.data?.bookings || []);
-    } catch (error) {
-      console.error('Failed to fetch user bookings:', error);
+  // After fetching astrologer, normalize languages if needed
+  useEffect(() => {
+    if (astrologer && typeof astrologer.languages === 'string') {
+      setAstrologer((prev: Astrologer) => ({
+        ...prev,
+        languages: astrologer.languages ? (astrologer.languages as string).split(',').map((l: string) => l.trim()) : [],
+      }));
     }
-  }, []);
+  }, [astrologer?.languages]);
 
   // 7. Refetch on tab switch
   useEffect(() => {
@@ -235,7 +550,7 @@ export default function AstrologerProfile() {
     } else if (activeTab === 'booked' && user && user.id) {
       fetchUserBookings(user.id);
     }
-  }, [activeTab, astrologer?.id, user, fetchUserBookings]);
+  }, [activeTab, astrologer?.id, user]);
 
   // 8. slotsByDate with useMemo
   const slotsByDate = useMemo<Record<string, Slot[]>>(() => {
@@ -269,14 +584,6 @@ export default function AstrologerProfile() {
     };
   }, [bookingStatus]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
   // 2. Conditional rendering for loading/error
   const LoadingSpinner = ({ size = 'md', text = '' }: { size?: 'sm' | 'md' | 'lg'; text?: string }) => {
     const sizeClasses = {
@@ -304,6 +611,24 @@ export default function AstrologerProfile() {
       </div>
     );
   }
+
+  // Show login prompt if user is not authenticated
+  if (!userLoading && !user?.id) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-600 text-lg mb-4">Please log in to view astrologer details</div>
+          <button
+            onClick={() => window.location.href = '/signin'}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (astrologerError || !astrologer) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -320,32 +645,118 @@ export default function AstrologerProfile() {
     );
   }
 
-  const handleSendMessage = () => {
-    if (!newMessage.trim()) return;
+  const handleStartChat = async () => {
+    if (!user?.id) {
+      setBookingError('Please log in to start chat');
+      return;
+    }
 
-    const userMessage = {
-      id: messages.length + 1,
-      sender: 'user',
-      text: newMessage,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b2d4b32e?w=150&h=150&fit=crop&crop=face'
-    };
+    console.log('Current bookedSlots:', bookedSlots);
+    console.log('Current astrologer ID:', astrologer?.id);
 
-    setMessages(prev => [...prev, userMessage]);
-    setNewMessage('');
-    setIsTyping(true);
+    // Use the current booking ID if available, otherwise find the latest booking
+    let userBooking = null;
+    if (currentBookingId) {
+      userBooking = bookedSlots.find(slot => slot.id === currentBookingId);
+    }
 
-    setTimeout(() => {
-      const astrologerReply = {
-        id: messages.length + 2,
-        sender: 'astrologer',
-        text: "Thank you for sharing. Let me analyze your birth chart and provide you with detailed insights about your career prospects.",
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
-      };
-      setMessages(prev => [...prev, astrologerReply]);
-      setIsTyping(false);
-    }, 2000);
+    // If no current booking ID or booking not found, find the latest booking
+    if (!userBooking) {
+      userBooking = bookedSlots.find(slot =>
+        slot.status === 'upcoming' || slot.status === 'accepted' || slot.status === 'active'
+      );
+    }
+
+    console.log('Found user booking:', userBooking);
+
+    if (!userBooking) {
+      setBookingError('Please book a slot first to start chat');
+      return;
+    }
+
+    // Set the current booking ID
+    setCurrentBookingId(userBooking.id);
+
+    // Check if booking is paid - if not, show payment modal
+    if (!userBooking.isPaid || !userBooking.chatEnabled) {
+      if (!userBooking.id || userBooking.id === 0) {
+        setBookingError('Invalid booking. Please try booking again.');
+        return;
+      }
+      setShowPayment(true);
+      return;
+    }
+
+    // If paid, start chat directly
+    setShowChat(true);
+  };
+
+  const handleStartVideoCall = async () => {
+    console.log('handleStartVideoCall called');
+
+    if (!user?.id) {
+      setBookingError('Please log in to start video call');
+      return;
+    }
+
+    if (!socket) {
+      setBookingError('Socket connection not available. Please refresh the page.');
+      return;
+    }
+
+    // Use the current booking ID if available, otherwise find the latest booking
+    let userBooking = null;
+    if (currentBookingId) {
+      userBooking = bookedSlots.find(slot => slot.id === currentBookingId);
+    }
+
+    // If no current booking ID or booking not found, find the latest booking
+    if (!userBooking) {
+      userBooking = bookedSlots.find(slot =>
+        slot.status === 'upcoming' || slot.status === 'accepted' || slot.status === 'active'
+      );
+    }
+
+    console.log('Found user booking for video call:', userBooking);
+
+    if (!userBooking) {
+      setBookingError('Please book a slot first to start video call');
+      return;
+    }
+
+    // Set the current booking ID
+    setCurrentBookingId(userBooking.id);
+
+    // Check if booking is paid - if not, show payment modal
+    if (!userBooking.isPaid || !userBooking.videoEnabled) {
+      if (!userBooking.id || userBooking.id === 0) {
+        setBookingError('Invalid booking. Please try booking again.');
+        return;
+      }
+      console.log('Booking not paid, showing payment modal');
+      setShowPayment(true);
+      return;
+    }
+
+    // If paid, start video call directly
+    console.log('Starting video call for booking:', userBooking.id);
+    setShowVideoCall(true);
+  };
+
+  // Create properly typed astrologer objects for components
+  const chatAstrologer = {
+    id: Number(astrologer.id),
+    firstName: astrologer.firstName,
+    lastName: astrologer.lastName,
+    profileImage: astrologer.profileImage,
+    pricePerChat: astrologer.pricePerChat
+  };
+
+  const videoAstrologer = {
+    id: Number(astrologer.id),
+    firstName: astrologer.firstName,
+    lastName: astrologer.lastName,
+    profileImage: astrologer.profileImage
   };
 
   const handleBookSlot = async () => {
@@ -362,21 +773,33 @@ export default function AstrologerProfile() {
       const [, monthDay, year] = selectedSlot.date.split(',').map((s: string) => s.trim());
       // monthDay: 'Jul 22', year: '2025', start: '09:37'
       const [monthStr, dayStr] = monthDay.split(' ');
-      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const month = months.indexOf(monthStr);
       const day = parseInt(dayStr, 10);
       const [hour, minute] = selectedSlot.start.split(':').map(Number);
       const dateObj = new Date(Number(year), month, day, hour, minute);
       const isoDate = dateObj.toISOString();
-      await axios.post('/api/user/booking', {
+
+      const bookingResponse = await axios.post('/api/user/booking', {
         astrologerId: astrologer?.id,
         clientId: user.id,
         date: isoDate,
         type: 'chat',
       });
-      setBookingStatus('Slot booked successfully!');
-      setSelectedSlot(null);
-      fetchUserBookings(user.id);
+
+      // After successful booking, show payment modal
+      if (bookingResponse.data.success) {
+        setSelectedSlot(null);
+        // Store the booking ID for payment
+        const bookingId = bookingResponse.data.booking?.id;
+        if (bookingId) {
+          setCurrentBookingId(bookingId);
+          // Refresh bookings to include the new booking
+          fetchUserBookings(user.id);
+          // Show payment modal immediately after booking
+          setShowPayment(true);
+        }
+      }
     } catch (e: unknown) {
       const err = e as { response?: { data?: { error?: string } } };
       setBookingError(err.response?.data?.error || 'Failed to book slot');
@@ -469,10 +892,21 @@ export default function AstrologerProfile() {
                     <Award className="w-4 h-4" />
                     {astrologer?.yearsOfExperience} years exp
                   </div>
-                  {/* <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1">
                     <Globe className="w-4 h-4" />
-                    {astrologer?.languages.join(", ")}
-                  </div> */}
+                    {(() => {
+                      if (Array.isArray(astrologer?.languages)) {
+                        return astrologer.languages.map(code =>
+                          LANGUAGE_NAMES[code.trim() as keyof typeof LANGUAGE_NAMES] || code.trim()
+                        ).join(', ');
+                      } else if (typeof astrologer?.languages === 'string') {
+                        return astrologer.languages.split(',').map(code =>
+                          LANGUAGE_NAMES[code.trim() as keyof typeof LANGUAGE_NAMES] || code.trim()
+                        ).join(', ');
+                      }
+                      return '';
+                    })()}
+                  </div>
                 </div>
               </div>
             </div>
@@ -482,17 +916,17 @@ export default function AstrologerProfile() {
               <div className="text-center">
                 <div className="flex items-center gap-1 mb-1">
                   <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
-                  <span className="font-bold text-lg text-slate-800">{astrologer?.rating}</span>
+                  <span className="font-bold text-lg text-slate-800">4.5</span>
                 </div>
                 <p className="text-xs text-slate-500">{astrologer?.totalRatings} ratings</p>
               </div>
-              <div className="text-center">
+              {/* <div className="text-center">
                 <div className="font-bold text-lg text-slate-800">{astrologer?.orders}</div>
                 <p className="text-xs text-slate-500">consultations</p>
-              </div>
+              </div> */}
               <div className="text-center">
-                <div className="font-bold text-lg text-emerald-600">₹{astrologer?.price}</div>
-                <p className="text-xs text-slate-500">per minute</p>
+                <div className="font-bold text-lg text-emerald-600">₹{astrologer?.pricePerChat}</div>
+                <p className="text-xs text-slate-500">per chat</p>
               </div>
             </div>
           </div>
@@ -528,70 +962,159 @@ export default function AstrologerProfile() {
                     <p className="text-sm text-indigo-200">{astrologer?.availability}</p>
                   </div>
                   <div className="ml-auto flex gap-2">
-                    <button className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
-                      <Phone className="w-4 h-4" />
+                    <button
+                      onClick={handleStartChat}
+                      className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+                      title="Start Chat"
+                    >
+                      <MessageCircle className="w-4 h-4" />
                     </button>
-                    <button className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Video call button clicked in header');
+                        handleStartVideoCall();
+                      }}
+                      className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+                      title="Start Video Call"
+                    >
                       <Video className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.map(message => (
-                  <div key={message.id} className={`flex gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
-                    {message.sender === 'astrologer' && (
-                      <Image src={message.avatar} alt="" width={32} height={32} className="w-8 h-8 rounded-full" />
-                    )}
-                    <div className={`max-w-xs lg:max-w-md ${message.sender === 'user'
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-100 text-slate-800'
-                      } rounded-2xl px-4 py-2`}>
-                      <p className="text-sm">{message.text}</p>
-                      <p className={`text-xs mt-1 ${message.sender === 'user' ? 'text-indigo-200' : 'text-slate-500'
-                        }`}>
-                        {message.time}
-                      </p>
-                    </div>
-                    {message.sender === 'user' && (
-                      <Image src={message.avatar} alt="" width={32} height={32} className="w-8 h-8 rounded-full" />
-                    )}
-                  </div>
-                ))}
+                {/* Booking Status Indicator */}
+                {user && (
+                  <div className="mt-3 pt-3 border-t border-indigo-500">
+                    {(() => {
+                      // Use current booking ID if available, otherwise find the latest booking
+                      let userBooking = null;
+                      if (currentBookingId) {
+                        userBooking = bookedSlots.find(slot => slot.id === currentBookingId);
+                      }
 
-                {isTyping && (
-                  <div className="flex gap-3">
-                    <Image src={astrologer?.profileImage} alt="" width={32} height={32} className="w-8 h-8 rounded-full" />
-                    <div className="bg-slate-100 rounded-2xl px-4 py-2">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      </div>
-                    </div>
+                      if (!userBooking) {
+                        userBooking = bookedSlots.find(slot =>
+                          slot.status === 'upcoming' || slot.status === 'accepted' || slot.status === 'active'
+                        );
+                      }
+
+                      if (!userBooking) {
+                        return (
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-indigo-200">
+                              <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                              <span className="text-sm">Book a slot to start chatting</span>
+                            </div>
+                            <button
+                              onClick={() => user?.id && fetchUserBookings(user.id)}
+                              className="text-xs px-2 py-1 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+                              title="Refresh"
+                            >
+                              ↻
+                            </button>
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-indigo-200">
+                            <div className={`w-2 h-2 rounded-full ${userBooking.isPaid && userBooking.chatEnabled ? 'bg-green-400' : 'bg-yellow-400'
+                              }`}></div>
+                            <span className="text-sm">
+                              Booking: {new Date(userBooking.date).toLocaleDateString()} at {new Date(userBooking.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-xs px-2 py-1 rounded-full ${userBooking.isPaid ? 'bg-green-500 text-white' : 'bg-yellow-500 text-white'
+                              }`}>
+                              {userBooking.isPaid ? 'Paid' : 'Unpaid'}
+                            </span>
+                            <span className={`text-xs px-2 py-1 rounded-full ${userBooking.chatEnabled ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
+                              }`}>
+                              {userBooking.chatEnabled ? 'Chat Active' : 'Chat Locked'}
+                            </span>
+                            <button
+                              onClick={() => user?.id && fetchUserBookings(user.id)}
+                              className="text-xs px-2 py-1 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+                              title="Refresh"
+                            >
+                              ↻
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
-                <div ref={messagesEndRef} />
               </div>
 
-              <div className="p-4 border-t border-slate-200">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    placeholder="Type your message..."
-                    className="flex-1 px-4 py-2 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
-                  />
-                  <button
-                    onClick={handleSendMessage}
-                    disabled={!newMessage.trim()}
-                    className="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <Send className="w-4 h-4" />
-                  </button>
+              <div className="flex-1 flex items-center justify-center p-8">
+                <div className="text-center">
+                  <MessageCircle className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Start a Conversation</h3>
+                  <p className="text-gray-500 mb-6">
+                    Click the chat button above to start a real-time conversation with {astrologer?.firstName}
+                  </p>
+                  <div className="flex gap-3 justify-center">
+                    <button
+                      onClick={handleStartChat}
+                      disabled={(() => {
+                        let userBooking = null;
+                        if (currentBookingId) {
+                          userBooking = bookedSlots.find(slot => slot.id === currentBookingId);
+                        }
+                        if (!userBooking) {
+                          userBooking = bookedSlots.find(slot =>
+                            slot.status === 'upcoming' || slot.status === 'accepted' || slot.status === 'active'
+                          );
+                        }
+                        return !userBooking?.isPaid;
+                      })()}
+                      className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      Start Chat
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Main video call button clicked');
+                        handleStartVideoCall();
+                      }}
+                      disabled={(() => {
+                        let userBooking = null;
+                        if (currentBookingId) {
+                          userBooking = bookedSlots.find(slot => slot.id === currentBookingId);
+                        }
+                        if (!userBooking) {
+                          userBooking = bookedSlots.find(slot =>
+                            slot.status === 'upcoming' || slot.status === 'accepted' || slot.status === 'active'
+                          );
+                        }
+                        const isDisabled = !userBooking?.isPaid || !socket;
+                        console.log('Video call button disabled:', isDisabled, 'userBooking:', userBooking, 'hasSocket:', !!socket);
+                        return isDisabled;
+                      })()}
+                      className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <Video className="w-4 h-4" />
+                      Video Call
+                    </button>
+                  </div>
+                  {bookingError && (
+                    <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                      {bookingError}
+                    </div>
+                  )}
+                  {bookingStatus && (
+                    <div className="mt-4 p-3 bg-green-50 text-green-700 rounded-lg border border-green-200">
+                      {bookingStatus}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -604,33 +1127,51 @@ export default function AstrologerProfile() {
               {slotsLoading && <LoadingSpinner size="sm" text="Loading slots..." />}
               {slotsError && <div className="text-red-600 mb-2">{slotsError}</div>}
               {!slotsLoading && !slotsError && (
-              <div className="space-y-6">
+                <div className="space-y-6">
                   {Object.keys(slotsByDate).length === 0 && <div>No slots available.</div>}
                   {Object.entries(slotsByDate).map(([date, slots]) => (
                     <div key={date}>
                       <h4 className="font-semibold text-slate-700 mb-3">{date}</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                        {slots.map((slot: Slot, slotIndex: number) => (
-                        <button
-                          key={slotIndex}
-                            onClick={() => setSelectedSlot({ ...slot, date })}
-                            className={`p-3 rounded-lg border-2 transition-all ${
-                              selectedSlot?.id === slot.id
-                              ? 'bg-indigo-600 text-white border-indigo-600'
-                              : 'bg-white text-gray-900 hover:bg-slate-50 border-slate-200 hover:border-indigo-300'
-                            }`}
-                        >
-                          <div className="flex items-center gap-2 justify-center">
-                            <Clock className="w-4 h-4" />
-                              <span className="text-sm font-medium">{slot.start} - {slot.end}</span>
-                          </div>
-                            <div className="text-xs text-emerald-600 mt-1">Slot</div>
-                        </button>
-                      ))}
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {slots.map((slot: Slot, slotIndex: number) => {
+                          // Determine if slot is in the past
+                          const slotDate = new Date(slot.date);
+                          const now = new Date();
+                          const isPast = slotDate < now;
+                          const isAvailable = slot.isAvailable && !isPast;
+                          return (
+                            <button
+                              key={slotIndex}
+                              onClick={() => isAvailable && setSelectedSlot({ ...slot, date })}
+                              disabled={!isAvailable}
+                              className={`p-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center ${selectedSlot?.id === slot.id
+                                ? 'bg-indigo-600 text-white border-indigo-600'
+                                : !isAvailable
+                                  ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-60'
+                                  : 'bg-white text-gray-900 hover:bg-slate-50 border-slate-200 hover:border-indigo-300'
+                                }`}
+                              title={
+                                isPast
+                                  ? 'Past slot'
+                                  : slot.isAvailable === false
+                                    ? 'Already booked'
+                                    : 'Available'
+                              }
+                            >
+                              <div className="flex items-center gap-2 justify-center">
+                                <Clock className="w-4 h-4" />
+                                <span className="text-sm font-medium">{slot.start} - {slot.end}</span>
+                              </div>
+                              <div className="text-xs mt-1">
+                                {isPast ? 'Past' : slot.isAvailable === false ? 'Booked' : 'Available'}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
               )}
 
               {selectedSlot && (
@@ -771,33 +1312,37 @@ export default function AstrologerProfile() {
           {/* About Tab */}
           {activeTab === 'about' && (
             <div className="p-6">
-              <h3 className="text-xl font-bold mb-4 text-slate-800">About Dr. Yogeshwara</h3>
+              <h3 className="text-xl font-bold mb-4 text-slate-800">About {astrologer?.firstName} {astrologer?.lastName}</h3>
               <div className="space-y-6">
                 <div>
                   <p className="text-slate-600 leading-relaxed">{astrologer?.about}</p>
                 </div>
-
                 <div>
                   <h4 className="font-semibold mb-2 text-slate-800">Specializations</h4>
                   <div className="flex flex-wrap gap-2">
-                    {(astrologer?.skills ?? []).map((skill: string) => (
+                    {(astrologer?.areasOfExpertise ?? '').split(',').map((skill: string) => (
                       <span key={skill} className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm border border-slate-200">
                         {skill}
                       </span>
                     ))}
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold mb-2 text-slate-800">Languages</h4>
-                  <p className="text-slate-600">{astrologer?.languages.join(", ")}</p>
+                  <p className="text-slate-600">{
+                    Array.isArray(astrologer?.languages)
+                      ? astrologer.languages.map((code: string) => LANGUAGE_NAMES[code as keyof typeof LANGUAGE_NAMES] || code).join(', ')
+                      : (astrologer?.languages || '').split(',').map((code: string) => LANGUAGE_NAMES[code as keyof typeof LANGUAGE_NAMES] || code).join(', ')
+                  }</p>
                 </div>
-
                 <div>
+                  <h4 className="font-semibold mb-2 text-slate-800">Price Per Chat</h4>
+                  <p className="text-slate-600">₹{astrologer?.pricePerChat ?? astrologer?.price} per chat</p>
+                </div>
+                {/* <div>
                   <h4 className="font-semibold mb-2 text-slate-800">Response Time</h4>
                   <p className="text-slate-600">{astrologer?.responseTime}</p>
-                </div>
-
+                </div> */}
                 <div className="flex items-center gap-4 pt-4 border-t border-slate-200">
                   <button className="flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-700 rounded-lg hover:bg-rose-200 transition-colors">
                     <Heart className="w-4 h-4" />
@@ -813,6 +1358,75 @@ export default function AstrologerProfile() {
           )}
         </div>
       </div>
+
+      {/* Real-time Chat Modal */}
+      {showChat && currentBookingId && (
+        <RealTimeChat
+          bookingId={currentBookingId}
+          astrologer={{
+            id: Number(astrologer.id),
+            firstName: astrologer.firstName,
+            lastName: astrologer.lastName,
+            profileImage: astrologer.profileImage,
+            pricePerChat: astrologer.pricePerChat
+          }}
+          onClose={() => setShowChat(false)}
+          onPaymentRequired={() => {
+            setShowChat(false);
+            setShowPayment(true);
+          }}
+          onVideoCall={() => {
+            setShowChat(false);
+            setShowVideoCall(true);
+          }}
+        />
+      )}
+
+      {/* Video Call Modal */}
+      {showVideoCall && socket && currentBookingId && (
+  <div className="fixed inset-0 z-50">
+    <VideoCall
+      bookingId={currentBookingId}
+      astrologer={{
+        id: Number(astrologer.id),
+        firstName: astrologer.firstName,
+        lastName: astrologer.lastName,
+        profileImage: astrologer.profileImage
+      }}
+      onClose={() => {
+        console.log('Closing video call modal');
+        setShowVideoCall(false);
+      }}
+      socket={socket}
+    />
+  </div>
+)}
+
+      {/* Debug info for video call */}
+      {console.log('Video call modal state:', {
+        showVideoCall,
+        hasSocket: !!socket,
+        currentBookingId,
+        astrologerId: astrologer?.id
+      })}
+
+      {/* Payment Modal */}
+      {showPayment && currentBookingId && (
+        <PaymentModal
+          bookingId={currentBookingId}
+          astrologer={{
+            id: Number(astrologer.id),
+            firstName: astrologer.firstName,
+            lastName: astrologer.lastName,
+            pricePerChat: astrologer.pricePerChat
+          }}
+          onPaymentSuccess={handlePaymentSuccess}
+          onClose={() => {
+            setShowPayment(false);
+            setCurrentBookingId(null);
+          }}
+        />
+      )}
     </div>
   );
 }
