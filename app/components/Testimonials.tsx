@@ -159,6 +159,17 @@ export function Testimonials() {
                 transition={{ duration: 0.6, ease: 'easeInOut' }}
                 className="flex-1 flex flex-col justify-center px-10 py-24 md:py-32 md:pr-0 md:pl-20"
                 style={{ minWidth: 0 }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                onDragEnd={(e, info) => {
+                  if (window.innerWidth < 768) {
+                    if (info.offset.x < -100) {
+                      paginate(1);
+                    } else if (info.offset.x > 100) {
+                      paginate(-1);
+                    }
+                  }
+                }}
               >
                 <div className="flex flex-col h-full justify-center">
                   <div className="flex items-center mb-6">

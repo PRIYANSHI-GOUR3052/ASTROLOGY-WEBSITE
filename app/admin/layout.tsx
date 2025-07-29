@@ -124,6 +124,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           active: pathname === '/admin/products/categories',
         },
         {
+          label: 'Attributes',
+          href: '/admin/products/attributes',
+          active: pathname === '/admin/products/attributes',
+        },
+        {
           label: 'Product Creation',
           href: '/admin/products/create',
           active: pathname === '/admin/products/create',
