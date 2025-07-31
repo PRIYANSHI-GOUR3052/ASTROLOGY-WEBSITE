@@ -21,6 +21,13 @@ import CartIcon from "./CartIcon";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const servicesMegaMenu = {
   consultations: {
@@ -381,14 +388,50 @@ export function Header() {
             >
               {t('header.nav.join_us') || t('header.join_us') || 'Join Us'}
             </a>
-            {/* Sign In Button */}
-            <button
-              onClick={() => signIn()}
-              className="px-5 py-2 rounded-full font-semibold transition-colors text-base"
-              style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff', border: 'none' }}
-            >
-              {t('header.auth.signin') || 'Sign In'}
-            </button>
+            {/* User Menu or Sign In Button */}
+            {session?.user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-full font-semibold transition-colors text-base hover:bg-[#6a9550]"
+                    style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff', border: 'none' }}
+                  >
+                    <Avatar className="h-6 w-6">
+                      <AvatarFallback className="text-xs font-bold bg-white/20 text-white">
+                        {session.user.name ? session.user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="hidden sm:inline">{session.user.name || session.user.email}</span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-[#FEFBF2] border border-[#e6c77e] shadow-2xl rounded-2xl p-2">
+                  <DropdownMenuItem className="font-semibold text-[#77A656] hover:bg-[#e9eafc] rounded-lg cursor-pointer">
+                    {session.user.name || session.user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="cursor-pointer hover:bg-[#e9eafc] rounded-lg">
+                    <Link href="/profile" className="w-full text-black hover:text-[#77A656]">
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="cursor-pointer hover:bg-[#e9eafc] rounded-lg">
+                    <Link href="/orders" className="w-full text-black hover:text-[#77A656]">
+                      My Orders
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 hover:bg-red-50 rounded-lg">
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <button
+                onClick={() => signIn()}
+                className="px-5 py-2 rounded-full font-semibold transition-colors text-base"
+                style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff', border: 'none' }}
+              >
+                {t('header.auth.signin') || 'Sign In'}
+              </button>
+            )}
           </div>
         </div>
         {/* Navigation Bar */}
@@ -770,8 +813,32 @@ export function Header() {
                 {/* <Link href="/cart" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 py-2 rounded-full bg-[#f7f7fa] text-black font-semibold text-center" style={{ fontFamily: 'Playfair Display, serif' }}>{t('header.cart')}</Link> */}
                 {/* Mobile Join Us button */}
                 <a href="/astrologer/auth/" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 py-2 rounded-full font-semibold text-center" style={{ background: '#77A656', color: '#fff', fontFamily: 'Playfair Display, serif' }}>{t('header.nav.join_us') || t('header.join_us') || 'Join Us'}</a>
-                {/* Mobile Sign In button */}
-                <button onClick={() => { signIn(); setIsMobileMenuOpen(false); }} className="flex-1 py-2 rounded-full font-semibold text-center" style={{ background: '#77A656', color: '#fff', border: 'none', fontFamily: 'Playfair Display, serif' }}>{t('header.auth.signin') || 'Sign In'}</button>
+                {/* Mobile User Menu or Sign In button */}
+                {session?.user ? (
+                  <div className="flex-1 flex flex-col gap-2">
+                    <div className="flex items-center gap-2 py-2 px-3 rounded-full bg-[#77A656] text-white">
+                      <Avatar className="h-6 w-6">
+                        <AvatarFallback className="text-xs font-bold bg-white/20 text-white">
+                          {session.user.name ? session.user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm font-semibold truncate">{session.user.name || session.user.email}</span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="text-sm text-black hover:text-[#77A656] px-2 py-1 rounded">
+                        Profile
+                      </Link>
+                      <Link href="/orders" onClick={() => setIsMobileMenuOpen(false)} className="text-sm text-black hover:text-[#77A656] px-2 py-1 rounded">
+                        My Orders
+                      </Link>
+                      <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="text-sm text-red-600 hover:text-red-700 px-2 py-1 rounded text-left">
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button onClick={() => { signIn(); setIsMobileMenuOpen(false); }} className="flex-1 py-2 rounded-full font-semibold text-center" style={{ background: '#77A656', color: '#fff', border: 'none', fontFamily: 'Playfair Display, serif' }}>{t('header.auth.signin') || 'Sign In'}</button>
+                )}
               </div>
             </nav>
           </motion.div>
