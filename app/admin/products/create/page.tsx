@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Plus, Edit, Trash, Search, Filter } from 'lucide-react';
 
 interface Product {
@@ -173,13 +174,12 @@ export default function ProductsPage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">Products</h2>
-        <button
-          onClick={openAddModal}
-          className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
-        >
-          <Plus className="w-5 h-5" />
-          Add New Product
-        </button>
+        <Link href="/admin/products/add">
+          <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
+            <Plus className="w-5 h-5" />
+            Add New Product
+          </button>
+        </Link>
       </div>
 
       {/* Search and Filter */}
@@ -200,61 +200,80 @@ export default function ProductsPage() {
         </button>
       </div>
 
-      {/* Products Table */}
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+      {/* Products Table - Theme & Dark Mode */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden border border-gray-200 dark:border-gray-700">
         <table className="w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-purple-50 dark:bg-purple-900">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">
                 Product
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">
                 Price
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">
                 Description
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {loading ? (
               <tr>
-                <td colSpan={4} className="px-6 py-4 text-center">
+                <td
+                  colSpan={4}
+                  className="px-6 py-4 text-center text-gray-500 dark:text-gray-400"
+                >
                   Loading products...
                 </td>
               </tr>
             ) : filteredProducts.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-6 py-4 text-center">
+                <td
+                  colSpan={4}
+                  className="px-6 py-4 text-center text-gray-500 dark:text-gray-400"
+                >
                   No products found.
                 </td>
               </tr>
             ) : (
               filteredProducts.map((product) => (
-                <tr key={product.id} className="hover:bg-gray-50">
+                <tr
+                  key={product.id}
+                  className="hover:bg-purple-50 dark:hover:bg-purple-900 transition-colors"
+                >
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                    <div className="text-xs text-gray-500">{product.slug}</div>
+                    <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                      {product.name}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      {product.slug}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">₹{Number(product.price).toFixed(2)}</div>
+                    <div className="text-sm text-gray-900 dark:text-gray-100">
+                      ₹{Number(product.price).toFixed(2)}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{product.description || 'yes'}</div>
+                    <div className="text-sm text-gray-900 dark:text-gray-100">
+                      {product.description || "yes"}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button 
-                      className="text-blue-600 hover:text-blue-900 mr-2"
+                    <button
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-2"
                       onClick={() => openEditModal(product)}
                     >
                       <Edit className="w-5 h-5" />
                     </button>
-                    <button 
-                      className="text-red-600 hover:text-red-900"
-                      onClick={() => product.id && handleDeleteProduct(product.id)}
+                    <button
+                      className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
+                      onClick={() =>
+                        product.id && handleDeleteProduct(product.id)
+                      }
                     >
                       <Trash className="w-5 h-5" />
                     </button>
@@ -266,54 +285,62 @@ export default function ProductsPage() {
         </table>
       </div>
 
-      {/* Modal for Adding/Editing Product */}
+      {/* Modal for Adding/Editing Product - Theme & Dark Mode */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-            <h3 className="text-xl font-semibold mb-4">
-              {isEditMode ? 'Edit Product' : 'Add New Product'}
+          <div className="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-lg w-96 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+              {isEditMode ? "Edit Product" : "Add New Product"}
             </h3>
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Product Name</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Product Name
+                  </label>
                   <input
                     type="text"
                     value={productName}
                     onChange={handleNameChange}
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full p-2 border rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Product Description</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Product Description
+                  </label>
                   <textarea
                     value={productDescription}
                     onChange={(e) => setProductDescription(e.target.value)}
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full p-2 border rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     rows={4}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Price (₹)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Price (₹)
+                  </label>
                   <input
                     type="number"
                     value={productPrice}
                     onChange={(e) => setProductPrice(e.target.value)}
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full p-2 border rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     min="0"
                     step="0.01"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Slug</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Slug
+                  </label>
                   <input
                     type="text"
                     value={productSlug}
                     onChange={(e) => setProductSlug(e.target.value)}
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full p-2 border rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   />
                 </div>
@@ -323,15 +350,15 @@ export default function ProductsPage() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                  className="bg-gray-500 dark:bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 dark:hover:bg-gray-600"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
                 >
-                  {isEditMode ? 'Update Product' : 'Save Product'}
+                  {isEditMode ? "Update Product" : "Save Product"}
                 </button>
               </div>
             </form>
