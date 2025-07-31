@@ -4,11 +4,12 @@ import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../contexts/useLanguage';
 
 // FIRST ROW - 6 MAIN ZODIAC SIGNS
 const mainZodiacSigns = [
   {
-    name: 'Aries',
+    name: 'aries',
     symbol: '',
     dates: 'Mar 21 - Apr 19',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753092662/2a9a8fad-602c-4a8b-b0a2-a2acee74386d.png',
@@ -17,7 +18,7 @@ const mainZodiacSigns = [
     shadowColor: 'shadow-red-400/40'
   },
   {
-    name: 'Taurus',
+    name: 'taurus',
     symbol: '',
     dates: 'Apr 20 - May 20',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095187/taurus_2_bbgbls.jpg',
@@ -26,7 +27,7 @@ const mainZodiacSigns = [
     shadowColor: 'shadow-green-400/40'
   },
   {
-    name: 'Gemini',
+    name: 'gemini',
     symbol: '',
     dates: 'May 21 - Jun 20',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095191/gemini_usaz4b.jpg',
@@ -35,7 +36,7 @@ const mainZodiacSigns = [
     shadowColor: 'shadow-yellow-400/40'
   },
   {
-    name: 'Cancer',
+    name: 'cancer',
     symbol: '',
     dates: 'Jun 21 - Jul 22',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095191/cancer_ihdhhi.jpg',
@@ -44,7 +45,7 @@ const mainZodiacSigns = [
     shadowColor: 'shadow-blue-400/40'
   },
   {
-    name: 'Leo',
+    name: 'leo',
     symbol: '',
     dates: 'Jul 23 - Aug 22',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095189/leo_ieeqpu.jpg',
@@ -53,7 +54,7 @@ const mainZodiacSigns = [
     shadowColor: 'shadow-orange-400/40'
   },
   {
-    name: 'Virgo',
+    name: 'virgo',
     symbol: '',
     dates: 'Aug 23 - Sep 22',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753095189/virgo_iirwhi.jpg',
@@ -66,7 +67,7 @@ const mainZodiacSigns = [
 // EXPANDABLE - REMAINING 6 ZODIAC SIGNS
 const additionalZodiacSigns = [
   {
-    name: 'Libra',
+    name: 'libra',
     symbol: '',
     dates: 'Sep 23 - Oct 22',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753183716/libra_qxomfb.png',
@@ -75,7 +76,7 @@ const additionalZodiacSigns = [
     shadowColor: 'shadow-pink-400/40'
   },
   {
-    name: 'Scorpio',
+    name: 'scorpio',
     symbol: '',
     dates: 'Oct 23 - Nov 21',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753183870/Scorpio_njyib9.png',
@@ -84,7 +85,7 @@ const additionalZodiacSigns = [
     shadowColor: 'shadow-purple-400/40'
   },
   {
-    name: 'Sagittarius',
+    name: 'sagittarius',
     symbol: '',
     dates: 'Nov 22 - Dec 21',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184598/saggitaious_a9csap.png',
@@ -93,7 +94,7 @@ const additionalZodiacSigns = [
     shadowColor: 'shadow-indigo-400/40'
   },
   {
-    name: 'Capricorn',
+    name: 'capricorn',
     symbol: '',
     dates: 'Dec 22 - Jan 19',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184598/capricon_zpjvdq.png',
@@ -102,22 +103,22 @@ const additionalZodiacSigns = [
     shadowColor: 'shadow-gray-400/40'
   },
   {
-    name: 'Aquarius',
+    name: 'aquarius',
     symbol: '',
     dates: 'Jan 20 - Feb 18',
-    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184596/aquarius_wygprx.png',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184598/aquarius_qqqj8j.png',
     slug: 'aquarius',
-    color: 'from-cyan-300 via-sky-300 to-cyan-400',
+    color: 'from-cyan-300 via-blue-300 to-cyan-400',
     shadowColor: 'shadow-cyan-400/40'
   },
   {
-    name: 'Pisces',
+    name: 'pisces',
     symbol: '',
     dates: 'Feb 19 - Mar 20',
-    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184597/Pisces_b2t4pu.png',
+    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1753184598/pisces_qqqj8j.png',
     slug: 'pisces',
-    color: 'from-teal-300 via-green-300 to-teal-400',
-    shadowColor: 'shadow-teal-400/40'
+    color: 'from-blue-300 via-indigo-300 to-blue-400',
+    shadowColor: 'shadow-blue-400/40'
   }
 ];
 
@@ -174,6 +175,7 @@ export default function ZodiacCategories() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [showAll, setShowAll] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <section 
@@ -202,7 +204,7 @@ export default function ZodiacCategories() {
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-light mb-4 text-slate-800"
               style={{ fontFamily: 'Playfair Display, serif' }}>
-            Shop By Zodiac
+            {t('zodiac.shopByZodiac')}
           </h2>
           
           <motion.div
@@ -274,17 +276,17 @@ export default function ZodiacCategories() {
               </Link>
 
               {/* ZODIAC NAME */}
-              <motion.h3
+              <motion.h3 
                 className="mt-3 text-center text-sm md:text-base font-semibold text-slate-700"
                 style={{ fontFamily: 'Playfair Display, serif' }}
                 initial={{ opacity: 0, y: 10 }}
-                animate={isInView ? {
+                animate={isInView ? { 
                   opacity: 1, 
                   y: 0,
-                  transition: { delay: index * 0.1 + 0.8, duration: 0.4 }
+                  transition: { duration: 0.6, delay: 0.2 + index * 0.1 }
                 } : {}}
               >
-                {sign.name}
+                {t(`zodiac.signs.${sign.name}`)}
               </motion.h3>
               
               {/* DATES */}
@@ -370,7 +372,7 @@ export default function ZodiacCategories() {
                     {/* ZODIAC NAME */}
                     <h3 className="mt-3 text-center text-sm md:text-base font-semibold text-slate-700"
                         style={{ fontFamily: 'Playfair Display, serif' }}>
-                      {sign.name}
+                      {t(`zodiac.signs.${sign.name}`)}
                     </h3>
                     
                     {/* DATES */}
@@ -398,7 +400,7 @@ export default function ZodiacCategories() {
             whileTap={{ scale: 0.98 }}
           >
             <span className="mr-2">
-              {showAll ? 'Show Less Signs' : 'Show More Signs'}
+              {showAll ? t('zodiac.showLessSigns') : t('zodiac.showMoreSigns')}
             </span>
             <motion.svg
               className="w-4 h-4"

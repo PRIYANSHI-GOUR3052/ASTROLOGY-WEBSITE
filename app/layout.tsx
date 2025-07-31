@@ -24,6 +24,8 @@ const notoSansSC = Noto_Sans_SC({
   display: 'swap',
 });
 
+
+
 export const metadata = {
   title: 'Nakshatra Gyaan - Your Spiritual Journey Begins Here',
   description: 'Discover your path with comprehensive Vedic astrology and spiritual guidance.',

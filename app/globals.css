@@ -9,6 +9,21 @@ body {
   background-color: #FDE289;
 }
 
+/* Malayalam font support */
+[lang="ml"] {
+  font-family: var(--font-sans-malayalam), 'Noto Sans Malayalam', 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Odia font support */
+[lang="or"] {
+  font-family: 'Noto Sans Oriya', 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Punjabi font support */
+[lang="pa"] {
+  font-family: 'Noto Sans Gurmukhi', 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', 'Marcellus', 'Cinzel', 'Cormorant Garamond', serif;
   font-weight: 700;

@@ -1,4 +1,29 @@
 ﻿{
+  "zodiac": {
+    "shopByZodiac": "Comprar por Zodiaco",
+    "showMoreSigns": "Mostrar Más Signos",
+    "showLessSigns": "Mostrar Menos Signos",
+    "signs": {
+      "aries": "Aries",
+      "taurus": "Tauro",
+      "gemini": "Géminis",
+      "cancer": "Cáncer",
+      "leo": "Leo",
+      "virgo": "Virgo",
+      "libra": "Libra",
+      "scorpio": "Escorpio",
+      "sagittarius": "Sagitario",
+      "capricorn": "Capricornio",
+      "aquarius": "Acuario",
+      "pisces": "Piscis"
+    }
+  },
+  "statistics": {
+    "kundliServed": "Kundlis atendidos",
+    "yearsOfLegacy": "Años de legado",
+    "consultationsGiven": "Consultas realizadas",
+    "awardsInOccult": "Premios en ciencias ocultas"
+  },
   "hero": {
     "mainHeading": "Desbloquear los secretos del cosmos",
     "subHeading": "Astrología védica personalizada para iluminar tu camino",
@@ -265,26 +290,42 @@
     }
   },
   "astrologerProfile": {
-    "heading": "Conozca al Dr. Narendra - Su astrólogo de confianza",
-    "subheading": "Astrólogo védico experto con décadas de experiencia",
-    "credential1": {
-      "title": "Experto en astrología védica",
-      "description": "El Dr. Narendra es un renombrado astrólogo védico con más de 15 años de experiencia en astrología india tradicional. Se especializa en análisis de cartas natales, remedios planetarios y orientación vital a través de la sabiduría védica antigua."
+    "heading": "Nuestro astrólogo principal",
+    "subheading": "Experto en astrología védica con más de 20 años de experiencia",
+    "credentials": {
+      "0": {
+        "title": "Experto en astrología védica",
+        "description": "Más de dos décadas estudiando y practicando las técnicas tradicionales de astrología védica. Especializado en análisis de cartas natales, doshas planetarios y remedios."
+      },
+      "1": {
+        "title": "PhD en Ciencias Astrológicas",
+        "description": "PhD en Ciencias Astrológicas de una prestigiosa universidad. Combina el estudio profundo de textos antiguos con investigación moderna."
+      },
+      "2": {
+        "title": "Experto en numerología y tarot",
+        "description": "Especialización en numerología y lectura de tarot, proporcionando orientación integral combinada con astrología."
+      }
     },
-    "credential2": {
-      "title": "Doctorado en Astrología y Filosofía",
-      "description": "Con un doctorado en astrología y filosofía, el Dr. Narendra combina el conocimiento tradicional con la comprensión moderna para brindar consultas astrológicas integrales y orientación espiritual."
+    "specializations": {
+      "heading": "Especializaciones",
+      "list": [
+        "Análisis de carta natal",
+        "Remedios de doshas planetarios",
+        "Compatibilidad matrimonial",
+        "Orientación profesional",
+        "Astrología empresarial",
+        "Astrología de salud"
+      ]
     },
-    "beliefHi": "Creo que la vida de cada persona es única y que todo problema tiene solución.",
-    "beliefEn": "I believe that every individual's life is unique and every problem has a solution.",
-    "experienceHi": "Más de 15 años de experiencia y miles de clientes satisfechos",
-    "experienceEn": "15+ Years of Experience and Thousands of Satisfied Clients",
-    "bookAppointment": "Reservar consulta"
+    "experience": {
+      "heading": "Experiencia",
+      "text": "Con más de 20 años de experiencia, ha analizado más de 10,000 cartas natales y asesorado a clientes en todo el mundo."
+    }
   },
   "about": {
     "banner": {
       "heading": "Acerca de Nakshatra Gyaan",
-      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
+      "text": "Durante más de dos décadas, nuestros astrólogos expertos han combinado la sabiduría antigua con conocimientos modernos, guiando a los buscadores en su viaje espiritual con orientación precisa y transformadora."
     },
     "tabs": {
       "0": "Nuestro viaje",
@@ -378,6 +419,12 @@
       "link1": { "title": "Las piedras preciosas y sus poderes", "url": "/blog/gemstones-and-their-powers" },
       "link2": { "title": "Conceptos básicos de numerología", "url": "/blog/numerology-basics" },
       "link3": { "title": "La influencia de los planetas", "url": "/blog/the-influence-of-planets" }
+    },
+    "statistics": {
+      "kundli_served": "Kundli Servidos",
+      "years_legacy": "Años de Legado",
+      "consultations_given": "Consultas Realizadas",
+      "awards_occult": "Premios en Ocultismo"
     }
   },
   "astrologyQuiz": {

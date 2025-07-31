@@ -1,4 +1,29 @@
 {
+  "zodiac": {
+    "shopByZodiac": "Acheter par Zodiaque",
+    "showMoreSigns": "Afficher Plus de Signes",
+    "showLessSigns": "Afficher Moins de Signes",
+    "signs": {
+      "aries": "Bélier",
+      "taurus": "Taureau",
+      "gemini": "Gémeaux",
+      "cancer": "Cancer",
+      "leo": "Lion",
+      "virgo": "Vierge",
+      "libra": "Balance",
+      "scorpio": "Scorpion",
+      "sagittarius": "Sagittaire",
+      "capricorn": "Capricorne",
+      "aquarius": "Verseau",
+      "pisces": "Poissons"
+    }
+  },
+  "statistics": {
+    "kundliServed": "Kundlis servis",
+    "yearsOfLegacy": "Années de patrimoine",
+    "consultationsGiven": "Consultations données",
+    "awardsInOccult": "Prix en sciences occultes"
+  },
   "hero": {
     "mainHeading": "Déverrouiller les secrets du cosmos",
     "subHeading": "Astrologie védique personnalisée pour éclairer votre chemin",
@@ -152,7 +177,7 @@
   "about": {
     "banner": {
       "heading": "À propos de Nakshatra Gyaan",
-      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
+      "text": "Depuis plus de deux décennies, nos astrologues experts ont mélangé la sagesse ancienne avec des idées modernes, guidant les chercheurs dans leur voyage spirituel avec des conseils précis et transformateurs."
     },
     "tabs": {
       "0": "Notre parcours",
@@ -247,6 +272,12 @@
       "link1": { "title": "Pierres précieuses et leurs pouvoirs", "url": "/blog/gemstones-and-their-powers" },
       "link2": { "title": "Notions de base en numérologie", "url": "/blog/numerology-basics" },
       "link3": { "title": "L'influence des planètes", "url": "/blog/the-influence-of-planets" }
+    },
+    "statistics": {
+      "kundli_served": "Kundli Servis",
+      "years_legacy": "Années d'Héritage",
+      "consultations_given": "Consultations Données",
+      "awards_occult": "Prix en Occultisme"
     }
   },
   "astrologyQuiz": {
@@ -538,21 +569,37 @@
     }
   },
   "astrologerProfile": {
-    "heading": "Rencontrez le Dr Narendra - Votre astrologue de confiance",
-    "subheading": "Astrologue védique expert avec des décennies d'expérience",
-    "credential1": {
-      "title": "Expert en astrologie védique",
-      "description": "Le Dr Narendra est un astrologue védique renommé avec plus de 15 ans d'expérience en astrologie indienne traditionnelle. Il est spécialisé dans l'analyse de thèmes natals, les remèdes planétaires et l'orientation de vie grâce à la sagesse védique ancienne."
+    "heading": "Notre astrologue principal",
+    "subheading": "Expert en astrologie védique avec plus de 20 ans d'expérience",
+    "credentials": {
+      "0": {
+        "title": "Expert en astrologie védique",
+        "description": "Plus de deux décennies d'étude et de pratique des techniques traditionnelles d'astrologie védique. Spécialisé dans l'analyse de thèmes natals, les doshas planétaires et les remèdes."
+      },
+      "1": {
+        "title": "PhD en sciences astrologiques",
+        "description": "PhD en sciences astrologiques d'une université prestigieuse. Combine l'étude approfondie des textes anciens avec la recherche moderne."
+      },
+      "2": {
+        "title": "Expert en numérologie et tarot",
+        "description": "Spécialisation en numérologie et lecture de tarot, fournissant des conseils complets combinés à l'astrologie."
+      }
     },
-    "credential2": {
-      "title": "PhD en astrologie et philosophie",
-      "description": "Avec un doctorat en astrologie et philosophie, le Dr Narendra combine les connaissances traditionnelles avec la compréhension moderne pour offrir des consultations astrologiques complètes et des conseils spirituels."
+    "specializations": {
+      "heading": "Spécialisations",
+      "list": [
+        "Analyse de thème natal",
+        "Remèdes de doshas planétaires",
+        "Compatibilité matrimoniale",
+        "Conseils de carrière",
+        "Astrologie commerciale",
+        "Astrologie de santé"
+      ]
     },
-    "beliefHi": "Je crois que la vie de chaque individu est unique et que chaque problème a une solution.",
-    "beliefEn": "I believe that every individual's life is unique and every problem has a solution.",
-    "experienceHi": "Plus de 15 ans d'expérience et des milliers de clients satisfaits",
-    "experienceEn": "15+ Years of Experience and Thousands of Satisfied Clients",
-    "bookAppointment": "Réserver une consultation"
+    "experience": {
+      "heading": "Expérience",
+      "text": "Avec plus de 20 ans d'expérience, il a analysé plus de 10 000 thèmes natals et conseillé des clients dans le monde entier."
+    }
   },
   "contact": {
     "floatingCard1": {
@@ -655,10 +702,10 @@
       "youtube": "YouTube"
     },
     "brand": {
-      "name": "nakshatra",
+      "name": "Connaissance de Nakshatra",
       "taglinePrefix": "Conçu par ",
       "team": "Équipe Scalixity",
-      "copyright": "© Nakshatra Gyaan. Tous droits réservés.",
+      "copyright": "© Connaissance de Nakshatra. Tous droits réservés.",
       "poweredByPrefix": "Propulsé par ",
       "energy": "Énergie Cosmique",
       "language": "🌍 FR Français"
