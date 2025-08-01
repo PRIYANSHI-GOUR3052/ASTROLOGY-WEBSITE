@@ -5,22 +5,16 @@ const path = require('path');
 
 console.log('🚀 Starting Socket.IO server...');
 
-// Set environment variables
-process.env.SOCKET_PORT = process.env.SOCKET_PORT || '3001';
-process.env.NEXT_PUBLIC_SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001';
-process.env.NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-process.env.JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production';
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
-console.log('Environment variables set:');
-console.log('- SOCKET_PORT:', process.env.SOCKET_PORT);
-console.log('- NEXT_PUBLIC_SOCKET_URL:', process.env.NEXT_PUBLIC_SOCKET_URL);
-console.log('- NEXT_PUBLIC_APP_URL:', process.env.NEXT_PUBLIC_APP_URL);
+// Path to the socket server
+const socketServerPath = path.join(__dirname, '..', 'lib', 'socket-server.js');
 
 // Start the socket server
-const socketServer = spawn('node', ['lib/socket-server.js'], {
+const socketServer = spawn('node', [socketServerPath], {
   stdio: 'inherit',
-  env: process.env
+  env: {
+    ...process.env,
+    NODE_ENV: process.env.NODE_ENV || 'development'
+  }
 });
 
 socketServer.on('error', (error) => {
@@ -29,17 +23,23 @@ socketServer.on('error', (error) => {
 });
 
 socketServer.on('close', (code) => {
-  console.log(`Socket server exited with code ${code}`);
-  process.exit(code);
+  if (code !== 0) {
+    console.error(`❌ Socket server exited with code ${code}`);
+    process.exit(code);
+  }
 });
 
 // Handle process termination
 process.on('SIGINT', () => {
-  console.log('\n🛑 Stopping socket server...');
+  console.log('\n🛑 Shutting down socket server...');
   socketServer.kill('SIGINT');
 });
 
 process.on('SIGTERM', () => {
-  console.log('\n🛑 Stopping socket server...');
+  console.log('\n🛑 Shutting down socket server...');
   socketServer.kill('SIGTERM');
-}); 
+});
+
+console.log('✅ Socket server started successfully');
+console.log('📡 Server will be available at http://localhost:3001');
+console.log('🏥 Health check available at http://localhost:3001/health'); 

@@ -308,56 +308,33 @@ export default function AstrologerProfile() {
     }
   };
 
-  // 4. Fetch user from localStorage or session
+  // 4. Fetch user from localStorage or session using auth utility
   useEffect(() => {
     const getCurrentUser = async () => {
       try {
-        // First try to get from localStorage (for regular users)
-        const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-        if (storedUser) {
-          try {
-            const userData = JSON.parse(storedUser);
-            setUser(userData);
-            setUserLoading(false);
-            return;
-          } catch {
-            console.error('Failed to parse user data from localStorage');
-            localStorage.removeItem('user');
+        setUserLoading(true);
+        
+        // Import the auth utility dynamically to avoid SSR issues
+        const { getCurrentUser: getAuthUser } = await import('@/lib/auth-client');
+        const authResult = await getAuthUser();
+        
+        if (authResult.user) {
+          console.log('Found authenticated user:', authResult.user);
+          setUser(authResult.user);
+          
+          // Store the JWT token for socket authentication if available
+          if (authResult.token) {
+            localStorage.setItem('token', authResult.token);
+            console.log('Stored JWT token for authenticated user');
           }
+        } else {
+          console.log('No authenticated user found:', authResult.error);
+          setUser(null);
         }
-
-        // If no localStorage user, try to get from session (for NextAuth users)
-        try {
-          const sessionRes = await fetch('/api/auth/session');
-          if (sessionRes.ok) {
-            const sessionData = await sessionRes.json();
-            if (sessionData.user) {
-              setUser({
-                id: sessionData.user.id,
-                name: sessionData.user.name,
-                email: sessionData.user.email
-              });
-
-              // Store the JWT token for socket authentication
-              if (sessionData.token) {
-                localStorage.setItem('token', sessionData.token);
-                console.log('Stored JWT token for NextAuth user');
-              }
-
-              setUserLoading(false);
-              return;
-            }
-          }
-        } catch (error) {
-          console.error('Failed to get session:', error);
-        }
-
-        // If neither works, user is not authenticated
-        setUser(null);
-        setUserLoading(false);
       } catch (error) {
         console.error('Error getting user:', error);
         setUser(null);
+      } finally {
         setUserLoading(false);
       }
     };
@@ -646,7 +623,10 @@ export default function AstrologerProfile() {
   }
 
   const handleStartChat = async () => {
+    console.log('handleStartChat called with user:', user);
+    
     if (!user?.id) {
+      console.log('No user ID found, showing error');
       setBookingError('Please log in to start chat');
       return;
     }

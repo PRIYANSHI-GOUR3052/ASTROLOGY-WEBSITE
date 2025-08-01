@@ -1,11 +1,12 @@
+import bcrypt from 'bcryptjs';
+import { jwtVerify, SignJWT } from 'jose';
+import jwt from 'jsonwebtoken';
 import { NextAuthOptions } from 'next-auth';
 import { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import pool from '@/lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import bcrypt from 'bcryptjs';
-import { jwtVerify, SignJWT } from 'jose';
 
 // Extend the next-auth types
 declare module 'next-auth' {
@@ -26,6 +27,13 @@ declare module 'next-auth/jwt' {
     id: number;
     role: string;
   }
+}
+
+export interface User {
+  id: number;
+  name?: string;
+  email?: string;
+  role?: string;
 }
 
 // Define the AuthenticatedRequest type
@@ -132,8 +140,7 @@ export const authOptions: NextAuthOptions = {
 // --- Astrologer Auth Helpers ---
 
 export async function hashPassword(password: string): Promise<string> {
-  const salt = await bcrypt.genSalt(10);
-  return bcrypt.hash(password, salt);
+  return await bcrypt.hash(password, 12);
 }
 
 export async function comparePassword(password: string, hash: string): Promise<boolean> {
@@ -161,4 +168,40 @@ export async function signAstrologerJwt(payload: object, _expiresIn = '7d') {
 export async function verifyAstrologerJwt(token: string) {
   const { payload } = await jwtVerify(token, getAstrologerSecretKey());
   return payload;
+}
+
+export async function signJwt(payload: object, expiresIn = '7d'): Promise<string> {
+  const iat = Math.floor(Date.now() / 1000);
+  const exp = iat + 7 * 24 * 60 * 60;
+  return await new SignJWT({ ...payload })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt(iat)
+    .setExpirationTime(exp)
+    .sign(new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key'));
+}
+
+export async function verifyJwt(token: string) {
+  const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key'));
+  return payload;
+}
+
+/**
+ * Verify JWT token and extract user information (server-side)
+ */
+export function verifyToken(token: string): User | null {
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    if (typeof payload === 'object' && payload !== null && 'id' in payload) {
+      return {
+        id: (payload as any).id,
+        name: (payload as any).name,
+        email: (payload as any).email,
+        role: (payload as any).role || 'client'
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error('Token verification failed:', error);
+    return null;
+  }
 }

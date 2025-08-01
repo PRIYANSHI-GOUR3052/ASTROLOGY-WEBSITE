@@ -52,11 +52,11 @@ function getClientId(req: NextApiRequest): number | null {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
-      const { bookingId } = req.query;
+      const { bookingId, limit = '50', offset = '0' } = req.query;
       const clientId = getClientId(req);
       
       if (!clientId) {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res.status(401).json({ error: 'Authentication required' });
       }
 
       if (!bookingId) {
@@ -70,6 +70,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           clientId: clientId,
           isPaid: true,
           chatEnabled: true
+        },
+        include: {
+          astrologer: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              profileImage: true
+            }
+          },
+          client: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
         }
       });
 
@@ -77,10 +94,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(404).json({ error: 'Booking not found or chat not enabled' });
       }
 
-      // Get messages for this booking
+      // Get messages for this booking with pagination
       const messages = await prisma.chatMessage.findMany({
         where: { bookingId: Number(bookingId) },
-        orderBy: { createdAt: 'asc' },
+        orderBy: { createdAt: 'desc' },
+        take: Number(limit),
+        skip: Number(offset),
         include: {
           booking: {
             include: {
@@ -91,7 +110,45 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       });
 
-      return res.status(200).json({ messages });
+      // Reverse to get chronological order
+      const chronologicalMessages = messages.reverse();
+
+      // Mark astrologer messages as read
+      const unreadAstrologerMessages = chronologicalMessages.filter(
+        msg => msg.senderType === 'astrologer' && !msg.isRead
+      );
+
+      if (unreadAstrologerMessages.length > 0) {
+        await prisma.chatMessage.updateMany({
+          where: {
+            id: {
+              in: unreadAstrologerMessages.map(msg => msg.id)
+            }
+          },
+          data: { isRead: true }
+        });
+
+        // Update the messages in response
+        chronologicalMessages.forEach(msg => {
+          if (msg.senderType === 'astrologer') {
+            msg.isRead = true;
+          }
+        });
+      }
+
+      return res.status(200).json({ 
+        messages: chronologicalMessages,
+        booking: {
+          id: booking.id,
+          isPaid: booking.isPaid,
+          chatEnabled: booking.chatEnabled,
+          videoEnabled: booking.videoEnabled,
+          sessionStart: booking.sessionStart,
+          sessionEnd: booking.sessionEnd,
+          astrologer: booking.astrologer,
+          client: booking.client
+        }
+      });
 
     } catch (error) {
       console.error('Get chat messages error:', error);
@@ -105,11 +162,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const clientId = getClientId(req);
       
       if (!clientId) {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res.status(401).json({ error: 'Authentication required' });
       }
 
       if (!bookingId || !message) {
         return res.status(400).json({ error: 'Booking ID and message required' });
+      }
+
+      // Validate message length
+      if (message.trim().length === 0) {
+        return res.status(400).json({ error: 'Message cannot be empty' });
+      }
+
+      if (message.length > 1000) {
+        return res.status(400).json({ error: 'Message too long (max 1000 characters)' });
       }
 
       // Verify the booking belongs to this client and is paid
@@ -119,11 +185,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           clientId: clientId,
           isPaid: true,
           chatEnabled: true
+        },
+        include: {
+          astrologer: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              profileImage: true
+            }
+          },
+          client: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
         }
       });
 
       if (!booking) {
         return res.status(404).json({ error: 'Booking not found or chat not enabled' });
+      }
+
+      // Check if session is still active (within 2 hours of booking time)
+      const now = new Date();
+      const bookingTime = new Date(booking.date);
+      const timeDiff = Math.abs(now.getTime() - bookingTime.getTime());
+      const maxTimeDiff = 2 * 60 * 60 * 1000; // 2 hours
+
+      if (timeDiff > maxTimeDiff) {
+        return res.status(400).json({ error: 'Chat session has expired' });
       }
 
       // Create new message
@@ -132,7 +225,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           bookingId: Number(bookingId),
           senderId: clientId,
           senderType: 'client',
-          message,
+          message: message.trim(),
           messageType,
           isRead: false
         },
@@ -146,9 +239,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       });
 
-      console.log(`Client message created with senderType: client, senderId: ${clientId}`);
+      console.log(`Client message created with ID: ${newMessage.id}, senderType: client, senderId: ${clientId}`);
 
-      return res.status(201).json({ message: newMessage });
+      return res.status(201).json({ 
+        message: newMessage,
+        booking: {
+          id: booking.id,
+          isPaid: booking.isPaid,
+          chatEnabled: booking.chatEnabled,
+          videoEnabled: booking.videoEnabled,
+          astrologer: booking.astrologer,
+          client: booking.client
+        }
+      });
 
     } catch (error) {
       console.error('Send chat message error:', error);

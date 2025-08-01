@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Phone, Video, Mic, MicOff, VideoOff, X, Settings } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Phone, Video, Mic, MicOff, VideoOff, X, Settings, RefreshCw, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 
 interface VideoCallProps {
@@ -52,12 +52,21 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState('');
   const [isJoined, setIsJoined] = useState(false);
+  const [connectionQuality, setConnectionQuality] = useState<'good' | 'poor' | 'unknown'>('unknown');
+  const [isReconnecting, setIsReconnecting] = useState(false);
+  const [callDuration, setCallDuration] = useState(0);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
+  const callStartTimeRef = useRef<number>(0);
+  const reconnectAttemptsRef = useRef(0);
+  const iceCandidatesRef = useRef<RTCIceCandidateInit[]>([]);
 
-  // WebRTC configuration with better STUN servers
+  const MAX_RECONNECT_ATTEMPTS = 3;
+  const RECONNECT_DELAY = 2000;
+
+  // Enhanced WebRTC configuration with multiple STUN/TURN servers
   const rtcConfig = {
     iceServers: [
       { urls: 'stun:stun.l.google.com:19302' },
@@ -65,58 +74,96 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
       { urls: 'stun:stun2.l.google.com:19302' },
       { urls: 'stun:stun3.l.google.com:19302' },
       { urls: 'stun:stun4.l.google.com:19302' },
-    ]
+      // Add TURN servers for better connectivity (replace with your TURN server)
+      // {
+      //   urls: 'turn:your-turn-server.com:3478',
+      //   username: 'username',
+      //   credential: 'password'
+      // }
+    ],
+    iceCandidatePoolSize: 10
   };
 
+  // Call duration timer
   useEffect(() => {
-    console.log('VideoCall useEffect triggered, socket:', !!socket);
-    if (socket) {
-      console.log('Initializing video call...');
-      initializeCall();
-    } else {
-      console.log('No socket available, cannot initialize video call');
+    let interval: NodeJS.Timeout;
+    
+    if (isConnected && callStartTimeRef.current > 0) {
+      interval = setInterval(() => {
+        const duration = Math.floor((Date.now() - callStartTimeRef.current) / 1000);
+        setCallDuration(duration);
+      }, 1000);
     }
-    return () => {
-      console.log('VideoCall cleanup');
-      cleanupCall();
-    };
-  }, [socket]);
 
-  const initializeCall = async () => {
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isConnected]);
+
+  // Initialize call
+  const initializeCall = useCallback(async () => {
     try {
       console.log('Initializing video call for booking:', bookingId);
+      setError('');
+      setIsConnecting(true);
       
-      // First, join the booking room
-      if (socket) {
-        socket.emit('join-booking', { bookingId });
-        
-        socket.on('joined-booking', (data: any) => {
-          console.log('Successfully joined booking room:', data);
-          setIsJoined(true);
-          startWebRTC();
-        });
-        
-        socket.on('error', (data: any) => {
-          console.error('Socket error:', data);
-          setError(data.message || 'Failed to join video call');
-        });
+      if (!socket) {
+        throw new Error('Socket connection not available');
       }
+
+      // Join the booking room
+      socket.emit('join-booking', { bookingId });
+      
+      socket.on('joined-booking', (data: any) => {
+        console.log('Successfully joined booking room:', data);
+        setIsJoined(true);
+        startWebRTC();
+      });
+      
+      socket.on('error', (data: any) => {
+        console.error('Socket error:', data);
+        setError(data.message || 'Failed to join video call');
+        setIsConnecting(false);
+      });
 
     } catch (error) {
       console.error('Error initializing call:', error);
       setError('Failed to initialize video call');
+      setIsConnecting(false);
     }
-  };
+  }, [bookingId, socket]);
 
-  const startWebRTC = async () => {
+  // Start WebRTC connection
+  const startWebRTC = useCallback(async () => {
     try {
       console.log('Starting WebRTC connection...');
       
-      // Get user media
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      });
+      // Request user media with fallback options
+      let stream: MediaStream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { 
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            frameRate: { ideal: 30 }
+          },
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        });
+      } catch (mediaError) {
+        console.warn('Failed to get video+audio, trying audio only:', mediaError);
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: false,
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        });
+      }
 
       console.log('Got user media stream');
       setLocalStream(stream);
@@ -145,6 +192,7 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         }
         setIsConnected(true);
         setIsConnecting(false);
+        callStartTimeRef.current = Date.now();
       };
 
       // Handle ICE candidates
@@ -161,23 +209,60 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
       // Handle connection state changes
       peerConnection.onconnectionstatechange = () => {
         console.log('Connection state changed:', peerConnection.connectionState);
-        if (peerConnection.connectionState === 'connected') {
-          setIsConnected(true);
-          setIsConnecting(false);
-        } else if (peerConnection.connectionState === 'failed') {
-          setError('Connection failed');
-          setIsConnecting(false);
-        } else if (peerConnection.connectionState === 'disconnected') {
-          setIsConnected(false);
+        
+        switch (peerConnection.connectionState) {
+          case 'connected':
+            setIsConnected(true);
+            setIsConnecting(false);
+            setIsReconnecting(false);
+            reconnectAttemptsRef.current = 0;
+            setConnectionQuality('good');
+            break;
+          case 'connecting':
+            setIsConnecting(true);
+            setConnectionQuality('unknown');
+            break;
+          case 'disconnected':
+            setIsConnected(false);
+            setConnectionQuality('poor');
+            handleReconnection();
+            break;
+          case 'failed':
+            setError('Connection failed');
+            setIsConnecting(false);
+            setConnectionQuality('poor');
+            break;
+          case 'closed':
+            setIsConnected(false);
+            setIsConnecting(false);
+            break;
         }
       };
 
       // Handle ICE connection state changes
       peerConnection.oniceconnectionstatechange = () => {
         console.log('ICE connection state:', peerConnection.iceConnectionState);
-        if (peerConnection.iceConnectionState === 'failed') {
-          setError('ICE connection failed');
+        
+        switch (peerConnection.iceConnectionState) {
+          case 'connected':
+            setConnectionQuality('good');
+            break;
+          case 'checking':
+            setConnectionQuality('unknown');
+            break;
+          case 'failed':
+            setConnectionQuality('poor');
+            handleReconnection();
+            break;
+          case 'disconnected':
+            setConnectionQuality('poor');
+            break;
         }
+      };
+
+      // Handle ICE gathering state
+      peerConnection.onicegatheringstatechange = () => {
+        console.log('ICE gathering state:', peerConnection.iceGatheringState);
       };
 
       // Socket event listeners for WebRTC signaling
@@ -185,6 +270,12 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         socket.on('video-offer', async (data: VideoOfferData) => {
           try {
             console.log('Received video offer from:', data.fromUserId);
+            
+            if (peerConnection.signalingState !== 'stable') {
+              console.log('Signaling state not stable, ignoring offer');
+              return;
+            }
+            
             await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
             const answer = await peerConnection.createAnswer();
             await peerConnection.setLocalDescription(answer);
@@ -203,6 +294,12 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         socket.on('video-answer', async (data: VideoAnswerData) => {
           try {
             console.log('Received video answer from:', data.fromUserId);
+            
+            if (peerConnection.signalingState !== 'have-local-offer') {
+              console.log('Signaling state not have-local-offer, ignoring answer');
+              return;
+            }
+            
             await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
           } catch (error) {
             console.error('Error handling video answer:', error);
@@ -213,7 +310,13 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         socket.on('ice-candidate', async (data: IceCandidateData) => {
           try {
             console.log('Received ICE candidate from:', data.fromUserId);
-            await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            
+            if (peerConnection.remoteDescription) {
+              await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            } else {
+              // Store candidate for later
+              iceCandidatesRef.current.push(data.candidate);
+            }
           } catch (error) {
             console.error('Error adding ICE candidate:', error);
           }
@@ -222,9 +325,6 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         // Listen for video call requests
         socket.on('video-call-request', (data: VideoCallRequestData) => {
           console.log('Received video call request:', data);
-          if (data.type === 'video') {
-            console.log('Auto-accepting video call');
-          }
         });
 
         // Listen for user joined/left events
@@ -235,14 +335,20 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         socket.on('user-left', (data: any) => {
           console.log('User left video call:', data);
           setError('Other participant left the call');
+          setTimeout(() => {
+            endCall();
+          }, 3000);
         });
       }
 
-      // Create and send offer after a short delay to ensure room is joined
+      // Create and send offer after a short delay
       setTimeout(async () => {
         try {
           console.log('Creating video offer...');
-          const offer = await peerConnection.createOffer();
+          const offer = await peerConnection.createOffer({
+            offerToReceiveAudio: true,
+            offerToReceiveVideo: true
+          });
           await peerConnection.setLocalDescription(offer);
           
           if (socket) {
@@ -261,10 +367,41 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
     } catch (error) {
       console.error('Error starting WebRTC:', error);
       setError('Failed to access camera/microphone. Please check permissions.');
+      setIsConnecting(false);
     }
-  };
+  }, [bookingId, socket, rtcConfig]);
 
-  const cleanupCall = () => {
+  // Handle reconnection
+  const handleReconnection = useCallback(() => {
+    if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
+      setError('Connection lost. Maximum reconnection attempts reached.');
+      return;
+    }
+
+    setIsReconnecting(true);
+    reconnectAttemptsRef.current++;
+
+    console.log(`Attempting reconnection ${reconnectAttemptsRef.current}/${MAX_RECONNECT_ATTEMPTS}`);
+
+    setTimeout(() => {
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close();
+      }
+      startWebRTC();
+    }, RECONNECT_DELAY * reconnectAttemptsRef.current);
+  }, [startWebRTC]);
+
+  // Manual reconnect
+  const handleManualReconnect = useCallback(() => {
+    setError('');
+    reconnectAttemptsRef.current = 0;
+    setIsReconnecting(false);
+    cleanupCall();
+    initializeCall();
+  }, [initializeCall]);
+
+  // Cleanup call
+  const cleanupCall = useCallback(() => {
     console.log('Cleaning up video call...');
     
     // Remove socket listeners
@@ -292,9 +429,20 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
       peerConnectionRef.current.close();
       console.log('Closed peer connection');
     }
-  };
 
-  const toggleAudio = () => {
+    // Clear refs
+    setLocalStream(null);
+    setRemoteStream(null);
+    setIsConnected(false);
+    setIsConnecting(false);
+    setIsJoined(false);
+    setCallDuration(0);
+    callStartTimeRef.current = 0;
+    iceCandidatesRef.current = [];
+  }, [socket, localStream]);
+
+  // Toggle audio
+  const toggleAudio = useCallback(() => {
     if (localStream) {
       const audioTrack = localStream.getAudioTracks()[0];
       if (audioTrack) {
@@ -303,9 +451,10 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         console.log('Audio toggled:', audioTrack.enabled);
       }
     }
-  };
+  }, [localStream]);
 
-  const toggleVideo = () => {
+  // Toggle video
+  const toggleVideo = useCallback(() => {
     if (localStream) {
       const videoTrack = localStream.getVideoTracks()[0];
       if (videoTrack) {
@@ -314,26 +463,57 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         console.log('Video toggled:', videoTrack.enabled);
       }
     }
-  };
+  }, [localStream]);
 
-  const endCall = () => {
+  // End call
+  const endCall = useCallback(() => {
     console.log('Ending video call...');
     cleanupCall();
     onClose();
+  }, [cleanupCall, onClose]);
+
+  // Initialize call on mount
+  useEffect(() => {
+    if (socket) {
+      initializeCall();
+    } else {
+      setError('Socket connection not available');
+    }
+
+    return () => {
+      cleanupCall();
+    };
+  }, [socket, initializeCall, cleanupCall]);
+
+  // Format call duration
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  if (error) {
+  if (error && !isConnecting && !isReconnecting) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
           <div className="text-center">
+            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-500" />
             <div className="text-red-600 text-lg mb-4">{error}</div>
-            <button
-              onClick={onClose}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-            >
-              Close
-            </button>
+            <div className="flex gap-2 justify-center">
+              <button
+                onClick={handleManualReconnect}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center gap-2"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Retry
+              </button>
+              <button
+                onClick={endCall}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+              >
+                End Call
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -364,27 +544,43 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         </div>
 
         {/* Connection Status */}
-        {isConnecting && (
-          <div className="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
-              {isJoined ? 'Connecting...' : 'Joining room...'}
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
+          {isConnecting && (
+            <div className="bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
+                {isJoined ? 'Connecting...' : 'Joining room...'}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Connection Status */}
-        {isConnected && (
-          <div className="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-              Connected
+          {isReconnecting && (
+            <div className="bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
+              <div className="flex items-center gap-2">
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                Reconnecting... ({reconnectAttemptsRef.current}/{MAX_RECONNECT_ATTEMPTS})
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {isConnected && (
+            <div className="bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
+              <div className="flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full ${
+                  connectionQuality === 'good' ? 'bg-green-400' : 
+                  connectionQuality === 'poor' ? 'bg-red-400' : 'bg-yellow-400'
+                }`}></div>
+                <span>Connected</span>
+                {callDuration > 0 && (
+                  <span className="text-sm opacity-75">({formatDuration(callDuration)})</span>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Astrologer Info */}
-        <div className="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
+        <div className="absolute top-20 left-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
           <div className="flex items-center gap-2">
             <Image
               src={astrologer.profileImage}
@@ -404,6 +600,7 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
             className={`p-4 rounded-full ${
               isAudioEnabled ? 'bg-white text-gray-800' : 'bg-red-500 text-white'
             } hover:bg-opacity-80 transition-colors`}
+            title={isAudioEnabled ? 'Mute' : 'Unmute'}
           >
             {isAudioEnabled ? <Mic className="w-6 h-6" /> : <MicOff className="w-6 h-6" />}
           </button>
@@ -413,6 +610,7 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
             className={`p-4 rounded-full ${
               isVideoEnabled ? 'bg-white text-gray-800' : 'bg-red-500 text-white'
             } hover:bg-opacity-80 transition-colors`}
+            title={isVideoEnabled ? 'Turn off video' : 'Turn on video'}
           >
             {isVideoEnabled ? <Video className="w-6 h-6" /> : <VideoOff className="w-6 h-6" />}
           </button>
@@ -420,6 +618,7 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
           <button
             onClick={endCall}
             className="p-4 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors"
+            title="End call"
           >
             <Phone className="w-6 h-6 rotate-135" />
           </button>
@@ -427,8 +626,9 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
 
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={endCall}
           className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition-colors"
+          title="Close"
         >
           <X className="w-6 h-6" />
         </button>

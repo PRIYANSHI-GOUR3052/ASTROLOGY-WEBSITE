@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Send, Phone, Video, X, MessageCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Send, Phone, Video, X, MessageCircle, RefreshCw, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { io, Socket } from 'socket.io-client';
 import axios from 'axios';
+import { getCurrentUser, getAuthToken } from '@/lib/auth-client';
 
 interface Message {
   id: number;
@@ -13,6 +14,7 @@ interface Message {
   message: string;
   messageType: string;
   createdAt: string;
+  isRead?: boolean;
 }
 
 interface Booking {
@@ -56,108 +58,159 @@ export default function RealTimeChat({
   const [newMessage, setNewMessage] = useState('');
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(true);
   const [booking, setBooking] = useState<Booking | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [isTyping, setIsTyping] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
+  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const [lastMessageId, setLastMessageId] = useState<number>(0);
+  const [sendingMessages, setSendingMessages] = useState<Set<string>>(new Set()); // Track messages being sent
+  const [isSending, setIsSending] = useState(false); // Global sending state
+  
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const socketRef = useRef<Socket | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const messageQueueRef = useRef<Array<{ message: string; timestamp: number }>>([]);
+
+  const MAX_RECONNECT_ATTEMPTS = 5;
+  const RECONNECT_DELAY = 2000;
+  const TYPING_TIMEOUT = 3000;
 
   console.log('RealTimeChat mounted with bookingId:', bookingId);
 
   // Scroll to bottom when new messages arrive
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
+    setTimeout(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+    }, 100);
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
-  // Initialize socket connection
-  useEffect(() => {
-    const initializeSocket = async () => {
-      try {
-        // First, check if we have user data in localStorage (custom auth)
-        const user = localStorage.getItem('user');
-        if (!user) {
-          console.log('No localStorage user data found, skipping socket connection');
-          setError('User not authenticated - please login with normal login (not Google)');
-          return;
-        }
+  // Get user authentication data using the auth utility
+  const getUserAuthData = useCallback(async () => {
+    try {
+      console.log('Getting user authentication data...');
+      
+      // Use the auth utility to get current user
+      const authResult = await getCurrentUser();
+      console.log('Auth result:', authResult);
+      
+      if (!authResult.user || !authResult.user.id) {
+        console.log('No authenticated user found in auth result');
+        throw new Error('No authenticated user found. Please log in and try again.');
+      }
 
-        const userData = JSON.parse(user);
-        const socketUserId = userData.id;
-        setCurrentUserId(socketUserId);
-        console.log('Found localStorage user data - ID:', socketUserId);
+      const clientId = authResult.user.id;
+      console.log('Found authenticated user with ID:', clientId);
+      
+      setCurrentUserId(clientId);
 
-        // For normal login users, we need a token. If not in localStorage, create one
-        let token = localStorage.getItem('token');
-        
-        if (!token) {
-          // Create a simple token for the localStorage user
-          try {
-            const response = await fetch('/api/auth/create-token', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                userId: socketUserId,
-                email: userData.email,
-                name: userData.name
-              })
-            });
-            if (response.ok) {
-              const data = await response.json();
-              token = data.token;
-              console.log('Created token for localStorage user');
-            }
-          } catch (error) {
-            console.error('Failed to create token:', error);
-          }
-        }
+      // Get or create token using the auth utility
+      const token = await getAuthToken();
+      console.log('Token obtained:', token ? 'Yes' : 'No');
+      
+      if (!token) {
+        throw new Error('Failed to get authentication token. Please log in again.');
+      }
 
-        if (!token) {
-          setError('Authentication token not available');
-          return;
-        }
+      console.log('Successfully obtained authentication token');
+      return { clientId, token };
+    } catch (error) {
+      console.error('Failed to get user auth data:', error);
+      throw error;
+    }
+  }, []);
 
-        // Connect to socket server
-        console.log('Connecting to socket with localStorage user ID:', socketUserId);
-        console.log('Connecting to socket with token type:', typeof token);
-        
-        if (!token || typeof token !== 'string') {
-          console.error('Invalid token for socket connection:', token);
-          setError('Authentication failed - invalid token');
-          return;
-        }
+  // Initialize socket connection with reconnection logic
+  const initializeSocket = useCallback(async () => {
+    try {
+      setIsConnecting(true);
+      setError('');
+
+      const { clientId, token } = await getUserAuthData();
+
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+
+      console.log('Initializing socket connection...');
         
         const socketInstance = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001', {
           auth: { 
             token,
-            userId: socketUserId // Pass the correct user ID
-          }
+          userId: clientId,
+          userRole: 'client'
+        },
+        transports: ['websocket', 'polling'],
+        timeout: 20000,
+        forceNew: true,
+        reconnection: true,
+        reconnectionAttempts: MAX_RECONNECT_ATTEMPTS,
+        reconnectionDelay: RECONNECT_DELAY,
+        reconnectionDelayMax: 10000
         });
 
         socketInstance.on('connect', () => {
+        console.log('Socket connected successfully');
           setIsConnected(true);
-          console.log('Connected to chat server');
+        setIsConnecting(false);
+        setReconnectAttempts(0);
+        setError('');
           
-          // Join the booking room immediately after connection
+        // Join booking room
           if (bookingId) {
             console.log('Joining booking room:', bookingId);
             socketInstance.emit('join-booking', { bookingId });
           }
-        });
 
-        socketInstance.on('disconnect', () => {
+        // Process any queued messages
+        if (messageQueueRef.current.length > 0) {
+          console.log('Processing queued messages:', messageQueueRef.current.length);
+          messageQueueRef.current.forEach(({ message, timestamp }) => {
+            if (Date.now() - timestamp < 30000) { // Only send messages from last 30 seconds
+              socketInstance.emit('send-message', {
+                bookingId,
+                message,
+                messageType: 'text'
+              });
+            }
+          });
+          messageQueueRef.current = [];
+        }
+      });
+
+      socketInstance.on('disconnect', (reason) => {
+        console.log('Socket disconnected:', reason);
           setIsConnected(false);
-          console.log('Disconnected from chat server');
-        });
+        
+        if (reason === 'io server disconnect') {
+          // Server disconnected us, try to reconnect
+          setTimeout(() => {
+            socketInstance.connect();
+          }, RECONNECT_DELAY);
+        }
+      });
 
-        socketInstance.on('error', (error) => {
-          setError(error.message);
-          if (error.message.includes('not paid')) {
-            onPaymentRequired();
+      socketInstance.on('connect_error', (error) => {
+        console.error('Socket connection error:', error);
+        setIsConnecting(false);
+        setError('Connection failed. Retrying...');
+        
+        if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+          setReconnectAttempts(prev => prev + 1);
+          reconnectTimeoutRef.current = setTimeout(() => {
+            initializeSocket();
+          }, RECONNECT_DELAY * (reconnectAttempts + 1));
+        } else {
+          setError('Failed to connect after multiple attempts. Please refresh the page.');
           }
         });
 
@@ -166,316 +219,372 @@ export default function RealTimeChat({
           setBooking(prev => prev ? { ...prev, ...data } : null);
         });
 
-        socketInstance.on('error', (error) => {
-          console.error('Socket error:', error);
-          setError(error.message || 'Socket connection error');
-        });
-
-        socketInstance.on('new-message', (message) => {
-          // Check if message already exists to prevent duplicates
-          setMessages(prev => {
-            const messageExists = prev.some(msg => msg.id === message.id);
-            if (messageExists) {
-              console.log('Message already exists, skipping duplicate:', message.id);
-              return prev;
-            }
-            console.log('Adding new message from socket:', message.id, message.senderType);
-            return [...prev, message];
-          });
-        });
-
-        socketInstance.on('video-call-request', (data) => {
-          console.log('Received video call request:', data);
-          // Handle incoming video call request
-          if (data.type === 'video') {
-            setError('Incoming video call... (Feature coming soon)');
-          } else {
-            setError('Incoming voice call... (Feature coming soon)');
-          }
-        });
-
-        socketInstance.on('user-joined', (data) => {
-          console.log('User joined:', data);
-        });
-
-        socketInstance.on('user-left', (data) => {
-          console.log('User left:', data);
-        });
-
-        socketInstance.on('session-ended', (data) => {
-          setError('Session has ended');
-        });
-
-        setSocket(socketInstance);
-
-      } catch (error) {
-        console.error('Socket initialization error:', error);
-        setError('Failed to connect to chat');
-      }
-    };
-
-    initializeSocket();
-
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, [bookingId, onPaymentRequired]);
-
-  // Load booking data and messages
-  useEffect(() => {
-    const loadBookingData = async () => {
-      try {
-        console.log('Loading booking data for bookingId:', bookingId);
-        setIsLoading(true);
+      socketInstance.on('new-message', (message: Message) => {
+        console.log('Received new message:', message.id, message.senderType, message.message);
         
-        // Get user token and client ID
-        let token = localStorage.getItem('token');
-        let clientId: number | null = null;
-        
-        // First, check if we have user data in localStorage (custom auth)
-        const user = localStorage.getItem('user');
-        if (user) {
-          const userData = JSON.parse(user);
-          clientId = userData.id;
-          console.log('Using localStorage user data - clientId:', clientId);
-          
-          // If we don't have a token, create one for the localStorage user
-          if (!token) {
-            try {
-              const response = await fetch('/api/auth/create-token', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  userId: clientId,
-                  email: userData.email,
-                  name: userData.name
-                })
-              });
-              if (response.ok) {
-                const data = await response.json();
-                token = data.token;
-                console.log('Created token for localStorage user');
-              }
-            } catch (error) {
-              console.error('Failed to create token:', error);
-            }
-          }
-        } else {
-          // No localStorage user data - show error
-          console.log('No localStorage user data found');
-          setError('Please login with normal login (not Google)');
-          return;
-        }
-
-        if (!token || !clientId) {
-          setError('User not authenticated');
-          return;
-        }
-
-        // Validate token format
-        if (typeof token !== 'string') {
-          console.error('Invalid token format in loadBookingData:', typeof token, token);
-          setError('Authentication failed - invalid token format');
-          return;
-        }
-
-        console.log('Client ID:', clientId);
-        console.log('Token before API calls:', typeof token, token);
-
-        // Fetch all bookings for the client and find the specific booking
-        console.log('Fetching all bookings for client...');
-        const bookingResponse = await axios.get(`/api/user/booking?clientId=${clientId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        console.log('Booking response:', bookingResponse.data);
-        
-        const bookingData = bookingResponse.data.bookings?.find((b: any) => b.id === bookingId);
-        
-        if (!bookingData) {
-          console.log('Booking not found in response');
-          setError('Booking not found');
-          return;
-        }
-
-        console.log('Booking data loaded:', bookingData);
-
-        // Check if booking is paid and chat is enabled
-        if (!bookingData.isPaid) {
-          console.log('Booking not paid, triggering payment required');
-          setError('Payment required to start chat');
-          onPaymentRequired();
-          return;
-        }
-
-        if (!bookingData.chatEnabled) {
-          console.log('Chat not enabled for booking');
-          setError('Chat is not enabled for this booking');
-          return;
-        }
-
-        setBooking(bookingData);
-
-        // Now load messages
-        console.log('Loading messages...');
-        const messagesResponse = await axios.get(`/api/user/chat?bookingId=${bookingId}&clientId=${clientId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        console.log('Messages response:', messagesResponse.data);
-        
-        if (messagesResponse.data.messages) {
-          setMessages(messagesResponse.data.messages);
-        }
-
-      } catch (error: any) {
-        console.error('Failed to load booking data:', error);
-        setError(error.response?.data?.error || 'Failed to load booking data');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (bookingId && bookingId > 0) {
-      loadBookingData();
-    } else {
-      console.log('Invalid bookingId:', bookingId);
-      setError('Invalid booking ID');
-    }
-  }, [bookingId, onPaymentRequired]);
-
-  // Listen for new messages when socket connects
-  useEffect(() => {
-    if (socket) {
-      // Listen for new messages
-      socket.on('new-message', (message: Message) => {
-        // Check if message already exists to prevent duplicates
+        // Check for duplicates
         setMessages(prev => {
           const messageExists = prev.some(msg => msg.id === message.id);
           if (messageExists) {
             console.log('Message already exists, skipping duplicate:', message.id);
             return prev;
           }
-          console.log('Adding new message:', message.id, message.senderType);
-          return [...prev, message];
+        
+          // Update last message ID
+          if (message.id > lastMessageId) {
+            setLastMessageId(message.id);
+          }
+          
+          // Remove any temporary messages with the same content
+          const filteredPrev = prev.filter(msg => 
+            !(msg.id < 0 && msg.message === message.message && msg.senderType === message.senderType)
+          );
+          
+          return [...filteredPrev, message];
         });
+
+        // Mark message as read if from astrologer
+        if (message.senderType === 'astrologer' && currentUserId) {
+          markMessageAsRead(message.id);
+        }
       });
 
-      return () => {
-        socket.off('new-message');
-      };
-    }
-  }, [socket]);
-
-  const handleSendMessage = async () => {
-    if (!newMessage.trim() || !socket) return;
-
-    const messageToSend = newMessage.trim();
-    setNewMessage(''); // Clear input immediately for better UX
-
-    try {
-      // Get user token and client ID
-      let token = localStorage.getItem('token');
-      let clientId: number | null = null;
-      
-      const user = localStorage.getItem('user');
-      if (user) {
-        const userData = JSON.parse(user);
-        clientId = userData.id;
-        
-        if (!token) {
-          try {
-            const response = await fetch('/api/auth/create-token', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                userId: clientId,
-                email: userData.email,
-                name: userData.name
-              })
-            });
-            if (response.ok) {
-              const data = await response.json();
-              token = data.token;
-            }
-          } catch (error) {
-            console.error('Failed to create token:', error);
-          }
+      socketInstance.on('typing-start', (data) => {
+        if (data.userId !== currentUserId) {
+          setTypingUsers(prev => new Set(prev).add(data.userId));
         }
-      } else {
-        setError('Please login with normal login (not Google)');
-        return;
-      }
+      });
 
-      if (!token || !clientId) {
-        setError('User not authenticated');
-        return;
-      }
+      socketInstance.on('typing-stop', (data) => {
+        setTypingUsers(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(data.userId);
+          return newSet;
+        });
+        });
 
-      // Send message via socket only (not API) to prevent duplicates
+        socketInstance.on('video-call-request', (data) => {
+          console.log('Received video call request:', data);
+        if (onVideoCall) {
+          onVideoCall();
+        }
+      });
+
+        socketInstance.on('session-ended', (data) => {
+          setError('Session has ended');
+        setTimeout(() => {
+          onClose();
+        }, 3000);
+      });
+
+      socketInstance.on('error', (error) => {
+        console.error('Socket error:', error);
+        if (error.message?.includes('not paid')) {
+          onPaymentRequired();
+        } else {
+          setError(error.message || 'Connection error');
+        }
+      });
+
+      // Handle message sending errors
+      socketInstance.on('message-error', (error) => {
+        console.error('Message sending error:', error);
+        setError('Failed to send message: ' + (error.message || 'Unknown error'));
+        
+        // Remove any temporary messages that failed to send
+        setMessages(prev => prev.filter(msg => msg.id >= 0));
+      });
+
+      socketRef.current = socketInstance;
+        setSocket(socketInstance);
+
+      } catch (error) {
+        console.error('Socket initialization error:', error);
+      setIsConnecting(false);
+      setError(error instanceof Error ? error.message : 'Failed to connect to chat');
+    }
+  }, [bookingId, currentUserId, lastMessageId, onPaymentRequired, onVideoCall, onClose, reconnectAttempts, getUserAuthData]);
+
+  // Load booking data and messages
+  const loadBookingData = useCallback(async () => {
+    try {
+      console.log('Loading booking data for bookingId:', bookingId);
+      setIsLoading(true);
+      setError('');
+      
+      const { clientId, token } = await getUserAuthData();
+  
+      // Check if component is still mounted
+      if (!bookingId) return;
+  
+      const bookingResponse = await axios.get(`/api/user/booking?clientId=${clientId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Check again before state updates
+      if (!bookingId) return;
+      
+      const bookingData = bookingResponse.data.bookings?.find((b: any) => b.id === bookingId);
+      
+      if (!bookingData) {
+        throw new Error('Booking not found');
+      }
+  
+      console.log('Booking data loaded:', bookingData);
+  
+      if (!bookingData.isPaid) {
+        throw new Error('Payment required to start chat');
+      }
+  
+      if (!bookingData.chatEnabled) {
+        throw new Error('Chat is not enabled for this booking');
+      }
+  
+      setBooking(bookingData);
+  
+      // Load messages
+      const messagesResponse = await axios.get(`/api/user/chat?bookingId=${bookingId}&clientId=${clientId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (messagesResponse.data.messages && bookingId) { // Check again
+        const loadedMessages = messagesResponse.data.messages;
+        setMessages(loadedMessages);
+        
+        if (loadedMessages.length > 0) {
+          const maxId = Math.max(...loadedMessages.map((m: Message) => m.id));
+          setLastMessageId(maxId);
+        }
+      }
+  
+    } catch (error: any) {
+      console.error('Failed to load booking data:', error);
+      if (!bookingId) return; // Don't update state if component unmounted
+      
+      const errorMessage = error.response?.data?.error || error.message || 'Failed to load booking data';
+      setError(errorMessage);
+      
+      if (errorMessage.includes('Payment required')) {
+        onPaymentRequired();
+      }
+    } finally {
+      if (bookingId) { // Only update if still mounted
+        setIsLoading(false);
+      }
+    }
+  }, [bookingId, getUserAuthData, onPaymentRequired]);
+
+  const debouncedReconnect = useCallback(
+    debounce(() => {
+      if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+        setReconnectAttempts(prev => prev + 1);
+        initializeSocket();
+      }
+    }, 1000),
+    [reconnectAttempts, initializeSocket]
+  );
+  
+  function debounce(func: Function, wait: number) {
+    let timeout: NodeJS.Timeout;
+    return function executedFunction(...args: any[]) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+  
+  useEffect(() => {
+    if (bookingId && bookingId > 0) {
+      loadBookingData();
+    } else {
+      setError('Invalid booking ID');
+      setIsLoading(false);
+    }
+  }, [bookingId, getUserAuthData, onPaymentRequired]);
+
+  useEffect(() => {
+    // Initialize socket only after booking data is loaded and user is authenticated
+    if (booking && currentUserId && !socket) {
+      initializeSocket();
+    }
+  }, [booking, currentUserId, socket]);
+
+  // Mark message as read
+  const markMessageAsRead = useCallback(async (messageId: number) => {
+    try {
+      const { clientId, token } = await getUserAuthData();
+      
+      await axios.patch(`/api/user/chat/mark-read`, {
+        messageId,
+        clientId
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    } catch (error) {
+      console.error('Failed to mark message as read:', error);
+    }
+  }, [getUserAuthData]);
+
+  // Handle typing indicator
+  const handleTyping = useCallback((isTyping: boolean) => {
+    if (!socket || !isConnected) return;
+
+    if (isTyping) {
+      socket.emit('typing-start', { bookingId });
+    } else {
+      socket.emit('typing-stop', { bookingId });
+    }
+  }, [socket, isConnected, bookingId]);
+
+  // Handle message input change
+  const handleMessageChange = useCallback((value: string) => {
+    setNewMessage(value);
+    
+    // Handle typing indicator
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    handleTyping(true);
+    
+    typingTimeoutRef.current = setTimeout(() => {
+      handleTyping(false);
+    }, TYPING_TIMEOUT);
+  }, [handleTyping]);
+
+  // Send message
+  const handleSendMessage = useCallback(async () => {
+    if (!newMessage.trim() || !socket || !isConnected || isSending) return;
+  
+    const messageToSend = newMessage.trim();
+    const messageKey = `${messageToSend}-${Date.now()}`;
+    const tempMessageId = -Date.now();
+    
+    // Set global sending state
+    setIsSending(true);
+    
+    // Add to sending messages set
+    setSendingMessages(prev => new Set(prev).add(messageKey));
+    
+    // Clear input and typing
+    setNewMessage('');
+    handleTyping(false);
+  
+    try {
+      // Add temporary message for better UX
+      const tempMessage: Message = {
+        id: tempMessageId,
+        senderId: currentUserId!,
+        senderType: 'client',
+        message: messageToSend,
+        messageType: 'text',
+        createdAt: new Date().toISOString(),
+        isRead: false
+      };
+  
+      setMessages(prev => [...prev, tempMessage]);
+  
+      // Send via socket
       socket.emit('send-message', {
         bookingId,
         message: messageToSend,
         messageType: 'text'
       });
-
-    } catch (error: any) {
+  
+      console.log('Message sent via socket:', messageToSend);
+  
+    } catch (error) {
       console.error('Failed to send message:', error);
-      setError('Failed to send message');
+      
+      // Remove temporary message on error
+      setMessages(prev => prev.filter(msg => msg.id !== tempMessageId));
+      
+      // Queue message for retry
+      messageQueueRef.current.push({
+        message: messageToSend,
+        timestamp: Date.now()
+      });
+      
+      setError('Failed to send message. Will retry when reconnected.');
+    } finally {
+      // Remove from sending messages set after a delay
+      setTimeout(() => {
+        setSendingMessages(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(messageKey);
+          return newSet;
+        });
+        
+        // Clear global sending state - check current size, not old state
+        setSendingMessages(currentSending => {
+          if (currentSending.size <= 1) { // Will be 0 after this message is removed
+            setIsSending(false);
+          }
+          const newSet = new Set(currentSending);
+          newSet.delete(messageKey);
+          return newSet;
+        });
+      }, 1000);
     }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  }, [newMessage, socket, isConnected, bookingId, currentUserId, handleTyping, isSending]);
+  
+  // Handle key press
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
-  };
+  }, [handleSendMessage]);
 
-  const handleVideoCall = () => {
+  // Handle video call
+  const handleVideoCall = useCallback(() => {
     if (!booking?.videoEnabled) {
       setError('Video calls not available for this session');
       return;
     }
     
-    if (!socket) {
+    if (!socket || !isConnected) {
       setError('Not connected to chat server');
       return;
     }
     
-    // Emit video call request
     socket.emit('video-call-request', {
       bookingId,
       type: 'video'
     });
     
-    console.log('Video call request sent');
-    
-    // Call the onVideoCall prop if provided
     if (onVideoCall) {
       onVideoCall();
     }
-  };
+  }, [booking?.videoEnabled, socket, isConnected, bookingId, onVideoCall]);
 
-  const handleVoiceCall = () => {
+  // Handle voice call
+  const handleVoiceCall = useCallback(() => {
     if (!booking?.videoEnabled) {
       setError('Voice calls not available for this session');
       return;
     }
     
-    if (!socket) {
+    if (!socket || !isConnected) {
       setError('Not connected to chat server');
       return;
     }
     
-    // Emit voice call request
     socket.emit('video-call-request', {
       bookingId,
       type: 'voice'
     });
-    
-    console.log('Voice call request sent');
-  };
+  }, [booking?.videoEnabled, socket, isConnected, bookingId]);
+
+  // Manual reconnect
+  const handleReconnect = useCallback(() => {
+    setReconnectAttempts(0);
+    setError('');
+    initializeSocket();
+  }, [initializeSocket]);
 
   if (isLoading) {
     return (
@@ -483,25 +592,35 @@ export default function RealTimeChat({
         <div className="bg-white rounded-lg p-6">
           <div className="flex items-center gap-3">
             <div className="w-6 h-6 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-            <span>Connecting to chat...</span>
+            <span>Loading chat...</span>
           </div>
         </div>
       </div>
     );
   }
 
-  if (error) {
+  if (error && !isConnecting) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
           <div className="text-center">
+            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-500" />
             <div className="text-red-600 text-lg mb-4">{error}</div>
+            <div className="flex gap-2 justify-center">
+              <button
+                onClick={handleReconnect}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center gap-2"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Retry
+              </button>
             <button
               onClick={onClose}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
             >
               Close
             </button>
+            </div>
           </div>
         </div>
       </div>
@@ -523,16 +642,19 @@ export default function RealTimeChat({
             />
             <div>
               <h3 className="font-semibold">{`${astrologer.firstName} ${astrologer.lastName}`}</h3>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
               <p className="text-sm text-indigo-200">
-                {isConnected ? 'Online' : 'Connecting...'}
+                  {isConnecting ? 'Connecting...' : isConnected ? 'Online' : 'Disconnected'}
               </p>
+              </div>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
             <button
               onClick={handleVoiceCall}
-              disabled={!booking?.videoEnabled}
+              disabled={!booking?.videoEnabled || !isConnected}
               className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors disabled:opacity-50"
               title="Voice Call"
             >
@@ -540,7 +662,7 @@ export default function RealTimeChat({
             </button>
             <button
               onClick={handleVideoCall}
-              disabled={!booking?.videoEnabled}
+              disabled={!booking?.videoEnabled || !isConnected}
               className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors disabled:opacity-50"
               title="Video Call"
             >
@@ -556,7 +678,7 @@ export default function RealTimeChat({
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4" ref={messagesEndRef}>
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.length === 0 ? (
             <div className="text-center text-gray-500 py-8">
               <MessageCircle className="w-12 h-12 mx-auto mb-2 text-gray-300" />
@@ -564,20 +686,20 @@ export default function RealTimeChat({
             </div>
           ) : (
             messages.map((message) => {
-              // Determine if this message is from the current user (client side)
-              const isClientMessage = currentUserId && message.senderId === currentUserId;
-              console.log('Rendering message:', {
-                id: message.id,
-                senderType: message.senderType,
-                senderId: message.senderId,
-                currentUserId: currentUserId,
-                isClientMessage: isClientMessage,
-                messageText: message.message.substring(0, 50) + '...'
-              });
+              const isClientMessage = message.senderType === 'client';
+              const isTemporaryMessage = message.id < 0;
+              // Fix the key generation for temporary messages
+              const messageKey = isTemporaryMessage 
+                ? `${message.message}-${Math.abs(message.id)}`
+                : message.id.toString();
+              const isSending = isTemporaryMessage && sendingMessages.has(messageKey);
+              
               return (
                 <div
                   key={message.id}
-                  className={`flex gap-3 ${isClientMessage ? 'justify-end' : 'justify-start'}`}
+                  className={`flex gap-3 ${isClientMessage ? 'justify-end' : 'justify-start'} ${
+                    isTemporaryMessage ? 'opacity-70' : ''
+                  }`}
                 >
                   {!isClientMessage && (
                     <Image
@@ -589,23 +711,43 @@ export default function RealTimeChat({
                     />
                   )}
                   <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl relative ${
                       isClientMessage
                         ? 'bg-indigo-600 text-white'
                         : 'bg-slate-100 text-slate-800'
-                    }`}
+                    } ${isTemporaryMessage ? 'border-2 border-dashed border-gray-400' : ''}`}
                   >
                     <p className="text-sm">{message.message}</p>
-                    <p
-                      className={`text-xs mt-1 ${
-                        isClientMessage ? 'text-indigo-200' : 'text-slate-500'
-                      }`}
-                    >
-                      {new Date(message.createdAt).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </p>
+                    
+                    {/* Loading indicator for temporary messages */}
+                    {isTemporaryMessage && (
+                      <div className="absolute -top-2 -right-2">
+                        <div className="w-4 h-4 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center justify-between mt-1">
+                      <p
+                        className={`text-xs ${
+                          isClientMessage ? 'text-indigo-200' : 'text-slate-500'
+                        }`}
+                      >
+                        {new Date(message.createdAt).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                        {isTemporaryMessage && ' (sending...)'}
+                      </p>
+                      {isClientMessage && !isTemporaryMessage && (
+                        <div className="flex items-center gap-1">
+                          {message.isRead ? (
+                            <div className="w-3 h-3 text-indigo-200">✓✓</div>
+                          ) : (
+                            <div className="w-3 h-3 text-indigo-200">✓</div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                   {isClientMessage && (
                     <Image
@@ -621,7 +763,8 @@ export default function RealTimeChat({
             })
           )}
           
-          {isTyping && (
+          {/* Typing indicator */}
+          {typingUsers.size > 0 && (
             <div className="flex gap-3">
               <Image
                 src={astrologer.profileImage}
@@ -639,6 +782,18 @@ export default function RealTimeChat({
               </div>
             </div>
           )}
+          
+          {/* Global sending indicator */}
+          {isSending && (
+            <div className="flex justify-end">
+              <div className="bg-indigo-100 rounded-2xl px-4 py-2 flex items-center gap-2">
+                <div className="w-3 h-3 border-2 border-indigo-400 border-t-indigo-600 rounded-full animate-spin"></div>
+                <span className="text-xs text-indigo-600">Sending message...</span>
+              </div>
+            </div>
+          )}
+          
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Message Input */}
@@ -647,20 +802,31 @@ export default function RealTimeChat({
             <input
               type="text"
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              onChange={(e) => handleMessageChange(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
-              disabled={!isConnected || !booking?.chatEnabled}
+              placeholder={isConnected ? (isSending ? "Sending message..." : "Type your message...") : "Connecting..."}
+              disabled={!isConnected || !booking?.chatEnabled || isSending}
               className="flex-1 px-4 py-2 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
             <button
               onClick={handleSendMessage}
-              disabled={!newMessage.trim() || !isConnected || !booking?.chatEnabled}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              disabled={!newMessage.trim() || !isConnected || !booking?.chatEnabled || isSending}
+              className="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center min-w-[60px]"
             >
-              <Send className="w-4 h-4" />
+              {isSending ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
             </button>
           </div>
+          
+          {/* Connection status */}
+          {!isConnected && (
+            <div className="mt-2 text-center">
+              <p className="text-xs text-red-500">Disconnected. Trying to reconnect...</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
