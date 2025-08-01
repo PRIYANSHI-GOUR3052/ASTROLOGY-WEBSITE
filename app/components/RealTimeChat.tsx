@@ -5,6 +5,7 @@ import { Send, Phone, Video, X, MessageCircle, RefreshCw, AlertCircle } from 'lu
 import Image from 'next/image';
 import { io, Socket } from 'socket.io-client';
 import axios from 'axios';
+import { getCurrentUser, getAuthToken } from '@/lib/auth-client';
 
 interface Message {
   id: number;
@@ -66,6 +67,8 @@ export default function RealTimeChat({
   const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
   const [lastMessageId, setLastMessageId] = useState<number>(0);
+  const [sendingMessages, setSendingMessages] = useState<Set<string>>(new Set()); // Track messages being sent
+  const [isSending, setIsSending] = useState(false); // Global sending state
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<Socket | null>(null);
@@ -82,7 +85,7 @@ export default function RealTimeChat({
   // Scroll to bottom when new messages arrive
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   }, []);
 
@@ -90,45 +93,34 @@ export default function RealTimeChat({
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  // Get user authentication data
+  // Get user authentication data using the auth utility
   const getUserAuthData = useCallback(async () => {
     try {
-      const user = localStorage.getItem('user');
-      if (!user) {
-        throw new Error('No user data found');
-      }
-
-      const userData = JSON.parse(user);
-      const clientId = userData.id;
+      console.log('Getting user authentication data...');
       
-      if (!clientId) {
-        throw new Error('Invalid user data');
+      // Use the auth utility to get current user
+      const authResult = await getCurrentUser();
+      console.log('Auth result:', authResult);
+      
+      if (!authResult.user || !authResult.user.id) {
+        console.log('No authenticated user found in auth result');
+        throw new Error('No authenticated user found. Please log in and try again.');
       }
 
+      const clientId = authResult.user.id;
+      console.log('Found authenticated user with ID:', clientId);
+      
       setCurrentUserId(clientId);
 
-      // Get or create token
-      let token = localStorage.getItem('token');
+      // Get or create token using the auth utility
+      const token = await getAuthToken();
+      console.log('Token obtained:', token ? 'Yes' : 'No');
+      
       if (!token) {
-        const response = await fetch('/api/auth/create-token', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: clientId,
-            email: userData.email,
-            name: userData.name
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to create authentication token');
-        }
-
-        const data = await response.json();
-        token = data.token;
-        localStorage.setItem('token', token);
+        throw new Error('Failed to get authentication token. Please log in again.');
       }
 
+      console.log('Successfully obtained authentication token');
       return { clientId, token };
     } catch (error) {
       console.error('Failed to get user auth data:', error);
@@ -150,10 +142,10 @@ export default function RealTimeChat({
       }
 
       console.log('Initializing socket connection...');
-      
-      const socketInstance = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001', {
-        auth: { 
-          token,
+        
+        const socketInstance = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001', {
+          auth: { 
+            token,
           userId: clientId,
           userRole: 'client'
         },
@@ -164,20 +156,20 @@ export default function RealTimeChat({
         reconnectionAttempts: MAX_RECONNECT_ATTEMPTS,
         reconnectionDelay: RECONNECT_DELAY,
         reconnectionDelayMax: 10000
-      });
+        });
 
-      socketInstance.on('connect', () => {
+        socketInstance.on('connect', () => {
         console.log('Socket connected successfully');
-        setIsConnected(true);
+          setIsConnected(true);
         setIsConnecting(false);
         setReconnectAttempts(0);
         setError('');
-        
+          
         // Join booking room
-        if (bookingId) {
-          console.log('Joining booking room:', bookingId);
-          socketInstance.emit('join-booking', { bookingId });
-        }
+          if (bookingId) {
+            console.log('Joining booking room:', bookingId);
+            socketInstance.emit('join-booking', { bookingId });
+          }
 
         // Process any queued messages
         if (messageQueueRef.current.length > 0) {
@@ -197,7 +189,7 @@ export default function RealTimeChat({
 
       socketInstance.on('disconnect', (reason) => {
         console.log('Socket disconnected:', reason);
-        setIsConnected(false);
+          setIsConnected(false);
         
         if (reason === 'io server disconnect') {
           // Server disconnected us, try to reconnect
@@ -219,16 +211,16 @@ export default function RealTimeChat({
           }, RECONNECT_DELAY * (reconnectAttempts + 1));
         } else {
           setError('Failed to connect after multiple attempts. Please refresh the page.');
-        }
-      });
+          }
+        });
 
-      socketInstance.on('joined-booking', (data) => {
-        console.log('Successfully joined booking:', data);
-        setBooking(prev => prev ? { ...prev, ...data } : null);
-      });
+        socketInstance.on('joined-booking', (data) => {
+          console.log('Successfully joined booking:', data);
+          setBooking(prev => prev ? { ...prev, ...data } : null);
+        });
 
       socketInstance.on('new-message', (message: Message) => {
-        console.log('Received new message:', message.id, message.senderType);
+        console.log('Received new message:', message.id, message.senderType, message.message);
         
         // Check for duplicates
         setMessages(prev => {
@@ -237,13 +229,18 @@ export default function RealTimeChat({
             console.log('Message already exists, skipping duplicate:', message.id);
             return prev;
           }
-          
+        
           // Update last message ID
           if (message.id > lastMessageId) {
             setLastMessageId(message.id);
           }
           
-          return [...prev, message];
+          // Remove any temporary messages with the same content
+          const filteredPrev = prev.filter(msg => 
+            !(msg.id < 0 && msg.message === message.message && msg.senderType === message.senderType)
+          );
+          
+          return [...filteredPrev, message];
         });
 
         // Mark message as read if from astrologer
@@ -264,17 +261,17 @@ export default function RealTimeChat({
           newSet.delete(data.userId);
           return newSet;
         });
-      });
+        });
 
-      socketInstance.on('video-call-request', (data) => {
-        console.log('Received video call request:', data);
+        socketInstance.on('video-call-request', (data) => {
+          console.log('Received video call request:', data);
         if (onVideoCall) {
           onVideoCall();
         }
       });
 
-      socketInstance.on('session-ended', (data) => {
-        setError('Session has ended');
+        socketInstance.on('session-ended', (data) => {
+          setError('Session has ended');
         setTimeout(() => {
           onClose();
         }, 3000);
@@ -289,11 +286,20 @@ export default function RealTimeChat({
         }
       });
 
-      socketRef.current = socketInstance;
-      setSocket(socketInstance);
+      // Handle message sending errors
+      socketInstance.on('message-error', (error) => {
+        console.error('Message sending error:', error);
+        setError('Failed to send message: ' + (error.message || 'Unknown error'));
+        
+        // Remove any temporary messages that failed to send
+        setMessages(prev => prev.filter(msg => msg.id >= 0));
+      });
 
-    } catch (error) {
-      console.error('Socket initialization error:', error);
+      socketRef.current = socketInstance;
+        setSocket(socketInstance);
+
+      } catch (error) {
+        console.error('Socket initialization error:', error);
       setIsConnecting(false);
       setError(error instanceof Error ? error.message : 'Failed to connect to chat');
     }
@@ -307,49 +313,54 @@ export default function RealTimeChat({
       setError('');
       
       const { clientId, token } = await getUserAuthData();
-
-      // Fetch booking data
+  
+      // Check if component is still mounted
+      if (!bookingId) return;
+  
       const bookingResponse = await axios.get(`/api/user/booking?clientId=${clientId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      
+      // Check again before state updates
+      if (!bookingId) return;
       
       const bookingData = bookingResponse.data.bookings?.find((b: any) => b.id === bookingId);
       
       if (!bookingData) {
         throw new Error('Booking not found');
       }
-
+  
       console.log('Booking data loaded:', bookingData);
-
-      // Validate booking status
+  
       if (!bookingData.isPaid) {
         throw new Error('Payment required to start chat');
       }
-
+  
       if (!bookingData.chatEnabled) {
         throw new Error('Chat is not enabled for this booking');
       }
-
+  
       setBooking(bookingData);
-
+  
       // Load messages
       const messagesResponse = await axios.get(`/api/user/chat?bookingId=${bookingId}&clientId=${clientId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      if (messagesResponse.data.messages) {
+      if (messagesResponse.data.messages && bookingId) { // Check again
         const loadedMessages = messagesResponse.data.messages;
         setMessages(loadedMessages);
         
-        // Set last message ID
         if (loadedMessages.length > 0) {
           const maxId = Math.max(...loadedMessages.map((m: Message) => m.id));
           setLastMessageId(maxId);
         }
       }
-
+  
     } catch (error: any) {
       console.error('Failed to load booking data:', error);
+      if (!bookingId) return; // Don't update state if component unmounted
+      
       const errorMessage = error.response?.data?.error || error.message || 'Failed to load booking data';
       setError(errorMessage);
       
@@ -357,33 +368,49 @@ export default function RealTimeChat({
         onPaymentRequired();
       }
     } finally {
-      setIsLoading(false);
+      if (bookingId) { // Only update if still mounted
+        setIsLoading(false);
+      }
     }
   }, [bookingId, getUserAuthData, onPaymentRequired]);
 
-  // Initialize socket and load data
+  const debouncedReconnect = useCallback(
+    debounce(() => {
+      if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+        setReconnectAttempts(prev => prev + 1);
+        initializeSocket();
+      }
+    }, 1000),
+    [reconnectAttempts, initializeSocket]
+  );
+  
+  function debounce(func: Function, wait: number) {
+    let timeout: NodeJS.Timeout;
+    return function executedFunction(...args: any[]) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+  
   useEffect(() => {
     if (bookingId && bookingId > 0) {
-      loadBookingData().then(() => {
-        initializeSocket();
-      });
+      loadBookingData();
     } else {
       setError('Invalid booking ID');
       setIsLoading(false);
     }
+  }, [bookingId, getUserAuthData, onPaymentRequired]);
 
-    return () => {
-      if (reconnectTimeoutRef.current) {
-        clearTimeout(reconnectTimeoutRef.current);
-      }
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-    };
-  }, [bookingId, loadBookingData, initializeSocket]);
+  useEffect(() => {
+    // Initialize socket only after booking data is loaded and user is authenticated
+    if (booking && currentUserId && !socket) {
+      initializeSocket();
+    }
+  }, [booking, currentUserId, socket]);
 
   // Mark message as read
   const markMessageAsRead = useCallback(async (messageId: number) => {
@@ -430,23 +457,26 @@ export default function RealTimeChat({
 
   // Send message
   const handleSendMessage = useCallback(async () => {
-    if (!newMessage.trim() || !socket || !isConnected) return;
-
+    if (!newMessage.trim() || !socket || !isConnected || isSending) return;
+  
     const messageToSend = newMessage.trim();
+    const messageKey = `${messageToSend}-${Date.now()}`;
+    const tempMessageId = -Date.now();
+    
+    // Set global sending state
+    setIsSending(true);
+    
+    // Add to sending messages set
+    setSendingMessages(prev => new Set(prev).add(messageKey));
+    
+    // Clear input and typing
     setNewMessage('');
     handleTyping(false);
-
+  
     try {
-      // Send via socket
-      socket.emit('send-message', {
-        bookingId,
-        message: messageToSend,
-        messageType: 'text'
-      });
-
-      // Add to local state immediately for better UX
+      // Add temporary message for better UX
       const tempMessage: Message = {
-        id: Date.now(), // Temporary ID
+        id: tempMessageId,
         senderId: currentUserId!,
         senderType: 'client',
         message: messageToSend,
@@ -454,11 +484,23 @@ export default function RealTimeChat({
         createdAt: new Date().toISOString(),
         isRead: false
       };
-
+  
       setMessages(prev => [...prev, tempMessage]);
-
+  
+      // Send via socket
+      socket.emit('send-message', {
+        bookingId,
+        message: messageToSend,
+        messageType: 'text'
+      });
+  
+      console.log('Message sent via socket:', messageToSend);
+  
     } catch (error) {
       console.error('Failed to send message:', error);
+      
+      // Remove temporary message on error
+      setMessages(prev => prev.filter(msg => msg.id !== tempMessageId));
       
       // Queue message for retry
       messageQueueRef.current.push({
@@ -467,9 +509,28 @@ export default function RealTimeChat({
       });
       
       setError('Failed to send message. Will retry when reconnected.');
+    } finally {
+      // Remove from sending messages set after a delay
+      setTimeout(() => {
+        setSendingMessages(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(messageKey);
+          return newSet;
+        });
+        
+        // Clear global sending state - check current size, not old state
+        setSendingMessages(currentSending => {
+          if (currentSending.size <= 1) { // Will be 0 after this message is removed
+            setIsSending(false);
+          }
+          const newSet = new Set(currentSending);
+          newSet.delete(messageKey);
+          return newSet;
+        });
+      }, 1000);
     }
-  }, [newMessage, socket, isConnected, bookingId, currentUserId, handleTyping]);
-
+  }, [newMessage, socket, isConnected, bookingId, currentUserId, handleTyping, isSending]);
+  
   // Handle key press
   const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -553,12 +614,12 @@ export default function RealTimeChat({
                 <RefreshCw className="w-4 h-4" />
                 Retry
               </button>
-              <button
-                onClick={onClose}
+            <button
+              onClick={onClose}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
-              >
-                Close
-              </button>
+            >
+              Close
+            </button>
             </div>
           </div>
         </div>
@@ -583,9 +644,9 @@ export default function RealTimeChat({
               <h3 className="font-semibold">{`${astrologer.firstName} ${astrologer.lastName}`}</h3>
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
-                <p className="text-sm text-indigo-200">
+              <p className="text-sm text-indigo-200">
                   {isConnecting ? 'Connecting...' : isConnected ? 'Online' : 'Disconnected'}
-                </p>
+              </p>
               </div>
             </div>
           </div>
@@ -625,11 +686,20 @@ export default function RealTimeChat({
             </div>
           ) : (
             messages.map((message) => {
-              const isClientMessage = currentUserId && message.senderId === currentUserId;
+              const isClientMessage = message.senderType === 'client';
+              const isTemporaryMessage = message.id < 0;
+              // Fix the key generation for temporary messages
+              const messageKey = isTemporaryMessage 
+                ? `${message.message}-${Math.abs(message.id)}`
+                : message.id.toString();
+              const isSending = isTemporaryMessage && sendingMessages.has(messageKey);
+              
               return (
                 <div
                   key={message.id}
-                  className={`flex gap-3 ${isClientMessage ? 'justify-end' : 'justify-start'}`}
+                  className={`flex gap-3 ${isClientMessage ? 'justify-end' : 'justify-start'} ${
+                    isTemporaryMessage ? 'opacity-70' : ''
+                  }`}
                 >
                   {!isClientMessage && (
                     <Image
@@ -641,13 +711,21 @@ export default function RealTimeChat({
                     />
                   )}
                   <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl relative ${
                       isClientMessage
                         ? 'bg-indigo-600 text-white'
                         : 'bg-slate-100 text-slate-800'
-                    }`}
+                    } ${isTemporaryMessage ? 'border-2 border-dashed border-gray-400' : ''}`}
                   >
                     <p className="text-sm">{message.message}</p>
+                    
+                    {/* Loading indicator for temporary messages */}
+                    {isTemporaryMessage && (
+                      <div className="absolute -top-2 -right-2">
+                        <div className="w-4 h-4 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+                      </div>
+                    )}
+                    
                     <div className="flex items-center justify-between mt-1">
                       <p
                         className={`text-xs ${
@@ -658,8 +736,9 @@ export default function RealTimeChat({
                           hour: '2-digit',
                           minute: '2-digit'
                         })}
+                        {isTemporaryMessage && ' (sending...)'}
                       </p>
-                      {isClientMessage && (
+                      {isClientMessage && !isTemporaryMessage && (
                         <div className="flex items-center gap-1">
                           {message.isRead ? (
                             <div className="w-3 h-3 text-indigo-200">✓✓</div>
@@ -704,6 +783,16 @@ export default function RealTimeChat({
             </div>
           )}
           
+          {/* Global sending indicator */}
+          {isSending && (
+            <div className="flex justify-end">
+              <div className="bg-indigo-100 rounded-2xl px-4 py-2 flex items-center gap-2">
+                <div className="w-3 h-3 border-2 border-indigo-400 border-t-indigo-600 rounded-full animate-spin"></div>
+                <span className="text-xs text-indigo-600">Sending message...</span>
+              </div>
+            </div>
+          )}
+          
           <div ref={messagesEndRef} />
         </div>
 
@@ -715,18 +804,29 @@ export default function RealTimeChat({
               value={newMessage}
               onChange={(e) => handleMessageChange(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder={isConnected ? "Type your message..." : "Connecting..."}
-              disabled={!isConnected || !booking?.chatEnabled}
+              placeholder={isConnected ? (isSending ? "Sending message..." : "Type your message...") : "Connecting..."}
+              disabled={!isConnected || !booking?.chatEnabled || isSending}
               className="flex-1 px-4 py-2 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
             <button
               onClick={handleSendMessage}
-              disabled={!newMessage.trim() || !isConnected || !booking?.chatEnabled}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              disabled={!newMessage.trim() || !isConnected || !booking?.chatEnabled || isSending}
+              className="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center min-w-[60px]"
             >
-              <Send className="w-4 h-4" />
+              {isSending ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
             </button>
           </div>
+          
+          {/* Connection status */}
+          {!isConnected && (
+            <div className="mt-2 text-center">
+              <p className="text-xs text-red-500">Disconnected. Trying to reconnect...</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

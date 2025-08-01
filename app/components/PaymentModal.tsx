@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { CreditCard, Lock, CheckCircle, X } from 'lucide-react';
 import axios from 'axios';
+import { getCurrentUser, getAuthToken, User } from '@/lib/auth-client';
 
 interface PaymentModalProps {
   bookingId: number;
@@ -24,6 +25,8 @@ export default function PaymentModal({
 }: PaymentModalProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
+  const [user, setUser] = useState<User | null>(null);
+  const [userLoading, setUserLoading] = useState(true);
 
   // Check for invalid booking ID when modal opens
   useEffect(() => {
@@ -33,6 +36,32 @@ export default function PaymentModal({
       setError('');
     }
   }, [bookingId]);
+
+  // Get user authentication data using the auth utility
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        setUserLoading(true);
+        const authResult = await getCurrentUser();
+        
+        if (authResult.user) {
+          setUser(authResult.user);
+        } else {
+          setUser(null);
+          if (authResult.error) {
+            console.error('Auth error:', authResult.error);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user:', error);
+        setUser(null);
+      } finally {
+        setUserLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
 
   const [paymentMethod, setPaymentMethod] = useState('mock');
 
@@ -47,18 +76,23 @@ export default function PaymentModal({
         return;
       }
 
-      // Get user from localStorage
-      const user = localStorage.getItem('user');
-      if (!user) {
-        setError('User not authenticated');
+      // Check if user is authenticated
+      if (!user || !user.id) {
+        setError('User not authenticated. Please log in and try again.');
         return;
       }
 
-      const userData = JSON.parse(user);
-      console.log('User data from localStorage:', userData);
+      console.log('User data for payment:', user);
       
-      const clientId = userData.id || userData.userId;
+      const clientId = user.id;
       console.log('Extracted clientId:', clientId);
+
+      // Get authentication token for API calls
+      const token = await getAuthToken();
+      if (!token) {
+        setError('Unable to authenticate. Please log in again.');
+        return;
+      }
 
       const paymentData = {
         bookingId,
@@ -69,7 +103,10 @@ export default function PaymentModal({
 
       console.log('Sending payment data:', paymentData);
 
-      const response = await axios.post('/api/user/payment', paymentData);
+      // Make API call with authorization header
+      const response = await axios.post('/api/user/payment', paymentData, {
+        headers: { Authorization: `Bearer ${token as string}` }
+      });
 
       console.log('Payment response:', response.data);
 
@@ -81,11 +118,59 @@ export default function PaymentModal({
     } catch (error: any) {
       console.error('Payment error details:', error);
       console.error('Payment error response:', error.response?.data);
-      setError(error.response?.data?.error || 'Payment failed. Please try again.');
+      
+      if (error.response?.status === 401) {
+        setError('Authentication failed. Please log in again and try the payment.');
+      } else if (error.response?.status === 400) {
+        setError(error.response.data.error || 'Invalid payment request.');
+      } else {
+        setError(error.response?.data?.error || 'Payment failed. Please try again.');
+      }
     } finally {
       setIsProcessing(false);
     }
   };
+
+  // Show loading state while getting user data
+  if (userLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white rounded-lg p-6">
+          <div className="flex items-center gap-3">
+            <div className="w-6 h-6 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            <span>Loading payment...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if user is not authenticated
+  if (!user || !user.id) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+          <div className="text-center">
+            <div className="text-red-600 text-lg mb-4">Please log in to complete payment</div>
+            <div className="flex gap-2 justify-center">
+              <button
+                onClick={() => window.location.href = '/signin'}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              >
+                Go to Login
+              </button>
+              <button
+                onClick={onClose}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -111,6 +196,14 @@ export default function PaymentModal({
 
         {/* Content */}
         <div className="p-6">
+          {/* User Info */}
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <h4 className="font-medium text-green-900 mb-1">Authenticated User</h4>
+            <p className="text-sm text-green-700">
+              {user.name || user.email} (ID: {user.id})
+            </p>
+          </div>
+
           {/* Astrologer Info */}
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
             <h4 className="font-medium text-gray-900 mb-2">
