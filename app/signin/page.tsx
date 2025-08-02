@@ -286,8 +286,6 @@ export default function SignInPage() {
                   </div>
                   <Button type="submit" className="w-full font-semibold text-lg py-3 rounded-lg bg-black text-white hover:bg-gray-900 transition-all" disabled={isLoading}>
                     {isLoading ? 'Loading...' : 'Create Account'}
-                  <Button type="submit" className="w-full font-semibold text-lg py-3 rounded-lg bg-gradient-to-r from-[#a084ee] to-[#f857a6] text-white hover:brightness-110 transition-all" disabled={isLoading}>
-                    {isLoading ? 'Creating Account...' : 'Create Account'}
                   </Button>
                 </form>
               </TabsContent>
