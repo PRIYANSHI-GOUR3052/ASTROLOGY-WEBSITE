@@ -164,14 +164,21 @@ export function Header() {
         {/* Left: Logo */}
         <Link
           href="/"
-          className="font-bold text-xl tracking-tight"
+          className="flex items-center gap-2 font-bold text-xl tracking-tight"
           style={{
             fontFamily: 'Playfair Display, serif',
             color: '#000',
             letterSpacing: '-0.01em',
           }}
         >
-          NG
+          <img
+            src="https://res.cloudinary.com/dxwspucxw/image/upload/c_crop,w_330,h_330,ar_1:1/v1753773413/NG_logo_te1xtm.jpg"
+            alt="Logo"
+            width={38}
+            height={38}
+            style={{ borderRadius: '0.5rem', objectFit: 'cover', background: '#fff' }}
+            className="inline-block align-middle shadow-sm"
+          />
         </Link>
 
         {/* Right: Search + Cart + Hamburger */}
@@ -346,7 +353,15 @@ export function Header() {
         */}
         <div className="relative flex items-center justify-between w-full max-w-7xl mx-auto px-8 py-3 gap-x-8 z-10">
           {/* Logo */}
-          <Link href="/" className="font-bold text-2xl md:text-3xl tracking-tight" style={{ fontFamily: 'Playfair Display, serif', color: '#000', letterSpacing: '-0.01em' }}>
+          <Link href="/" className="flex items-center gap-2 font-bold text-2xl md:text-3xl tracking-tight" style={{ fontFamily: 'Playfair Display, serif', color: '#000', letterSpacing: '-0.01em' }}>
+            <img
+              src="https://res.cloudinary.com/dxwspucxw/image/upload/c_crop,w_330,h_330,ar_1:1/v1753773413/NG_logo_te1xtm.jpg"
+              alt="Logo"
+              width={38}
+              height={38}
+              style={{ borderRadius: '0.5rem', objectFit: 'cover', background: '#fff'}}
+              className="inline-block align-middle shadow-sm"
+            />
             {t('header.logo.line2')}
           </Link>
           {/* Search Bar */}

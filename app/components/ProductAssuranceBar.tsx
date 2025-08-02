@@ -39,27 +39,70 @@ const assurances = [
 export default function ProductAssuranceBar() {
   return (
     <div className="w-screen flex justify-center items-center pt-8 pb-14" style={{background:'#F9F6F2', marginLeft:'calc(50% - 50vw)', marginRight:'calc(50% - 50vw)'}}>
-      <div className="flex w-full max-w-none justify-between items-stretch px-2 md:px-4" style={{gap:0}}>
-        {assurances.reduce<ReactNode[]>((acc, a, idx) => {
-          acc.push(
-            <div key={a.label} className="flex flex-col items-center flex-1 min-w-0" style={{minWidth:0, flex:'1 1 0%', paddingLeft:0, paddingRight:0}}>
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 md:w-11 md:h-11">
-                  {a.icon}
+      {/* Mobile: 2 rows (3+2), Desktop: 1 row */}
+      <div className="w-full max-w-none px-2 md:px-4">
+        {/* Mobile layout */}
+        <div className="flex flex-col gap-4 md:hidden">
+          <div className="flex w-full justify-between items-stretch gap-0">
+            {assurances.slice(0, 3).map((a) => (
+              <div key={a.label} className="flex flex-col items-center justify-center" style={{paddingLeft:0, paddingRight:0}}>
+                <div className="flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 md:w-11 md:h-11 flex items-center justify-center mx-auto">
+                    {a.icon}
+                  </div>
+                  <span className="mt-3 md:mt-5 text-xs md:text-lg font-bold text-black tracking-wide uppercase text-center leading-tight" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>{a.label}</span>
                 </div>
-                <span className="mt-3 md:mt-5 text-xs md:text-lg font-bold text-black tracking-wide uppercase text-center leading-tight" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>{a.label}</span>
               </div>
-            </div>
-          );
-          if (idx < assurances.length - 1) {
+            ))}
+          </div>
+          <div className="flex w-full justify-center items-stretch gap-x-24">
+            {assurances.slice(3).map((a) => (
+              <div key={a.label} className="flex flex-col items-center justify-center" style={{paddingLeft:0, paddingRight:0}}>
+                <div className="flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 md:w-11 md:h-11 flex items-center justify-center mx-auto">
+                    {a.icon}
+                  </div>
+                  <span className="mt-3 md:mt-5 text-xs md:text-lg font-bold text-black tracking-wide uppercase text-center leading-tight" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>
+                    {a.label === 'AURA TUNED' ? (
+                      <>
+                        <span className="block md:inline">AURA</span>
+                        <span className="block md:inline">TUNED</span>
+                      </>
+                    ) : a.label === 'FREE DELIVERY' ? (
+                      <>
+                        <span className="block md:inline">FREE</span>
+                        <span className="block md:inline">DELIVERY</span>
+                      </>
+                    ) : a.label}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Desktop layout (unchanged) */}
+        <div className="hidden md:flex w-full max-w-none justify-between items-stretch gap-0">
+          {assurances.reduce<ReactNode[]>((acc, a, idx) => {
             acc.push(
-              <div key={`sep-${idx}`} className="hidden md:flex items-center" style={{height:140, width:0, marginLeft:0, marginRight:0}}>
-                <div className="h-24 border-r" style={{borderColor: LINE_COLOR, marginLeft:0, marginRight:0}} />
+              <div key={a.label} className="flex flex-col items-center justify-center flex-1 min-w-0" style={{minWidth:0, flex:'1 1 0%', paddingLeft:0, paddingRight:0}}>
+                <div className="flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 md:w-11 md:h-11 flex items-center justify-center mx-auto">
+                    {a.icon}
+                  </div>
+                  <span className="mt-3 md:mt-5 text-xs md:text-lg font-bold text-black tracking-wide uppercase text-center leading-tight" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>{a.label}</span>
+                </div>
               </div>
             );
-          }
-          return acc;
-        }, [])}
+            if (idx < assurances.length - 1) {
+              acc.push(
+                <div key={`sep-${idx}`} className="hidden md:flex items-center" style={{height:140, width:0, marginLeft:0, marginRight:0}}>
+                  <div className="h-24 border-r" style={{borderColor: LINE_COLOR, marginLeft:0, marginRight:0}} />
+                </div>
+              );
+            }
+            return acc;
+          }, [])}
+        </div>
       </div>
     </div>
   );

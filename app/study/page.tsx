@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AnimatedStars } from '../components/AnimatedStars'
+// import { AnimatedStars } from '../components/AnimatedStars'
 import { MysticBackground } from '../components/MysticBackground'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -211,7 +211,7 @@ export default function StudyPage() {
         transition={{ duration: 0.7 }}
         className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white text-black"
       >
-        <AnimatedStars />
+        {/* <AnimatedStars /> */}
         <MysticBackground>
           <div className="container mx-auto pt-32 px-4 py-16 relative z-10">
             {/* Glassmorphic Hero/Banner */}
@@ -423,12 +423,21 @@ export default function StudyPage() {
               <h2 className="text-3xl font-bold text-indigo-900 mb-8 text-center" style={{ fontFamily: 'Playfair Display, serif' }}>{lang === 'hi' ? 'अक्सर पूछे जाने वाले प्रश्न' : 'Frequently Asked Questions'}</h2>
               <div className="space-y-8 max-w-3xl mx-auto">
                 {faqs.map((faq, idx) => (
-                  <div key={idx}>
-                    <div className="flex items-center mb-2">
-                      <span className="text-indigo-600 mr-2 text-xl">&#x3f;</span>
-                      <span className="font-bold text-lg text-indigo-900" style={{ fontFamily: 'Playfair Display, serif' }}>{faq.q}</span>
+                  <div key={idx} className="bg-white/70 rounded-xl p-4 md:p-6 shadow flex flex-col gap-2">
+                    <div className="flex items-start gap-2 md:gap-3">
+                      <span className="text-indigo-600 mt-1 text-xl min-w-[1.5em] flex-shrink-0">&#x3f;</span>
+                      <span className="font-bold text-base md:text-lg text-indigo-900" style={{ fontFamily: 'Playfair Display, serif' }}>{faq.q}</span>
                     </div>
-                    <p className="text-black text-justify pl-8" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif' }}>{faq.a}</p>
+                    <div className="flex items-start gap-2 md:gap-3">
+                      <span className="text-green-500 mt-1 text-lg min-w-[1.5em] flex-shrink-0">
+                        {/* Check-circle icon SVG */}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
+                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M8 12.5l2.2 2L16 9.5" />
+                        </svg>
+                      </span>
+                      <span className="text-black text-justify text-sm md:text-base" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif' }}>{faq.a}</span>
+                    </div>
                   </div>
                 ))}
               </div>

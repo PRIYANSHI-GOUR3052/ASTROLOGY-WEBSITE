@@ -19,6 +19,64 @@ const FloatingCard = ({ className, children }: { className?: string; children?: 
   </div>
 );
 
+function ZodiacBackground() {
+  // Minimalist SVGs for Aries, Taurus, Gemini, and two constellations
+  // All use #e2dac2, opacity 5-15%, slow float/fade animation, absolute, z-0
+  return (
+    <div className="pointer-events-none fixed inset-0 z-0 select-none">
+      {/* Aries */}
+      <svg className="absolute top-10 left-10 w-24 h-24 opacity-30 animate-zodiac-float-y" viewBox="0 0 64 64" fill="none">
+        <path d="M16 48C8 32 16 8 32 8C48 8 56 32 48 48" stroke="#d6c48a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      {/* Taurus */}
+      <svg className="absolute bottom-16 left-20 w-20 h-20 opacity-25 animate-zodiac-float-x" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="40" r="12" stroke="#d6c48a" strokeWidth="3"/>
+        <path d="M20 20C20 12 44 12 44 20" stroke="#d6c48a" strokeWidth="3" strokeLinecap="round"/>
+      </svg>
+      {/* Gemini */}
+      <svg className="absolute top-24 right-16 w-20 h-20 opacity-25 animate-zodiac-float-y" viewBox="0 0 64 64" fill="none">
+        <path d="M20 16C24 32 40 32 44 16" stroke="#d6c48a" strokeWidth="3"/>
+        <path d="M24 48V16M40 48V16" stroke="#d6c48a" strokeWidth="3"/>
+      </svg>
+      {/* Constellation 1 */}
+      <svg className="absolute bottom-10 right-10 w-28 h-12 opacity-20 animate-zodiac-float-y" viewBox="0 0 120 40" fill="none">
+        <circle cx="10" cy="30" r="2" fill="#d6c48a"/>
+        <circle cx="40" cy="10" r="2" fill="#d6c48a"/>
+        <circle cx="80" cy="20" r="2" fill="#d6c48a"/>
+        <circle cx="110" cy="35" r="2" fill="#d6c48a"/>
+        <path d="M10 30L40 10L80 20L110 35" stroke="#d6c48a" strokeWidth="1.5"/>
+      </svg>
+      {/* Constellation 2 */}
+      <svg className="absolute top-1/2 left-1/4 w-24 h-10 opacity-20 animate-zodiac-float-x" viewBox="0 0 96 32" fill="none">
+        <circle cx="8" cy="24" r="2" fill="#d6c48a"/>
+        <circle cx="32" cy="8" r="2" fill="#d6c48a"/>
+        <circle cx="64" cy="16" r="2" fill="#d6c48a"/>
+        <circle cx="88" cy="28" r="2" fill="#d6c48a"/>
+        <path d="M8 24L32 8L64 16L88 28" stroke="#d6c48a" strokeWidth="1.5"/>
+      </svg>
+    </div>
+  );
+}
+
+
+// Zodiac SVG float/fade animation styles
+// Add this block to your styles/globals.css:
+/*
+@keyframes zodiac-float-y {
+  0% { transform: translateY(0px); opacity: 0.2; }
+  50% { transform: translateY(-24px); opacity: 0.4; }
+  100% { transform: translateY(0px); opacity: 0.3; }
+}
+@keyframes zodiac-float-x {
+  0% { transform: translateX(0px); opacity: 0.2; }
+  50% { transform: translateX(20px); opacity: 0.4; }
+  100% { transform: translateX(0px); opacity: 0.3; }
+}
+.animate-zodiac-float-slow { animation: zodiac-float-y 14s ease-in-out infinite alternate; }
+.animate-zodiac-float-medium { animation: zodiac-float-x 10s ease-in-out infinite alternate; }
+.animate-zodiac-float-fast { animation: zodiac-float-y 7s ease-in-out infinite alternate; }
+*/
+
 export default function SignInPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -91,67 +149,65 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="relative bg-black">
-      {/* Exact cosmic background overlay, no floating cards */}
-      <ExactCosmicBackground />
+    <div className="relative min-h-screen bg-[#FEFBF2]">
+      <ZodiacBackground />
       <main className="relative w-full min-h-screen overflow-hidden bg-transparent flex flex-col">
-        {/* FloatingCard components removed for exact match */}
         <div className="relative z-10 flex-grow flex flex-col justify-center items-center px-4 py-20">
-          <div className="bg-[#111] border border-[#222] shadow-2xl rounded-3xl p-8 w-full max-w-md">
+          <div className="bg-white border border-gray-200 shadow-2xl rounded-3xl p-8 w-full max-w-md">
             <div className="text-center mb-8">
-               <h2 className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                Welcome to <span className="bg-gradient-to-r from-[#a084ee] to-[#f857a6] bg-clip-text text-transparent">Nakshatra Gyaan</span>
-               </h2>
-               <p className="text-gray-400">Unlock the secrets of the cosmos. Your journey begins here.</p>
+            <h2 className="text-4xl font-bold text-black mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+             Welcome to <span className="text-amber-600">Nakshatra Gyaan</span>
+            </h2>
+            <p className="text-gray-500">Unlock the secrets of the cosmos. Your journey begins here.</p>
             </div>
 
             {error && (
-              <div className="mb-4 p-3 bg-red-900/50 text-red-300 rounded-xl border border-red-500/50 text-center text-sm">
+              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-xl border border-red-300 text-center text-sm">
                 {error}
               </div>
             )}
 
             <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 bg-black border border-[#222] rounded-xl p-1">
-                <TabsTrigger value="login" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#a084ee] data-[state=active]:to-[#f857a6] data-[state=active]:text-white rounded-lg text-gray-400 transition-all">Login</TabsTrigger>
-                <TabsTrigger value="signup" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#a084ee] data-[state=active]:to-[#f857a6] data-[state=active]:text-white rounded-lg text-gray-400 transition-all">Sign Up</TabsTrigger>
-              </TabsList>
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100 border border-gray-200 rounded-xl p-1">
+              <TabsTrigger value="login" className="data-[state=active]:bg-black data-[state=active]:text-white rounded-lg text-gray-500 transition-all">Login</TabsTrigger>
+              <TabsTrigger value="signup" className="data-[state=active]:bg-black data-[state=active]:text-white rounded-lg text-gray-500 transition-all">Sign Up</TabsTrigger>
+            </TabsList>
 
               <TabsContent value="login" className="mt-6">
                 <form className="space-y-4" onSubmit={(e) => handleCredentialSubmit(e, 'login')}>
                   <div className="relative">
-                      <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                      <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
                       <Input
                         name="email"
                         type="email"
                         placeholder="Email"
                         required
-                        className="w-full pl-11 pr-4 py-3 bg-[#1C1C1C] border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+                        className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
                       />
                   </div>
                   <div className="relative">
-                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
                       <Input
                         name="password"
                         type="password"
                         placeholder="Password"
                         required
-                        className="w-full pl-11 pr-4 py-3 bg-[#1C1C1C] border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+                        className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
                       />
                   </div>
-                  <Button type="submit" className="w-full font-semibold text-lg py-3 rounded-lg bg-gradient-to-r from-[#a084ee] to-[#f857a6] text-white hover:brightness-110 transition-all" disabled={isLoading}>
+                  <Button type="submit" className="w-full font-semibold text-lg py-3 rounded-lg bg-black text-white hover:bg-gray-900 transition-all" disabled={isLoading}>
                     {isLoading ? 'Loading...' : 'Login'}
                   </Button>
                 </form>
-                <div className="mt-6 text-center text-gray-500 text-sm">Or continue with</div>
+                <div className="mt-6 text-center text-black text-sm">Or continue with</div>
                 <div className="mt-4">
                   <Button
                     variant="outline"
-                    className="w-full font-semibold py-3 rounded-lg border border-gray-700 bg-[#1C1C1C] text-gray-400 hover:bg-[#222] transition-all flex items-center justify-center"
+                    className="w-full font-semibold py-3 rounded-lg border border-gray-200 bg-white text-black hover:bg-gray-100 transition-all flex items-center justify-center"
                     onClick={handleGoogleSignIn}
                     disabled={isLoading}
                   >
-                    <Star className="w-5 h-5 mr-3 text-yellow-500" />
+                    <Star className="w-5 h-5 mr-3 text-black" />
                     Sign in with Google
                   </Button>
                 </div>
@@ -160,58 +216,58 @@ export default function SignInPage() {
               <TabsContent value="signup" className="mt-6">
                 <form className="space-y-4" onSubmit={(e) => handleCredentialSubmit(e, 'signup')}>
                   <div className="relative">
-                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
                       <Input
                         name="name"
                         type="text"
                         placeholder="Full Name"
                         required
-                        className="w-full pl-11 pr-4 py-3 bg-[#1C1C1C] border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+                        className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
                       />
                   </div>
                   <div className="relative">
-                      <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                      <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
                       <Input
                         name="email"
                         type="email"
                         placeholder="Email"
                         required
-                        className="w-full pl-11 pr-4 py-3 bg-[#1C1C1C] border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+                        className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
                       />
                   </div>
                   <div className="relative">
-                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
                       <Input
                         name="password"
                         type="password"
                         placeholder="Create Password"
                         required
-                        className="w-full pl-11 pr-4 py-3 bg-[#1C1C1C] border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+                        className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
                       />
                   </div>
                   <div className="relative">
-                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
                       <Input
                         name="confirmPassword"
                         type="password"
                         placeholder="Confirm Password"
                         required
-                        className="w-full pl-11 pr-4 py-3 bg-[#1C1C1C] border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+                        className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
                       />
                   </div>
-                  <Button type="submit" className="w-full font-semibold text-lg py-3 rounded-lg bg-gradient-to-r from-[#a084ee] to-[#f857a6] text-white hover:brightness-110 transition-all" disabled={isLoading}>
+                  <Button type="submit" className="w-full font-semibold text-lg py-3 rounded-lg bg-black text-white hover:bg-gray-900 transition-all" disabled={isLoading}>
                     {isLoading ? 'Loading...' : 'Create Account'}
                   </Button>
                 </form>
-                <div className="mt-6 text-center text-gray-500 text-sm">Or continue with</div>
+                <div className="mt-6 text-center text-black text-sm">Or continue with</div>
                 <div className="mt-4">
                   <Button
                     variant="outline"
-                    className="w-full font-semibold py-3 rounded-lg border border-gray-700 bg-[#1C1C1C] text-gray-400 hover:bg-[#222] transition-all flex items-center justify-center"
+                    className="w-full font-semibold py-3 rounded-lg border border-black bg-white text-black hover:bg-gray-100 transition-all flex items-center justify-center"
                     onClick={handleGoogleSignIn}
                     disabled={isLoading}
                   >
-                    <Star className="w-5 h-5 mr-3 text-yellow-500" />
+                    <Star className="w-5 h-5 mr-3 text-black" />
                     Sign up with Google
                   </Button>
                 </div>
@@ -229,29 +285,8 @@ export default function SignInPage() {
 function ExactCosmicBackground() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none">
-      {/* Main solid black background to match footer */}
+      {/* Main solid black background only, no blur, orbs, or planets */}
       <div className="absolute inset-0 bg-[#111]" />
-      {/* Glowing orbs/planets, less blur, more defined */}
-      <div className="absolute -left-40 top-0 w-[380px] h-[380px] rounded-full bg-[#F8B195] opacity-80 blur-[60px]" />
-      <div className="absolute left-1/4 top-32 w-[180px] h-[180px] rounded-full bg-[#A084EE] opacity-70 blur-[40px]" />
-      <div className="absolute right-1/4 top-1/2 w-[260px] h-[260px] rounded-full bg-[#F857A6] opacity-80 blur-[50px]" />
-      <div className="absolute right-0 bottom-0 w-[340px] h-[340px] rounded-full bg-[#A084EE] opacity-70 blur-[60px]" />
-      <div className="absolute left-1/2 bottom-0 w-[120px] h-[120px] rounded-full bg-[#F8B195] opacity-50 blur-[30px]" />
-      <div className="absolute left-[60%] top-[10%] w-[90px] h-[90px] rounded-full bg-[#F857A6] opacity-60 blur-[25px]" />
-      {/* Dense, subtle stars, slightly brighter */}
-      {[...Array(100)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute bg-white rounded-full opacity-50"
-          style={{
-            width: `${Math.random() * 1.5 + 1}px`,
-            height: `${Math.random() * 1.5 + 1}px`,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            filter: 'blur(0.3px)'
-          }}
-        />
-      ))}
     </div>
   );
 }
