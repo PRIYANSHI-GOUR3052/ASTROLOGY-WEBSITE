@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { Search, Filter, Star, CheckCircle } from "lucide-react";
@@ -10,202 +10,7 @@ import "@fontsource/poppins/400.css";
 import "@fontsource/poppins/600.css";
 import "@fontsource/playfair-display/600.css";
 
-const ASTROLOGERS = [
-  {
-    id: 1,
-    name: "Yogeshwara",
-    skills: ["Tarot", "Psychic"],
-    languages: ["English", "Hindi"],
-    experience: 9,
-    price: 35,
-    rating: 4.9,
-    orders: 0,
-    isNew: true,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 2,
-    name: "Netrik",
-    skills: ["Vedic", "Life Coach"],
-    languages: ["English", "Hindi"],
-    experience: 4,
-    price: 22,
-    rating: 4.7,
-    orders: 0,
-    isNew: true,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 3,
-    name: "Acharya Shailesh",
-    skills: ["Vedic", "Palmistry", "Face Reading"],
-    languages: ["English", "Hindi", "Bhojpuri"],
-    experience: 3,
-    price: 19,
-    rating: 4.6,
-    orders: 0,
-    isNew: true,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 4,
-    name: "Vicki",
-    skills: ["Tarot"],
-    languages: ["English", "Hindi"],
-    experience: 2,
-    price: 16,
-    rating: 4.5,
-    orders: 2352,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 5,
-    name: "Bhavdesh",
-    skills: ["Vedic", "Palmistry", "Face Reading"],
-    languages: ["English", "Hindi"],
-    experience: 6,
-    price: 26,
-    rating: 4.8,
-    orders: 18868,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 6,
-    name: "Neel",
-    skills: ["Vedic", "Life Coach", "Psychologist"],
-    languages: ["English", "Hindi"],
-    experience: 5,
-    price: 38,
-    rating: 4.9,
-    orders: 12520,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 7,
-    name: "Anoushka",
-    skills: ["Vedic", "Nadi", "KP"],
-    languages: ["English", "Hindi", "French"],
-    experience: 5,
-    price: 20,
-    rating: 4.7,
-    orders: 2965,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 8,
-    name: "Pankhuri",
-    skills: ["Tarot", "Life Coach", "Psychologist"],
-    languages: ["English", "Hindi"],
-    experience: 10,
-    price: 46,
-    rating: 5.0,
-    orders: 6575,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 9,
-    name: "Arvishka",
-    skills: ["Tarot"],
-    languages: ["English", "Hindi"],
-    experience: 3,
-    price: 18,
-    rating: 4.6,
-    orders: 2243,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 10,
-    name: "Laxmanish",
-    skills: ["Vedic", "Vastu", "Lal Kitab"],
-    languages: ["English", "Hindi", "Punjabi"],
-    experience: 6,
-    price: 19,
-    rating: 4.7,
-    orders: 7764,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 11,
-    name: "Acharyaa Prabhat",
-    skills: ["Vedic", "Vastu", "Palmistry"],
-    languages: ["English", "Hindi", "Sanskrit"],
-    experience: 5,
-    price: 25,
-    rating: 4.8,
-    orders: 0,
-    isNew: true,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 12,
-    name: "Tarot Laxmi",
-    skills: ["Numerology", "Tarot", "Psychic"],
-    languages: ["English", "Hindi", "Maithili"],
-    experience: 2,
-    price: 25,
-    rating: 4.5,
-    orders: 0,
-    isNew: true,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 13,
-    name: "Dharam Satya",
-    skills: ["Tarot", "Psychic"],
-    languages: ["English", "Hindi"],
-    experience: 7,
-    price: 29,
-    rating: 4.8,
-    orders: 0,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 14,
-    name: "Mayera",
-    skills: ["Numerology", "Tarot", "Loshu Grid"],
-    languages: ["English", "Hindi"],
-    experience: 3,
-    price: 21,
-    rating: 4.6,
-    orders: 0,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-  {
-    id: 15,
-    name: "Mihiraj",
-    skills: ["Vedic", "Life Coach"],
-    languages: ["English", "Hindi"],
-    experience: 8,
-    price: 32,
-    rating: 4.9,
-    orders: 0,
-    isNew: false,
-    img: "/images/placeholder-user.jpg",
-  },
-];
-
-const SKILLS = Array.from(new Set(ASTROLOGERS.flatMap(a => a.skills)));
-const LANGUAGES = Array.from(new Set(ASTROLOGERS.flatMap(a => a.languages)));
-
-const SORT_OPTIONS = [
-  { label: "Popularity", value: "popularity" },
-  { label: "Experience: High to Low", value: "exp_high" },
-  { label: "Experience: Low to High", value: "exp_low" },
-  { label: "Total Orders: High to Low", value: "orders_high" },
-  { label: "Total Orders: Low to High", value: "orders_low" },
-  { label: "Price: High to Low", value: "price_high" },
-  { label: "Price: Low to High", value: "price_low" },
-  { label: "Rating: High to Low", value: "rating_high" },
-];
+const API_URL = "/api/user/chatwithastrologer";
 
 function useDynamicCardAnimation() {
   const [style, setStyle] = useState({});
@@ -234,7 +39,33 @@ function useDynamicCardAnimation() {
   return { style, handleMouseMove, handleMouseLeave };
 }
 
-function AstrologerCard({ astrologer }: { astrologer: typeof ASTROLOGERS[number] }) {
+// Define the sort options
+const SORT_OPTIONS = [
+  { label: "Popularity", value: "popularity" },
+  { label: "Experience: High to Low", value: "exp_high" },
+  { label: "Experience: Low to High", value: "exp_low" },
+  { label: "Total Orders: High to Low", value: "orders_high" },
+  { label: "Total Orders: Low to High", value: "orders_low" },
+  { label: "Price: High to Low", value: "price_high" },
+  { label: "Price: Low to High", value: "price_low" },
+  { label: "Rating: High to Low", value: "rating_high" },
+];
+
+// Astrologer type for fetched data
+interface Astrologer {
+  id: number;
+  name: string;
+  skills: string[];
+  languages: string[];
+  experience: number;
+  price: number;
+  rating: number;
+  orders: number;
+  isNew: boolean;
+  img: string;
+}
+
+function AstrologerCard({ astrologer }: { astrologer: Astrologer }) {
   const { style, handleMouseMove, handleMouseLeave } = useDynamicCardAnimation();
   const { t } = useTranslation();
   const a = astrologer;
@@ -252,29 +83,29 @@ function AstrologerCard({ astrologer }: { astrologer: typeof ASTROLOGERS[number]
       onMouseLeave={handleMouseLeave}
       className="block"
     >
-      <Link href={`/astrologer/${a.id}`} className="block">
+      <Link href={`/astrologer/${a.id}`} className="block h-full">
         <div className="bg-white rounded-xl shadow-sm p-5 flex flex-col gap-2 cursor-pointer h-full border border-transparent transition-all max-w-md mx-auto" style={{ fontFamily: 'Poppins, Inter, Montserrat, Arial, sans-serif' }}>
-          <div className="flex items-center gap-8">
-            <img src={a.img} alt={a.name} className="w-20 h-20 rounded-full object-cover border-2 border-gray-200" />
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-xl text-[#23244a]" style={{ fontFamily: 'Playfair Display, Poppins, Inter, Montserrat, Arial, sans-serif' }}>{a.name}</span>
-                {a.isNew && <span className="text-xs text-red-500 font-bold ml-2">{t('chatWithAstrologer.new', 'New!')}</span>}
-                <CheckCircle className="w-5 h-5 text-green-500" />
+          <div className="flex items-start gap-8 flex-1">
+            <img src={a.img} alt={a.name} className="w-20 h-20 rounded-full object-cover border-2 border-gray-200 flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="font-bold text-xl text-[#23244a] truncate" style={{ fontFamily: 'Playfair Display, Poppins, Inter, Montserrat, Arial, sans-serif' }}>{a.name}</span>
+                {a.isNew && <span className="text-xs text-red-500 font-bold ml-2 flex-shrink-0">{t('chatWithAstrologer.new', 'New!')}</span>}
+                <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
               </div>
-              <div className="text-base text-gray-700 font-medium">{a.skills.join(", ")}</div>
-              <div className="text-base text-gray-600 font-medium">{a.languages.join(", ")}</div>
+              <div className="text-base text-gray-700 font-medium mb-1 line-clamp-2">{a.skills.join(", ")}</div>
+              <div className="text-base text-gray-600 font-medium mb-1 line-clamp-2">{a.languages.join(", ")}</div>
               <div className="text-base text-gray-500 font-medium">{t('chatWithAstrologer.experience', 'Exp:')} {a.experience} {t('chatWithAstrologer.years', 'Years')}</div>
             </div>
           </div>
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-2 mt-auto pt-4">
             <div className="flex items-center gap-1 text-yellow-500">
               <Star className="w-5 h-5" />
               <span className="font-bold text-lg">{a.rating}</span>
             </div>
             {a.orders > 0 && <span className="text-xs font-bold text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded shadow-sm">{a.orders} {t('chatWithAstrologer.orders', 'orders')}</span>}
             <span className="text-base text-gray-700 ml-auto font-bold">₹ {a.price}/min</span>
-            <Link href="/contact" className="ml-4">
+            <Link href={`/astrologers/${a.id}`} className="ml-4">
               <button className="border-2 border-green-500 text-green-600 font-bold py-2 px-6 rounded-lg hover:bg-green-50 transition min-w-fit" style={{ fontFamily: 'Poppins, Inter, Montserrat, Arial, sans-serif' }}>{t('chatWithAstrologer.chat', 'Chat')}</button>
             </Link>
           </div>
@@ -290,41 +121,37 @@ export default function ChatWithAstrologer() {
   const [selectedSkill, setSelectedSkill] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [sortBy, setSortBy] = useState("popularity");
+  const [astrologers, setAstrologers] = useState<Astrologer[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredAstrologers = useMemo(() => {
-    let filtered = ASTROLOGERS.filter(a =>
-      (!selectedSkill || a.skills.includes(selectedSkill)) &&
-      (!selectedLanguage || a.languages.includes(selectedLanguage)) &&
-      (!search || a.name.toLowerCase().includes(search.toLowerCase()))
-    );
-    filtered = filtered.slice(); // Prevent in-place mutation
-    switch (sortBy) {
-      case "exp_high":
-        filtered.sort((a, b) => b.experience - a.experience);
-        break;
-      case "exp_low":
-        filtered.sort((a, b) => a.experience - b.experience);
-        break;
-      case "orders_high":
-        filtered.sort((a, b) => (b.orders || 0) - (a.orders || 0));
-        break;
-      case "orders_low":
-        filtered.sort((a, b) => (a.orders || 0) - (b.orders || 0));
-        break;
-      case "price_high":
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case "price_low":
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case "rating_high":
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      default:
-        filtered.sort((a, b) => (b.orders || 0) - (a.orders || 0));
-    }
-    return filtered;
-  }, [search, selectedSkill, selectedLanguage, sortBy]);
+  // Fetch astrologers from API
+  useEffect(() => {
+    setLoading(true);
+    setError("");
+    const params = new URLSearchParams();
+    if (selectedSkill) params.append("skill", selectedSkill);
+    if (selectedLanguage) params.append("language", selectedLanguage);
+    if (sortBy) params.append("sortBy", sortBy);
+    if (search) params.append("search", search);
+    fetch(`${API_URL}?${params.toString()}`)
+      .then(res => res.json())
+      .then(data => {
+        setAstrologers(data.astrologers || []);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError("Failed to load astrologers");
+        setLoading(false);
+      });
+  }, [selectedSkill, selectedLanguage, sortBy, search]);
+
+  // Extract skills and languages from fetched data
+  const SKILLS = useMemo(() => Array.from(new Set(astrologers.flatMap(a => a.skills))), [astrologers]);
+  const LANGUAGES = useMemo(() => Array.from(new Set(astrologers.flatMap(a => a.languages))), [astrologers]);
+
+  // Use fetched astrologers directly
+  const filteredAstrologers = astrologers;
 
   return (
     <motion.div
@@ -377,11 +204,17 @@ export default function ChatWithAstrologer() {
       </div>
       {/* Astrologer List */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-10">
-        <AnimatePresence>
-          {filteredAstrologers.map((a, idx) => (
-            <AstrologerCard key={a.id} astrologer={a} />
-          ))}
-        </AnimatePresence>
+        {loading ? (
+          <div className="col-span-full text-center py-12 text-lg font-semibold text-gray-500">{t('chatWithAstrologer.loading', 'Loading astrologers...')}</div>
+        ) : error ? (
+          <div className="col-span-full text-center py-12 text-lg font-semibold text-red-500">{error}</div>
+        ) : (
+          <AnimatePresence>
+            {filteredAstrologers.map((a, idx) => (
+              <AstrologerCard key={a.id} astrologer={a} />
+            ))}
+          </AnimatePresence>
+        )}
       </div>
     </motion.div>
   );

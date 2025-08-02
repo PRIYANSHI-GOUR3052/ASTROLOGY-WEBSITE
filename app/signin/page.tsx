@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { signIn, getSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -89,47 +89,62 @@ export default function SignInPage() {
 
     try {
       const formData = new FormData(event.currentTarget)
+      const email = formData.get('email') as string
+      const password = formData.get('password') as string
 
       if (action === 'signup') {
-        const password = formData.get('password') as string
+        const name = formData.get('name') as string
         const confirmPassword = formData.get('confirmPassword') as string
 
         if (password !== confirmPassword) {
           throw new Error('Passwords do not match')
         }
 
-        const response = await fetch('/api/auth', {
+        // Create user account
+        const signupResponse = await fetch('/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email: formData.get('email'),
+            email,
             password,
-            name: formData.get('name'),
-            action: 'signup'
+            name
           })
         })
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Signup failed');
+        if (!signupResponse.ok) {
+          const errorData = await signupResponse.json();
+          throw new Error(errorData.error || 'Signup failed');
         }
 
-        const result = await response.json()
-        localStorage.setItem('token', result.token)
-        localStorage.setItem('user', JSON.stringify(result.user))
-        window.dispatchEvent(new Event('authChange'))
-        router.push('/')
-      } else {
+        // After successful signup, sign in the user
         const result = await signIn('credentials', {
           redirect: false,
-          email: formData.get('email'),
-          password: formData.get('password'),
+          email,
+          password,
         })
 
         if (result?.error) {
           throw new Error(result.error)
         }
-        router.push('/')
+
+        if (result?.ok) {
+          router.push('/')
+        }
+      } else {
+        // Login
+        const result = await signIn('credentials', {
+          redirect: false,
+          email,
+          password,
+        })
+
+        if (result?.error) {
+          throw new Error(result.error)
+        }
+
+        if (result?.ok) {
+          router.push('/')
+        }
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Authentication failed')
@@ -214,6 +229,20 @@ export default function SignInPage() {
               </TabsContent>
 
               <TabsContent value="signup" className="mt-6">
+                <div className="text-center mb-6">
+                  <p className="text-gray-400 mb-4">Create your account to unlock the secrets of the cosmos.</p>
+                  <Button
+                    variant="outline"
+                    className="w-full font-semibold py-3 rounded-lg border border-gray-700 bg-[#1C1C1C] text-gray-400 hover:bg-[#222] transition-all flex items-center justify-center mb-4"
+                    onClick={handleGoogleSignIn}
+                    disabled={isLoading}
+                  >
+                    <Star className="w-5 h-5 mr-3 text-yellow-500" />
+                    Sign up with Google
+                  </Button>
+                  <p className="text-gray-500 text-sm">Or create an account with email</p>
+                </div>
+                
                 <form className="space-y-4" onSubmit={(e) => handleCredentialSubmit(e, 'signup')}>
                   <div className="relative">
                       <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
@@ -257,20 +286,10 @@ export default function SignInPage() {
                   </div>
                   <Button type="submit" className="w-full font-semibold text-lg py-3 rounded-lg bg-black text-white hover:bg-gray-900 transition-all" disabled={isLoading}>
                     {isLoading ? 'Loading...' : 'Create Account'}
+                  <Button type="submit" className="w-full font-semibold text-lg py-3 rounded-lg bg-gradient-to-r from-[#a084ee] to-[#f857a6] text-white hover:brightness-110 transition-all" disabled={isLoading}>
+                    {isLoading ? 'Creating Account...' : 'Create Account'}
                   </Button>
                 </form>
-                <div className="mt-6 text-center text-black text-sm">Or continue with</div>
-                <div className="mt-4">
-                  <Button
-                    variant="outline"
-                    className="w-full font-semibold py-3 rounded-lg border border-black bg-white text-black hover:bg-gray-100 transition-all flex items-center justify-center"
-                    onClick={handleGoogleSignIn}
-                    disabled={isLoading}
-                  >
-                    <Star className="w-5 h-5 mr-3 text-black" />
-                    Sign up with Google
-                  </Button>
-                </div>
               </TabsContent>
             </Tabs>
           </div>
