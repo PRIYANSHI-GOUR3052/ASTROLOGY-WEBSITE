@@ -164,18 +164,19 @@ export default function Chatbot() {
     };
 
     return (
-        <div className="fixed bottom-4 right-4">
+        <div className="fixed bottom-4 right-4 z-[9999] pointer-events-none">
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="bg-black text-white p-4 rounded-full hover:bg-gray-800 shadow-lg"
+                    className="bg-black text-white p-4 rounded-full hover:bg-gray-800 shadow-lg z-[9999] pointer-events-auto"
+                    style={{ position: 'relative' }}
                 >
                     <MessageSquare size={24} />
                 </button>
             )}
 
             {isOpen && (
-                <div className="w-96 h-[600px] bg-white rounded-lg shadow-lg flex flex-col">
+                <div className="w-full max-w-xs md:w-96 h-[600px] bg-white rounded-lg shadow-lg flex flex-col z-[9999] pointer-events-auto" style={{ position: 'relative' }}>
                     <div className="p-4 bg-black text-white rounded-t-lg flex justify-between items-center">
                         <h2 className="text-xl font-semibold">{translations[currentLang].title}</h2>
                         <div className="flex items-center gap-2">

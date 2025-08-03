@@ -3,25 +3,29 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import React from "react";
+import { z } from "zod";
 
 interface Slot {
   id?: number;
   date: string;
   start: string;
   end: string;
-  repeat: string;
+  repeat?: string;
 }
 
 type APIErrorResponse = { error?: string };
 
-
-const repeatOptions = ["None", "Daily", "Weekly"];
+const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const AvailabilityPage = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
-  const [form, setForm] = useState<Slot>({ date: "", start: "", end: "", repeat: "None" });
+  const [form, setForm] = useState({
+    startDate: "",
+    startTime: "",
+    endTime: "",
+    weekdays: [] as number[],
+  });
   const [showForm, setShowForm] = useState(true);
-  const [editId, setEditId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -43,52 +47,63 @@ const AvailabilityPage = () => {
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    if (name === "weekdays" && type === "checkbox") {
+      const idx = Number(value);
+      const checked = (e.target as HTMLInputElement).checked;
+      setForm((prev) => ({
+        ...prev,
+        weekdays: checked
+          ? [...prev.weekdays, idx]
+          : prev.weekdays.filter((d) => d !== idx),
+      }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   };
+
+  // Zod validation schema
+  const formSchema = z.object({
+    startDate: z.string().min(1, "Start date required"),
+    startTime: z.string().regex(/^\d{2}:\d{2}$/),
+    endTime: z.string().regex(/^\d{2}:\d{2}$/),
+    weekdays: z.array(z.number().int().min(0).max(6)).min(1, "Select at least one weekday"),
+  });
 
   const handleAddOrUpdateSlot = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     const token = localStorage.getItem('astrologerToken');
     if (!token) return setError('Not authenticated');
-    if (!form.date || !form.start || !form.end) return;
+    // Validate form
+    const result = formSchema.safeParse(form);
+    if (!result.success) {
+      setError(result.error.errors[0].message);
+      return;
+    }
     setLoading(true);
     try {
       let res: Response;
-      if (editId !== null) {
-        // Update existing slot
-        res = await fetch('/api/astrologer/availability', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ ...form, id: editId })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          const updatedSlot = data as Slot;
-          setSlots(prev => prev.map(slot => slot.id === editId ? { ...updatedSlot, date: updatedSlot.date.slice(0, 10) } : slot));
-          setEditId(null);
-        } else {
-          const errorData = data as APIErrorResponse;
-          setError(errorData.error || 'Failed to update slot');
-        }
+      res = await fetch('/api/astrologer/availability', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(form)
+      });
+      const data = await res.json();
+      if (res.ok) {
+        // Refetch slots
+        fetch('/api/astrologer/availability', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (Array.isArray(data)) setSlots(data.map(slot => ({ ...slot, date: slot.date.slice(0, 10) })));
+          });
+        setForm({ startDate: "", startTime: "", endTime: "", weekdays: [] });
       } else {
-        // Add new slot
-        res = await fetch('/api/astrologer/availability', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify(form)
-        });
-        const data = await res.json();
-        if (res.ok) {
-          const newSlot = data as Slot;
-          setSlots(prev => [...prev, { ...newSlot, date: newSlot.date.slice(0, 10) }]);
-        } else {
-          const errorData = data as APIErrorResponse;
-          setError(errorData.error || 'Failed to add slot');
-        }
+        const errorData = data as APIErrorResponse;
+        setError(errorData.error || 'Failed to add slot');
       }
-      setForm({ date: "", start: "", end: "", repeat: "None" });
     } catch {
       setError('Failed to save slot');
     } finally {
@@ -121,12 +136,6 @@ const AvailabilityPage = () => {
     }
   };
 
-  const handleEditSlot = (slot: Slot) => {
-    setForm({ date: slot.date, start: slot.start, end: slot.end, repeat: slot.repeat });
-    setEditId(slot.id!);
-    setShowForm(true);
-  };
-
   return (
     <motion.div
       className="w-full mx-auto bg-amber dark:bg-black p-5 sm:p-8 rounded-xl shadow"
@@ -149,24 +158,33 @@ const AvailabilityPage = () => {
             transition={{ duration: 0.3 }}
           >
             <div>
-              <label className="block font-semibold text-sm mb-1">Date</label>
-              <input type="date" name="date" value={form.date} onChange={handleChange} className="w-full px-4 py-2 rounded border" required />
+              <label className="block font-semibold text-sm mb-1">Start Date</label>
+              <input type="date" name="startDate" value={form.startDate} onChange={handleChange} className="w-full px-4 py-2 rounded border" required />
             </div>
             <div>
               <label className="block font-semibold text-sm mb-1">Start Time</label>
-              <input type="time" name="start" value={form.start} onChange={handleChange} className="w-full px-4 py-2 rounded border" required />
+              <input type="time" name="startTime" value={form.startTime} onChange={handleChange} className="w-full px-4 py-2 rounded border" required />
             </div>
             <div>
               <label className="block font-semibold text-sm mb-1">End Time</label>
-              <input type="time" name="end" value={form.end} onChange={handleChange} className="w-full px-4 py-2 rounded border" required />
+              <input type="time" name="endTime" value={form.endTime} onChange={handleChange} className="w-full px-4 py-2 rounded border" required />
             </div>
-            <div>
-              <label className="block font-semibold text-sm mb-1">Repeat</label>
-              <select name="repeat" value={form.repeat} onChange={handleChange} className="w-full px-4 py-2 rounded border">
-                {repeatOptions.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
+            <div className="col-span-2">
+              <label className="block font-semibold text-sm mb-1">Weekdays</label>
+              <div className="flex gap-2 flex-wrap">
+                {weekdayLabels.map((label, idx) => (
+                  <label key={label} className="flex items-center gap-1">
+                    <input
+                      type="checkbox"
+                      name="weekdays"
+                      value={idx}
+                      checked={form.weekdays.includes(idx)}
+                      onChange={handleChange}
+                    />
+                    {label}
+                  </label>
                 ))}
-              </select>
+              </div>
             </div>
             <div className="col-span-2 flex justify-center">
               <motion.button
@@ -176,21 +194,8 @@ const AvailabilityPage = () => {
                 className="py-2 px-6 bg-amber-500 dark:bg-purple-700 text-white font-bold rounded-lg mt-2 shadow"
                 disabled={loading}
               >
-                {editId !== null ? "Update Slot" : "Add Slot"}
+                Add Slots
               </motion.button>
-              {editId !== null && (
-                <button
-                  type="button"
-                  className="ml-4 py-2 px-4 bg-gray-300 dark:bg-gray-600 text-black dark:text-white rounded-lg mt-2"
-                  onClick={() => {
-                    setEditId(null);
-                    setForm({ date: "", start: "", end: "", repeat: "None" });
-                  }}
-                  disabled={loading}
-                >
-                  Cancel
-                </button>
-              )}
             </div>
           </motion.form>
         )}
@@ -222,7 +227,7 @@ const AvailabilityPage = () => {
                   <span><span className="font-semibold">Date:</span> {slot.date}</span>
                   <span><span className="font-semibold">Start:</span> {slot.start}</span>
                   <span><span className="font-semibold">End:</span> {slot.end}</span>
-                  <span><span className="font-semibold">Repeat:</span> {slot.repeat}</span>
+                  {slot.repeat && <span><span className="font-semibold">Repeat:</span> {slot.repeat}</span>}
                 </div>
                 <div className="flex gap-2">
                   <motion.button
@@ -233,15 +238,6 @@ const AvailabilityPage = () => {
                     disabled={loading}
                   >
                     Remove
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.1, backgroundColor: '#f59e42', color: '#fff' }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-3 py-1 rounded bg-amber-100 text-amber-700 font-semibold text-xs transition-colors"
-                    onClick={() => handleEditSlot(slot)}
-                    disabled={loading}
-                  >
-                    Edit
                   </motion.button>
                 </div>
               </motion.div>

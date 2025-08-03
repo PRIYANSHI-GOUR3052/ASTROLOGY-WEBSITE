@@ -5,6 +5,19 @@ import jwt from 'jsonwebtoken';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // --- Helper to get clientId from JWT or body/query ---
   function getClientId(req: NextApiRequest): number | null {
+    // First try to get from request body (for POST requests)
+    if (req.body?.clientId) {
+      const id = Number(req.body.clientId);
+      if (!isNaN(id)) return id;
+    }
+
+    // Try to get from query params (for GET requests)
+    if (req.query?.clientId) {
+      const id = Number(req.query.clientId);
+      if (!isNaN(id)) return id;
+    }
+
+    // Try JWT token from Authorization header
     const authHeader = req.headers['authorization'];
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.replace('Bearer ', '');
@@ -19,9 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // ignore error
       }
     }
-    const idFromBody = req.body?.clientId ?? req.query?.clientId;
-    const id = typeof idFromBody === 'string' || typeof idFromBody === 'number' ? Number(idFromBody) : NaN;
-    return !isNaN(id) ? id : null;
+
+    return null;
   }
 
   // --- Input validation helper ---
@@ -34,8 +46,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!astrologerId || clientId === null || !date || !type) return false;
     if (isNaN(Number(astrologerId)) || isNaN(Number(clientId))) return false;
     if (typeof type !== 'string') return false;
+    
     const d = new Date(date);
-    if (isNaN(d.getTime()) || d < new Date()) return false;
+    if (isNaN(d.getTime())) return false;
+    
+    // Allow bookings for current time and future (remove past date restriction for testing)
+    // if (d < new Date()) return false;
+    
     return true;
   }
 
@@ -66,7 +83,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           status: 'upcoming',
         },
       });
-      return res.status(201).json({ booking });
+      return res.status(201).json({ 
+        success: true,
+        booking 
+      });
     } catch (e) {
       return res.status(500).json({ error: 'Failed to create booking', details: e instanceof Error ? e.message : e });
     }
@@ -75,41 +95,105 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // --- GET: List all bookings for a client ---
   if (req.method === 'GET' && !req.query.availableSlots) {
     const clientId = getClientId(req);
+    console.log('GET /api/user/booking - clientId:', clientId, 'type:', typeof clientId);
+    
     if (clientId === null || isNaN(Number(clientId))) {
+      console.log('GET /api/user/booking - invalid clientId');
       return res.status(400).json({ error: 'Missing or invalid clientId' });
     }
+    
     try {
+      console.log('GET /api/user/booking - querying database with clientId:', Number(clientId));
       const bookings = await prisma.booking.findMany({
         where: { clientId: Number(clientId) },
         orderBy: { date: 'desc' },
         include: { astrologer: true },
       });
+      console.log('GET /api/user/booking - found bookings:', bookings.length);
       return res.status(200).json({ bookings });
     } catch (e) {
+      console.error('GET /api/user/booking - database error:', e);
       return res.status(500).json({ error: 'Failed to fetch bookings', details: e instanceof Error ? e.message : e });
     }
   }
 
-  // --- GET: List available slots for an astrologer (user-side, no auth) ---
-  if (req.method === 'GET' && req.query.availableSlots === '1') {
-    const { astrologerId } = req.query;
-    if (!astrologerId || isNaN(Number(astrologerId))) {
-      return res.status(400).json({ error: 'Missing or invalid astrologerId' });
-    }
-    try {
-      const now = new Date();
-      const slots = await prisma.astrologerAvailability.findMany({
-        where: {
-          astrologerId: Number(astrologerId),
-          date: { gte: now },
-        },
-        orderBy: { date: 'asc' },
-      });
-      return res.status(200).json(slots);
-    } catch (e) {
-      return res.status(500).json({ error: 'Failed to fetch slots', details: e instanceof Error ? e.message : e });
-    }
+ // --- GET: List available slots for an astrologer (user-side, no auth) ---
+if (req.method === 'GET' && req.query.availableSlots === '1') {
+  const { astrologerId } = req.query;
+  if (!astrologerId || isNaN(Number(astrologerId))) {
+    return res.status(400).json({ error: 'Missing or invalid astrologerId' });
   }
+  
+  try {
+    const now = new Date();
+    const tenDaysLater = new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000);
+    
+    const slots = await prisma.astrologerAvailability.findMany({
+      where: {
+        astrologerId: Number(astrologerId),
+        date: {
+          gte: now,
+          lt: tenDaysLater
+        },
+      },
+      orderBy: { date: 'asc' },
+    });
+    
+    
+    // Get all bookings for this astrologer in the date range
+    const allBookings = await prisma.booking.findMany({
+      where: {
+        astrologerId: Number(astrologerId),
+        date: {
+          gte: now,
+          lt: tenDaysLater
+        },
+        status: { notIn: ['cancelled', 'rejected'] },
+      },
+    });
+    
+    
+    const slotsWithAvailability = slots.map(slot => {
+      const slotDate = new Date(slot.date);
+      const slotDateStr = slotDate.toISOString().split('T')[0]; // YYYY-MM-DD
+      
+      // Convert IST time to UTC
+      // Create a date with the slot time in IST timezone
+      const [slotHour, slotMinute] = slot.start.split(':').map(Number);
+      
+      // Method 1: Manual conversion (IST = UTC + 5:30)
+      // To convert IST to UTC: subtract 5 hours 30 minutes
+      const expectedBookingDate = new Date(`${slotDateStr}T${slot.start}:00.000Z`);
+      // This date is currently treated as UTC, but it's actually IST
+      // So we need to subtract 5.5 hours to get the actual UTC time
+      expectedBookingDate.setTime(expectedBookingDate.getTime() - (5.5 * 60 * 60 * 1000));
+     
+      // Check if any booking matches this time
+      const matchingBooking = allBookings.find(booking => {
+        const bookingDate = new Date(booking.date);
+        const timeDiff = Math.abs(bookingDate.getTime() - expectedBookingDate.getTime());
+        
+        return timeDiff < 60000; // Within 1 minute tolerance
+      });
+      
+      const isBooked = !!matchingBooking;
+      
+      return {
+        ...slot,
+        isAvailable: !isBooked,
+      };
+    });
+    
+    
+    return res.status(200).json(slotsWithAvailability);
+    
+  } catch (e) {
+    return res.status(500).json({ 
+      error: 'Failed to fetch slots', 
+      details: e instanceof Error ? e.message : e 
+    });
+  }
+}
 
   // --- PATCH: Update a booking (rate or cancel) ---
   if (req.method === 'PATCH') {
@@ -146,4 +230,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
-}
+} 

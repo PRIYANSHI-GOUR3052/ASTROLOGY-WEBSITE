@@ -49,9 +49,9 @@ export default function CelestialJourneyMainGrid() {
       {/* Center: Carousel with two small blocks below */}
       <div className="lg:col-span-6 flex flex-col gap-5">
         {/* Center Main: Image-Only Carousel */}
-        <div className=" bg-white rounded-xl shadow overflow-hidden h-[450px]">
+        <div className="bg-white rounded-xl shadow overflow-hidden w-full max-w-full mx-auto h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] flex items-center justify-center p-4">
           <Carousel
-            opts={{axis:'y', loop: true, align: "center", skipSnaps: false }}
+            opts={{ axis: 'y', loop: true, align: 'center', skipSnaps: false }}
             plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
             className="w-full h-full"
           >
@@ -61,16 +61,15 @@ export default function CelestialJourneyMainGrid() {
                 "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042872/course-2_ribcdu.jpg",
                 "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042871/astrology_app_eoszbs.jpg",
               ].map((img, i) => (
-                <CarouselItem key={i} className="p-3">
-                  <div className="rounded-xl overflow-hidden shadow bg-white h-[400px] flex flex-col">
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={img}
-                        alt={`Main Carousel ${i + 1}`}
-                        fill
-                        className="object-cover rounded-lg"
-                      />
-                    </div>
+                <CarouselItem key={i} className="flex items-center justify-center w-full h-full">
+                  <div className="relative w-full h-[180px] sm:h-[250px] md:h-[320px] lg:h-[400px] max-w-[95vw] mx-auto rounded-xl overflow-hidden shadow bg-white flex flex-col p-4">
+                    <Image
+                      src={img}
+                      alt={`Main Carousel ${i + 1}`}
+                      fill
+                      className="object-cover rounded-lg"
+                      sizes="(max-width: 640px) 95vw, (max-width: 1024px) 90vw, 800px"
+                    />
                   </div>
                 </CarouselItem>
               ))}
@@ -81,7 +80,7 @@ export default function CelestialJourneyMainGrid() {
         </div>
 
         {/* Below: Zodiac + Myth blocks */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-0">
           {/* Zodiac Decoder: Carousel */}
           <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-3">
             <Carousel

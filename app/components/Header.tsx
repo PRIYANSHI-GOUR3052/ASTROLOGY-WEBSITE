@@ -21,6 +21,13 @@ import CartIcon from "./CartIcon";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const servicesMegaMenu = {
   consultations: {
@@ -158,66 +165,71 @@ export function Header() {
   return (
     <>
       <div
-  className="flex items-center justify-between w-full px-4 py-2 md:hidden"
-  style={{ background: '#F3F1EB' }}
->
-  {/* Left: Logo */}
-  <Link
-    href="/"
-    className="font-bold text-xl tracking-tight"
-    style={{
-      fontFamily: 'Playfair Display, serif',
-      color: '#000',
-      letterSpacing: '-0.01em',
-    }}
-  >
-    NG
-  </Link>
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between w-full px-4 py-2 md:hidden"
+        style={{ background: '#F3F1EB' }}
+      >
+        {/* Left: Logo */}
+        <Link
+          href="/"
+          className="font-bold text-xl tracking-tight"
+          style={{
+            fontFamily: 'Playfair Display, serif',
+            color: '#000',
+            letterSpacing: '-0.01em',
+          }}
+        >
+          NG
+        </Link>
 
-  {/* Right: Search + Cart + Hamburger */}
-  <div className="flex items-center gap-3">
-    {/* Search Input (now inside a form, triggers search on Enter) */}
-    <form onSubmit={handleSearchSubmit} className="w-full max-w-[150px]">
-      <input
-        type="text"
-        placeholder="Search"
-        className="px-3 py-1 w-full text-sm text-black rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-    </form>
+        {/* Right: Search + Cart + Hamburger */}
+        <div className="flex items-center gap-3">
+          {/* Search Input (now inside a form, triggers search on Enter) */}
+          <form onSubmit={handleSearchSubmit} className="w-full max-w-[150px]">
+            <input
+              type="text"
+              placeholder="Search"
+              className="px-3 py-1 w-full text-sm text-black rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </form>
 
-    {/* Cart Icon */}
-    <Link href="/cart">
-  <button
-    className="relative w-9 h-9 flex items-center justify-center rounded-full border border-gray-300 bg-white/80 hover:bg-gray-100"
-    aria-label="Cart"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5 text-black"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.6 8M17 13l1.6 8M6 21a1 1 0 100-2 1 1 0 000 2zm12 0a1 1 0 100-2 1 1 0 000 2z" />
-    </svg>
-  </button>
-</Link>
+          {/* Cart Icon */}
+          <Link href="/cart">
+            <button
+              className="relative w-9 h-9 flex items-center justify-center rounded-full border border-gray-300 bg-white/80 hover:bg-gray-100"
+              aria-label="Cart"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-black"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.6 8M17 13l1.6 8M6 21a1 1 0 100-2 1 1 0 000 2zm12 0a1 1 0 100-2 1 1 0 000 2z" />
+              </svg>
+            </button>
+          </Link>
 
-    {/* Hamburger Icon */}
-    <button
-      id="hamburger-button"
-      onClick={() => setIsMobileMenuOpen(true)}
-      className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white/80 hover:bg-gray-100 transition-colors focus:outline-none"
-      aria-label={t('header.nav.menu') || 'Open menu'}
-    >
-      <Menu className="h-6 w-6 text-black" />
-    </button>
-  </div>
-</div>
-{/* Mobile horizontal nav bar (below top bar) */}
-<div className="md:hidden w-full flex justify-center items-center gap-2 px-2 py-2 relative" style={{ background: '#FDF9EF' }}>
+          {/* Hamburger Icon */}
+          <button
+            id="hamburger-button"
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white/80 hover:bg-gray-100 transition-colors focus:outline-none"
+            aria-label={t('header.nav.menu') || 'Open menu'}
+          >
+            <Menu className="h-6 w-6 text-black" />
+          </button>
+        </div>
+      </div>
+      {/* Spacer for fixed mobile header and nav bar */}
+      <div className="md:hidden" style={{ height: '104px' }} />
+      {/* Mobile horizontal nav bar (below top bar) */}
+      <div
+        className="fixed top-[56px] left-0 right-0 z-50 md:hidden w-full flex justify-center items-center gap-2 px-2 py-2"
+        style={{ background: '#FDF9EF', boxShadow: '0 2px 8px 0 rgba(36,34,68,0.04)' }}
+      >
   {/* Consultations dropdown trigger */}
   <button
     type="button"
@@ -381,14 +393,50 @@ export function Header() {
             >
               {t('header.nav.join_us') || t('header.join_us') || 'Join Us'}
             </a>
-            {/* Sign In Button */}
-            <button
-              onClick={() => signIn()}
-              className="px-5 py-2 rounded-full font-semibold transition-colors text-base"
-              style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff', border: 'none' }}
-            >
-              {t('header.auth.signin') || 'Sign In'}
-            </button>
+            {/* User Menu or Sign In Button */}
+            {session?.user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-full font-semibold transition-colors text-base hover:bg-[#6a9550]"
+                    style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff', border: 'none' }}
+                  >
+                    <Avatar className="h-6 w-6">
+                      <AvatarFallback className="text-xs font-bold bg-white/20 text-white">
+                        {session.user.name ? session.user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="hidden sm:inline">{session.user.name || session.user.email}</span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-[#FEFBF2] border border-[#e6c77e] shadow-2xl rounded-2xl p-2">
+                  <DropdownMenuItem className="font-semibold text-[#77A656] hover:bg-[#e9eafc] rounded-lg cursor-pointer">
+                    {session.user.name || session.user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="cursor-pointer hover:bg-[#e9eafc] rounded-lg">
+                    <Link href="/profile" className="w-full text-black hover:text-[#77A656]">
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="cursor-pointer hover:bg-[#e9eafc] rounded-lg">
+                    <Link href="/orders" className="w-full text-black hover:text-[#77A656]">
+                      My Orders
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 hover:bg-red-50 rounded-lg">
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <button
+                onClick={() => signIn()}
+                className="px-5 py-2 rounded-full font-semibold transition-colors text-base"
+                style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff', border: 'none' }}
+              >
+                {t('header.auth.signin') || 'Sign In'}
+              </button>
+            )}
           </div>
         </div>
         {/* Navigation Bar */}
@@ -728,7 +776,6 @@ export function Header() {
                   </div>
                 </div>
               </div>
-              <Link href="/courses" onClick={() => setIsMobileMenuOpen(false)} className="font-semibold text-lg text-black" style={{ fontFamily: 'Playfair Display, serif' }}>{t('header.nav.courses')}</Link>
               <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="font-semibold text-lg text-black" style={{ fontFamily: 'Playfair Display, serif' }}>{t('header.nav.contact')}</Link>
               {/* Consultations Dropdown REMOVED FROM HAMBURGER MENU */}
               {/* Language Selector in Drawer */}
@@ -770,8 +817,32 @@ export function Header() {
                 {/* <Link href="/cart" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 py-2 rounded-full bg-[#f7f7fa] text-black font-semibold text-center" style={{ fontFamily: 'Playfair Display, serif' }}>{t('header.cart')}</Link> */}
                 {/* Mobile Join Us button */}
                 <a href="/astrologer/auth/" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 py-2 rounded-full font-semibold text-center" style={{ background: '#77A656', color: '#fff', fontFamily: 'Playfair Display, serif' }}>{t('header.nav.join_us') || t('header.join_us') || 'Join Us'}</a>
-                {/* Mobile Sign In button */}
-                <button onClick={() => { signIn(); setIsMobileMenuOpen(false); }} className="flex-1 py-2 rounded-full font-semibold text-center" style={{ background: '#77A656', color: '#fff', border: 'none', fontFamily: 'Playfair Display, serif' }}>{t('header.auth.signin') || 'Sign In'}</button>
+                {/* Mobile User Menu or Sign In button */}
+                {session?.user ? (
+                  <div className="flex-1 flex flex-col gap-2">
+                    <div className="flex items-center gap-2 py-2 px-3 rounded-full bg-[#77A656] text-white">
+                      <Avatar className="h-6 w-6">
+                        <AvatarFallback className="text-xs font-bold bg-white/20 text-white">
+                          {session.user.name ? session.user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm font-semibold truncate">{session.user.name || session.user.email}</span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="text-sm text-black hover:text-[#77A656] px-2 py-1 rounded">
+                        Profile
+                      </Link>
+                      <Link href="/orders" onClick={() => setIsMobileMenuOpen(false)} className="text-sm text-black hover:text-[#77A656] px-2 py-1 rounded">
+                        My Orders
+                      </Link>
+                      <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="text-sm text-red-600 hover:text-red-700 px-2 py-1 rounded text-left">
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button onClick={() => { signIn(); setIsMobileMenuOpen(false); }} className="flex-1 py-2 rounded-full font-semibold text-center" style={{ background: '#77A656', color: '#fff', border: 'none', fontFamily: 'Playfair Display, serif' }}>{t('header.auth.signin') || 'Sign In'}</button>
+                )}
               </div>
             </nav>
           </motion.div>

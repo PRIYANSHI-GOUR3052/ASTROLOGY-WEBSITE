@@ -72,53 +72,53 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Links grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-12 text-center">
-          <div>
-            <h4 className="font-semibold mb-4 text-white">{t('footer.links.keepExploring')}</h4>
-            <ul className="space-y-2">
-              {quickLinks.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white text-sm transition-colors">{t(link.label)}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4 text-white">{t('footer.links.connect')}</h4>
-            <ul className="space-y-2 mb-4">
-              <li><Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">{t('footer.links.quickLinks.contact')}</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4 text-white">{t('footer.links.legal')}</h4>
-            <ul className="space-y-2">
-              <li><Link href="/terms-conditions" className="text-gray-400 hover:text-white text-sm transition-colors">{t('footer.links.legalLinks.terms')}</Link></li>
-              <li><Link href="/privacy-policy" className="text-gray-400 hover:text-white text-sm transition-colors">{t('footer.links.legalLinks.privacy')}</Link></li>
-              <li><Link href="/site-credits" className="text-gray-400 hover:text-white text-sm transition-colors">{t('footer.links.legalLinks.credits')}</Link></li>
-            </ul>
-          </div>
-        </div>
 
-        {/* Social links */}
-        <div className="flex justify-center gap-6 mb-12">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label={t('footer.social.facebook')}>
-            <Facebook size={24} />
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label={t('footer.social.twitter')}>
-            <Twitter size={24} />
-          </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label={t('footer.social.instagram')}>
-            <Instagram size={24} />
-          </a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label={t('footer.social.youtube')}>
-            <Youtube size={24} />
-          </a>
-        </div>
-
-        {/* Large brand name */}
-        <div className="text-center mb-8">
-          <h1 className="text-[64px] md:text-[80px] font-bold text-white/10 tracking-wider m-0 select-none">{t('footer.brand.name')}</h1>
+        {/* Responsive Links grid and Socials */}
+        <div className="w-full max-w-2xl mx-auto mb-8">
+          <div className="grid grid-cols-2 gap-4 text-center md:grid-cols-3 md:gap-8">
+            {/* Keep Exploring */}
+            <div>
+              <h5 className="text-xs font-semibold mb-2 text-white/80 md:text-base md:mb-4">{t('footer.links.keepExploring')}</h5>
+              <ul className="space-y-1 md:space-y-2">
+                {quickLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="text-gray-400 hover:text-white text-xs md:text-sm transition-colors">{t(link.label)}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* Legal (on mobile, in 2nd col; on md, 2nd col) */}
+            <div>
+              <h5 className="text-xs font-semibold mb-2 text-white/80 md:text-base md:mb-4">{t('footer.links.legal')}</h5>
+              <ul className="space-y-1 md:space-y-2">
+                <li><Link href="/terms-conditions" className="text-gray-400 hover:text-white text-xs md:text-sm transition-colors">{t('footer.links.legalLinks.terms')}</Link></li>
+                <li><Link href="/privacy-policy" className="text-gray-400 hover:text-white text-xs md:text-sm transition-colors">{t('footer.links.legalLinks.privacy')}</Link></li>
+                <li><Link href="/site-credits" className="text-gray-400 hover:text-white text-xs md:text-sm transition-colors">{t('footer.links.legalLinks.credits')}</Link></li>
+              </ul>
+            </div>
+            {/* Connect (on mobile, spans 2 cols; on md, 3rd col) */}
+            <div className="col-span-2 md:col-span-1">
+              <h5 className="text-xs font-semibold mb-2 text-white/80 md:text-base md:mb-4">{t('footer.links.connect')}</h5>
+              <ul className="space-y-1 md:space-y-2 mb-2 md:mb-4">
+                <li><Link href="/contact" className="text-gray-400 hover:text-white text-xs md:text-sm transition-colors">{t('footer.links.quickLinks.contact')}</Link></li>
+              </ul>
+            </div>
+          </div>
+          {/* Social links below links grid */}
+          <div className="flex gap-4 justify-center mt-6 md:mt-8 mb-4 md:mb-12">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label={t('footer.social.facebook')}>
+              <Facebook size={24} />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label={t('footer.social.twitter')}>
+              <Twitter size={24} />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label={t('footer.social.instagram')}>
+              <Instagram size={24} />
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label={t('footer.social.youtube')}>
+              <Youtube size={24} />
+            </a>
+          </div>
         </div>
 
         {/* Bottom section */}
@@ -141,7 +141,7 @@ export default function Footer() {
       {/* Scroll to top button */}
       <button
         onClick={scrollToTop}
-        className="fixed bottom-6 right-6 bg-gradient-to-r from-violet-500 to-pink-500 text-white p-3 rounded-full shadow-xl z-50 transition-transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-violet-300"
+        className="fixed bottom-20 right-5 bg-gradient-to-r from-violet-500 to-pink-500 text-white p-3 rounded-full shadow-xl z-50 transition-transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-violet-300"
         aria-label={t('footer.scrollToTop')}
       >
         <ArrowUp size={24} />
