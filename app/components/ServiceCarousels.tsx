@@ -64,40 +64,43 @@ const newlyLaunched: CarouselItem[] = [
   },
 ];
 
+import React, { useState } from 'react';
+
 function CarouselSection({ title, items, headingColor = '#232323' }: { title: string; items: CarouselItem[]; headingColor?: string }) {
+  const [showAll, setShowAll] = useState(false);
+  const displayItems = showAll ? items : items.slice(0, 5);
+  const hasMore = items.length > 5;
   return (
     <section className="w-screen overflow-x-clip my-8 md:my-12" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
       <h2 className="text-xl md:text-2xl lg:text-3xl font-bold uppercase mb-6 md:mb-8 tracking-wide text-center w-full px-4" style={{ letterSpacing: '0.04em', color: headingColor }}>{title}</h2>
       <div className="w-screen overflow-x-clip" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
-        <div className="flex flex-col md:flex-row justify-center items-center w-screen gap-8 md:gap-0 px-4 md:px-0">
-          {/* First Row - 3 cards */}
-          <div className="flex flex-row justify-center items-center gap-6 md:gap-8 w-full md:w-auto">
-            {items.slice(0, 3).map((item) => (
-              <div key={item.slug} className="flex flex-col items-center justify-center">
-                <Link href={`/${item.slug}`} className="flex flex-col items-center group">
+        {/* Mobile: 3 on first row, 2 on second row, both evenly spaced */}
+        <div className="flex flex-col md:hidden w-full px-4 gap-4">
+          <div className="flex flex-row justify-evenly items-center w-full gap-4">
+            {displayItems.slice(0, 3).map((item) => (
+              <div key={item.slug} className="flex flex-col items-center justify-center flex-1">
+                <Link href={`/${item.slug}`} className="flex flex-col items-center group w-full">
                   <motion.div
                     whileHover={{ scale: 1.08 }}
                     transition={{ duration: 0.5, ease: 'easeInOut' }}
-                    className="rounded-full border-4 border-yellow-400 w-20 h-20 md:w-28 lg:w-36 md:h-28 lg:h-36 flex items-center justify-center overflow-hidden bg-white shadow-md"
+                    className="rounded-full border-4 border-yellow-400 w-20 h-20 flex items-center justify-center overflow-hidden bg-white shadow-md mx-auto"
                   >
-                    <Image src={item.image} alt={item.name} width={144} height={144} className="object-cover w-full h-full" />
+                    <Image src={item.image} alt={item.name} width={80} height={80} className="object-cover w-full h-full" />
                   </motion.div>
-                  <span className="mt-3 md:mt-4 text-center text-xs md:text-sm lg:text-lg font-semibold text-black leading-tight w-full px-1" style={{ fontFamily: 'Inter, sans-serif' }}>{item.name}</span>
+                  <span className="mt-3 text-center text-xs font-semibold text-black leading-tight w-full px-1" style={{ fontFamily: 'Inter, sans-serif' }}>{item.name}</span>
                 </Link>
               </div>
             ))}
           </div>
-          
-          {/* Second Row - 2 cards (only on mobile) */}
-          {items.length > 3 && (
-            <div className="flex flex-row justify-center items-center gap-6 md:hidden w-full">
-              {items.slice(3, 5).map((item) => (
-                <div key={item.slug} className="flex flex-col items-center justify-center">
-                  <Link href={`/${item.slug}`} className="flex flex-col items-center group">
+          {displayItems.length > 3 && (
+            <div className="flex flex-row justify-evenly items-center w-full gap-4">
+              {displayItems.slice(3, 5).map((item) => (
+                <div key={item.slug} className="flex flex-col items-center justify-center flex-1">
+                  <Link href={`/${item.slug}`} className="flex flex-col items-center group w-full">
                     <motion.div
                       whileHover={{ scale: 1.08 }}
                       transition={{ duration: 0.5, ease: 'easeInOut' }}
-                      className="rounded-full border-4 border-yellow-400 w-20 h-20 flex items-center justify-center overflow-hidden bg-white shadow-md"
+                      className="rounded-full border-4 border-yellow-400 w-20 h-20 flex items-center justify-center overflow-hidden bg-white shadow-md mx-auto"
                     >
                       <Image src={item.image} alt={item.name} width={80} height={80} className="object-cover w-full h-full" />
                     </motion.div>
@@ -107,25 +110,46 @@ function CarouselSection({ title, items, headingColor = '#232323' }: { title: st
               ))}
             </div>
           )}
-          
-          {/* Desktop layout - all 5 cards in one row */}
-          <div className="hidden md:flex flex-row justify-center items-center w-full gap-8">
-            {items.map((item) => (
-              <div key={`desktop-${item.slug}`} className="flex flex-col items-center justify-center">
-                <Link href={`/${item.slug}`} className="flex flex-col items-center group">
-                  <motion.div
-                    whileHover={{ scale: 1.08 }}
-                    transition={{ duration: 0.5, ease: 'easeInOut' }}
-                    className="rounded-full border-4 border-yellow-400 w-28 lg:w-36 h-28 lg:h-36 flex items-center justify-center overflow-hidden bg-white shadow-md"
-                  >
-                    <Image src={item.image} alt={item.name} width={144} height={144} className="object-cover w-full h-full" />
-                  </motion.div>
-                  <span className="mt-4 text-center text-sm lg:text-lg font-semibold text-black leading-tight w-full" style={{ fontFamily: 'Inter, sans-serif' }}>{item.name}</span>
-                </Link>
-              </div>
-            ))}
-          </div>
         </div>
+        {/* Desktop: all 5 cards in one row, evenly spaced */}
+        <div className="hidden md:flex flex-row justify-evenly items-center w-full gap-8 px-4">
+          {displayItems.map((item) => (
+            <div key={`desktop-${item.slug}`} className="flex flex-col items-center justify-center flex-1">
+              <Link href={`/${item.slug}`} className="flex flex-col items-center group w-full">
+                <motion.div
+                  whileHover={{ scale: 1.08 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className="rounded-full border-4 border-yellow-400 w-28 lg:w-36 h-28 lg:h-36 flex items-center justify-center overflow-hidden bg-white shadow-md mx-auto"
+                >
+                  <Image src={item.image} alt={item.name} width={144} height={144} className="object-cover w-full h-full" />
+                </motion.div>
+                <span className="mt-4 text-center text-sm lg:text-lg font-semibold text-black leading-tight w-full" style={{ fontFamily: 'Inter, sans-serif' }}>{item.name}</span>
+              </Link>
+            </div>
+          ))}
+        </div>
+        {/* View More button */}
+        {hasMore && !showAll && (
+          <div className="flex justify-center mt-4">
+            <button
+              className="px-6 py-2 bg-yellow-400 text-black font-semibold rounded-full shadow hover:bg-yellow-500 transition-colors"
+              onClick={() => setShowAll(true)}
+            >
+              View More
+            </button>
+          </div>
+        )}
+        {/* View Less button */}
+        {hasMore && showAll && (
+          <div className="flex justify-center mt-4">
+            <button
+              className="px-6 py-2 bg-gray-200 text-black font-semibold rounded-full shadow hover:bg-gray-300 transition-colors"
+              onClick={() => setShowAll(false)}
+            >
+              View Less
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

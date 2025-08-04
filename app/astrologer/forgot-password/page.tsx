@@ -29,44 +29,38 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="bg-[#ece7e4] relative min-h-screen flex items-center justify-center px-4">
-      {/* Background Effects */}
-      <div className="absolute inset-0 z-0 opacity-90">
-        <AnimatedStars />
-        <MysticBackground />
-      </div>
-
-      <div className="relative z-10 max-w-md w-full bg-[#111] p-8 rounded-3xl shadow-2xl border border-[#222] text-white">
-        <h2 className="text-2xl font-bold text-center mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+    <div className="relative min-h-screen bg-[#FEFBF2] flex items-center justify-center px-4">
+      <div className="relative z-10 max-w-md w-full bg-white p-8 rounded-3xl shadow-2xl border border-gray-200">
+        <h2 className="text-black text-2xl font-bold text-center mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
           Reset Password
         </h2>
-        <p className="text-sm text-center text-gray-400 mb-6">
+        <p className="text-sm text-center text-gray-500 mb-6">
           Enter your email address and we&apos;ll send you instructions to reset your password.
         </p>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label className="block mb-1 font-medium text-gray-300">Email</label>
+            <label className="block mb-1 font-medium text-gray-700">Email</label>
             <input
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full px-4 py-2 border border-gray-700 bg-[#1C1C1C] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+              className="w-full px-4 py-2 border border-gray-200 bg-white text-black rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-[#a084ee] to-[#f857a6] text-white rounded-xl font-semibold hover:brightness-110 transition"
+            className="w-full py-3 bg-black text-white rounded-xl font-semibold hover:brightness-110 transition"
           >
             {loading ? 'Sending...' : 'Send Reset Link'}
           </button>
         </form>
 
         <div className="mt-4 text-center">
-          <Link href="/" className="text-sm text-[#f857a6] hover:underline font-medium">
+          <Link href="/" className="text-sm text-amber-600 hover:underline font-medium">
             Back to Home Page
           </Link>
         </div>

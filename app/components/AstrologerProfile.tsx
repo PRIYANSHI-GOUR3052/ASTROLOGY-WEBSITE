@@ -29,6 +29,10 @@ export function AstrologerProfile() {
         <div className="w-full max-w-6xl mx-auto mb-12 rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 flex flex-col items-center justify-center shadow-lg">
           <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight font-sans">{t('astrologerProfile.heading')}</h1>
           <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl font-sans">{t('astrologerProfile.subheading')}</p>
+        {/* Updated heading container with full width and slight margins */}
+        <div className="w-full mx-auto px-4 mb-12 rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 md:px-16 flex flex-col items-center justify-center shadow-lg" style={{maxWidth: 'calc(100% - 0rem)'}}>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight font-sans">Meet Dr. Narendra - Your Trusted Astrologer</h1>
+          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl font-sans">Expert Vedic Astrologer with Decades of Experience</p>
         </div>
         <div className="space-y-8">
           {credentials.map((credential, index) => (

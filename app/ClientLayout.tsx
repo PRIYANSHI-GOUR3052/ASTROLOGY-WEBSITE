@@ -48,6 +48,7 @@ export default function ClientLayout({
       "/astrologer/register",
       "/astrologer/auth",
       "/astrologer/forgot-password",
+      "/astrologer/reset-password",
     ];
 
     const dynamicPatterns: RegExp[] = [

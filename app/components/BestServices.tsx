@@ -106,15 +106,6 @@ export function BestServices() {
     <section className="min-h-screen py-16 bg-white font-sans overflow-hidden">
       <div className="container mx-auto px-4">
 
-        <div className="flex justify-between items-center py-4 mb-12">
-          <div className="flex items-center gap-2">
-            <Image src="/zodiac_wheel_icon.svg" alt={t('bestServices.bannerIconAlt')} width={30} height={30} />
-            <span className="text-xl font-bold text-gray-900">{t('bestServices.bannerTitle')}</span>
-          </div>
-          <div className="flex items-center gap-6">
-          </div>
-        </div>
-
         {/* New Banner Section */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}

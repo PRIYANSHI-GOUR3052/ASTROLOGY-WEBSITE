@@ -243,57 +243,57 @@ export default function StonesPage() {
         <div className="text-center py-4">Loading stones...</div>
       ) : (
         /* Stones Table */
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-[#0B1120] rounded-lg shadow-sm border border-gray-200 dark:border-[#1f2937] overflow-hidden">
           {stones.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               No stones found. Add your first stone by clicking the &quot;Add New Stone&quot; button.
             </div>
           ) : (
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-[#1e293b]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Stone Name (नाम)
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Zodiac Sign (राशि)
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Price Per Carat (₹)
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-[#1f2937]">
                 {stones.map((stone) => (
-                  <tr key={stone.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
+                  <tr key={stone.id} className="hover:bg-gray-50 dark:hover:bg-[#1e293b] transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
+                      <div className="text-sm font-medium">
                         {stone.name_en} ({stone.name})
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
+                      <div className="text-sm">
                         {stone.zodiac_en} ({stone.zodiac})
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
+                      <div className="text-sm">
                         ₹{parseFloat(stone.price_per_carat.toString()).toLocaleString()}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button 
                         onClick={() => openEditModal(stone.id)}
-                        className="text-blue-600 hover:text-blue-900 mr-2"
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-2"
                       >
                         <Edit className="w-5 h-5" />
                       </button>
                       <button 
                         onClick={() => handleDeleteStone(stone.id)}
-                        className="text-red-600 hover:text-red-900"
+                        className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
                       >
                         <Trash className="w-5 h-5" />
                       </button>
@@ -309,99 +309,94 @@ export default function StonesPage() {
       {/* Modal for Adding/Editing Stone */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-            <h3 className="text-xl font-semibold mb-4">
+          <div className="bg-white dark:bg-[#0B1120] border border-gray-200 dark:border-[#1f2937] p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
               {isEditMode ? 'Edit Stone (रत्न संपादित करें)' : 'Add New Stone (नया रत्न जोड़ें)'}
             </h3>
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Stone Name (Hindi)</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Stone Name (Hindi)</label>
                     <input
                       type="text"
                       value={stoneName}
                       onChange={(e) => setStoneName(e.target.value)}
                       placeholder="रूबी"
-                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-[#1e293b] text-gray-900 dark:text-white border-gray-300 dark:border-[#334155]"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Stone Name (English)</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Stone Name (English)</label>
                     <input
                       type="text"
                       value={stoneNameEn}
                       onChange={(e) => setStoneNameEn(e.target.value)}
                       placeholder="Ruby"
-                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-[#1e293b] text-gray-900 dark:text-white border-gray-300 dark:border-[#334155]"
                       required
                     />
                   </div>
                 </div>
-                
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Zodiac Sign (Hindi)</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Zodiac Sign (Hindi)</label>
                     <input
                       type="text"
                       value={zodiac}
                       onChange={(e) => setZodiac(e.target.value)}
                       placeholder="सिंह"
-                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-[#1e293b] text-gray-900 dark:text-white border-gray-300 dark:border-[#334155]"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Zodiac Sign (English)</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Zodiac Sign (English)</label>
                     <input
                       type="text"
                       value={zodiacEn}
                       onChange={(e) => setZodiacEn(e.target.value)}
                       placeholder="Leo"
-                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-[#1e293b] text-gray-900 dark:text-white border-gray-300 dark:border-[#334155]"
                       required
                     />
                   </div>
                 </div>
-                
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Benefits (Hindi)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Benefits (Hindi)</label>
                   <textarea
                     value={benefits}
                     onChange={(e) => setBenefits(e.target.value)}
                     placeholder="आत्मविश्वास, नेतृत्व और जीवन शक्ति बढ़ाता है"
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-[#1e293b] text-gray-900 dark:text-white border-gray-300 dark:border-[#334155]"
                     rows={2}
                     required
                   />
                 </div>
-                
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Benefits (English)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Benefits (English)</label>
                   <textarea
                     value={benefitsEn}
                     onChange={(e) => setBenefitsEn(e.target.value)}
                     placeholder="Enhances confidence, leadership, and vitality"
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-[#1e293b] text-gray-900 dark:text-white border-gray-300 dark:border-[#334155]"
                     rows={2}
                     required
                   />
                 </div>
-                
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Price Per Carat (₹)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Price Per Carat (₹)</label>
                   <input
                     type="number"
                     value={pricePerCarat}
                     onChange={(e) => setPricePerCarat(e.target.value)}
                     placeholder="15000"
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-[#1e293b] text-gray-900 dark:text-white border-gray-300 dark:border-[#334155]"
                     required
                   />
                 </div>
               </div>
-
               <div className="flex justify-between mt-6">
                 <button
                   type="button"

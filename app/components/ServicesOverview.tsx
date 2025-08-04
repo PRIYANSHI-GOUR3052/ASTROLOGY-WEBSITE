@@ -310,14 +310,13 @@ export function ServicesOverview() {
   };
 
   return (
-    <section className="py-16 sm:py-24 bg-white font-sans">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <section className="py-16 sm:py-24 bg-white font-sans" style={{ width: '97vw', margin: '0 auto' }}>
+      <div className="w-full p-0 m-0">
         {/* Header Section */}
         <div className="text-center mb-12">
           <div
-            className="mx-auto rounded-3xl shadow-md"
+            className="rounded-3xl shadow-md"
             style={{
-              maxWidth: '100%',
               background: 'linear-gradient(90deg, #fdf6f2 0%, #f6f1fa 50%, #e3f2fd 100%)',
               boxShadow: '0 4px 16px 0 rgba(36, 34, 68, 0.08)',
               padding: '3rem 1.5rem',

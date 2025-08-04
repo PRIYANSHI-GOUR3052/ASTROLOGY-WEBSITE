@@ -1,3 +1,16 @@
+@keyframes zodiac-float-y {
+  0% { transform: translateY(0px); opacity: 0.2; }
+  50% { transform: translateY(-24px); opacity: 0.4; }
+  100% { transform: translateY(0px); opacity: 0.3; }
+}
+@keyframes zodiac-float-x {
+  0% { transform: translateX(0px); opacity: 0.2; }
+  50% { transform: translateX(20px); opacity: 0.4; }
+  100% { transform: translateX(0px); opacity: 0.3; }
+}
+.animate-zodiac-float-slow { animation: zodiac-float-y 14s ease-in-out infinite alternate; }
+.animate-zodiac-float-medium { animation: zodiac-float-x 10s ease-in-out infinite alternate; }
+.animate-zodiac-float-fast { animation: zodiac-float-y 7s ease-in-out infinite alternate; }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

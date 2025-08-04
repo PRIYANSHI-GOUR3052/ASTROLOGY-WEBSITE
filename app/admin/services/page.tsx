@@ -196,42 +196,42 @@ export default function AdminServicesPage() {
         </Button>
       </div>
       
-      <Card className="shadow-md">
-        <CardHeader className="bg-muted/50">
-          <CardTitle>All Services</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="bg-white dark:bg-[#0B1120] rounded-lg shadow-sm border border-gray-200 dark:border-[#1f2937]">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-[#1f2937] bg-gray-50 dark:bg-[#1e293b] rounded-t-lg">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">All Services</h2>
+        </div>
+        <div className="p-0">
           {loading ? (
             <div className="flex justify-center p-6">
               <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/30">
-                    <TableHead>Title (Hindi)</TableHead>
-                    <TableHead>Title (English)</TableHead>
-                    <TableHead>Slug</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Priority</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+              <table className="w-full">
+                <thead className="bg-gray-50 dark:bg-[#1e293b]">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">Title (Hindi)</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">Title (English)</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">Slug</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">Price</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">Priority</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-[#1f2937]">
                   {services.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No services found</TableCell>
-                    </TableRow>
+                    <tr>
+                      <td colSpan={6} className="text-center py-8 text-gray-500 dark:text-gray-400">No services found</td>
+                    </tr>
                   ) : (
                     services.map((service) => (
-                      <TableRow key={service.id} className="hover:bg-muted/20">
-                        <TableCell>{service.title_hi}</TableCell>
-                        <TableCell>{service.title_en}</TableCell>
-                        <TableCell className="font-mono text-sm">{service.slug}</TableCell>
-                        <TableCell>₹{service.price}</TableCell>
-                        <TableCell>{service.priority}</TableCell>
-                        <TableCell>
+                      <tr key={service.id} className="hover:bg-gray-50 dark:hover:bg-[#1e293b] transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">{service.title_hi}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">{service.title_en}</td>
+                        <td className="px-6 py-4 whitespace-nowrap font-mono text-sm text-gray-900 dark:text-white">{service.slug}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">₹{service.price}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">{service.priority}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex space-x-2">
                             <Button variant="outline" size="sm" onClick={() => handleEdit(service)} className="border-muted-foreground/30">
                               <Edit className="h-4 w-4 text-blue-500" />
@@ -240,16 +240,16 @@ export default function AdminServicesPage() {
                               <Trash2 className="h-4 w-4 text-red-500" />
                             </Button>
                           </div>
-                        </TableCell>
-                      </TableRow>
+                        </td>
+                      </tr>
                     ))
                   )}
-                </TableBody>
-              </Table>
+                </tbody>
+              </table>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
       
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">

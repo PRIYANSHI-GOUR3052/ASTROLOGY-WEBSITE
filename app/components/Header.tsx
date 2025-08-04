@@ -171,14 +171,21 @@ export function Header() {
         {/* Left: Logo */}
         <Link
           href="/"
-          className="font-bold text-xl tracking-tight"
+          className="flex items-center gap-2 font-bold text-xl tracking-tight"
           style={{
             fontFamily: 'Playfair Display, serif',
             color: '#000',
             letterSpacing: '-0.01em',
           }}
         >
-          NG
+          <img
+            src="https://res.cloudinary.com/dxwspucxw/image/upload/c_crop,w_330,h_330,ar_1:1/v1753773413/NG_logo_te1xtm.jpg"
+            alt="Logo"
+            width={38}
+            height={38}
+            style={{ borderRadius: '0.5rem', objectFit: 'cover', background: '#fff' }}
+            className="inline-block align-middle shadow-sm"
+          />
         </Link>
 
         {/* Right: Search + Cart + Hamburger */}
@@ -353,7 +360,15 @@ export function Header() {
         */}
         <div className="relative flex items-center justify-between w-full max-w-7xl mx-auto px-8 py-3 gap-x-8 z-10">
           {/* Logo */}
-          <Link href="/" className="font-bold text-2xl md:text-3xl tracking-tight" style={{ fontFamily: 'Playfair Display, serif', color: '#000', letterSpacing: '-0.01em' }}>
+          <Link href="/" className="flex items-center gap-2 font-bold text-2xl md:text-3xl tracking-tight" style={{ fontFamily: 'Playfair Display, serif', color: '#000', letterSpacing: '-0.01em' }}>
+            <img
+              src="https://res.cloudinary.com/dxwspucxw/image/upload/c_crop,w_330,h_330,ar_1:1/v1753773413/NG_logo_te1xtm.jpg"
+              alt="Logo"
+              width={38}
+              height={38}
+              style={{ borderRadius: '0.5rem', objectFit: 'cover', background: '#fff'}}
+              className="inline-block align-middle shadow-sm"
+            />
             {t('header.logo.line2')}
           </Link>
           {/* Search Bar */}
@@ -566,8 +581,8 @@ export function Header() {
             {/* Language Button: Yellow, Dropdown White, Items Black */}
             <button
               onClick={() => setIsLangDropdownOpen((prev) => !prev)}
-              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none"
-              style={{ fontFamily: 'Playfair Display, serif', height: '40px', minWidth: 'auto', color: '#77A656', background: 'transparent', fontWeight: 700 }}
+              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none align-middle"
+              style={{ fontFamily: 'Playfair Display, serif', color: '#77A656', background: 'transparent', fontWeight: 700, display: 'flex', alignItems: 'center', minHeight: '32px', height: 'auto', lineHeight: 1, paddingTop: 0, paddingBottom: 0 }}
               aria-haspopup="listbox"
               aria-expanded={isLangDropdownOpen}
               aria-controls="lang-menu"
@@ -577,8 +592,9 @@ export function Header() {
                 if (e.key === 'Enter' || e.key === ' ') setIsLangDropdownOpen(v => !v);
               }}
             >
-              <span className="relative z-10">{(LANGUAGE_NAMES as Record<string, string>)[lang] || t('header.language_selector.button') || 'Select Language'}</span>
-              <span className="ml-1 text-lg" style={{ lineHeight: 1, color: '#77A656' }}>&#x2304;</span>
+              <span className="relative z-10 flex items-center" style={{lineHeight:1}}>{(LANGUAGE_NAMES as Record<string, string>)[lang] || t('header.language_selector.button') || 'Select Language'}</span>
+              {/* Dropdown arrow styled to match Consultations menu, perfectly centered */}
+              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isLangDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#77A656', display: 'flex', alignItems: 'center', marginTop: '1px' }} />
               <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
             </button>
             <AnimatePresence>

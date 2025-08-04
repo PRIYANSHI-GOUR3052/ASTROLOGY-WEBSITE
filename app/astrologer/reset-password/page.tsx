@@ -49,56 +49,50 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="bg-[#ece7e4] relative min-h-screen flex items-center justify-center px-4">
-      {/* Background Effects */}
-      <div className="absolute inset-0 z-0 opacity-90">
-        <AnimatedStars />
-        <MysticBackground />
-      </div>
-
-      <div className="relative z-10 max-w-md w-full bg-[#111] p-8 rounded-3xl shadow-2xl border border-[#222] text-white">
-        <h2 className="text-2xl font-bold text-center mb-2" style={{ fontFamily: "Playfair Display, serif" }}>
+    <div className="relative min-h-screen bg-[#FEFBF2] flex items-center justify-center px-4">
+      <div className="relative z-10 max-w-md w-full bg-white p-8 rounded-3xl shadow-2xl border border-gray-200">
+        <h2 className="text-black text-2xl font-bold text-center mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
           Reset Your Password
         </h2>
-        <p className="text-sm text-center text-gray-400 mb-6">
+        <p className="text-sm text-center text-gray-500 mb-6">
           Enter a new password for your astrologer account
         </p>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label className="block mb-1 font-medium text-gray-300">New Password</label>
+            <label className="block mb-1 font-medium text-gray-700">New Password</label>
             <input
               type="password"
               value={newPassword}
               onChange={e => setNewPassword(e.target.value)}
               placeholder="Enter new password"
-              className="w-full px-4 py-2 border border-gray-700 bg-[#1C1C1C] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+              className="w-full px-4 py-2 border border-gray-200 bg-white text-black rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium text-gray-300">Confirm New Password</label>
+            <label className="block mb-1 font-medium text-gray-700">Confirm New Password</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
               placeholder="Re-enter new password"
-              className="w-full px-4 py-2 border border-gray-700 bg-[#1C1C1C] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a084ee]"
+              className="w-full px-4 py-2 border border-gray-200 bg-white text-black rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-[#a084ee] to-[#f857a6] text-white rounded-xl font-semibold hover:brightness-110 transition"
+            className="w-full py-3 bg-black text-white rounded-xl font-semibold hover:brightness-110 transition"
           >
             {loading ? 'Resetting...' : 'Reset Password'}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-400">
+        <div className="mt-6 text-center text-sm text-gray-500">
           <p>
-            Back to{" "}
-            <Link href="/astrologer/auth" className="text-[#f857a6] hover:underline font-medium">
+            Back to{' '}
+            <Link href="/astrologer/auth" className="text-amber-600 hover:underline font-medium">
               Login
             </Link>
           </p>
