@@ -65,7 +65,6 @@ export default function RecentPosts() {
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[470px] md:h-[428px]">
             <div className="relative w-full h-64 md:h-64 flex items-center justify-center" style={{ background: posts[0].themeColor, transition: 'background 0.3s' }}>
               <Image src={posts[0].imageUrl} alt={posts[0].title.en} fill className="object-cover rounded-2xl" />
-              <span className="absolute top-4 left-4 bg-white text-gray-800 text-sm font-semibold px-4 py-1 rounded-lg shadow">{posts[0].category}</span>
             </div>
             <div className="p-6 flex flex-col justify-between h-[164px]">
               {(() => {
@@ -93,7 +92,7 @@ export default function RecentPosts() {
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[470px] md:h-[428px]">
             <div className="relative w-full h-64 md:h-64 flex items-center justify-center" style={{ background: additionalPosts[0].themeColor, transition: 'background 0.3s' }}>
               <Image src={additionalPosts[0].imageUrl} alt={additionalPosts[0].title.en} fill className="object-cover rounded-2xl" />
-              <span className="absolute top-4 left-4 bg-white text-gray-800 text-sm font-semibold px-4 py-1 rounded-lg shadow">{additionalPosts[0].category}</span>
+              
             </div>
             <div className="p-6 flex flex-col justify-between h-[164px]">
               {(() => {
@@ -125,7 +124,6 @@ export default function RecentPosts() {
               <div key={post.title.en} className="flex flex-row bg-white rounded-2xl shadow-lg overflow-hidden h-[230px] md:h-[200px] w-full md:w-[420px] mx-auto">
                 <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 flex items-center justify-center my-auto mx-4" style={{ background: post.themeColor, transition: 'background 0.3s' }}>
                   <Image src={post.imageUrl} alt={post.title.en} fill className="object-cover rounded-2xl" />
-                  <span className="absolute top-2 left-2 bg-white text-gray-800 text-xs font-semibold px-3 py-1 rounded shadow">{post.category}</span>
                 </div>
                 <div className="flex-1 p-4 flex flex-col justify-center">
                   <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{getSafe(post.title, lang)}</h4>
@@ -146,7 +144,6 @@ export default function RecentPosts() {
           <div className="flex flex-row bg-white rounded-2xl shadow-lg overflow-hidden h-[230px] md:h-[200px] w-full md:w-[420px] mx-auto">
             <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 flex items-center justify-center my-auto mx-4" style={{ background: additionalPosts[1].themeColor, transition: 'background 0.3s' }}>
               <Image src={additionalPosts[1].imageUrl} alt={additionalPosts[1].title.en} fill className="object-cover rounded-2xl" />
-              <span className="absolute top-2 left-2 bg-white text-gray-800 text-xs font-semibold px-3 py-1 rounded shadow">{additionalPosts[1].category}</span>
             </div>
             <div className="flex-1 p-4 flex flex-col justify-center">
               <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{getSafePost(additionalPosts[1].title, lang)}</h4>

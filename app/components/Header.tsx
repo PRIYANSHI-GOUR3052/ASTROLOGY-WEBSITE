@@ -581,8 +581,8 @@ export function Header() {
             {/* Language Button: Yellow, Dropdown White, Items Black */}
             <button
               onClick={() => setIsLangDropdownOpen((prev) => !prev)}
-              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none"
-              style={{ fontFamily: 'Playfair Display, serif', height: '40px', minWidth: 'auto', color: '#77A656', background: 'transparent', fontWeight: 700 }}
+              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none align-middle"
+              style={{ fontFamily: 'Playfair Display, serif', color: '#77A656', background: 'transparent', fontWeight: 700, display: 'flex', alignItems: 'center', minHeight: '32px', height: 'auto', lineHeight: 1, paddingTop: 0, paddingBottom: 0 }}
               aria-haspopup="listbox"
               aria-expanded={isLangDropdownOpen}
               aria-controls="lang-menu"
@@ -592,8 +592,9 @@ export function Header() {
                 if (e.key === 'Enter' || e.key === ' ') setIsLangDropdownOpen(v => !v);
               }}
             >
-              <span className="relative z-10">{(LANGUAGE_NAMES as Record<string, string>)[lang] || t('header.language_selector.button') || 'Select Language'}</span>
-              <span className="ml-1 text-lg" style={{ lineHeight: 1, color: '#77A656' }}>&#x2304;</span>
+              <span className="relative z-10 flex items-center" style={{lineHeight:1}}>{(LANGUAGE_NAMES as Record<string, string>)[lang] || t('header.language_selector.button') || 'Select Language'}</span>
+              {/* Dropdown arrow styled to match Consultations menu, perfectly centered */}
+              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isLangDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#77A656', display: 'flex', alignItems: 'center', marginTop: '1px' }} />
               <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
             </button>
             <AnimatePresence>

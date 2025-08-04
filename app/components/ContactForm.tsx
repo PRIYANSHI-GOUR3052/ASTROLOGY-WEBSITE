@@ -92,7 +92,7 @@ export function ContactForm() {
 
       <FloatingCard 
         href="/services"
-        className="top-[50%] right-4 w-72 rotate-[12deg] opacity-90 z-10"
+        className="top-[70%] right-4 w-72 rotate-[12deg] opacity-90 z-10"
         gradient="bg-gradient-to-br from-blue-500 via-teal-400 to-green-400"
       >
         <div className="bg-black/20 rounded-md px-3 py-1 text-xs text-white mb-4 inline-block">{t('contact.floatingCard2.label')}</div>
