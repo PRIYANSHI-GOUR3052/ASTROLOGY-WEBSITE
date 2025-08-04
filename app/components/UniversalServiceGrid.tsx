@@ -327,7 +327,7 @@ export function UniversalServicesGrid({ className = '' }) {
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
                 <Link href={`/services/${nextFourServices[3].slug}`} className="block group" style={{ textDecoration: 'none' }}>
-                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[428px] hover:shadow-xl transition-all duration-300">
+                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[450px] hover:shadow-xl transition-all duration-300">
                     <div className="relative w-full h-64 flex items-center justify-center">
                       <img
                         src={nextFourServices[3].image}
@@ -448,7 +448,7 @@ export function UniversalServicesGrid({ className = '' }) {
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
                 <Link href={`/services/${nextFourServices2[3].slug}`} className="block group" style={{ textDecoration: 'none' }}>
-                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[428px] hover:shadow-xl transition-all duration-300">
+                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[450px] hover:shadow-xl transition-all duration-300">
                     <div className="relative w-full h-64 flex items-center justify-center">
                       <img
                         src={nextFourServices2[3].image}
@@ -559,7 +559,7 @@ export function UniversalServicesGrid({ className = '' }) {
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
                 <Link href={`/services/${nextFourServices3[3].slug}`} className="block group" style={{ textDecoration: 'none' }}>
-                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[428px] hover:shadow-xl transition-all duration-300">
+                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[450px] hover:shadow-xl transition-all duration-300">
                     <div className="relative w-full h-64 flex items-center justify-center">
                       <img
                         src={nextFourServices3[3].image}
@@ -604,13 +604,13 @@ export function UniversalServicesGrid({ className = '' }) {
 export function ProductServiceCard({ image, title, description, badge, href }: ProductServiceCardProps) {
   return (
     <Link href={href} className="block group h-full" style={{ textDecoration: 'none' }}>
-      <div className="relative rounded-2xl overflow-hidden shadow-lg h-[340px] flex flex-col justify-end group-hover:scale-[1.02] group-hover:shadow-2xl duration-200 bg-[#f7f5ed]">
+      <div className="relative rounded-2xl overflow-hidden shadow-lg h-[380px] min-h-[380px] flex flex-col justify-end group-hover:scale-[1.02] group-hover:shadow-2xl duration-200 bg-[#f7f5ed]">
         {/* Service/Product Image */}
         <motion.div
           className="absolute inset-0 w-full h-full z-0"
           whileHover={{ scale: 1.08 }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
-          style={{ minHeight: 220, maxHeight: 340 }}
+          style={{ minHeight: 220, maxHeight: 380 }}
         >
           <img
             src={image}

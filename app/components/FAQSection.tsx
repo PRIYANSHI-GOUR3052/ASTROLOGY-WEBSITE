@@ -100,9 +100,9 @@ export const FAQSection: FC<FAQSectionProps> = ({ faqs }) => {
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2 md:space-x-4">
                       <motion.div 
-                        className={`flex items-center justify-center w-12 h-12 rounded-xl transition-colors duration-300 ${
+                        className={`flex items-center justify-center w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl transition-colors duration-300 ${
                           isActive ? 'bg-[#fe7b57] text-white' : 'bg-[#fe7b57]/10 text-[#fe7b57]'
                         }`}
                         animate={{ 
@@ -111,10 +111,10 @@ export const FAQSection: FC<FAQSectionProps> = ({ faqs }) => {
                         }}
                         transition={{ duration: 0.2 }}
                       >
-                        <IconComponent className="w-6 h-6" />
+                        <IconComponent className="w-5 h-5 md:w-6 md:h-6" />
                       </motion.div>
-                      <h3 className={`text-lg font-semibold pr-4 ${isActive ? 'text-[#fe7b57]' : 'text-gray-900'}`}>
-                        <span className="text-xl md:text-2xl">{item.question}</span>
+                      <h3 className={`text-base md:text-lg font-semibold pr-2 md:pr-4 ${isActive ? 'text-[#fe7b57]' : 'text-gray-900'}`}>
+                        <span className="text-base md:text-xl md:text-2xl">{item.question}</span>
                       </h3>
                     </div>
                     <motion.div
@@ -144,10 +144,13 @@ export const FAQSection: FC<FAQSectionProps> = ({ faqs }) => {
                         transition={{ duration: 0.2, delay: 0.1 }}
                         className="px-8 pb-6"
                       >
-                        <div className="ml-16 border-l-4 border-[#fe7b57]/10 pl-6">
-                          <p className="text-gray-700 leading-relaxed text-base">
-                            <span className="text-lg md:text-xl">{item.answer}</span>
-                          </p>
+                        <div className="flex border-l-2 md:border-l-4 border-[#fe7b57]/10">
+                          <div className="w-6 md:w-12 flex-shrink-0" />
+                          <div className="pl-2 md:pl-4 pr-1">
+                            <p className="py-4 text-gray-700 leading-relaxed text-sm md:text-base">
+                              <span className="text-base md:text-lg md:text-xl">{item.answer}</span>
+                            </p>
+                          </div>
                         </div>
                       </motion.div>
                     </motion.div>

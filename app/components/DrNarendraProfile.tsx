@@ -105,8 +105,8 @@ export function DrNarendraProfile() {
         <div className="text-center bg-gradient-to-r from-violet-500 to-pink-500 text-white p-12 rounded-2xl shadow-2xl border border-white/10">
           <h2 className="text-4xl font-bold mb-4">Ready for Personalized Astrological Guidance?</h2>
           <p className="text-xl mb-8">Book a consultation with Dr. Narendra Kumar Sharma today and unlock your true potential.</p>
-          <Link href="/contact">
-            <Button className="bg-white text-pink-600 hover:bg-gray-100 px-8 py-4 rounded-full text-lg font-semibold shadow-lg transition-transform transform hover:scale-105">
+          <Link href="/contact" className="flex justify-center w-full">
+            <Button className="bg-white text-pink-600 hover:bg-gray-100 px-8 py-4 rounded-full text-lg font-semibold shadow-lg transition-transform transform hover:scale-105 mx-auto">
               Book Your Session Now!
             </Button>
           </Link>

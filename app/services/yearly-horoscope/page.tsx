@@ -100,7 +100,7 @@ export default function YearlyHoroscopePage() {
 
     return (
         <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white font-sans">
-            <div className="container mx-auto pt-8 px-4 py-16 relative z-10">
+            <div className="container mx-auto pt-8 px-4 relative z-10">
                 <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
                     <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg font-serif" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Yearly Horoscope Analysis</h1>
                     <p className="text-xl md:text-2xl text-center text-gray-700 max-w-3xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
@@ -214,12 +214,16 @@ export default function YearlyHoroscopePage() {
                 )}
 
                 <div className="mt-20 space-y-20">
-                    <DrNarendraProfile />
+                    <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] px-0">
+                        <DrNarendraProfile />
+                    </div>
                     <Statistics />
                 </div>
 
                 <div className="mt-20">
-                    <ContactForm />
+                    <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] px-0">
+                        <ContactForm />
+                    </div>
                 </div>
             </div>
         </div>

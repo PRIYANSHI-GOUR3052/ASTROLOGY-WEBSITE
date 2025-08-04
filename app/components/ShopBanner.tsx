@@ -93,8 +93,7 @@ export default function ShopBanner() {
   const currentVariant = getAnimationVariant(currentCarouselIndex);
 
   return (
-    <div className="relative w-full h-[450px] overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900/30 to-slate-800">
-      
+    <div className="relative w-full h-[350px] sm:h-[450px] overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900/30 to-slate-800">
       <AnimatePresence mode="wait">
         <motion.div
           key={`carousel-${currentCarouselIndex}-${animationKey}`}
@@ -114,48 +113,46 @@ export default function ShopBanner() {
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
                 priority={currentCarouselIndex === 0}
               />
-              
               {/* Subtle overlay for better text readability */}
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300" />
-              
               {/* Gradient overlays for aesthetic */}
               <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
-              <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-20 sm:h-32 bg-gradient-to-b from-black/40 to-transparent" />
             </div>
           </Link>
 
           {/* Category Title Overlay - Clickable */}
-          <div className="absolute top-8 left-8 z-20">
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-[90vw] max-w-xs sm:top-8 sm:left-8 sm:translate-x-0">
             <Link 
               href={`/shop/category/${currentCarousel.id}`}
-              className="block bg-black/50 hover:bg-black/70 backdrop-blur-sm rounded-lg px-6 py-4 transition-all duration-300 group cursor-pointer border border-white/10"
+              className="block bg-black/60 hover:bg-black/70 backdrop-blur-sm rounded-lg px-4 py-2 sm:px-6 sm:py-4 transition-all duration-300 group cursor-pointer border border-white/10 text-center sm:text-left"
             >
-              <h2 className="text-2xl md:text-3xl font-light text-white group-hover:text-amber-200 transition-colors duration-300">
+              <h2 className="text-lg sm:text-2xl md:text-3xl font-light text-white group-hover:text-amber-200 transition-colors duration-300">
                 {currentCarousel.title}
               </h2>
-              <p className="text-white/70 text-sm mt-2 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+              <p className="text-white/70 text-xs sm:text-sm mt-1 sm:mt-2 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
                 Browse all products →
               </p>
             </Link>
           </div>
 
           {/* Product Title Overlay */}
-          <div className="absolute bottom-8 left-8 z-20">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-[90vw] max-w-xs sm:bottom-8 sm:left-8 sm:translate-x-0">
             <Link href={currentCarousel.image.url} className="group">
-              <div className="bg-white/90 hover:bg-white backdrop-blur-sm rounded-lg px-6 py-4 transition-all duration-300 border border-amber-200/20">
-                <h3 className="text-slate-800 font-semibold text-lg md:text-xl group-hover:text-amber-700 transition-colors">
+              <div className="bg-white/90 hover:bg-white backdrop-blur-sm rounded-lg px-4 py-2 sm:px-6 sm:py-4 transition-all duration-300 border border-amber-200/20 text-center sm:text-left">
+                <h3 className="text-slate-800 font-semibold text-base sm:text-lg md:text-xl group-hover:text-amber-700 transition-colors">
                   {currentCarousel.image.title}
                 </h3>
-                <p className="text-slate-600 text-sm mt-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                <p className="text-slate-600 text-xs sm:text-sm mt-1 opacity-70 group-hover:opacity-100 transition-opacity">
                   Click to explore
                 </p>
               </div>
             </Link>
           </div>
 
-          {/* Progress Indicator */}
-          <div className="absolute bottom-8 right-8 z-20 flex space-x-3">
+          {/* Progress Indicator - hide on xs, show on sm+ */}
+          <div className="hidden sm:flex absolute bottom-8 right-8 z-20 space-x-3">
             {carouselData.map((_, index) => (
               <button
                 key={index}
@@ -181,16 +178,16 @@ export default function ShopBanner() {
             ))}
           </div>
 
-          {/* Corner decorative element */}
-          <div className="absolute top-8 right-8 z-20">
+          {/* Corner decorative element - hide on xs, show on sm+ */}
+          <div className="hidden sm:block absolute top-8 right-8 z-20">
             <div className="flex items-center space-x-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
               <span className="text-white text-sm font-medium">Featured</span>
             </div>
           </div>
 
-          {/* Navigation hint */}
-          <div className="absolute bottom-20 right-8 z-20 text-right">
+          {/* Navigation hint - hide on xs, show on sm+ */}
+          <div className="hidden sm:block absolute bottom-20 right-8 z-20 text-right">
             <div className="bg-white/15 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10">
               <p className="text-white/90 text-sm font-medium">
                 {currentCarouselIndex + 1} / {carouselData.length}
@@ -201,8 +198,8 @@ export default function ShopBanner() {
             </div>
           </div>
 
-          {/* Click indicator for main image */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* Click indicator for main image - hide on xs, show on sm+ */}
+          <div className="hidden sm:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="bg-amber-400 text-slate-800 rounded-full p-4 shadow-xl">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -211,7 +208,6 @@ export default function ShopBanner() {
           </div>
         </motion.div>
       </AnimatePresence>
-
       {/* Global overlay for better contrast */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/5 pointer-events-none" />
     </div>
