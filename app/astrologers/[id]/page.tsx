@@ -19,6 +19,7 @@ import {
   Globe
 } from 'lucide-react';
 import axios from 'axios';
+import { Socket } from 'socket.io-client';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { LANGUAGE_NAMES } from '../../contexts/LanguageContext';
@@ -192,7 +193,7 @@ export default function AstrologerProfile() {
   const [showChat, setShowChat] = useState(false);
   const [showVideoCall, setShowVideoCall] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
-  const [socket, setSocket] = useState<any>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [currentBookingId, setCurrentBookingId] = useState<number | null>(null);
   const [isFetchingBookings, setIsFetchingBookings] = useState(false);
 
@@ -229,11 +230,11 @@ export default function AstrologerProfile() {
 
       // Filter bookings for the current astrologer and sort by date (latest first)
       const currentAstrologerBookings = allBookings
-        .filter((booking: any) => booking.astrologerId === Number(astrologer?.id))
-        .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        .filter((booking: { astrologerId: number; date: string }) => booking.astrologerId === Number(astrologer?.id))
+        .sort((a: { date: string }, b: { date: string }) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
       console.log('Filtered and sorted bookings for current astrologer:', currentAstrologerBookings);
-      console.log('Booking details:', currentAstrologerBookings.map((b: any) => ({
+      console.log('Booking details:', currentAstrologerBookings.map((b: { id: number; date: string; status: string; isPaid: boolean; chatEnabled: boolean; videoEnabled: boolean }) => ({
         id: b.id,
         date: b.date,
         status: b.status,
@@ -245,7 +246,7 @@ export default function AstrologerProfile() {
       setBookedSlots(currentAstrologerBookings);
 
       // Find the most recent active booking (paid and enabled)
-      const latestActiveBooking = currentAstrologerBookings.find((booking: any) =>
+      const latestActiveBooking = currentAstrologerBookings.find((booking: { isPaid: boolean; chatEnabled: boolean; videoEnabled: boolean; status: string; id: number }) =>
         booking.isPaid && (booking.chatEnabled || booking.videoEnabled) &&
         (booking.status === 'upcoming' || booking.status === 'accepted' || booking.status === 'active')
       );
@@ -256,7 +257,7 @@ export default function AstrologerProfile() {
         setCurrentBookingId(latestActiveBooking.id);
       } else {
         // Check if there's an unpaid booking that needs payment
-        const unpaidBooking = currentAstrologerBookings.find((booking: any) =>
+        const unpaidBooking = currentAstrologerBookings.find((booking: { status: string; isPaid: boolean; id: number }) =>
           (booking.status === 'upcoming' || booking.status === 'accepted') && !booking.isPaid
         );
         if (unpaidBooking) {
@@ -320,7 +321,7 @@ export default function AstrologerProfile() {
         
         if (authResult.user) {
           console.log('Found authenticated user:', authResult.user);
-          setUser(authResult.user);
+          setUser(authResult.user as User);
           
           // Store the JWT token for socket authentication if available
           if (authResult.token) {
@@ -1383,12 +1384,12 @@ export default function AstrologerProfile() {
 )}
 
       {/* Debug info for video call */}
-      {console.log('Video call modal state:', {
+      {/* {console.log('Video call modal state:', {
         showVideoCall,
         hasSocket: !!socket,
         currentBookingId,
         astrologerId: astrologer?.id
-      })}
+      })} */}
 
       {/* Payment Modal */}
       {showPayment && currentBookingId && (

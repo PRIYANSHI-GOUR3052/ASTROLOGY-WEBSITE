@@ -83,8 +83,7 @@ const AvailabilityPage = () => {
     }
     setLoading(true);
     try {
-      let res: Response;
-      res = await fetch('/api/astrologer/availability', {
+      const res: Response = await fetch('/api/astrologer/availability', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(form)

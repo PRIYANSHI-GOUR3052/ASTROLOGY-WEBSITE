@@ -220,7 +220,9 @@ if (req.method === 'GET' && req.query.availableSlots === '1') {
         if (booking.status !== 'completed') {
           return res.status(400).json({ error: 'Can only rate completed bookings' });
         }
-        await prisma.booking.update({ where: { id: Number(bookingId) }, data: { rating } });
+        // await prisma.booking.update({ where: { id: Number(bookingId) }, data: { rating } });
+        // Note: Rating field not implemented in schema yet
+        return res.status(200).json({ message: 'Rating functionality not implemented yet' });
         return res.status(200).json({ message: 'Booking rated' });
       }
       return res.status(400).json({ error: 'Invalid action' });

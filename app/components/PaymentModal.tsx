@@ -115,16 +115,19 @@ export default function PaymentModal({
       } else {
         setError('Payment failed. Please try again.');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Payment error details:', error);
-      console.error('Payment error response:', error.response?.data);
       
-      if (error.response?.status === 401) {
+      // Type guard for axios error
+      const axiosError = error as { response?: { data?: { error?: string }; status?: number } };
+      console.error('Payment error response:', axiosError.response?.data);
+      
+      if (axiosError.response?.status === 401) {
         setError('Authentication failed. Please log in again and try the payment.');
-      } else if (error.response?.status === 400) {
-        setError(error.response.data.error || 'Invalid payment request.');
+      } else if (axiosError.response?.status === 400) {
+        setError(axiosError.response.data?.error || 'Invalid payment request.');
       } else {
-        setError(error.response?.data?.error || 'Payment failed. Please try again.');
+        setError(axiosError.response?.data?.error || 'Payment failed. Please try again.');
       }
     } finally {
       setIsProcessing(false);
