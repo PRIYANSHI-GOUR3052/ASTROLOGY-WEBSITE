@@ -10,7 +10,8 @@ export default function CoursesPage() {
     title: '',
     description: '',
     duration: 1,
-    image: ''
+    image: '',
+    price: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -36,7 +37,7 @@ export default function CoursesPage() {
     e.preventDefault();
     // Here you would handle the course creation logic
     setShowModal(false);
-    setForm({ title: '', description: '', duration: 1, image: '' });
+    setForm({ title: '', description: '', duration: 1, image: '', price: '' });
   };
 
   return (
@@ -56,23 +57,23 @@ export default function CoursesPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white dark:bg-[#0B1120] rounded-2xl shadow-2xl w-full max-w-lg p-8 relative border border-purple-200 dark:border-[#334155] animate-fadeIn">
+          <div className="bg-white dark:bg-[#0B1120] rounded-2xl shadow-2xl w-full max-w-md p-4 sm:p-6 relative border border-purple-200 dark:border-[#334155] animate-fadeIn max-h-[90vh] overflow-y-auto">
             <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
               onClick={() => setShowModal(false)}
               aria-label="Close"
             >
               <X className="w-6 h-6" />
             </button>
-            <h3 className="text-2xl font-bold text-purple-700 dark:text-white mb-6 text-center">Create New Course</h3>
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <h3 className="text-xl font-bold text-purple-700 dark:text-white mb-4 text-center">Create New Course</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
               {/* Image upload */}
-              <div className="flex flex-col items-center mb-4">
+              <div className="flex flex-col items-center mb-2">
                 <label htmlFor="image-upload" className="cursor-pointer w-full block">
                   {form.image ? (
-                    <img src={form.image} alt="Course" className="w-full h-44 object-cover rounded-lg border-2 border-dashed border-purple-400 transition-all" />
+                    <img src={form.image} alt="Course" className="w-full h-32 object-cover rounded-lg border-2 border-dashed border-purple-400 transition-all" />
                   ) : (
-                    <div className="w-full h-44 flex items-center justify-center bg-gray-100 dark:bg-[#1e293b] rounded-lg border-2 border-dashed border-purple-400 transition-all">
+                    <div className="w-full h-32 flex items-center justify-center bg-gray-100 dark:bg-[#1e293b] rounded-lg border-2 border-dashed border-purple-400 transition-all">
                       <span className="text-gray-400">Click to add image</span>
                     </div>
                   )}
@@ -93,7 +94,7 @@ export default function CoursesPage() {
                   name="title"
                   value={form.title}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-[#334155] bg-white dark:bg-[#1e293b] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-[#334155] bg-white dark:bg-[#1e293b] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
@@ -104,8 +105,8 @@ export default function CoursesPage() {
                   name="description"
                   value={form.description}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-[#334155] bg-white dark:bg-[#1e293b] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  rows={3}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-[#334155] bg-white dark:bg-[#1e293b] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  rows={2}
                   required
                 />
               </div>
@@ -115,7 +116,7 @@ export default function CoursesPage() {
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 rounded-lg border border-purple-300 dark:border-purple-800 hover:bg-purple-200 dark:hover:bg-purple-800"
+                    className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 rounded-lg border border-purple-300 dark:border-purple-800 hover:bg-purple-200 dark:hover:bg-purple-800"
                     onClick={() => setForm((prev) => ({ ...prev, duration: Math.max(1, prev.duration - 1) }))}
                   >
                     -
@@ -126,21 +127,35 @@ export default function CoursesPage() {
                     value={form.duration}
                     min={1}
                     onChange={handleChange}
-                    className="w-20 text-center px-2 py-2 rounded-lg border border-gray-300 dark:border-[#334155] bg-white dark:bg-[#1e293b] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-16 text-center px-2 py-2 rounded-lg border border-gray-300 dark:border-[#334155] bg-white dark:bg-[#1e293b] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   />
                   <button
                     type="button"
-                    className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 rounded-lg border border-purple-300 dark:border-purple-800 hover:bg-purple-200 dark:hover:bg-purple-800"
+                    className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 rounded-lg border border-purple-300 dark:border-purple-800 hover:bg-purple-200 dark:hover:bg-purple-800"
                     onClick={() => setForm((prev) => ({ ...prev, duration: prev.duration + 1 }))}
                   >
                     +
                   </button>
                 </div>
               </div>
+              {/* Price input */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Price (INR)</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={form.price}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-[#334155] bg-white dark:bg-[#1e293b] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="e.g. 1999"
+                  min={0}
+                  required
+                />
+              </div>
               <button
                 type="submit"
-                className="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-700 transition-colors mt-2 shadow-lg"
+                className="w-full bg-purple-600 text-white font-bold py-2 rounded-lg hover:bg-purple-700 transition-colors mt-2 shadow-lg"
               >
                 Create Course
               </button>
@@ -174,7 +189,8 @@ export default function CoursesPage() {
             duration: '8 weeks',
             students: 45,
             rating: 4.8,
-            image: '/courses/vedic-astrology.jpg'
+            image: '/courses/vedic-astrology.jpg',
+            price: 1999
           },
           {
             title: 'Advanced Kundli Reading',
@@ -182,7 +198,8 @@ export default function CoursesPage() {
             duration: '12 weeks',
             students: 32,
             rating: 4.9,
-            image: '/courses/kundli-reading.jpg'
+            image: '/courses/kundli-reading.jpg',
+            price: 2499
           },
           {
             title: 'Career Astrology',
@@ -190,7 +207,8 @@ export default function CoursesPage() {
             duration: '10 weeks',
             students: 38,
             rating: 4.7,
-            image: '/courses/career-astrology.jpg'
+            image: '/courses/career-astrology.jpg',
+            price: 1799
           }
         ].map((course, index) => (
           <div key={index} className="bg-white dark:bg-[#0B1120] border border-gray-200 dark:border-[#1f2937] rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
@@ -201,6 +219,13 @@ export default function CoursesPage() {
               </div>
             </div>
             <div className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm text-gray-600 dark:text-gray-300">₹{course.price}</p>
+                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <Star className="w-4 h-4 mr-2 text-yellow-400" />
+                  {course.rating} / 5.0
+                </div>
+              </div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{course.description}</p>
               <div className="space-y-2">
                 <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
@@ -210,10 +235,6 @@ export default function CoursesPage() {
                 <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                   <Users className="w-4 h-4 mr-2" />
                   {course.students} students
-                </div>
-                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                  <Star className="w-4 h-4 mr-2 text-yellow-400" />
-                  {course.rating} / 5.0
                 </div>
               </div>
               <div className="mt-4 flex gap-2">
