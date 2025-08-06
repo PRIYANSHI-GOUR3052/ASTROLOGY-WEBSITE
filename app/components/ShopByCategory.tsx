@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 
@@ -326,14 +327,20 @@ export default function ShopByCategory({ limit }: { limit?: number }) {
                     className="relative w-full aspect-square mb-6 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 group-hover:shadow-lg transition-shadow duration-200" // Faster
                     whileHover={{ scale: 1.01, transition: { duration: 0.2 } }} // Faster and subtler
                   >
-                    <img
+                    <Image
                       src={category.image}
                       alt={category.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" // Faster zoom
-                      onError={(e) => { 
-                        e.currentTarget.src = '/images/placeholder.jpg'; 
-                      }}
+                      fill
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       draggable={false}
+                      priority={index < 4}
+                      loading={index < 4 ? undefined : 'lazy'}
+                      onError={(e) => {
+                        // fallback for next/image: use placeholder if error
+                        if (e.currentTarget instanceof HTMLImageElement) {
+                          e.currentTarget.src = '/images/placeholder.jpg';
+                        }
+                      }}
                     />
                     
                     {/* Gradient overlay */}
