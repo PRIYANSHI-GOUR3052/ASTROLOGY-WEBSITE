@@ -20,6 +20,39 @@ const nextConfig = {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
+    // Enable optimized route pre-loading
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-*'],
+  },
+  // Performance optimizations
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  // Enable route prefetching
+  generateStaticParams: true,
+  // Optimize chunk splitting
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.optimization.splitChunks = {
+        ...config.optimization.splitChunks,
+        cacheGroups: {
+          ...config.optimization.splitChunks.cacheGroups,
+          admin: {
+            name: 'admin',
+            test: /[\\/]app[\\/]admin[\\/]/,
+            chunks: 'all',
+            priority: 10,
+          },
+          vendor: {
+            name: 'vendor',
+            test: /[\\/]node_modules[\\/]/,
+            chunks: 'all',
+            priority: 5,
+          },
+        },
+      };
+    }
+    return config;
   },
 };
 
