@@ -11,9 +11,9 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Helper to run multer in API route
-function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: RequestHandler) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
   return new Promise((resolve, reject) => {
-    fn(req as express.Request, res as express.Response, (result: unknown) => {
+    fn(req as unknown as any, res as unknown as any, (result: unknown) => {
       if (result instanceof Error) {
         return reject(result);
       }

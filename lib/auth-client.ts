@@ -38,7 +38,7 @@ export async function getCurrentUser(): Promise<AuthResult> {
               email: userData.email,
               role: userData.role || 'client'
             },
-            token
+            token: token || undefined
           };
         } catch {
           console.error('getCurrentUser: Failed to parse user data from localStorage');

@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { Send, Phone, Video, MessageCircle, Clock, User } from 'lucide-react';
 import Image from 'next/image';
 import axios from 'axios';
+import { Socket } from 'socket.io-client';
 import RealTimeChat from '../../components/RealTimeChat';
 import VideoCall from '../../components/VideoCall';
 
@@ -36,10 +37,18 @@ const ConsultationsPage = () => {
   const [activeChatId, setActiveChatId] = useState<number | null>(null);
   const [showChat, setShowChat] = useState(false);
   const [showVideoCall, setShowVideoCall] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState<any>(null);
-  const [socket, setSocket] = useState<any>(null);
+  const [selectedBooking, setSelectedBooking] = useState<{ id: number; client: { id: number; name: string } } | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [astrologer, setAstrologer] = useState<any>(null);
+  const [astrologer, setAstrologer] = useState<{ 
+    id: number; 
+    name: string; 
+    email: string; 
+    firstName?: string; 
+    lastName?: string; 
+    profileImage?: string; 
+    pricePerChat?: number; 
+  } | null>(null);
   const [astrologerId, setAstrologerId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -104,8 +113,8 @@ const ConsultationsPage = () => {
         console.error('Socket connection error:', error);
         console.error('Socket error details:', {
           message: error.message,
-          type: error.type,
-          description: error.description
+          type: 'type' in error ? (error as { type: string }).type : 'unknown',
+          description: 'description' in error ? (error as { description: string }).description : 'unknown'
         });
       });
 
@@ -152,7 +161,7 @@ const ConsultationsPage = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      const chatData = response.data.bookings.map((booking: any) => ({
+      const chatData = response.data.bookings.map((booking: { id: number; client: { name: string }; clientId: number; lastMessage?: string; updatedAt: string; isPaid: boolean; chatEnabled: boolean; videoEnabled: boolean; status: string }) => ({
         id: booking.id,
         client: booking.client.name,
         clientId: booking.clientId,
@@ -334,8 +343,8 @@ const ConsultationsPage = () => {
           bookingId={selectedBooking.id}
           astrologer={{
             id: astrologer.id,
-            firstName: astrologer.firstName,
-            lastName: astrologer.lastName,
+            firstName: astrologer.firstName || '',
+            lastName: astrologer.lastName || '',
             profileImage: astrologer.profileImage || '/placeholder-user.jpg',
             pricePerChat: astrologer.pricePerChat || 0
           }}
@@ -354,8 +363,8 @@ const ConsultationsPage = () => {
           bookingId={selectedBooking.id}
           astrologer={{
             id: astrologer.id,
-            firstName: astrologer.firstName,
-            lastName: astrologer.lastName,
+            firstName: astrologer.firstName || '',
+            lastName: astrologer.lastName || '',
             profileImage: astrologer.profileImage || '/placeholder-user.jpg'
           }}
           onClose={() => setShowVideoCall(false)}

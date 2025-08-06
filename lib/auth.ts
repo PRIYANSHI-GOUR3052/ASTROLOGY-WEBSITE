@@ -193,10 +193,10 @@ export function verifyToken(token: string): User | null {
     const payload = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
     if (typeof payload === 'object' && payload !== null && 'id' in payload) {
       return {
-        id: (payload as any).id,
-        name: (payload as any).name,
-        email: (payload as any).email,
-        role: (payload as any).role || 'client'
+        id: (payload as { id: number }).id,
+        name: (payload as { name?: string }).name,
+        email: (payload as { email?: string }).email,
+        role: (payload as { role?: string }).role || 'client'
       };
     }
     return null;

@@ -8,10 +8,10 @@ function parseCSV(str?: string | null): string[] {
 }
 
 // Dummy rating/orders for now (replace with real logic if available)
-function getAstrologerRating(astrologer: any): number {
+function getAstrologerRating(astrologer: { rating?: number; id: number }): number {
   return astrologer.rating ?? 4.5 + (astrologer.id % 5) * 0.1;
 }
-function getAstrologerOrders(astrologer: any): number {
+function getAstrologerOrders(astrologer: { orders?: number; id: number }): number {
   return astrologer.orders ?? (astrologer.id * 1234) % 20000;
 }
 

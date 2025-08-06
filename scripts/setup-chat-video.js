@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const fs = require('fs');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { execSync } = require('child_process');
 
 console.log('🚀 Setting up Chat and Video Call System...\n');

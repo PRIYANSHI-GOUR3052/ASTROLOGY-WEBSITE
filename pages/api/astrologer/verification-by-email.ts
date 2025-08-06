@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/lib/prisma';
 import { jwtVerify } from 'jose';
+import { Prisma } from '@prisma/client';
 
 // Admin authentication using JWT from cookies
 async function getAdminFromRequest(req: NextApiRequest) {
@@ -96,24 +97,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(200).json({ success: true, updated });
       } else if (type === 'education') {
         // key is education id
-        const updateData = {
-          status,
-          remarks: remarks || null,
-        } as unknown as Prisma.AstrologerEducationUpdateArgs; // Type assertion to satisfy Prisma
         const updated = await prisma.astrologerEducation.update({
           where: { id: Number(key) },
-          data: updateData,
+          data: {
+            status,
+            remarks: remarks || null,
+          },
         });
         return res.status(200).json({ success: true, updated });
       } else if (type === 'certification') {
         // key is certification id
-        const updateData = {
-          status,
-          remarks: remarks || null,
-        } as unknown as Prisma.AstrologerCertificationUpdateArgs; // Type assertion to satisfy Prisma
         const updated = await prisma.astrologerCertification.update({
           where: { id: Number(key) },
-          data: updateData,
+          data: {
+            status,
+            remarks: remarks || null,
+          },
         });
         return res.status(200).json({ success: true, updated });
       } else if (type === 'profile') {
