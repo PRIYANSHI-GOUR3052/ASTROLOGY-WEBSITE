@@ -10,10 +10,18 @@ import type express from 'express';
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+type MiddlewareFunction = (
+  req: NextApiRequest & { files?: { [fieldname: string]: Express.Multer.File[] } },
+  res: NextApiResponse,
+  callback: (result?: unknown) => void
+) => void;
+
 // Helper to run multer in API route
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
   return new Promise((resolve, reject) => {
-    fn(req as unknown as any, res as unknown as any, (result: unknown) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fn(req as any, res as any, (result: unknown) => {
       if (result instanceof Error) {
         return reject(result);
       }
