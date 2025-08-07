@@ -1,20 +1,21 @@
 'use client';
 
 import { useEffect } from 'react';
-import ProductOfTheDay from '../components/ProductOfTheDay';
-import { Statistics } from '../components/Statistics';
+import dynamic from 'next/dynamic';
 
-import CelestialJourneyMainGrid from '../components/Hero/CelestialJourneyMainGrid';
-import ShopCategoriesMinimal from '../components/ShopCategoriesMinimal';
-import NakshatraTicker from '../components/NakshatraTicker';
-import ShopBanner from '../components/ShopBanner';
-import ZodiacCategories from '../components/ZodiacCategories';
-import SimpleHorizontalBanner from '../components/SimpleHorizontalBanner';
-import ProductAnnouncementTicker from '../components/ProductAnnouncementTicker';
-import BestSellerCards from '../components/BestSellerCards';
-import ProductAssuranceBar from '../components/ProductAssuranceBar';
-import NakshatraGyaanBanner from '../components/NakshatraGyaanBanner';
-import SpiritualJourneyBanner from '../components/SpiritualJourneyBanner';
+const ProductOfTheDay = dynamic(() => import('../components/ProductOfTheDay'), { loading: () => <div>Loading...</div>, ssr: false });
+const Statistics = dynamic(() => import('../components/Statistics').then(mod => mod.Statistics), { loading: () => <div>Loading...</div>, ssr: false });
+const CelestialJourneyMainGrid = dynamic(() => import('../components/Hero/CelestialJourneyMainGrid'), { loading: () => <div>Loading...</div>, ssr: false });
+const ShopCategoriesMinimal = dynamic(() => import('../components/ShopCategoriesMinimal'), { loading: () => <div>Loading...</div>, ssr: false });
+const NakshatraTicker = dynamic(() => import('../components/NakshatraTicker'), { loading: () => <div>Loading...</div>, ssr: false });
+const ShopBanner = dynamic(() => import('../components/ShopBanner'), { loading: () => <div>Loading...</div>, ssr: false });
+const ZodiacCategories = dynamic(() => import('../components/ZodiacCategories'), { loading: () => <div>Loading...</div>, ssr: false });
+const SimpleHorizontalBanner = dynamic(() => import('../components/SimpleHorizontalBanner'), { loading: () => <div>Loading...</div>, ssr: false });
+const ProductAnnouncementTicker = dynamic(() => import('../components/ProductAnnouncementTicker'), { loading: () => <div>Loading...</div>, ssr: false });
+const BestSellerCards = dynamic(() => import('../components/BestSellerCards'), { loading: () => <div>Loading...</div>, ssr: false });
+const ProductAssuranceBar = dynamic(() => import('../components/ProductAssuranceBar'), { loading: () => <div>Loading...</div>, ssr: false });
+const NakshatraGyaanBanner = dynamic(() => import('../components/NakshatraGyaanBanner'), { loading: () => <div>Loading...</div>, ssr: false });
+const SpiritualJourneyBanner = dynamic(() => import('../components/SpiritualJourneyBanner'), { loading: () => <div>Loading...</div>, ssr: false });
 
 const products = [
   {
@@ -230,7 +231,7 @@ export default function ShopPage() {
           {/* Removed duplicate <h1>Spiritual Shop</h1> here */}
           {/* Full-width Product Carousel (dynamically imported) */}
           {/* New Best Seller Cards with RecentPosts Layout */}
-          <BestSellerCards products={products} />
+          <BestSellerCards products={products.map(product => ({ ...product, loading: 'lazy' }))} />
           {/* <FeaturedProducts /> */}
           {/* Product Of The Day Section */}
           <ProductOfTheDay />
