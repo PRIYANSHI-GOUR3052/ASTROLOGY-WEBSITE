@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { signIn, getSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -214,6 +215,13 @@ export default function SignInPage() {
                     {isLoading ? 'Loading...' : 'Login'}
                   </Button>
                 </form>
+                
+                <div className="mt-4 text-center">
+                  <Link href="/forgot-password" className="text-sm text-amber-600 hover:underline font-medium">
+                    Forgot Password?
+                  </Link>
+                </div>
+                
                 <div className="mt-6 text-center text-black text-sm">Or continue with</div>
                 <div className="mt-4">
                   <Button

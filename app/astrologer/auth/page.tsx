@@ -141,6 +141,13 @@ const AstrologerAuthPage = () => {
                 {isLoading ? 'Loading...' : 'Sign in to Astrologer Account'}
               </button>
             </form>
+            
+            <div className="mt-4 text-center">
+              <Link href="/astrologer/forgot-password" className="text-sm text-amber-600 hover:underline font-medium">
+                Forgot Password?
+              </Link>
+            </div>
+            
             {/* Google sign-in removed for astrologer login */}
             <div className="mt-6 text-center text-sm text-gray-500">
               <p>

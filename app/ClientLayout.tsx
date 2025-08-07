@@ -40,6 +40,7 @@ const EXACT_PATHS = [
   "/astrologer/auth",
   "/astrologer/forgot-password",
   "/astrologer/reset-password",
+  "/forgot-password",
 ];
 
 const DYNAMIC_PATTERNS: RegExp[] = [
