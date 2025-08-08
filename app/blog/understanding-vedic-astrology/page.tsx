@@ -23,7 +23,7 @@ export default function UnderstandingVedicAstrologyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-20 md:pt-32">
+    <div className="min-h-screen bg-white pt-0 md:pt-2">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Banner Heading */}
         <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">

@@ -29,7 +29,7 @@ export default function AstrologicalRemediesPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-green-50 to-white font-sans pt-16 md:pt-24">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-green-50 to-white font-sans pt-2 md:pt-4">
       <div className="container mx-auto pb-16 px-4 relative z-10">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl bg-gradient-to-r from-[#f0fff4] via-[#f5fff5] to-[#f0fff9] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-green-100">
           <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg font-serif" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Astrological Remedies for Life</h1>

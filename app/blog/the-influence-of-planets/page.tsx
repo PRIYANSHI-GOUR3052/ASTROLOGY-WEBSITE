@@ -23,7 +23,7 @@ export default function InfluenceOfPlanetsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-20 md:pt-32">
+    <div className="min-h-screen bg-white pt-0 md:pt-2">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
