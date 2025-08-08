@@ -98,7 +98,32 @@ export default function RealTimeChat({
     try {
       console.log('Getting user authentication data...');
       
-      // Use the auth utility to get current user
+      // Check if this is an astrologer (they have astrologerToken in localStorage)
+      const astrologerToken = localStorage.getItem('astrologerToken');
+      if (astrologerToken) {
+        console.log('Detected astrologer token, using astrologer authentication');
+        
+        // Get astrologer data
+        const astrologerResponse = await axios.get('/api/astrologer/profile', {
+          headers: { Authorization: `Bearer ${astrologerToken}` }
+        });
+        
+        const astrologerData = astrologerResponse.data.astrologer;
+        if (!astrologerData || !astrologerData.id) {
+          throw new Error('Failed to get astrologer data');
+        }
+        
+        console.log('Astrologer data:', astrologerData);
+        setCurrentUserId(astrologerData.id);
+        
+        return { 
+          clientId: astrologerData.id, 
+          token: astrologerToken,
+          isAstrologer: true
+        };
+      }
+      
+      // Use the auth utility to get current user (for clients)
       const authResult = await getCurrentUser();
       console.log('Auth result:', authResult);
       
@@ -121,7 +146,7 @@ export default function RealTimeChat({
       }
 
       console.log('Successfully obtained authentication token');
-      return { clientId, token };
+      return { clientId, token, isAstrologer: false };
     } catch (error) {
       console.error('Failed to get user auth data:', error);
       throw error;
@@ -134,7 +159,7 @@ export default function RealTimeChat({
       setIsConnecting(true);
       setError('');
 
-      const { clientId, token } = await getUserAuthData();
+      const { clientId, token, isAstrologer } = await getUserAuthData();
 
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -147,7 +172,7 @@ export default function RealTimeChat({
           auth: { 
             token,
           userId: clientId,
-          userRole: 'client'
+          userRole: isAstrologer ? 'astrologer' : 'client'
         },
         transports: ['websocket', 'polling'],
         timeout: 20000,
@@ -312,19 +337,47 @@ export default function RealTimeChat({
       setIsLoading(true);
       setError('');
       
-      const { clientId, token } = await getUserAuthData();
+      const { clientId, token, isAstrologer } = await getUserAuthData();
   
       // Check if component is still mounted
       if (!bookingId) return;
   
-      const bookingResponse = await axios.get(`/api/user/booking?clientId=${clientId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      let bookingData;
+      
+      if (isAstrologer) {
+        // Use astrologer API for astrologers
+        console.log('Using astrologer API to fetch booking data');
+        const bookingResponse = await axios.get(`/api/astrologer/bookings`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        bookingData = bookingResponse.data.bookings?.find((b: { id: number; isPaid: boolean; chatEnabled: boolean }) => b.id === bookingId);
+        
+        // Transform the booking data to match the expected format
+        if (bookingData) {
+          bookingData = {
+            ...bookingData,
+            astrologer: {
+              id: bookingData.astrologer.id,
+              firstName: bookingData.astrologer.firstName,
+              lastName: bookingData.astrologer.lastName,
+              profileImage: bookingData.astrologer.profileImage || '/placeholder-user.jpg',
+              pricePerChat: bookingData.astrologer.pricePerChat || 0
+            }
+          };
+        }
+      } else {
+        // Use client API for clients
+        console.log('Using client API to fetch booking data');
+        const bookingResponse = await axios.get(`/api/user/booking?clientId=${clientId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        bookingData = bookingResponse.data.bookings?.find((b: { id: number; isPaid: boolean; chatEnabled: boolean }) => b.id === bookingId);
+      }
       
       // Check again before state updates
       if (!bookingId) return;
-      
-      const bookingData = bookingResponse.data.bookings?.find((b: { id: number; isPaid: boolean; chatEnabled: boolean }) => b.id === bookingId);
       
       if (!bookingData) {
         throw new Error('Booking not found');
@@ -342,7 +395,7 @@ export default function RealTimeChat({
   
       setBooking(bookingData);
   
-      // Load messages
+      // Load messages - use the same API for both astrologers and clients
       const messagesResponse = await axios.get(`/api/user/chat?bookingId=${bookingId}&clientId=${clientId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -417,8 +470,16 @@ export default function RealTimeChat({
   // Mark message as read
   const markMessageAsRead = useCallback(async (messageId: number) => {
     try {
-      const { clientId, token } = await getUserAuthData();
+      const { clientId, token, isAstrologer } = await getUserAuthData();
       
+      if (isAstrologer) {
+        // For astrologers, we might not need to mark messages as read, or use a different endpoint
+        console.log('Astrologer marking message as read:', messageId);
+        // TODO: Implement astrologer-specific message read marking if needed
+        return;
+      }
+      
+      // For clients, use the existing endpoint
       await axios.patch(`/api/user/chat/mark-read`, {
         messageId,
         clientId
@@ -476,11 +537,14 @@ export default function RealTimeChat({
     handleTyping(false);
   
     try {
+      // Get user auth data to determine if this is an astrologer
+      const { isAstrologer } = await getUserAuthData();
+      
       // Add temporary message for better UX
       const tempMessage: Message = {
         id: tempMessageId,
         senderId: currentUserId!,
-        senderType: 'client',
+        senderType: isAstrologer ? 'astrologer' : 'client',
         message: messageToSend,
         messageType: 'text',
         createdAt: new Date().toISOString(),
@@ -531,7 +595,7 @@ export default function RealTimeChat({
         });
       }, 1000);
     }
-  }, [newMessage, socket, isConnected, bookingId, currentUserId, handleTyping, isSending]);
+  }, [newMessage, socket, isConnected, bookingId, currentUserId, handleTyping, isSending, getUserAuthData]);
   
   // Handle key press
   const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
@@ -631,167 +695,147 @@ export default function RealTimeChat({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl h-[600px] flex flex-col">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl h-[700px] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-indigo-600 text-white rounded-t-lg">
-          <div className="flex items-center gap-3">
-            <Image
-              src={astrologer.profileImage}
-              alt={`${astrologer.firstName} ${astrologer.lastName}`}
-              width={40}
-              height={40}
-              className="w-10 h-10 rounded-full"
-            />
-            <div>
-              <h3 className="font-semibold">{`${astrologer.firstName} ${astrologer.lastName}`}</h3>
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
-              <p className="text-sm text-indigo-200">
-                  {isConnecting ? 'Connecting...' : isConnected ? 'Online' : 'Disconnected'}
-              </p>
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                <MessageCircle className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold tracking-tight">
+                  Chat with {astrologer.firstName} {astrologer.lastName}
+                </h2>
+                <div className="flex items-center gap-3 mt-1">
+                  <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-yellow-400'} animate-pulse`}></div>
+                  <span className="text-sm text-indigo-100">
+                    {isConnecting ? 'Connecting...' : isConnected ? 'Online' : 'Disconnected'}
+                  </span>
+                  <span className="text-xs text-indigo-200">
+                    Consultation #{bookingId}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleVoiceCall}
-              disabled={!booking?.videoEnabled || !isConnected}
-              className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors disabled:opacity-50"
-              title="Voice Call"
-            >
-              <Phone className="w-4 h-4" />
-            </button>
-            <button
-              onClick={handleVideoCall}
-              disabled={!booking?.videoEnabled || !isConnected}
-              className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors disabled:opacity-50"
-              title="Video Call"
-            >
-              <Video className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onClose}
-              className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleVoiceCall}
+                disabled={!booking?.videoEnabled || !isConnected}
+                className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Voice Call"
+              >
+                <Phone className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleVideoCall}
+                disabled={!booking?.videoEnabled || !isConnected}
+                className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Video Call"
+              >
+                <Video className="w-4 h-4" />
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
+                title="Close Chat"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-800 p-6">
           {messages.length === 0 ? (
-            <div className="text-center text-gray-500 py-8">
-              <MessageCircle className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-              <p>No messages yet. Start the conversation!</p>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                Start the Conversation
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Begin chatting with {astrologer.firstName} to get your consultation started
+              </p>
             </div>
           ) : (
-            messages.map((message) => {
-              const isClientMessage = message.senderType === 'client';
-              const isTemporaryMessage = message.id < 0;
-              // Fix the key generation for temporary messages
-              const messageKey = isTemporaryMessage 
-                ? `${message.message}-${Math.abs(message.id)}`
-                : message.id.toString();
-              const isSending = isTemporaryMessage && sendingMessages.has(messageKey);
-              
-              return (
-                <div
-                  key={message.id}
-                  className={`flex gap-3 ${isClientMessage ? 'justify-end' : 'justify-start'} ${
-                    isTemporaryMessage ? 'opacity-70' : ''
-                  }`}
-                >
-                  {!isClientMessage && (
-                    <Image
-                      src={astrologer.profileImage}
-                      alt=""
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  )}
+            <div className="space-y-4">
+              {messages.map((message) => {
+                const isClientMessage = message.senderType === 'client';
+                const isAstrologerMessage = message.senderType === 'astrologer';
+                const isTemporaryMessage = message.id < 0;
+                const isCurrentUserMessage = message.senderId === currentUserId;
+                
+                return (
                   <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl relative ${
-                      isClientMessage
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-slate-100 text-slate-800'
-                    } ${isTemporaryMessage ? 'border-2 border-dashed border-gray-400' : ''}`}
+                    key={message.id}
+                    className={`flex ${isCurrentUserMessage ? 'justify-end' : 'justify-start'}`}
                   >
-                    <p className="text-sm">{message.message}</p>
-                    
-                    {/* Loading indicator for temporary messages */}
-                    {isTemporaryMessage && (
-                      <div className="absolute -top-2 -right-2">
-                        <div className="w-4 h-4 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-                      </div>
-                    )}
-                    
-                    <div className="flex items-center justify-between mt-1">
-                      <p
-                        className={`text-xs ${
-                          isClientMessage ? 'text-indigo-200' : 'text-slate-500'
-                        }`}
-                      >
-                        {new Date(message.createdAt).toLocaleTimeString([], {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                        {isTemporaryMessage && ' (sending...)'}
+                    <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
+                      isCurrentUserMessage
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm border border-gray-200 dark:border-gray-600'
+                    } ${isTemporaryMessage ? 'opacity-70' : ''}`}>
+                      <p className="text-sm leading-relaxed font-medium">
+                        {message.message}
                       </p>
-                      {isClientMessage && !isTemporaryMessage && (
-                        <div className="flex items-center gap-1">
-                          {message.isRead ? (
-                            <div className="w-3 h-3 text-indigo-200">✓✓</div>
-                          ) : (
-                            <div className="w-3 h-3 text-indigo-200">✓</div>
-                          )}
-                        </div>
-                      )}
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-xs opacity-70">
+                          {new Date(message.createdAt).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                          {isTemporaryMessage && ' • sending...'}
+                        </span>
+                        {isClientMessage && !isTemporaryMessage && (
+                          <div className="flex items-center gap-1">
+                            {message.isRead ? (
+                              <div className="text-xs opacity-70">✓✓</div>
+                            ) : (
+                              <div className="text-xs opacity-70">✓</div>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  {isClientMessage && (
-                    <Image
-                      src="/placeholder-user.jpg"
-                      alt=""
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  )}
+                );
+              })}
+              
+              {/* Typing indicator */}
+              {typingUsers.size > 0 && (
+                <div className="flex justify-start">
+                  <div className="bg-white dark:bg-gray-700 rounded-2xl px-4 py-3 shadow-sm border border-gray-200 dark:border-gray-600">
+                    <div className="flex items-center gap-2">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {astrologer.firstName} is typing...
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              );
-            })
-          )}
-          
-          {/* Typing indicator */}
-          {typingUsers.size > 0 && (
-            <div className="flex gap-3">
-              <Image
-                src={astrologer.profileImage}
-                alt=""
-                width={32}
-                height={32}
-                className="w-8 h-8 rounded-full"
-              />
-              <div className="bg-slate-100 rounded-2xl px-4 py-2">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              )}
+              
+              {/* Global sending indicator */}
+              {isSending && (
+                <div className="flex justify-end">
+                  <div className="bg-indigo-100 dark:bg-indigo-900/20 rounded-2xl px-4 py-3 border border-indigo-200 dark:border-indigo-800">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+                      <span className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
+                        Sending message...
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-          
-          {/* Global sending indicator */}
-          {isSending && (
-            <div className="flex justify-end">
-              <div className="bg-indigo-100 rounded-2xl px-4 py-2 flex items-center gap-2">
-                <div className="w-3 h-3 border-2 border-indigo-400 border-t-indigo-600 rounded-full animate-spin"></div>
-                <span className="text-xs text-indigo-600">Sending message...</span>
-              </div>
+              )}
             </div>
           )}
           
@@ -799,8 +843,8 @@ export default function RealTimeChat({
         </div>
 
         {/* Message Input */}
-        <div className="p-4 border-t border-slate-200">
-          <div className="flex gap-2">
+        <div className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex gap-3">
             <input
               type="text"
               value={newMessage}
@@ -808,25 +852,30 @@ export default function RealTimeChat({
               onKeyPress={handleKeyPress}
               placeholder={isConnected ? (isSending ? "Sending message..." : "Type your message...") : "Connecting..."}
               disabled={!isConnected || !booking?.chatEnabled || isSending}
-              className="flex-1 px-4 py-2 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:cursor-not-allowed font-medium"
             />
             <button
               onClick={handleSendMessage}
               disabled={!newMessage.trim() || !isConnected || !booking?.chatEnabled || isSending}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center min-w-[60px]"
+              className="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center min-w-[80px] font-semibold"
             >
               {isSending ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                <Send className="w-4 h-4" />
+                <Send className="w-5 h-5" />
               )}
             </button>
           </div>
           
           {/* Connection status */}
           {!isConnected && (
-            <div className="mt-2 text-center">
-              <p className="text-xs text-red-500">Disconnected. Trying to reconnect...</p>
+            <div className="mt-3 text-center">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <span className="text-sm text-red-600 dark:text-red-400 font-medium">
+                  Disconnected. Trying to reconnect...
+                </span>
+              </div>
             </div>
           )}
         </div>
