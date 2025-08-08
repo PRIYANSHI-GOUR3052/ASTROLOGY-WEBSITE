@@ -248,11 +248,11 @@ export function Header() {
     <span className={`transition-transform duration-300 ${isConsultationBarOpen ? 'rotate-180' : ''}`}>▼</span>
   </button>
   <Link
-    href="/talk-to-astrologer"
+    href="/chat-with-astrologer"
     className="text-sm font-bold text-black px-2 py-1 rounded transition-colors"
     style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
   >
-    {t("header.nav.talk_to_astrologer")}
+    {t("header.nav.chat_with_astrologer")}
   </Link>
   <Link
     href="/shop"
@@ -601,11 +601,11 @@ export function Header() {
             <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
           <Link
-            href="/talk-to-astrologer"
+            href="/chat-with-astrologer"
             className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
             style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
           >
-            <span className="relative z-10">{t("header.nav.talk_to_astrologer")}</span>
+            <span className="relative z-10">{t("header.nav.chat_with_astrologer")}</span>
             <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
           <Link
