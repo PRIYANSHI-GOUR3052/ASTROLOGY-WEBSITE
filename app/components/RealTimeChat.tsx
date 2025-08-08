@@ -695,150 +695,147 @@ export default function RealTimeChat({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl h-[600px] flex flex-col">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl h-[700px] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-indigo-600 text-white rounded-t-lg">
-          <div className="flex items-center gap-3">
-            <Image
-              src={astrologer.profileImage}
-              alt={`${astrologer.firstName} ${astrologer.lastName}`}
-              width={40}
-              height={40}
-              className="w-10 h-10 rounded-full"
-            />
-            <div>
-              <h3 className="font-semibold">{`${astrologer.firstName} ${astrologer.lastName}`}</h3>
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
-              <p className="text-sm text-indigo-200">
-                  {isConnecting ? 'Connecting...' : isConnected ? 'Online' : 'Disconnected'}
-              </p>
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                <MessageCircle className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold tracking-tight">
+                  Chat with {astrologer.firstName} {astrologer.lastName}
+                </h2>
+                <div className="flex items-center gap-3 mt-1">
+                  <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-yellow-400'} animate-pulse`}></div>
+                  <span className="text-sm text-indigo-100">
+                    {isConnecting ? 'Connecting...' : isConnected ? 'Online' : 'Disconnected'}
+                  </span>
+                  <span className="text-xs text-indigo-200">
+                    Consultation #{bookingId}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleVoiceCall}
-              disabled={!booking?.videoEnabled || !isConnected}
-              className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors disabled:opacity-50"
-              title="Voice Call"
-            >
-              <Phone className="w-4 h-4" />
-            </button>
-            <button
-              onClick={handleVideoCall}
-              disabled={!booking?.videoEnabled || !isConnected}
-              className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors disabled:opacity-50"
-              title="Video Call"
-            >
-              <Video className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onClose}
-              className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleVoiceCall}
+                disabled={!booking?.videoEnabled || !isConnected}
+                className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Voice Call"
+              >
+                <Phone className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleVideoCall}
+                disabled={!booking?.videoEnabled || !isConnected}
+                className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Video Call"
+              >
+                <Video className="w-4 h-4" />
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
+                title="Close Chat"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-800 p-6">
           {messages.length === 0 ? (
-            <div className="text-center text-gray-500 py-8">
-              <MessageCircle className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-              <p>No messages yet. Start the conversation!</p>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                Start the Conversation
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Begin chatting with {astrologer.firstName} to get your consultation started
+              </p>
             </div>
           ) : (
-            messages.map((message) => {
-              const isClientMessage = message.senderType === 'client';
-              const isAstrologerMessage = message.senderType === 'astrologer';
-              const isTemporaryMessage = message.id < 0;
-              
-              // Check if this message is from the current user
-              const isCurrentUserMessage = message.senderId === currentUserId;
-              
-              return (
-                <div
-                  key={message.id}
-                  className={`flex gap-3 ${isCurrentUserMessage ? 'flex-row-reverse' : ''}`}
-                >
-                  {!isCurrentUserMessage && (
-                    <Image
-                      src={isAstrologerMessage ? astrologer.profileImage : "/placeholder-user.jpg"}
-                      alt=""
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  )}
-                  <div className={`flex-1 ${isCurrentUserMessage ? 'text-right' : ''}`}>
-                    <div className={`inline-block max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+            <div className="space-y-4">
+              {messages.map((message) => {
+                const isClientMessage = message.senderType === 'client';
+                const isAstrologerMessage = message.senderType === 'astrologer';
+                const isTemporaryMessage = message.id < 0;
+                const isCurrentUserMessage = message.senderId === currentUserId;
+                
+                return (
+                  <div
+                    key={message.id}
+                    className={`flex ${isCurrentUserMessage ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
                       isCurrentUserMessage
                         ? 'bg-indigo-600 text-white'
-                        : 'bg-slate-100 text-slate-900'
-                    }`}>
-                      <p className="text-sm">{message.message}</p>
-                      <p className="text-xs opacity-70 mt-1">
-                        {new Date(message.createdAt).toLocaleTimeString([], {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                        {isTemporaryMessage && ' (sending...)'}
+                        : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm border border-gray-200 dark:border-gray-600'
+                    } ${isTemporaryMessage ? 'opacity-70' : ''}`}>
+                      <p className="text-sm leading-relaxed font-medium">
+                        {message.message}
                       </p>
-                      {isClientMessage && !isTemporaryMessage && (
-                        <div className="flex items-center gap-1">
-                          {message.isRead ? (
-                            <div className="w-3 h-3 text-indigo-200">✓✓</div>
-                          ) : (
-                            <div className="w-3 h-3 text-indigo-200">✓</div>
-                          )}
-                        </div>
-                      )}
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-xs opacity-70">
+                          {new Date(message.createdAt).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                          {isTemporaryMessage && ' • sending...'}
+                        </span>
+                        {isClientMessage && !isTemporaryMessage && (
+                          <div className="flex items-center gap-1">
+                            {message.isRead ? (
+                              <div className="text-xs opacity-70">✓✓</div>
+                            ) : (
+                              <div className="text-xs opacity-70">✓</div>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  {isCurrentUserMessage && (
-                    <Image
-                      src={isAstrologerMessage ? astrologer.profileImage : "/placeholder-user.jpg"}
-                      alt=""
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  )}
+                );
+              })}
+              
+              {/* Typing indicator */}
+              {typingUsers.size > 0 && (
+                <div className="flex justify-start">
+                  <div className="bg-white dark:bg-gray-700 rounded-2xl px-4 py-3 shadow-sm border border-gray-200 dark:border-gray-600">
+                    <div className="flex items-center gap-2">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {astrologer.firstName} is typing...
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              );
-            })
-          )}
-          
-          {/* Typing indicator */}
-          {typingUsers.size > 0 && (
-            <div className="flex gap-3">
-              <Image
-                src={astrologer.profileImage}
-                alt=""
-                width={32}
-                height={32}
-                className="w-8 h-8 rounded-full"
-              />
-              <div className="bg-slate-100 rounded-2xl px-4 py-2">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              )}
+              
+              {/* Global sending indicator */}
+              {isSending && (
+                <div className="flex justify-end">
+                  <div className="bg-indigo-100 dark:bg-indigo-900/20 rounded-2xl px-4 py-3 border border-indigo-200 dark:border-indigo-800">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+                      <span className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
+                        Sending message...
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-          
-          {/* Global sending indicator */}
-          {isSending && (
-            <div className="flex justify-end">
-              <div className="bg-indigo-100 rounded-2xl px-4 py-2 flex items-center gap-2">
-                <div className="w-3 h-3 border-2 border-indigo-400 border-t-indigo-600 rounded-full animate-spin"></div>
-                <span className="text-xs text-indigo-600">Sending message...</span>
-              </div>
+              )}
             </div>
           )}
           
@@ -846,8 +843,8 @@ export default function RealTimeChat({
         </div>
 
         {/* Message Input */}
-        <div className="p-4 border-t border-slate-200">
-          <div className="flex gap-2">
+        <div className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex gap-3">
             <input
               type="text"
               value={newMessage}
@@ -855,25 +852,30 @@ export default function RealTimeChat({
               onKeyPress={handleKeyPress}
               placeholder={isConnected ? (isSending ? "Sending message..." : "Type your message...") : "Connecting..."}
               disabled={!isConnected || !booking?.chatEnabled || isSending}
-              className="flex-1 px-4 py-2 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:cursor-not-allowed font-medium"
             />
             <button
               onClick={handleSendMessage}
               disabled={!newMessage.trim() || !isConnected || !booking?.chatEnabled || isSending}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center min-w-[60px]"
+              className="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center min-w-[80px] font-semibold"
             >
               {isSending ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                <Send className="w-4 h-4" />
+                <Send className="w-5 h-5" />
               )}
             </button>
           </div>
           
           {/* Connection status */}
           {!isConnected && (
-            <div className="mt-2 text-center">
-              <p className="text-xs text-red-500">Disconnected. Trying to reconnect...</p>
+            <div className="mt-3 text-center">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <span className="text-sm text-red-600 dark:text-red-400 font-medium">
+                  Disconnected. Trying to reconnect...
+                </span>
+              </div>
             </div>
           )}
         </div>

@@ -304,167 +304,250 @@ const ConsultationsPage = () => {
   }
 
   return (
-    <motion.div
-      className="flex w-full h-[80vh] bg-white dark:bg-black rounded-xl shadow overflow-hidden"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-    >
-      {/* Left Chat List */}
-      <div className="w-full md:w-1/4 border-r bg-[#FFF5E1] border-gray-300 dark:border-gray-700 dark:bg-midnight p-4 space-y-3">
-        <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Active Consultations</h2>
-        
-        {/* Connection Status */}
-        <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                {isConnected ? 'Connected' : 'Disconnected'}
-              </span>
-            </div>
-            {!isConnected && (
-              <button 
-                onClick={() => {
-                  setError(null);
-                  initializeSocket();
-                }}
-                className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 underline"
-              >
-                Reconnect
-              </button>
-            )}
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Consultations Dashboard
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300">
+            Manage your active consultations and chat with clients
+          </p>
         </div>
-        
-        {/* Error Display */}
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-              </svg>
-              <span className="text-sm text-red-700 dark:text-red-300">{error}</span>
-            </div>
-            <button 
-              onClick={() => {
-                setError(null);
-                initializeSocket();
-              }}
-              className="mt-2 text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 underline"
-            >
-              Retry Connection
-            </button>
-          </div>
-        )}
-        
-        {chats.length === 0 ? (
-          <div className="text-center text-gray-500 py-8">
-            <MessageCircle className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-            <p>No active consultations</p>
-          </div>
-        ) : (
-          chats.map((chat) => (
-            <div
-              key={chat.id}
-              className={cn(
-                'cursor-pointer p-3 rounded-lg transition border',
-                activeChatId === chat.id
-                  ? 'bg-[#FFE4B8] dark:bg-[#333] border-indigo-300'
-                  : 'hover:bg-[#FFF1CC] dark:hover:bg-[#222] border-gray-200'
-              )}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-purple-700 dark:text-purple-400 font-semibold">{chat.client}</h3>
-                <span className={cn(
-                  'text-xs px-2 py-1 rounded-full',
-                  chat.status === 'active' ? 'bg-green-100 text-green-700' :
-                  chat.status === 'ended' ? 'bg-gray-100 text-gray-700' :
-                  'bg-yellow-100 text-yellow-700'
-                )}>
-                  {chat.status}
-                </span>
-              </div>
-              
-              <p className="text-sm text-gray-600 dark:text-gray-400 italic truncate mb-2">
-                {chat.lastMessage}
-              </p>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500 dark:text-gray-500">
-                  {new Date(chat.timestamp).toLocaleString()}
-                </span>
-                
-                <div className="flex gap-1">
-                  {chat.isPaid && chat.chatEnabled && (
-                    <button
-                      onClick={() => handleStartChat(chat)}
-                      className="p-1 bg-indigo-100 text-indigo-600 rounded hover:bg-indigo-200 transition-colors"
-                      title="Start Chat"
-                    >
-                      <MessageCircle className="w-3 h-3" />
-                    </button>
-                  )}
-                  
-                  {chat.isPaid && chat.videoEnabled && (
-                    <button
-                      onClick={() => handleStartVideoCall(chat)}
-                      className="p-1 bg-green-100 text-green-600 rounded hover:bg-green-200 transition-colors"
-                      title="Start Video Call"
-                    >
-                      <Video className="w-3 h-3" />
-                    </button>
-                  )}
+
+        {/* Connection Status */}
+        <div className="mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'} animate-pulse`}></div>
+                <div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    {isConnected ? 'Connected to Chat Server' : 'Disconnected'}
+                  </span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {isConnected ? 'Ready to receive messages' : 'Unable to connect to chat server'}
+                  </p>
                 </div>
               </div>
+              {!isConnected && (
+                <button 
+                  onClick={() => {
+                    setError(null);
+                    initializeSocket();
+                  }}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+                >
+                  Reconnect
+                </button>
+              )}
             </div>
-          ))
-        )}
-      </div>
+          </div>
+        </div>
 
-      {/* Right Chat Panel */}
-      <div className="flex-1 flex flex-col">
-        {activeChat ? (
-          <>
-            {/* Chat Header */}
-            <div className="p-4 border-b border-gray-300 dark:border-gray-700 text-lg font-semibold text-gray-800 dark:text-white">
-              Chat with {activeChat.client}
-            </div>
-
-            {/* Chat Messages */}
-            <div className="flex-1 p-4 space-y-3 overflow-y-auto">
-              {/* Placeholder for messages - would be replaced with real messages */}
-              <div className="text-center text-gray-500 py-8">
-                <MessageCircle className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-                <p>Click on a consultation to start chatting</p>
+        {/* Error Display */}
+        {error && (
+          <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0">
+                <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
               </div>
-            </div>
-
-            {/* Message Input */}
-            <div className="p-4 border-t border-gray-300 dark:border-gray-700 flex gap-2">
-              <input
-                type="text"
-                placeholder="Type your message..."
-                className="flex-1 rounded-full px-4 py-2 bg-gray-100 dark:bg-[#222] text-gray-900 dark:text-white focus:outline-none"
-                disabled
-              />
-              <button
-                className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-full disabled:opacity-50"
-                disabled
-              >
-                Send
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center text-gray-500">
-              <MessageCircle className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium mb-2">No consultation selected</h3>
-              <p>Choose a consultation from the list to start chatting</p>
+              <div className="flex-1">
+                <h3 className="text-sm font-medium text-red-800 dark:text-red-200">Connection Error</h3>
+                <p className="text-sm text-red-700 dark:text-red-300 mt-1">{error}</p>
+                <button 
+                  onClick={() => {
+                    setError(null);
+                    initializeSocket();
+                  }}
+                  className="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 underline"
+                >
+                  Try Again
+                </button>
+              </div>
             </div>
           </div>
         )}
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Consultations List */}
+          <div className="lg:col-span-1">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                  Active Consultations
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {chats.length} consultation{chats.length !== 1 ? 's' : ''} available
+                </p>
+              </div>
+              
+              <div className="p-4">
+                {chats.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <MessageCircle className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                      No Active Consultations
+                    </h3>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      When clients book consultations, they will appear here
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {chats.map((chat) => (
+                      <div
+                        key={chat.id}
+                        className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer border border-gray-200 dark:border-gray-600"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                              {chat.client}
+                            </h3>
+                            <div className="flex items-center gap-2">
+                              <span className={cn(
+                                'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
+                                chat.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                                chat.status === 'ended' ? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200' :
+                                'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                              )}>
+                                {chat.status}
+                              </span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                {new Date(chat.timestamp).toLocaleDateString()}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+                          {chat.lastMessage}
+                        </p>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            {chat.isPaid && (
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                Paid
+                              </span>
+                            )}
+                            {!chat.isPaid && (
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                Unpaid
+                              </span>
+                            )}
+                          </div>
+                          
+                          <div className="flex gap-2">
+                            {chat.isPaid && chat.chatEnabled && (
+                              <button
+                                onClick={() => handleStartChat(chat)}
+                                className="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-xs font-medium"
+                              >
+                                <MessageCircle className="w-3 h-3" />
+                                Chat
+                              </button>
+                            )}
+                            
+                            {chat.isPaid && chat.videoEnabled && (
+                              <button
+                                onClick={() => handleStartVideoCall(chat)}
+                                className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs font-medium"
+                              >
+                                <Video className="w-3 h-3" />
+                                Video
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Chat Area */}
+          <div className="lg:col-span-2">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 h-[600px] flex flex-col">
+              {activeChat ? (
+                <>
+                  {/* Chat Header */}
+                  <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                          Chat with {activeChat.client}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Consultation ID: #{activeChat.bookingId}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={cn(
+                          'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
+                          activeChat.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                          'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+                        )}>
+                          {activeChat.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Chat Messages */}
+                  <div className="flex-1 p-6 overflow-y-auto">
+                    <div className="text-center text-gray-500 py-12">
+                      <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                      <h3 className="text-lg font-medium mb-2">Start the Conversation</h3>
+                      <p className="text-sm">Click the chat button to begin messaging with {activeChat.client}</p>
+                    </div>
+                  </div>
+
+                  {/* Message Input */}
+                  <div className="p-6 border-t border-gray-200 dark:border-gray-700">
+                    <div className="flex gap-3">
+                      <input
+                        type="text"
+                        placeholder="Type your message..."
+                        className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        disabled
+                      />
+                      <button
+                        className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                        disabled
+                      >
+                        Send
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <MessageCircle className="w-10 h-10 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                      Select a Consultation
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 max-w-md">
+                      Choose a consultation from the list to start chatting with your client
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Real-time Chat Modal */}
@@ -501,7 +584,7 @@ const ConsultationsPage = () => {
           socket={socket}
         />
       )}
-    </motion.div>
+    </div>
   );
 };
 
