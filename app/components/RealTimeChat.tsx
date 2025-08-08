@@ -324,7 +324,7 @@ export default function RealTimeChat({
       // Check again before state updates
       if (!bookingId) return;
       
-      const bookingData = bookingResponse.data.bookings?.find((b: any) => b.id === bookingId);
+      const bookingData = bookingResponse.data.bookings?.find((b: { id: number; isPaid: boolean; chatEnabled: boolean }) => b.id === bookingId);
       
       if (!bookingData) {
         throw new Error('Booking not found');
@@ -357,11 +357,13 @@ export default function RealTimeChat({
         }
       }
   
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load booking data:', error);
       if (!bookingId) return; // Don't update state if component unmounted
       
-      const errorMessage = error.response?.data?.error || error.message || 'Failed to load booking data';
+      // Type guard for axios error
+      const axiosError = error as { response?: { data?: { error?: string } }; message?: string };
+      const errorMessage = axiosError.response?.data?.error || axiosError.message || 'Failed to load booking data';
       setError(errorMessage);
       
       if (errorMessage.includes('Payment required')) {
@@ -384,9 +386,9 @@ export default function RealTimeChat({
     [reconnectAttempts, initializeSocket]
   );
   
-  function debounce(func: Function, wait: number) {
+  function debounce(func: (...args: unknown[]) => void, wait: number) {
     let timeout: NodeJS.Timeout;
-    return function executedFunction(...args: any[]) {
+    return function executedFunction(...args: unknown[]) {
       const later = () => {
         clearTimeout(timeout);
         func(...args);

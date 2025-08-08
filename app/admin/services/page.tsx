@@ -188,11 +188,11 @@ export default function AdminServicesPage() {
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto ">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Manage Services</h1>
-        <Button onClick={handleAddNew} className="bg-primary hover:bg-primary/90">
-          <Plus className="h-4 w-4 mr-2" /> Add New Service
+        <Button onClick={handleAddNew} className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
+          <Plus className="h-4 w-4" /> Add New Service
         </Button>
       </div>
       
@@ -252,7 +252,7 @@ export default function AdminServicesPage() {
       </div>
       
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto border-0 shadow-lg">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">
               {editingId ? 'Edit Service' : 'Add New Service'}
@@ -270,7 +270,7 @@ export default function AdminServicesPage() {
                   value={formData.title_hi}
                   onChange={handleInputChange}
                   placeholder="ज्योतिष परामर्श"
-                  className="w-full"
+                  className="w-full border-0 focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -286,7 +286,7 @@ export default function AdminServicesPage() {
                   onChange={handleInputChange}
                   onBlur={generateSlug}
                   placeholder="Astrology Consultation"
-                  className="w-full"
+                  className="w-full border-0 focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -302,7 +302,7 @@ export default function AdminServicesPage() {
                     value={formData.slug}
                     onChange={handleInputChange}
                     placeholder="astrology-consultation"
-                    className="w-full font-mono"
+                    className="w-full font-mono border-0 focus:ring-2 focus:ring-primary"
                     required
                   />
                   <Button 
@@ -327,7 +327,7 @@ export default function AdminServicesPage() {
                   value={formData.price}
                   onChange={handleInputChange}
                   placeholder="1999"
-                  className="w-full"
+                  className="w-full border-0 focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -341,7 +341,7 @@ export default function AdminServicesPage() {
                   name="icon_type"
                   value={formData.icon_type}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border-0 rounded-md focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="lucide">Lucide Icon</option>
@@ -360,7 +360,7 @@ export default function AdminServicesPage() {
                     value={formData.icon_path}
                     onChange={handleInputChange}
                     placeholder={formData.icon_type === 'lucide' ? 'Sun' : 'M12,2L2,22h20L12,2z'}
-                    className="w-full"
+                    className="w-full border-0 focus:ring-2 focus:ring-primary"
                     required
                   />
                   {formData.icon_type === 'lucide' && formData.icon_path && (
@@ -385,7 +385,7 @@ export default function AdminServicesPage() {
                   value={formData.priority}
                   onChange={handleInputChange}
                   placeholder="100"
-                  className="w-full"
+                  className="w-full border-0 focus:ring-2 focus:ring-primary"
                 />
               </div>
             </div>
@@ -400,7 +400,7 @@ export default function AdminServicesPage() {
                 value={formData.description_hi}
                 onChange={handleInputChange}
                 placeholder="अपने जीवन पथ, संबंधों और करियर के बारे में व्यक्तिगत ज्योतिषीय पठन के माध्यम से अंतर्दृष्टि प्राप्त करें।"
-                className="w-full"
+                className="w-full border-0 focus:ring-2 focus:ring-primary"
                 rows={3}
                 required
               />
@@ -416,7 +416,7 @@ export default function AdminServicesPage() {
                 value={formData.description_en}
                 onChange={handleInputChange}
                 placeholder="Gain insights into your life path, relationships, and career through personalized astrological readings."
-                className="w-full"
+                className="w-full border-0 focus:ring-2 focus:ring-primary"
                 rows={3}
                 required
               />

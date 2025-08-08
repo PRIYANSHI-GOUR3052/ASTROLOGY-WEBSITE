@@ -12,9 +12,9 @@ export const config = {
 
 const upload = multer();
 
-function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: (...args: unknown[]) => void) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
   return new Promise((resolve, reject) => {
-    fn(req, res, (result: unknown) => {
+    fn(req as unknown as any, res as unknown as any, (result: unknown) => {
       if (result instanceof Error) {
         return reject(result);
       }

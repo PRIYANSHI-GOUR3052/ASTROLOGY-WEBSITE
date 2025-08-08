@@ -44,9 +44,9 @@ export const config = {
 
 const upload = multer();
 
-function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: (...args: unknown[]) => void) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
   return new Promise((resolve, reject) => {
-    fn(req, res, (result: unknown) => {
+    fn(req as unknown as any, res as unknown as any, (result: unknown) => {
       if (result instanceof Error) {
         return reject(result);
       }
@@ -102,7 +102,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       body = {};
     }
     // If fields are sent as FormData, they are strings
-    const { firstName, lastName, phone, yearsOfExperience, areasOfExpertise, avatar, about, pricePerChat, languages } = body as Record<string, any>;
+    const { firstName, lastName, phone, yearsOfExperience, areasOfExpertise, avatar, about, pricePerChat, languages } = body as Record<string, string | number | null>;
     let profileImageUrl: string | undefined;
     if (file && file.buffer) {
       // Upload the file to Cloudinary
@@ -115,9 +115,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       profileImageUrl = body.profileImage as string;
     }
     // Normalize empty strings to null
-    const norm = (v: any) => (v === undefined || v === null || v === '' ? null : v);
+    const norm = (v: string | number | null | undefined) => (v === undefined || v === null || v === '' ? null : v);
     // Only include fields in updateData if they are not undefined
-    const updateData: any = {};
+    const updateData: Record<string, string | number | null> = {};
     if (firstName !== undefined) updateData.firstName = firstName;
     if (lastName !== undefined) updateData.lastName = lastName;
     if (phone !== undefined) updateData.phone = phone;

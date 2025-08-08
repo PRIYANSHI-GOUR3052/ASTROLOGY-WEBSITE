@@ -18,7 +18,7 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement
 }
 
-type ActionTypes = 'ADD' | 'REMOVE' | 'CLEAR';
+type ActionTypes = 'ADD_TOAST' | 'UPDATE_TOAST' | 'DISMISS_TOAST' | 'REMOVE_TOAST';
 
 let count = 0
 
@@ -29,19 +29,19 @@ function genId() {
 
 type Action =
   | {
-      type: ActionTypes
+      type: 'ADD_TOAST'
       toast: ToasterToast
     }
   | {
-      type: ActionTypes
+      type: 'UPDATE_TOAST'
       toast: Partial<ToasterToast>
     }
   | {
-      type: ActionTypes
+      type: 'DISMISS_TOAST'
       toastId?: ToasterToast["id"]
     }
   | {
-      type: ActionTypes
+      type: 'REMOVE_TOAST'
       toastId?: ToasterToast["id"]
     }
 
@@ -119,6 +119,8 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         toasts: state.toasts.filter((t) => t.id !== action.toastId),
       }
+    default:
+      return state;
   }
 }
 

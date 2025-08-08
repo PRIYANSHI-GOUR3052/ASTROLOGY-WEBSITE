@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { X, Plus, ChevronDown, ChevronUp, Link } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

@@ -527,13 +527,13 @@ const ProfilePage = () => {
                       <input
                         type="checkbox"
                         value={code}
-                        checked={basicForm.languages.includes(code)}
+                        checked={basicForm.languages.includes(code as SupportedLang)}
                         onChange={e => {
                           const checked = e.target.checked;
                           setBasicForm(prev => ({
                             ...prev,
                             languages: checked
-                              ? [...prev.languages, code]
+                              ? [...prev.languages, code as SupportedLang]
                               : prev.languages.filter(l => l !== code)
                           }));
                         }}

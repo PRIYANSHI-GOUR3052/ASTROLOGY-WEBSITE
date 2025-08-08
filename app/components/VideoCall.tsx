@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Phone, Video, Mic, MicOff, VideoOff, X, Settings, RefreshCw, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
+import { Socket } from 'socket.io-client';
 
 interface VideoCallProps {
   bookingId: number;
@@ -13,7 +14,7 @@ interface VideoCallProps {
     profileImage: string;
   };
   onClose: () => void;
-  socket: any; // Socket instance for signaling
+  socket: Socket | null; // Socket instance for signaling
 }
 
 interface VideoOfferData {
@@ -114,13 +115,13 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
       // Join the booking room
       socket.emit('join-booking', { bookingId });
       
-      socket.on('joined-booking', (data: any) => {
+      socket.on('joined-booking', (data: { bookingId: number; message: string }) => {
         console.log('Successfully joined booking room:', data);
         setIsJoined(true);
         startWebRTC();
       });
       
-      socket.on('error', (data: any) => {
+      socket.on('error', (data: { message: string }) => {
         console.error('Socket error:', data);
         setError(data.message || 'Failed to join video call');
         setIsConnecting(false);
@@ -328,11 +329,11 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         });
 
         // Listen for user joined/left events
-        socket.on('user-joined', (data: any) => {
+        socket.on('user-joined', (data: { userId: string; userRole: string }) => {
           console.log('User joined video call:', data);
         });
 
-        socket.on('user-left', (data: any) => {
+        socket.on('user-left', (data: { userId: string; userRole: string }) => {
           console.log('User left video call:', data);
           setError('Other participant left the call');
           setTimeout(() => {

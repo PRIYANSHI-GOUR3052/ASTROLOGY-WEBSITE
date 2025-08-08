@@ -111,7 +111,7 @@ export const authOptions: NextAuthOptions = {
             )
             
             // Get the inserted user's ID
-            const insertResult = result as any;
+            const insertResult = result as { insertId: number };
             user.id = insertResult.insertId.toString();
           } else {
             // User exists, use their database ID

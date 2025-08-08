@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { spawn } = require('child_process');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const path = require('path');
 
 console.log('🚀 Starting Socket.IO server...');

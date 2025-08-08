@@ -24,6 +24,9 @@ export default function ZodiacSignPage() {
   const [editIdx, setEditIdx] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
   const [editImage, setEditImage] = useState<string | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addName, setAddName] = useState('');
+  const [addImage, setAddImage] = useState<string | null>(null);
 
   const handleEdit = (idx: number) => {
     setEditIdx(idx);
@@ -31,21 +34,32 @@ export default function ZodiacSignPage() {
     setEditImage(null);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'edit' | 'add') => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (ev) => {
-        setEditImage(ev.target?.result as string);
+        if (type === 'edit') setEditImage(ev.target?.result as string);
+        else setAddImage(ev.target?.result as string);
       };
       reader.readAsDataURL(e.target.files[0]);
     }
+  };
+
+  const handleAddZodiac = () => {
+    // Here you would add the new zodiac sign to your data source
+    setShowAddModal(false);
+    setAddName('');
+    setAddImage(null);
   };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 p-6">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Zodiac Signs</h1>
-        <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition-colors">
+        <button
+          className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition-colors"
+          onClick={() => setShowAddModal(true)}
+        >
           + Add Zodiac Sign
         </button>
       </div>
@@ -137,7 +151,7 @@ export default function ZodiacSignPage() {
                   type="file"
                   accept="image/*"
                   className="hidden"
-                  onChange={handleImageChange}
+                  onChange={e => handleImageChange(e, 'edit')}
                 />
               </label>
             </div>
@@ -162,6 +176,56 @@ export default function ZodiacSignPage() {
                 onClick={() => setEditIdx(null)}
               >
                 Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-full max-w-sm">
+            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Add Zodiac Sign</h2>
+            <div className="flex flex-col items-center mb-4">
+              <div className="w-20 h-20 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden mb-2">
+                <img
+                  src={addImage || "/placeholder-user.jpg"}
+                  alt="Add zodiac image"
+                  className="w-16 h-16 object-cover rounded-full"
+                  style={{ display: 'block' }}
+                />
+              </div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 cursor-pointer">
+                <span className="underline">Add Image</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={e => handleImageChange(e, 'add')}
+                />
+              </label>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Zodiac Name</label>
+              <input
+                type="text"
+                className="w-full border px-3 py-2 rounded text-sm bg-white dark:bg-gray-800 text-black dark:text-white"
+                value={addName}
+                onChange={e => setAddName(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-end gap-2 mt-6">
+              <button
+                className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold"
+                onClick={() => setShowAddModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-purple-600 hover:bg-purple-700 text-white font-semibold"
+                onClick={handleAddZodiac}
+              >
+                Add Zodiac
               </button>
             </div>
           </div>

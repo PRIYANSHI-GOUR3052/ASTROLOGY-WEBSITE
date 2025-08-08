@@ -41,7 +41,7 @@ export function useDashboardData() {
           totals.sales = Number(totals.sales);
           totals.orders = Number(totals.orders);
           totals.conversionRate = typeof totals.conversionRate === 'number'
-            ? `${totals.conversionRate.toFixed(2)}%`
+            ? `${(totals.conversionRate as number).toFixed(2)}%`
             : totals.conversionRate;
         }
       }

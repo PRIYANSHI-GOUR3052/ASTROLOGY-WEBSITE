@@ -1,5 +1,9 @@
 import nodemailer from 'nodemailer';
 
+// Validate required environment variables
+if (!process.env.SMTP_USER || !process.env.SMTP_PASS || !process.env.SMTP_HOST) {
+  throw new Error('SMTP_USER, SMTP_PASS, and SMTP_HOST environment variables are required');
+}
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -32,7 +36,7 @@ export async function sendResetPasswordEmail({ to, resetUrl, astrologerName }: {
     </div>
   `;
   return transporter.sendMail({
-    from: `Nakshatra Gyaan <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+    from: `Nakshatra Gyaan <${process.env.SMTP_FROM || process.env.SMTP_USER!}>`,
     to,
     subject,
     html,
