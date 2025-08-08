@@ -98,7 +98,32 @@ export default function RealTimeChat({
     try {
       console.log('Getting user authentication data...');
       
-      // Use the auth utility to get current user
+      // Check if this is an astrologer (they have astrologerToken in localStorage)
+      const astrologerToken = localStorage.getItem('astrologerToken');
+      if (astrologerToken) {
+        console.log('Detected astrologer token, using astrologer authentication');
+        
+        // Get astrologer data
+        const astrologerResponse = await axios.get('/api/astrologer/profile', {
+          headers: { Authorization: `Bearer ${astrologerToken}` }
+        });
+        
+        const astrologerData = astrologerResponse.data.astrologer;
+        if (!astrologerData || !astrologerData.id) {
+          throw new Error('Failed to get astrologer data');
+        }
+        
+        console.log('Astrologer data:', astrologerData);
+        setCurrentUserId(astrologerData.id);
+        
+        return { 
+          clientId: astrologerData.id, 
+          token: astrologerToken,
+          isAstrologer: true
+        };
+      }
+      
+      // Use the auth utility to get current user (for clients)
       const authResult = await getCurrentUser();
       console.log('Auth result:', authResult);
       
@@ -121,7 +146,7 @@ export default function RealTimeChat({
       }
 
       console.log('Successfully obtained authentication token');
-      return { clientId, token };
+      return { clientId, token, isAstrologer: false };
     } catch (error) {
       console.error('Failed to get user auth data:', error);
       throw error;
@@ -134,7 +159,7 @@ export default function RealTimeChat({
       setIsConnecting(true);
       setError('');
 
-      const { clientId, token } = await getUserAuthData();
+      const { clientId, token, isAstrologer } = await getUserAuthData();
 
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -147,7 +172,7 @@ export default function RealTimeChat({
           auth: { 
             token,
           userId: clientId,
-          userRole: 'client'
+          userRole: isAstrologer ? 'astrologer' : 'client'
         },
         transports: ['websocket', 'polling'],
         timeout: 20000,
@@ -312,19 +337,47 @@ export default function RealTimeChat({
       setIsLoading(true);
       setError('');
       
-      const { clientId, token } = await getUserAuthData();
+      const { clientId, token, isAstrologer } = await getUserAuthData();
   
       // Check if component is still mounted
       if (!bookingId) return;
   
-      const bookingResponse = await axios.get(`/api/user/booking?clientId=${clientId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      let bookingData;
+      
+      if (isAstrologer) {
+        // Use astrologer API for astrologers
+        console.log('Using astrologer API to fetch booking data');
+        const bookingResponse = await axios.get(`/api/astrologer/bookings`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        bookingData = bookingResponse.data.bookings?.find((b: { id: number; isPaid: boolean; chatEnabled: boolean }) => b.id === bookingId);
+        
+        // Transform the booking data to match the expected format
+        if (bookingData) {
+          bookingData = {
+            ...bookingData,
+            astrologer: {
+              id: bookingData.astrologer.id,
+              firstName: bookingData.astrologer.firstName,
+              lastName: bookingData.astrologer.lastName,
+              profileImage: bookingData.astrologer.profileImage || '/placeholder-user.jpg',
+              pricePerChat: bookingData.astrologer.pricePerChat || 0
+            }
+          };
+        }
+      } else {
+        // Use client API for clients
+        console.log('Using client API to fetch booking data');
+        const bookingResponse = await axios.get(`/api/user/booking?clientId=${clientId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        bookingData = bookingResponse.data.bookings?.find((b: { id: number; isPaid: boolean; chatEnabled: boolean }) => b.id === bookingId);
+      }
       
       // Check again before state updates
       if (!bookingId) return;
-      
-      const bookingData = bookingResponse.data.bookings?.find((b: { id: number; isPaid: boolean; chatEnabled: boolean }) => b.id === bookingId);
       
       if (!bookingData) {
         throw new Error('Booking not found');
@@ -342,7 +395,7 @@ export default function RealTimeChat({
   
       setBooking(bookingData);
   
-      // Load messages
+      // Load messages - use the same API for both astrologers and clients
       const messagesResponse = await axios.get(`/api/user/chat?bookingId=${bookingId}&clientId=${clientId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -417,8 +470,16 @@ export default function RealTimeChat({
   // Mark message as read
   const markMessageAsRead = useCallback(async (messageId: number) => {
     try {
-      const { clientId, token } = await getUserAuthData();
+      const { clientId, token, isAstrologer } = await getUserAuthData();
       
+      if (isAstrologer) {
+        // For astrologers, we might not need to mark messages as read, or use a different endpoint
+        console.log('Astrologer marking message as read:', messageId);
+        // TODO: Implement astrologer-specific message read marking if needed
+        return;
+      }
+      
+      // For clients, use the existing endpoint
       await axios.patch(`/api/user/chat/mark-read`, {
         messageId,
         clientId
@@ -476,11 +537,14 @@ export default function RealTimeChat({
     handleTyping(false);
   
     try {
+      // Get user auth data to determine if this is an astrologer
+      const { isAstrologer } = await getUserAuthData();
+      
       // Add temporary message for better UX
       const tempMessage: Message = {
         id: tempMessageId,
         senderId: currentUserId!,
-        senderType: 'client',
+        senderType: isAstrologer ? 'astrologer' : 'client',
         message: messageToSend,
         messageType: 'text',
         createdAt: new Date().toISOString(),
@@ -531,7 +595,7 @@ export default function RealTimeChat({
         });
       }, 1000);
     }
-  }, [newMessage, socket, isConnected, bookingId, currentUserId, handleTyping, isSending]);
+  }, [newMessage, socket, isConnected, bookingId, currentUserId, handleTyping, isSending, getUserAuthData]);
   
   // Handle key press
   const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
@@ -689,51 +753,34 @@ export default function RealTimeChat({
           ) : (
             messages.map((message) => {
               const isClientMessage = message.senderType === 'client';
+              const isAstrologerMessage = message.senderType === 'astrologer';
               const isTemporaryMessage = message.id < 0;
-              // Fix the key generation for temporary messages
-              const messageKey = isTemporaryMessage 
-                ? `${message.message}-${Math.abs(message.id)}`
-                : message.id.toString();
-              const isSending = isTemporaryMessage && sendingMessages.has(messageKey);
+              
+              // Check if this message is from the current user
+              const isCurrentUserMessage = message.senderId === currentUserId;
               
               return (
                 <div
                   key={message.id}
-                  className={`flex gap-3 ${isClientMessage ? 'justify-end' : 'justify-start'} ${
-                    isTemporaryMessage ? 'opacity-70' : ''
-                  }`}
+                  className={`flex gap-3 ${isCurrentUserMessage ? 'flex-row-reverse' : ''}`}
                 >
-                  {!isClientMessage && (
+                  {!isCurrentUserMessage && (
                     <Image
-                      src={astrologer.profileImage}
+                      src={isAstrologerMessage ? astrologer.profileImage : "/placeholder-user.jpg"}
                       alt=""
                       width={32}
                       height={32}
                       className="w-8 h-8 rounded-full"
                     />
                   )}
-                  <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl relative ${
-                      isClientMessage
+                  <div className={`flex-1 ${isCurrentUserMessage ? 'text-right' : ''}`}>
+                    <div className={`inline-block max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                      isCurrentUserMessage
                         ? 'bg-indigo-600 text-white'
-                        : 'bg-slate-100 text-slate-800'
-                    } ${isTemporaryMessage ? 'border-2 border-dashed border-gray-400' : ''}`}
-                  >
-                    <p className="text-sm">{message.message}</p>
-                    
-                    {/* Loading indicator for temporary messages */}
-                    {isTemporaryMessage && (
-                      <div className="absolute -top-2 -right-2">
-                        <div className="w-4 h-4 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-                      </div>
-                    )}
-                    
-                    <div className="flex items-center justify-between mt-1">
-                      <p
-                        className={`text-xs ${
-                          isClientMessage ? 'text-indigo-200' : 'text-slate-500'
-                        }`}
-                      >
+                        : 'bg-slate-100 text-slate-900'
+                    }`}>
+                      <p className="text-sm">{message.message}</p>
+                      <p className="text-xs opacity-70 mt-1">
                         {new Date(message.createdAt).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit'
@@ -751,9 +798,9 @@ export default function RealTimeChat({
                       )}
                     </div>
                   </div>
-                  {isClientMessage && (
+                  {isCurrentUserMessage && (
                     <Image
-                      src="/placeholder-user.jpg"
+                      src={isAstrologerMessage ? astrologer.profileImage : "/placeholder-user.jpg"}
                       alt=""
                       width={32}
                       height={32}

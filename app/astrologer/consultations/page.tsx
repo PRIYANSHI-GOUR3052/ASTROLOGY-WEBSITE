@@ -40,6 +40,7 @@ const ConsultationsPage = () => {
   const [selectedBooking, setSelectedBooking] = useState<{ id: number; client: { id: number; name: string } } | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isConnected, setIsConnected] = useState(false);
   const [astrologer, setAstrologer] = useState<{ 
     id: number; 
     name: string; 
@@ -50,11 +51,22 @@ const ConsultationsPage = () => {
     pricePerChat?: number; 
   } | null>(null);
   const [astrologerId, setAstrologerId] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchAstrologerData();
     fetchBookings();
     initializeSocket();
+
+    // Cleanup function to disconnect socket when component unmounts
+    return () => {
+      if (socket) {
+        console.log('Cleaning up socket connection on unmount');
+        socket.disconnect();
+        setSocket(null);
+        setIsConnected(false);
+      }
+    };
   }, []);
 
   const fetchAstrologerData = async () => {
@@ -62,18 +74,36 @@ const ConsultationsPage = () => {
       const token = localStorage.getItem('astrologerToken');
       if (!token) {
         console.error('Astrologer not authenticated');
+        setError('Please log in as an astrologer');
         return;
       }
+
+      console.log('Fetching astrologer data with token:', token.substring(0, 20) + '...');
 
       const response = await axios.get('/api/astrologer/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
 
+      console.log('Astrologer profile response:', response.data);
+
       if (response.data.astrologer) {
         setAstrologer(response.data.astrologer);
+        console.log('Astrologer data set:', response.data.astrologer);
+      } else {
+        console.error('No astrologer data in response');
+        setError('Failed to fetch astrologer data');
       }
     } catch (error) {
       console.error('Failed to fetch astrologer data:', error);
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          setError('Authentication failed. Please log in again.');
+        } else {
+          setError(`Failed to fetch astrologer data: ${error.response?.data?.error || error.message}`);
+        }
+      } else {
+        setError('Failed to fetch astrologer data');
+      }
     }
   };
 
@@ -83,7 +113,16 @@ const ConsultationsPage = () => {
       const astrologerToken = localStorage.getItem('astrologerToken');
       if (!astrologerToken) {
         console.error('Astrologer not authenticated');
+        setError('Please log in as an astrologer');
         return;
+      }
+
+      // Disconnect existing socket if any
+      if (socket) {
+        console.log('Disconnecting existing socket');
+        socket.disconnect();
+        setSocket(null);
+        setIsConnected(false);
       }
 
       // Get astrologer data to get the ID
@@ -102,11 +141,20 @@ const ConsultationsPage = () => {
           token: astrologerToken,
           userId: astrologerData.id,
           userRole: 'astrologer'
-        }
+        },
+        transports: ['websocket', 'polling'],
+        timeout: 20000,
+        forceNew: true,
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 2000,
+        reconnectionDelayMax: 10000
       });
 
       socketInstance.on('connect', () => {
         console.log('Connected to chat server with socket ID:', socketInstance.id);
+        setError(''); // Clear any previous errors
+        setIsConnected(true);
       });
 
       socketInstance.on('connect_error', (error) => {
@@ -116,17 +164,29 @@ const ConsultationsPage = () => {
           type: 'type' in error ? (error as { type: string }).type : 'unknown',
           description: 'description' in error ? (error as { description: string }).description : 'unknown'
         });
+        setError(`Connection failed: ${error.message}`);
+        setIsConnected(false);
       });
 
       socketInstance.on('disconnect', (reason) => {
         console.log('Disconnected from chat server:', reason);
+        setIsConnected(false);
+        if (reason === 'io server disconnect') {
+          // Server disconnected us, try to reconnect
+          setTimeout(() => {
+            socketInstance.connect();
+          }, 2000);
+        }
       });
 
       socketInstance.on('error', (error) => {
         console.error('Socket error event:', error);
+        setError(`Socket error: ${error.message || 'Unknown error'}`);
+        setIsConnected(false);
       });
 
       socketInstance.on('new-message', (message) => {
+        console.log('Received new message:', message);
         // Update chat list with new message
         setChats(prev => prev.map(chat => {
           if (chat.bookingId === message.bookingId) {
@@ -140,9 +200,20 @@ const ConsultationsPage = () => {
         }));
       });
 
+      socketInstance.on('joined-booking', (data) => {
+        console.log('Successfully joined booking:', data);
+      });
+
+      socketInstance.on('session-ended', (data) => {
+        console.log('Session ended:', data);
+        setError('Session has ended');
+      });
+
       setSocket(socketInstance);
     } catch (error) {
       console.error('Socket initialization error:', error);
+      setError(`Failed to initialize socket: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setIsConnected(false);
     }
   };
 
@@ -154,12 +225,17 @@ const ConsultationsPage = () => {
       const token = localStorage.getItem('astrologerToken');
       if (!token) {
         console.error('Astrologer not authenticated');
+        setError('Please log in as an astrologer');
         return;
       }
+
+      console.log('Fetching bookings with token:', token.substring(0, 20) + '...');
 
       const response = await axios.get('/api/astrologer/bookings', {
         headers: { Authorization: `Bearer ${token}` }
       });
+      
+      console.log('Bookings response:', response.data);
       
       const chatData = response.data.bookings.map((booking: { id: number; client: { name: string }; clientId: number; lastMessage?: string; updatedAt: string; isPaid: boolean; chatEnabled: boolean; videoEnabled: boolean; status: string }) => ({
         id: booking.id,
@@ -174,9 +250,19 @@ const ConsultationsPage = () => {
         status: booking.status
       }));
 
+      console.log('Processed chat data:', chatData);
       setChats(chatData);
     } catch (error) {
       console.error('Failed to fetch bookings:', error);
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          setError('Authentication failed. Please log in again.');
+        } else {
+          setError(`Failed to fetch bookings: ${error.response?.data?.error || error.message}`);
+        }
+      } else {
+        setError('Failed to fetch bookings');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -227,6 +313,50 @@ const ConsultationsPage = () => {
       {/* Left Chat List */}
       <div className="w-full md:w-1/4 border-r bg-[#FFF5E1] border-gray-300 dark:border-gray-700 dark:bg-midnight p-4 space-y-3">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Active Consultations</h2>
+        
+        {/* Connection Status */}
+        <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+              <span className="text-sm text-gray-600 dark:text-gray-400">
+                {isConnected ? 'Connected' : 'Disconnected'}
+              </span>
+            </div>
+            {!isConnected && (
+              <button 
+                onClick={() => {
+                  setError(null);
+                  initializeSocket();
+                }}
+                className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 underline"
+              >
+                Reconnect
+              </button>
+            )}
+          </div>
+        </div>
+        
+        {/* Error Display */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+              <span className="text-sm text-red-700 dark:text-red-300">{error}</span>
+            </div>
+            <button 
+              onClick={() => {
+                setError(null);
+                initializeSocket();
+              }}
+              className="mt-2 text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 underline"
+            >
+              Retry Connection
+            </button>
+          </div>
+        )}
         
         {chats.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
