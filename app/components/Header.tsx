@@ -252,7 +252,7 @@ export function Header() {
     className="text-sm font-bold text-black px-2 py-1 rounded transition-colors"
     style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
   >
-    {t("header.nav.chat-with-astrologer")}
+    {t("header.nav.chat_with_astrologer")}
   </Link>
   <Link
     href="/shop"
