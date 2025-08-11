@@ -6,30 +6,29 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function uploadAstrologerProfileImage(imageBase64: string, astrologerEmail: string): Promise<string> {
-  // imageBase64: data URL or base64 string
-  const uploadResponse = await cloudinary.uploader.upload(imageBase64, {
-    folder: 'nakshatra/astrologers',
-    public_id: astrologerEmail.replace(/[^a-zA-Z0-9]/g, '_'),
-    overwrite: true,
-  });
-  return uploadResponse.secure_url;
-}
+export default cloudinary;
 
-export async function uploadAstrologerProfileImageBuffer(buffer: Buffer, astrologerEmail: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream(
-      {
-        folder: 'nakshatra/astrologers',
-        public_id: astrologerEmail.replace(/[^a-zA-Z0-9]/g, '_'),
-        overwrite: true,
-      },
-      (error, result) => {
-        if (error) return reject(error);
-        if (!result || !result.secure_url) return reject(new Error('No secure_url returned from Cloudinary'));
-        resolve(result.secure_url);
-      }
-    );
-    stream.end(buffer);
-  });
-} 
+export const uploadImage = async (file: string, folder: string = 'zodiac-signs'): Promise<string> => {
+  try {
+    const result = await cloudinary.uploader.upload(file, {
+      folder,
+      resource_type: 'image',
+      transformation: [
+        { width: 400, height: 400, crop: 'fill' },
+        { quality: 'auto' }
+      ]
+    });
+    return result.secure_url;
+  } catch (error) {
+    console.error('Cloudinary upload error:', error);
+    throw new Error('Failed to upload image');
+  }
+};
+
+export const deleteImage = async (publicId: string): Promise<void> => {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    console.error('Cloudinary delete error:', error);
+  }
+}; 
