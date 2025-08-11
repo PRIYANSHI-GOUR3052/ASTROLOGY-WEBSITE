@@ -24,6 +24,7 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { LANGUAGE_NAMES } from '../../contexts/LanguageContext';
 import RealTimeChat from '../../components/RealTimeChat';
+import UserChat from '../../components/UserChat';
 import VideoCall from '../../components/VideoCall';
 import PaymentModal from '../../components/PaymentModal';
 
@@ -421,6 +422,13 @@ export default function AstrologerProfile() {
   
         console.log('Initializing socket connection for user:', userData.id);
   
+        // Disconnect existing socket if any
+        if (socket) {
+          console.log('Disconnecting existing socket');
+          socket.disconnect();
+          setSocket(null);
+        }
+  
         // Import socket.io-client dynamically
         const { io } = await import('socket.io-client');
         const socketInstance = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001', {
@@ -431,22 +439,33 @@ export default function AstrologerProfile() {
           },
           transports: ['websocket', 'polling'],
           timeout: 20000,
-          forceNew: true // Force a new connection
+          forceNew: true, // Force a new connection
+          reconnection: true,
+          reconnectionAttempts: 5,
+          reconnectionDelay: 2000,
+          reconnectionDelayMax: 10000
         });
   
         socketInstance.on('connect', () => {
           console.log('Connected to socket server with ID:', socketInstance.id);
           setSocket(socketInstance); // Set socket only after successful connection
+          setBookingError(''); // Clear any previous errors
         });
   
         socketInstance.on('connect_error', (error) => {
           console.error('Socket connection error:', error);
-          setBookingError('Failed to connect to video service. Please refresh the page.');
+          setBookingError('Socket server not available. Please start the socket server with: npm run socket');
         });
   
         socketInstance.on('disconnect', (reason) => {
           console.log('Disconnected from socket server:', reason);
           setSocket(null);
+          if (reason === 'io server disconnect') {
+            // Server disconnected us, try to reconnect
+            setTimeout(() => {
+              socketInstance.connect();
+            }, 2000);
+          }
         });
   
         socketInstance.on('error', (error) => {
@@ -456,7 +475,7 @@ export default function AstrologerProfile() {
   
       } catch (error) {
         console.error('Failed to initialize socket:', error);
-        setBookingError('Failed to initialize video service.');
+        setBookingError('Failed to initialize video service. Please ensure the socket server is running.');
       }
     };
   
@@ -682,6 +701,11 @@ export default function AstrologerProfile() {
 
     if (!socket) {
       setBookingError('Socket connection not available. Please refresh the page.');
+      return;
+    }
+
+    if (!socket.connected) {
+      setBookingError('Socket is not connected. Please wait a moment and try again.');
       return;
     }
 
@@ -988,13 +1012,17 @@ export default function AstrologerProfile() {
                               <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
                               <span className="text-sm">Book a slot to start chatting</span>
                             </div>
-                            <button
-                              onClick={() => user?.id && fetchUserBookings(user.id)}
-                              className="text-xs px-2 py-1 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-                              title="Refresh"
-                            >
-                              ↻
-                            </button>
+                            <div className="flex items-center gap-2">
+                              <div className={`w-2 h-2 rounded-full ${socket?.connected ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                              <span className="text-xs opacity-75">{socket?.connected ? 'Connected' : 'Disconnected'}</span>
+                              <button
+                                onClick={() => user?.id && fetchUserBookings(user.id)}
+                                className="text-xs px-2 py-1 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+                                title="Refresh"
+                              >
+                                ↻
+                              </button>
+                            </div>
                           </div>
                         );
                       }
@@ -1017,6 +1045,8 @@ export default function AstrologerProfile() {
                               }`}>
                               {userBooking.chatEnabled ? 'Chat Active' : 'Chat Locked'}
                             </span>
+                            <div className={`w-2 h-2 rounded-full ${socket?.connected ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                            <span className="text-xs opacity-75">{socket?.connected ? 'Connected' : 'Disconnected'}</span>
                             <button
                               onClick={() => user?.id && fetchUserBookings(user.id)}
                               className="text-xs px-2 py-1 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
@@ -1076,11 +1106,27 @@ export default function AstrologerProfile() {
                             slot.status === 'upcoming' || slot.status === 'accepted' || slot.status === 'active'
                           );
                         }
-                        const isDisabled = !userBooking?.isPaid || !socket;
-                        console.log('Video call button disabled:', isDisabled, 'userBooking:', userBooking, 'hasSocket:', !!socket);
+                        const isDisabled = !userBooking?.isPaid || !socket || !socket.connected;
+                        console.log('Video call button disabled:', isDisabled, 'userBooking:', userBooking, 'hasSocket:', !!socket, 'socketConnected:', socket?.connected);
                         return isDisabled;
                       })()}
                       className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      title={(() => {
+                        if (!socket) return 'Socket connection not available';
+                        if (!socket.connected) return 'Socket is connecting...';
+                        let userBooking = null;
+                        if (currentBookingId) {
+                          userBooking = bookedSlots.find(slot => slot.id === currentBookingId);
+                        }
+                        if (!userBooking) {
+                          userBooking = bookedSlots.find(slot =>
+                            slot.status === 'upcoming' || slot.status === 'accepted' || slot.status === 'active'
+                          );
+                        }
+                        if (!userBooking) return 'No active booking found';
+                        if (!userBooking.isPaid) return 'Payment required for video call';
+                        return 'Start video call';
+                      })()}
                     >
                       <Video className="w-4 h-4" />
                       Video Call
@@ -1342,7 +1388,7 @@ export default function AstrologerProfile() {
 
       {/* Real-time Chat Modal */}
       {showChat && currentBookingId && (
-        <RealTimeChat
+        <UserChat
           bookingId={currentBookingId}
           astrologer={{
             id: Number(astrologer.id),
@@ -1355,10 +1401,6 @@ export default function AstrologerProfile() {
           onPaymentRequired={() => {
             setShowChat(false);
             setShowPayment(true);
-          }}
-          onVideoCall={() => {
-            setShowChat(false);
-            setShowVideoCall(true);
           }}
         />
       )}

@@ -161,10 +161,10 @@ model users {
   created_at     DateTime?        @default(now()) @db.Timestamp(0)
   updated_at     DateTime?        @default(now()) @db.Timestamp(0)
   google_id      String?          @db.VarChar(255)
+  booking        booking[]
   cart           cart[]
   orders         orders[]
   user_addresses user_addresses[]
-  Booking        Booking[]
 }
 
 model visitors {
@@ -176,158 +176,169 @@ model visitors {
   page_visits page_visits[]
 }
 
-model Astrologer {
+model astrologer {
   id                     Int                      @id @default(autoincrement())
   firstName              String
   lastName               String
-  email                  String                   @unique
-  phone                  String                   @unique
+  email                  String                   @unique(map: "Astrologer_email_key")
+  phone                  String                   @unique(map: "Astrologer_phone_key")
   password               String
-  areasOfExpertise       String // Comma-separated
+  areasOfExpertise       String
   yearsOfExperience      Int?
   bankName               String?
   accountNumber          String?
   ifscCode               String?
   profileImage           String?
-  about                  String? // Astrologer about section
-  pricePerChat           Decimal?                 @db.Decimal(10, 2) // Price per chat
-  languages              String? // Comma-separated language codes
   createdAt              DateTime                 @default(now())
-  resetToken             String? // For password reset
-  resetTokenExpiry       DateTime? // For password reset expiry
-  verificationStatus     String                   @default("unverified") // unverified, pending, approved, rejected
-  verification           AstrologerVerification?
-  AstrologerAvailability AstrologerAvailability[]
-  Booking                Booking[]
+  resetToken             String?
+  resetTokenExpiry       DateTime?
+  verificationStatus     String                   @default("unverified")
+  about                  String?
+  languages              String?
+  pricePerChat           Decimal?                 @db.Decimal(10, 2)
+  astrologeravailability astrologeravailability[]
+  astrologerverification astrologerverification?
+  booking                booking[]
 }
 
-model AstrologerVerification {
-  id                 Int                       @id @default(autoincrement())
-  astrologerId       Int                       @unique
-  aadharCard         String? // File URL
-  aadharStatus       String?                   @default("unverified") // unverified, pending, accepted, rejected
-  aadharRemarks      String?
-  panCard            String? // File URL
-  panStatus          String?                   @default("unverified")
-  panRemarks         String?
-  selfie             String? // File URL
-  selfieStatus       String?                   @default("unverified")
-  selfieRemarks      String?
-  workProof          String? // File URL (experience letter, screenshots, etc.)
-  workProofStatus    String?                   @default("unverified")
-  workProofRemarks   String?
-  declarationForm    String? // File URL
-  declarationStatus  String?                   @default("unverified")
-  declarationRemarks String?
-  addressProof       String? // File URL (optional)
-  addressStatus      String?                   @default("unverified")
-  addressRemarks     String?
-  status             String                    @default("unverified") // unverified, pending, approved, rejected
-  adminRemarks       String?
-  createdAt          DateTime                  @default(now())
-  updatedAt          DateTime                  @updatedAt
-  astrologer         Astrologer                @relation(fields: [astrologerId], references: [id])
-  certifications     AstrologerCertification[]
-  educations         AstrologerEducation[]
-}
-
-model AstrologerCertification {
-  id               Int                    @id @default(autoincrement())
-  verificationId   Int
-  courseName       String
-  instituteName    String
-  yearOfCompletion String
-  certificateFile  String // File URL (PDF/JPG)
-  status           String?                @default("pending") // unverified, pending, accepted, rejected
-  remarks          String?
-  verification     AstrologerVerification @relation(fields: [verificationId], references: [id])
-}
-
-model AstrologerEducation {
-  id             Int                    @id @default(autoincrement())
-  verificationId Int
-  qualification  String
-  fieldOfStudy   String
-  universityName String
-  degreeFile     String // File URL (PDF/JPG)
-  status         String?                @default("pending") // unverified, pending, accepted, rejected
-  remarks        String?
-  verification   AstrologerVerification @relation(fields: [verificationId], references: [id])
-}
-
-model AstrologerAvailability {
+model astrologeravailability {
   id           Int        @id @default(autoincrement())
   astrologerId Int
   date         DateTime
-  start        String // Store as "HH:mm"
-  end          String // Store as "HH:mm"
-  repeat       String // "None", "Daily", "Weekly"
+  start        String
+  end          String
+  repeat       String
   createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  astrologer   Astrologer @relation(fields: [astrologerId], references: [id])
+  updatedAt    DateTime
+  astrologer   astrologer @relation(fields: [astrologerId], references: [id], map: "AstrologerAvailability_astrologerId_fkey")
+
+  @@index([astrologerId], map: "AstrologerAvailability_astrologerId_fkey")
 }
 
-model Booking {
-  id           Int       @id @default(autoincrement())
+model astrologercertification {
+  id                     Int                    @id @default(autoincrement())
+  verificationId         Int
+  courseName             String
+  instituteName          String
+  yearOfCompletion       String
+  certificateFile        String
+  remarks                String?
+  status                 String?                @default("pending")
+  astrologerverification astrologerverification @relation(fields: [verificationId], references: [id], map: "AstrologerCertification_verificationId_fkey")
+
+  @@index([verificationId], map: "AstrologerCertification_verificationId_fkey")
+}
+
+model astrologereducation {
+  id                     Int                    @id @default(autoincrement())
+  verificationId         Int
+  qualification          String
+  fieldOfStudy           String
+  universityName         String
+  degreeFile             String
+  remarks                String?
+  status                 String?                @default("pending")
+  astrologerverification astrologerverification @relation(fields: [verificationId], references: [id], map: "AstrologerEducation_verificationId_fkey")
+
+  @@index([verificationId], map: "AstrologerEducation_verificationId_fkey")
+}
+
+model astrologerverification {
+  id                      Int                       @id @default(autoincrement())
+  astrologerId            Int                       @unique(map: "AstrologerVerification_astrologerId_key")
+  aadharCard              String?
+  panCard                 String?
+  selfie                  String?
+  workProof               String?
+  declarationForm         String?
+  addressProof            String?
+  status                  String                    @default("unverified")
+  adminRemarks            String?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime
+  aadharRemarks           String?
+  aadharStatus            String?                   @default("unverified")
+  addressRemarks          String?
+  addressStatus           String?                   @default("unverified")
+  declarationRemarks      String?
+  declarationStatus       String?                   @default("unverified")
+  panRemarks              String?
+  panStatus               String?                   @default("unverified")
+  selfieRemarks           String?
+  selfieStatus            String?                   @default("unverified")
+  workProofRemarks        String?
+  workProofStatus         String?                   @default("unverified")
+  astrologercertification astrologercertification[]
+  astrologereducation     astrologereducation[]
+  astrologer              astrologer                @relation(fields: [astrologerId], references: [id], map: "AstrologerVerification_astrologerId_fkey")
+}
+
+model booking {
+  id           Int           @id @default(autoincrement())
   astrologerId Int
   clientId     Int
   date         DateTime
   type         String
-  status       String // 'upcoming', 'past', 'accepted', 'rejected', 'rescheduled'
-  remarks      String? // For rejection or reschedule notes
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  isPaid       Boolean   @default(false)
-  paymentId    String?   @unique
-  sessionId    String?   @unique
-  chatEnabled  Boolean   @default(false)
-  videoEnabled Boolean   @default(false)
-  sessionStart DateTime?
+  status       String
+  remarks      String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime
+  chatEnabled  Boolean       @default(false)
+  isPaid       Boolean       @default(false)
+  paymentId    String?       @unique(map: "Booking_paymentId_key")
   sessionEnd   DateTime?
+  sessionId    String?       @unique(map: "Booking_sessionId_key")
+  sessionStart DateTime?
+  videoEnabled Boolean       @default(false)
+  astrologer   astrologer    @relation(fields: [astrologerId], references: [id], map: "Booking_astrologerId_fkey")
+  users        users         @relation(fields: [clientId], references: [id], map: "Booking_clientId_fkey")
+  chatmessage  chatmessage[]
+  payment      payment[]
+  session      session[]
 
-  astrologer Astrologer    @relation(fields: [astrologerId], references: [id])
-  client     users         @relation(fields: [clientId], references: [id])
-  messages   ChatMessage[]
-  payments   Payment[]
-  Session    Session[]
+  @@index([astrologerId], map: "Booking_astrologerId_fkey")
+  @@index([clientId], map: "Booking_clientId_fkey")
 }
 
-model ChatMessage {
+model chatmessage {
   id          Int      @id @default(autoincrement())
   bookingId   Int
   senderId    Int
-  senderType  String // 'client' or 'astrologer'
+  senderType  String
   message     String   @db.Text
-  messageType String   @default("text") // 'text', 'image', 'file'
+  messageType String   @default("text")
   isRead      Boolean  @default(false)
   createdAt   DateTime @default(now())
+  booking     booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade, map: "ChatMessage_bookingId_fkey")
 
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  @@index([bookingId], map: "ChatMessage_bookingId_fkey")
 }
 
-model Payment {
+model payment {
   id            Int      @id @default(autoincrement())
   bookingId     Int
   amount        Decimal  @db.Decimal(10, 2)
   currency      String   @default("INR")
-  status        String   @default("pending") // 'pending', 'completed', 'failed', 'refunded'
-  paymentMethod String   @default("mock") // 'mock', 'stripe', 'razorpay'
-  transactionId String?  @unique
+  status        String   @default("pending")
+  paymentMethod String   @default("mock")
+  transactionId String?  @unique(map: "Payment_transactionId_key")
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  updatedAt     DateTime
+  booking       booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade, map: "Payment_bookingId_fkey")
 
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  @@index([bookingId], map: "Payment_bookingId_fkey")
 }
 
-model Session {
+model session {
   id           Int       @id @default(autoincrement())
-  sessionId    String    @unique
+  sessionId    String    @unique(map: "Session_sessionId_key")
   bookingId    Int
-  type         String // 'chat', 'video', 'both'
-  status       String    @default("active") // 'active', 'ended', 'expired'
+  type         String
+  status       String    @default("active")
   startTime    DateTime  @default(now())
   endTime      DateTime?
-  participants Json? // Store participant info as JSON
+  participants Json?
+  booking      booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade, map: "Session_bookingId_fkey")
 
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  @@index([bookingId], map: "Session_bookingId_fkey")
 }
