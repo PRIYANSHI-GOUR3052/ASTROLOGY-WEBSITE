@@ -248,11 +248,11 @@ export function Header() {
     <span className={`transition-transform duration-300 ${isConsultationBarOpen ? 'rotate-180' : ''}`}>▼</span>
   </button>
   <Link
-    href="/talk-to-astrologer"
+    href="/chat-with-astrologer"
     className="text-sm font-bold text-black px-2 py-1 rounded transition-colors"
     style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
   >
-    {t("header.nav.talk_to_astrologer")}
+    {t("header.nav.chat_with_astrologer")}
   </Link>
   <Link
     href="/shop"
@@ -536,14 +536,62 @@ export function Header() {
               )}
             </AnimatePresence>
           </div>
-          <Link
-            href="/study"
-            className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
-            style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
+          {/* Study Dropdown (Desktop) */}
+          <div
+            className="relative"
+            onMouseEnter={() => setIsStudyDropdownOpen(true)}
+            onMouseLeave={() => setTimeout(() => setIsStudyDropdownOpen(false), 120)}
           >
-            <span className="relative z-10">{t("header.nav.study")}</span>
-            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
-          </Link>
+            <button
+              onClick={() => setIsStudyDropdownOpen((prev) => !prev)}
+              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none"
+              style={{ fontFamily: 'Playfair Display, serif', color: '#000', background: 'transparent', fontWeight: 700 }}
+              aria-haspopup="true"
+              aria-expanded={isStudyDropdownOpen}
+              aria-controls="study-menu"
+              tabIndex={0}
+              onKeyDown={e => {
+                if (e.key === 'Escape') setIsStudyDropdownOpen(false);
+                if (e.key === 'Enter' || e.key === ' ') setIsStudyDropdownOpen(v => !v);
+              }}
+            >
+              <span className="relative z-10">{t("header.nav.study")}</span>
+              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isStudyDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#77A656' }} />
+              <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+            </button>
+            <AnimatePresence>
+              {isStudyDropdownOpen && (
+                <motion.div
+                  id="study-menu"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 16 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  className="absolute left-1/2 -translate-x-1/2 mt-2 w-[260px] max-w-[96vw] rounded-2xl shadow-2xl border border-[#e6c77e] z-50 px-4 py-4 flex flex-col gap-2 card-floating"
+                  tabIndex={-1}
+                  onKeyDown={e => { if (e.key === 'Escape') setIsStudyDropdownOpen(false); }}
+                  style={{ pointerEvents: isStudyDropdownOpen ? 'auto' : 'none', borderWidth: 1.5, background: '#FEFBF2' }}
+                >
+                  <Link
+                    href="/study"
+                    className="block text-black px-3 py-2 rounded-md text-base font-medium hover:bg-[#e9eafc] transition-all"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                    onClick={() => setIsStudyDropdownOpen(false)}
+                  >
+                    {t('header.nav.study')}
+                  </Link>
+                  <Link
+                    href="/courses"
+                    className="block text-black px-3 py-2 rounded-md text-base font-medium hover:bg-[#e9eafc] transition-all"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                    onClick={() => setIsStudyDropdownOpen(false)}
+                  >
+                    {t('header.nav.courses')}
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <Link
             href="/blog"
             className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
@@ -553,11 +601,11 @@ export function Header() {
             <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
           <Link
-            href="/talk-to-astrologer"
+            href="/chat-with-astrologer"
             className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
             style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
           >
-            <span className="relative z-10">{t("header.nav.talk_to_astrologer")}</span>
+            <span className="relative z-10">{t("header.nav.chat_with_astrologer")}</span>
             <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
           <Link

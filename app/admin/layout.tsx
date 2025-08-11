@@ -1,8 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useRoutePrefetch } from '../../hooks/useRoutePrefetch';
+import { usePerformanceMonitor } from '../../hooks/usePerformanceMonitor';
+import RouteLoadingIndicator from './components/RouteLoadingIndicator';
 import { 
   Home, 
   Users, 
@@ -20,14 +23,110 @@ import {
   UserCircle2,
   Orbit,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  LucideIcon
 } from 'lucide-react';
+
+// Type definitions
+interface NavChild {
+  label: string;
+  href: string;
+  active: boolean;
+}
+
+interface NavItem {
+  icon: LucideIcon;
+  label: string;
+  href?: string;
+  active: boolean;
+  children?: NavChild[];
+  expanded?: boolean;
+}
+
+// Memoized Navigation Link Component
+const NavigationLink = memo(({ item }: { item: NavItem }) => (
+  <Link 
+    href={item.href!}
+    prefetch={true} // Enable prefetching for better performance
+    className={`
+      flex items-center space-x-3 p-2 rounded-lg transition-colors
+      ${item.active 
+        ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200' 
+        : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+      }
+    `}
+  >
+    <item.icon className="w-5 h-5" />
+    <span className="text-sm font-medium">{item.label}</span>
+  </Link>
+));
+
+NavigationLink.displayName = 'NavigationLink';
+
+// Memoized Products Dropdown Component
+const ProductsDropdown = memo(({ 
+  item, 
+  isOpen, 
+  onToggle 
+}: { 
+  item: NavItem; 
+  isOpen: boolean; 
+  onToggle: () => void; 
+}) => {
+  const isAnyChildActive = item.children?.some((child: NavChild) => child.active);
+  
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={onToggle}
+        className={`flex items-center justify-between w-full space-x-3 p-2 rounded-lg transition-colors cursor-pointer focus:outline-none
+          ${isAnyChildActive
+            ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200'
+            : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}
+        `}
+      >
+        <span className="flex items-center space-x-3">
+          <item.icon className="w-5 h-5" />
+          <span className="text-sm font-medium">{item.label}</span>
+        </span>
+        {isOpen ? (
+          <ChevronUp className="w-4 h-4" />
+        ) : (
+          <ChevronDown className="w-4 h-4" />
+        )}
+      </button>
+      {isOpen && (
+        <div className="ml-8 mt-1 space-y-1">
+          {item.children?.map((child: NavChild) => (
+            <Link
+              key={child.href}
+              href={child.href}
+              prefetch={true} // Enable prefetching
+              className={`flex items-center space-x-2 p-2 rounded-lg transition-colors
+                ${child.active
+                  ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}
+              `}
+            >
+              <span className="text-sm font-medium">{child.label}</span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+});
+
+ProductsDropdown.displayName = 'ProductsDropdown';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const { prefetchAdminRoutes } = useRoutePrefetch();
+  const { measureRender } = usePerformanceMonitor();
   
   // Check if current path is login page
   const isLoginPage = pathname === '/admin/login';
@@ -45,25 +144,32 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       setIsDarkMode(false);
       document.documentElement.classList.remove('dark');
     }
-  }, []);
 
-  // Toggle dark mode
-  const toggleDarkMode = () => {
+    // Prefetch admin routes for better performance
+    if (!isLoginPage) {
+      prefetchAdminRoutes();
+    }
+  }, [isLoginPage, prefetchAdminRoutes]);
+
+  // Toggle dark mode with memoization
+  const toggleDarkMode = useCallback(() => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     
-    // Update HTML class
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  };
+    // Optimized DOM manipulation using requestAnimationFrame
+    requestAnimationFrame(() => {
+      if (newMode) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  }, [isDarkMode]);
 
-  // Logout function
-  const handleLogout = async () => {
+  // Logout function with performance optimization
+  const handleLogout = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
@@ -73,17 +179,23 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (response.ok) {
-        // Redirect to login page after successful logout
-        router.push('/admin/login');
+        // Use router.replace for better performance
+        router.replace('/admin/login');
       } else {
         console.error('Logout failed');
       }
     } catch (error) {
       console.error('Logout error:', error);
     }
-  };
+  }, [router]);
 
-  const navItems = [
+  // Optimized dropdown toggle with useCallback
+  const toggleProductsDropdown = useCallback(() => {
+    setProductsDropdownOpen(prev => !prev);
+  }, []);
+
+  // Memoized navigation items for better performance
+  const navItems = useMemo(() => [
     { 
       icon: Home, 
       label: 'Dashboard', 
@@ -135,8 +247,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         },
       ],
       // Expanded if any child is active
-      expanded: ['/admin/products/zodiac-sign', '/admin/products/categories', '/admin/products/create'].includes(pathname || ''),
-      active: ['/admin/products/zodiac-sign', '/admin/products/categories', '/admin/products/create'].includes(pathname || ''),
+      expanded: ['/admin/products/zodiac-sign', '/admin/products/categories', '/admin/products/attributes', '/admin/products/create'].includes(pathname || ''),
+      active: ['/admin/products/zodiac-sign', '/admin/products/categories', '/admin/products/attributes', '/admin/products/create'].includes(pathname || ''),
     },
     {
       icon: Package,
@@ -162,7 +274,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       href: '/admin/settings',
       active: pathname === '/admin/settings'
     }
-  ];
+  ], [pathname]);
 
   // If login page, only render children without layout
   if (isLoginPage) {
@@ -175,9 +287,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
   // Regular admin layout for all other admin pages
   return (
-    <div className="flex h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      {/* Sidebar */}
-      <div className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm">
+    <div>
+      <RouteLoadingIndicator />
+      <div className="flex h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        {/* Sidebar */}
+        <div className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Nakshatra Gyaan</h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">Admin Portal</p>
@@ -187,67 +301,22 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           {navItems.map((item) => {
             // Products dropdown
             if (item.label === 'Products' && item.children) {
-              const isAnyChildActive = item.children.some(child => child.active);
-              const isOpen = productsDropdownOpen || isAnyChildActive;
+              const isOpen = productsDropdownOpen || item.expanded;
               return (
-                <div key="products-dropdown">
-                  <button
-                    type="button"
-                    onClick={() => setProductsDropdownOpen((open) => !open)}
-                    className={`flex items-center justify-between w-full space-x-3 p-2 rounded-lg transition-colors cursor-pointer focus:outline-none
-                      ${isAnyChildActive
-                        ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200'
-                        : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}
-                    `}
-                  >
-                    <span className="flex items-center space-x-3">
-                      <item.icon className="w-5 h-5" />
-                      <span className="text-sm font-medium">{item.label}</span>
-                    </span>
-                    {isOpen ? (
-                      <ChevronUp className="w-4 h-4" />
-                    ) : (
-                      <ChevronDown className="w-4 h-4" />
-                    )}
-                  </button>
-                  {isOpen && (
-                    <div className="ml-8 mt-1 space-y-1">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          className={`flex items-center space-x-2 p-2 rounded-lg transition-colors
-                            ${child.active
-                              ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200'
-                              : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}
-                          `}
-                        >
-                          <span className="text-sm font-medium">{child.label}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <ProductsDropdown
+                  key="products-dropdown"
+                  item={item}
+                  isOpen={isOpen}
+                  onToggle={toggleProductsDropdown}
+                />
               );
             }
             // Regular nav item
             return item.href ? (
-              <Link 
-                key={item.href}
-                href={item.href}
-                className={`
-                  flex items-center space-x-3 p-2 rounded-lg transition-colors
-                  ${item.active 
-                    ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200' 
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-                  }
-                `}
-              >
-                <item.icon className="w-5 h-5" />
-                <span className="text-sm font-medium">{item.label}</span>
-              </Link>
+              <NavigationLink key={item.href} item={item} />
             ) : (
               <div
+                key={item.label}
                 className={`flex items-center space-x-3 p-2 rounded-lg transition-colors cursor-default
                   ${item.active
                     ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200'
@@ -260,10 +329,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             );
           })}
         </nav>
-      </div>
+        </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col">
         {/* Bagisto-style Header */}
         <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex justify-between items-center">
           {/* Left side - Mega Search */}
@@ -328,6 +397,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-6">
           {children}
         </main>
+        </div>
       </div>
     </div>
   );

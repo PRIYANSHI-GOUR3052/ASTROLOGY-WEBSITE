@@ -57,7 +57,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const bookings = await prisma.booking.findMany({
         where,
         orderBy: { date: 'asc' },
-        include: { client: true },
+        include: { 
+          client: true,
+          astrologer: true 
+        },
       });
       return res.status(200).json({ bookings });
     } catch (e) {

@@ -84,7 +84,7 @@ const heroicSlideVariants = {
       type: "spring",
       damping: 15,
       stiffness: 100,
-      duration: 1.2,
+      duration: 0.5,
       ease: [0.25, 0.46, 0.45, 0.94]
     }
   }

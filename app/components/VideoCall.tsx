@@ -42,7 +42,8 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
   console.log('VideoCall component rendered with props:', {
     bookingId,
     astrologerId: astrologer?.id,
-    hasSocket: !!socket
+    hasSocket: !!socket,
+    socketConnected: !!socket?.connected
   });
 
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
@@ -56,6 +57,7 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
   const [connectionQuality, setConnectionQuality] = useState<'good' | 'poor' | 'unknown'>('unknown');
   const [isReconnecting, setIsReconnecting] = useState(false);
   const [callDuration, setCallDuration] = useState(0);
+  const [socketConnected, setSocketConnected] = useState(false);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -85,6 +87,48 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
     iceCandidatePoolSize: 10
   };
 
+  // Monitor socket connection state
+  useEffect(() => {
+    if (!socket) {
+      setSocketConnected(false);
+      return;
+    }
+
+    const handleConnect = () => {
+      console.log('Socket connected in VideoCall');
+      setSocketConnected(true);
+      setError('');
+    };
+
+    const handleDisconnect = () => {
+      console.log('Socket disconnected in VideoCall');
+      setSocketConnected(false);
+      if (isConnected) {
+        setError('Connection lost. Please refresh the page.');
+      }
+    };
+
+    const handleConnectError = (error: any) => {
+      console.error('Socket connection error in VideoCall:', error);
+      setSocketConnected(false);
+      setError('Socket connection failed. Please refresh the page.');
+    };
+
+    // Set initial state
+    setSocketConnected(socket.connected);
+
+    // Add event listeners
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
+    socket.on('connect_error', handleConnectError);
+
+    return () => {
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
+      socket.off('connect_error', handleConnectError);
+    };
+  }, [socket, isConnected]);
+
   // Call duration timer
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -112,6 +156,49 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
         throw new Error('Socket connection not available');
       }
 
+      // Check socket server health first
+      try {
+        const healthResponse = await fetch(`${process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001'}/health`);
+        if (!healthResponse.ok) {
+          throw new Error('Socket server is not responding');
+        }
+        console.log('Socket server health check passed');
+      } catch (healthError) {
+        console.error('Socket server health check failed:', healthError);
+        throw new Error('Socket server is not available. Please start it with: npm run socket');
+      }
+
+      if (!socket.connected) {
+        console.log('Socket not connected, attempting to connect...');
+        socket.connect();
+        
+        // Wait for connection with timeout
+        await new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new Error('Socket connection timeout'));
+          }, 10000);
+
+          const handleConnect = () => {
+            clearTimeout(timeout);
+            socket.off('connect', handleConnect);
+            socket.off('connect_error', handleConnectError);
+            resolve();
+          };
+
+          const handleConnectError = (error: any) => {
+            clearTimeout(timeout);
+            socket.off('connect', handleConnect);
+            socket.off('connect_error', handleConnectError);
+            reject(new Error(`Socket connection failed: ${error.message}`));
+          };
+
+          socket.on('connect', handleConnect);
+          socket.on('connect_error', handleConnectError);
+        });
+      }
+
+      console.log('Socket is connected, joining booking room...');
+
       // Join the booking room
       socket.emit('join-booking', { bookingId });
       
@@ -129,7 +216,7 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
 
     } catch (error) {
       console.error('Error initializing call:', error);
-      setError('Failed to initialize video call');
+      setError(error instanceof Error ? error.message : 'Failed to initialize video call');
       setIsConnecting(false);
     }
   }, [bookingId, socket]);
@@ -398,7 +485,11 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
     reconnectAttemptsRef.current = 0;
     setIsReconnecting(false);
     cleanupCall();
-    initializeCall();
+    
+    // Wait a bit before trying to reconnect
+    setTimeout(() => {
+      initializeCall();
+    }, 1000);
   }, [initializeCall]);
 
   // Cleanup call
@@ -476,14 +567,18 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
   // Initialize call on mount
   useEffect(() => {
     if (socket) {
-      initializeCall();
-    } else {
-      setError('Socket connection not available');
-    }
+      // Add a small delay to ensure socket is properly initialized
+      const timeoutId = setTimeout(() => {
+        initializeCall();
+      }, 500);
 
-    return () => {
-      cleanupCall();
-    };
+      return () => {
+        clearTimeout(timeoutId);
+        cleanupCall();
+      };
+    } else {
+      setError('Socket connection not available. Please refresh the page.');
+    }
   }, [socket, initializeCall, cleanupCall]);
 
   // Format call duration
@@ -500,6 +595,19 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
           <div className="text-center">
             <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-500" />
             <div className="text-red-600 text-lg mb-4">{error}</div>
+            <div className="text-sm text-gray-600 mb-4">
+              {!socket ? 'No socket connection available' : 
+               !socket.connected ? 'Socket is not connected' : 
+               'Socket is connected but call failed'}
+            </div>
+            {!socket && (
+              <div className="text-xs text-gray-500 mb-4 p-3 bg-gray-50 rounded">
+                <strong>To fix this:</strong><br/>
+                1. Make sure the socket server is running<br/>
+                2. Run: <code className="bg-gray-200 px-1 rounded">npm run socket</code><br/>
+                3. Or run: <code className="bg-gray-200 px-1 rounded">npm run dev:full</code>
+              </div>
+            )}
             <div className="flex gap-2 justify-center">
               <button
                 onClick={handleManualReconnect}
@@ -576,6 +684,15 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
                   <span className="text-sm opacity-75">({formatDuration(callDuration)})</span>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* Debug Info - Only show in development */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg text-xs">
+              <div>Socket: {socket ? (socket.connected ? 'Connected' : 'Disconnected') : 'None'}</div>
+              <div>Booking: {bookingId}</div>
+              <div>Joined: {isJoined ? 'Yes' : 'No'}</div>
             </div>
           )}
         </div>

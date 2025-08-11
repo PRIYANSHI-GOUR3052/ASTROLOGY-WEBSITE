@@ -76,6 +76,7 @@ type Subcategory = {
 type CategoryTree = {
   name: string;
   icon: string;
+  image?: string | null;
   subcategories?: Subcategory[];
 };
 
@@ -381,7 +382,7 @@ const CategoriesPage: React.FC = () => {
 
   const handleEditCategory = (idx: number) => {
     const cat = categories[idx];
-    setEditCategory({ name: cat.name, image: (cat as any).image || null });
+    setEditCategory({ name: cat.name, image: cat.image || null });
     setShowEditModalIdx(idx);
   };
 

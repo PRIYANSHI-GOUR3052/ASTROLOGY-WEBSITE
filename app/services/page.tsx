@@ -1,12 +1,13 @@
 "use client";
 import { AnimatedStars } from '../components/AnimatedStars'
 import { MysticBackground } from '../components/MysticBackground'
-import { CTASection } from '../components/CTASection'
+import dynamic from 'next/dynamic';
 import ShopBanner from '../components/ShopBanner'
 import NakshatraTicker from '../components/NakshatraTicker'
-import SpiritualJourneyBanner from '../components/SpiritualJourneyBanner'
 
-import { UniversalServicesGrid } from '../components/UniversalServiceGrid';
+const UniversalServicesGrid = dynamic(() => import('../components/UniversalServiceGrid').then(mod => mod.UniversalServicesGrid), { loading: () => <div>Loading...</div>, ssr: false });
+const CTASection = dynamic(() => import('../components/CTASection').then(mod => mod.CTASection), { loading: () => <div>Loading...</div>, ssr: false });
+const SpiritualJourneyBanner = dynamic(() => import('../components/SpiritualJourneyBanner'), { loading: () => <div>Loading...</div>, ssr: false });
 export default function ServicesPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-amber-50 via-white to-orange-50 -mt-4">

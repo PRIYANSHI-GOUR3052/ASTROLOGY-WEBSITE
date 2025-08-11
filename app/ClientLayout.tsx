@@ -1,14 +1,69 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback, lazy, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { Header } from "./components/Header";
-import Footer from "./components/Footer";
 import { PageTransition } from "./components/PageTransition";
-import Chatbot from "./components/Chatbot";
 import { AuthProvider } from "./contexts/AuthContext";
 import { v4 as uuidv4 } from "uuid";
 import { Toaster } from "@/components/ui/sonner";
+
+// Lazy load components that aren't always needed
+const Chatbot = lazy(() => import("./components/Chatbot"));
+const Footer = lazy(() => import("./components/Footer"));
+
+// Constants moved outside component to prevent recreation
+const EXACT_PATHS = [
+  "/admin/dashboard",
+  "/admin/clients",
+  "/admin/astrologers",
+  "/admin/courses",
+  "/admin/products",
+  "/admin/products/zodiac-sign",
+  "/admin/products/categories",
+  "/admin/products/attributes",
+  "/admin/products/create",
+  "/admin/products/add",
+  "/admin/services",
+  "/admin/reviews",
+  "/admin/settings",
+  "/admin/login",
+  "/signin",
+  "/admin/stone",
+  "/astrologer/profile",
+  "/astrologer/availability",
+  "/astrologer/bookings",
+  "/astrologer/consultations",
+  "/astrologer/reviews",
+  "/astrologer/withdraw",
+  "/astrologer/register",
+  "/astrologer/auth",
+  "/astrologer/forgot-password",
+  "/astrologer/reset-password",
+  "/forgot-password",
+  "/reset-password",
+];
+
+const DYNAMIC_PATTERNS: RegExp[] = [
+  /^\/admin\/astrologers\/[^/]+$/, // matches /admin/astrologers/anything
+];
+
+const TOASTER_OPTIONS = {
+  unstyled: true,
+  style: {
+    backgroundColor: "#1C1C1C",
+    color: "white",
+    border: "1px solid #333",
+    boxShadow: "0 4px 14px rgba(0, 0, 0, 0.6)",
+    padding: "16px",
+    borderRadius: "12px",
+    fontSize: "14px",
+  },
+  className: "",
+};
+
+// Debounce function to limit API calls
+let trackingTimeout: NodeJS.Timeout | null = null;
 
 export default function ClientLayout({
   children,
@@ -16,54 +71,50 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAdminRoute = pathname?.startsWith("/admin");
-  const isSignInRoute = pathname === "/signin";
-
-  const shouldHideLayout = (() => {
-    const path = pathname ?? "";
-
-    const exactPaths = [
-      "/admin/dashboard",
-      "/admin/clients",
-      "/admin/astrologers",
-      "/admin/courses",
-      "/admin/products",
-      "/admin/products/zodiac-sign",
-      "/admin/products/categories",
-      "/admin/products/attributes",
-      "/admin/products/create",
-      "/admin/products/add",
-      "/admin/services",
-      "/admin/reviews",
-      "/admin/settings",
-      "/admin/login",
-      "/signin",
-      "/admin/stone",
-      "/astrologer/profile",
-      "/astrologer/availability",
-      "/astrologer/bookings",
-      "/astrologer/consultations",
-      "/astrologer/reviews",
-      "/astrologer/withdraw",
-      "/astrologer/register",
-      "/astrologer/auth",
-      "/astrologer/forgot-password",
-      "/astrologer/reset-password",
-    ];
-
-    const dynamicPatterns: RegExp[] = [
-      /^\/admin\/astrologers\/[^/]+$/, // matches /admin/astrologers/anything
-    ];
-
-    return (
-      exactPaths.includes(path) ||
-      dynamicPatterns.some((regex) => regex.test(path))
-    );
-  })();
-
-
-
   const [isClient, setIsClient] = useState(false);
+
+  // Memoize route checks
+  const isAdminRoute = useMemo(() => pathname?.startsWith("/admin"), [pathname]);
+  const isSignInRoute = useMemo(() => pathname === "/signin", [pathname]);
+
+  // Memoize shouldHideLayout calculation
+  const shouldHideLayout = useMemo(() => {
+    const path = pathname ?? "";
+    return (
+      EXACT_PATHS.includes(path) ||
+      DYNAMIC_PATTERNS.some((regex) => regex.test(path))
+    );
+  }, [pathname]);
+
+  // Memoized tracking function with debouncing
+  const trackPageVisit = useCallback(async (visitorId: string, path: string) => {
+    // Clear existing timeout
+    if (trackingTimeout) {
+      clearTimeout(trackingTimeout);
+    }
+
+    // Debounce API call to prevent excessive requests
+    trackingTimeout = setTimeout(async () => {
+      try {
+        const response = await fetch("/api/track-visitor", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            visitorId,
+            path,
+            timestamp: new Date().toISOString(),
+            referrer: document.referrer || null,
+          }),
+        });
+
+        if (!response.ok) {
+          console.error("Failed to track visitor");
+        }
+      } catch (error) {
+        console.error("Error tracking visitor:", error);
+      }
+    }, 300); // 300ms debounce
+  }, []);
 
   useEffect(() => {
     setIsClient(true);
@@ -76,29 +127,8 @@ export default function ClientLayout({
       localStorage.setItem("visitor_id", visitorId);
     }
 
-    const trackPageVisit = async () => {
-      try {
-        const response = await fetch("/api/track-visitor", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            visitorId,
-            path: pathname,
-            timestamp: new Date().toISOString(),
-            referrer: document.referrer || null,
-          }),
-        });
-
-        if (!response.ok) {
-          console.error("Failed to track visitor");
-        }
-      } catch (error) {
-        console.error("Error tracking visitor:", error);
-      }
-    };
-
-    trackPageVisit();
-  }, [pathname, shouldHideLayout]);
+    trackPageVisit(visitorId, pathname ?? "");
+  }, [pathname, shouldHideLayout, trackPageVisit]);
 
   useEffect(() => {
     // Store original body background
@@ -136,23 +166,15 @@ export default function ClientLayout({
       <div className="min-h-screen bg-white">
         <Header />
         <PageTransition>{children}</PageTransition>
-        <Footer />
-        <Chatbot />
+        <Suspense fallback={<div className="sr-only">Loading footer...</div>}>
+          <Footer />
+        </Suspense>
+        <Suspense fallback={<div className="sr-only">Loading chat...</div>}>
+          <Chatbot />
+        </Suspense>
         <Toaster
           position="top-center"
-          toastOptions={{
-            unstyled: true,
-            style: {
-              backgroundColor: "#1C1C1C",
-              color: "white",
-              border: "1px solid #333",
-              boxShadow: "0 4px 14px rgba(0, 0, 0, 0.6)",
-              padding: "16px",
-              borderRadius: "12px",
-              fontSize: "14px",
-            },
-            className: "",
-          }}
+          toastOptions={TOASTER_OPTIONS}
         />
       </div>
       {/* </MysticBackground> */}

@@ -7,11 +7,14 @@ import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { AnimatedStars } from '../../components/AnimatedStars';
 import { MysticBackground } from '../../components/MysticBackground';
+import { Eye, EyeOff } from 'lucide-react';
 
 const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -61,23 +64,41 @@ const ResetPasswordPage = () => {
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
             <label className="block mb-1 font-medium text-gray-700">New Password</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={e => setNewPassword(e.target.value)}
-              placeholder="Enter new password"
-              className="w-full px-4 py-2 border border-gray-200 bg-white text-black rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
-            />
+            <div className="relative">
+              <input
+                type={showNewPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={e => setNewPassword(e.target.value)}
+                placeholder="Enter new password"
+                className="w-full px-4 pr-12 py-2 border border-gray-200 bg-white text-black rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 hover:text-gray-800 transition-colors"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+              >
+                {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
           <div>
             <label className="block mb-1 font-medium text-gray-700">Confirm New Password</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
-              placeholder="Re-enter new password"
-              className="w-full px-4 py-2 border border-gray-200 bg-white text-black rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
-            />
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                placeholder="Re-enter new password"
+                className="w-full px-4 pr-12 py-2 border border-gray-200 bg-white text-black rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 hover:text-gray-800 transition-colors"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
 
           <button

@@ -1,28 +1,42 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 import AstrologerSidebar from "@/components/astrologer/Sidebar";
 import { useAuthToken } from '@/hooks/useAuthToken';
 
+// Cache for verification status to avoid repeated API calls
+let verificationCache: { status: string; timestamp: number } | null = null;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(false);
-  const [checkingVerification, setCheckingVerification] = useState(false);
-  const [isVerified, setIsVerified] = useState(true);
+  const [authState, setAuthState] = useState<{
+    isChecking: boolean;
+    isAuthenticated: boolean;
+    isVerified: boolean;
+    hasCheckedOnce: boolean;
+  }>({
+    isChecking: false,
+    isAuthenticated: false,
+    isVerified: true,
+    hasCheckedOnce: false,
+  });
+
   const router = useRouter();
   const pathname = usePathname();
   const token = useAuthToken();
 
-  const isAuthRoute =
-    pathname?.includes("/astrologer/auth") ||
-    pathname?.includes("/astrologer/register") ||
-    pathname?.includes("/astrologer/reset-password") ||
-    pathname?.includes("/astrologer/forgot-password");
+  // Memoize route checks to prevent recalculation
+  const isAuthRoute = useMemo(() => {
+    return pathname?.includes("/astrologer/auth") ||
+           pathname?.includes("/astrologer/register") ||
+           pathname?.includes("/astrologer/reset-password") ||
+           pathname?.includes("/astrologer/forgot-password");
+  }, [pathname]);
 
-  const isProfilePage = pathname === "/astrologer/profile";
+  const isProfilePage = useMemo(() => pathname === "/astrologer/profile", [pathname]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -38,36 +52,81 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // Auth and verification check for dashboard routes
+  // Optimized verification check with caching
+  const checkVerificationStatus = useCallback(async (authToken: string) => {
+    // Check cache first
+    if (verificationCache && 
+        Date.now() - verificationCache.timestamp < CACHE_DURATION) {
+      return verificationCache.status;
+    }
+
+    try {
+      const response = await fetch("/api/astrologer/verification", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      
+      if (!response.ok) throw new Error('Verification check failed');
+      
+      const data = await response.json();
+      const status = data.verification?.status || 'unverified';
+      
+      // Update cache
+      verificationCache = { status, timestamp: Date.now() };
+      
+      return status;
+    } catch (error) {
+      console.error('Verification check error:', error);
+      return 'unverified';
+    }
+  }, []);
+
+  // Auth and verification check - only run once or when token changes
   useEffect(() => {
-    if (!isAuthRoute && token) {
-      setCheckingAuth(true);
+    if (isAuthRoute) return;
+
+    const performAuthCheck = async () => {
+      // If no token, redirect to auth
       if (!token) {
         router.push("/astrologer/auth");
-        setCheckingAuth(false);
         return;
       }
-      setCheckingAuth(false);
-      setCheckingVerification(true);
-      fetch("/api/astrologer/verification", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then(res => res.json())
-        .then(data => {
-          const status = data.verification?.status || 'unverified';
-          if (data.verification && status !== "approved") {
-            setIsVerified(false);
-            router.push("/astrologer/profile")
-          } else {
-            setIsVerified(true);
-          }
-        })
-        .catch(() => {
-          setIsVerified(false);
-        })
-        .finally(() => setCheckingVerification(false));
-    }
-  }, [pathname, isAuthRoute, router, token]);
+
+      // If already checked and has valid token, skip
+      if (authState.hasCheckedOnce && authState.isAuthenticated && token) {
+        return;
+      }
+
+      setAuthState(prev => ({ ...prev, isChecking: true }));
+
+      try {
+        const verificationStatus = await checkVerificationStatus(token);
+        const isVerified = verificationStatus === "approved";
+        
+        setAuthState({
+          isChecking: false,
+          isAuthenticated: true,
+          isVerified,
+          hasCheckedOnce: true,
+        });
+
+        // Only redirect if not verified and not on profile page
+        if (!isVerified && !isProfilePage) {
+          router.push("/astrologer/profile");
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        setAuthState({
+          isChecking: false,
+          isAuthenticated: false,
+          isVerified: false,
+          hasCheckedOnce: true,
+        });
+        router.push("/astrologer/auth");
+      }
+    };
+
+    performAuthCheck();
+  }, [token, isAuthRoute, isProfilePage, router, checkVerificationStatus, authState.hasCheckedOnce, authState.isAuthenticated]);
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
@@ -81,8 +140,21 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // Clear cache when user logs out
+  const handleLogout = useCallback(() => {
+    verificationCache = null; // Clear cache
+    localStorage.removeItem("astrologerToken");
+    setAuthState({
+      isChecking: false,
+      isAuthenticated: false,
+      isVerified: false,
+      hasCheckedOnce: false,
+    });
+    router.push("/astrologer/auth");
+  }, [router]);
+
   // Map status to allowed values for AstrologerSidebar
-  const sidebarStatus = isVerified ? 'verified' : (isProfilePage ? 'pending' : undefined);
+  const sidebarStatus = authState.isVerified ? 'verified' : (isProfilePage ? 'pending' : undefined);
 
   // 🔁 If it's an auth-related page, skip layout
   if (isAuthRoute) {
@@ -90,10 +162,10 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   // Show loading spinner while checking auth or verification
-  if (checkingAuth || checkingVerification) {
+  if (authState.isChecking) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100" />
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-black">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white" />
       </div>
     );
   }
@@ -101,7 +173,7 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100">
       {/* Sidebar - Only show if verified or on profile page */}
-      {(isVerified || isProfilePage) && <AstrologerSidebar approvalStatus={sidebarStatus} />}
+      {(authState.isVerified || isProfilePage) && <AstrologerSidebar approvalStatus={sidebarStatus} />}
       
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
@@ -125,10 +197,7 @@ const AstrologerLayout = ({ children }: { children: React.ReactNode }) => {
             </button>
 
             <button
-              onClick={() => {
-                localStorage.removeItem("astrologerToken");
-                router.push("/astrologer/auth");
-              }}
+              onClick={handleLogout}
               className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
             >
               Logout

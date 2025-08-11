@@ -76,8 +76,8 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
   const decodedEmail = decodeURIComponent(params?.email || "")
 
   // Add after fetching verification in useEffect
-  const [educations] = useState<Education[]>([])
-  const [certifications] = useState<Certification[]>([])
+  const [educations, setEducations] = useState<Education[]>([])
+  const [certifications, setCertifications] = useState<Certification[]>([])
   const [eduStatuses, setEduStatuses] = useState<{ [id: number]: DocumentStatus }>({})
   const [eduRemarks, setEduRemarks] = useState<{ [id: number]: string }>({})
   const [eduShowReject, setEduShowReject] = useState<{ [id: number]: boolean }>({})
@@ -118,8 +118,17 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
       const res = await fetch(`/api/astrologer/verification-by-email?email=${encodeURIComponent(decodedEmail)}`, {
         credentials: "include",
       });
-      if (!res.ok) return;
+      if (!res.ok) {
+        console.error("Failed to fetch verification:", res.status, res.statusText);
+        return;
+      }
       const { verification } = await res.json();
+      
+      if (!verification) {
+        console.error("No verification data received");
+        return;
+      }
+
       const astro: Astrologer = {
         name: verification.astrologer.firstName + " " + verification.astrologer.lastName,
         email: verification.astrologer.email,
@@ -147,6 +156,11 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
         },
       };
       setAstrologer(astro);
+      
+      // Set education and certification data
+      setEducations(verification.educations || []);
+      setCertifications(verification.certifications || []);
+      
       const docStatuses: DocumentStatuses = {};
       const docReasons: RejectionReasons = {};
       (["aadharCard", "panCard", "selfie", "workProof", "declarationForm", "addressProof"] as DocumentKey[]).forEach(
@@ -162,10 +176,44 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
       setDocumentStatuses(docStatuses);
       setRejectionReasons(docReasons);
       setAdminRemarks(verification.adminRemarks || "");
+      
+      // Set education and certification statuses
+      const eduStatusMap: { [id: number]: DocumentStatus } = {};
+      const eduRemarksMap: { [id: number]: string } = {};
+      (verification.educations || []).forEach((edu: any) => {
+        if (edu.id) {
+          eduStatusMap[edu.id] = normalizeStatus(edu.status);
+          eduRemarksMap[edu.id] = edu.remarks || "";
+        }
+      });
+      setEduStatuses(eduStatusMap);
+      setEduRemarks(eduRemarksMap);
+      
+      const certStatusMap: { [id: number]: DocumentStatus } = {};
+      const certRemarksMap: { [id: number]: string } = {};
+      (verification.certifications || []).forEach((cert: any) => {
+        if (cert.id) {
+          certStatusMap[cert.id] = normalizeStatus(cert.status);
+          certRemarksMap[cert.id] = cert.remarks || "";
+        }
+      });
+      setCertStatuses(certStatusMap);
+      setCertRemarks(certRemarksMap);
+      
+    } catch (error) {
+      console.error("Error fetching verification:", error);
     } finally {
       setLoading(false);
     }
   }, [decodedEmail, normalizeStatus]);
+
+  // Add useEffect to fetch data on component mount
+  useEffect(() => {
+    if (decodedEmail) {
+      console.log("Fetching verification for email:", decodedEmail);
+      refetchVerification();
+    }
+  }, [decodedEmail, refetchVerification]);
 
   // Enhanced auto-processing logic
   useEffect(() => {
@@ -312,8 +360,36 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
     refetchVerification,
   ])
 
-  if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>
-  if (!astrologer) return notFound()
+  if (loading) return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600 dark:text-gray-400">Loading astrologer details...</p>
+      </div>
+    </div>
+  )
+  
+  if (!astrologer) return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="text-center">
+        <div className="text-red-500 mb-4">
+          <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+        </div>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Astrologer Not Found</h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">
+          Could not find astrologer with email: {decodedEmail}
+        </p>
+        <button 
+          onClick={() => window.history.back()}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Go Back
+        </button>
+      </div>
+    </div>
+  )
 
   // Remove setEducations and setCertifications if not used
   // const [educations] = useState<Education[]>([])

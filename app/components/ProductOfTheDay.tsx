@@ -12,6 +12,7 @@ export default function ProductOfTheDay() {
             alt="Natural Gemstone Collection"
             className="w-full h-full object-cover object-center rounded-none lg:rounded-r-3xl shadow-xl"
             style={{ minHeight: '500px', maxHeight: '800px' }}
+            loading="lazy"
           />
           {/* Gradient Overlay for better text visibility */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent rounded-none lg:rounded-r-3xl"></div>
