@@ -76,12 +76,17 @@ export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isStudyDropdownOpen, setIsStudyDropdownOpen] = useState(false);
+  const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   // Add state for mobile nav bar consultations dropdown
   const [isConsultationBarOpen, setIsConsultationBarOpen] = useState(false);
+  // Add state for mobile nav bar shop dropdown
+  const [isShopBarOpen, setIsShopBarOpen] = useState(false);
   // Add state for mobile menu Study dropdown
   const [isStudyOpen, setIsStudyOpen] = useState(false);
+  // Add state for mobile menu Shop dropdown
+  const [isShopOpen, setIsShopOpen] = useState(false);
 
   const servicesMenuRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -254,13 +259,15 @@ export function Header() {
   >
     {t("header.nav.chat_with_astrologer")}
   </Link>
-  <Link
-    href="/shop"
-    className="text-sm font-bold text-black px-2 py-1 rounded transition-colors"
+  <button
+    type="button"
+    className="text-sm font-bold text-black px-2 py-1 rounded transition-colors flex items-center gap-1"
     style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
+    onClick={() => setIsShopBarOpen((prev) => !prev)}
   >
     {t("header.nav.buy_products")}
-  </Link>
+    <span className={`transition-transform duration-300 ${isShopBarOpen ? 'rotate-180' : ''}`}>▼</span>
+  </button>
   <Link
     href="/services"
     className="text-sm font-bold text-black px-2 py-1 rounded transition-colors"
@@ -323,6 +330,84 @@ export function Header() {
               </Link>
             </li>
           ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  {/* Shop dropdown below nav bar */}
+  <div className={`absolute left-0 top-full w-full z-40 transition-all duration-300 ${isShopBarOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`} style={{ background: '#FDF9EF', borderRadius: '0 0 1rem 1rem', boxShadow: isShopBarOpen ? '0 4px 24px 0 rgba(36,34,68,0.08)' : 'none', overflow: 'hidden' }}>
+    <div className="py-2 px-2 flex flex-col gap-2">
+      {/* Shop items */}
+      <div>
+        <div className="text-base font-bold mb-1" style={{ color: '#77A656', fontFamily: 'Playfair Display, serif' }}>Shop Collections</div>
+        <ul className="flex flex-col gap-1">
+          <li>
+            <Link
+              href="/shop"
+              onClick={() => setIsShopBarOpen(false)}
+              className="block text-black px-3 py-2 rounded-md text-base font-medium hover:bg-[#e9eafc] transition-all"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              🏪 Shop Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/shop/all-products"
+              onClick={() => setIsShopBarOpen(false)}
+              className="block text-black px-3 py-2 rounded-md text-base font-medium hover:bg-[#e9eafc] transition-all"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              🔍 All Products
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/shop/categories"
+              onClick={() => setIsShopBarOpen(false)}
+              className="block text-black px-3 py-2 rounded-md text-base font-medium hover:bg-[#e9eafc] transition-all"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              📂 Browse Categories
+            </Link>
+          </li>
+        </ul>
+      </div>
+      {/* Popular Categories */}
+      <div>
+        <div className="text-base font-bold mb-1" style={{ color: '#77A656', fontFamily: 'Playfair Display, serif' }}>Popular Categories</div>
+        <ul className="flex flex-col gap-1">
+          <li>
+            <Link
+              href="/shop/category/gemstones-crystals"
+              onClick={() => setIsShopBarOpen(false)}
+              className="block text-black px-3 py-2 rounded-md text-base font-medium hover:bg-[#e9eafc] transition-all"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              💎 Gemstones & Crystals
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/shop/category/rudraksha-malas"
+              onClick={() => setIsShopBarOpen(false)}
+              className="block text-black px-3 py-2 rounded-md text-base font-medium hover:bg-[#e9eafc] transition-all"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              📿 Rudraksha & Malas
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/shop/category/spiritual-jewelry"
+              onClick={() => setIsShopBarOpen(false)}
+              className="block text-black px-3 py-2 rounded-md text-base font-medium hover:bg-[#e9eafc] transition-all"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              💍 Spiritual Jewelry
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
@@ -608,14 +693,87 @@ export function Header() {
             <span className="relative z-10">{t("header.nav.chat_with_astrologer")}</span>
             <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
-          <Link
-            href="/shop"
-            className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
-            style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
+          {/* Shop Dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => setIsShopDropdownOpen(true)}
+            onMouseLeave={() => setTimeout(() => setIsShopDropdownOpen(false), 120)}
           >
-            <span className="relative z-10">{t("header.nav.buy_products")}</span>
-            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
-          </Link>
+            <Link
+              href="/shop"
+              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none"
+              style={{ fontFamily: 'Playfair Display, serif', color: '#000', background: 'transparent', fontWeight: 700 }}
+            >
+              <span className="relative z-10">{t("header.nav.buy_products")}</span>
+              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isShopDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#000' }} />
+              <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+            </Link>
+            <AnimatePresence>
+              {isShopDropdownOpen && (
+                <motion.div
+                  id="shop-menu"
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute left-1/2 -translate-x-1/2 mt-2 w-64 rounded-lg shadow-lg border border-gray-200 z-50 py-2"
+                  style={{ background: '#FEFBF2' }}
+                  tabIndex={-1}
+                  onKeyDown={e => { if (e.key === 'Escape') setIsShopDropdownOpen(false); }}
+                >
+                  <Link
+                    href="/shop"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    🏪 Shop Home
+                  </Link>
+                  <Link
+                    href="/shop/all-products"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    🔍 All Products
+                  </Link>
+                  <Link
+                    href="/shop/categories"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    📂 Browse Categories
+                  </Link>
+                  <hr className="my-2 border-gray-200" />
+                  <Link
+                    href="/shop/category/gemstones-crystals"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    💎 Gemstones & Crystals
+                  </Link>
+                  <Link
+                    href="/shop/category/rudraksha-malas"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    📿 Rudraksha & Malas
+                  </Link>
+                  <Link
+                    href="/shop/category/spiritual-jewelry"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    💍 Spiritual Jewelry
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <Link
             href="/services"
             className="text-base font-bold text-black px-2 py-1 relative group transition-colors"

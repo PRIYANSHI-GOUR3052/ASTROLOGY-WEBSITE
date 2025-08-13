@@ -152,6 +152,20 @@ export default function ShopBanner() {
         </div>
       </div>
 
+      {/* View All Products Button - top center on mobile, top left on desktop */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 sm:top-8 sm:left-8 sm:translate-x-0 z-20">
+        <Link href="/shop/all-products" className="group">
+          <div className="bg-black/60 hover:bg-black/70 backdrop-blur-sm rounded-lg px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 border border-white/10 text-center sm:text-left">
+            <h3 className="text-sm sm:text-base font-medium text-white group-hover:text-amber-200 transition-colors duration-300">
+              🔍 View All Products
+            </h3>
+            <p className="text-white/70 text-xs mt-1 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+              Browse our collection
+            </p>
+          </div>
+        </Link>
+      </div>
+
       {/* Persistent Navigation hint - hide on xs, show on sm+ */}
       <div className="hidden sm:block absolute bottom-20 right-8 z-20 text-right">
         <div className="bg-white/15 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10">
