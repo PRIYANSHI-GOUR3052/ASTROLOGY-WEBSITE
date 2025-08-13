@@ -621,7 +621,7 @@ Best Seller Collection
           transition={{ delay: 1.5, duration: 0.6 }}
           className="text-center mt-16 px-8"
         >
-          <Link href="/shop">
+          <Link href="/shop/all-products">
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
