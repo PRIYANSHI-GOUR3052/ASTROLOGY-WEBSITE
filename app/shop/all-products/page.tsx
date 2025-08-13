@@ -2,11 +2,10 @@
 
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { ChevronDown, X, Filter, Grid3X3, List, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { UniversalCartButton } from "@/app/components/UniversalCartButton";
 import { products } from "@/data/products";
+import { ReusableProductGrid } from "@/app/components/product-cards";
 
 // Types
 interface Product {
@@ -244,146 +243,6 @@ const FilterSidebar = ({
     )}
   </AnimatePresence>
 );
-
-// Product Card Component
-const ProductCard = ({ product, viewMode }: { product: Product; viewMode: ViewMode }) => {
-  const discount = product.originalPrice 
-    ? Math.round(((getPriceValue(product.originalPrice) - getPriceValue(product.price)) / getPriceValue(product.originalPrice)) * 100)
-    : 0;
-
-  if (viewMode === "list") {
-    return (
-      <motion.div
-        layout
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        className="flex bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden"
-      >
-        <div className="relative w-32 h-32 flex-shrink-0">
-          <Image
-            src={product.image || "/images/placeholder.jpg"}
-            alt={product.title}
-            fill
-            className="object-cover"
-          />
-          {discount > 0 && (
-            <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-              {discount}% OFF
-            </span>
-          )}
-        </div>
-        
-        <div className="flex-1 p-4 flex flex-col justify-between">
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{product.title}</h3>
-            <p className="text-sm text-gray-600 line-clamp-2 mb-2">{product.description}</p>
-            {product.category && (
-              <span className="inline-block px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full font-medium">
-                {product.category}
-              </span>
-            )}
-          </div>
-          
-          <div className="flex items-center justify-between mt-4">
-            <div className="flex items-center space-x-2">
-              <span className="text-lg font-bold text-gray-900">{product.price}</span>
-              {product.originalPrice && (
-                <span className="text-sm text-gray-500 line-through">{product.originalPrice}</span>
-              )}
-            </div>
-            
-            <UniversalCartButton
-              productId={product.id}
-              productName={product.title}
-              price={getPriceValue(product.price)}
-              image={product.image || "/images/placeholder.jpg"}
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors"
-            >
-              Add to Cart
-            </UniversalCartButton>
-          </div>
-        </div>
-      </motion.div>
-    );
-  }
-
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden"
-    >
-      <Link href={`/shop/${product.slug}`}>
-        <div className="relative aspect-square overflow-hidden">
-          <Image
-            src={product.image || "/images/placeholder.jpg"}
-            alt={product.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-          {discount > 0 && (
-            <span className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium z-10">
-              {discount}% OFF
-            </span>
-          )}
-          {product.category && (
-            <span className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-gray-700 text-xs px-2 py-1 rounded-full font-medium">
-              {product.category}
-            </span>
-          )}
-        </div>
-      </Link>
-      
-      <div className="p-4">
-        <Link href={`/shop/${product.slug}`}>
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
-            {product.title}
-          </h3>
-        </Link>
-        
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3">{product.description}</p>
-        
-        {product.rating && (
-          <div className="flex items-center mb-3">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <span
-                  key={i}
-                  className={`text-sm ${i < Math.floor(product.rating!) ? 'text-yellow-400' : 'text-gray-300'}`}
-                >
-                  ★
-                </span>
-              ))}
-            </div>
-            <span className="text-xs text-gray-500 ml-2">({product.rating})</span>
-          </div>
-        )}
-        
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-2">
-            <span className="text-lg font-bold text-gray-900">{product.price}</span>
-            {product.originalPrice && (
-              <span className="text-sm text-gray-500 line-through">{product.originalPrice}</span>
-            )}
-          </div>
-        </div>
-        
-        <UniversalCartButton
-          productId={product.id}
-          productName={product.title}
-          price={getPriceValue(product.price)}
-          image={product.image || "/images/placeholder.jpg"}
-          className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors"
-        >
-          Add to Cart
-        </UniversalCartButton>
-      </div>
-    </motion.div>
-  );
-};
 
 export default function AllProductsPage() {
   const [filters, setFilters] = useState<Filters>({});
@@ -656,21 +515,22 @@ export default function AllProductsPage() {
             </div>
 
             {/* Products Grid/List */}
-            <motion.div layout className={`${
-              viewMode === "grid" 
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" 
-                : "space-y-4"
-            }`}>
-              <AnimatePresence mode="popLayout">
-                {paginatedProducts.map(product => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    viewMode={viewMode}
-                  />
-                ))}
-              </AnimatePresence>
-            </motion.div>
+            <ReusableProductGrid
+              products={paginatedProducts}
+              viewMode={viewMode}
+              columns={4}
+              showQuickActions={true}
+              showWishlist={true}
+              showCompare={false}
+              onWishlistClick={(product) => {
+                console.log('Added to wishlist:', product.title);
+                // Add wishlist logic here
+              }}
+              onQuickViewClick={(product) => {
+                console.log('Quick view:', product.title);
+                // Add quick view logic here
+              }}
+            />
 
             {/* No Results */}
             {filteredAndSortedProducts.length === 0 && (
