@@ -4,15 +4,20 @@ import { uploadImage } from '@/lib/cloudinary';
 
 const prisma = new PrismaClient();
 
-// GET all zodiac signs
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const zodiacSigns = await prisma.zodiac_signs.findMany({
       orderBy: {
         name: 'asc'
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        image_url: true
       }
     });
-    
+
     return NextResponse.json(zodiacSigns);
   } catch (error) {
     console.error('Error fetching zodiac signs:', error);
@@ -20,6 +25,8 @@ export async function GET() {
       { error: 'Failed to fetch zodiac signs' },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }
 

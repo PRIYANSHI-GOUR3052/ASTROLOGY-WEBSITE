@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Category {
   id: number;
   name: string;
-  subcategories?: { id: number; name: string }[];
+  slug: string;
+  description?: string;
+  image_url?: string;
+  subcategories?: { id: number; name: string; slug: string }[];
+}
+
+interface ZodiacSign {
+  id: number;
+  name: string;
+  slug: string;
+  image_url?: string;
 }
 
 interface StepCategorySelectionProps {
@@ -17,23 +27,6 @@ interface StepCategorySelectionProps {
   totalSteps?: number;
 }
 
-// Category list (no subcategories)
-const categories = [
-  { id: 1, name: 'Gemstones & Crystals' },
-  { id: 2, name: 'Rudraksha & Malas' },
-  { id: 3, name: 'Spiritual Bracelets' },
-  { id: 4, name: 'Sacred Yantras' },
-  { id: 5, name: 'Astrology Reports' },
-  { id: 6, name: 'Puja Essentials' },
-  { id: 7, name: 'Feng Shui Items' },
-  { id: 8, name: 'Meditation Tools' },
-];
-
-const zodiacSigns = [
-  'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
-  'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
-];
-
 const StepCategorySelection: React.FC<StepCategorySelectionProps> = ({
   zodiacSign = '',
   categoryId,
@@ -44,14 +37,83 @@ const StepCategorySelection: React.FC<StepCategorySelectionProps> = ({
   step = 1,
   totalSteps = 2,
 }) => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [zodiacSigns, setZodiacSigns] = useState<ZodiacSign[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Fetch categories and zodiac signs in parallel
+        const [categoriesResponse, zodiacResponse] = await Promise.all([
+          fetch('/api/categories'),
+          fetch('/api/zodiac-signs')
+        ]);
+
+        if (!categoriesResponse.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+
+        if (!zodiacResponse.ok) {
+          throw new Error('Failed to fetch zodiac signs');
+        }
+
+        const categoriesData = await categoriesResponse.json();
+        const zodiacData = await zodiacResponse.json();
+
+        setCategories(categoriesData);
+        setZodiacSigns(zodiacData);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError(err instanceof Error ? err.message : 'Failed to fetch data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="space-y-6 w-full">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6 w-full">
+          <div className="flex items-center justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+            <span className="ml-2 text-gray-600 dark:text-gray-400">Loading...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6 w-full">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6 w-full">
+          <div className="text-center py-8">
+            <div className="text-red-600 dark:text-red-400 mb-2">Error loading data</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">{error}</div>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-
     <div className="space-y-6 w-full">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6 w-full">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-6">Select Category</h2>
-
 
         {/* Zodiac Sign Dropdown */}
         <div className="mb-4">
@@ -63,7 +125,7 @@ const StepCategorySelection: React.FC<StepCategorySelectionProps> = ({
           >
             <option value="">Select zodiac sign</option>
             {zodiacSigns.map(sign => (
-              <option key={sign} value={sign}>{sign}</option>
+              <option key={sign.id} value={sign.name}>{sign.name}</option>
             ))}
           </select>
         </div>

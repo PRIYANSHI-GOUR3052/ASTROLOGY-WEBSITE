@@ -9,62 +9,98 @@ import StepShippingDetails from "./components/StepShippingDetails";
 import StepDetailedSEO from "./components/StepDetailedSEO";
 import StepStockManagement from "./components/StepStockManagement";
 type SEOData = {
-  shortDescription: string;
-  fullDescription: string;
-  metaTitle: string;
-  metaDescription: string;
-  metaKeywords: string;
+  meta_title: string;
+  meta_description: string;
+  meta_keywords: string;
+  og_title: string;
+  og_description: string;
+  og_image: string;
+  twitter_title: string;
+  twitter_description: string;
+  twitter_image: string;
+  canonical_url: string;
 };
+
 const initialSEO: SEOData = {
-  shortDescription: '',
-  fullDescription: '',
-  metaTitle: '',
-  metaDescription: '',
-  metaKeywords: '',
+  meta_title: '',
+  meta_description: '',
+  meta_keywords: '',
+  og_title: '',
+  og_description: '',
+  og_image: '',
+  twitter_title: '',
+  twitter_description: '',
+  twitter_image: '',
+  canonical_url: '',
 };
 
 type StockData = {
+  sku: string;
   quantity: number;
-  lowStockThreshold: number;
+  reserved: number;
+  min_stock: number;
+  max_stock: number;
+  location: string;
+  batch_number: string;
+  expiry_date: string;
+  cost_price: number;
 };
+
 const initialStock: StockData = {
+  sku: '',
   quantity: 0,
-  lowStockThreshold: 0,
+  reserved: 0,
+  min_stock: 0,
+  max_stock: 0,
+  location: '',
+  batch_number: '',
+  expiry_date: '',
+  cost_price: 0,
 };
 type ShippingData = {
   weight: string;
-  weightUnit: string;
+  weight_unit: string;
   length: string;
   width: string;
   height: string;
-  dimensionUnit: string;
-  shippingClass: string;
+  dimension_unit: string;
+  shipping_class: string;
+  is_free_shipping: boolean;
+  shipping_cost: string;
+  handling_time: string;
+  max_shipping_cost: string;
 };
+
 const initialShipping: ShippingData = {
   weight: '',
-  weightUnit: 'Kilograms (kg)',
+  weight_unit: 'kg',
   length: '',
   width: '',
   height: '',
-  dimensionUnit: 'Centimeters (cm)',
-  shippingClass: '',
+  dimension_unit: 'cm',
+  shipping_class: '',
+  is_free_shipping: false,
+  shipping_cost: '',
+  handling_time: '',
+  max_shipping_cost: '',
 };
 
-type FormData = {
-  zodiacSign?: string | null;
+type ProductFormData = {
+  zodiacSign: string | null;
   categoryId: number | null;
   name: string;
   description: string;
   sku: string;
   sellingPrice: string;
   discountedPrice: string;
-  color?: string;
+  color: string;
+  images: string[];
 };
 
-type Errors = Partial<Record<keyof FormData, string>>;
+type Errors = Partial<Record<keyof ProductFormData, string>>;
 
-const initialFormData: FormData = {
-  zodiacSign: '',
+const initialFormData: ProductFormData = {
+  zodiacSign: null,
   categoryId: null,
   name: "",
   description: "",
@@ -72,6 +108,7 @@ const initialFormData: FormData = {
   sellingPrice: "",
   discountedPrice: "",
   color: '',
+  images: [],
 };
 
 const steps = [
@@ -87,22 +124,57 @@ export default function AddProductPage() {
   const router = useRouter();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [media, setMedia] = useState<File[]>([]);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<ProductFormData>(initialFormData);
   const [shipping, setShipping] = useState<ShippingData>(initialShipping);
   const [seo, setSEO] = useState<SEOData>(initialSEO);
   const [errors, setErrors] = useState<Errors>({});
   const [stock, setStock] = useState<StockData>(initialStock);
-  const handleStockFieldChange = (field: string, value: number) => {
+  const [createdProductId, setCreatedProductId] = useState<number | undefined>(undefined);
+  
+  const handleStockFieldChange = (field: string, value: any) => {
     setStock(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleStockUpdate = () => {
-    // Final stock update logic here
-    setLoading(true);
-    setTimeout(() => {
+  const handleStockUpdate = async () => {
+    if (!createdProductId) {
+      console.error('No product ID available for stock update');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      
+      const stockData = {
+        sku: stock.sku,
+        quantity: Number(stock.quantity) || 0,
+        reserved: Number(stock.reserved) || 0,
+        min_stock: Number(stock.min_stock) || 0,
+        max_stock: stock.max_stock ? Number(stock.max_stock) : null,
+        location: stock.location || null,
+        batch_number: stock.batch_number || null,
+        expiry_date: stock.expiry_date || null,
+        cost_price: stock.cost_price ? Number(stock.cost_price) : null
+      };
+
+      const response = await fetch(`/api/products/${createdProductId}/stock`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(stockData)
+      });
+
+      if (response.ok) {
+        const savedData = await response.json();
+        console.log('Stock saved successfully:', savedData);
+        router.push("/admin/products");
+      } else {
+        const errorData = await response.json();
+        console.error('Error saving stock data:', errorData);
+      }
+    } catch (error) {
+      console.error('Error saving stock data:', error);
+    } finally {
       setLoading(false);
-      router.push("/admin/products/create");
-    }, 1200);
+    }
   };
   const [loading, setLoading] = useState<boolean>(false);
   const handleSEOFieldChange = (field: string, value: string) => {
@@ -185,21 +257,52 @@ export default function AddProductPage() {
     setActiveStep(2);
   };
 
-  const handleAttributeChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleAttributeChange = (attributeId: number, value: any) => {
+    // Map attribute IDs to form fields
+    if (attributeId === 1) { // Assuming 1 is color attribute ID
+      setFormData(prev => ({ ...prev, color: value }));
+    }
   };
 
   const handleMediaChange = (files: File[]) => {
     setMedia(files);
   };
 
-  const handleAttributeMediaSubmit = () => {
-    // Final submit logic here
-    setLoading(true);
-    setTimeout(() => {
+  const handleAttributeMediaSubmit = async () => {
+    try {
+      setLoading(true);
+      
+      // Create the main product first
+      const productData = {
+        name: formData.name,
+        description: formData.description,
+        price: formData.sellingPrice,
+        sku: formData.sku,
+        category_id: formData.categoryId,
+        zodiac_id: formData.zodiacSign ? parseInt(formData.zodiacSign) : null,
+        images: formData.images
+      };
+
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setCreatedProductId(result.product.id);
+        console.log('Product created successfully:', result.product);
+        setActiveStep(3);
+      } else {
+        const errorData = await response.json();
+        console.error('Error creating product:', errorData);
+      }
+    } catch (error) {
+      console.error('Error creating product:', error);
+    } finally {
       setLoading(false);
-      router.push("/admin/products/create");
-    }, 1200);
+    }
   };
 
   // Get category label for Step 1 (mocked, replace with actual lookup if needed)
@@ -250,6 +353,8 @@ export default function AddProductPage() {
         )}
         {activeStep === 1 && (
           <StepProductDetails
+            categoryId={formData.categoryId}
+            zodiacSign={formData.zodiacSign}
             formData={formData}
             onFieldChange={handleFieldChange as (field: string, value: string) => void}
             onBack={handleBack}
@@ -261,12 +366,11 @@ export default function AddProductPage() {
         {activeStep === 2 && (
           <StepAttributeMedia
             categoryId={formData.categoryId}
-            attributes={{ color: formData.color || '' }}
-            media={media}
+            zodiacId={formData.zodiacSign ? parseInt(formData.zodiacSign) : null}
+            selectedAttributes={{ color: formData.color || '' }}
             onAttributeChange={handleAttributeChange}
-            onMediaChange={handleMediaChange}
             onBack={() => setActiveStep(1)}
-            onSubmit={() => setActiveStep(3)}
+            onSubmit={handleAttributeMediaSubmit}
             errors={errors}
           />
         )}
@@ -290,11 +394,13 @@ export default function AddProductPage() {
         )}
         {activeStep === 5 && (
           <StepStockManagement
+            productId={createdProductId}
             stock={stock}
             onFieldChange={handleStockFieldChange}
-            onUpdate={handleStockUpdate}
             onBack={() => setActiveStep(4)}
+            onNext={handleStockUpdate}
             errors={{}}
+            isSubmitting={loading}
           />
         )}
       </div>
