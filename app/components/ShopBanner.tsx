@@ -5,8 +5,26 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Simplified carousel data - one image per category
-const carouselData = [
+// Define types for better TypeScript support
+interface CarouselItem {
+  id: string;
+  title: string;
+  image: {
+    src: string;
+    title: string;
+    url: string;
+  };
+}
+
+interface ShopBannerProps {
+  variant?: 'default' | 'gemstones' | 'spiritual' | 'astrology' | 'jewelry' | 'services';
+  customData?: CarouselItem[];
+  showAllProductsButton?: boolean;
+  title?: string;
+}
+
+// Default carousel data - one image per category
+const defaultCarouselData = [
   {
     id: 'gemstones',
     title: 'Sacred Gemstones & Crystals',
@@ -45,9 +63,92 @@ const carouselData = [
   },
 ];
 
-export default function ShopBanner() {
+// Category-specific carousel data
+const categoryCarouselData = {
+  gemstones: [
+    {
+      id: 'gemstones-1',
+      title: 'Sacred Gemstones & Crystals',
+      image: {
+        src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752753177/naturalstones_xsst5z.jpg',
+        title: 'Natural Gemstones',
+        url: '/shop/gemstones'
+      }
+    },
+    // Add more gemstone-specific items
+  ],
+  spiritual: [
+    {
+      id: 'spiritual-1',
+      title: 'Spiritual Accessories',
+      image: {
+        src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754784/accessory_viwtit.jpg',
+        title: 'Spiritual Tools',
+        url: '/shop/spiritual-accessories'
+      }
+    },
+    // Add more spiritual-specific items
+  ],
+  astrology: [
+    {
+      id: 'astrology-1',
+      title: 'Astrology Services',
+      image: {
+        src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754941/personalized_astrology_tools_mj3501.jpg',
+        title: 'Astrology Consultation',
+        url: '/shop/astrology-services'
+      }
+    },
+    // Add more astrology-specific items
+  ],
+  jewelry: [
+    {
+      id: 'jewelry-1',
+      title: 'Sacred Jewelry & Malas',
+      image: {
+        src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754647/kundli_h5hiqg.jpg',
+        title: 'Sacred Jewelry',
+        url: '/shop/jewelry'
+      }
+    },
+    // Add more jewelry-specific items
+  ],
+  services: [
+    {
+      id: 'services-1',
+      title: 'Astrology Services',
+      image: {
+        src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754941/personalized_astrology_tools_mj3501.jpg',
+        title: 'Personalized Readings',
+        url: '/services/personalized-readings'
+      }
+    },
+    {
+      id: 'services-2',
+      title: 'Consultation Services',
+      image: {
+        src: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754647/kundli_h5hiqg.jpg',
+        title: 'Expert Consultation',
+        url: '/services/consultation'
+      }
+    },
+    // Add more service-specific items
+  ],
+};
+
+export default function ShopBanner({ 
+  variant = 'default', 
+  customData, 
+  showAllProductsButton = true,
+  title 
+}: ShopBannerProps) {
   const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
+
+  // Determine which data to use
+  const carouselData = customData || 
+    (variant !== 'default' ? categoryCarouselData[variant] : null) || 
+    defaultCarouselData;
 
   // Carousel switching every 4 seconds
   useEffect(() => {
@@ -119,7 +220,7 @@ export default function ShopBanner() {
 
       {/* Persistent Progress Indicator - hide on xs, show on sm+ */}
       <div className="hidden sm:flex absolute bottom-8 right-8 z-20 space-x-3">
-        {carouselData.map((_, index) => (
+        {carouselData.map((item: CarouselItem, index: number) => (
           <button
             key={index}
             onClick={() => {
@@ -153,18 +254,20 @@ export default function ShopBanner() {
       </div>
 
       {/* View All Products Button - top center on mobile, top left on desktop */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 sm:top-8 sm:left-8 sm:translate-x-0 z-20">
-        <Link href="/shop/all-products" className="group">
-          <div className="bg-black/60 hover:bg-black/70 backdrop-blur-sm rounded-lg px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 border border-white/10 text-center sm:text-left">
-            <h3 className="text-sm sm:text-base font-medium text-white group-hover:text-amber-200 transition-colors duration-300">
-              🔍 View All Products
-            </h3>
-            <p className="text-white/70 text-xs mt-1 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
-              Browse our collection
-            </p>
-          </div>
-        </Link>
-      </div>
+      {showAllProductsButton && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 sm:top-8 sm:left-8 sm:translate-x-0 z-20">
+          <Link href={variant === 'services' ? '/services/all' : '/shop/all-products'} className="group">
+            <div className="bg-black/60 hover:bg-black/70 backdrop-blur-sm rounded-lg px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 border border-white/10 text-center sm:text-left">
+              <h3 className="text-sm sm:text-base font-medium text-white group-hover:text-amber-200 transition-colors duration-300">
+                🔍 {title || (variant === 'services' ? 'View All Services' : 'View All Products')}
+              </h3>
+              <p className="text-white/70 text-xs mt-1 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                Browse our {variant === 'services' ? 'services' : 'collection'}
+              </p>
+            </div>
+          </Link>
+        </div>
+      )}
 
       {/* Persistent Navigation hint - hide on xs, show on sm+ */}
       <div className="hidden sm:block absolute bottom-20 right-8 z-20 text-right">

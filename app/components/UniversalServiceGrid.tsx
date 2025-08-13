@@ -6,6 +6,8 @@ import Link from 'next/link';
 import ServiceCarousels from './ServiceCarousels';
 import NakshatraGyaanBanner from './NakshatraGyaanBanner';
 import ProductAssuranceBar from './ProductAssuranceBar';
+import { UniversalServiceCard } from './UniversalServiceCard';
+import { UniversalServiceCardGrid } from './UniversalServiceCardGrid';
 
 interface ProductServiceCardProps {
   image: string;
@@ -22,6 +24,8 @@ const services = [
     description: 'Discover the science and sacred art of Vedic compatibility. Our expert astrologers blend tradition and modern insight to guide you toward a harmonious, blessed union.',
     image: '/images/birth_chart_mockup.jpg',
     badge: 'STARTS AT ₹2100',
+    price: '₹2,100',
+    originalPrice: '₹3,500',
   },
   {
     slug: 'panchang',
@@ -29,6 +33,8 @@ const services = [
     description: 'Your daily Vedic almanac for cosmic alignment, auspicious timings, and spiritual clarity.',
     image: '/images/cosmiccalendar.png',
     badge: '',
+    price: '₹299',
+    originalPrice: '₹499',
   },
   {
     slug: 'career-job',
@@ -36,6 +42,8 @@ const services = [
     description: 'Navigate your professional path with cosmic clarity. Get personalized guidance to make informed career decisions and overcome challenges.',
     image: '/images/course-3.jpg',
     badge: 'HIGHLY RECOMMENDED',
+    price: '₹1,499',
+    originalPrice: '₹2,999',
   },
   {
     slug: 'grah-shanti',
@@ -50,6 +58,8 @@ const services = [
     description: 'Discover the power of numbers in your life with personalized numerology reading.',
     image: '/images/course-4.jpg',
     badge: '',
+    price: '₹899',
+    originalPrice: '₹1,499',
   },
   {
     slug: 'online-puja',
@@ -57,6 +67,8 @@ const services = [
     description: 'Experience the sacred power of Vedic rituals from the comfort of your home.',
     image: '/images/course-1.jpg',
     badge: 'STARTS AT ₹5100',
+    price: '₹5,100',
+    originalPrice: '₹7,500',
   },
   {
     slug: 'palmistry',
@@ -64,6 +76,8 @@ const services = [
     description: 'Unlock the secrets hidden in your hands. Get insightful readings on your life path, character, and future.',
     image: '/images/course-5.jpg',
     badge: '',
+    price: '₹799',
+    originalPrice: '₹1,299',
   },
   {
     slug: 'personal-reading',
@@ -232,24 +246,12 @@ export function UniversalServicesGrid({ className = '' }) {
       </div>
 
       {/* First 3 cards in horizontal grid */}
-      <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-16 ${className}`}>
-        {firstThreeServices.map((service, index) => (
-          <motion.div
-            key={service.slug}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-          >
-            <ProductServiceCard
-              image={service.image}
-              title={service.title}
-              description={service.description}
-              badge={service.badge}
-              href={`/services/${service.slug}`}
-            />
-          </motion.div>
-        ))}
-      </div>
+      <UniversalServiceCardGrid 
+        services={firstThreeServices}
+        className={className}
+        maxCards={3}
+        gridCols="grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+      />
 
       {/* Section Heading */}
       <div className="mb-12">

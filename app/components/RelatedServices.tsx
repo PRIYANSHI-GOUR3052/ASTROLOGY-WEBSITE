@@ -150,7 +150,7 @@ const RelatedServices: React.FC<RelatedServicesProps> = ({
       {/* View All Services Link */}
       <div className="text-center mt-6">
         <Link 
-          href="/services" 
+          href="/services/all" 
           className="inline-flex items-center gap-2 bg-[#23244a] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#77A656] transition-colors"
         >
           View All Services
