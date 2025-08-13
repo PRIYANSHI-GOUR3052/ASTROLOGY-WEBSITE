@@ -3,55 +3,61 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Main 5 categories for shop page - EARTHLY POLISHED COLORS WITH IMAGES
-const mainCategories = [
+// Category interface to match backend data
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  image_url?: string | null;
+  created_at: string;
+  updated_at: string;
+  subcategories: any[];
+}
+
+// Color schemes for categories - will be assigned dynamically
+const colorSchemes = [
   {
-    name: 'Gemstones & Crystals',
-    icon: '💎',
-    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752753177/naturalstones_xsst5z.jpg',
-    slug: 'gemstones-crystals',
     color: 'from-emerald-300 via-green-400 to-teal-400',
     shadowColor: 'shadow-emerald-400/40',
     glowColor: 'shadow-emerald-300/50'
   },
   {
-    name: 'Rudraksha & Malas',
-    icon: '📿',
-    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752753830/rudrakshamala_pibmxj.jpg',
-    slug: 'rudraksha-malas', 
     color: 'from-amber-300 via-orange-300 to-yellow-400',
     shadowColor: 'shadow-amber-400/40',
     glowColor: 'shadow-amber-300/50'
   },
   {
-    name: 'Spiritual Bracelets',
-    icon: '⚡',
-    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754784/accessory_viwtit.jpg',
-    slug: 'bracelets',
     color: 'from-rose-300 via-pink-300 to-rose-400',
     shadowColor: 'shadow-rose-400/40',
     glowColor: 'shadow-rose-300/50'
   },
   {
-    name: 'Sacred Yantras',
-    icon: '🔯',
-    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754014/yantra_kppksi.jpg',
-    slug: 'yantras-plates',
     color: 'from-yellow-300 via-amber-300 to-orange-300',
     shadowColor: 'shadow-yellow-400/40',
     glowColor: 'shadow-yellow-300/50'
   },
   {
-    name: 'Puja Essentials',
-    icon: '🕯️',
-    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752754218/puja_samagri_sc0vpt.jpg',
-    slug: 'puja-essentials',
     color: 'from-blue-300 via-cyan-300 to-teal-300',
     shadowColor: 'shadow-blue-400/40',
     glowColor: 'shadow-blue-300/50'
+  },
+  {
+    color: 'from-purple-300 via-indigo-300 to-blue-400',
+    shadowColor: 'shadow-purple-400/40',
+    glowColor: 'shadow-purple-300/50'
+  },
+  {
+    color: 'from-red-300 via-pink-300 to-rose-400',
+    shadowColor: 'shadow-red-400/40',
+    glowColor: 'shadow-red-300/50'
+  },
+  {
+    color: 'from-green-300 via-emerald-300 to-teal-400',
+    shadowColor: 'shadow-green-400/40',
+    glowColor: 'shadow-green-300/50'
   }
 ];
 
@@ -123,6 +129,39 @@ export default function ShopCategoriesMinimal() {
   const router = useRouter();
   const isInView = useInView(ref, { once: true, margin: "-150px" });
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+
+
+  // Fetch categories from backend
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/categories');
+        if (response.ok) {
+          const data = await response.json();
+          setCategories(data);
+        } else {
+          setError('Failed to fetch categories');
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setError('Error loading categories');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // Helper function to get color scheme for a category
+  const getColorScheme = (index: number) => {
+    return colorSchemes[index % colorSchemes.length];
+  };
 
   // CINEMATIC PAGE TRANSITION
   const handleExploreMore = async () => {
@@ -139,6 +178,17 @@ export default function ShopCategoriesMinimal() {
 
   return (
     <>
+      {/* Custom styles to hide scrollbar */}
+      <style jsx>{`
+        .hide-scrollbar {
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE and Edge */
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none; /* Chrome, Safari and Opera */
+        }
+      `}</style>
+      
       {/* ELEGANT PAGE EXIT OVERLAY - BOOK PAGE TURNING */}
       <AnimatePresence>
         {isTransitioning && (
@@ -193,78 +243,119 @@ export default function ShopCategoriesMinimal() {
             />
           </motion.div>
 
-          {/* HEROIC CATEGORIES GRID */}
+          {/* HEROIC CATEGORIES GRID WITH SCROLL */}
           <motion.div
             ref={ref}
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8 lg:gap-12 mb-16 max-w-none justify-items-center"
+            className="mb-16 max-w-none"
           >
-            {mainCategories.map((category, index) => (
-              <motion.div
-                key={category.slug}
-                variants={heroicSlideVariants}
-                className="flex flex-col items-center"
-              >
-                <Link href={`/shop/category/${category.slug}`}>
-                  <motion.div
-                    variants={iconHoverVariants}
-                    initial="rest"
-                    whileHover="hover"
-                    className="relative cursor-pointer"
-                  >
-
-                    
-                    {/* MAIN CIRCLE - MUCH LARGER SIZE WITH IMAGE */}
-                    <motion.div
-                      className={`relative w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-40 xl:h-40 rounded-full bg-gradient-to-br ${category.color} shadow-xl ${category.shadowColor} border-4 border-white/30 overflow-hidden`}
-                      whileHover={{
-                        scale: 1.15,
-                        boxShadow: '0 25px 50px rgba(251, 146, 60, 0.4)',
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      {/* CATEGORY IMAGE */}
-                      <div className="absolute inset-0 rounded-full overflow-hidden">
-                        <Image
-                          src={category.image}
-                          alt={category.name}
-                          fill
-                          className="object-cover object-center"
-                          sizes="(max-width: 768px) 112px, (max-width: 1024px) 128px, (max-width: 1280px) 144px, 160px"
-                        />
-                      </div>
-                      
-                      {/* SUBTLE COLOR OVERLAY */}
-                      <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${category.color} opacity-20 mix-blend-soft-light`} />
-                      
-                      {/* INNER GLOW BORDER */}
-                      <div className="absolute inset-2 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
-                    </motion.div>
-
-
-                  </motion.div>
-                </Link>
-
-                {/* CATEGORY NAME */}
-                <motion.h3
-                  className="mt-4 text-center text-sm md:text-base lg:text-lg font-semibold text-slate-700"
-                  style={{ fontFamily: 'Playfair Display, serif' }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={isInView ? {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      delay: 0.8 + index * 0.2,
-                      duration: 0.6
-                    }
-                  } : {}}
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+                <span className="ml-4 text-lg text-gray-600">Loading sacred realms...</span>
+              </div>
+            ) : error ? (
+              <div className="text-center py-20">
+                <p className="text-lg text-red-600 mb-4">{error}</p>
+                <button 
+                  onClick={() => window.location.reload()}
+                  className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
                 >
-                  {category.name}
-                </motion.h3>
-              </motion.div>
-            ))}
+                  Try Again
+                </button>
+              </div>
+            ) : categories.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-lg text-gray-600">No categories found. Create your first category!</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto pb-8 relative hide-scrollbar" style={{ scrollBehavior: 'smooth' }}>
+                {/* Left fade indicator */}
+                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white via-white/90 to-transparent pointer-events-none z-10" />
+                
+                {/* Right fade indicator */}
+                <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white via-white/90 to-transparent pointer-events-none z-10" />
+                
+                {/* Scroll hint */}
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 pointer-events-none z-10">
+                  ← Scroll to explore →
+                </div>
+                
+                <div className="flex gap-8 md:gap-10 lg:gap-12 min-w-max px-6">
+                  {categories.map((category, index) => {
+                    const colorScheme = getColorScheme(index);
+                    return (
+                      <motion.div
+                        key={category.id}
+                        variants={heroicSlideVariants}
+                        className="flex flex-col items-center min-w-[140px] md:min-w-[160px] lg:min-w-[180px]"
+                      >
+                        <Link href={`/shop/category/${category.slug}`}>
+                          <motion.div
+                            variants={iconHoverVariants}
+                            initial="rest"
+                            whileHover="hover"
+                            className="relative cursor-pointer"
+                          >
+                            {/* MAIN CIRCLE - MUCH LARGER SIZE WITH IMAGE */}
+                            <motion.div
+                              className={`relative w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-40 xl:h-40 rounded-full bg-gradient-to-br ${colorScheme.color} shadow-xl ${colorScheme.shadowColor} border-4 border-white/30 overflow-hidden`}
+                              whileHover={{
+                                scale: 1.15,
+                                boxShadow: '0 25px 50px rgba(251, 146, 60, 0.4)',
+                                transition: { duration: 0.3 }
+                              }}
+                            >
+                              {/* CATEGORY IMAGE */}
+                              <div className="absolute inset-0 rounded-full overflow-hidden">
+                                {category.image_url ? (
+                                  <Image
+                                    src={category.image_url}
+                                    alt={category.name}
+                                    fill
+                                    className="object-cover object-center"
+                                    sizes="(max-width: 768px) 112px, (max-width: 1024px) 128px, (max-width: 1280px) 144px, 160px"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                                    <span className="text-3xl text-gray-500">📷</span>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* SUBTLE COLOR OVERLAY */}
+                              <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${colorScheme.color} opacity-20 mix-blend-soft-light`} />
+                              
+                              {/* INNER GLOW BORDER */}
+                              <div className="absolute inset-2 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
+                            </motion.div>
+                          </motion.div>
+                        </Link>
+
+                        {/* CATEGORY NAME */}
+                        <motion.h3
+                          className="mt-4 text-center text-sm md:text-base lg:text-lg font-semibold text-slate-700"
+                          style={{ fontFamily: 'Playfair Display, serif' }}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={isInView ? {
+                            opacity: 1,
+                            y: 0,
+                            transition: {
+                              delay: 0.8 + index * 0.2,
+                              duration: 0.6
+                            }
+                          } : {}}
+                        >
+                          {category.name}
+                        </motion.h3>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </motion.div>
 
           {/* CINEMATIC EXPLORE MORE BUTTON */}

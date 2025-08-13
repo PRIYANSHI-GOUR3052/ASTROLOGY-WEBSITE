@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Edit, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 
 type SubcategoryModalProps = {
@@ -56,90 +56,82 @@ const SubcategoryModal: React.FC<SubcategoryModalProps> = ({ parentCategory, onC
 };
 
 type Category = {
+  id: number;
   name: string;
-  slug?: string;
-  icon: string;
-  image?: string | null;
-};
-
-type CategoryRowProps = {
-  category: Category;
-  onAddSubcategory: (slug: string, subName: string) => void;
-  subcategories: string[];
+  slug: string;
+  description?: string | null;
+  image_url?: string | null;
+  banner_url?: string | null;
+  created_at: string;
+  updated_at: string;
+  subcategories: Subcategory[];
 };
 
 type Subcategory = {
+  id: number;
   name: string;
-  subcategories?: Subcategory[];
+  slug: string;
+  image_url?: string | null;
+  category_id: number;
+  created_at: string;
+  updated_at: string;
 };
 
-type CategoryTree = {
-  name: string;
-  icon: string;
-  image?: string | null;
-  subcategories?: Subcategory[];
-};
+type CategoryTree = Category;
 
-const demoCategories: CategoryTree[] = [
-  { name: "Gemstones & Crystals", icon: "💎", subcategories: [] },
-  { name: "Rudraksha & Malas", icon: "📿", subcategories: [] },
-  { name: "Spiritual Bracelets", icon: "🧿", subcategories: [] },
-  { name: "Sacred Yantras", icon: "🔱", subcategories: [] },
-  { name: "Astrology Reports", icon: "📜", subcategories: [] },
-  { name: "Puja Essentials", icon: "🪔", subcategories: [] },
-  { name: "Feng Shui Items", icon: "🌬️", subcategories: [] },
-  { name: "Meditation Tools", icon: "🧘", subcategories: [] },
+const defaultCategories: CategoryTree[] = [
+  { id: 0, name: "Gemstones & Crystals", slug: "gemstones-crystals", description: null, image_url: null, banner_url: null, created_at: "", updated_at: "", subcategories: [] },
+  { id: 0, name: "Rudraksha & Malas", slug: "rudraksha-malas", description: null, image_url: null, banner_url: null, created_at: "", updated_at: "", subcategories: [] },
+  { id: 0, name: "Spiritual Bracelets", slug: "spiritual-bracelets", description: null, image_url: null, banner_url: null, created_at: "", updated_at: "", subcategories: [] },
+  { id: 0, name: "Sacred Yantras", slug: "sacred-yantras", description: null, image_url: null, banner_url: null, created_at: "", updated_at: "", subcategories: [] },
+  { id: 0, name: "Astrology Reports", slug: "astrology-reports", description: null, image_url: null, banner_url: null, created_at: "", updated_at: "", subcategories: [] },
+  { id: 0, name: "Puja Essentials", slug: "puja-essentials", description: null, image_url: null, banner_url: null, created_at: "", updated_at: "", subcategories: [] },
+  { id: 0, name: "Feng Shui Items", slug: "feng-shui-items", description: null, image_url: null, banner_url: null, created_at: "", updated_at: "", subcategories: [] },
+  { id: 0, name: "Meditation Tools", slug: "meditation-tools", description: null, image_url: null, banner_url: null, created_at: "", updated_at: "", subcategories: [] },
 ];
 
 const SubcategoryList: React.FC<{
   subcategories: Subcategory[];
-  onAddSubcategory: (path: number[], name: string) => void;
-  path: number[];
-}> = ({ subcategories, onAddSubcategory, path }) => {
-  const [expanded, setExpanded] = useState<boolean[]>(subcategories.map(() => false));
-  const [showModalIdx, setShowModalIdx] = useState<number | null>(null);
+  onAddSubcategory: (categoryId: number, name: string) => void;
+  onEditSubcategory: (subcategory: Subcategory) => void;
+  onDeleteSubcategory: (subcategoryId: number) => void;
+}> = ({ subcategories, onAddSubcategory, onEditSubcategory, onDeleteSubcategory }) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
     <>
-      {subcategories.map((sub, idx) => (
-        <React.Fragment key={idx}>
+      {subcategories.map((sub) => (
+        <React.Fragment key={sub.id}>
           <div className="flex items-center gap-2 pl-8 py-2 border-l border-gray-200 dark:border-gray-700 bg-purple-50 dark:bg-purple-900">
-            <button
-              className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-              aria-label="Expand"
-              onClick={() => {
-                setExpanded(exp => exp.map((e, i) => i === idx ? !e : e));
-              }}
-              disabled={!sub.subcategories || sub.subcategories.length === 0}
-            >
-              {sub.subcategories && sub.subcategories.length > 0 ? (
-                expanded[idx] ? <ChevronUp className="w-4 h-4 text-gray-600 dark:text-gray-300" /> : <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-              ) : <span className="w-4" />}
-            </button>
             <span className="font-bold text-gray-900 dark:text-gray-100">{sub.name}</span>
             <button
               className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs ml-2"
-              onClick={() => setShowModalIdx(idx)}
+              onClick={() => setShowModal(true)}
             >
               + Subcategory
             </button>
-            <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ml-2" title="Edit">
+            <button 
+              className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ml-2" 
+              title="Edit"
+              onClick={() => onEditSubcategory(sub)}
+            >
               <Edit className="w-4 h-4 text-gray-600 dark:text-gray-300" />
             </button>
-            <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Delete">
+            <button 
+              className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" 
+              title="Delete"
+              onClick={() => onDeleteSubcategory(sub.id)}
+            >
               <Trash2 className="w-4 h-4 text-gray-600 dark:text-gray-300" />
             </button>
           </div>
-          {expanded[idx] && sub.subcategories && sub.subcategories.length > 0 && (
-            <SubcategoryList subcategories={sub.subcategories} onAddSubcategory={onAddSubcategory} path={[...path, idx]} />
-          )}
-          {showModalIdx === idx && (
+          {showModal && (
             <SubcategoryModal
               parentCategory={sub.name}
-              onClose={() => setShowModalIdx(null)}
+              onClose={() => setShowModal(false)}
               onCreate={subName => {
-                onAddSubcategory([...path, idx], subName);
-                setShowModalIdx(null);
+                onAddSubcategory(sub.category_id, subName);
+                setShowModal(false);
               }}
             />
           )}
@@ -152,21 +144,27 @@ const SubcategoryList: React.FC<{
 const CategoryModal: React.FC<{
   open: boolean;
   onClose: () => void;
-  onSave: (name: string, image: string | null) => void;
+  onSave: (name: string, description: string, image: string | null, banner: string | null) => void;
   initialName?: string;
+  initialDescription?: string;
   initialImage?: string | null;
+  initialBanner?: string | null;
   isEdit?: boolean;
-}> = ({ open, onClose, onSave, initialName = '', initialImage = null, isEdit = false }) => {
+}> = ({ open, onClose, onSave, initialName = '', initialDescription = '', initialImage = null, initialBanner = null, isEdit = false }) => {
   const [name, setName] = useState(initialName);
+  const [description, setDescription] = useState(initialDescription);
   const [image, setImage] = useState<string | null>(initialImage);
+  const [banner, setBanner] = useState<string | null>(initialBanner);
 
   // Reset state when modal opens
   React.useEffect(() => {
     if (open) {
       setName(initialName);
+      setDescription(initialDescription);
       setImage(initialImage);
+      setBanner(initialBanner);
     }
-  }, [open, initialName, initialImage]);
+  }, [open, initialName, initialDescription, initialImage, initialBanner]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -178,22 +176,65 @@ const CategoryModal: React.FC<{
     }
   };
 
+  const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setBanner(ev.target?.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-full max-w-sm">
+      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-full max-w-md">
         <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">{isEdit ? 'Edit Category' : 'Add Category'}</h2>
-        <div className="flex flex-col items-center mb-4">
-          <div className="w-20 h-20 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden mb-2">
-            <img
-              src={image || "/placeholder-user.jpg"}
-              alt={isEdit ? 'Edit category image' : 'Add category image'}
-              className="w-16 h-16 object-cover rounded-full"
-              style={{ display: 'block' }}
+        
+        {/* Category Name */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category Name *</label>
+          <input
+            type="text"
+            className="w-full border px-3 py-2 rounded text-sm bg-white dark:bg-gray-800 text-black dark:text-white"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="Enter category name"
+          />
+        </div>
+
+        {/* Category Description */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
+          <textarea
+            className="w-full border px-3 py-2 rounded text-sm bg-white dark:bg-gray-800 text-black dark:text-white resize-none"
+            rows={3}
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            placeholder="Enter category description (optional)"
             />
           </div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 cursor-pointer">
-            <span className="underline">{isEdit ? 'Edit Image' : 'Add Image'}</span>
+
+        {/* Category Image */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category Image</label>
+          <div className="flex items-center space-x-4">
+            <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+              {image ? (
+                <img
+                  src={image}
+                  alt="Category image"
+                  className="w-12 h-12 object-cover rounded-full"
+                />
+              ) : (
+                <span className="text-xl text-gray-400">📷</span>
+              )}
+            </div>
+            <label className="cursor-pointer">
+              <span className="text-sm text-purple-600 hover:text-purple-700 underline">
+                {image ? 'Change Image' : 'Upload Image'}
+              </span>
             <input
               type="file"
               accept="image/*"
@@ -202,15 +243,37 @@ const CategoryModal: React.FC<{
             />
           </label>
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category Name</label>
-          <input
-            type="text"
-            className="w-full border px-3 py-2 rounded text-sm bg-white dark:bg-gray-800 text-black dark:text-white"
-            value={name}
-            onChange={e => setName(e.target.value)}
-          />
         </div>
+
+        {/* Category Banner */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category Banner</label>
+          <div className="flex items-center space-x-4">
+            <div className="w-24 h-12 rounded bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+              {banner ? (
+                <img
+                  src={banner}
+                  alt="Category banner"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-lg text-gray-400">🖼️</span>
+              )}
+            </div>
+            <label className="cursor-pointer">
+              <span className="text-sm text-purple-600 hover:text-purple-700 underline">
+                {banner ? 'Change Banner' : 'Upload Banner'}
+              </span>
+          <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleBannerChange}
+              />
+            </label>
+          </div>
+        </div>
+
         <div className="flex justify-end gap-2 mt-6">
           <button
             className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold"
@@ -220,7 +283,7 @@ const CategoryModal: React.FC<{
           </button>
           <button
             className="px-4 py-2 rounded bg-purple-600 hover:bg-purple-700 text-white font-semibold"
-            onClick={() => onSave(name.trim(), image)}
+            onClick={() => onSave(name.trim(), description.trim(), image, banner)}
             disabled={!name.trim()}
           >
             {isEdit ? 'Save Changes' : 'Add Category'}
@@ -233,11 +296,12 @@ const CategoryModal: React.FC<{
 
 const CategoryRow: React.FC<{
   category: CategoryTree;
-  idx: number;
-  onAddSubcategory: (path: number[], name: string) => void;
-  onEdit: (idx: number) => void;
-  onDelete: (idx: number) => void;
-}> = ({ category, idx, onAddSubcategory, onEdit, onDelete }) => {
+  onAddSubcategory: (categoryId: number, name: string) => void;
+  onEdit: (category: CategoryTree) => void;
+  onDelete: (categoryId: number) => void;
+  onEditSubcategory: (subcategory: Subcategory) => void;
+  onDeleteSubcategory: (subcategoryId: number) => void;
+}> = ({ category, onAddSubcategory, onEdit, onDelete, onEditSubcategory, onDeleteSubcategory }) => {
   const [expanded, setExpanded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -257,7 +321,28 @@ const CategoryRow: React.FC<{
                 expanded ? <ChevronUp className="w-4 h-4 text-gray-600 dark:text-gray-300" /> : <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-300" />
               ) : <span className="w-4" />}
             </button>
-            <span className="text-xl">{category.icon}</span>
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+                {category.image_url ? (
+                  <img
+                    src={category.image_url}
+                    alt={category.name}
+                    className="w-6 h-6 object-cover rounded-full"
+                  />
+                ) : (
+                  <span className="text-sm text-gray-400">📷</span>
+                )}
+              </div>
+              {category.banner_url && (
+                <div className="w-6 h-3 rounded bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+                  <img
+                    src={category.banner_url}
+                    alt={`${category.name} banner`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </div>
             <span className="font-medium text-gray-900 dark:text-gray-100">{category.name}</span>
             <button
               className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs ml-3"
@@ -269,7 +354,7 @@ const CategoryRow: React.FC<{
         </td>
         <td className="align-middle px-6 py-4 text-center">
           <div className="flex gap-2 justify-center items-center">
-            <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Edit" onClick={() => onEdit(idx)}>
+            <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Edit" onClick={() => onEdit(category)}>
               <Edit className="w-4 h-4 text-gray-600 dark:text-gray-300" />
             </button>
             <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" title="Delete" onClick={() => setShowDeleteModal(true)}>
@@ -281,7 +366,12 @@ const CategoryRow: React.FC<{
       {expanded && category.subcategories && category.subcategories.length > 0 && (
         <tr>
           <td colSpan={2} className="p-0">
-            <SubcategoryList subcategories={category.subcategories} onAddSubcategory={onAddSubcategory} path={[idx]} />
+            <SubcategoryList 
+              subcategories={category.subcategories} 
+              onAddSubcategory={onAddSubcategory}
+              onEditSubcategory={onEditSubcategory}
+              onDeleteSubcategory={onDeleteSubcategory}
+            />
           </td>
         </tr>
       )}
@@ -290,7 +380,7 @@ const CategoryRow: React.FC<{
           parentCategory={category.name}
           onClose={() => setShowModal(false)}
           onCreate={subName => {
-            onAddSubcategory([idx], subName);
+            onAddSubcategory(category.id, subName);
             setShowModal(false);
           }}
         />
@@ -309,7 +399,7 @@ const CategoryRow: React.FC<{
               </button>
               <button
                 className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-semibold"
-                onClick={() => { setShowDeleteModal(false); onDelete(idx); }}
+                onClick={() => { setShowDeleteModal(false); onDelete(category.id); }}
               >
                 Confirm Delete
               </button>
@@ -321,82 +411,184 @@ const CategoryRow: React.FC<{
   );
 };
 
-type SubcategoriesState = {
-  [slug: string]: string[];
-};
 
-const addSubcategoryToTree = (tree: CategoryTree[], path: number[], name: string): CategoryTree[] => {
-  if (path.length === 0) return tree;
-  const [idx, ...rest] = path;
-  return tree.map((cat, i) => {
-    if (i !== idx) return cat;
-    if (rest.length === 0) {
-      return {
-        ...cat,
-        subcategories: [...(cat.subcategories || []), { name, subcategories: [] }],
-      };
-    }
-    return {
-      ...cat,
-      subcategories: cat.subcategories ? addSubcategoryToSub(cat.subcategories, rest, name) : [],
-    };
-  });
-};
 
-const addSubcategoryToSub = (subs: Subcategory[], path: number[], name: string): Subcategory[] => {
-  if (path.length === 0) return subs;
-  const [idx, ...rest] = path;
-  return subs.map((sub, i) => {
-    if (i !== idx) return sub;
-    if (rest.length === 0) {
-      return {
-        ...sub,
-        subcategories: [...(sub.subcategories || []), { name, subcategories: [] }],
-      };
-    }
-    return {
-      ...sub,
-      subcategories: sub.subcategories ? addSubcategoryToSub(sub.subcategories, rest, name) : [],
-    };
-  });
+// Helper function to generate slug from name
+const generateSlug = (name: string): string => {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 };
 
 const CategoriesPage: React.FC = () => {
-  const [categories, setCategories] = useState<CategoryTree[]>(demoCategories);
+  const [categories, setCategories] = useState<CategoryTree[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [showEditModalIdx, setShowEditModalIdx] = useState<number | null>(null);
-  const [editCategory, setEditCategory] = useState<{ name: string; image: string | null } | null>(null);
-  const [showDeleteModalIdx, setShowDeleteModalIdx] = useState<number | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editCategory, setEditCategory] = useState<CategoryTree | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
 
-  const handleAddSubcategory = (path: number[], name: string) => {
-    setCategories(prev => addSubcategoryToTree(prev, path, name));
+  // Fetch categories from backend
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        if (response.ok) {
+          const data = await response.json();
+          setCategories(data);
+        } else {
+          console.error('Failed to fetch categories');
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const handleAddSubcategory = async (categoryId: number, name: string) => {
+    try {
+      const slug = generateSlug(name);
+      const response = await fetch('/api/subcategories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, slug, category_id: categoryId })
+      });
+
+      if (response.ok) {
+        // Refresh categories to get updated data
+        const refreshResponse = await fetch('/api/categories');
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          setCategories(data);
+        }
+      } else {
+        console.error('Failed to create subcategory');
+      }
+    } catch (error) {
+      console.error('Error creating subcategory:', error);
+    }
   };
 
-  const handleAddCategory = (name: string, image: string | null) => {
-    setCategories(prev => [
-      ...prev,
-      { name, icon: '🆕', subcategories: [], image },
-    ]);
-    setShowAddModal(false);
+  const handleAddCategory = async (name: string, description: string, image: string | null, banner: string | null) => {
+    try {
+      const slug = generateSlug(name);
+      const response = await fetch('/api/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          name, 
+          slug, 
+          description: description || null,
+          image_data: image,
+          banner_data: banner
+        })
+      });
+
+      if (response.ok) {
+        // Refresh categories to get updated data
+        const refreshResponse = await fetch('/api/categories');
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          setCategories(data);
+        }
+        setShowAddModal(false);
+      } else {
+        console.error('Failed to create category');
+      }
+    } catch (error) {
+      console.error('Error creating category:', error);
+    }
   };
 
-  const handleEditCategory = (idx: number) => {
-    const cat = categories[idx];
-    setEditCategory({ name: cat.name, image: cat.image || null });
-    setShowEditModalIdx(idx);
+  const handleEditCategory = (category: CategoryTree) => {
+    setEditCategory(category);
+    setShowEditModal(true);
   };
 
-  const handleSaveEditCategory = (name: string, image: string | null) => {
-    setCategories(prev => prev.map((cat, i) =>
-      i === showEditModalIdx ? { ...cat, name, image } : cat
-    ));
-    setShowEditModalIdx(null);
-    setEditCategory(null);
+  const handleSaveEditCategory = async (name: string, description: string, image: string | null, banner: string | null) => {
+    if (!editCategory) return;
+
+    try {
+      const slug = generateSlug(name);
+      const response = await fetch(`/api/categories/${editCategory.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          name, 
+          slug, 
+          description: description || null,
+          image_data: image,
+          banner_data: banner
+        })
+      });
+
+      if (response.ok) {
+        // Refresh categories to get updated data
+        const refreshResponse = await fetch('/api/categories');
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          setCategories(data);
+        }
+        setShowEditModal(false);
+        setEditCategory(null);
+      } else {
+        console.error('Failed to update category');
+      }
+    } catch (error) {
+      console.error('Error updating category:', error);
+    }
   };
 
-  const handleDeleteCategory = (idx: number) => {
-    setCategories(prev => prev.filter((_, i) => i !== idx));
-    setShowDeleteModalIdx(null);
+  const handleDeleteCategory = async (categoryId: number) => {
+    try {
+      const response = await fetch(`/api/categories/${categoryId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        // Refresh categories to get updated data
+        const refreshResponse = await fetch('/api/categories');
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          setCategories(data);
+        }
+        setShowDeleteModal(false);
+        setDeleteCategoryId(null);
+      } else {
+        console.error('Failed to delete category');
+      }
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
+  };
+
+  const handleEditSubcategory = async (subcategory: Subcategory) => {
+    // TODO: Implement subcategory editing
+    console.log('Edit subcategory:', subcategory);
+  };
+
+  const handleDeleteSubcategory = async (subcategoryId: number) => {
+    try {
+      const response = await fetch(`/api/subcategories/${subcategoryId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        // Refresh categories to get updated data
+        const refreshResponse = await fetch('/api/categories');
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          setCategories(data);
+        }
+      } else {
+        console.error('Failed to delete subcategory');
+      }
+    } catch (error) {
+      console.error('Error deleting subcategory:', error);
+    }
   };
 
   return (
@@ -419,16 +611,37 @@ const CategoriesPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {categories.map((cat, idx) => (
+            {loading ? (
+              <tr>
+                <td colSpan={2} className="text-center py-8">
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                    <span className="ml-3 text-gray-600">Loading categories...</span>
+                  </div>
+                </td>
+              </tr>
+            ) : categories.length === 0 ? (
+              <tr>
+                <td colSpan={2} className="text-center py-8">
+                  <p className="text-gray-500">No categories found. Create your first category!</p>
+                </td>
+              </tr>
+            ) : (
+              categories.map((cat) => (
               <CategoryRow
-                key={cat.name}
+                  key={cat.id}
                 category={cat}
-                idx={idx}
                 onAddSubcategory={handleAddSubcategory}
                 onEdit={handleEditCategory}
-                onDelete={setShowDeleteModalIdx}
-              />
-            ))}
+                  onDelete={(categoryId) => {
+                    setDeleteCategoryId(categoryId);
+                    setShowDeleteModal(true);
+                  }}
+                  onEditSubcategory={handleEditSubcategory}
+                  onDeleteSubcategory={handleDeleteSubcategory}
+                />
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -440,15 +653,17 @@ const CategoriesPage: React.FC = () => {
       />
       {/* Edit Category Modal */}
       <CategoryModal
-        open={showEditModalIdx !== null}
-        onClose={() => { setShowEditModalIdx(null); setEditCategory(null); }}
+        open={showEditModal}
+        onClose={() => { setShowEditModal(false); setEditCategory(null); }}
         onSave={handleSaveEditCategory}
         initialName={editCategory?.name}
-        initialImage={editCategory?.image}
+        initialDescription={editCategory?.description || ''}
+        initialImage={editCategory?.image_url}
+        initialBanner={editCategory?.banner_url}
         isEdit
       />
       {/* Delete Category Modal */}
-      {showDeleteModalIdx !== null && (
+      {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-full max-w-sm">
             <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Delete Category</h2>
@@ -456,13 +671,13 @@ const CategoriesPage: React.FC = () => {
             <div className="flex justify-end gap-2 mt-6">
               <button
                 className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold"
-                onClick={() => setShowDeleteModalIdx(null)}
+                onClick={() => setShowDeleteModal(false)}
               >
                 Cancel
               </button>
               <button
                 className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-semibold"
-                onClick={() => handleDeleteCategory(showDeleteModalIdx)}
+                onClick={() => deleteCategoryId && handleDeleteCategory(deleteCategoryId)}
               >
                 Confirm Delete
               </button>
