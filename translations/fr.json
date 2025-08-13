@@ -569,36 +569,29 @@
     }
   },
   "astrologerProfile": {
-    "heading": "Notre astrologue principal",
-    "subheading": "Expert en astrologie védique avec plus de 20 ans d'expérience",
+    "heading": "Rencontrez Notre Expert Astrologue",
+    "subheading": "Découvrez Votre Destinée à Travers la Sagesse Ancienne et l'Expertise Moderne",
     "credentials": {
       "0": {
-        "title": "Expert en astrologie védique",
-        "description": "Plus de deux décennies d'étude et de pratique des techniques traditionnelles d'astrologie védique. Spécialisé dans l'analyse de thèmes natals, les doshas planétaires et les remèdes."
+        "title": "Expert en Astrologie Védique",
+        "description": "Spécialisé en astrologie védique avec plus de 15 ans d'expérience dans l'analyse des thèmes natals, les positions planétaires et les influences cosmiques. Expert en fournissant des prédictions précises et des conseils de vie basés sur l'ancienne sagesse védique."
       },
       "1": {
-        "title": "PhD en sciences astrologiques",
-        "description": "PhD en sciences astrologiques d'une université prestigieuse. Combine l'étude approfondie des textes anciens avec la recherche moderne."
-      },
-      "2": {
-        "title": "Expert en numérologie et tarot",
-        "description": "Spécialisation en numérologie et lecture de tarot, fournissant des conseils complets combinés à l'astrologie."
+        "title": "PhD en Astrologie et Philosophie",
+        "description": "Détient un Doctorat en Astrologie et Philosophie d'institutions prestigieuses. Combine les connaissances traditionnelles avec la recherche moderne pour offrir des consultations astrologiques complètes et des remèdes."
       }
     },
-    "specializations": {
-      "heading": "Spécialisations",
-      "list": [
-        "Analyse de thème natal",
-        "Remèdes de doshas planétaires",
-        "Compatibilité matrimoniale",
-        "Conseils de carrière",
-        "Astrologie commerciale",
-        "Astrologie de santé"
-      ]
+    "belief": {
+      "hindi": "हमारा मानना है कि प्रत्येक व्यक्ति के पास एक अनूठा कॉस्मिक ब्लूप्रिंट होता है जो उनके जीवन की यात्रा का मार्गदर्शन करता है।",
+      "english": "We believe that every individual has a unique cosmic blueprint that guides their life's journey."
     },
     "experience": {
-      "heading": "Expérience",
-      "text": "Avec plus de 20 ans d'expérience, il a analysé plus de 10 000 thèmes natals et conseillé des clients dans le monde entier."
+      "hindi": "वैदिक ज्योतिष में दशकों के संयुक्त अनुभव के साथ, हमने हजारों लोगों को उनके जीवन में स्पष्टता, उद्देश्य और दिशा खोजने में मदद की है।",
+      "english": "With decades of combined experience in Vedic astrology, we have helped thousands find clarity, purpose, and direction in their lives."
+    },
+    "additionalInfo": "Nos consultations combinent la sagesse védique traditionnelle avec la compréhension moderne pour vous fournir les conseils les plus précis et utiles.",
+    "cta": {
+      "button": "Réservez Votre Consultation Maintenant"
     }
   },
   "contact": {

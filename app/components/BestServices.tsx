@@ -111,7 +111,8 @@ export function BestServices() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative rounded-3xl p-10 mb-12 text-center shadow-xl overflow-hidden bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe]"
+          className="relative rounded-3xl p-10 mb-12 text-center shadow-xl overflow-hidden"
+          style={{ backgroundColor: '#FEFBF2' }}
         >
           {/* Starry background effect */}
           <div className="absolute inset-0 z-0 opacity-70" style={{ backgroundImage: 'radial-gradient(circle at 10% 20%, rgba(255,255,255,0.05) 0%, transparent 10%), radial-gradient(circle at 80% 90%, rgba(255,255,255,0.08) 0%, transparent 15%), radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 10%), radial-gradient(circle at 30% 70%, rgba(255,255,255,0.06) 0%, transparent 12%), radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04) 0%, transparent 10%)', backgroundSize: '300px 300px, 400px 400px, 200px 200px, 350px 350px, 250px 250px' }}></div>
@@ -119,7 +120,7 @@ export function BestServices() {
           <h2 className="relative z-10 text-4xl md:text-5xl font-extrabold mb-4 leading-tight text-black">
             {t('bestServices.bannerHeading')}
           </h2>
-          <p className="relative z-10 text-lg md:text-xl mb-6 opacity-90 text-black">
+          <p className="relative z-10 text-lg md:text-xl mb-6 opacity-90" style={{ color: '#166534' }}>
             {t('bestServices.bannerDescription')}
           </p>
         </motion.div>

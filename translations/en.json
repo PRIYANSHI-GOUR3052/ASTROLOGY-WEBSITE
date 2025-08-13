@@ -96,28 +96,29 @@
     "card9Desc": "Unlock the mystical secrets of the cards and gain profound insight into your life's journey."
   },
   "astrologerProfile": {
-    "heading": "Meet Dr. Narendra - Your Trusted Astrologer",
-    "subheading": "Expert Vedic Astrologer with Decades of Experience",
+    "heading": "Meet Our Expert Astrologer",
+    "subheading": "Discover Your Destiny Through Ancient Wisdom and Modern Expertise",
     "credentials": {
       "0": {
         "title": "Vedic Astrology Expert",
-        "description": "Dr. Narendra is a renowned Vedic Astrologer with over 15 years of experience in traditional Indian astrology. He specializes in birth chart analysis, planetary remedies, and life guidance through ancient Vedic wisdom."
+        "description": "Specialized in Vedic astrology with over 15 years of experience in birth chart analysis, planetary positions, and cosmic influences. Expert in providing accurate predictions and life guidance based on ancient Vedic wisdom."
       },
       "1": {
         "title": "PhD in Astrology & Philosophy",
-        "description": "With a PhD in Astrology and Philosophy, Dr. Narendra combines traditional knowledge with modern understanding to provide comprehensive astrological consultations and spiritual guidance."
+        "description": "Holds a Doctorate in Astrology and Philosophy from prestigious institutions. Combines traditional knowledge with modern research to offer comprehensive astrological consultations and remedies."
       }
     },
     "belief": {
-      "hindi": "मैं मानता हूं कि हर व्यक्ति का जीवन अनोखा है और हर समस्या का समाधान संभव है।",
-      "english": "I believe that every individual's life is unique and every problem has a solution."
+      "hindi": "हमारा मानना है कि प्रत्येक व्यक्ति के पास एक अनूठा कॉस्मिक ब्लूप्रिंट होता है जो उनके जीवन की यात्रा का मार्गदर्शन करता है।",
+      "english": "We believe that every individual has a unique cosmic blueprint that guides their life's journey."
     },
     "experience": {
-      "hindi": "१५+ वर्षों का अनुभव और हजारों संतुष्ट ग्राहक",
-      "english": "15+ Years of Experience and Thousands of Satisfied Clients"
+      "hindi": "वैदिक ज्योतिष में दशकों के संयुक्त अनुभव के साथ, हमने हजारों लोगों को उनके जीवन में स्पष्टता, उद्देश्य और दिशा खोजने में मदद की है।",
+      "english": "With decades of combined experience in Vedic astrology, we have helped thousands find clarity, purpose, and direction in their lives."
     },
+    "additionalInfo": "Our consultations combine traditional Vedic wisdom with modern understanding to provide you with the most accurate and helpful guidance.",
     "cta": {
-      "button": "Book Your Consultation"
+      "button": "Book Your Consultation Now"
     }
   },
   "header": {

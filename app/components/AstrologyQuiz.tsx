@@ -55,38 +55,48 @@ export function AstrologyQuiz() {
   const [quizCompleted, setQuizCompleted] = useState(false)
   const [showFeedback, setShowFeedback] = useState(false)
 
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  
+  // Force English content for now to fix user experience
+  const isEnglish = lang === 'en';
+  const isHindi = lang === 'hi';
+  const isBengali = lang === 'bn';
+  const isTamil = lang === 'ta';
+  const isTelugu = lang === 'te';
+  const isMarathi = lang === 'mr';
+  const isGujarati = lang === 'gu';
+  const isMalayalam = lang === 'ml';
 
-  // Demo quiz data fallback
+  // Demo quiz data fallback with complete Malayalam support
   const demoQuizData: QuizData = {
-    moreQuizText: 'Want more quizzes? Visit:',
-    tryAgainButton: 'Try Again',
-    completedTitle: 'Quiz Completed!',
-    title: 'Astrology Demo Quiz',
-    subtitle: 'Test your astrology knowledge with these fun questions!',
-    questionHeader: 'Question',
+    moreQuizText: isMalayalam ? 'കൂടുതൽ ക്വിസ് വേണോ? സന്ദർശിക്കുക:' : isGujarati ? 'વધુ ક്વિઝ જોઈએ છે? મુલાકાત લો:' : isMarathi ? 'अजून क्विझ हवे आहेत? भेट द्या:' : isTelugu ? 'మరిన్ని క്విజ్‌లు కావాలా? సందర్శించండి:' : isTamil ? 'மேலும் வினாடி வினாக்கள் வேண்டுமா? பார்வையிடவும்:' : 'Want more quizzes? Visit:',
+    tryAgainButton: isMalayalam ? 'വീണ്ടും ശ്രമിക്കുക' : isGujarati ? 'ફરીથી પ્રયાસ કરો' : isMarathi ? 'पुन्हा प्रयत्न करा' : isTelugu ? 'మళ్లీ ప్రయత్నించండి' : isTamil ? 'மீண்டும் முயற்சிக்கவும்' : 'Try Again',
+    completedTitle: isMalayalam ? 'ക്വിസ് പൂർത്തിയായി!' : isGujarati ? 'ક്વિઝ પൂર્ણ થયું!' : isMarathi ? 'क्विझ पूर्ण झाले!' : isTelugu ? 'క്విజ్ పൂర്తయింది!' : isTamil ? 'வினாடி வினா முடிந்தது!' : 'Quiz Completed!',
+    title: isMalayalam ? 'ജ്യോതിഷ ഡെമോ ക്വിസ്' : isGujarati ? 'જ്યોતિષ ડേમോ ક്વિઝ' : isMarathi ? 'ज्योतिष डेमो क्विझ' : isTelugu ? 'జ്యോతిష డെమో క്విజ్' : isTamil ? 'ஜோதிட டெமோ வினாடி வினா' : 'Astrology Demo Quiz',
+    subtitle: isMalayalam ? 'ഈ രസകരമായ ചോദ്യങ്ങൾ ഉപയോഗിച്ച് നിങ്ങളുടെ ജ്യോതിഷ അറിവ് പരീക്ഷിക്കുക!' : isGujarati ? 'આ મજેદાર પ્રશ્નો સાથે તમારું જ്યോતિષ જ്ઞાન તપાસો!' : isMarathi ? 'या मजेदार प्रश्नांसह तुमचे ज्योतिष ज्ञान तपासा!' : isTelugu ? 'ఈ ఆసక్తికరమైన ప్రశ్నలతో మీ జ്యోతిష జ്ఞానాన్ని పరీక్షించండి!' : isTamil ? 'இந்த வேடிக்கையான கேள்விகளுடன் உங்கள் ஜோதிட அறிவை சோதிக்கவும்!' : isBengali ? 'এই মজার প্রশ্নগুলির সাথে আপনার জ্যোতিষ জ্ঞান পরীক্ষা করুন!' : isHindi ? 'ഇന മജേദാർ പ്രശ്നങ്ങൾ കൂടെ നിങ്ങളുടെ ജ്യോതിഷ അറിവ് പരീക്ഷിക്കുക!' : isEnglish ? 'Test your astrology knowledge with these fun questions!' : 'Test your astrology knowledge with these fun questions!',
+    questionHeader: isMalayalam ? 'ചോദ്യം' : isGujarati ? 'પ્રશ્ન' : isMarathi ? 'प्रश्न' : isTelugu ? 'ప્రశ્న' : isTamil ? 'கேள்வி' : 'Question',
     questions: [
       {
-        question: 'Which planet is known as the Red Planet?',
-        options: ['Venus', 'Mars', 'Jupiter', 'Saturn'],
+        question: isMalayalam ? 'ചുവന്ന ഗ്രഹമായി ഏത് ഗ്രഹത്തെ അറിയപ്പെടുന്നു?' : isGujarati ? 'લાલ ગ્રહ તરીકે કયા ગ്રહને ઓળખવામાં આવે છે?' : isMarathi ? 'लाल ग्रह म्हणून कोणाला ओळखतात?' : isTelugu ? 'ఎరుపు గ്రహం అని ఏ గ്రహాన్ని పిలుస్తారు?' : isTamil ? 'சிவப்பு கோள் என்று எந்த கோள் அழைக்கப்படுகிறது?' : isBengali ? 'লাল গ্রহ নামে কোন গ্রহ পরিচিত?' : isHindi ? 'लाल ग्रह के नाम से कौन सा ग्रह जाना जाता है?' : 'Which planet is known as the Red Planet?',
+        options: isMalayalam ? ['ശുക്രൻ', 'ചൊവ്വ', 'വ്യാഴം', 'ശനി'] : isGujarati ? ['શુક્ર', 'મંગળ', 'ગુરુ', 'શનિ'] : isMarathi ? ['शुक्र', 'मंगळ', 'गुरू', 'शनि'] : isTelugu ? ['శుక్రుడు', 'అంగారకుడు', 'గురుడు', 'శని'] : isTamil ? ['வெள்ளி', 'செவ்வாய்', 'வியாழன்', 'சனி'] : isBengali ? ['শুক্র', 'মঙ্গল', 'বৃহস্পতি', 'শনি'] : isHindi ? ['ശുക്രൻ', 'ചൊവ്വ', 'വ്യാഴം', 'ശനി'] : ['Venus', 'Mars', 'Jupiter', 'Saturn'],
         correctAnswerIndex: 1,
       },
       {
-        question: 'What is the zodiac sign for late July?',
-        options: ['Cancer', 'Leo', 'Virgo', 'Gemini'],
+        question: isMalayalam ? 'ജൂലൈ മാസത്തിന്റെ അവസാനത്തിൽ ഏത് രാശിയാണ്?' : isGujarati ? 'જુલાઈ મહિનાના અંતમાં કયું રાશિચક્ર?' : isMarathi ? 'जुलै महिन्याच्या शेवटी कोणता राशी?' : isTelugu ? 'జూలై నెల చివరిలో ఏ రాశి?' : isTamil ? 'ஜூலை மாத இறுதியில் எந்த ராசி?' : isBengali ? 'জুলাই মাসের শেষে কোন রাশি হয়?' : isHindi ? 'ജൂലൈയുടെ അവസാനത്തിൽ ഏത് രാശിയാണ്?' : 'What is the zodiac sign for late July?',
+        options: isMalayalam ? ['കർക്കടകം', 'സിംഹം', 'കന്നി', 'മിഥുനം'] : isGujarati ? ['કર્ક', 'સિંહ', 'કન્યા', 'મિથુન'] : isMarathi ? ['कर्क', 'सिंह', 'कन्या', 'मिथुन'] : isTelugu ? ['కర్కాటకం', 'సింహం', 'కన్య', 'మిథునం'] : isTamil ? ['கடகம்', 'சிம்மம்', 'கன்னி', 'மிதுனம்'] : isBengali ? ['কর্ক', 'সিংহ', 'কন্যা', 'মিথুন'] : isHindi ? ['കർക്കടകം', 'സിംഹം', 'കന്നി', 'മിഥുനം'] : ['Cancer', 'Leo', 'Virgo', 'Gemini'],
         correctAnswerIndex: 1,
       },
       {
-        question: 'Which sign is symbolized by the scales?',
-        options: ['Libra', 'Pisces', 'Sagittarius', 'Capricorn'],
+        question: isMalayalam ? 'ഏത് രാശിയാണ് തുലാസ് ഉപയോഗിച്ച് സൂചിപ്പിക്കുന്നത്?' : isGujarati ? 'કયું રાશિચક્ર તુલા દ્વારા દર્શાવવામાં આવે છે?' : isMarathi ? 'कोणता राशी तराजूने दर्शविला जातो?' : isTelugu ? 'ఏ రాశి తులాదండం ద్వారా సూచించబడుతుంది?' : isTamil ? 'எந்த ராசி தராசு மூலம் குறிக்கப்படுகிறது?' : isBengali ? 'কোন রাশি দাঁড়িপাল্লা দিয়ে প্রতীক?' : isHindi ? 'ഏത് രാശിയാണ് തുലാസ് ഉപയോഗിച്ച് സൂചിപ്പിക്കുന്നത്?' : 'Which sign is symbolized by the scales?',
+        options: isMalayalam ? ['തുലാം', 'മീനം', 'ധനു', 'മകരം'] : isGujarati ? ['તુલા', 'મીન', 'ધનુ', 'મકર'] : isMarathi ? ['तूळ', 'मीन', 'धनु', 'मकर'] : isTelugu ? ['తుల', 'మీనం', 'ధనస్సు', 'మకరం'] : isTamil ? ['துலாம்', 'மீனம்', 'தனுசு', 'மகரம்'] : isBengali ? ['তুলা', 'মীন', 'ধনু', 'মকর'] : isHindi ? ['തുലാം', 'മീനം', 'ധനു', 'മകരം'] : ['Libra', 'Pisces', 'Sagittarius', 'Capricorn'],
         correctAnswerIndex: 0,
       },
     ],
     randomCards: [
-      { title: 'Fun Fact', description: 'Astrology has 12 zodiac signs.' },
-      { title: 'Did You Know?', description: 'The Sun spends about a month in each sign.' },
-      { title: 'Quiz Tip', description: 'Read each question carefully!' },
-      { title: 'Challenge', description: 'Try to get all answers correct!' },
+      { title: isMalayalam ? 'രസകരമായ വിവരങ്ങൾ' : isGujarati ? 'મજેદાર માહિતી' : isMarathi ? 'मजेदार माहिती' : isTelugu ? 'ఆసక్తికరమైన సమాచారం' : isTamil ? 'சுவாரஸ்யமான தகவல்' : isBengali ? 'মজার তথ্য' : isHindi ? 'രസകരമായ വിവരങ്ങൾ' : 'Fun Fact', description: isMalayalam ? 'ജ്യോതിഷത്തിൽ 12 രാശികൾ ഉണ്ട്.' : isGujarati ? 'જ്યോતિષમાં 12 રાશિચક્ર છે.' : isMarathi ? 'ज्योतिषात 12 राशी आहेत.' : isTelugu ? 'జ്యോతిషంలో 12 రాశులు ఉన్నాయి.' : isTamil ? 'ஜோதிடத்தில் 12 ராசிகள் உள்ளன.' : isBengali ? 'জ্যোতিষে ১২টি রাশি আছে।' : isHindi ? 'ജ്യോതിഷത്തിൽ 12 രാശികൾ ഉണ്ട്.' : 'Astrology has 12 zodiac signs.' },
+      { title: isMalayalam ? 'നിങ്ങൾക്ക് അറിയാമോ?' : isGujarati ? 'શું તમને ખબર છે?' : isMarathi ? 'तुम्हाला माहित आहे का?' : isTelugu ? 'మీకు తెలుసా?' : isTamil ? 'நீங்கள் அறிவீர்களா?' : isBengali ? 'আপনি কি জানেন?' : isHindi ? 'നിങ്ങൾക്ക് അറിയാമോ?' : 'Did You Know?', description: isMalayalam ? 'സൂര്യൻ ഓരോ രാശിയിലും ഒരു മാസം ചെലവഴിക്കുന്നു.' : isGujarati ? 'સૂર્ય દરેક રાશિચક્રમાં લગભગ એક મહિનോ વീતાવേ છે.' : isMarathi ? 'सूर्य प्रत्येक राशीत सुमारे एक महिना घालवतो.' : isTelugu ? 'సూర్యుడు ప్రతి రాశిలో ఒక నెల చుట్టూ ఉంటాడు.' : isTamil ? 'சூரியன் ஒவ்வொரு ராசியிலும் சுமார் ஒரு மாதம் கழிக்கிறது.' : isBengali ? 'সূর্য প্রতিটি রাশিতে প্রায় এক মাস কাটায়।' : isHindi ? 'സൂര്യൻ ഓരോ രാശിയിലും ഒരു മാസം ചെലവഴിക്കുന്നു.' : 'The Sun spends about a month in each sign.' },
+      { title: isMalayalam ? 'ക്വിസ് നുറുങ്ങ്' : isGujarati ? 'ક્વિઝ ટિપ' : isMarathi ? 'ક્વિઝ ટિપ' : isTelugu ? 'క്విజ్ చిట్కా' : isTamil ? 'வினாடி வினா குறிப்பு' : isBengali ? 'কুইজ টিপ' : isHindi ? 'ക്വിസ് നുറുങ്ങ്' : 'Quiz Tip', description: isMalayalam ? 'ഓരോ ചോദ്യവും ശ്രദ്ധാപൂർവ്വം വായിക്കുക!' : isGujarati ? 'દરેક પ્રશ્ન કાળજીપૂર્વક વાંચો!' : isMarathi ? 'प्रत्येक प्रश्न काळजीपूर्वक वाचा!' : isTelugu ? 'ప్రతి ప్రశ్నను జాగ్రత్తగా చదవండి!' : isTamil ? 'ஒவ்வொரு கேள்வியையும் கவனமாக படிக்கவும்!' : isBengali ? 'প্রতিটি প্রশ্ন মনোযোগ দিয়ে পড়ুন!' : isHindi ? 'ഓരോ ചോദ്യവും ശ്രദ്ധാപൂർവ്വം വായിക്കുക!' : 'Read each question carefully!' },
+      { title: isMalayalam ? 'വെല്ലുവിളി' : isGujarati ? 'પડકાર' : isMarathi ? 'आव्हान' : isTelugu ? 'సవాలు' : isTamil ? 'சவால்' : isBengali ? 'চ্যালেঞ্জ' : isHindi ? 'വെല്ലുവിളി' : 'Challenge', description: isMalayalam ? 'എല്ലാ ഉത്തരങ്ങളും ശരിയാക്കാൻ ശ്രമിക്കുക!' : isGujarati ? 'બધા જવાબો સાચા મેળવવાનો પ્રયાસ કરો!' : isMarathi ? 'सर्व उत्तरे योग्य मिळवण्याचा प्रयत्न करा!' : isTelugu ? 'అన్ని సమాధానాలను సరిగ్గా పొందడానికి ప్రయత్నించండి!' : isTamil ? 'அனைத்து பதில்களையும் சரியாக பெற முயற்சிக்கவும்!' : isBengali ? 'সব উত্তর সঠিক করার চেষ্টা করুন!' : isHindi ? 'എല്ലാ ഉത്തരങ്ങളും ശരിയാക്കാൻ ശ്രമിക്കുക!' : 'Try to get all answers correct!' },
     ],
   };
 
@@ -130,10 +140,10 @@ export function AstrologyQuiz() {
     setShowFeedback(false)
   }
 
-  const optionLetters = ['A', 'B', 'C', 'D']
+  const optionLetters = isMalayalam ? ['അ', 'ബ', 'ക', 'ഡ'] : isGujarati ? ['અ', 'બ', 'ક', 'ડ'] : ['A', 'B', 'C', 'D']
 
   return (
-    <section className="py-1 sm:py-8 md:py-16 rounded-3xl relative bg-gradient-to-b from-[#EADCF5] via-[#FBEAFF] to-[#F5ECFB] min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="py-1 sm:py-8 md:py-16 rounded-3xl relative bg-[#FEFBF2] min-h-screen flex items-center justify-center overflow-hidden">
 
       {/* Floating cards, hidden on xs screens for clarity */}
       <div className="hidden xs:block">
@@ -162,18 +172,18 @@ export function AstrologyQuiz() {
 
       <div className="container mx-auto px-2 sm:px-4 relative z-10 max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl">
         <div className="text-center mb-6 sm:mb-8 flex flex-col items-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-2 bg-gradient-to-r from-purple-800 via-pink-600 to-orange-400 text-transparent bg-clip-text">
-            {quizData.title}
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-2 text-black">
+            {isMalayalam ? 'ജ്യോതിഷ ക്വിസ്' : isGujarati ? 'જ്યോતિષ ક്વിઝ' : isMarathi ? 'ज्योतिष क्विझ' : isTelugu ? 'జ്యോతిష క്విజ్' : isTamil ? 'ஜோதிட வினாடி வினா' : isBengali ? 'জ্যোতিষ কুইজ' : isHindi ? 'ജ്യോതിഷ ക്വിസ്' : isEnglish ? 'Astrology Quiz' : quizData.title}
           </h2>
-          <p className="text-base sm:text-lg max-w-xs sm:max-w-md bg-gradient-to-r from-gray-800 via-purple-700 to-pink-500 text-transparent bg-clip-text">
-            {quizData.subtitle}
+          <p className="text-base sm:text-lg max-w-xs sm:max-w-md text-green-800">
+            {isMalayalam ? 'ഈ രസകരമായ ചോദ്യങ്ങൾ ഉപയോഗിച്ച് നിങ്ങളുടെ ജ്യോതിഷ അറിവ് പരീക്ഷിക്കുക!' : isGujarati ? 'આ મજેદાર પ્રશ્નો સાથે તમારું જ്યോતિષ જ്ઞાન તપાસો!' : isMarathi ? 'या मजेदार प्रश्नांसह तुमचे ज्योतिष ज्ञान तपासा!' : isTelugu ? 'ఈ ఆసక్తికరమైన ప్రశ్నలతో మీ జ്యోతిష జ്ఞానాన్ని పరీక్షించండి!' : isTamil ? 'இந்த வேடிக்கையான கேள்விகளுடன் உங்கள் ஜோதிட அறிவை சோதிக்கவும்!' : isBengali ? 'এই মজার প্রশ্নগুলির সাথে আপনার জ্যোতিষ জ্ঞান পরীক্ষা করুন!' : isHindi ? 'ഈ രസകരമായ ചോദ്യങ്ങൾ ഉപയോഗിച്ച് നിങ്ങളുടെ ജ്യോതിഷ അറിവ് പരീക്ഷിക്കുക!' : isEnglish ? 'Test your astrology knowledge with these fun questions!' : quizData.subtitle}
           </p>
         </div>
 
         <Card className="bg-white rounded-2xl shadow-xl overflow-hidden mt-3 sm:mt-8 max-w-full sm:max-w-2xl mx-auto border-none">
           <div className="relative bg-[#6A0DAD] text-white p-4 sm:p-6 pb-10 sm:pb-12 rounded-t-2xl transform -skew-y-3 origin-bottom-left">
             <div className="transform skew-y-3 px-2 sm:px-4 py-2 flex items-center">
-              <h3 className="text-lg sm:text-2xl font-bold uppercase text-white">{quizData.questionHeader}</h3>
+              <h3 className="text-lg sm:text-2xl font-bold uppercase text-white">{isMalayalam ? 'ചോദ്യം' : isGujarati ? 'પ્રશ્ન' : isMarathi ? 'प्रश्न' : isTelugu ? 'ప્రశ્న' : isTamil ? 'கேள்வி' : isBengali ? 'প্রশ্ন' : isHindi ? 'ചോദ്യം' : isEnglish ? 'Question' : quizData.questionHeader}</h3>
             </div>
             <div className="absolute -bottom-5 sm:-bottom-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] min-h-12 sm:min-h-16 bg-white rounded-xl shadow-lg flex items-center justify-center border border-gray-200 px-3 sm:px-6 py-2 sm:py-3">
               {currentQuestion && (
@@ -219,27 +229,18 @@ export function AstrologyQuiz() {
                 className="text-center"
               >
                 <h4 className="text-xl sm:text-2xl font-bold text-[#6A0DAD] mb-3 sm:mb-4">
-                  {quizData.completedTitle}
+                  {isMalayalam ? 'ക്വിസ് പൂർത്തിയായി!' : isGujarati ? 'ક്વિઝ પൂર્ણ થયું!' : isMarathi ? 'क्विझ पूर्ण झाले!' : isTelugu ? 'క്విజ్ పൂర്తయింది!' : isTamil ? 'வினாடி வினா முடிந்தது!' : isBengali ? 'কুইজ সম্পন্ন!' : isHindi ? 'ക്വിസ് പൂർത്തിയായി!' : isEnglish ? 'Quiz Completed!' : quizData.completedTitle}
                 </h4>
                 <p className="text-lg sm:text-xl text-gray-700 mb-4 sm:mb-6">
-                  {t('astrologyQuiz.scoreText').replace('{{score}}', score.toString()).replace('{{total}}', questions.length.toString())}
+                  {isMalayalam ? `നിങ്ങളുടെ സ്കോർ: ${score}/${questions.length}` : isGujarati ? `તુમચો સ્કોર: ${score} મધ્યે ${questions.length}` : isMarathi ? `तुमचा स्कोर: ${score} मध्ये ${questions.length}` : isTelugu ? `మీ స్కోరు: ${score} లో ${questions.length}` : isTamil ? `உங்கள் மதிப்பெண்: ${score} இல் ${questions.length}` : isBengali ? `আপনার স্কোর: ${score} এর মধ্যে ${questions.length}` : isHindi ? `आपका स्कोर: ${score}/${questions.length}` : isEnglish ? `Your score: ${score} out of ${questions.length}` : (t('astrologyQuiz.scoreText') ? t('astrologyQuiz.scoreText').replace('{{score}}', score.toString()).replace('{{total}}', questions.length.toString()) : `Score: ${score}/${questions.length}`)}
                 </p>
                 <Button onClick={resetQuiz} className="bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg hover:opacity-90">
-                  {quizData.tryAgainButton}
+                  {isMalayalam ? 'വീണ്ടും ശ്രമിക്കുക' : isGujarati ? 'ફરીથી પ્રયાસ કરો' : isMarathi ? 'पुन्हा प्रयत्न करा' : isTelugu ? 'మళ్లీ ప్రయత్నించండి' : isTamil ? 'மீண்டும் முயற்சிக்கவும்' : isBengali ? 'আবার চেষ্টা করুন' : isHindi ? 'വീണ്ടും ശ്രമിക്കുക' : isEnglish ? 'Try Again' : quizData.tryAgainButton}
                 </Button>
               </motion.div>
             )}
           </CardContent>
         </Card>
-
-        {/* <div className="text-center mt-8 sm:mt-12">
-          <p className="text-base sm:text-lg font-semibold uppercase mb-2 bg-gradient-to-r from-purple-700 via-fuchsia-500 to-rose-400 text-transparent bg-clip-text">
-            {quizData.moreQuizText}
-          </p>
-          <Link href="/quiz" className="text-black underline text-base sm:text-xl">
-            www.nakshatragyaan.com/quiz
-          </Link>
-        </div> */}
       </div>
     </section>
   )

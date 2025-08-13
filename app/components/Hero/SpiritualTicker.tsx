@@ -38,10 +38,10 @@ export default function SpiritualTicker() {
             </span>
           </div>
           <div className="flex flex-col justify-center items-start min-w-[260px] ml-8">
-            <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#77A656' }}>
+            <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic text-green-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
               {meanings[lang]?.split('. ').slice(0,2).join('. ')}
             </span>
-            <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#77A656' }}>
+            <span className="font-serif text-sm md:text-base font-medium leading-tight tracking-wide italic text-green-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
               {meanings[lang]?.split('. ').slice(2).join('. ')}
             </span>
           </div>

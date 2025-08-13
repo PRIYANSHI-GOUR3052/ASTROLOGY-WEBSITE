@@ -68,7 +68,7 @@ export default function UnlockCosmosBanner() {
         </div>
         <div className="mt-6 md:mt-0 flex-shrink-0">
           <Link href="/services">
-            <span className="inline-block bg-[#FEFBF2] text-[#23244a] font-bold px-8 py-4 rounded-full shadow-lg hover:bg-white hover:text-amber-700 transition-colors text-xl border-2 border-[#e5e5e5] tracking-wide">
+            <span className="inline-block bg-[#FEFBF2] font-bold px-8 py-4 rounded-full shadow-lg hover:border-green-800 transition-all duration-300 text-xl border-2 border-[#e5e5e5] tracking-wide" style={{ color: '#166534' }}>
               {t('hero.ctaButton')}
             </span>
           </Link>

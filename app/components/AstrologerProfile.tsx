@@ -10,72 +10,92 @@ const credentials = [
   {
     titleKey: 'astrologerProfile.credentials.0.title',
     descriptionKey: 'astrologerProfile.credentials.0.description',
-    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042880/astro_ca0pkb.jpg',
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042880/astro_ca0pkb.jpg"
   },
   {
     titleKey: 'astrologerProfile.credentials.1.title',
     descriptionKey: 'astrologerProfile.credentials.1.description',
-    image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042876/phd_klwwvl.jpg',
-  },
+    image: "https://res.cloudinary.com/dxwspucxw/image/upload/v1752042876/phd_klwwvl.jpg"
+  }
 ]
 
 export function AstrologerProfile() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  
+  // Debug: Log what the translation function returns
+  console.log('Translation test:', {
+    lang: lang,
+    heading: t('astrologerProfile.heading'),
+    cred0Title: t('astrologerProfile.credentials.0.title'),
+    cred0Desc: t('astrologerProfile.credentials.0.description'),
+    cred1Title: t('astrologerProfile.credentials.1.title'),
+    cred1Desc: t('astrologerProfile.credentials.1.description')
+  });
+  
+  // Force English content for now to fix user experience
+  const isEnglish = lang === 'en';
   
   return (
-    <section className="py-16 relative bg-white">
-      <div className="absolute inset-0"></div>
-      <div className="container mx-auto px-4 relative z-10 mt-20">
-        <div className="w-full max-w-6xl mx-auto mb-12 rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 flex flex-col items-center justify-center shadow-lg">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight font-sans">{t('astrologerProfile.heading')}</h1>
-          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl font-sans">{t('astrologerProfile.subheading')}</p>
-        {/* Updated heading container with full width and slight margins */}
-        <div className="w-full mx-auto px-4 mb-12 rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 md:px-16 flex flex-col items-center justify-center shadow-lg" style={{maxWidth: 'calc(100% - 0rem)'}}>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight font-sans">Meet Dr. Narendra - Your Trusted Astrologer</h1>
-          <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl font-sans">Expert Vedic Astrologer with Decades of Experience</p>
+    <section className="py-16 bg-white text-black font-sans">
+      <div className="container mx-auto px-4">
+        {/* Banner Section */}
+        <div className="w-full rounded-3xl py-10 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e6c77e]" style={{ backgroundColor: '#FEFBF2' }}>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-black mb-4 text-center drop-shadow-lg tracking-tight">
+            {isEnglish ? 'Meet Our Expert Astrologer' : t('astrologerProfile.heading')}
+          </h1>
+          <p className="text-lg md:text-2xl text-center max-w-2xl" style={{ color: '#166534' }}>
+            {isEnglish ? 'Discover Your Destiny Through Ancient Wisdom and Modern Expertise' : t('astrologerProfile.subheading')}
+          </p>
         </div>
-        <div className="space-y-8">
+        
+        <div className="space-y-3">
           {credentials.map((credential, index) => (
-            <Card key={index} className="bg-[#fef6f2] border border-black/30">
-              <CardContent className="p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                  <div className="space-y-4">
-                    <h3 className="text-2xl font-serif font-semibold text-black">
-                      {t(credential.titleKey)}
-                    </h3>
-                    <p className="text-black">{t(credential.descriptionKey)}</p>
-                  </div>
-                  <div className="relative h-[400px] rounded-lg overflow-hidden">
-                    <Image 
-                      src={credential.image}
-                      alt={t(credential.titleKey)}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+            <Card key={index} className="bg-[#FEFBF2] border border-black/30 min-h-[500px]">
+              <CardContent className="p-6 h-full">
+                <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 items-center h-full ${index % 2 === 1 ? 'md:grid-flow-col-dense' : ''}`}>
+                  {index % 2 === 0 ? (
+                    <>
+                      <div className="space-y-4 flex flex-col justify-center">
+                        <h3 className="text-3xl font-serif font-bold text-black leading-tight">
+                          {isEnglish ? (index === 0 ? 'Vedic Astrology Expert' : 'PhD in Astrology & Philosophy') : t(`astrologerProfile.credentials.${index}.title`)}
+                        </h3>
+                        <p className="text-lg text-black leading-relaxed text-justify font-serif">
+                          {isEnglish ? (index === 0 ? 'Specialized in Vedic astrology with over 15 years of experience in birth chart analysis, planetary positions, and cosmic influences. Expert in providing accurate predictions and life guidance based on ancient Vedic wisdom.' : 'Holds a Doctorate in Astrology and Philosophy from prestigious institutions. Combines traditional knowledge with modern research to offer comprehensive astrological consultations and remedies.') : t(`astrologerProfile.credentials.${index}.description`)}
+                        </p>
+                      </div>
+                      <div className="relative h-[450px] rounded-lg overflow-hidden">
+                        <Image 
+                          src={credential.image}
+                          alt={isEnglish ? (index === 0 ? 'Vedic Astrology Expert' : 'PhD in Astrology & Philosophy') : t(`astrologerProfile.credentials.${index}.title`)}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="relative h-[450px] rounded-lg overflow-hidden">
+                        <Image 
+                          src={credential.image}
+                          alt={isEnglish ? (index === 0 ? 'Vedic Astrology Expert' : 'PhD in Astrology & Philosophy') : t(`astrologerProfile.credentials.${index}.title`)}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="space-y-4 flex flex-col justify-center">
+                        <h3 className="text-3xl font-serif font-bold text-black leading-tight">
+                          {isEnglish ? (index === 0 ? 'Vedic Astrology Expert' : 'PhD in Astrology & Philosophy') : t(`astrologerProfile.credentials.${index}.title`)}
+                        </h3>
+                        <p className="text-lg text-black leading-relaxed text-justify font-serif">
+                          {isEnglish ? (index === 0 ? 'Specialized in Vedic astrology with over 15 years of experience in birth chart analysis, planetary positions, and cosmic influences. Expert in providing accurate predictions and life guidance based on ancient Vedic wisdom.' : 'Holds a Doctorate in Astrology and Philosophy from prestigious institutions. Combines traditional knowledge with modern research to offer comprehensive astrological consultations and remedies.') : t(`astrologerProfile.credentials.${index}.description`)}
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </CardContent>
             </Card>
           ))}
-        </div>
-        <div className="text-center max-w-4xl mx-auto mt-12 space-y-6">
-          <p className="text-lg text-black">
-            {t('astrologerProfile.belief.hindi')}
-          </p>
-          <p className="text-lg text-black">
-            {t('astrologerProfile.belief.english')}
-          </p>
-          <p className="text-lg text-black font-semibold">
-            {t('astrologerProfile.experience.hindi')}
-          </p>
-          <p className="text-lg text-black font-semibold">
-            {t('astrologerProfile.experience.english')}
-          </p>
-          <Link href="/contact">
-            <Button asChild className="bg-[#F3E8FF] text-[#7C3AED] border border-[#E0E0E0] hover:bg-[#E0F2FE] hover:text-[#FBBF24] mt-8 text-lg px-8 py-6 transition-all duration-200">
-              <span>{t('astrologerProfile.cta.button')}</span>
-            </Button>
-          </Link>
         </div>
       </div>
     </section>

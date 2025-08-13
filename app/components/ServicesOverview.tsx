@@ -317,7 +317,7 @@ export function ServicesOverview() {
           <div
             className="rounded-3xl shadow-md"
             style={{
-              background: 'linear-gradient(90deg, #fdf6f2 0%, #f6f1fa 50%, #e3f2fd 100%)',
+              backgroundColor: '#FEFBF2',
               boxShadow: '0 4px 16px 0 rgba(36, 34, 68, 0.08)',
               padding: '3rem 1.5rem',
               borderRadius: '2rem',
@@ -342,7 +342,7 @@ export function ServicesOverview() {
               className="text-lg md:text-xl font-medium"
               style={{
                 fontFamily: 'Montserrat, Arial, sans-serif',
-                color: '#374151',
+                color: '#166534',
                 textAlign: 'center',
                 marginTop: '0.5rem',
               }}
