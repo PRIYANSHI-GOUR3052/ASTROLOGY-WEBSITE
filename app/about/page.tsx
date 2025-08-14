@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { User, Calendar, Star, HelpCircle, Users, Target, Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CTASection } from '../components/CTASection';
-import { Statistics } from '../components/Statistics';
+
 import { AstrologerProfile } from '../components/AstrologerProfile';
 import { Testimonials } from '../components/Testimonials';
 import { useLanguage } from '../contexts/useLanguage';
@@ -56,7 +56,7 @@ export default function AboutPage() {
                     <p key={idx}>{story}</p>
                   ))}
                 </div>
-                <Statistics />
+                
                 {/* Testimonial */}
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="bg-white rounded-xl p-6 mt-8 flex items-start gap-4 border">
                   <Quote className="w-8 h-8 text-amber-500 mt-1" />
