@@ -5,17 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import ProductPurchaseInfo from './ProductPurchaseInfo';
-
-interface Product {
-  title: string;
-  description: string;
-  price: string;
-  slug: string;
-  image?: string;
-  category?: string;
-  rating?: number;
-  originalPrice?: string;
-}
+import { ReusableProductGrid } from './product-cards';
+import type { Product } from './ReusableProductCard';
 
 interface BestSellerCardsProps {
   products: Product[];
@@ -63,9 +54,17 @@ const imageVariants = {
 export default function BestSellerCards({ products }: BestSellerCardsProps) {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
+  // Helper function to ensure products have required id field
+  const transformProducts = (prods: Product[]): Product[] => {
+    return prods.map(product => ({
+      ...product,
+      id: product.id || product.slug, // Use slug as fallback for id
+    }));
+  };
+
   // Take first 8 products for featured layout, next 8 for grid
-  const featuredProducts = products.slice(0, 8);
-  const gridProducts = products.slice(8, 16);
+  const featuredProducts = transformProducts(products.slice(0, 8));
+  const gridProducts = transformProducts(products.slice(8, 16));
   
   // First set (big left, 3 small right)
   const firstSetMain = featuredProducts[0];
@@ -485,133 +484,17 @@ Best Seller Collection
           More Products
         </motion.h3>
 
-        <div className="w-full px-4 sm:px-8 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-8">
-          {gridProducts.map((product, index) => (
-            <motion.div
-              key={product.slug}
-              variants={{
-                hidden: { 
-                  opacity: 0, 
-                  y: 60,
-                  scale: 0.8
-                },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  transition: {
-                    duration: 0.8,
-                    delay: index * 0.1,
-                    ease: "easeOut"
-                  }
-                }
-              }}
-              onHoverStart={() => setHoveredCard(index + 10)}
-              onHoverEnd={() => setHoveredCard(null)}
-            >
-              <Link href={`/shop/${product.slug}`} className="block group">
-                <motion.div 
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden h-[360px] sm:h-[380px] relative"
-                  whileHover={{ 
-                    y: -12, 
-                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-                    scale: 1.02
-                  }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  {/* Product Image */}
-                  <div className="relative w-full h-48 overflow-hidden">
-                    <motion.div
-                      animate={hoveredCard === index + 10 ? { scale: 1.1 } : { scale: 1 }}
-                      transition={{ duration: 0.6, ease: "easeInOut" }}
-                      className="w-full h-full"
-                    >
-                      <Image 
-                        src={product.image || '/images/placeholder.jpg'} 
-                        alt={product.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </motion.div>
-                    
-                    {/* Cart Icon - Mobile Only */}
-                    <motion.button
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.3 + index * 0.1, type: "spring", stiffness: 200 }}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="absolute top-3 left-3 bg-black text-white p-2 rounded-full shadow-lg hover:bg-gray-800 transition-all sm:hidden"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        // Add to cart functionality here
-                        console.log('Add to cart:', product.title);
-                      }}
-                    >
-                      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                      </svg>
-                    </motion.button>
-
-                    {/* Badge */}
-                    <motion.span 
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.3 + index * 0.1, type: "spring", stiffness: 200 }}
-                      className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg"
-                    >
-                      HOT
-                    </motion.span>
-
-                    {/* Gradient Overlay on Hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 flex flex-col justify-between h-[132px]">
-                    <div>
-                      <motion.h4 
-                        className="text-lg font-bold text-gray-900 mb-2 group-hover:text-amber-700 transition-colors line-clamp-2"
-                        style={{ fontFamily: 'Playfair Display, serif' }}
-                      >
-                        {product.title}
-                      </motion.h4>
-                      
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {product.description}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold text-amber-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          {product.price}
-                        </span>
-                        {product.originalPrice && (
-                          <span className="text-sm text-gray-400 line-through">
-                            {product.originalPrice}
-                          </span>
-                        )}
-                      </div>
-                      
-                      <motion.button
-                        whileHover={{ 
-                          scale: 1.1, 
-                          backgroundColor: "#1f2937",
-                          boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3)"
-                        }}
-                        whileTap={{ scale: 0.9 }}
-                        className="hidden sm:block px-2 sm:px-4 py-2 bg-black text-white text-xs font-bold rounded-full shadow-lg transition-all border border-black hover:border-gray-800"
-                      >
-                        Add to Cart
-                      </motion.button>
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
-            </motion.div>
-          ))}
+        <div className="w-full px-4 sm:px-8">
+          <ReusableProductGrid
+            products={gridProducts}
+            viewMode="grid"
+            columns={4}
+            gap="md"
+            showQuickActions={false}
+            showWishlist={false}
+            showCompare={false}
+            className="mb-8"
+          />
         </div>
 
         {/* View All Products Button */}
@@ -621,7 +504,7 @@ Best Seller Collection
           transition={{ delay: 1.5, duration: 0.6 }}
           className="text-center mt-16 px-8"
         >
-          <Link href="/shop">
+          <Link href="/shop/all-products">
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}

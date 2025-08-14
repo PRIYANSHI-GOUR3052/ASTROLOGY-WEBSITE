@@ -19,7 +19,7 @@ export default function NakshatraGyaanBanner() {
             {/* Top Badge */}
             <div className="inline-block">
               <span className="text-sm font-semibold text-amber-700 uppercase tracking-wider bg-amber-100 px-4 py-2 rounded-full">
-                Trusted by 50,000+ Customers
+                Authentic Vedic Astrology
               </span>
             </div>
 

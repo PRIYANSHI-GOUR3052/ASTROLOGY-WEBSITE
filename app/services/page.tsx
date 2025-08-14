@@ -15,7 +15,7 @@ export default function ServicesPage() {
       <MysticBackground>
       
       {/* SHOP BANNER AT THE TOP */}
-      <ShopBanner />
+      <ShopBanner variant="services" />
       
       {/* NAKSHATRA TICKER */}
       <NakshatraTicker />

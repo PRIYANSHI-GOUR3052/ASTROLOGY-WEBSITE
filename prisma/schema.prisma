@@ -15,73 +15,6 @@ model admins {
   created_at DateTime? @default(now()) @db.Timestamp(0)
 }
 
-model cart {
-  id         Int       @id @default(autoincrement())
-  user_id    Int
-  product_id Int
-  quantity   Int       @default(1)
-  is_stone   Boolean   @default(false)
-  is_service Boolean   @default(false)
-  carats     Decimal?  @db.Decimal(10, 2)
-  created_at DateTime? @default(now()) @db.Timestamp(0)
-  updated_at DateTime? @default(now()) @db.Timestamp(0)
-  users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cart_ibfk_1")
-
-  @@index([product_id], map: "product_id")
-  @@index([user_id], map: "user_id")
-}
-
-model order_addresses {
-  id            Int       @id @default(autoincrement())
-  order_id      Int
-  full_name     String    @db.VarChar(255)
-  address_line1 String    @db.VarChar(255)
-  address_line2 String?   @db.VarChar(255)
-  city          String    @db.VarChar(100)
-  state         String    @db.VarChar(100)
-  pincode       String    @db.VarChar(20)
-  phone         String    @db.VarChar(20)
-  created_at    DateTime? @default(now()) @db.Timestamp(0)
-  orders        orders    @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "order_addresses_ibfk_1")
-
-  @@index([order_id], map: "order_id")
-}
-
-model order_items {
-  id         Int       @id @default(autoincrement())
-  order_id   Int
-  product_id Int
-  is_stone   Boolean   @default(false)
-  is_service Boolean   @default(false)
-  quantity   Int
-  carats     Decimal?  @db.Decimal(10, 2)
-  price      Decimal   @db.Decimal(10, 2)
-  created_at DateTime? @default(now()) @db.Timestamp(0)
-  orders     orders    @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "order_items_ibfk_1")
-
-  @@index([order_id], map: "order_id")
-}
-
-model orders {
-  id                Int               @id @default(autoincrement())
-  user_id           Int
-  stripe_session_id String            @db.VarChar(255)
-  total_amount      Decimal           @db.Decimal(10, 2)
-  status            String            @default("pending") @db.VarChar(50)
-  payment_method    String            @default("online") @db.VarChar(50)
-  shipping_status   String?           @default("pending") @db.VarChar(50)
-  address_id        Int?
-  created_at        DateTime?         @default(now()) @db.Timestamp(0)
-  updated_at        DateTime?         @default(now()) @db.Timestamp(0)
-  order_addresses   order_addresses[]
-  order_items       order_items[]
-  users             users             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "orders_ibfk_1")
-  user_addresses    user_addresses?   @relation(fields: [address_id], references: [id], onUpdate: NoAction, map: "orders_ibfk_2")
-
-  @@index([address_id], map: "address_id")
-  @@index([user_id], map: "user_id")
-}
-
 model page_visits {
   id         Int       @id @default(autoincrement())
   visitor_id String    @db.VarChar(255)
@@ -91,17 +24,6 @@ model page_visits {
   visitors   visitors  @relation(fields: [visitor_id], references: [visitor_id], onDelete: Cascade, onUpdate: NoAction, map: "page_visits_ibfk_1")
 
   @@index([visitor_id], map: "visitor_id")
-}
-
-model products {
-  id          Int       @id @default(autoincrement())
-  name        String    @db.VarChar(255)
-  description String    @db.Text
-  price       Decimal   @db.Decimal(10, 2)
-  slug        String    @unique(map: "slug") @db.VarChar(255)
-  available   Int?      @default(0)
-  created_at  DateTime? @default(now()) @db.Timestamp(0)
-  updated_at  DateTime? @default(now()) @db.Timestamp(0)
 }
 
 model services {
@@ -121,38 +43,6 @@ model services {
   updated_at     DateTime? @default(now()) @db.Timestamp(0)
 }
 
-model stones {
-  id              Int       @id @default(autoincrement())
-  name            String    @db.VarChar(255)
-  name_en         String    @db.VarChar(255)
-  zodiac          String    @db.VarChar(255)
-  zodiac_en       String    @db.VarChar(255)
-  benefits        String    @db.Text
-  benefits_en     String    @db.Text
-  price_per_carat Decimal   @db.Decimal(10, 2)
-  created_at      DateTime? @default(now()) @db.Timestamp(0)
-  updated_at      DateTime? @default(now()) @db.Timestamp(0)
-}
-
-model user_addresses {
-  id            Int       @id @default(autoincrement())
-  user_id       Int
-  full_name     String    @db.VarChar(255)
-  address_line1 String    @db.VarChar(255)
-  address_line2 String?   @db.VarChar(255)
-  city          String    @db.VarChar(100)
-  state         String    @db.VarChar(100)
-  pincode       String    @db.VarChar(20)
-  phone         String    @db.VarChar(20)
-  is_default    Boolean?  @default(false)
-  created_at    DateTime? @default(now()) @db.Timestamp(0)
-  updated_at    DateTime? @default(now()) @db.Timestamp(0)
-  orders        orders[]
-  users         users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_addresses_ibfk_1")
-
-  @@index([user_id], map: "user_id")
-}
-
 model users {
   id               Int              @id @default(autoincrement())
   name             String           @db.VarChar(255)
@@ -163,9 +53,6 @@ model users {
   google_id        String?          @db.VarChar(255)
   resetToken       String?          @db.VarChar(255) // For password reset
   resetTokenExpiry DateTime?        // For password reset expiry
-  cart             cart[]
-  orders           orders[]
-  user_addresses   user_addresses[]
   booking          booking[]
 }
 
@@ -352,4 +239,274 @@ model zodiac_signs {
   image_url String?  @db.VarChar(500)
   created_at DateTime? @default(now()) @db.Timestamp(0)
   updated_at DateTime? @default(now()) @db.Timestamp(0)
+  zodiac_attributes zodiac_attributes[]
+  products products[]
+}
+
+model categories {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(100)
+  slug        String        @unique @db.VarChar(100)
+  description String?       @db.Text
+  image_url   String?       @db.VarChar(500)
+  banner_url  String?       @db.VarChar(500)
+  created_at  DateTime?     @default(now()) @db.Timestamp(0)
+  updated_at  DateTime?     @default(now()) @db.Timestamp(0)
+  subcategories subcategories[]
+  category_attributes category_attributes[]
+  products products[]
+}
+
+model subcategories {
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(100)
+  slug         String    @db.VarChar(100)
+  image_url    String?   @db.VarChar(500)
+  category_id  Int
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+  categories   categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  
+  @@index([category_id])
+}
+
+model attributes {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(100)
+  slug        String    @unique @db.VarChar(100)
+  type        String    @db.VarChar(50) // 'text', 'select', 'multiselect', 'number', 'boolean', 'date'
+  description String?   @db.Text
+  is_required Boolean   @default(false)
+  is_filterable Boolean @default(false)
+  is_searchable Boolean @default(false)
+  sort_order  Int       @default(0)
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  attribute_values attribute_values[]
+  product_attributes product_attributes[]
+  category_attributes category_attributes[]
+  zodiac_attributes zodiac_attributes[]
+}
+
+model attribute_values {
+  id           Int       @id @default(autoincrement())
+  attribute_id Int
+  value        String    @db.VarChar(255)
+  slug         String    @db.VarChar(255)
+  sort_order   Int       @default(0)
+  is_active    Boolean   @default(true)
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  attributes   attributes @relation(fields: [attribute_id], references: [id], onDelete: Cascade)
+  product_attribute_values product_attribute_values[]
+  
+  @@index([attribute_id])
+  @@unique([attribute_id, slug])
+}
+
+model products {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  description String    @db.Text
+  price       Decimal   @db.Decimal(10, 2)
+  slug        String    @unique(map: "slug") @db.VarChar(255)
+  available   Int?      @default(0)
+  category_id Int?
+  zodiac_id   Int?
+  image_url   String?   @db.VarChar(500)
+  banner_url  String?   @db.VarChar(500)
+  is_active   Boolean   @default(true)
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  category    categories? @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  zodiac      zodiac_signs? @relation(fields: [zodiac_id], references: [id], onDelete: SetNull)
+  product_attributes product_attributes[]
+  product_media product_media[]
+  product_stock product_stock[]
+  product_meta product_meta?
+  product_pricing product_pricing[]
+  product_shipping product_shipping?
+  
+  @@index([category_id])
+  @@index([zodiac_id])
+}
+
+model product_media {
+  id          Int       @id @default(autoincrement())
+  product_id  Int
+  media_type  String    @db.VarChar(50) // 'image', 'video', 'document'
+  media_url   String    @db.VarChar(500)
+  alt_text    String?   @db.VarChar(255)
+  title       String?   @db.VarChar(255)
+  sort_order  Int       @default(0)
+  is_primary  Boolean   @default(false)
+  is_active   Boolean   @default(true)
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  products    products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  
+  @@index([product_id])
+}
+
+model product_stock {
+  id          Int       @id @default(autoincrement())
+  product_id  Int
+  sku         String?   @unique @db.VarChar(100)
+  quantity    Int       @default(0)
+  reserved    Int       @default(0)
+  min_stock   Int       @default(0)
+  max_stock   Int?
+  location    String?   @db.VarChar(100)
+  batch_number String?  @db.VarChar(100)
+  expiry_date DateTime?
+  cost_price  Decimal?  @db.Decimal(10, 2)
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  products    products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  
+  @@unique([product_id, sku])
+  @@index([product_id])
+}
+
+model product_meta {
+  id              Int       @id @default(autoincrement())
+  product_id      Int       @unique
+  meta_title      String?   @db.VarChar(255)
+  meta_description String?  @db.Text
+  meta_keywords   String?   @db.Text
+  og_title        String?   @db.VarChar(255)
+  og_description  String?   @db.Text
+  og_image        String?   @db.VarChar(500)
+  twitter_title   String?   @db.VarChar(255)
+  twitter_description String? @db.Text
+  twitter_image   String?   @db.VarChar(500)
+  canonical_url   String?   @db.VarChar(500)
+  structured_data Json?
+  created_at      DateTime? @default(now()) @db.Timestamp(0)
+  updated_at      DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  products        products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+model product_pricing {
+  id              Int       @id @default(autoincrement())
+  product_id      Int
+  base_price      Decimal   @db.Decimal(10, 2)
+  sale_price      Decimal?  @db.Decimal(10, 2)
+  discount_type   String?   @db.VarChar(20) // 'percentage', 'fixed'
+  discount_value  Decimal?  @db.Decimal(10, 2)
+  discount_start  DateTime?
+  discount_end    DateTime?
+  is_active       Boolean   @default(true)
+  created_at      DateTime? @default(now()) @db.Timestamp(0)
+  updated_at      DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  products        products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  
+  @@index([product_id])
+}
+
+model product_shipping {
+  id              Int       @id @default(autoincrement())
+  product_id      Int       @unique
+  weight          Decimal?  @db.Decimal(10, 3) // Weight in kg
+  weight_unit     String    @default("kg") @db.VarChar(10) // kg, g, lb
+  length          Decimal?  @db.Decimal(10, 2) // Length in cm
+  width           Decimal?  @db.Decimal(10, 2) // Width in cm
+  height          Decimal?  @db.Decimal(10, 2) // Height in cm
+  dimension_unit  String    @default("cm") @db.VarChar(10) // cm, in
+  shipping_class  String?   @db.VarChar(50) // Standard, Express, Free, Heavy
+  is_free_shipping Boolean  @default(false)
+  shipping_cost   Decimal?  @db.Decimal(10, 2) // Fixed shipping cost
+  max_shipping_cost Decimal? @db.Decimal(10, 2) // Maximum shipping cost for variable rates
+  shipping_zones  Json?     // JSON array of shipping zone IDs
+  created_at      DateTime? @default(now()) @db.Timestamp(0)
+  updated_at      DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  products        products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+model product_attributes {
+  id         Int       @id @default(autoincrement())
+  product_id Int
+  attribute_id Int
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  products   products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  attributes attributes @relation(fields: [attribute_id], references: [id], onDelete: Cascade)
+  product_attribute_values product_attribute_values[]
+  
+  @@unique([product_id, attribute_id])
+  @@index([product_id])
+  @@index([attribute_id])
+}
+
+model product_attribute_values {
+  id                    Int       @id @default(autoincrement())
+  product_attribute_id  Int
+  attribute_value_id    Int?
+  text_value            String?   @db.Text
+  number_value          Decimal?  @db.Decimal(10, 2)
+  boolean_value         Boolean?
+  date_value            DateTime?
+  created_at            DateTime? @default(now()) @db.Timestamp(0)
+  updated_at            DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  product_attributes    product_attributes @relation(fields: [product_attribute_id], references: [id], onDelete: Cascade)
+  attribute_values      attribute_values? @relation(fields: [attribute_value_id], references: [id], onDelete: SetNull)
+  
+  @@index([product_attribute_id])
+  @@index([attribute_value_id])
+}
+
+model category_attributes {
+  id           Int       @id @default(autoincrement())
+  category_id  Int
+  attribute_id Int
+  is_required  Boolean   @default(false)
+  sort_order   Int       @default(0)
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  categories   categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  attributes   attributes @relation(fields: [attribute_id], references: [id], onDelete: Cascade)
+  
+  @@unique([category_id, attribute_id])
+  @@index([category_id])
+  @@index([attribute_id])
+}
+
+model zodiac_attributes {
+  id           Int       @id @default(autoincrement())
+  zodiac_id    Int
+  attribute_id Int
+  is_required  Boolean   @default(false)
+  sort_order   Int       @default(0)
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+  
+  // Relations
+  zodiac_signs zodiac_signs @relation(fields: [zodiac_id], references: [id], onDelete: Cascade)
+  attributes   attributes   @relation(fields: [attribute_id], references: [id], onDelete: Cascade)
+  
+  @@unique([zodiac_id, attribute_id])
+  @@index([zodiac_id])
+  @@index([attribute_id])
 }

@@ -1,14 +1,56 @@
 "use client";
 
-import { useState } from 'react';
-import { serviceContent } from '@/app/data/serviceContent';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from 'framer-motion';
+import { notFound } from 'next/navigation';
+import { FaClock, FaStar, FaVideo, FaShoppingCart, FaShieldAlt, FaRegStar, FaRegLightbulb, FaRegSmile, FaRegHeart, FaRegComments, FaRegSun, FaRegGem } from 'react-icons/fa';
+import { services, getServiceBySlug } from '@/data/services';
+import { UniversalCartButton } from '@/app/components/UniversalCartButton';
+import ProductAssuranceBar from '@/app/components/ProductAssuranceBar';
+import ServiceCarousels from '@/app/components/ServiceCarousels';
+import NakshatraGyaanBanner from '@/app/components/NakshatraGyaanBanner';
+import SpiritualJourneyBanner from '@/app/components/SpiritualJourneyBanner';
+import { Testimonials } from '@/app/components/Testimonials';
 import { Statistics } from '@/app/components/Statistics';
 import { AboutSummary } from '@/app/components/AboutSummary';
-import { motion } from 'framer-motion';
-import { FaRegLightbulb, FaRegHeart, FaRegStar, FaRegSmile, FaRegComments, FaRegSun, FaRegGem } from 'react-icons/fa';
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/app/contexts/useLanguage';
 import { CTASection } from '@/app/components/CTASection';
+import RelatedServices from '@/app/components/RelatedServices';
+import Link from 'next/link';
+
+// Generic FAQs for services
+const getServiceFaqs = (service: any) => [
+  {
+    question: `What is ${service.title} and what are its benefits?`,
+    answer: `${service.title} is ${service.description}. This consultation provides personalized guidance based on ancient Vedic astrology principles to help you make informed decisions about your life.`,
+  },
+  {
+    question: `How long is the ${service.title} session?`,
+    answer: `The session duration is ${service.duration}. This gives our expert astrologers enough time to thoroughly analyze your birth chart and provide comprehensive guidance.`,
+  },
+  {
+    question: `What type of consultation is this?`,
+    answer: `This is a ${service.consultationType} session. You can choose the format that's most convenient for you, and our astrologers will provide the same quality of guidance regardless of the medium.`,
+  },
+  {
+    question: "What information do I need to provide?",
+    answer: "You'll need your exact birth date, time, and place of birth for accurate chart calculation. If you don't have your birth time, our astrologers can work with available information to provide guidance.",
+  },
+  {
+    question: "How accurate are the predictions?",
+    answer: "Vedic astrology is highly accurate when performed by experienced astrologers. The accuracy depends on precise birth data and the astrologer's expertise. Our predictions are based on time-tested techniques and deep spiritual knowledge.",
+  },
+  {
+    question: `What makes this ${service.title} special?`,
+    answer: `Our ${service.title} combines traditional Vedic wisdom with modern insights. Each session is personalized and designed to provide practical guidance that you can implement in your daily life for positive transformation.`,
+  },
+  {
+    question: "Can I ask follow-up questions?",
+    answer: "Yes, our sessions are interactive. You can ask questions and seek clarification during the consultation. Our goal is to ensure you leave with complete understanding and actionable guidance.",
+  },
+];
 
 interface ServiceContent {
   title: string;
@@ -28,288 +70,445 @@ interface ServiceContent {
 }
 
 export default function ServicePage({ params }: { params: { slug: string } }) {
-  const service = serviceContent[params.slug as keyof typeof serviceContent];
+  const service = getServiceBySlug(params.slug);
+  if (!service) return notFound();
+
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Overview');
-  const { lang, setLang } = useLanguage();
 
-  // Premium layout for career-job
-  if (params.slug === 'career-job') {
-    const tabs = [
-      'Overview',
-      'What is Career & Job Guidance?',
-      'Benefits',
-      'FAQs',
-      'Purchase',
-    ];
-    return (
-      <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-blue-50 to-white text-black">
-        <div className="container mx-auto px-4 pt-8 pb-20 relative z-10">
-          {/* Glassmorphic Banner */}
-          <div className="w-full rounded-3xl bg-gradient-to-r from-[#e0f7fa] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e0f7fa]">
-            <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg" style={{ fontFamily: 'Playfair Display, serif' }}>
-              Career & Job Guidance
-            </h1>
-            <p className="text-xl md:text-2xl text-center text-gray-700 max-w-3xl mx-auto mb-4" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif' }}>
-              Unlock your professional destiny with cosmic clarity. Our Vedic astrologers offer deep, actionable insights for every stage of your career journey—from first job to leadership, from uncertainty to breakthrough.
-            </p>
-          </div>
-
-          {/* Tabs Navigation */}
-          <div className="flex flex-wrap gap-4 justify-center mb-12">
-            {tabs.map(tab => (
-              <button
-                key={tab}
-                className={`px-6 py-2 rounded-full font-semibold transition-all duration-200 shadow-md border border-blue-100 backdrop-blur-md ${activeTab === tab ? 'bg-blue-200 text-blue-900 scale-105' : 'bg-white text-blue-700 hover:bg-blue-50'}`}
-                style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif' }}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-
-          {/* Main Content Tabs */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Main Content */}
-            <div className="lg:col-span-2">
-              {/* Overview Tab */}
-              {activeTab === 'Overview' && (
-                <section className="mb-12 text-lg leading-relaxed text-black space-y-6">
-                  {/* User-provided editorial content without emojis */}
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    In today&apos;s fast-paced, hyper-competitive world, choosing and navigating a career path can feel overwhelming. Amidst external expectations and internal doubts, how do you find the work that truly resonates with your soul? At Nakshatra Gyaan, we believe your profession is not just a means of livelihood—it is a sacred expression of your dharma, your higher purpose in this lifetime. Through the ancient science of Vedic astrology, we help you uncover your divine professional blueprint and align it with real-world opportunities and inner fulfillment.
-                  </p>
-                  <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6 text-justify" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>Why Choose Astrological Career Guidance?</h3>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    Conventional career advice often falls short because it ignores the cosmic design encoded in your birth chart. Your Janma Kundli is a celestial map of your karma, potential, and soul journey. It reveals the ideal environments, industries, and roles where your energy naturally thrives, as well as the karmic challenges that may appear along the way. With the precision of Vedic astrology, combined with insights from modern psychology and spiritual counseling, we offer a comprehensive roadmap that answers questions your heart has been asking all along:
-                  </p>
-                  <ul className="list-disc ml-8 mb-5 text-justify" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    <li>What career path is truly aligned with my natural gifts and spiritual essence?</li>
-                    <li>Am I destined to lead, serve, heal, teach, innovate, or create?</li>
-                    <li>When is the ideal time to change jobs, start a new venture, or take a leap of faith?</li>
-                    <li>Why do I keep facing the same challenges in the workplace—and how can I overcome them?</li>
-                    <li>Can I achieve material success while staying spiritually grounded and emotionally balanced?</li>
-                  </ul>
-                  <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6 text-justify" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>What We Explore in Your Session</h3>
-                  <ul className="list-disc ml-8 mb-5 text-justify" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    <li>The 10th House (Karma Bhava): Your profession, leadership, and public life</li>
-                    <li>The 6th House: Work environment, challenges, and service</li>
-                    <li>The 2nd and 11th Houses: Income, wealth, gains, and financial fulfillment</li>
-                    <li>Planetary Yogas & Doshas: Karmic blocks or blessings impacting your career</li>
-                    <li>Dasha-Bhukti Analysis: Your current and upcoming planetary periods</li>
-                    <li>Transits (Gochar): External events and cosmic timings influencing your life decisions</li>
-                    <li>Nakshatras and Atmakaraka: Your soul&apos;s true desire and spiritual calling</li>
-                  </ul>
-                  <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6 text-justify" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>The Nakshatra Gyaan Experience</h3>
-                  <ul className="list-disc ml-8 mb-5 text-justify" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    <li><b>Soulful Strategy:</b> Our guidance is not generic—it&apos;s spiritually attuned, emotionally aware, and strategically designed to help you grow, not just survive.</li>
-                    <li><b>Holistic Remedies:</b> We offer personalized mantras, yantras, gemstones, affirmations, fasting techniques, and pujas to help you remove obstacles and amplify your career potential.</li>
-                    <li><b>Actionable Insights:</b> You will receive practical recommendations on industries, roles, skill development, and timing—tailored to your chart, not trends.</li>
-                    <li><b>Confidential & Compassionate Space:</b> We understand the vulnerability in career transitions. Whether you&apos;re lost, stuck, or standing at a new threshold, we hold space with empathy, non-judgment, and divine intention.</li>
-                  </ul>
-                  <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6 text-justify" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>Who This Is For</h3>
-                  <ul className="list-disc ml-8 mb-5 text-justify" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    <li>Students unsure of which academic path to follow</li>
-                    <li>Professionals experiencing stagnation, burnout, or a desire for change</li>
-                    <li>Entrepreneurs looking for auspicious timing, business direction, or market alignment</li>
-                    <li>Spiritual seekers who want to integrate purpose with prosperity</li>
-                    <li>Job changers or returnees to the workforce after a break</li>
-                  </ul>
-                  <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6 text-justify" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>Career as Karma, Career as Calling</h3>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    In the Vedic tradition, your work is one of the most powerful expressions of your karma. It is where your personal evolution, societal contribution, and spiritual progress intersect. When chosen and pursued consciously, your profession becomes a path of transformation and service—not just a paycheck.
-                  </p>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    At Nakshatra Gyaan, we honor that truth. Our consultations are an invitation to reconnect with your true nature, reawaken your confidence, and realign with the divine rhythm of the universe.
-                  </p>
-                  <Statistics />
-                </section>
-              )}
-
-              {/* What is Career & Job Guidance? Tab */}
-              {activeTab === 'What is Career & Job Guidance?' && (
-                <section className="mb-12">
-                  <h2 className="text-3xl font-bold text-blue-900 mb-8 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif', textAlign: 'justify' }}>What is Career & Job Guidance?</h2>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    Career & Job Guidance at Nakshatra Gyaan is not merely a consultation—it is a sacred decoding of your professional destiny. In a world driven by competition, uncertainty, and ever-evolving opportunities, we offer a calm, cosmic perspective that reveals what your soul truly seeks in the realm of work, purpose, and prosperity. Our sessions are designed to guide you toward a career that doesn&apos;t just sustain you—but fulfills, inspires, and elevates you.
-                  </p>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    What sets our service apart is its deeply integrative approach—a blend of classical Vedic astrology, karmic insight, and modern career psychology. We begin by analyzing your birth chart, which acts as a divine blueprint of your professional inclinations, talents, lessons, and dharma (life purpose). We examine planetary placements, your 10th and 6th houses, nakshatras, dashas (planetary periods), and current transits to understand not just what you can do—but what you are destined to thrive in.
-                  </p>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    Our mission is not to fit you into a box, but to help you break free from limitations—be it stagnation, self-doubt, job dissatisfaction, or confusion about your path. Whether you are a student trying to choose a stream, a young professional navigating early career choices, a seasoned employee facing burnout, or an entrepreneur looking for divine timing to launch a business—our guidance meets you where you are and helps you realign.
-                  </p>
-                  <p className="text-black text-justify mb-2" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    In each session, we explore questions such as:
-                  </p>
-                  <ul className="list-disc ml-8 mb-5 text-justify" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    <li>What type of profession will best support my emotional, financial, and spiritual needs?</li>
-                    <li>Am I meant to work under someone or lead my own venture?</li>
-                    <li>Which skills and energies should I harness to grow in my field?</li>
-                    <li>Are my current challenges karmic, and if so, how do I neutralize them?</li>
-                    <li>What is the right time to switch jobs, relocate, ask for a promotion, or invest in a dream project?</li>
-                    <li>How can I overcome professional blocks, toxic environments, or inner resistance?</li>
-                  </ul>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    But our role doesn&apos;t end at insight. Every consultation includes actionable guidance—we recommend personalized mantras, planetary remedies, spiritual rituals, gemstones, and lifestyle shifts to activate your professional success. Our astrologers empower you with awareness but also equip you with tools to shift the energies in your favor. We believe that real success comes not just from luck, but from alignment—with time, with dharma, and with inner truth.
-                  </p>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    More than just forecasting, we walk beside you in your career evolution journey. Whether you seek recognition, wealth, impact, or peace of mind—we help you define success on your own terms and reach it with clarity, grace, and inner strength. At Nakshatra Gyaan, your career is treated as your karma bhoomi—a sacred field of action—and our purpose is to help you fulfill it with intention and wisdom.
-                  </p>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    Let the stars be your mentors, the planets your allies, and your soul your compass. Discover the empowering, transformative magic of Career & Job Guidance—crafted with care, backed by science, and blessed by the cosmos.
-                  </p>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    Our consultations are not just about prediction—they are about empowerment. We help you understand the deeper meaning behind your professional experiences, so you can transform challenges into stepping stones and setbacks into opportunities for growth. Every session is a sacred dialogue, where your aspirations are honored and your unique journey is celebrated.
-                  </p>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    At Nakshatra Gyaan, we are committed to walking with you at every stage of your career evolution. Whether you are seeking clarity, courage, or a cosmic green light, our guidance is designed to illuminate your path and inspire you to pursue your highest calling with confidence, wisdom, and grace.
-                  </p>
-                  <p className="text-black text-justify mb-5" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif', textAlign: 'justify' }}>
-                    We understand that every career journey is unique, filled with both triumphs and trials. Our role is to help you see the bigger picture, to recognize the divine timing in every twist and turn, and to trust the process of your own becoming. With every session, you gain not just answers, but a renewed sense of purpose and the tools to manifest your dreams. Let us help you turn uncertainty into opportunity and ambition into achievement—one cosmic insight at a time.
-                  </p>
-                </section>
-              )}
-
-              {/* Benefits Tab */}
-              {activeTab === 'Benefits' && (
-                <section className="mb-12">
-                  <h2 className="text-3xl font-bold text-blue-900 mb-8 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Benefits of Career & Job Guidance</h2>
-                  <div className="grid md:grid-cols-2 gap-8">
-                    {/* 8+ animated, pastel glassmorphic benefit cards */}
-                    {[
-                      {
-                        icon: <FaRegLightbulb className="text-blue-400 w-8 h-8 mb-2" />, title: 'Clarity on Career Path', desc: 'Discover your true calling and the most auspicious fields for your growth.'
-                      },
-                      {
-                        icon: <FaRegStar className="text-yellow-400 w-8 h-8 mb-2" />, title: 'Timing of Job Changes', desc: 'Know the best periods for switching jobs, promotions, or business launches.'
-                      },
-                      {
-                        icon: <FaRegSmile className="text-green-400 w-8 h-8 mb-2" />, title: 'Overcoming Obstacles', desc: 'Get remedies and strategies to break through professional stagnation.'
-                      },
-                      {
-                        icon: <FaRegHeart className="text-pink-400 w-8 h-8 mb-2" />, title: 'Workplace Harmony', desc: 'Improve relationships with colleagues, bosses, and teams.'
-                      },
-                      {
-                        icon: <FaRegComments className="text-indigo-400 w-8 h-8 mb-2" />, title: 'Communication Skills', desc: 'Enhance your leadership and communication abilities.'
-                      },
-                      {
-                        icon: <FaRegSun className="text-orange-400 w-8 h-8 mb-2" />, title: 'Material & Spiritual Success', desc: 'Achieve both financial prosperity and inner fulfillment.'
-                      },
-                      {
-                        icon: <FaRegGem className="text-purple-400 w-8 h-8 mb-2" />, title: 'Personalized Remedies', desc: 'Receive mantras, rituals, and astrological solutions tailored to your chart.'
-                      },
-                      {
-                        icon: <FaRegLightbulb className="text-blue-400 w-8 h-8 mb-2" />, title: 'Confidence & Empowerment', desc: 'Step into your power and make bold, conscious career moves.'
-                      },
-                    ].map((benefit, idx) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 + idx * 0.1 }}
-                        viewport={{ once: true }}
-                        className="rounded-2xl bg-white/70 backdrop-blur-md shadow-lg p-8 flex flex-col items-center border border-blue-100 hover:scale-105 transition-transform duration-200"
-                        style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif' }}
-                      >
-                        {benefit.icon}
-                        <h3 className="font-bold text-lg mb-2 text-blue-900" style={{ fontFamily: 'Playfair Display, serif' }}>{benefit.title}</h3>
-                        <p className="text-gray-700 text-center text-base">{benefit.desc}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {/* FAQs Tab */}
-              {activeTab === 'FAQs' && (
-                <section className="mb-12">
-                  <h2 className="text-3xl font-bold text-blue-900 mb-8 border-b pb-2 text-left" style={{ fontFamily: 'Playfair Display, serif' }}>Frequently Asked Questions</h2>
-                  <div className="space-y-8">
-                    {/* 8+ in-depth FAQ entries */}
-                    {[
-                      {
-                        q: 'How can astrology help my career?',
-                        a: 'Astrology reveals your natural talents, ideal career paths, and the timing of key opportunities. It helps you make informed decisions, avoid pitfalls, and maximize your professional growth.'
-                      },
-                      {
-                        q: 'Can you predict the best time for a job change?',
-                        a: 'Yes. By analyzing your planetary periods (Dashas) and transits, we can identify the most auspicious windows for job changes, promotions, or business launches.'
-                      },
-                      {
-                        q: 'What if I am facing repeated setbacks at work?',
-                        a: 'We identify the astrological causes of stagnation or obstacles and provide practical remedies—mantras, rituals, and mindset shifts—to help you break through.'
-                      },
-                      {
-                        q: 'Is this guidance suitable for entrepreneurs?',
-                        a: 'Absolutely. We offer specialized insights for business owners, including timing for launches, partnership compatibility, and strategies for sustainable growth.'
-                      },
-                      {
-                        q: 'Will my session be confidential?',
-                        a: 'Yes. All consultations are private and your information is kept strictly confidential.'
-                      },
-                      {
-                        q: 'Can I get remedies for career problems?',
-                        a: 'Yes. We provide personalized remedies—mantras, gemstones, rituals, and affirmations—based on your unique chart.'
-                      },
-                      {
-                        q: 'Do you offer guidance for students or career starters?',
-                        a: 'Yes. We help students and young professionals choose the right field, prepare for exams, and plan their career trajectory.'
-                      },
-                      {
-                        q: 'How do I book a session?',
-                        a: 'Simply click the "Book Your Session" button in the Purchase tab or contact us for a personalized consultation.'
-                      },
-                    ].map((faq, idx) => (
-                      <div key={idx}>
-                        <div className="flex items-center mb-2">
-                          <span className="text-blue-600 mr-2 text-xl">&#x3f;</span>
-                          <span className="font-bold text-lg text-blue-900" style={{ fontFamily: 'Playfair Display, serif' }}>{faq.q}</span>
-                        </div>
-                        <p className="text-black text-justify pl-8" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif' }}>{faq.a}</p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {/* Purchase Tab */}
-              {activeTab === 'Purchase' && (
-                <section className="mb-12">
-                  <div className="rounded-3xl bg-gradient-to-r from-[#e0f7fa] via-[#f3e8ff] to-[#e0f2fe] p-10 shadow-xl border border-blue-100 flex flex-col items-center">
-                    <h2 className="text-3xl font-bold text-blue-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>Book Your Career & Job Guidance Session</h2>
-                    <p className="text-lg text-center mb-6" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif' }}>
-                      Ready to unlock your professional destiny? Book a personalized session with our expert astrologers and take the next step toward success.
-                    </p>
-                    <Button className="bg-blue-700 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg transition-transform transform hover:scale-105">
-                      Book Your Session Now!
-                    </Button>
-                  </div>
-                </section>
-              )}
-            </div>
-
-            {/* Sidebar */}
-            <div className="lg:col-span-1 flex flex-col gap-8">
-              <AboutSummary />
-            </div>
-          </div>
-        </div>
-        <div className="container mx-auto px-4 pb-16">
-          <CTASection />
-        </div>
+  // Helper function for default detailed description
+  const getDefaultDetailedDescription = (service: any) => {
+    return `
+      <div style="color: #374151; line-height: 1.8;">
+        <h3 style="font-size: 1.5rem; font-weight: 600; color: #23244a; margin-bottom: 1rem; font-family: 'Playfair Display', serif;">About ${service.title}</h3>
+        <p style="margin-bottom: 1rem; color: #4b5563;">${service.description}</p>
+        
+        <h4 style="font-size: 1.25rem; font-weight: 600; color: #23244a; margin-top: 1.5rem; margin-bottom: 0.75rem;">What You'll Get:</h4>
+        <ul style="margin-bottom: 1.5rem; padding-left: 1.5rem;">
+          ${service.features?.map((feature: string) => `<li style="margin-bottom: 0.5rem; color: #4b5563;">${feature}</li>`).join('') || '<li style="margin-bottom: 0.5rem; color: #4b5563;">Personalized consultation based on your birth chart</li><li style="margin-bottom: 0.5rem; color: #4b5563;">Expert guidance from experienced astrologers</li><li style="margin-bottom: 0.5rem; color: #4b5563;">Practical remedies and solutions</li>'}
+        </ul>
+        
+        <h4 style="font-size: 1.25rem; font-weight: 600; color: #23244a; margin-top: 1.5rem; margin-bottom: 0.75rem;">Benefits:</h4>
+        <ul style="margin-bottom: 1.5rem; padding-left: 1.5rem;">
+          <li style="margin-bottom: 0.5rem; color: #4b5563;">Clear insights into your life path and purpose</li>
+          <li style="margin-bottom: 0.5rem; color: #4b5563;">Guidance for important life decisions</li>
+          <li style="margin-bottom: 0.5rem; color: #4b5563;">Understanding of karmic patterns and challenges</li>
+          <li style="margin-bottom: 0.5rem; color: #4b5563;">Spiritual remedies for harmony and success</li>
+          <li style="margin-bottom: 0.5rem; color: #4b5563;">Personalized recommendations for growth</li>
+        </ul>
+        
+        <h4 style="font-size: 1.25rem; font-weight: 600; color: #23244a; margin-top: 1.5rem; margin-bottom: 0.75rem;">Consultation Process:</h4>
+        <p style="margin-bottom: 1rem; color: #4b5563;">Our consultation is conducted through ${service.consultationType} and lasts ${service.duration}. You'll receive personalized insights based on your birth chart analysis and can ask questions throughout the session.</p>
       </div>
-    );
-  }
+    `;
+  };
 
-  // ...default rendering for other slugs...
-  if (!service) {
-    return <div style={{ color: "#000" }}>Service not found</div>;
-  }
+  // Create service images array
+  const serviceImages = service.images && service.images.length > 0 
+    ? service.images 
+    : ['/images/placeholder.jpg', '/images/placeholder.jpg', '/images/placeholder.jpg'];
+
+  // Calculate discount percentage
+  const getDiscountPercentage = () => {
+    if (!service.originalPrice || service.originalPrice <= service.price) return null;
+    return Math.round(((service.originalPrice - service.price) / service.originalPrice) * 100);
+  };
+
+  const discount = getDiscountPercentage();
+
+  const serviceFaqs = getServiceFaqs(service);
 
   return (
-    <div className="container mx-auto px-4 py-16 bg-gradient-to-r from-[#FAD9C1] to-[#A3BFF3] min-h-screen" style={{ color: "#000" }}>
-      {/* ...default JSX... */}
-    </div>
+    <>
+      <style jsx global>{`
+        *::-webkit-scrollbar {
+          display: none !important;
+          height: 0 !important;
+          width: 0 !important;
+          background: transparent !important;
+        }
+        * {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+        }
+      `}</style>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-start py-6 px-2 md:px-0 mt-8">
+        {/* Main Service Section with Fixed Left and Scrollable Right */}
+        <div className="max-w-7xl w-full flex flex-col lg:flex-row gap-8 relative">
+          {/* Left: Fixed Image Section */}
+          <div className="lg:w-1/2 lg:sticky lg:top-8 lg:self-start flex flex-col items-center">
+            <div className="w-full rounded-xl overflow-hidden bg-[#f7f5ed] flex items-center justify-center mb-3" style={{ aspectRatio: '1/1', maxWidth: 400 }}>
+              <Image
+                src={serviceImages[selectedImage]}
+                alt={service.title}
+                width={380}
+                height={380}
+                className="object-cover w-full h-full"
+                priority
+              />
+            </div>
+            <div className="flex flex-row gap-2 w-full overflow-x-auto pb-2 justify-center">
+              {serviceImages.map((img, idx) => (
+                <button
+                  key={`${img}-${idx}`}
+                  onClick={() => setSelectedImage(idx)}
+                  className={`rounded-lg border-2 ${selectedImage === idx ? 'border-black' : 'border-transparent'} overflow-hidden focus:outline-none`}
+                  style={{ minWidth: 64, minHeight: 64 }}
+                >
+                  <Image src={img} alt={service.title} width={64} height={64} className="object-cover w-full h-full" />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Scrollable Service Info Section */}
+          <div className="lg:w-1/2 flex flex-col gap-4 lg:max-h-screen lg:overflow-y-auto lg:pr-4" style={{ scrollbarWidth: 'thin' }}>
+            <h1 className="text-2xl md:text-3xl font-semibold text-[#23244a]" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{service.title}</h1>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-[#FFD700] text-lg">&#9733;</span>
+              <span className="text-base font-medium text-[#23244a]">{service.rating}</span>
+              <span className="text-sm text-[#23244a]">({service.reviewsCount} reviews)</span>
+            </div>
+            <div className="flex gap-2 mt-2">
+              <span className="px-3 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{service.category}</span>
+              <span className="px-3 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{service.consultationType}</span>
+              <span className="px-3 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">{service.duration}</span>
+            </div>
+            <div className="flex items-end gap-3 mt-3">
+              <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>₹{service.price}</span>
+              {service.originalPrice && service.originalPrice > service.price && (
+                <>
+                  <span className="text-base text-gray-400 line-through">₹{service.originalPrice}</span>
+                  {discount && <span className="text-base font-semibold text-green-700">{discount}% OFF</span>}
+                </>
+              )}
+            </div>
+            {service.discount && service.discount !== 'Free' && (
+              <div className="text-red-600 font-medium text-sm mt-1">
+                {service.discount} - Limited time offer!
+              </div>
+            )}
+            
+            <div className="text-xs text-gray-600 mt-1">
+              {service.ordersCount} consultations booked • Highly rated astrologers
+            </div>
+            
+            {/* Service Stats */}
+            <div className="mt-3 bg-gray-100 rounded-lg p-3 flex flex-col gap-2">
+              <span className="text-xs font-medium text-[#23244a]">SERVICE DETAILS</span>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <FaClock className="text-purple-500" />
+                  <span>Duration: {service.duration}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaVideo className="text-green-500" />
+                  <span>{service.consultationType}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaStar className="text-yellow-500" />
+                  <span>Rating: {service.rating}/5</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaShoppingCart className="text-blue-500" />
+                  <span>{service.ordersCount} bookings</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Book Now Button */}
+            <div className="flex gap-3 mt-5">
+              <UniversalCartButton
+                productId={service.id}
+                productName={service.title}
+                price={service.price}
+                className="flex-1 bg-black text-white py-3 rounded-md font-semibold text-base hover:bg-[#23244a] transition"
+              >
+                BOOK CONSULTATION
+              </UniversalCartButton>
+              <button className="flex-1 bg-yellow-400 text-black py-3 rounded-md font-semibold text-base hover:bg-yellow-500 transition">BOOK NOW</button>
+            </div>
+
+            {/* Service Description Dropdown */}
+            <div className="mt-6 border border-gray-200 rounded-lg">
+              <button
+                className="w-full text-left p-4 font-medium text-[#23244a] cursor-pointer text-base focus:outline-none flex justify-between items-center hover:bg-gray-50"
+                onClick={() => setDescriptionOpen(!descriptionOpen)}
+                aria-expanded={descriptionOpen}
+              >
+                <span className="font-semibold">Service Description</span>
+                <span className={`ml-2 transition-transform text-lg ${descriptionOpen ? 'rotate-90' : ''}`}>▶</span>
+              </button>
+              <AnimatePresence initial={false}>
+                {descriptionOpen && (
+                  <motion.div
+                    key="description-content"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-4 pt-0 border-t border-gray-100">
+                      <div 
+                        className="service-description"
+                        style={{
+                          fontSize: '14px',
+                          lineHeight: '1.6',
+                          color: '#374151'
+                        }}
+                        dangerouslySetInnerHTML={{ 
+                          __html: service.detailedDescription || getDefaultDetailedDescription(service)
+                        }}
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+
+        {/* Service Sections and Additional Content */}
+        <div className="max-w-7xl w-full mt-12 space-y-8">
+          {/* Service Assurance Bar */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <FaClock className="text-blue-500" />
+                <span>Quick & Expert Consultation</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaStar className="text-yellow-500" />
+                <span>5-Star Rated Astrologers</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaShieldAlt className="text-green-500" />
+                <span>100% Confidential</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaVideo className="text-purple-500" />
+                <span>Online & Offline Available</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ProductAssuranceBar */}
+          <div className="w-full flex justify-center px-2 md:px-0 my-8">
+            <div className="max-w-5xl w-full bg-[#F9F6F2] rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div className="py-8 md:py-12 px-4 md:px-8">
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-6 md:mb-10 text-black text-center tracking-wide uppercase" style={{ fontFamily: 'Playfair Display, serif', letterSpacing: '0.08em' }}>
+                  OUR CONSULTATION PROMISE
+                </h2>
+                <div className="flex flex-col md:flex-row w-full justify-between items-stretch gap-4 md:gap-8">
+                  {/* CONSULTATION */}
+                  <div className="flex flex-col items-center flex-1 min-w-0 mb-8 md:mb-0">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-6 h-6 md:w-8 md:h-8">
+                        <svg width="32" height="32" fill="none" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" stroke="#FFD600" strokeWidth="1.5" fill="none"/><path d="M10 22h12M16 10v12" stroke="#FFD600" strokeWidth="1.2"/></svg>
+                      </div>
+                      <div className="mt-2 md:mt-3 text-base md:text-lg font-bold text-black tracking-wide uppercase" style={{ fontFamily: 'Playfair Display, serif', letterSpacing: '0.08em' }}>CONSULTATION</div>
+                      <div className="mt-2 mb-4 text-black w-full text-sm md:text-base">
+                        <ul className="list-disc ml-6 text-base" style={{fontFamily: 'Lora, Georgia, serif', color: 'black'}}>
+                          <li>Expert Vedic astrologers</li>
+                          <li>Personalized guidance</li>
+                        </ul>
+                      </div>
+                      <a href="/about" className="mt-auto px-4 md:px-6 py-2 border border-black text-black rounded transition hover:bg-black hover:text-white text-xs md:text-sm font-medium" style={{minWidth:100, fontFamily: 'Inter, Montserrat, Playfair Display, Arial, sans-serif'}}>
+                        Learn More
+                      </a>
+                    </div>
+                  </div>
+                  {/* Separator */}
+                  <div className="hidden md:flex items-center" style={{height:180, width:0}}>
+                    <div className="h-32 border-r" style={{borderColor: '#FFD600'}} />
+                  </div>
+                  {/* PRIVACY */}
+                  <div className="flex flex-col items-center flex-1 min-w-0 mb-8 md:mb-0">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-6 h-6 md:w-8 md:h-8">
+                        <svg width="32" height="32" fill="none" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" stroke="#FFD600" strokeWidth="1.5" fill="none"/><rect x="12" y="12" width="8" height="8" stroke="#FFD600" strokeWidth="1.2" fill="none"/></svg>
+                      </div>
+                      <div className="mt-2 md:mt-3 text-base md:text-lg font-bold text-black tracking-wide uppercase" style={{ fontFamily: 'Playfair Display, serif', letterSpacing: '0.08em' }}>PRIVACY</div>
+                      <div className="mt-2 mb-4 text-black w-full text-sm md:text-base">
+                        <ul className="list-disc ml-6 text-base" style={{fontFamily: 'Lora, Georgia, serif', color: 'black'}}>
+                          <li>100% Confidential sessions</li>
+                          <li>Secure data protection</li>
+                        </ul>
+                      </div>
+                      <a href="/privacy-policy" className="mt-auto px-4 md:px-6 py-2 border border-black text-black rounded transition hover:bg-black hover:text-white text-xs md:text-sm font-medium" style={{minWidth:100, fontFamily: 'Inter, Montserrat, Playfair Display, Arial, sans-serif'}}>
+                        Learn More
+                      </a>
+                    </div>
+                  </div>
+                  {/* Separator */}
+                  <div className="hidden md:flex items-center" style={{height:180, width:0}}>
+                    <div className="h-32 border-r" style={{borderColor: '#FFD600'}} />
+                  </div>
+                  {/* SUPPORT */}
+                  <div className="flex flex-col items-center flex-1 min-w-0 mb-8 md:mb-0">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-6 h-6 md:w-8 md:h-8">
+                        <svg width="32" height="32" fill="none" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" stroke="#FFD600" strokeWidth="1.5" fill="none"/><path d="M10 18l3.5 3.5L22 13" stroke="#FFD600" strokeWidth="1.5" fill="none"/></svg>
+                      </div>
+                      <div className="mt-2 md:mt-3 text-base md:text-lg font-bold text-black tracking-wide uppercase" style={{ fontFamily: 'Playfair Display, serif', letterSpacing: '0.08em' }}>SUPPORT</div>
+                      <div className="mt-2 mb-4 text-black w-full text-sm md:text-base">
+                        <ul className="list-disc ml-6 text-base" style={{fontFamily: 'Lora, Georgia, serif', color: 'black'}}>
+                          <li>24/7 customer support</li>
+                          <li>Follow-up guidance</li>
+                        </ul>
+                      </div>
+                      <a href="/contact" className="mt-auto px-4 md:px-6 py-2 border border-black text-black rounded transition hover:bg-black hover:text-white text-xs md:text-sm font-medium" style={{minWidth:100, fontFamily: 'Inter, Montserrat, Playfair Display, Arial, sans-serif'}}>
+                        Contact Us
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Service Quality Assurance */}
+          <div className="w-full flex justify-center px-2 md:px-0 my-8">
+            <div className="max-w-5xl w-full bg-[#F9F6F2] rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div className="py-8 md:py-12 px-4 md:px-8">
+                {/* Mobile: 2 rows (3+2), Desktop: 1 row */}
+                <div className="w-full">
+                  {/* Mobile layout */}
+                  <div className="flex flex-col gap-6 md:hidden">
+                    <div className="flex w-full justify-between items-center">
+                      <div className="flex flex-col items-center">
+                        <div className="w-12 h-12 flex items-center justify-center">
+                          <FaRegStar className="text-2xl text-[#FFD600]" />
+                        </div>
+                        <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>EXPERT<br/>GUIDANCE</span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="w-12 h-12 flex items-center justify-center">
+                          <FaShieldAlt className="text-2xl text-[#FFD600]" />
+                        </div>
+                        <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>AUTHENTIC<br/>VEDIC</span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="w-12 h-12 flex items-center justify-center">
+                          <FaRegHeart className="text-2xl text-[#FFD600]" />
+                        </div>
+                        <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>PERSONALIZED<br/>APPROACH</span>
+                      </div>
+                    </div>
+                    <div className="flex w-full justify-center gap-16">
+                      <div className="flex flex-col items-center">
+                        <div className="w-12 h-12 flex items-center justify-center">
+                          <FaClock className="text-2xl text-[#FFD600]" />
+                        </div>
+                        <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>TIMELY<br/>SESSIONS</span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="w-12 h-12 flex items-center justify-center">
+                          <FaVideo className="text-2xl text-[#FFD600]" />
+                        </div>
+                        <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>ONLINE &<br/>OFFLINE</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Desktop layout - consistent with mobile */}
+                  <div className="hidden md:flex w-full justify-between items-center">
+                    <div className="flex flex-col items-center">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <FaRegStar className="text-2xl text-[#FFD600]" />
+                      </div>
+                      <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>EXPERT<br/>GUIDANCE</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <FaShieldAlt className="text-2xl text-[#FFD600]" />
+                      </div>
+                      <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>AUTHENTIC<br/>VEDIC</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <FaRegHeart className="text-2xl text-[#FFD600]" />
+                      </div>
+                      <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>PERSONALIZED<br/>APPROACH</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <FaClock className="text-2xl text-[#FFD600]" />
+                      </div>
+                      <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>TIMELY<br/>SESSIONS</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <FaVideo className="text-2xl text-[#FFD600]" />
+                      </div>
+                      <span className="mt-3 text-sm font-bold text-black tracking-wide uppercase text-center" style={{letterSpacing: '0.08em', fontFamily: 'Playfair Display, serif'}}>ONLINE &<br/>OFFLINE</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* FAQs Section */}
+          {serviceFaqs.length > 0 && (
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h2 className="text-2xl font-bold text-[#23244a] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+                Frequently Asked Questions
+              </h2>
+              <div className="space-y-4">
+                {serviceFaqs.map((faq, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg">
+                    <button
+                      className="w-full text-left p-4 font-medium text-[#23244a] cursor-pointer focus:outline-none flex justify-between items-center hover:bg-gray-50"
+                      onClick={() => {
+                        const newOpenFaqs = new Set(openFaqs);
+                        if (newOpenFaqs.has(index)) {
+                          newOpenFaqs.delete(index);
+                        } else {
+                          newOpenFaqs.add(index);
+                        }
+                        setOpenFaqs(newOpenFaqs);
+                      }}
+                      aria-expanded={openFaqs.has(index)}
+                    >
+                      <span>{faq.question}</span>
+                      <span className={`ml-2 transition-transform ${openFaqs.has(index) ? 'rotate-90' : ''}`}>▶</span>
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {openFaqs.has(index) && (
+                        <motion.div
+                          key="faq-content"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-4 pt-0 border-t border-gray-100">
+                            <p className="text-gray-600">{faq.answer}</p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Related Services */}
+          <RelatedServices 
+            currentServiceId={service.id}
+            category={service.category}
+            title="Related Services"
+            maxItems={4}
+            className="mt-8"
+          />
+        </div>
+      </div>
+    </>
   );
 }
