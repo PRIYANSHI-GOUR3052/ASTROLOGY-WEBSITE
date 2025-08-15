@@ -266,7 +266,7 @@ export default function AllProductsPage() {
 
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = products.filter(product => {
+    const filtered = products.filter(product => {
       // Search filter
       if (searchQuery) {
         const searchLower = searchQuery.toLowerCase();
@@ -316,27 +316,28 @@ export default function AllProductsPage() {
       return true;
     });
 
-    // Sort products
+    // Sort products (create a copy to avoid mutating the filtered array)
+    const sorted = [...filtered];
     switch (sortOption) {
       case "price-low":
-        filtered.sort((a, b) => getPriceValue(a.price) - getPriceValue(b.price));
+        sorted.sort((a, b) => getPriceValue(a.price) - getPriceValue(b.price));
         break;
       case "price-high":
-        filtered.sort((a, b) => getPriceValue(b.price) - getPriceValue(a.price));
+        sorted.sort((a, b) => getPriceValue(b.price) - getPriceValue(a.price));
         break;
       case "name":
-        filtered.sort((a, b) => a.title.localeCompare(b.title));
+        sorted.sort((a, b) => a.title.localeCompare(b.title));
         break;
       case "newest":
         // Assuming newer products have higher IDs
-        filtered.sort((a, b) => b.id.localeCompare(a.id));
+        sorted.sort((a, b) => b.id.localeCompare(a.id));
         break;
       default:
         // Featured/default sorting
         break;
     }
 
-    return filtered;
+    return sorted;
   }, [searchQuery, filters, sortOption]);
 
   // Pagination
