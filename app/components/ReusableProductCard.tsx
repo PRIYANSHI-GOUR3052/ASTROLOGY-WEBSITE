@@ -204,12 +204,12 @@ export const ReusableProductCard = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       className={cn(
-        "group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden",
+        "group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden h-full flex flex-col",
         className
       )}
     >
       {/* Image Section */}
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden flex-shrink-0">
         <Link href={`/shop/${product.slug}`}>
           <Image
             src={product.image || "/images/placeholder.jpg"}
@@ -268,41 +268,43 @@ export const ReusableProductCard = ({
       </div>
       
       {/* Content Section */}
-      <CardContent className="p-4">
+      <CardContent className="p-4 flex-1 flex flex-col">
         <Link href={`/shop/${product.slug}`}>
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors">
+          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors min-h-[3rem]">
             {product.title}
           </h3>
         </Link>
         
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+        <p className="text-sm text-gray-600 line-clamp-2 mb-3 min-h-[2.5rem]">
           {product.description}
         </p>
         
         {/* Rating */}
-        {product.rating && (
-          <div className="flex items-center mb-3">
+        <div className="mb-3 min-h-[1.5rem]">
+          {product.rating && (
             <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={cn(
-                    "w-4 h-4",
-                    i < Math.floor(product.rating!) 
-                      ? "text-yellow-400 fill-yellow-400" 
-                      : "text-gray-300"
-                  )}
-                />
-              ))}
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={cn(
+                      "w-4 h-4",
+                      i < Math.floor(product.rating!) 
+                        ? "text-yellow-400 fill-yellow-400" 
+                        : "text-gray-300"
+                    )}
+                  />
+                ))}
+              </div>
+              <span className="text-xs text-gray-500 ml-2">
+                ({product.rating}) {product.reviewCount && `• ${product.reviewCount} reviews`}
+              </span>
             </div>
-            <span className="text-xs text-gray-500 ml-2">
-              ({product.rating}) {product.reviewCount && `• ${product.reviewCount} reviews`}
-            </span>
-          </div>
-        )}
+          )}
+        </div>
         
         {/* Price */}
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center space-x-2">
             <span className="text-lg font-bold text-gray-900">{product.price}</span>
             {product.originalPrice && (
@@ -315,7 +317,7 @@ export const ReusableProductCard = ({
       </CardContent>
 
       {/* Footer with Cart Button */}
-      <CardFooter className="p-4 pt-0">
+      <CardFooter className="p-4 pt-2">
         <UniversalCartButton
           productId={product.id}
           productName={product.title}
