@@ -20,8 +20,23 @@ import { CTASection } from '@/app/components/CTASection';
 import RelatedServices from '@/app/components/RelatedServices';
 import Link from 'next/link';
 
+// Define Service interface
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  slug: string;
+  price: number;
+  originalPrice?: number;
+  duration: string;
+  consultationType: string;
+  features?: string[];
+  images?: string[];
+  category?: string;
+}
+
 // Generic FAQs for services
-const getServiceFaqs = (service: any) => [
+const getServiceFaqs = (service: Service) => [
   {
     question: `What is ${service.title} and what are its benefits?`,
     answer: `${service.title} is ${service.description}. This consultation provides personalized guidance based on ancient Vedic astrology principles to help you make informed decisions about your life.`,
@@ -52,34 +67,18 @@ const getServiceFaqs = (service: any) => [
   },
 ];
 
-interface ServiceContent {
-  title: string;
-  description: string;
-  benefits: string[];
-  price: string;
-  consultationDetails?: string;
-  additionalInfo?: string;
-  stats?: { label: string; value: string }[];
-  astrologer?: {
-    name: string;
-    photo: string;
-    credentials: string;
-    bio: string;
-  };
-  faqs?: { question: string; answer: string }[];
-}
-
 export default function ServicePage({ params }: { params: { slug: string } }) {
-  const service = getServiceBySlug(params.slug);
-  if (!service) return notFound();
-
+  // Move all hooks to the top before any conditional returns
   const [selectedImage, setSelectedImage] = useState(0);
   const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
   const [descriptionOpen, setDescriptionOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Overview');
 
+  const service = getServiceBySlug(params.slug);
+  if (!service) return notFound();
+
   // Helper function for default detailed description
-  const getDefaultDetailedDescription = (service: any) => {
+  const getDefaultDetailedDescription = (service: Service) => {
     return `
       <div style="color: #374151; line-height: 1.8;">
         <h3 style="font-size: 1.5rem; font-weight: 600; color: #23244a; margin-bottom: 1rem; font-family: 'Playfair Display', serif;">About ${service.title}</h3>

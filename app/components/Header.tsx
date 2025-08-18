@@ -716,60 +716,37 @@ export function Header() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.15, ease: "easeOut" }}
-                  className="absolute left-1/2 -translate-x-1/2 mt-2 w-64 rounded-lg shadow-lg border border-gray-200 z-50 py-2"
+                  className="absolute left-1/2 -translate-x-1/2 mt-2 rounded-lg shadow-lg border border-gray-200 z-50 px-4 py-3"
                   style={{ background: '#FEFBF2' }}
                   tabIndex={-1}
                   onKeyDown={e => { if (e.key === 'Escape') setIsShopDropdownOpen(false); }}
                 >
-                  <Link
-                    href="/shop"
-                    onClick={() => setIsShopDropdownOpen(false)}
-                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
-                    style={{ fontFamily: 'Playfair Display, serif' }}
-                  >
-                    🏪 Shop Home
-                  </Link>
-                  <Link
-                    href="/shop/all-products"
-                    onClick={() => setIsShopDropdownOpen(false)}
-                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
-                    style={{ fontFamily: 'Playfair Display, serif' }}
-                  >
-                    🔍 All Products
-                  </Link>
-                  <Link
-                    href="/shop/categories"
-                    onClick={() => setIsShopDropdownOpen(false)}
-                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
-                    style={{ fontFamily: 'Playfair Display, serif' }}
-                  >
-                    📂 Browse Categories
-                  </Link>
-                  <hr className="my-2 border-gray-200" />
-                  <Link
-                    href="/shop/category/gemstones-crystals"
-                    onClick={() => setIsShopDropdownOpen(false)}
-                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                    style={{ fontFamily: 'Playfair Display, serif' }}
-                  >
-                    💎 Gemstones & Crystals
-                  </Link>
-                  <Link
-                    href="/shop/category/rudraksha-malas"
-                    onClick={() => setIsShopDropdownOpen(false)}
-                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                    style={{ fontFamily: 'Playfair Display, serif' }}
-                  >
-                    📿 Rudraksha & Malas
-                  </Link>
-                  <Link
-                    href="/shop/category/spiritual-jewelry"
-                    onClick={() => setIsShopDropdownOpen(false)}
-                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                    style={{ fontFamily: 'Playfair Display, serif' }}
-                  >
-                    💍 Spiritual Jewelry
-                  </Link>
+                  <div className="flex flex-nowrap items-stretch gap-2">
+                    <Link
+                      href="/shop"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                      className="px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-md transition-colors whitespace-nowrap"
+                      style={{ fontFamily: 'Playfair Display, serif' }}
+                    >
+                      🏪 Home
+                    </Link>
+                    <Link
+                      href="/shop/categories"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                      className="px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-md transition-colors whitespace-nowrap"
+                      style={{ fontFamily: 'Playfair Display, serif' }}
+                    >
+                      📂 Categories
+                    </Link>
+                    <Link
+                      href="/shop/all-products"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                      className="px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-md transition-colors whitespace-nowrap"
+                      style={{ fontFamily: 'Playfair Display, serif' }}
+                    >
+                      🔍 All Products
+                    </Link>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

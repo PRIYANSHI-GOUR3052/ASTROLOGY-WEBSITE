@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../contexts/useLanguage';
-import { ProductServiceCard } from './UniversalServiceGrid';
+import { ProductServiceCard } from './ProductServiceCard';
 
 const productKeys = [
   'dhanYogBracelet',

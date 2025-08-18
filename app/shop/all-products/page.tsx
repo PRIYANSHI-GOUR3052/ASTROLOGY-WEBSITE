@@ -49,11 +49,11 @@ const getPriceValue = (priceStr: string): number => {
 
 // Banner Component
 const AllProductsBanner = () => (
-  <div className="relative w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-16 md:py-24 overflow-hidden">
+  <div className="relative w-full bg-gradient-to-br from-indigo-900 via-green-900 to-emerald-900 py-16 md:py-24 overflow-hidden">
     {/* Animated background elements */}
     <div className="absolute inset-0">
       <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-amber-300/10 to-yellow-300/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-purple-300/10 to-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+  <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-green-300/10 to-emerald-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-r from-blue-300/10 to-cyan-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
     </div>
 
@@ -137,7 +137,7 @@ const AllProductsBanner = () => (
           </motion.div>
           
           <motion.div
-            className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-xl shadow-lg"
+            className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-xl shadow-lg"
             animate={{ rotate: -360 }}
             transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
           >
@@ -199,7 +199,7 @@ const FilterSidebar = ({
               {activeFiltersCount > 0 && (
                 <button
                   onClick={onClearFilters}
-                  className="text-sm text-purple-600 hover:text-purple-800 font-medium"
+                  className="text-sm text-green-800 hover:text-green-900 font-medium"
                 >
                   Clear all ({activeFiltersCount})
                 </button>
@@ -219,7 +219,7 @@ const FilterSidebar = ({
                           type="checkbox"
                           checked={filters[category]?.includes(option) || false}
                           onChange={() => onFilterChange(category, option)}
-                          className="mr-3 h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                          className="mr-3 h-4 w-4 text-green-700 border-gray-300 rounded focus:ring-green-600"
                         />
                         <span className="text-sm text-gray-700">{option}</span>
                       </label>
@@ -420,7 +420,7 @@ export default function AllProductsPage() {
                     setSearchQuery(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
                 />
               </div>
 
@@ -435,7 +435,7 @@ export default function AllProductsPage() {
                     <Filter className="w-4 h-4" />
                     Filters
                     {getActiveFiltersCount() > 0 && (
-                      <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                      <span className="bg-green-800 text-white text-xs px-2 py-1 rounded-full">
                         {getActiveFiltersCount()}
                       </span>
                     )}
@@ -453,7 +453,7 @@ export default function AllProductsPage() {
                     <button
                       onClick={() => setViewMode("grid")}
                       className={`p-2 rounded-md transition-colors ${
-                        viewMode === "grid" ? "bg-white shadow-sm text-purple-600" : "text-gray-600 hover:text-gray-800"
+                        viewMode === "grid" ? "bg-white shadow-sm text-green-700" : "text-gray-600 hover:text-gray-800"
                       }`}
                     >
                       <Grid3X3 className="w-4 h-4" />
@@ -461,7 +461,7 @@ export default function AllProductsPage() {
                     <button
                       onClick={() => setViewMode("list")}
                       className={`p-2 rounded-md transition-colors ${
-                        viewMode === "list" ? "bg-white shadow-sm text-purple-600" : "text-gray-600 hover:text-gray-800"
+                        viewMode === "list" ? "bg-white shadow-sm text-green-700" : "text-gray-600 hover:text-gray-800"
                       }`}
                     >
                       <List className="w-4 h-4" />
@@ -472,7 +472,7 @@ export default function AllProductsPage() {
                   <select
                     value={sortOption}
                     onChange={(e) => setSortOption(e.target.value as SortOption)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent bg-white"
                   >
                     <option value="featured">Featured</option>
                     <option value="price-low">Price: Low to High</option>
@@ -492,12 +492,12 @@ export default function AllProductsPage() {
                       values.map(value => (
                         <span
                           key={`${category}-${value}`}
-                          className="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium"
+                          className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium"
                         >
                           {value}
                           <button
                             onClick={() => toggleFilter(category, value)}
-                            className="ml-2 text-purple-600 hover:text-purple-800"
+                            className="ml-2 text-green-700 hover:text-green-900"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -547,7 +547,7 @@ export default function AllProductsPage() {
                 </p>
                 <button
                   onClick={clearAllFilters}
-                  className="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors"
+                  className="bg-green-800 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-900 transition-colors"
                 >
                   Clear all filters
                 </button>
@@ -578,7 +578,7 @@ export default function AllProductsPage() {
                         onClick={() => setCurrentPage(page)}
                         className={`px-4 py-2 rounded-lg transition-colors ${
                           currentPage === page
-                            ? "bg-purple-600 text-white"
+                            ? "bg-green-800 text-white"
                             : "border border-gray-300 hover:bg-gray-50"
                         }`}
                       >

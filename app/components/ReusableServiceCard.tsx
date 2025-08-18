@@ -176,7 +176,7 @@ export const ReusableServiceCard = ({
               )}
               
               <Link href={`/services/${service.slug}`}>
-                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
+                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors">
                   {service.title}
                 </h3>
               </Link>
@@ -246,7 +246,7 @@ export const ReusableServiceCard = ({
                 productName={service.title}
                 price={service.price}
                 isService={true}
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors"
+                className="bg-green-800 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-900 transition-colors"
               >
                 Book Now
               </UniversalCartButton>
@@ -332,7 +332,7 @@ export const ReusableServiceCard = ({
       {/* Content Section */}
       <CardContent className="p-4">
         <Link href={`/services/${service.slug}`}>
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
+          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors">
             {service.title}
           </h3>
         </Link>
@@ -402,7 +402,7 @@ export const ReusableServiceCard = ({
           productName={service.title}
           price={service.price}
           isService={true}
-          className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-green-800 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={service.availability === 'offline'}
         >
           <Calendar className="w-4 h-4 mr-2" />

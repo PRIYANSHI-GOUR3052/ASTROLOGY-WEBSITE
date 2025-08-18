@@ -136,7 +136,7 @@ export const ReusableProductCard = ({
               )}
               
               <Link href={`/shop/${product.slug}`}>
-                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
+                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors">
                   {product.title}
                 </h3>
               </Link>
@@ -184,7 +184,7 @@ export const ReusableProductCard = ({
                 productName={product.title}
                 price={priceValue}
                 image={product.image || "/images/placeholder.jpg"}
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors"
+                className="bg-green-800 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-900 transition-colors"
               >
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 Add to Cart
@@ -270,7 +270,7 @@ export const ReusableProductCard = ({
       {/* Content Section */}
       <CardContent className="p-4">
         <Link href={`/shop/${product.slug}`}>
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
+          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors">
             {product.title}
           </h3>
         </Link>
@@ -321,7 +321,7 @@ export const ReusableProductCard = ({
           productName={product.title}
           price={priceValue}
           image={product.image || "/images/placeholder.jpg"}
-          className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-green-800 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={product.inStock === false}
         >
           <ShoppingCart className="w-4 h-4 mr-2" />

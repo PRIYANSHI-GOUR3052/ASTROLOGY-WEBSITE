@@ -7,7 +7,7 @@ import { getProductById, products } from '../../../data/products';
 import { UniversalCartButton } from '../../components/UniversalCartButton';
 import ProductAssuranceBar from '../../components/ProductAssuranceBar';
 import ProductPurchaseInfo from '../../components/ProductPurchaseInfo';
-import { ProductServiceCard } from "../../components/UniversalServiceGrid";
+import { ProductServiceCard } from "../../components/ProductServiceCard";
 import ServiceCarousels from '../../components/ServiceCarousels';
 import NakshatraGyaanBanner from '../../components/NakshatraGyaanBanner';
 import SpiritualJourneyBanner from '../../components/SpiritualJourneyBanner';

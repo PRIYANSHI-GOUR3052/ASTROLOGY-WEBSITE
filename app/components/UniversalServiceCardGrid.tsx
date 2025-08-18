@@ -27,12 +27,6 @@ export function UniversalServiceCardGrid({
 }: UniversalServiceCardGridProps) {
   const displayServices = services.slice(0, maxCards);
 
-  const handleAddToCart = (service: Service) => {
-    // Add to cart logic here
-    console.log('Adding to cart:', service.title);
-    // You can implement cart logic here
-  };
-
   return (
     <div className={`grid ${gridCols} gap-8 mb-16 ${className}`}>
       {displayServices.map((service, index) => (
@@ -46,7 +40,8 @@ export function UniversalServiceCardGrid({
           index={index}
           price={service.price}
           originalPrice={service.originalPrice}
-          onAddToCart={() => handleAddToCart(service)}
+          productId={service.slug}
+          productName={service.title}
         />
       ))}
     </div>
