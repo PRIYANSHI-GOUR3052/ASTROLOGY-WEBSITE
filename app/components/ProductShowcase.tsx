@@ -91,28 +91,6 @@ export default function ProductShowcase({
 		}
 	}, [currentPage, autoScrollOnPageChange]);
 
-	// Pagination numbers with ellipsis (reuse logic from service showcase)
-	const paginationNumbers = useMemo(() => {
-		const pages: (number | string)[] = [];
-		const maxButtons = 7;
-		if (totalPages <= maxButtons) {
-			for (let i = 1; i <= totalPages; i++) pages.push(i);
-			return pages;
-		}
-		const showLeftEllipsis = currentPage > 4;
-		const showRightEllipsis = currentPage < totalPages - 3;
-		pages.push(1);
-		if (showLeftEllipsis) pages.push('…');
-		const start = showLeftEllipsis ? currentPage - 1 : 2;
-		const end = showRightEllipsis ? currentPage + 1 : totalPages - 1;
-		for (let i = start; i <= end; i++) {
-			if (i > 1 && i < totalPages) pages.push(i);
-		}
-		if (showRightEllipsis) pages.push('…');
-		pages.push(totalPages);
-		return pages;
-	}, [currentPage, totalPages]);
-
 	// Guard: nothing to show - moved after hooks to comply with rules of hooks
 	if (!products || products.length === 0) return null;
 
@@ -134,34 +112,20 @@ export default function ProductShowcase({
 					</div>
 					{totalPages > 1 && (
 						<div className="flex justify-end">
-							<div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-xl px-2 py-1 border border-gray-200 shadow-sm">
+							<div className="flex items-center gap-2">
 								<button
 									onClick={() => handlePageChange(currentPage - 1)}
 									disabled={currentPage === 1}
 									aria-label="Previous page"
-									className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-inner"
+									className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm"
 								>
 									<ArrowLeft className="w-4 h-4" />
 								</button>
-								{paginationNumbers.map((p, idx) => (
-									typeof p === 'number' ? (
-										<button
-											key={p}
-											onClick={() => handlePageChange(p)}
-											aria-current={p === currentPage ? 'page' : undefined}
-											className={`min-w-9 h-9 px-3 rounded-md border text-sm font-medium transition-colors ${p === currentPage ? 'bg-green-800 text-white border-green-800' : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-100 hover:text-black'}`}
-										>
-											{p}
-										</button>
-									) : (
-										<span key={`ellipsis-${idx}`} className="px-2 text-gray-400 select-none">{p}</span>
-									)
-								))}
 								<button
 									onClick={() => handlePageChange(currentPage + 1)}
 									disabled={currentPage === totalPages}
 									aria-label="Next page"
-									className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-inner"
+									className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm"
 								>
 									<ArrowRight className="w-4 h-4" />
 								</button>

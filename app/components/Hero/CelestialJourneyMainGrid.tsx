@@ -14,8 +14,8 @@ import {
 export default function CelestialJourneyMainGrid() {
   return (
     <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-5">
-      {/* Left Tall Card: Cosmic Calendar Carousel */}
-      <div className="lg:col-span-3 xl:col-span-3">
+      {/* Left Tall Card: Cosmic Calendar Carousel - Hidden on mobile */}
+      <div className="hidden lg:block lg:col-span-3 xl:col-span-3">
         <div className="bg-white rounded-xl shadow p-4 flex flex-col gap-2 h-full min-h-[450px] justify-between">
           <Carousel
             opts={{ loop: true, align: "center", skipSnaps: false }}
@@ -46,10 +46,10 @@ export default function CelestialJourneyMainGrid() {
         </div>
       </div>
 
-      {/* Center: Carousel with two small blocks below */}
+      {/* Center: Carousel with two small blocks below - Hidden main carousel on mobile */}
       <div className="lg:col-span-6 flex flex-col gap-5">
-        {/* Center Main: Image-Only Carousel */}
-        <div className="bg-white rounded-xl shadow overflow-hidden w-full max-w-full mx-auto h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] flex items-center justify-center p-4">
+        {/* Center Main: Image-Only Carousel - Hidden on mobile */}
+        <div className="hidden lg:block bg-white rounded-xl shadow overflow-hidden w-full max-w-full mx-auto h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] flex items-center justify-center p-4">
           <Carousel
             opts={{ axis: 'y', loop: true, align: 'center', skipSnaps: false }}
             plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
@@ -79,7 +79,7 @@ export default function CelestialJourneyMainGrid() {
           </Carousel>
         </div>
 
-        {/* Below: Zodiac + Myth blocks */}
+        {/* Below: Zodiac + Myth blocks - Always visible */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-0">
           {/* Zodiac Decoder: Carousel */}
           <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-3">
@@ -142,8 +142,8 @@ export default function CelestialJourneyMainGrid() {
         </div>
       </div>
 
-      {/* Right Tall Card: Spiritual Growth Carousel */}
-      <div className="lg:col-span-3 xl:col-span-3">
+      {/* Right Tall Card: Spiritual Growth Carousel - Hidden on mobile */}
+      <div className="hidden lg:block lg:col-span-3 xl:col-span-3">
         <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-3 h-full min-h-[450px] justify-between">
           <Carousel
             opts={{ loop: true, align: "center", skipSnaps: false }}

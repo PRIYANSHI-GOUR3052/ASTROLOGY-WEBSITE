@@ -33,11 +33,45 @@ export default function ServicesPage() {
     }
     return 0;
   };
-  const showcaseServices = filteredServices.map(s => ({
-    ...s,
-    price: toNumber((s as typeof services[0]).price),
-    originalPrice: (s as typeof services[0]).originalPrice !== undefined ? toNumber((s as typeof services[0]).originalPrice) : undefined,
-  }));
+
+  const getServiceDetails = (slug: string, index: number) => {
+    const consultationTypes = ['Video Call', 'Phone Call', 'In Person'];
+    const durations = ['30 mins', '45 mins', '60 mins', '90 mins'];
+    const ratings = [4.2, 4.5, 4.7, 4.8, 4.9];
+    
+    // Assign specific details based on service type
+    let consultationType = consultationTypes[index % consultationTypes.length];
+    let duration = durations[index % durations.length];
+    let rating = ratings[index % ratings.length];
+    
+    // Customize based on service slug
+    if (slug.includes('puja') || slug.includes('online')) {
+      consultationType = 'Video Call';
+      duration = '60 mins';
+    } else if (slug.includes('kundali') || slug.includes('matching')) {
+      consultationType = 'Video Call';
+      duration = '90 mins';
+    } else if (slug.includes('career') || slug.includes('numerology')) {
+      consultationType = 'Phone Call';
+      duration = '45 mins';
+    }
+    
+    return { consultationType, duration, rating };
+  };
+
+  const showcaseServices = filteredServices.map((s, index) => {
+    const serviceDetails = getServiceDetails(s.slug, index);
+    return {
+      ...s,
+      price: toNumber((s as typeof services[0]).price),
+      originalPrice: (s as typeof services[0]).originalPrice !== undefined ? toNumber((s as typeof services[0]).originalPrice) : undefined,
+      rating: serviceDetails.rating,
+      reviewsCount: Math.floor(Math.random() * 100) + 20,
+      duration: serviceDetails.duration,
+      consultationType: serviceDetails.consultationType,
+      availability: 'available' as const,
+    };
+  });
 
   // Service segmentation:
   // - First 3: static horizontal grid
