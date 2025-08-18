@@ -166,83 +166,146 @@ const FilterSidebar = ({
   activeFiltersCount: number;
   isOpen: boolean;
   onClose: () => void;
-}) => (
-  <AnimatePresence>
-    {isOpen && (
-      <>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={onClose}
-        />
-        <motion.div
-          initial={{ x: -300 }}
-          animate={{ x: 0 }}
-          exit={{ x: -300 }}
-          className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl z-50 lg:relative lg:w-full lg:shadow-none lg:z-auto"
-        >
-          <div className="p-6 h-full overflow-y-auto">
-            <div className="flex items-center justify-between mb-6 lg:hidden">
-              <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-gray-100 rounded-lg"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="hidden lg:flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
-              {activeFiltersCount > 0 && (
-                <button
-                  onClick={onClearFilters}
-                  className="text-sm text-green-800 hover:text-green-900 font-medium"
-                >
-                  Clear all ({activeFiltersCount})
-                </button>
-              )}
-            </div>
+}) => {
+  const [activeTab, setActiveTab] = useState('category');
+  
+  const tabLabels = {
+    category: 'Category',
+    priceRange: 'Price Range',
+    rating: 'Rating'
+  };
 
-            <div className="space-y-6">
-              {Object.entries(filterOptions).map(([category, options]) => (
-                <div key={category} className="border-b border-gray-200 pb-6">
-                  <h4 className="text-sm font-medium text-gray-900 mb-4 capitalize">
-                    {category.replace(/([A-Z])/g, ' $1')}
-                  </h4>
-                  <div className="space-y-2">
-                    {options.map(option => (
-                      <label key={option} className="flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={filters[category]?.includes(option) || false}
-                          onChange={() => onFilterChange(category, option)}
-                          className="mr-3 h-4 w-4 text-green-700 border-gray-300 rounded focus:ring-green-600"
-                        />
-                        <span className="text-sm text-gray-700">{option}</span>
-                      </label>
-                    ))}
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Mobile backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 lg:hidden filter-backdrop"
+            style={{ zIndex: 2147483647 }}
+            onClick={onClose}
+          />
+          {/* Desktop sidebar */}
+          <div className="hidden lg:block">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 h-full overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+                {activeFiltersCount > 0 && (
+                  <button
+                    onClick={onClearFilters}
+                    className="text-sm text-green-800 hover:text-green-900 font-medium"
+                  >
+                    Clear all ({activeFiltersCount})
+                  </button>
+                )}
+              </div>
+              <div className="space-y-6">
+                {Object.entries(filterOptions).map(([category, options]) => (
+                  <div key={category} className="border-b border-gray-200 pb-6">
+                    <h4 className="text-sm font-medium text-gray-900 mb-4 capitalize">
+                      {category.replace(/([A-Z])/g, ' $1')}
+                    </h4>
+                    <div className="space-y-2">
+                      {options.map(option => (
+                        <label key={option} className="flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={filters[category]?.includes(option) || false}
+                            onChange={() => onFilterChange(category, option)}
+                            className="mr-3 h-4 w-4 text-green-700 border-gray-300 rounded focus:ring-green-600"
+                          />
+                          <span className="text-sm text-gray-700">{option}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-
-            {activeFiltersCount > 0 && (
-              <button
-                onClick={onClearFilters}
-                className="mt-6 w-full bg-gray-900 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors lg:hidden"
-              >
-                Clear all filters
-              </button>
-            )}
           </div>
-        </motion.div>
-      </>
-    )}
-  </AnimatePresence>
-);
+          {/* Mobile modal */}
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-xl shadow-xl h-[50vh] lg:hidden filter-modal"
+            style={{ zIndex: 2147483647 }}
+          >
+            <div className="flex flex-col h-full">
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+                <button 
+                  onClick={onClose} 
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors bg-gray-50 border border-gray-300"
+                >
+                  <X className="w-5 h-5 text-gray-700" />
+                </button>
+              </div>
+              
+              {/* Tabs */}
+              <div className="flex border-b border-gray-200 bg-gray-50">
+                {Object.keys(filterOptions).map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setActiveTab(category)}
+                    className={`flex-1 py-3 px-2 text-xs font-medium text-center transition-colors ${
+                      activeTab === category
+                        ? "text-green-800 bg-white border-b-2 border-green-800"
+                        : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    {tabLabels[category as keyof typeof tabLabels]}
+                  </button>
+                ))}
+              </div>
+              
+              {/* Filter Content */}
+              <div className="flex-1 overflow-y-auto p-4">
+                <div className="space-y-3">
+                  {filterOptions[activeTab]?.map(option => (
+                    <label key={option} className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name={activeTab}
+                        checked={filters[activeTab]?.includes(option) || false}
+                        onChange={() => onFilterChange(activeTab, option)}
+                        className="mr-3 h-4 w-4 text-green-700 border-gray-300 focus:ring-green-600"
+                      />
+                      <span className="text-sm text-gray-700">{option}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer with action buttons */}
+              <div className="border-t border-gray-200 p-4">
+                <div className="flex gap-3">
+                  <button
+                    onClick={onClearFilters}
+                    className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  >
+                    Clear All
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="flex-1 py-3 px-4 bg-black text-white rounded-lg font-medium hover:bg-gray-900 transition-colors"
+                  >
+                    Apply Filters
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
 
 export default function AllProductsPage() {
   const [filters, setFilters] = useState<Filters>({});
@@ -373,6 +436,28 @@ export default function AllProductsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Add global style to hide floating elements when modal is open */}
+      {showFilters && (
+        <style jsx global>{`
+          [class*="chatbot"], 
+          [id*="chatbot"], 
+          [class*="chat"], 
+          [id*="chat"],
+          [class*="float"], 
+          [id*="float"],
+          [class*="scroll"], 
+          [id*="scroll"],
+          [class*="back-to-top"], 
+          [id*="back-to-top"],
+          .fixed:not(.filter-modal):not(.filter-backdrop) {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+          }
+        `}</style>
+      )}
+      
       {/* Banner */}
       <AllProductsBanner />
 
