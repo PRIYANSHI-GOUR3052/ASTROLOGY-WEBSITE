@@ -8,6 +8,7 @@ interface ReusableProductGridProps {
   products: Product[];
   viewMode?: 'grid' | 'list';
   columns?: 2 | 3 | 4 | 5;
+  mobileColumns?: 1 | 2;
   gap?: 'sm' | 'md' | 'lg';
   showQuickActions?: boolean;
   showWishlist?: boolean;
@@ -24,6 +25,7 @@ export const ReusableProductGrid = ({
   products,
   viewMode = 'grid',
   columns = 4,
+  mobileColumns = 1,
   gap = 'md',
   showQuickActions = true,
   showWishlist = true,
@@ -41,11 +43,16 @@ export const ReusableProductGrid = ({
       return 'grid grid-cols-1 gap-4';
     }
     
+    const mobileColumnClasses = {
+      1: 'grid-cols-1',
+      2: 'grid-cols-2',
+    };
+    
     const columnClasses = {
-      2: 'grid-cols-1 sm:grid-cols-2',
-      3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-      4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
-      5: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+      2: `${mobileColumnClasses[mobileColumns]} sm:grid-cols-2`,
+      3: `${mobileColumnClasses[mobileColumns]} sm:grid-cols-2 lg:grid-cols-3`,
+      4: `${mobileColumnClasses[mobileColumns]} sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`,
+      5: `${mobileColumnClasses[mobileColumns]} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`,
     };
     
     const gapClasses = {

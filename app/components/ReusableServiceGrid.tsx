@@ -8,6 +8,7 @@ interface ReusableServiceGridProps {
   services: Service[];
   viewMode?: 'grid' | 'list';
   columns?: 2 | 3 | 4 | 5;
+  mobileColumns?: 1 | 2;
   gap?: 'sm' | 'md' | 'lg';
   className?: string;
   loading?: boolean;
@@ -65,6 +66,7 @@ export const ReusableServiceGrid = ({
   services,
   viewMode = 'grid',
   columns = 4,
+  mobileColumns = 1,
   gap = 'md',
   className,
   loading = false,
@@ -78,11 +80,16 @@ export const ReusableServiceGrid = ({
   const getGridClasses = () => {
     if (viewMode === 'list') return 'grid grid-cols-1 gap-4';
 
+    const mobileColumnClasses = {
+      1: 'grid-cols-1',
+      2: 'grid-cols-2',
+    };
+
     const columnClasses: Record<number, string> = {
-      2: 'grid-cols-1 sm:grid-cols-2',
-      3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-      4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
-      5: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+      2: `${mobileColumnClasses[mobileColumns]} sm:grid-cols-2`,
+      3: `${mobileColumnClasses[mobileColumns]} sm:grid-cols-2 lg:grid-cols-3`,
+      4: `${mobileColumnClasses[mobileColumns]} sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`,
+      5: `${mobileColumnClasses[mobileColumns]} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`,
     };
     const gapClasses: Record<string, string> = {
       sm: 'gap-3',

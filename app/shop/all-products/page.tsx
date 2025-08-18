@@ -605,6 +605,7 @@ export default function AllProductsPage() {
               products={paginatedProducts}
               viewMode={viewMode}
               columns={4}
+              mobileColumns={2}
               showQuickActions={true}
               showWishlist={true}
               showCompare={false}

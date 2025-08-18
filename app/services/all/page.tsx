@@ -481,6 +481,7 @@ export default function AllServicesPage() {
                   services={paginatedServices}
                   viewMode={viewMode}
                   columns={4}
+                  mobileColumns={2}
                   loading={loading}
                   loadingCount={12}
                   className="max-w-none"
