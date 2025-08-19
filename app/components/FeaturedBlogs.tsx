@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../contexts/useLanguage';
 import { usePathname } from 'next/navigation';
+import { useState, useRef, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Define proper types for blog data
 interface BlogContent {
@@ -43,6 +45,35 @@ const getBlogUrl = (title: string) => {
 export default function FeaturedBlogs() {
   const { lang, t } = useLanguage();
   const pathname = usePathname();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScrollButtons = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    checkScrollButtons();
+  }, []);
   
   // Check if we're on the blog page
   const isBlogPage = pathname === '/blog';
@@ -61,7 +92,9 @@ export default function FeaturedBlogs() {
           </Link>
         )}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      {/* Desktop View */}
+      <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogs.map((blog, idx) => {
           const safeLang = blog.title[lang] ? lang : 'en';
           return (
@@ -96,6 +129,85 @@ export default function FeaturedBlogs() {
             </motion.div>
           );
         })}
+      </div>
+
+      {/* Mobile View - Horizontal Scroll */}
+      <div className="md:hidden">
+        <div className="relative">
+          {/* Navigation Arrows */}
+          <button
+            onClick={scrollLeft}
+            disabled={!canScrollLeft}
+            className={`absolute left-0 top-32 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
+              canScrollLeft ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+            }`}
+            style={{ marginLeft: '-20px' }}
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-600" />
+          </button>
+          
+          <button
+            onClick={scrollRight}
+            disabled={!canScrollRight}
+            className={`absolute right-0 top-32 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
+              canScrollRight ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+            }`}
+            style={{ marginRight: '-20px' }}
+          >
+            <ChevronRight className="w-5 h-5 text-gray-600" />
+          </button>
+
+          {/* Scrollable Container */}
+          <div
+            ref={scrollContainerRef}
+            onScroll={checkScrollButtons}
+            className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-2"
+            style={{ 
+              scrollSnapType: 'x mandatory', 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          >
+            {blogs.map((blog, idx) => {
+              const safeLang = blog.title[lang] ? lang : 'en';
+              return (
+                <div
+                  key={`mobile-${idx}`}
+                  className="flex-none w-[calc(52%-6px)] min-w-[170px] snap-start"
+                >
+                  <div className="bg-white rounded-xl shadow-lg overflow-hidden h-[300px] flex flex-col">
+                    <div className="relative w-full h-32 flex-shrink-0">
+                      <Image 
+                        src={blog.imageUrl} 
+                        alt={blog.title.en} 
+                        fill 
+                        className="object-cover" 
+                      />
+                    </div>
+                    <div className="p-3 flex flex-col flex-1">
+                      <h3 className="text-sm font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
+                        {blog.title[safeLang]}
+                      </h3>
+                      <div className="text-xs text-gray-500 mb-3 space-y-1">
+                        <div>📅 {blog.date}</div>
+                        <div>⏱ {getReadTime(blog.content[safeLang])} {t('blog.featured.minRead')}</div>
+                      </div>
+                      <div className="mt-auto">
+                        <Link 
+                          href={`/blog/${getBlogUrl(blog.title.en)}`}
+                          className="block w-full px-3 py-2 rounded-lg bg-black text-white text-xs font-semibold text-center hover:bg-gray-800 transition-all"
+                        >
+                          {t('blog.featured.readMore')} →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
