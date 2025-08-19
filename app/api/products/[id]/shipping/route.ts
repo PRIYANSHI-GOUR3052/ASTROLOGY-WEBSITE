@@ -3,60 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// GET shipping details for a product
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const productId = parseInt(params.id);
-    
-    if (isNaN(productId)) {
-      return NextResponse.json(
-        { error: 'Invalid product ID' },
-        { status: 400 }
-      );
-    }
-
-    // Use raw query since Prisma client doesn't recognize product_shipping model
-    const shippingDetails = await prisma.$queryRaw`
-      SELECT 
-        id,
-        product_id,
-        weight,
-        weight_unit,
-        length,
-        width,
-        height,
-        dimension_unit,
-        shipping_class,
-        is_free_shipping,
-        shipping_cost,
-        max_shipping_cost,
-        shipping_zones,
-        created_at,
-        updated_at
-      FROM product_shipping 
-      WHERE product_id = ${productId}
-    ` as any[];
-
-    if (shippingDetails.length === 0) {
-      return NextResponse.json(null);
-    }
-
-    return NextResponse.json(shippingDetails[0]);
-  } catch (error) {
-    console.error('Error fetching product shipping details:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch product shipping details' },
-      { status: 500 }
-    );
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
-// POST create shipping details for a product
+// POST - Create or update product shipping details
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -64,19 +11,6 @@ export async function POST(
   try {
     const productId = parseInt(params.id);
     const body = await request.json();
-    const {
-      weight,
-      weight_unit = 'kg',
-      length,
-      width,
-      height,
-      dimension_unit = 'cm',
-      shipping_class,
-      is_free_shipping = false,
-      shipping_cost,
-      max_shipping_cost,
-      shipping_zones
-    } = body;
 
     if (isNaN(productId)) {
       return NextResponse.json(
@@ -102,65 +36,83 @@ export async function POST(
       SELECT id FROM product_shipping WHERE product_id = ${productId}
     ` as any[];
 
+    let result;
     if (existingShipping.length > 0) {
-      return NextResponse.json(
-        { error: 'Shipping details already exist for this product. Use PUT to update.' },
-        { status: 400 }
-      );
+      // Update existing shipping details
+      result = await prisma.$queryRaw`
+        UPDATE product_shipping 
+        SET 
+          weight = ${body.weight},
+          weight_unit = ${body.weight_unit || 'kg'},
+          length = ${body.length},
+          width = ${body.width},
+          height = ${body.height},
+          dimension_unit = ${body.dimension_unit || 'cm'},
+          shipping_class = ${body.shipping_class},
+          is_free_shipping = ${body.is_free_shipping || false},
+          shipping_cost = ${body.shipping_cost},
+          max_shipping_cost = ${body.max_shipping_cost},
+          shipping_zones = ${body.shipping_zones ? JSON.stringify(body.shipping_zones) : null},
+          updated_at = NOW()
+        WHERE product_id = ${productId}
+      ` as any[];
+
+      // Get the updated record
+      const updatedShipping = await prisma.$queryRaw`
+        SELECT * FROM product_shipping WHERE product_id = ${productId}
+      ` as any[];
+
+      result = updatedShipping[0];
+    } else {
+      // Create new shipping details
+      result = await prisma.$queryRaw`
+        INSERT INTO product_shipping (
+          product_id,
+          weight,
+          weight_unit,
+          length,
+          width,
+          height,
+          dimension_unit,
+          shipping_class,
+          is_free_shipping,
+          shipping_cost,
+          max_shipping_cost,
+          shipping_zones,
+          created_at,
+          updated_at
+        ) VALUES (
+          ${productId},
+          ${body.weight},
+          ${body.weight_unit || 'kg'},
+          ${body.length},
+          ${body.width},
+          ${body.height},
+          ${body.dimension_unit || 'cm'},
+          ${body.shipping_class},
+          ${body.is_free_shipping || false},
+          ${body.shipping_cost},
+          ${body.max_shipping_cost},
+          ${body.shipping_zones ? JSON.stringify(body.shipping_zones) : null},
+          NOW(),
+          NOW()
+        )
+      ` as any[];
+
+      // Get the created record
+      const newShipping = await prisma.$queryRaw`
+        SELECT * FROM product_shipping WHERE product_id = ${productId}
+      ` as any[];
+
+      result = newShipping[0];
     }
 
-    // Create shipping details
-    await prisma.$queryRaw`
-      INSERT INTO product_shipping (
-        product_id, weight, weight_unit, length, width, height, 
-        dimension_unit, shipping_class, is_free_shipping, 
-        shipping_cost, max_shipping_cost, shipping_zones, 
-        created_at, updated_at
-      ) VALUES (
-        ${productId}, 
-        ${weight ? parseFloat(weight) : null}, 
-        ${weight_unit}, 
-        ${length ? parseFloat(length) : null}, 
-        ${width ? parseFloat(width) : null}, 
-        ${height ? parseFloat(height) : null}, 
-        ${dimension_unit}, 
-        ${shipping_class || null}, 
-        ${is_free_shipping}, 
-        ${shipping_cost ? parseFloat(shipping_cost) : null}, 
-        ${max_shipping_cost ? parseFloat(max_shipping_cost) : null}, 
-        ${shipping_zones ? JSON.stringify(shipping_zones) : null}, 
-        NOW(), 
-        NOW()
-      )
-    ` as any[];
+    return NextResponse.json(result);
 
-    // Get the created shipping details
-    const newShippingDetails = await prisma.$queryRaw`
-      SELECT 
-        id,
-        product_id,
-        weight,
-        weight_unit,
-        length,
-        width,
-        height,
-        dimension_unit,
-        shipping_class,
-        is_free_shipping,
-        shipping_cost,
-        max_shipping_cost,
-        shipping_zones,
-        created_at,
-        updated_at
-      FROM product_shipping 
-      WHERE product_id = ${productId}
-    ` as any[];
-
-    return NextResponse.json(newShippingDetails[0], { status: 201 });
   } catch (error) {
-    console.error('Error creating product shipping details:', error);
+    console.error('Error saving product shipping details:', error);
     return NextResponse.json(
-      { error: 'Failed to create product shipping details' },
+      { error: 'Failed to save product shipping details' },
       { status: 500 }
     );
   } finally {
@@ -168,7 +120,7 @@ export async function POST(
   }
 }
 
-// PUT update shipping details for a product
+// PUT - Update product shipping details
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -176,19 +128,6 @@ export async function PUT(
   try {
     const productId = parseInt(params.id);
     const body = await request.json();
-    const {
-      weight,
-      weight_unit,
-      length,
-      width,
-      height,
-      dimension_unit,
-      shipping_class,
-      is_free_shipping,
-      shipping_cost,
-      max_shipping_cost,
-      shipping_zones
-    } = body;
 
     if (isNaN(productId)) {
       return NextResponse.json(
@@ -209,75 +148,59 @@ export async function PUT(
       );
     }
 
-    // Build update query dynamically
-    const updateFields = [];
-    const updateValues = [];
+    // Update shipping details
+    await prisma.$queryRaw`
+      UPDATE product_shipping 
+      SET 
+        weight = ${body.weight},
+        weight_unit = ${body.weight_unit || 'kg'},
+        length = ${body.length},
+        width = ${body.width},
+        height = ${body.height},
+        dimension_unit = ${body.dimension_unit || 'cm'},
+        shipping_class = ${body.shipping_class},
+        is_free_shipping = ${body.is_free_shipping || false},
+        shipping_cost = ${body.shipping_cost},
+        max_shipping_cost = ${body.max_shipping_cost},
+        shipping_zones = ${body.shipping_zones ? JSON.stringify(body.shipping_zones) : null},
+        updated_at = NOW()
+      WHERE product_id = ${productId}
+    ` as any[];
 
-    if (weight !== undefined) {
-      updateFields.push('weight = ?');
-      updateValues.push(weight ? parseFloat(weight) : null);
-    }
-    if (weight_unit !== undefined) {
-      updateFields.push('weight_unit = ?');
-      updateValues.push(weight_unit);
-    }
-    if (length !== undefined) {
-      updateFields.push('length = ?');
-      updateValues.push(length ? parseFloat(length) : null);
-    }
-    if (width !== undefined) {
-      updateFields.push('width = ?');
-      updateValues.push(width ? parseFloat(width) : null);
-    }
-    if (height !== undefined) {
-      updateFields.push('height = ?');
-      updateValues.push(height ? parseFloat(height) : null);
-    }
-    if (dimension_unit !== undefined) {
-      updateFields.push('dimension_unit = ?');
-      updateValues.push(dimension_unit);
-    }
-    if (shipping_class !== undefined) {
-      updateFields.push('shipping_class = ?');
-      updateValues.push(shipping_class);
-    }
-    if (is_free_shipping !== undefined) {
-      updateFields.push('is_free_shipping = ?');
-      updateValues.push(is_free_shipping);
-    }
-    if (shipping_cost !== undefined) {
-      updateFields.push('shipping_cost = ?');
-      updateValues.push(shipping_cost ? parseFloat(shipping_cost) : null);
-    }
-    if (max_shipping_cost !== undefined) {
-      updateFields.push('max_shipping_cost = ?');
-      updateValues.push(max_shipping_cost ? parseFloat(max_shipping_cost) : null);
-    }
-    if (shipping_zones !== undefined) {
-      updateFields.push('shipping_zones = ?');
-      updateValues.push(shipping_zones ? JSON.stringify(shipping_zones) : null);
-    }
+    // Get the updated record
+    const updatedShipping = await prisma.$queryRaw`
+      SELECT * FROM product_shipping WHERE product_id = ${productId}
+    ` as any[];
 
-    updateFields.push('updated_at = NOW()');
+    return NextResponse.json(updatedShipping[0]);
 
-    if (updateFields.length === 0) {
+  } catch (error) {
+    console.error('Error updating product shipping details:', error);
+    return NextResponse.json(
+      { error: 'Failed to update product shipping details' },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// GET - Retrieve product shipping details
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const productId = parseInt(params.id);
+
+    if (isNaN(productId)) {
       return NextResponse.json(
-        { error: 'No fields to update' },
+        { error: 'Invalid product ID' },
         { status: 400 }
       );
     }
 
-    // Update shipping details
-    const updateQuery = `
-      UPDATE product_shipping 
-      SET ${updateFields.join(', ')} 
-      WHERE product_id = ${productId}
-    `;
-
-    await prisma.$executeRawUnsafe(updateQuery, ...updateValues);
-
-    // Get the updated shipping details
-    const updatedShippingDetails = await prisma.$queryRaw`
+    const shippingDetails = await prisma.$queryRaw`
       SELECT 
         id,
         product_id,
@@ -298,11 +221,26 @@ export async function PUT(
       WHERE product_id = ${productId}
     ` as any[];
 
-    return NextResponse.json(updatedShippingDetails[0]);
+    if (shippingDetails.length === 0) {
+      return NextResponse.json(null);
+    }
+
+    // Parse shipping_zones JSON if it exists
+    const result = shippingDetails[0];
+    if (result.shipping_zones) {
+      try {
+        result.shipping_zones = JSON.parse(result.shipping_zones);
+      } catch (e) {
+        result.shipping_zones = null;
+      }
+    }
+
+    return NextResponse.json(result);
+
   } catch (error) {
-    console.error('Error updating product shipping details:', error);
+    console.error('Error fetching product shipping details:', error);
     return NextResponse.json(
-      { error: 'Failed to update product shipping details' },
+      { error: 'Failed to fetch product shipping details' },
       { status: 500 }
     );
   } finally {
@@ -310,14 +248,14 @@ export async function PUT(
   }
 }
 
-// DELETE shipping details for a product
+// DELETE - Remove product shipping details
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const productId = parseInt(params.id);
-    
+
     if (isNaN(productId)) {
       return NextResponse.json(
         { error: 'Invalid product ID' },
@@ -325,15 +263,15 @@ export async function DELETE(
       );
     }
 
-    // Delete shipping details
     await prisma.$queryRaw`
       DELETE FROM product_shipping WHERE product_id = ${productId}
-    `;
+    ` as any[];
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      message: 'Product shipping details deleted successfully' 
+      message: 'Product shipping details deleted successfully'
     });
+
   } catch (error) {
     console.error('Error deleting product shipping details:', error);
     return NextResponse.json(

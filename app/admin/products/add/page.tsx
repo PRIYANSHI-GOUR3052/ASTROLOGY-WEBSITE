@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import StepCategorySelection from "./components/StepCategorySelection";
 import StepProductDetails from "./components/StepProductDetails";
 import StepAttributeMedia from "./components/StepAttribute&Media";
@@ -35,7 +35,6 @@ const initialSEO: SEOData = {
 };
 
 type StockData = {
-  sku: string;
   quantity: number;
   reserved: number;
   min_stock: number;
@@ -47,7 +46,6 @@ type StockData = {
 };
 
 const initialStock: StockData = {
-  sku: '',
   quantity: 0,
   reserved: 0,
   min_stock: 0,
@@ -92,9 +90,22 @@ type ProductFormData = {
   description: string;
   sku: string;
   sellingPrice: string;
-  discountedPrice: string;
+  originalPrice: string;
+  discountPrice: string;
   color: string;
   images: string[];
+  // Auto-pricing fields
+  productType: string;
+  weight?: string;
+  carats?: string;
+  quantity?: string;
+  quality?: string;
+  clarity?: string;
+  mukhi?: string;
+  material?: string;
+  perCaratPrice?: string;
+  perGramPrice?: string;
+  perPiecePrice?: string;
 };
 
 type Errors = Partial<Record<keyof ProductFormData, string>>;
@@ -106,9 +117,22 @@ const initialFormData: ProductFormData = {
   description: "",
   sku: "",
   sellingPrice: "",
-  discountedPrice: "",
+  originalPrice: "",
+  discountPrice: "",
   color: '',
   images: [],
+  // Auto-pricing fields
+  productType: "",
+  weight: "",
+  carats: "",
+  quantity: "",
+  quality: "",
+  clarity: "",
+  mukhi: "",
+  material: "",
+  perCaratPrice: "",
+  perGramPrice: "",
+  perPiecePrice: "",
 };
 
 const steps = [
@@ -122,6 +146,7 @@ const steps = [
 
 export default function AddProductPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [media, setMedia] = useState<File[]>([]);
   const [formData, setFormData] = useState<ProductFormData>(initialFormData);
@@ -130,13 +155,67 @@ export default function AddProductPage() {
   const [errors, setErrors] = useState<Errors>({});
   const [stock, setStock] = useState<StockData>(initialStock);
   const [createdProductId, setCreatedProductId] = useState<number | undefined>(undefined);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editProductId, setEditProductId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  
+  // Check if we're in edit mode
+  useEffect(() => {
+    const editId = searchParams?.get('edit');
+    if (editId) {
+      setIsEditMode(true);
+      setEditProductId(parseInt(editId));
+      setCreatedProductId(parseInt(editId));
+      // Load product data for editing
+      loadProductForEdit(parseInt(editId));
+    }
+  }, [searchParams]);
+  
+  const loadProductForEdit = async (productId: number) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/products/${productId}`);
+      if (response.ok) {
+        const product = await response.json();
+        // Populate form with existing product data
+        setFormData({
+          zodiacSign: product.zodiac_id?.toString() || null,
+          categoryId: product.category_id,
+          name: product.name,
+          description: product.description,
+          sku: product.sku || '',
+          sellingPrice: product.price?.toString() || '',
+          originalPrice: product.original_price?.toString() || '',
+          discountPrice: product.discount_price?.toString() || '',
+          color: product.color || '',
+          images: product.image_url ? [product.image_url] : [],
+          // Auto-pricing fields
+          productType: product.product_type || '',
+          weight: product.weight?.toString() || '',
+          carats: product.carats?.toString() || '',
+          quantity: product.quantity?.toString() || '',
+          quality: product.quality || '',
+          clarity: product.clarity || '',
+          mukhi: product.mukhi || '',
+          material: product.material || '',
+          perCaratPrice: product.per_carat_price?.toString() || '',
+          perGramPrice: product.per_gram_price?.toString() || '',
+          perPiecePrice: product.per_piece_price?.toString() || '',
+        });
+      }
+    } catch (error) {
+      console.error('Error loading product for edit:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   const handleStockFieldChange = (field: string, value: any) => {
     setStock(prev => ({ ...prev, [field]: value }));
   };
 
   const handleStockUpdate = async () => {
-    if (!createdProductId) {
+    if (!createdProductId && !editProductId) {
       console.error('No product ID available for stock update');
       return;
     }
@@ -144,19 +223,19 @@ export default function AddProductPage() {
     try {
       setLoading(true);
       
-      const stockData = {
-        sku: stock.sku,
-        quantity: Number(stock.quantity) || 0,
-        reserved: Number(stock.reserved) || 0,
-        min_stock: Number(stock.min_stock) || 0,
-        max_stock: stock.max_stock ? Number(stock.max_stock) : null,
-        location: stock.location || null,
-        batch_number: stock.batch_number || null,
-        expiry_date: stock.expiry_date || null,
-        cost_price: stock.cost_price ? Number(stock.cost_price) : null
-      };
+             const stockData = {
+         quantity: Number(stock.quantity) || 0,
+         reserved: Number(stock.reserved) || 0,
+         min_stock: Number(stock.min_stock) || 0,
+         max_stock: stock.max_stock ? Number(stock.max_stock) : null,
+         location: stock.location || null,
+         batch_number: stock.batch_number || null,
+         expiry_date: stock.expiry_date || null,
+         cost_price: stock.cost_price ? Number(stock.cost_price) : null
+       };
 
-      const response = await fetch(`/api/products/${createdProductId}/stock`, {
+      const productId = createdProductId || editProductId;
+      const response = await fetch(`/api/products/${productId}/stock`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(stockData)
@@ -165,41 +244,86 @@ export default function AddProductPage() {
       if (response.ok) {
         const savedData = await response.json();
         console.log('Stock saved successfully:', savedData);
+        
+        // Show success message and redirect
+        alert(isEditMode ? 'Product updated successfully!' : 'Product created successfully!');
         router.push("/admin/products");
       } else {
         const errorData = await response.json();
         console.error('Error saving stock data:', errorData);
+        alert('Error saving stock data. Please try again.');
       }
     } catch (error) {
       console.error('Error saving stock data:', error);
+      alert('Error saving stock data. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-  const [loading, setLoading] = useState<boolean>(false);
   const handleSEOFieldChange = (field: string, value: string) => {
     setSEO(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSEONext = () => {
-    // Final submit or next step logic here
-    setLoading(true);
-    setTimeout(() => {
+  const handleSEONext = async () => {
+    try {
+      setLoading(true);
+      
+      // Save SEO data immediately
+      if (createdProductId || editProductId) {
+        const seoData = {
+          meta_title: seo.meta_title,
+          meta_description: seo.meta_description,
+          meta_keywords: seo.meta_keywords,
+          og_title: seo.og_title,
+          og_description: seo.og_description,
+          og_image: seo.og_image,
+          twitter_title: seo.twitter_title,
+          twitter_description: seo.twitter_description,
+          twitter_image: seo.twitter_image,
+          canonical_url: seo.canonical_url
+        };
+
+        const response = await fetch(`/api/products/${createdProductId || editProductId}/meta`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(seoData)
+        });
+
+        if (response.ok) {
+          console.log('SEO data saved successfully');
+          setActiveStep(5);
+        } else {
+          console.error('Error saving SEO data');
+          alert('Error saving SEO data. Please try again.');
+        }
+      } else {
+        setActiveStep(5);
+      }
+      
+    } catch (error) {
+      console.error('Error saving SEO data:', error);
+      alert('Error saving SEO data. Please try again.');
+    } finally {
       setLoading(false);
-      router.push("/admin/products/create");
-    }, 1200);
+    }
   };
   const handleShippingFieldChange = (field: string, value: string) => {
     setShipping(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleShippingNext = () => {
-    // Final submit or next step logic here
-    setLoading(true);
-    setTimeout(() => {
+  const handleShippingNext = async () => {
+    try {
+      setLoading(true);
+      
+      // Shipping data is already saved by the StepShippingDetails component
+      console.log('Shipping step completed, proceeding to SEO...');
+      setActiveStep(4);
+      
+    } catch (error) {
+      console.error('Error in shipping step:', error);
+    } finally {
       setLoading(false);
-      router.push("/admin/products/create");
-    }, 1200);
+    }
   };
 
   // Step 0 validation
@@ -242,7 +366,7 @@ export default function AddProductPage() {
     }
   };
 
-  const handleFieldChange = (field: keyof FormData, value: string | number | null) => {
+  const handleFieldChange = (field: keyof ProductFormData, value: string | number | null) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
@@ -252,9 +376,83 @@ export default function AddProductPage() {
     setErrors({});
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateStep1()) return;
-    setActiveStep(2);
+    
+    try {
+      setLoading(true);
+      
+      // Save product details immediately
+      const productData = {
+        name: formData.name,
+        description: formData.description,
+        sellingPrice: formData.sellingPrice,
+        originalPrice: formData.originalPrice,
+        discountPrice: formData.discountPrice,
+        sku: formData.sku,
+        categoryId: formData.categoryId,
+        zodiacSign: formData.zodiacSign,
+        images: formData.images,
+        // Auto-pricing fields
+        productType: formData.productType,
+        weight: formData.weight,
+        carats: formData.carats,
+        quantity: formData.quantity,
+        quality: formData.quality,
+        clarity: formData.clarity,
+        color: formData.color,
+        mukhi: formData.mukhi,
+        material: formData.material,
+        perCaratPrice: formData.perCaratPrice,
+        perGramPrice: formData.perGramPrice,
+        perPiecePrice: formData.perPiecePrice
+      };
+
+      let response;
+      if (isEditMode && editProductId) {
+        // Update existing product
+        const updateData = {
+          name: formData.name,
+          description: formData.description,
+          price: formData.sellingPrice,
+          sku: formData.sku,
+          category_id: formData.categoryId,
+          zodiac_id: formData.zodiacSign ? parseInt(formData.zodiacSign) : null,
+          images: formData.images
+        };
+        response = await fetch(`/api/products/${editProductId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updateData)
+        });
+      } else {
+        // Create new product
+        response = await fetch('/api/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(productData)
+        });
+      }
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Product saved successfully:', result);
+        if (!isEditMode) {
+          setCreatedProductId(result.product.id);
+        }
+        setActiveStep(2);
+      } else {
+        const errorData = await response.json();
+        console.error('Error saving product:', errorData);
+        // Show error to user
+        alert('Error saving product. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error saving product:', error);
+      alert('Error saving product. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAttributeChange = (attributeId: number, value: any) => {
@@ -272,34 +470,12 @@ export default function AddProductPage() {
     try {
       setLoading(true);
       
-      // Create the main product first
-      const productData = {
-        name: formData.name,
-        description: formData.description,
-        price: formData.sellingPrice,
-        sku: formData.sku,
-        category_id: formData.categoryId,
-        zodiac_id: formData.zodiacSign ? parseInt(formData.zodiacSign) : null,
-        images: formData.images
-      };
-
-      const response = await fetch('/api/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(productData)
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        setCreatedProductId(result.product.id);
-        console.log('Product created successfully:', result.product);
-        setActiveStep(3);
-      } else {
-        const errorData = await response.json();
-        console.error('Error creating product:', errorData);
-      }
+      // Product is already saved, just proceed to next step
+      console.log('Attributes and media step completed, proceeding to shipping...');
+      setActiveStep(3);
+      
     } catch (error) {
-      console.error('Error creating product:', error);
+      console.error('Error in attributes step:', error);
     } finally {
       setLoading(false);
     }
@@ -310,7 +486,9 @@ export default function AddProductPage() {
 
   return (
     <div className="w-full p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-8">
-      <h1 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">Add Product</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
+        {isEditMode ? 'Edit Product' : 'Add Product'}
+      </h1>
 
       {/* Progress Bar */}
       <div className="mb-8">
@@ -372,15 +550,19 @@ export default function AddProductPage() {
             onBack={() => setActiveStep(1)}
             onSubmit={handleAttributeMediaSubmit}
             errors={errors}
+            productId={createdProductId || editProductId}
+            isSubmitting={loading}
           />
         )}
         {activeStep === 3 && (
           <StepShippingDetails
+            productId={createdProductId || editProductId || undefined}
             shipping={shipping}
             onFieldChange={handleShippingFieldChange}
             onBack={() => setActiveStep(2)}
             onNext={() => setActiveStep(4)}
             errors={{}}
+            isSubmitting={loading}
           />
         )}
         {activeStep === 4 && (
@@ -392,17 +574,17 @@ export default function AddProductPage() {
             errors={{}}
           />
         )}
-        {activeStep === 5 && (
-          <StepStockManagement
-            productId={createdProductId}
-            stock={stock}
-            onFieldChange={handleStockFieldChange}
-            onBack={() => setActiveStep(4)}
-            onNext={handleStockUpdate}
-            errors={{}}
-            isSubmitting={loading}
-          />
-        )}
+                 {activeStep === 5 && (
+           <StepStockManagement
+             productId={createdProductId || editProductId || undefined}
+             stock={stock}
+             onFieldChange={handleStockFieldChange}
+             onBack={() => setActiveStep(4)}
+             onNext={handleStockUpdate}
+             errors={{}}
+             isSubmitting={loading}
+           />
+         )}
       </div>
     </div>
   );

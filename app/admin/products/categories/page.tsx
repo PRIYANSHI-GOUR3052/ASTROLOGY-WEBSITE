@@ -6,9 +6,10 @@ type SubcategoryModalProps = {
   parentCategory: string;
   onClose: () => void;
   onCreate: (subName: string) => void;
+  isSubmitting?: boolean;
 };
 
-const SubcategoryModal: React.FC<SubcategoryModalProps> = ({ parentCategory, onClose, onCreate }) => {
+const SubcategoryModal: React.FC<SubcategoryModalProps> = ({ parentCategory, onClose, onCreate, isSubmitting = false }) => {
   const [subName, setSubName] = useState("");
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
@@ -41,13 +42,24 @@ const SubcategoryModal: React.FC<SubcategoryModalProps> = ({ parentCategory, onC
             Cancel
           </button>
           <button
-            className="px-4 py-2 rounded bg-purple-600 hover:bg-purple-700 text-white font-semibold"
+            className={`px-4 py-2 rounded font-semibold transition-colors ${
+              isSubmitting || !subName.trim()
+                ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                : 'bg-purple-600 hover:bg-purple-700 text-white'
+            }`}
             onClick={() => {
               if (subName.trim()) onCreate(subName.trim());
             }}
-            disabled={!subName.trim()}
+            disabled={isSubmitting || !subName.trim()}
           >
-            Create Subcategory
+            {isSubmitting ? (
+              <div className="flex items-center">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                Creating...
+              </div>
+            ) : (
+              'Create Subcategory'
+            )}
           </button>
         </div>
       </div>
@@ -95,7 +107,8 @@ const SubcategoryList: React.FC<{
   onAddSubcategory: (categoryId: number, name: string) => void;
   onEditSubcategory: (subcategory: Subcategory) => void;
   onDeleteSubcategory: (subcategoryId: number) => void;
-}> = ({ subcategories, onAddSubcategory, onEditSubcategory, onDeleteSubcategory }) => {
+  isSubmitting?: boolean;
+}> = ({ subcategories, onAddSubcategory, onEditSubcategory, onDeleteSubcategory, isSubmitting = false }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
@@ -133,6 +146,7 @@ const SubcategoryList: React.FC<{
                 onAddSubcategory(sub.category_id, subName);
                 setShowModal(false);
               }}
+              isSubmitting={isSubmitting}
             />
           )}
         </React.Fragment>
@@ -150,7 +164,8 @@ const CategoryModal: React.FC<{
   initialImage?: string | null;
   initialBanner?: string | null;
   isEdit?: boolean;
-}> = ({ open, onClose, onSave, initialName = '', initialDescription = '', initialImage = null, initialBanner = null, isEdit = false }) => {
+  isSubmitting?: boolean;
+}> = ({ open, onClose, onSave, initialName = '', initialDescription = '', initialImage = null, initialBanner = null, isEdit = false, isSubmitting = false }) => {
   const [name, setName] = useState(initialName);
   const [description, setDescription] = useState(initialDescription);
   const [image, setImage] = useState<string | null>(initialImage);
@@ -282,11 +297,22 @@ const CategoryModal: React.FC<{
             Cancel
           </button>
           <button
-            className="px-4 py-2 rounded bg-purple-600 hover:bg-purple-700 text-white font-semibold"
+            className={`px-4 py-2 rounded font-semibold transition-colors ${
+              isSubmitting || !name.trim()
+                ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                : 'bg-purple-600 hover:bg-purple-700 text-white'
+            }`}
             onClick={() => onSave(name.trim(), description.trim(), image, banner)}
-            disabled={!name.trim()}
+            disabled={isSubmitting || !name.trim()}
           >
-            {isEdit ? 'Save Changes' : 'Add Category'}
+            {isSubmitting ? (
+              <div className="flex items-center">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                {isEdit ? 'Saving...' : 'Creating...'}
+              </div>
+            ) : (
+              isEdit ? 'Save Changes' : 'Add Category'
+            )}
           </button>
         </div>
       </div>
@@ -301,7 +327,8 @@ const CategoryRow: React.FC<{
   onDelete: (categoryId: number) => void;
   onEditSubcategory: (subcategory: Subcategory) => void;
   onDeleteSubcategory: (subcategoryId: number) => void;
-}> = ({ category, onAddSubcategory, onEdit, onDelete, onEditSubcategory, onDeleteSubcategory }) => {
+  isSubmitting?: boolean;
+}> = ({ category, onAddSubcategory, onEdit, onDelete, onEditSubcategory, onDeleteSubcategory, isSubmitting = false }) => {
   const [expanded, setExpanded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -371,6 +398,7 @@ const CategoryRow: React.FC<{
               onAddSubcategory={onAddSubcategory}
               onEditSubcategory={onEditSubcategory}
               onDeleteSubcategory={onDeleteSubcategory}
+              isSubmitting={isSubmitting}
             />
           </td>
         </tr>
@@ -426,6 +454,8 @@ const CategoriesPage: React.FC = () => {
   const [editCategory, setEditCategory] = useState<CategoryTree | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   // Fetch categories from backend
   useEffect(() => {
@@ -450,6 +480,9 @@ const CategoriesPage: React.FC = () => {
 
   const handleAddSubcategory = async (categoryId: number, name: string) => {
     try {
+      setIsSubmitting(true);
+      setSubmitMessage('Creating subcategory...');
+      
       const slug = generateSlug(name);
       const response = await fetch('/api/subcategories', {
         method: 'POST',
@@ -458,6 +491,7 @@ const CategoriesPage: React.FC = () => {
       });
 
       if (response.ok) {
+        setSubmitMessage('Refreshing categories...');
         // Refresh categories to get updated data
         const refreshResponse = await fetch('/api/categories');
         if (refreshResponse.ok) {
@@ -466,14 +500,26 @@ const CategoriesPage: React.FC = () => {
         }
       } else {
         console.error('Failed to create subcategory');
+        setSubmitMessage('Failed to create subcategory');
+        setTimeout(() => setIsSubmitting(false), 2000);
+        return;
       }
     } catch (error) {
       console.error('Error creating subcategory:', error);
+      setSubmitMessage('Error creating subcategory');
+      setTimeout(() => setIsSubmitting(false), 2000);
+      return;
+    } finally {
+      setIsSubmitting(false);
+      setSubmitMessage('');
     }
   };
 
   const handleAddCategory = async (name: string, description: string, image: string | null, banner: string | null) => {
     try {
+      setIsSubmitting(true);
+      setSubmitMessage('Creating category...');
+      
       const slug = generateSlug(name);
       const response = await fetch('/api/categories', {
         method: 'POST',
@@ -488,6 +534,7 @@ const CategoriesPage: React.FC = () => {
       });
 
       if (response.ok) {
+        setSubmitMessage('Refreshing categories...');
         // Refresh categories to get updated data
         const refreshResponse = await fetch('/api/categories');
         if (refreshResponse.ok) {
@@ -497,9 +544,18 @@ const CategoriesPage: React.FC = () => {
         setShowAddModal(false);
       } else {
         console.error('Failed to create category');
+        setSubmitMessage('Failed to create category');
+        setTimeout(() => setIsSubmitting(false), 2000);
+        return;
       }
     } catch (error) {
       console.error('Error creating category:', error);
+      setSubmitMessage('Error creating category');
+      setTimeout(() => setIsSubmitting(false), 2000);
+      return;
+    } finally {
+      setIsSubmitting(false);
+      setSubmitMessage('');
     }
   };
 
@@ -512,6 +568,9 @@ const CategoriesPage: React.FC = () => {
     if (!editCategory) return;
 
     try {
+      setIsSubmitting(true);
+      setSubmitMessage('Updating category...');
+      
       const slug = generateSlug(name);
       const response = await fetch(`/api/categories/${editCategory.id}`, {
         method: 'PUT',
@@ -526,6 +585,7 @@ const CategoriesPage: React.FC = () => {
       });
 
       if (response.ok) {
+        setSubmitMessage('Refreshing categories...');
         // Refresh categories to get updated data
         const refreshResponse = await fetch('/api/categories');
         if (refreshResponse.ok) {
@@ -536,19 +596,32 @@ const CategoriesPage: React.FC = () => {
         setEditCategory(null);
       } else {
         console.error('Failed to update category');
+        setSubmitMessage('Failed to update category');
+        setTimeout(() => setIsSubmitting(false), 2000);
+        return;
       }
     } catch (error) {
       console.error('Error updating category:', error);
+      setSubmitMessage('Error updating category');
+      setTimeout(() => setIsSubmitting(false), 2000);
+      return;
+    } finally {
+      setIsSubmitting(false);
+      setSubmitMessage('');
     }
   };
 
   const handleDeleteCategory = async (categoryId: number) => {
     try {
+      setIsSubmitting(true);
+      setSubmitMessage('Deleting category...');
+      
       const response = await fetch(`/api/categories/${categoryId}`, {
         method: 'DELETE'
       });
 
       if (response.ok) {
+        setSubmitMessage('Refreshing categories...');
         // Refresh categories to get updated data
         const refreshResponse = await fetch('/api/categories');
         if (refreshResponse.ok) {
@@ -559,9 +632,18 @@ const CategoriesPage: React.FC = () => {
         setDeleteCategoryId(null);
       } else {
         console.error('Failed to delete category');
+        setSubmitMessage('Failed to delete category');
+        setTimeout(() => setIsSubmitting(false), 2000);
+        return;
       }
     } catch (error) {
       console.error('Error deleting category:', error);
+      setSubmitMessage('Error deleting category');
+      setTimeout(() => setIsSubmitting(false), 2000);
+      return;
+    } finally {
+      setIsSubmitting(false);
+      setSubmitMessage('');
     }
   };
 
@@ -572,11 +654,15 @@ const CategoriesPage: React.FC = () => {
 
   const handleDeleteSubcategory = async (subcategoryId: number) => {
     try {
+      setIsSubmitting(true);
+      setSubmitMessage('Deleting subcategory...');
+      
       const response = await fetch(`/api/subcategories/${subcategoryId}`, {
         method: 'DELETE'
       });
 
       if (response.ok) {
+        setSubmitMessage('Refreshing categories...');
         // Refresh categories to get updated data
         const refreshResponse = await fetch('/api/categories');
         if (refreshResponse.ok) {
@@ -585,9 +671,18 @@ const CategoriesPage: React.FC = () => {
         }
       } else {
         console.error('Failed to delete subcategory');
+        setSubmitMessage('Failed to delete subcategory');
+        setTimeout(() => setIsSubmitting(false), 2000);
+        return;
       }
     } catch (error) {
       console.error('Error deleting subcategory:', error);
+      setSubmitMessage('Error deleting subcategory');
+      setTimeout(() => setIsSubmitting(false), 2000);
+      return;
+    } finally {
+      setIsSubmitting(false);
+      setSubmitMessage('');
     }
   };
 
@@ -639,6 +734,7 @@ const CategoriesPage: React.FC = () => {
                   }}
                   onEditSubcategory={handleEditSubcategory}
                   onDeleteSubcategory={handleDeleteSubcategory}
+                  isSubmitting={isSubmitting}
                 />
               ))
             )}
@@ -650,6 +746,7 @@ const CategoriesPage: React.FC = () => {
         open={showAddModal}
         onClose={() => setShowAddModal(false)}
         onSave={handleAddCategory}
+        isSubmitting={isSubmitting}
       />
       {/* Edit Category Modal */}
       <CategoryModal
@@ -661,6 +758,7 @@ const CategoriesPage: React.FC = () => {
         initialImage={editCategory?.image_url}
         initialBanner={editCategory?.banner_url}
         isEdit
+        isSubmitting={isSubmitting}
       />
       {/* Delete Category Modal */}
       {showDeleteModal && (
@@ -681,6 +779,36 @@ const CategoriesPage: React.FC = () => {
               >
                 Confirm Delete
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Loading Modal */}
+      {isSubmitting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 max-w-sm w-full mx-4">
+            <div className="flex flex-col items-center">
+              {/* Spinner */}
+              <div className="relative">
+                <div className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+                <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-t-purple-400 rounded-full animate-ping opacity-20"></div>
+              </div>
+              
+              {/* Message */}
+              <div className="mt-4 text-center">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  {submitMessage}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Please wait while we process your request...
+                </p>
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-6 overflow-hidden">
+                <div className="bg-purple-600 h-2 rounded-full animate-pulse" style={{ width: '100%' }}></div>
+              </div>
             </div>
           </div>
         </div>

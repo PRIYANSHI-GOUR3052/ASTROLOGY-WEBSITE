@@ -6,39 +6,107 @@ const prisma = new PrismaClient();
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    console.log('API received data:', body);
+    
     const {
       name,
       description,
-      price,
+      sellingPrice,
+      originalPrice,
+      discountPrice,
       sku,
-      category_id,
-      zodiac_id,
-      images = []
+      categoryId,
+      zodiacSign,
+      images = [],
+      // Auto-pricing fields
+      productType,
+      weight,
+      carats,
+      quantity,
+      quality,
+      clarity,
+      color,
+      mukhi,
+      material,
+      perCaratPrice,
+      perGramPrice,
+      perPiecePrice
     } = body;
 
     // Validate required fields
-    if (!name || !description || !price) {
+    if (!name || !description || !sellingPrice) {
       return NextResponse.json(
-        { error: 'Name, description, and price are required' },
+        { error: 'Name, description, and selling price are required' },
         { status: 400 }
       );
     }
 
-    // Create the product
+    // Create the product (without images)
+    const productData = {
+      name,
+      description,
+      price: parseFloat(sellingPrice),
+      original_price: originalPrice ? parseFloat(originalPrice) : null,
+      discount_price: discountPrice ? parseFloat(discountPrice) : null,
+      sku,
+      slug: name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+      category_id: categoryId ? parseInt(categoryId) : null,
+      zodiac_id: zodiacSign ? parseInt(zodiacSign) : null,
+      image_url: null, // Remove image_url from products table
+      is_active: true,
+      available: 0,
+      
+      // Auto-pricing fields
+      product_type: productType || null,
+      weight: weight ? parseFloat(weight) : null,
+      carats: carats ? parseFloat(carats) : null,
+      quantity: quantity ? parseInt(quantity) : null,
+      quality: quality || null,
+      clarity: clarity || null,
+      color: color || null,
+      mukhi: mukhi || null,
+      material: material || null,
+      per_carat_price: perCaratPrice ? parseFloat(perCaratPrice) : null,
+      per_gram_price: perGramPrice ? parseFloat(perGramPrice) : null,
+      per_piece_price: perPiecePrice ? parseFloat(perPiecePrice) : null
+    };
+    
+    console.log('Creating product with data:', productData);
+    
     const newProduct = await prisma.products.create({
-      data: {
-        name,
-        description,
-        price: parseFloat(price),
-        slug: name.toLowerCase().replace(/\s+/g, '-'),
-        category_id: category_id ? parseInt(category_id) : null,
-        zodiac_id: zodiac_id ? parseInt(zodiac_id) : null,
-        image_url: images.length > 0 ? images[0] : null, // Use first image as main image
-        is_active: true,
-        available: 0
-      }
+      data: productData
     });
 
+    console.log('Product created successfully:', newProduct);
+
+    // Store images in product_media table if images are provided
+    if (images && images.length > 0) {
+      try {
+        const mediaData = images.map((imageUrl: string, index: number) => ({
+          type: 'image',
+          url: imageUrl,
+          alt_text: `${name} image ${index + 1}`,
+          title: `${name} image ${index + 1}`
+        }));
+
+        const mediaResponse = await fetch(`${request.nextUrl.origin}/api/products/${newProduct.id}/media`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ media: mediaData })
+        });
+
+        if (mediaResponse.ok) {
+          const mediaResult = await mediaResponse.json();
+          console.log('Media stored successfully:', mediaResult);
+        } else {
+          console.error('Failed to store media:', await mediaResponse.json());
+        }
+      } catch (mediaError) {
+        console.error('Error storing media:', mediaError);
+        // Don't fail the product creation if media storage fails
+      }
+    }
+    
     return NextResponse.json({
       success: true,
       product: newProduct,
