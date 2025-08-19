@@ -147,7 +147,7 @@ export const ReusableProductCard = ({
               
               {/* Rating */}
               {product.rating && (
-                <div className="flex items-center mb-3">
+                <div className="flex items-center mb-0.5">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
                       <Star
@@ -268,19 +268,19 @@ export const ReusableProductCard = ({
       </div>
       
       {/* Content Section */}
-      <CardContent className="p-4 flex-1 flex flex-col">
+      <CardContent className="p-4 pb-1 flex-1 flex flex-col">
         <Link href={`/shop/${product.slug}`}>
           <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors min-h-[3rem]">
             {product.title}
           </h3>
         </Link>
         
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3 min-h-[2.5rem]">
+        {/* <p className="text-sm text-gray-600 line-clamp-2 mb-3 min-h-[2.5rem]">
           {product.description}
-        </p>
+        </p> */}
         
         {/* Rating */}
-        <div className="mb-3 min-h-[1.5rem]">
+        <div className="mb-0.5 min-h-[1.5rem]">
           {product.rating && (
             <div className="flex items-center">
               <div className="flex items-center">
@@ -304,7 +304,7 @@ export const ReusableProductCard = ({
         </div>
         
         {/* Price */}
-        <div className="flex items-center justify-between mt-auto">
+        <div className="flex items-center justify-between mt-auto mb-0.5">
           <div className="flex items-center space-x-2">
             <span className="text-lg font-bold text-gray-900">{product.price}</span>
             {product.originalPrice && (
@@ -317,7 +317,7 @@ export const ReusableProductCard = ({
       </CardContent>
 
       {/* Footer with Cart Button */}
-      <CardFooter className="p-4 pt-2">
+      <CardFooter className="p-4 pt-0.5">
         <UniversalCartButton
           productId={product.id}
           productName={product.title}

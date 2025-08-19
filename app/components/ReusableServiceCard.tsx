@@ -203,7 +203,7 @@ export const ReusableServiceCard = ({
               
               {/* Rating */}
               {service.rating && (
-                <div className="flex items-center mb-3">
+                <div className="flex items-center mb-0.5">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
                       <Star
@@ -324,35 +324,15 @@ export const ReusableServiceCard = ({
       </div>
       
       {/* Content Section */}
-      <CardContent className="p-4 flex-1 flex flex-col">
+      <CardContent className="p-4 pb-1 flex-1 flex flex-col">
         <Link href={`/services/${service.slug}`}>
           <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors min-h-[3rem]">
             {service.title}
           </h3>
         </Link>
-        
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3 min-h-[2.5rem]">
-          {service.description}
-        </p>
-
-        {/* Service Details */}
-        <div className="flex flex-col gap-1 mb-3 text-xs text-gray-500 min-h-[2rem]">
-          {service.consultationType && (
-            <div className="flex items-center gap-1">
-              {getConsultationIcon(service.consultationType)}
-              <span className="truncate">{service.consultationType}</span>
-            </div>
-          )}
-          {service.duration && (
-            <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              <span>{service.duration}</span>
-            </div>
-          )}
-        </div>
-        
+                
         {/* Rating */}
-        <div className="mb-3 min-h-[1.5rem]">
+        <div className="mb-0.5 min-h-[1.5rem]">
           {service.rating && (
             <div className="flex items-center">
               <div className="flex items-center">
@@ -376,7 +356,7 @@ export const ReusableServiceCard = ({
         </div>
         
         {/* Price */}
-        <div className="flex items-center justify-between mt-auto">
+        <div className="flex items-center justify-between mt-auto mb-0.5">
           <div className="flex items-center space-x-2">
             <span className="text-lg font-bold text-gray-900">₹{service.price}</span>
             {service.originalPrice && (
@@ -389,7 +369,7 @@ export const ReusableServiceCard = ({
       </CardContent>
 
       {/* Footer with Book Button */}
-      <CardFooter className="p-4 pt-2">
+      <CardFooter className="p-4 pt-0.5">
         <UniversalCartButton
           productId={service.id}
           productName={service.title}
