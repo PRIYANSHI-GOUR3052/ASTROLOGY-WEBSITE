@@ -7,7 +7,7 @@ const LifeChangingSolutions = dynamic(() => import('./components/LifeChangingSol
 const AstrologerProfile = dynamic(() => import('./components/AstrologerProfile').then(mod => mod.AstrologerProfile), { loading: () => <div>Loading...</div>, ssr: false });
 const BestServices = dynamic(() => import('./components/BestServices').then(mod => mod.BestServices), { loading: () => <div>Loading...</div>, ssr: false });
 const Testimonials = dynamic(() => import('./components/Testimonials').then(mod => mod.Testimonials), { loading: () => <div>Loading...</div>, ssr: false });
-const ServicesOverview = dynamic(() => import('./components/ServicesOverview').then(mod => mod.ServicesOverview), { loading: () => <div>Loading...</div>, ssr: false });
+const BestProducts = dynamic(() => import('./components/BestProducts').then(mod => mod.BestProducts), { loading: () => <div>Loading...</div>, ssr: false });
 const FeaturedProducts = dynamic(() => import('./components/FeaturedProducts').then(mod => mod.FeaturedProducts), { loading: () => <div>Loading...</div>, ssr: false });
 const BlogPreview = dynamic(() => import('./components/BlogPreview').then(mod => mod.BlogPreview), { loading: () => <div>Loading...</div>, ssr: false });
 const ContactForm = dynamic(() => import('./components/ContactForm').then(mod => mod.ContactForm), { loading: () => <div>Loading...</div>, ssr: false });
@@ -55,7 +55,7 @@ export default function HomePage() {
         </ScrollAnimation>
 
         <ScrollAnimation>
-          <ServicesOverview />
+          <BestProducts />
         </ScrollAnimation>
 
         <div className="flex flex-col md:flex-row items-start gap-8 mt-12">
