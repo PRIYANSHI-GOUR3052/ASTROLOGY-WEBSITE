@@ -12,6 +12,7 @@ interface ShippingDetails {
   is_free_shipping: boolean;
   shipping_cost: string;
   max_shipping_cost: string;
+  handling_time?: string; // Optional field for future use
 }
 
 interface StepShippingDetailsProps {
@@ -309,65 +310,67 @@ const StepShippingDetails: React.FC<StepShippingDetailsProps> = ({
           )}
         </div>
 
-        {/* Free Shipping Option */}
+        {/* Shipping Cost Section */}
         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <DollarSign className="w-5 h-5 text-gray-500 mr-2" />
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Free Shipping</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Offer free shipping for this product</p>
-              </div>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
+          <div className="flex items-center mb-4">
+            <DollarSign className="w-5 h-5 text-gray-500 mr-2" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Shipping Cost</h3>
+          </div>
+          
+          {/* Free Shipping Toggle */}
+          <div className="mb-4">
+            <label className="flex items-center space-x-3 cursor-pointer">
               <input
                 type="checkbox"
-                className="sr-only peer"
+                className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                 checked={shipping.is_free_shipping}
                 onChange={e => onFieldChange("is_free_shipping", e.target.checked)}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+              <span className="text-gray-700 dark:text-gray-300 font-medium">Free Shipping</span>
             </label>
           </div>
-        </div>
 
-        {/* Shipping Cost Section */}
-        {!shipping.is_free_shipping && (
-          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-            <div className="flex items-center mb-4">
-              <DollarSign className="w-5 h-5 text-gray-500 mr-2" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Shipping Cost</h3>
-            </div>
+          {/* Shipping Cost Fields */}
+          {!shipping.is_free_shipping && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fixed Shipping Cost</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Shipping Cost (₹)
+                </label>
                 <input
                   type="number"
                   min="0"
                   step="0.01"
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800"
+                  className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 ${errors.shipping_cost ? 'border-red-500' : ''}`}
                   placeholder="0.00"
                   value={shipping.shipping_cost}
                   onChange={e => onFieldChange("shipping_cost", e.target.value)}
                 />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Leave empty for variable rates</p>
+                {errors.shipping_cost && <p className="text-red-600 text-xs mt-1">{errors.shipping_cost}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Max Shipping Cost</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Max Shipping Cost (₹)
+                </label>
                 <input
                   type="number"
                   min="0"
                   step="0.01"
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800"
+                  className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 ${errors.max_shipping_cost ? 'border-red-500' : ''}`}
                   placeholder="0.00"
                   value={shipping.max_shipping_cost}
                   onChange={e => onFieldChange("max_shipping_cost", e.target.value)}
                 />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Maximum cost for variable rates</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Maximum shipping cost for variable rates
+                </p>
+                {errors.max_shipping_cost && <p className="text-red-600 text-xs mt-1">{errors.max_shipping_cost}</p>}
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+
+
 
         {/* Preview Section */}
         <div className="bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-lg p-6">

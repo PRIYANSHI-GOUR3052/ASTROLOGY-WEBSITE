@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown, X, Edit } from "lucide-react";
 import { motion } from "framer-motion";
 import { UniversalCartButton } from "@/app/components/UniversalCartButton";
 import SpiritualTicker from "@/app/components/Hero/SpiritualTicker";
@@ -30,6 +30,26 @@ interface Product {
   description: string;
   path: string;
   category: string;
+}
+
+interface CategoryData {
+  id: number;
+  name: string;
+  slug: string;
+  description: string | null;
+  image_url: string | null;
+  banner_url: string | null;
+  tags?: string[] | null;
+  gradient_from?: string | null;
+  gradient_to?: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  subcategories: Array<{
+    id: number;
+    name: string;
+    slug: string;
+    image_url: string | null;
+  }>;
 }
 
 interface CategoryConfig {
@@ -355,16 +375,61 @@ export default function CategoryPage() {
   
   const [filters, setFilters] = useState<Filters>({});
   const [activeDropdown, setActiveDropdown] = useState<DropdownType>(null);
+  const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Get category configuration
-  const categoryConfig = categoryConfigs[slug] || {
-    title: "Products",
-    description: "Discover our collection of spiritual products",
-    bannerImage: "/images/products/default-banner.jpg",
-    tags: ["Spiritual", "Sacred", "Divine"],
-    gradientFrom: "gray-50",
-    gradientTo: "gray-100"
-  };
+  // Fetch category data from API
+  useEffect(() => {
+    const fetchCategoryData = async () => {
+      if (!slug) return;
+      
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetch(`/api/categories/slug/${slug}`);
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to fetch category data');
+        }
+        
+        setCategoryData(result.data);
+      } catch (err) {
+        console.error('Error fetching category data:', err);
+        setError(err instanceof Error ? err.message : 'Failed to fetch category data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategoryData();
+  }, [slug]);
+
+  // Get category configuration based on API data or fallback
+  const categoryConfig = useMemo(() => {
+    if (categoryData) {
+      return {
+        title: categoryData.name,
+        description: categoryData.description || "Discover our collection of spiritual products",
+        bannerImage: categoryData.banner_url || categoryData.image_url || "/images/products/default-banner.jpg",
+        tags: categoryData.tags || ["Spiritual", "Sacred", "Divine"],
+        gradientFrom: categoryData.gradient_from || "gray-50",
+        gradientTo: categoryData.gradient_to || "gray-100"
+      };
+    }
+    
+    // Fallback configuration
+    return categoryConfigs[slug] || {
+      title: "Products",
+      description: "Discover our collection of spiritual products",
+      bannerImage: "/images/products/default-banner.jpg",
+      tags: ["Spiritual", "Sacred", "Divine"],
+      gradientFrom: "gray-50",
+      gradientTo: "gray-100"
+    };
+  }, [categoryData, slug]);
 
   // Filter products for current category
   const categoryProducts = useMemo(() => {
@@ -445,6 +510,35 @@ export default function CategoryPage() {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading category...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Error: {error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Product Banner */}
@@ -522,6 +616,41 @@ export default function CategoryPage() {
           )}
         </div>
 
+        {/* Subcategories Section */}
+        {categoryData?.subcategories && categoryData.subcategories.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6">Subcategories</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {categoryData.subcategories.map((subcategory) => (
+                <Link 
+                  key={subcategory.id} 
+                  href={`/shop/category/${slug}/${subcategory.slug}`}
+                  className="group"
+                >
+                  <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow text-center">
+                    {subcategory.image_url && (
+                      <div className="relative h-20 mb-3">
+                        <Image
+                          src={subcategory.image_url}
+                          alt={subcategory.name}
+                          fill
+                          className="object-cover rounded-lg"
+                        />
+                      </div>
+                    )}
+                    <h3 
+                      className="font-medium text-gray-900 group-hover:text-purple-600 transition-colors overflow-hidden text-ellipsis line-clamp-2 min-h-[2.5rem]"
+                      title={subcategory.name}
+                    >
+                      {subcategory.name}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Results Count */}
         <div className="mb-8">
           <p className="text-gray-600">
@@ -531,7 +660,7 @@ export default function CategoryPage() {
 
         {/* Products Grid */}
         <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
             {filteredProducts.map((product) => (
               <Link key={product.id} href={product.path} className="w-full max-w-sm">
                 <motion.div
@@ -539,46 +668,68 @@ export default function CategoryPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5 }}
-                  className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
+                  className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer group h-full flex flex-col"
                 >
-                  {/* Product Image */}
-                  <div className="relative h-36 overflow-hidden rounded-t-2xl">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
+                                     {/* Product Image */}
+                   <div className="relative h-36 overflow-hidden rounded-t-2xl">
+                     <Image
+                       src={product.image}
+                       alt={product.name}
+                       fill
+                       className="object-cover group-hover:scale-105 transition-transform duration-300"
+                     />
+                     
+                     {/* Edit Button Overlay */}
+                     <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                       <Link
+                         href={`/admin/products/add?edit=${product.id}`}
+                         className="bg-white/90 hover:bg-white text-gray-700 hover:text-gray-900 p-2 rounded-full shadow-lg transition-all duration-200 hover:scale-110 group/edit"
+                         onClick={(e) => e.stopPropagation()}
+                         title="Edit Product"
+                       >
+                         <Edit className="w-4 h-4" />
+                         <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover/edit:opacity-100 transition-opacity duration-200 whitespace-nowrap z-20">
+                           Edit Product
+                         </span>
+                       </Link>
+                     </div>
+                   </div>
 
                   {/* Product Info */}
-                  <div className="p-4">
-                    <h3 className="font-serif font-bold text-gray-900 mb-2 text-lg line-clamp-2">
+                  <div className="p-4 flex-1 flex flex-col">
+                    <h3 
+                      className="font-serif font-bold text-gray-900 mb-2 text-lg overflow-hidden text-ellipsis line-clamp-2 min-h-[3.5rem]"
+                      title={product.name}
+                    >
                       {product.name}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-3 font-light line-clamp-2">
+                    <p 
+                      className="text-gray-600 text-sm mb-3 font-light overflow-hidden text-ellipsis line-clamp-2 min-h-[2.5rem]"
+                      title={product.description}
+                    >
                       {product.description}
                     </p>
                     
                     {/* Product Tags */}
                     <div className="flex flex-wrap gap-1 mb-3">
-                      {product.purpose.slice(0, 1).map((purpose, index) => (
+                      {product.purpose.slice(0, 2).map((purpose, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-full"
+                          className="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-full overflow-hidden text-ellipsis max-w-full"
+                          title={purpose}
                         >
-                          {purpose}
+                          {purpose.length > 15 ? `${purpose.substring(0, 15)}...` : purpose}
                         </span>
                       ))}
                     </div>
 
                     {/* Price */}
-                    <div className="flex items-center justify-between mb-3">
-                      <div>
+                    <div className="flex items-center justify-between mb-3 flex-wrap gap-1">
+                      <div className="flex items-center flex-wrap">
                         <span className="font-bold text-gray-900">{product.price}</span>
                         <span className="text-gray-500 line-through text-sm ml-2">{product.oldPrice}</span>
                       </div>
-                      <span className="text-green-600 text-sm font-medium">
+                      <span className="text-green-600 text-sm font-medium whitespace-nowrap">
                         {Math.round(((parseInt(product.oldPrice.replace(/[^\d]/g, '')) - parseInt(product.price.replace(/[^\d]/g, ''))) / parseInt(product.oldPrice.replace(/[^\d]/g, ''))) * 100)}% OFF
                       </span>
                     </div>

@@ -25,6 +25,7 @@ interface StepCategorySelectionProps {
   errors: { [key: string]: string };
   step?: number;
   totalSteps?: number;
+  productId?: number; // Add productId for edit mode
 }
 
 const StepCategorySelection: React.FC<StepCategorySelectionProps> = ({
@@ -36,13 +37,18 @@ const StepCategorySelection: React.FC<StepCategorySelectionProps> = ({
   errors,
   step = 1,
   totalSteps = 2,
+  productId,
 }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [zodiacSigns, setZodiacSigns] = useState<ZodiacSign[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
+    // Prevent multiple API calls
+    if (dataLoaded) return;
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -67,6 +73,29 @@ const StepCategorySelection: React.FC<StepCategorySelectionProps> = ({
 
         setCategories(categoriesData);
         setZodiacSigns(zodiacData);
+
+        // If in edit mode, load product data to pre-fill category and zodiac
+        if (productId) {
+          try {
+            const productResponse = await fetch(`/api/products/${productId}`);
+            if (productResponse.ok) {
+              const product = await productResponse.json();
+              console.log('✅ Product data loaded for category selection:', product);
+              
+              // Pre-fill category and zodiac if they exist
+              if (product.category_id) {
+                onCategoryChange(product.category_id);
+              }
+              if (product.zodiac_id) {
+                onZodiacChange(product.zodiac_id.toString());
+              }
+            }
+          } catch (error) {
+            console.error('Error loading product data for category selection:', error);
+          }
+        }
+
+        setDataLoaded(true);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch data');
@@ -76,7 +105,7 @@ const StepCategorySelection: React.FC<StepCategorySelectionProps> = ({
     };
 
     fetchData();
-  }, []);
+  }, [productId, dataLoaded]); // Add dataLoaded to dependencies
 
   if (loading) {
     return (

@@ -4,20 +4,41 @@ import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { ChevronDown, X, Filter, Grid3X3, List, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { products } from "@/data/products";
 import { ReusableProductGrid } from "@/app/components/product-cards";
 
 // Types
 interface Product {
-  id: string;
-  title: string;
+  id: number;
+  name: string;
   description: string;
-  price: string;
-  originalPrice?: string;
+  price: number;
+  original_price?: number;
+  discount_price?: number;
   slug: string;
   image?: string;
-  category?: string;
+  category?: {
+    id: number;
+    name: string;
+  };
+  zodiac?: {
+    id: number;
+    name: string;
+  };
+  product_media?: Array<{
+    id: number;
+    media_url: string;
+    alt_text?: string;
+  }>;
+  product_stock?: Array<{
+    id: number;
+    quantity: number;
+    reserved: number;
+  }>;
   rating?: number;
+  reviewCount?: number;
+  inStock?: boolean;
+  isNew?: boolean;
+  isFeatured?: boolean;
 }
 
 interface Filters {
@@ -30,8 +51,8 @@ type ViewMode = "grid" | "list";
 type SortOption = "featured" | "price-low" | "price-high" | "name" | "newest";
 
 // Extract filter options from products
-const getFilterOptions = () => {
-  const categories = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
+const getFilterOptions = (products: Product[]) => {
+  const categories = [...new Set(products.map(p => p.category?.name).filter(Boolean) as string[])].sort();
   const priceRanges = ["Under ₹1000", "₹1000 - ₹3000", "₹3000 - ₹5000", "Above ₹5000"];
   const ratings = ["4+ Stars", "3+ Stars", "2+ Stars", "1+ Stars"];
   
@@ -49,11 +70,11 @@ const getPriceValue = (priceStr: string): number => {
 
 // Banner Component
 const AllProductsBanner = () => (
-  <div className="relative w-full bg-gradient-to-br from-indigo-900 via-green-900 to-emerald-900 py-16 md:py-24 overflow-hidden">
+  <div className="relative w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-16 md:py-24 overflow-hidden">
     {/* Animated background elements */}
     <div className="absolute inset-0">
       <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-amber-300/10 to-yellow-300/10 rounded-full blur-3xl animate-pulse"></div>
-  <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-green-300/10 to-emerald-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-purple-300/10 to-pink-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-r from-blue-300/10 to-cyan-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
     </div>
 
@@ -137,7 +158,7 @@ const AllProductsBanner = () => (
           </motion.div>
           
           <motion.div
-            className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-xl shadow-lg"
+            className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-xl shadow-lg"
             animate={{ rotate: -360 }}
             transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
           >
@@ -166,148 +187,87 @@ const FilterSidebar = ({
   activeFiltersCount: number;
   isOpen: boolean;
   onClose: () => void;
-}) => {
-  const [activeTab, setActiveTab] = useState('category');
-  
-  const tabLabels = {
-    category: 'Category',
-    priceRange: 'Price Range',
-    rating: 'Rating'
-  };
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Mobile backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 lg:hidden filter-backdrop"
-            style={{ zIndex: 2147483647 }}
-            onClick={onClose}
-          />
-          {/* Desktop sidebar */}
-          <div className="hidden lg:block">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 h-full overflow-y-auto">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
-                {activeFiltersCount > 0 && (
-                  <button
-                    onClick={onClearFilters}
-                    className="text-sm text-green-800 hover:text-green-900 font-medium"
-                  >
-                    Clear all ({activeFiltersCount})
-                  </button>
-                )}
-              </div>
-              <div className="space-y-6">
-                {Object.entries(filterOptions).map(([category, options]) => (
-                  <div key={category} className="border-b border-gray-200 pb-6">
-                    <h4 className="text-sm font-medium text-gray-900 mb-4 capitalize">
-                      {category.replace(/([A-Z])/g, ' $1')}
-                    </h4>
-                    <div className="space-y-2">
-                      {options.map(option => (
-                        <label key={option} className="flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={filters[category]?.includes(option) || false}
-                            onChange={() => onFilterChange(category, option)}
-                            className="mr-3 h-4 w-4 text-green-700 border-gray-300 rounded focus:ring-green-600"
-                          />
-                          <span className="text-sm text-gray-700">{option}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+}) => (
+  <AnimatePresence>
+    {isOpen && (
+      <>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+        <motion.div
+          initial={{ x: -300 }}
+          animate={{ x: 0 }}
+          exit={{ x: -300 }}
+          className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl z-50 lg:relative lg:w-full lg:shadow-none lg:z-auto"
+        >
+          <div className="p-6 h-full overflow-y-auto">
+            <div className="flex items-center justify-between mb-6 lg:hidden">
+              <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
-          </div>
-          {/* Mobile modal */}
-          <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-xl shadow-xl h-[50vh] lg:hidden filter-modal"
-            style={{ zIndex: 2147483647 }}
-          >
-            <div className="flex flex-col h-full">
-              {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
-                <button 
-                  onClick={onClose} 
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors bg-gray-50 border border-gray-300"
+            
+            <div className="hidden lg:flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+              {activeFiltersCount > 0 && (
+                <button
+                  onClick={onClearFilters}
+                  className="text-sm text-purple-600 hover:text-purple-800 font-medium"
                 >
-                  <X className="w-5 h-5 text-gray-700" />
+                  Clear all ({activeFiltersCount})
                 </button>
-              </div>
-              
-              {/* Tabs */}
-              <div className="flex border-b border-gray-200 bg-gray-50">
-                {Object.keys(filterOptions).map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setActiveTab(category)}
-                    className={`flex-1 py-3 px-2 text-xs font-medium text-center transition-colors ${
-                      activeTab === category
-                        ? "text-green-800 bg-white border-b-2 border-green-800"
-                        : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    {tabLabels[category as keyof typeof tabLabels]}
-                  </button>
-                ))}
-              </div>
-              
-              {/* Filter Content */}
-              <div className="flex-1 overflow-y-auto p-4">
-                <div className="space-y-3">
-                  {filterOptions[activeTab]?.map(option => (
-                    <label key={option} className="flex items-center cursor-pointer">
-                      <input
-                        type="radio"
-                        name={activeTab}
-                        checked={filters[activeTab]?.includes(option) || false}
-                        onChange={() => onFilterChange(activeTab, option)}
-                        className="mr-3 h-4 w-4 text-green-700 border-gray-300 focus:ring-green-600"
-                      />
-                      <span className="text-sm text-gray-700">{option}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Footer with action buttons */}
-              <div className="border-t border-gray-200 p-4">
-                <div className="flex gap-3">
-                  <button
-                    onClick={onClearFilters}
-                    className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
-                  >
-                    Clear All
-                  </button>
-                  <button
-                    onClick={onClose}
-                    className="flex-1 py-3 px-4 bg-black text-white rounded-lg font-medium hover:bg-gray-900 transition-colors"
-                  >
-                    Apply Filters
-                  </button>
-                </div>
-              </div>
+              )}
             </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-  );
-};
+
+            <div className="space-y-6">
+              {Object.entries(filterOptions).map(([category, options]) => (
+                <div key={category} className="border-b border-gray-200 pb-6">
+                  <h4 className="text-sm font-medium text-gray-900 mb-4 capitalize">
+                    {category.replace(/([A-Z])/g, ' $1')}
+                  </h4>
+                  <div className="space-y-2">
+                    {options.map(option => (
+                      <label key={option} className="flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={filters[category]?.includes(option) || false}
+                          onChange={() => onFilterChange(category, option)}
+                          className="mr-3 h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        />
+                        <span className="text-sm text-gray-700">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {activeFiltersCount > 0 && (
+              <button
+                onClick={onClearFilters}
+                className="mt-6 w-full bg-gray-900 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors lg:hidden"
+              >
+                Clear all filters
+              </button>
+            )}
+          </div>
+        </motion.div>
+      </>
+    )}
+  </AnimatePresence>
+);
 
 export default function AllProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<Filters>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<SortOption>("featured");
@@ -316,7 +276,33 @@ export default function AllProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
-  const filterOptions = getFilterOptions();
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/products?limit=100'); // Get more products for filtering
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data.products || []);
+        } else {
+          console.error('Failed to fetch products');
+          // Set empty array to prevent errors
+          setProducts([]);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        // Set empty array to prevent errors
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const filterOptions = getFilterOptions(products);
 
   // Initialize filters
   useEffect(() => {
@@ -329,27 +315,27 @@ export default function AllProductsPage() {
 
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
-    const filtered = products.filter(product => {
+    let filtered = products.filter(product => {
       // Search filter
       if (searchQuery) {
         const searchLower = searchQuery.toLowerCase();
-        if (!product.title.toLowerCase().includes(searchLower) &&
+        if (!product.name.toLowerCase().includes(searchLower) &&
             !product.description.toLowerCase().includes(searchLower) &&
-            !product.category?.toLowerCase().includes(searchLower)) {
+            !product.category?.name.toLowerCase().includes(searchLower)) {
           return false;
         }
       }
 
       // Category filter
       if (filters.category?.length > 0) {
-        if (!filters.category.includes(product.category || '')) {
+        if (!filters.category.includes(product.category?.name || '')) {
           return false;
         }
       }
 
       // Price range filter
       if (filters.priceRange?.length > 0) {
-        const price = getPriceValue(product.price);
+        const price = product.price;
         const matchesPriceRange = filters.priceRange.some(range => {
           switch (range) {
             case "Under ₹1000":
@@ -379,29 +365,28 @@ export default function AllProductsPage() {
       return true;
     });
 
-    // Sort products (create a copy to avoid mutating the filtered array)
-    const sorted = [...filtered];
+    // Sort products
     switch (sortOption) {
       case "price-low":
-        sorted.sort((a, b) => getPriceValue(a.price) - getPriceValue(b.price));
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case "price-high":
-        sorted.sort((a, b) => getPriceValue(b.price) - getPriceValue(a.price));
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case "name":
-        sorted.sort((a, b) => a.title.localeCompare(b.title));
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
       case "newest":
         // Assuming newer products have higher IDs
-        sorted.sort((a, b) => b.id.localeCompare(a.id));
+        filtered.sort((a, b) => b.id - a.id);
         break;
       default:
         // Featured/default sorting
         break;
     }
 
-    return sorted;
-  }, [searchQuery, filters, sortOption]);
+    return filtered;
+  }, [searchQuery, filters, sortOption, products]);
 
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
@@ -436,28 +421,6 @@ export default function AllProductsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Add global style to hide floating elements when modal is open */}
-      {showFilters && (
-        <style jsx global>{`
-          [class*="chatbot"], 
-          [id*="chatbot"], 
-          [class*="chat"], 
-          [id*="chat"],
-          [class*="float"], 
-          [id*="float"],
-          [class*="scroll"], 
-          [id*="scroll"],
-          [class*="back-to-top"], 
-          [id*="back-to-top"],
-          .fixed:not(.filter-modal):not(.filter-backdrop) {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-          }
-        `}</style>
-      )}
-      
       {/* Banner */}
       <AllProductsBanner />
 
@@ -505,7 +468,7 @@ export default function AllProductsPage() {
                     setSearchQuery(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
@@ -520,7 +483,7 @@ export default function AllProductsPage() {
                     <Filter className="w-4 h-4" />
                     Filters
                     {getActiveFiltersCount() > 0 && (
-                      <span className="bg-green-800 text-white text-xs px-2 py-1 rounded-full">
+                      <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
                         {getActiveFiltersCount()}
                       </span>
                     )}
@@ -538,7 +501,7 @@ export default function AllProductsPage() {
                     <button
                       onClick={() => setViewMode("grid")}
                       className={`p-2 rounded-md transition-colors ${
-                        viewMode === "grid" ? "bg-white shadow-sm text-green-700" : "text-gray-600 hover:text-gray-800"
+                        viewMode === "grid" ? "bg-white shadow-sm text-purple-600" : "text-gray-600 hover:text-gray-800"
                       }`}
                     >
                       <Grid3X3 className="w-4 h-4" />
@@ -546,7 +509,7 @@ export default function AllProductsPage() {
                     <button
                       onClick={() => setViewMode("list")}
                       className={`p-2 rounded-md transition-colors ${
-                        viewMode === "list" ? "bg-white shadow-sm text-green-700" : "text-gray-600 hover:text-gray-800"
+                        viewMode === "list" ? "bg-white shadow-sm text-purple-600" : "text-gray-600 hover:text-gray-800"
                       }`}
                     >
                       <List className="w-4 h-4" />
@@ -557,7 +520,7 @@ export default function AllProductsPage() {
                   <select
                     value={sortOption}
                     onChange={(e) => setSortOption(e.target.value as SortOption)}
-                    className="text-gray-600 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent bg-white"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
                   >
                     <option value="featured">Featured</option>
                     <option value="price-low">Price: Low to High</option>
@@ -577,12 +540,12 @@ export default function AllProductsPage() {
                       values.map(value => (
                         <span
                           key={`${category}-${value}`}
-                          className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium"
+                          className="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium"
                         >
                           {value}
                           <button
                             onClick={() => toggleFilter(category, value)}
-                            className="ml-2 text-green-700 hover:text-green-900"
+                            className="ml-2 text-purple-600 hover:text-purple-800"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -600,27 +563,58 @@ export default function AllProductsPage() {
               )}
             </div>
 
+            {/* Loading State */}
+            {loading && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
+                    <div className="aspect-square bg-gray-200"></div>
+                    <div className="p-4 space-y-3">
+                      <div className="h-4 bg-gray-200 rounded"></div>
+                      <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                      <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Products Grid/List */}
-            <ReusableProductGrid
-              products={paginatedProducts}
-              viewMode={viewMode}
-              columns={4}
-              mobileColumns={2}
-              showQuickActions={true}
-              showWishlist={true}
-              showCompare={false}
-              onWishlistClick={(product) => {
-                console.log('Added to wishlist:', product.title);
-                // Add wishlist logic here
-              }}
-              onQuickViewClick={(product) => {
-                console.log('Quick view:', product.title);
-                // Add quick view logic here
-              }}
-            />
+            {!loading && (
+              <ReusableProductGrid
+                products={paginatedProducts.map(product => ({
+                  id: product.id.toString(),
+                  title: product.name,
+                  description: product.description,
+                  price: `₹${product.price}`,
+                  originalPrice: product.original_price ? `₹${product.original_price}` : undefined,
+                  slug: product.slug,
+                  image: product.product_media?.[0]?.media_url || product.image,
+                  category: product.category?.name,
+                  rating: product.rating,
+                  reviewCount: product.reviewCount,
+                  inStock: product.product_stock?.[0] ? product.product_stock[0].quantity > 0 : true,
+                  isNew: product.isNew,
+                  isFeatured: product.isFeatured
+                }))}
+                viewMode={viewMode}
+                columns={4}
+                showQuickActions={true}
+                showWishlist={true}
+                showCompare={false}
+                onWishlistClick={(product) => {
+                  console.log('Added to wishlist:', product.title);
+                  // Add wishlist logic here
+                }}
+                onQuickViewClick={(product) => {
+                  console.log('Quick view:', product.title);
+                  // Add quick view logic here
+                }}
+              />
+            )}
 
             {/* No Results */}
-            {filteredAndSortedProducts.length === 0 && (
+            {!loading && filteredAndSortedProducts.length === 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -633,7 +627,7 @@ export default function AllProductsPage() {
                 </p>
                 <button
                   onClick={clearAllFilters}
-                  className="bg-green-800 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-900 transition-colors"
+                  className="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors"
                 >
                   Clear all filters
                 </button>
@@ -664,7 +658,7 @@ export default function AllProductsPage() {
                         onClick={() => setCurrentPage(page)}
                         className={`px-4 py-2 rounded-lg transition-colors ${
                           currentPage === page
-                            ? "bg-green-800 text-white"
+                            ? "bg-purple-600 text-white"
                             : "border border-gray-300 hover:bg-gray-50"
                         }`}
                       >
