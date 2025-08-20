@@ -2,7 +2,7 @@
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import Link from 'next/link';
-import { ProductServiceCard } from './UniversalServiceGrid';
+import { ProductServiceCard } from './ProductServiceCard';
 
 const autoplayPlugin = Autoplay({ delay: 3500, stopOnInteraction: false });
 

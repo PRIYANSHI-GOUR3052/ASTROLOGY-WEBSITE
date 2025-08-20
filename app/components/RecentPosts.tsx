@@ -4,6 +4,8 @@ import { blogPosts } from '../data/blogPosts';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '../contexts/useLanguage';
+import { useState, useRef, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const posts = Object.values(blogPosts).slice(0, 4); // 1 featured + 3 side
 
@@ -54,11 +56,50 @@ function getSafePost(obj: PostLanguages, lang: string): string {
 
 export default function RecentPosts() {
   const { lang, t } = useLanguage();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScrollButtons = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  // Combine all posts for mobile view
+  const allPosts = [
+    posts[0],
+    additionalPosts[0],
+    ...posts.slice(1),
+    additionalPosts[1]
+  ];
+
+  useEffect(() => {
+    checkScrollButtons();
+  }, []);
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 py-16">
       <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-8">{t('blog.recent.heading')}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+      
+      {/* Desktop View */}
+      <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
         {/* Left Column: Two Featured Blogs */}
         <div className="md:col-span-2 flex flex-col gap-6">
           {/* First Featured Blog - Height matches 2 right blocks */}
@@ -156,6 +197,95 @@ export default function RecentPosts() {
                 {t('blog.featured.readMore')} →
               </Link>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile View - Horizontal Scroll */}
+      <div className="md:hidden">
+        <div className="relative">
+          {/* Navigation Arrows */}
+          <button
+            onClick={scrollLeft}
+            disabled={!canScrollLeft}
+            className={`absolute left-0 top-32 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
+              canScrollLeft ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+            }`}
+            style={{ marginLeft: '-20px' }}
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-600" />
+          </button>
+          
+          <button
+            onClick={scrollRight}
+            disabled={!canScrollRight}
+            className={`absolute right-0 top-32 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
+              canScrollRight ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+            }`}
+            style={{ marginRight: '-20px' }}
+          >
+            <ChevronRight className="w-5 h-5 text-gray-600" />
+          </button>
+
+          {/* Scrollable Container */}
+          <div
+            ref={scrollContainerRef}
+            onScroll={checkScrollButtons}
+            className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-2"
+            style={{ 
+              scrollSnapType: 'x mandatory', 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          >
+            {allPosts.map((post, index) => {
+              const isAdditionalPost = index === 1 || index === allPosts.length - 1;
+              
+              return (
+                <div
+                  key={`mobile-${index}`}
+                  className="flex-none w-[calc(52%-6px)] min-w-[170px] snap-start"
+                >
+                  <div className="bg-white rounded-xl shadow-lg overflow-hidden h-[300px] flex flex-col">
+                    <div 
+                      className="relative w-full h-32 flex-shrink-0" 
+                      style={{ 
+                        background: post.themeColor, 
+                        transition: 'background 0.3s' 
+                      }}
+                    >
+                      <Image 
+                        src={post.imageUrl} 
+                        alt={post.title.en} 
+                        fill 
+                        className="object-cover" 
+                      />
+                    </div>
+                    <div className="p-3 flex flex-col flex-1">
+                      <h3 className="text-sm font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
+                        {isAdditionalPost 
+                          ? getSafePost(post.title as PostLanguages, lang)
+                          : getSafe(post.title as Record<string, string>, lang)
+                        }
+                      </h3>
+                      <div className="text-xs text-gray-500 mb-3 space-y-1">
+                        <div>📅 {post.date}</div>
+                        <div>⏱ {index + 2} {t('blog.featured.minRead')}</div>
+                      </div>
+                      <div className="mt-auto">
+                        <Link 
+                          href={`/blog/${post.title.en.replace(/\s+/g, '-').toLowerCase()}`}
+                          className="block w-full px-3 py-2 rounded-lg bg-black text-white text-xs font-semibold text-center hover:bg-gray-800 transition-all"
+                        >
+                          {t('blog.featured.readMore')} →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

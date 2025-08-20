@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useLanguage } from '../contexts/useLanguage'
-import { Sparkles, ArrowRight, Facebook, Instagram, Twitter, ChevronDown } from 'lucide-react'
+import { Sparkles, ArrowRight, Facebook, Instagram, Twitter, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { horoscopeCards } from '@/app/data/horoscopeCards'
 import { useRef } from 'react';
@@ -257,6 +257,32 @@ export function DailyHoroscope() {
   const [selectedSign, setSelectedSign] = useState<string>('');
   const [horoscope, setHoroscope] = useState<string>('');
   const [openFAQIndex, setOpenFAQIndex] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScrollButtons = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    }
+  };
+
   const getHoroscope = () => {
     if (selectedSign) {
       const prediction = dailyPredictions[selectedSign as keyof typeof dailyPredictions];
@@ -280,6 +306,10 @@ export function DailyHoroscope() {
       });
     }, 3500 + i * 300)); // slight stagger for visual effect
     return () => timers.forEach(timer => clearInterval(timer));
+  }, []);
+
+  useEffect(() => {
+    checkScrollButtons();
   }, []);
 
   return (
@@ -342,35 +372,112 @@ export function DailyHoroscope() {
                 )}
               </Card>
 
-              {horoscopeCards.map((card, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.08 }}
-                  whileHover={{ scale: 1.04, boxShadow: '0 8px 32px rgba(0,0,0,0.10)' }}
-                  className="rounded-xl shadow-lg border border-gray-200 flex flex-col justify-between bg-white max-w-full md:max-w-[420px] mx-auto p-0"
-                >
-                  <div className="w-full h-44 xs:h-52 sm:h-56 relative">
-                    <Image
-                      src={card.image}
-                      alt={getLocalizedText(card.title, lang)}
-                      fill
-                      className="object-cover rounded-t-xl"
-                      priority={index < 2}
-                    />
+              {/* Desktop View - Grid */}
+              <div className="hidden md:contents">
+                {horoscopeCards.map((card, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.08 }}
+                    whileHover={{ scale: 1.04, boxShadow: '0 8px 32px rgba(0,0,0,0.10)' }}
+                    className="rounded-xl shadow-lg border border-gray-200 flex flex-col justify-between bg-white max-w-full md:max-w-[420px] mx-auto p-0"
+                  >
+                    <div className="w-full h-44 xs:h-52 sm:h-56 relative">
+                      <Image
+                        src={card.image}
+                        alt={getLocalizedText(card.title, lang)}
+                        fill
+                        className="object-cover rounded-t-xl"
+                        priority={index < 2}
+                      />
+                    </div>
+                    <div className="p-4 xs:p-6 flex flex-col flex-1">
+                      <h3 className="text-lg xs:text-xl font-bold text-black mb-2">{getLocalizedText(card.title, lang)}</h3>
+                      <p className="text-gray-700 mb-4 line-clamp-3 text-sm xs:text-base">{getLocalizedText(card.description, lang)}</p>
+                      <Link href={card.href} passHref>
+                        <Button className="bg-black text-white rounded-lg py-2 px-6 shadow-md transition-all duration-300 border border-[#E0E0E0] hover:bg-gray-800 text-sm xs:text-base">
+                          {t('dailyHoroscope.learnMore')}
+                        </Button>
+                      </Link>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Mobile View - Horizontal Scroll */}
+              <div className="md:hidden col-span-1">
+                <div className="relative">
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={scrollLeft}
+                    disabled={!canScrollLeft}
+                    className={`absolute left-0 top-32 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
+                      canScrollLeft ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+                    }`}
+                    style={{ marginLeft: '-20px' }}
+                  >
+                    <ChevronLeft className="w-5 h-5 text-gray-600" />
+                  </button>
+                  
+                  <button
+                    onClick={scrollRight}
+                    disabled={!canScrollRight}
+                    className={`absolute right-0 top-32 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
+                      canScrollRight ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+                    }`}
+                    style={{ marginRight: '-20px' }}
+                  >
+                    <ChevronRight className="w-5 h-5 text-gray-600" />
+                  </button>
+
+                  {/* Scrollable Container */}
+                  <div
+                    ref={scrollContainerRef}
+                    onScroll={checkScrollButtons}
+                    className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-2"
+                    style={{ 
+                      scrollSnapType: 'x mandatory', 
+                      scrollbarWidth: 'none', 
+                      msOverflowStyle: 'none',
+                      WebkitOverflowScrolling: 'touch'
+                    }}
+                  >
+                    {horoscopeCards.map((card, index) => (
+                      <div
+                        key={`mobile-${index}`}
+                        className="flex-none w-[calc(52%-6px)] min-w-[170px] snap-start"
+                      >
+                        <div className="bg-white rounded-xl shadow-lg overflow-hidden h-[300px] flex flex-col">
+                          <div className="relative w-full h-32 flex-shrink-0">
+                            <Image 
+                              src={card.image} 
+                              alt={getLocalizedText(card.title, lang)} 
+                              fill 
+                              className="object-cover" 
+                            />
+                          </div>
+                          <div className="p-3 flex flex-col flex-1">
+                            <h3 className="text-sm font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
+                              {getLocalizedText(card.title, lang)}
+                            </h3>
+                            <p className="text-xs text-gray-600 mb-3 line-clamp-3 flex-1">
+                              {getLocalizedText(card.description, lang)}
+                            </p>
+                            <div className="mt-auto">
+                              <Link href={card.href}>
+                                <Button className="w-full px-3 py-2 rounded-lg bg-black text-white text-xs font-semibold text-center hover:bg-gray-800 transition-all">
+                                  {t('dailyHoroscope.learnMore')}
+                                </Button>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="p-4 xs:p-6 flex flex-col flex-1">
-                    <h3 className="text-lg xs:text-xl font-bold text-black mb-2">{getLocalizedText(card.title, lang)}</h3>
-                    <p className="text-gray-700 mb-4 line-clamp-3 text-sm xs:text-base">{getLocalizedText(card.description, lang)}</p>
-                    <Link href={card.href} passHref>
-                      <Button className="bg-black text-white rounded-lg py-2 px-6 shadow-md transition-all duration-300 border border-[#E0E0E0] hover:bg-gray-800 text-sm xs:text-base">
-                        {t('dailyHoroscope.learnMore')}
-                      </Button>
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -428,8 +535,8 @@ export function DailyHoroscope() {
                 ))}
               </div>
             </Card>
-            {/* Product Image Cards: vertical column below FAQ */}
-            <div className="flex flex-col gap-4 xs:gap-6 mt-4 xs:mt-6 w-full max-w-full md:max-w-[420px] mx-auto">
+            {/* Product Image Cards: vertical column below FAQ - Hidden on mobile */}
+            <div className="hidden md:flex flex-col gap-4 xs:gap-6 mt-4 xs:mt-6 w-full max-w-full md:max-w-[420px] mx-auto">
               {[0, 1, 2].map((cardIdx) => {
                 const variants = [
                   { initial: { y: -80, opacity: 0 }, animate: { y: 0, opacity: 1 }, exit: { y: 80, opacity: 0 } },

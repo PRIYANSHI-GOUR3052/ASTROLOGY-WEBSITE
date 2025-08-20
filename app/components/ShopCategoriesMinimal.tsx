@@ -6,6 +6,16 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+// Subcategory interface
+interface Subcategory {
+  id: number;
+  name: string;
+  slug: string;
+  category_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
 // Category interface to match backend data
 interface Category {
   id: number;
@@ -14,7 +24,7 @@ interface Category {
   image_url?: string | null;
   created_at: string;
   updated_at: string;
-  subcategories: any[];
+  subcategories: Subcategory[];
 }
 
 // Color schemes for categories - will be assigned dynamically
