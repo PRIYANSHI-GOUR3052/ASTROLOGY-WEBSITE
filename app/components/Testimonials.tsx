@@ -123,7 +123,7 @@ export function Testimonials() {
   const testimonial = testimonials[current];
 
   return (
-    <section className="relative w-full min-h-[60vh] bg-white overflow-hidden py-20 flex flex-col items-center justify-center">
+    <section className="relative w-full min-h-[60vh] bg-white overflow-hidden py-20 flex flex-col items-center justify-center px-4 md:px-0">
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
         <motion.div
           initial={{ opacity: 0, y: -30 }}
@@ -137,17 +137,27 @@ export function Testimonials() {
           </div>
         </motion.div>
         <div className="relative w-full flex items-center justify-center">
-          {/* Left Arrow */}
-          <button
-            aria-label="Previous testimonial"
-            onClick={() => paginate(-1)}
-            className="hidden md:flex absolute -left-24 z-10 h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all"
-            style={{ top: '50%', transform: 'translateY(-50%)' }}
-          >
-            <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
-          </button>
-          {/* Testimonial Card */}
-          <div className="w-full md:w-[1000px] min-h-[650px] bg-[#f7f7f7] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden items-stretch">
+          {/* Left Arrow for all views, styled for mobile/desktop */}
+          <div className="absolute -left-6 md:-left-24 z-10 flex items-center h-full">
+            <button
+              aria-label="Previous testimonial"
+              onClick={() => paginate(-1)}
+              className="flex md:hidden h-10 w-10 md:h-12 md:w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all mx-2"
+              style={{ top: '50%', transform: 'translateY(-50%)' }}
+            >
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button
+              aria-label="Previous testimonial"
+              onClick={() => paginate(-1)}
+              className="hidden md:flex h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all"
+              style={{ top: '50%', transform: 'translateY(-50%)' }}
+            >
+              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
+            </button>
+          </div>
+          {/* Testimonial Card with swipe enabled for mobile */}
+          <div className="w-full md:w-[1000px] min-h-[650px] bg-[#f7f7f7] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden items-stretch mx-4 md:mx-0">
             <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
                 key={current}
@@ -157,15 +167,16 @@ export function Testimonials() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.6, ease: 'easeInOut' }}
-                className="flex-1 flex flex-col justify-center px-10 py-24 md:py-32 md:pr-0 md:pl-20"
+                className="flex-1 flex flex-col justify-center px-6 md:px-10 py-24 md:py-32 md:pr-0 md:pl-20"
                 style={{ minWidth: 0 }}
-                drag="x"
+                drag={typeof window !== 'undefined' && window.innerWidth < 768 ? 'x' : false}
                 dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
                 onDragEnd={(e, info) => {
                   if (window.innerWidth < 768) {
-                    if (info.offset.x < -100) {
+                    if (info.offset.x < -80) {
                       paginate(1);
-                    } else if (info.offset.x > 100) {
+                    } else if (info.offset.x > 80) {
                       paginate(-1);
                     }
                   }
@@ -207,11 +218,21 @@ export function Testimonials() {
                 </div>
               </motion.div>
             </AnimatePresence>
-            {/* Right Arrow */}
+          </div>
+          {/* Right Arrow for all views, styled for mobile/desktop */}
+          <div className="absolute -right-6 md:-right-24 z-10 flex items-center h-full">
             <button
               aria-label="Next testimonial"
               onClick={() => paginate(1)}
-              className="hidden md:flex absolute -right-24 z-10 h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all"
+              className="flex md:hidden h-10 w-10 md:h-12 md:w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all mx-2"
+              style={{ top: '50%', transform: 'translateY(-50%)' }}
+            >
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
+            </button>
+            <button
+              aria-label="Next testimonial"
+              onClick={() => paginate(1)}
+              className="hidden md:flex h-12 w-12 rounded-full bg-gray-300 hover:bg-gray-400 shadow items-center justify-center transition-all"
               style={{ top: '50%', transform: 'translateY(-50%)' }}
             >
               <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
