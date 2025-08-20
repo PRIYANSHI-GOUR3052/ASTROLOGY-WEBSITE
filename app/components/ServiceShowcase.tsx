@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useRef, useEffect } from 'react';
 import { ReusableServiceCard, Service as ReusableService } from './ReusableServiceCard';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 /**
@@ -25,19 +25,42 @@ interface ServiceShowcaseProps {
   services: (LegacyServiceItem | ReusableService)[];
   title: string;
   subtitle?: string;
-  pageSize?: number; // number of cards per row page (default 6)
-  autoScrollOnPageChange?: boolean; // if true, scrolls showcase into view on pagination (default false)
+  cardsPerView?: number; // number of cards visible at once (default 5)
+  scrollStep?: number; // number of cards to scroll at once (default 1)
 }
 
 export default function ServiceShowcase({
   services,
   title,
   subtitle,
-  pageSize = 6,
-  autoScrollOnPageChange = false,
+  cardsPerView = 5,
+  scrollStep = 1,
 }: ServiceShowcaseProps) {
-  const [page, setPage] = useState(1);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [responsiveCardsPerView, setResponsiveCardsPerView] = useState(cardsPerView);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // Update cards per view based on screen size
+  useEffect(() => {
+    const updateCardsPerView = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setResponsiveCardsPerView(1); // Mobile: 1 card
+      } else if (width < 1024) {
+        setResponsiveCardsPerView(2); // Tablet: 2 cards
+      } else if (width < 1280) {
+        setResponsiveCardsPerView(3); // Small desktop: 3 cards
+      } else if (width < 1536) {
+        setResponsiveCardsPerView(4); // Medium desktop: 4 cards
+      } else {
+        setResponsiveCardsPerView(5); // Large desktop: 5 cards
+      }
+    };
+
+    updateCardsPerView();
+    window.addEventListener('resize', updateCardsPerView);
+    return () => window.removeEventListener('resize', updateCardsPerView);
+  }, []);
 
   // Normalize incoming services to ReusableService shape expected by ReusableServiceCard
   const normalized: ReusableService[] = useMemo(() => {
@@ -72,30 +95,26 @@ export default function ServiceShowcase({
     });
   }, [services]);
 
-  const totalPages = Math.max(1, Math.ceil(normalized.length / pageSize));
-  const currentPage = Math.min(page, totalPages);
-  const startIdx = (currentPage - 1) * pageSize;
-  const pageItems = normalized.slice(startIdx, startIdx + pageSize);
+  const totalCards = normalized.length;
+  const maxIndex = Math.max(0, totalCards - responsiveCardsPerView);
+  const canScrollLeft = currentIndex > 0;
+  const canScrollRight = currentIndex < maxIndex;
 
-  const handlePageChange = (p: number) => {
-    if (p < 1 || p > totalPages) return;
-    setPage(p);
-  };
-
-  // Optional scroll (disabled by default to avoid shifting user's viewport)
-  useEffect(() => {
-    if (autoScrollOnPageChange) {
-      containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (direction === 'left' && canScrollLeft) {
+      setCurrentIndex(Math.max(0, currentIndex - scrollStep));
+    } else if (direction === 'right' && canScrollRight) {
+      setCurrentIndex(Math.min(maxIndex, currentIndex + scrollStep));
     }
-  }, [currentPage, autoScrollOnPageChange]);
+  };
 
   // Guard: nothing to show - moved after hooks to comply with rules of hooks
   if (!services || services.length === 0) return null;
 
   return (
     <div className="mb-12" ref={containerRef}>
-      {/* Heading with top-right pagination */}
-      <div className="mb-4 flex flex-col gap-3">
+      {/* Heading with navigation arrows */}
+      <div className="mb-6 flex flex-col gap-3">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div className="max-w-3xl">
             <h2
@@ -113,25 +132,25 @@ export default function ServiceShowcase({
               </p>
             )}
             <div className="mt-2 text-sm text-gray-500 font-medium">
-              Page {currentPage} of {totalPages}
+              {totalCards} services available
             </div>
           </div>
-          {totalPages > 1 && (
+          {totalCards > responsiveCardsPerView && (
             <div className="flex justify-end">
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm"
-                  aria-label="Previous page"
+                  onClick={() => handleScroll('left')}
+                  disabled={!canScrollLeft}
+                  className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm transition-all duration-200"
+                  aria-label="Scroll left"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm"
-                  aria-label="Next page"
+                  onClick={() => handleScroll('right')}
+                  disabled={!canScrollRight}
+                  className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm transition-all duration-200"
+                  aria-label="Scroll right"
                 >
                   <ArrowRight className="w-4 h-4" />
                 </button>
@@ -141,23 +160,61 @@ export default function ServiceShowcase({
         </div>
       </div>
 
-      {/* Single row of cards */}
-      <AnimatePresence mode="popLayout">
+      {/* Carousel container */}
+      <div 
+        className="relative overflow-hidden cursor-grab active:cursor-grabbing"
+        style={{
+          width: `${responsiveCardsPerView * (288 + 24) - 24}px`, // Exact width for visible cards only
+          maxWidth: '100%',
+        }}
+        onWheel={(e) => {
+          // Only handle horizontal scrolling (Shift+wheel or horizontal wheel)
+          if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+            e.preventDefault();
+            const scrollDirection = (e.deltaX || e.deltaY) > 0 ? 'right' : 'left';
+            handleScroll(scrollDirection);
+          }
+        }}
+      >
         <motion.div
-          key={`page-${currentPage}`}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          transition={{ duration: 0.3 }}
-          className="flex gap-6 overflow-hidden"
+          className="flex gap-6"
+          animate={{
+            x: `-${currentIndex * (288 + 24)}px`, // 288px card width + 24px gap
+          }}
+          transition={{
+            type: 'spring',
+            damping: 20,
+            stiffness: 300,
+          }}
+          style={{
+            width: `${normalized.length * (288 + 24)}px`, // Total width for all cards
+          }}
+          drag="x"
+          dragConstraints={{
+            left: -maxIndex * (288 + 24),
+            right: 0,
+          }}
+          dragElastic={0.1}
+          onDragEnd={(_, info) => {
+            const dragOffset = info.offset.x;
+            const dragThreshold = 100;
+            
+            if (Math.abs(dragOffset) > dragThreshold) {
+              if (dragOffset > 0 && canScrollLeft) {
+                handleScroll('left');
+              } else if (dragOffset < 0 && canScrollRight) {
+                handleScroll('right');
+              }
+            }
+          }}
         >
-          {pageItems.map((service) => (
+          {normalized.map((service) => (
             <div key={service.id} className="w-72 flex-shrink-0">
               <ReusableServiceCard service={service} viewMode="grid" />
             </div>
           ))}
         </motion.div>
-      </AnimatePresence>
+      </div>
     </div>
   );
 }
