@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Package, AlertTriangle, TrendingUp, MapPin, Calendar, DollarSign, Hash, RefreshCw } from "lucide-react";
 
 interface ProductStock {
-  sku: string;
   quantity: number;
   reserved: number;
   min_stock: number;
@@ -75,7 +74,6 @@ const StepStockManagement: React.FC<StepStockManagementProps> = ({
       setLoading(true);
       
       const stockData = {
-        sku: stock.sku,
         quantity: parseInt(stock.quantity.toString()) || 0,
         reserved: parseInt(stock.reserved.toString()) || 0,
         min_stock: parseInt(stock.min_stock.toString()) || 0,
@@ -86,31 +84,65 @@ const StepStockManagement: React.FC<StepStockManagementProps> = ({
         cost_price: stock.cost_price ? parseFloat(stock.cost_price.toString()) : null
       };
 
-      const method = existingStock ? 'PUT' : 'POST';
-      const response = await fetch(`/api/products/${productId}/stock`, {
-        method,
+      // Always try POST first, if it fails with 400 (already exists), then use PUT
+      let response = await fetch(`/api/products/${productId}/stock`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(stockData)
       });
 
+      // If POST fails with 400 (stock already exists), try PUT
+      if (response.status === 400) {
+        const errorData = await response.json();
+        if (errorData.error && errorData.error.includes('already exists')) {
+          response = await fetch(`/api/products/${productId}/stock`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(stockData)
+          });
+        }
+      }
+
       if (response.ok) {
         const savedData = await response.json();
         setExistingStock(savedData);
-        onNext();
+        
+        // Check if stock data is already filled (has meaningful values)
+        const hasStockData = stockData.quantity > 0 || 
+                           stockData.reserved > 0 || 
+                           stockData.min_stock > 0 || 
+                           (stockData.max_stock && stockData.max_stock > 0) ||
+                           stockData.location ||
+                           stockData.batch_number ||
+                           stockData.expiry_date ||
+                           (stockData.cost_price && stockData.cost_price > 0);
+        
+        if (hasStockData) {
+          // Stock data is filled, redirect to main page
+          alert('Product created successfully!');
+          window.location.href = '/admin/products/create';
+        } else {
+          // Stock data is empty, proceed to next step
+          onNext();
+        }
       } else {
         const errorData = await response.json();
         console.error('Error saving stock data:', errorData);
+        alert('Error saving stock data. Please try again.');
       }
     } catch (error) {
       console.error('Error saving stock data:', error);
+      alert('Error saving stock data. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAutoGenerateSKU = () => {
-    // This will be handled by the API when SKU is empty
-    onFieldChange('sku', '');
+  const handleRefreshStock = () => {
+    // Refresh stock data if needed
+    if (productId) {
+      loadExistingStock();
+    }
   };
 
   const getAvailableStock = (): number => {
@@ -168,11 +200,11 @@ const StepStockManagement: React.FC<StepStockManagementProps> = ({
         </div>
         <button
           type="button"
-          onClick={handleAutoGenerateSKU}
+          onClick={handleRefreshStock}
           className="flex items-center px-4 py-2 text-sm font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-900/30 rounded-lg transition-colors"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
-          Auto SKU
+          Refresh
         </button>
       </div>
 
@@ -186,22 +218,16 @@ const StepStockManagement: React.FC<StepStockManagementProps> = ({
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">Stock Overview</h3>
             </div>
             
-            {/* SKU */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                SKU (Stock Keeping Unit)
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  className={`flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 ${errors.sku ? 'border-red-500' : ''}`}
-                  placeholder="Auto-generated or custom SKU"
-                  value={stock.sku}
-                  onChange={e => onFieldChange('sku', e.target.value)}
-                />
+            {/* Product Info */}
+            <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Product SKU</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400 font-mono">
+                  {productId ? 'Auto-generated from product details' : 'Will be generated'}
+                </span>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Leave empty for auto-generation based on product name and category
+                SKU is automatically generated from product name and category
               </p>
             </div>
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, Save } from "lucide-react";
 
 interface Attribute {
   id: number;
@@ -45,6 +45,8 @@ interface StepAttributeMediaProps {
   onBack: () => void;
   onSubmit: () => void;
   errors: { [key: string]: string };
+  productId?: number | null; // Add productId prop for saving attributes
+  isSubmitting?: boolean; // Add loading state
 }
 
 const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
@@ -55,12 +57,16 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
   onBack,
   onSubmit,
   errors,
+  productId,
+  isSubmitting = false,
 }) => {
   const [categoryAttributes, setCategoryAttributes] = useState<CategoryAttribute[]>([]);
   const [zodiacAttributes, setZodiacAttributes] = useState<ZodiacAttribute[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
+  const [localSelectedAttributes, setLocalSelectedAttributes] = useState<{ [key: string]: any }>(selectedAttributes);
+  const [savingAttributes, setSavingAttributes] = useState(false);
 
   // Fetch attributes for the selected category and zodiac
   useEffect(() => {
@@ -140,6 +146,37 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
     fetchAttributes();
   }, [categoryId, zodiacId]);
 
+  // Load existing product attributes if editing
+  useEffect(() => {
+    const loadExistingAttributes = async () => {
+      if (productId) {
+        try {
+          const response = await fetch(`/api/products/${productId}/attributes`);
+          if (response.ok) {
+            const existingAttributes = await response.json();
+            const formattedAttributes: { [key: string]: any } = {};
+            
+            Object.values(existingAttributes).forEach((attr: any) => {
+              if (attr.values && attr.values.length > 0) {
+                if (attr.attributeType === 'multiselect') {
+                  formattedAttributes[attr.attributeId] = attr.values.map((v: any) => v.value);
+                } else {
+                  formattedAttributes[attr.attributeId] = attr.values[0].value;
+                }
+              }
+            });
+            
+            setLocalSelectedAttributes(formattedAttributes);
+          }
+        } catch (error) {
+          console.error('Error loading existing attributes:', error);
+        }
+      }
+    };
+
+    loadExistingAttributes();
+  }, [productId]);
+
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => ({
       ...prev,
@@ -147,8 +184,101 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
     }));
   };
 
+  // Handle local attribute changes
+  const handleLocalAttributeChange = (attributeId: number, value: any) => {
+    setLocalSelectedAttributes(prev => ({
+      ...prev,
+      [attributeId]: value
+    }));
+    // Also call the parent's onAttributeChange for backward compatibility
+    onAttributeChange(attributeId, value);
+  };
+
+  // Save attributes to database
+  const saveAttributesToDatabase = async () => {
+    if (!productId) {
+      console.error('No product ID available for saving attributes');
+      return false;
+    }
+
+    try {
+      setSavingAttributes(true);
+      
+      // Prepare attributes data for API
+      const attributesToSave: Array<{
+        attributeId: number;
+        value: any;
+        valueType: string;
+      }> = [];
+      
+      // Process category attributes
+      categoryAttributes.forEach(attr => {
+        const value = localSelectedAttributes[attr.attribute_id];
+        if (value !== undefined && value !== null && value !== '') {
+          attributesToSave.push({
+            attributeId: attr.attribute_id,
+            value: value,
+            valueType: attr.attribute.type
+          });
+        }
+      });
+
+      // Process zodiac attributes
+      zodiacAttributes.forEach(attr => {
+        const value = localSelectedAttributes[attr.attribute_id];
+        if (value !== undefined && value !== null && value !== '') {
+          attributesToSave.push({
+            attributeId: attr.attribute_id,
+            value: value,
+            valueType: attr.attribute.type
+          });
+        }
+      });
+
+      console.log('Saving attributes:', attributesToSave);
+
+      const response = await fetch(`/api/products/${productId}/attributes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ attributes: attributesToSave }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Attributes saved successfully:', result);
+        return true;
+      } else {
+        const errorData = await response.json();
+        console.error('Error saving attributes:', errorData);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error saving attributes:', error);
+      return false;
+    } finally {
+      setSavingAttributes(false);
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    if (productId) {
+      // Save attributes to database first
+      const attributesSaved = await saveAttributesToDatabase();
+      if (!attributesSaved) {
+        setError('Failed to save attributes. Please try again.');
+        return;
+      }
+    }
+    
+    // Call the parent's onSubmit
+    onSubmit();
+  };
+
   const renderAttributeInput = (attribute: Attribute, attributeValues?: AttributeValue[]) => {
-    const currentValue = selectedAttributes[attribute.id];
+    const currentValue = localSelectedAttributes[attribute.id];
     const isRequired = attribute.is_required;
 
     switch (attribute.type) {
@@ -158,7 +288,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
             type="text"
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
             value={currentValue || ''}
-            onChange={e => onAttributeChange(attribute.id, e.target.value)}
+            onChange={e => handleLocalAttributeChange(attribute.id, e.target.value)}
             placeholder={`Enter ${attribute.name.toLowerCase()}`}
             required={isRequired}
           />
@@ -170,7 +300,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
             type="number"
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
             value={currentValue || ''}
-            onChange={e => onAttributeChange(attribute.id, parseFloat(e.target.value) || 0)}
+            onChange={e => handleLocalAttributeChange(attribute.id, parseFloat(e.target.value) || 0)}
             placeholder={`Enter ${attribute.name.toLowerCase()}`}
             required={isRequired}
             min="0"
@@ -183,7 +313,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
           <select
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
             value={currentValue || ''}
-            onChange={e => onAttributeChange(attribute.id, e.target.value)}
+            onChange={e => handleLocalAttributeChange(attribute.id, e.target.value)}
             required={isRequired}
           >
             <option value="">Select {attribute.name.toLowerCase()}</option>
@@ -209,7 +339,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
                     const newValue = e.target.checked
                       ? [...currentArray, value.id]
                       : currentArray.filter(id => id !== value.id);
-                    onAttributeChange(attribute.id, newValue);
+                    handleLocalAttributeChange(attribute.id, newValue);
                   }}
                 />
                 <span className="text-gray-700 dark:text-gray-300">{value.value}</span>
@@ -225,7 +355,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
               type="checkbox"
               className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
               checked={currentValue || false}
-              onChange={e => onAttributeChange(attribute.id, e.target.checked)}
+              onChange={e => handleLocalAttributeChange(attribute.id, e.target.checked)}
             />
             <span className="text-gray-700 dark:text-gray-300">Yes</span>
           </label>
@@ -237,7 +367,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
             type="date"
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
             value={currentValue || ''}
-            onChange={e => onAttributeChange(attribute.id, e.target.value)}
+            onChange={e => handleLocalAttributeChange(attribute.id, e.target.value)}
             required={isRequired}
           />
         );
@@ -248,7 +378,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
             type="text"
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
             value={currentValue || ''}
-            onChange={e => onAttributeChange(attribute.id, e.target.value)}
+            onChange={e => handleLocalAttributeChange(attribute.id, e.target.value)}
             placeholder={`Enter ${attribute.name.toLowerCase()}`}
             required={isRequired}
           />
@@ -373,15 +503,32 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
           type="button"
           className="px-6 py-3 text-sm font-medium rounded-lg shadow-sm text-gray-700 bg-gray-200 hover:bg-gray-300 dark:text-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-colors"
           onClick={onBack}
+          disabled={isSubmitting || savingAttributes}
         >
           ← Back
         </button>
         <button
           type="button"
-          className="px-8 py-3 text-sm font-medium rounded-lg shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600 transition-colors"
-          onClick={onSubmit}
+          className="px-8 py-3 text-sm font-medium rounded-lg shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={handleSubmit}
+          disabled={isSubmitting || savingAttributes}
         >
-          Save & Continue
+          {savingAttributes ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              Saving Attributes...
+            </>
+          ) : isSubmitting ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              Processing...
+            </>
+          ) : (
+            <>
+              <Save className="w-4 h-4 mr-2" />
+              Save & Continue
+            </>
+          )}
         </button>
       </div>
     </div>

@@ -3,17 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Helper function to generate SKU
-function generateSKU(productName: string, categoryName: string = '', existingSKUs: string[] = []): string {
-  const baseSKU = `${productName.substring(0, 3).toUpperCase()}-${categoryName.substring(0, 3).toUpperCase()}-${Date.now().toString().slice(-6)}`;
-  
-  // Check if SKU already exists
-  if (existingSKUs.includes(baseSKU)) {
-    return `${baseSKU}-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
-  }
-  
-  return baseSKU;
-}
+
 
 // GET stock data for a product
 export async function GET(
@@ -75,7 +65,6 @@ export async function POST(
     const productId = parseInt(params.id);
     const body = await request.json();
     const {
-      sku,
       quantity = 0,
       reserved = 0,
       min_stock = 0,
@@ -122,15 +111,12 @@ export async function POST(
       );
     }
 
-    // Generate SKU if not provided
-    let finalSKU = sku;
-    if (!finalSKU) {
-      const existingSKUs = await prisma.$queryRaw`
-        SELECT sku FROM product_stock WHERE sku IS NOT NULL
-      ` as any[];
-      const existingSKUList = existingSKUs.map(row => row.sku);
-      finalSKU = generateSKU(productInfo.name, productInfo.category_name || '', existingSKUList);
-    }
+    // Get SKU from the product table since it's managed there
+    const productSKU = await prisma.$queryRaw`
+      SELECT sku FROM products WHERE id = ${productId}
+    ` as any[];
+    
+    const finalSKU = productSKU.length > 0 ? productSKU[0].sku : null;
 
     // Create stock data
     await prisma.$queryRaw`
@@ -194,7 +180,6 @@ export async function PUT(
     const productId = parseInt(params.id);
     const body = await request.json();
     const {
-      sku,
       quantity,
       reserved,
       min_stock,
@@ -227,11 +212,6 @@ export async function PUT(
     // Build update query dynamically
     const updateFields = [];
     const updateValues = [];
-
-    if (sku !== undefined) {
-      updateFields.push('sku = ?');
-      updateValues.push(sku);
-    }
     if (quantity !== undefined) {
       updateFields.push('quantity = ?');
       updateValues.push(quantity);
