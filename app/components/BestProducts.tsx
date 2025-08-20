@@ -103,7 +103,7 @@ export function BestProducts() {
             <div className="flex justify-end">
               <div className="flex items-center gap-4">
                 {/* View All Button */}
-                <Link href="/shop">
+                <Link href="/shop/all-products">
                   <button className="px-6 py-3 bg-black text-white font-semibold rounded-xl shadow-lg hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2">
                     View All
                     <span className="text-white">→</span>
