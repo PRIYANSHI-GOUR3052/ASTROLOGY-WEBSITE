@@ -4,20 +4,41 @@ import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { ChevronDown, X, Filter, Grid3X3, List, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { products } from "@/data/products";
 import { ReusableProductGrid } from "@/app/components/product-cards";
 
 // Types
 interface Product {
-  id: string;
-  title: string;
+  id: number;
+  name: string;
   description: string;
-  price: string;
-  originalPrice?: string;
+  price: number;
+  original_price?: number;
+  discount_price?: number;
   slug: string;
   image?: string;
-  category?: string;
+  category?: {
+    id: number;
+    name: string;
+  };
+  zodiac?: {
+    id: number;
+    name: string;
+  };
+  product_media?: Array<{
+    id: number;
+    media_url: string;
+    alt_text?: string;
+  }>;
+  product_stock?: Array<{
+    id: number;
+    quantity: number;
+    reserved: number;
+  }>;
   rating?: number;
+  reviewCount?: number;
+  inStock?: boolean;
+  isNew?: boolean;
+  isFeatured?: boolean;
 }
 
 interface Filters {
@@ -30,8 +51,8 @@ type ViewMode = "grid" | "list";
 type SortOption = "featured" | "price-low" | "price-high" | "name" | "newest";
 
 // Extract filter options from products
-const getFilterOptions = () => {
-  const categories = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
+const getFilterOptions = (products: Product[]) => {
+  const categories = [...new Set(products.map(p => p.category?.name).filter(Boolean) as string[])].sort();
   const priceRanges = ["Under ₹1000", "₹1000 - ₹3000", "₹3000 - ₹5000", "Above ₹5000"];
   const ratings = ["4+ Stars", "3+ Stars", "2+ Stars", "1+ Stars"];
   
@@ -245,6 +266,8 @@ const FilterSidebar = ({
 );
 
 export default function AllProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<Filters>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<SortOption>("featured");
@@ -253,7 +276,33 @@ export default function AllProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
-  const filterOptions = getFilterOptions();
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/products?limit=100'); // Get more products for filtering
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data.products || []);
+        } else {
+          console.error('Failed to fetch products');
+          // Set empty array to prevent errors
+          setProducts([]);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        // Set empty array to prevent errors
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const filterOptions = getFilterOptions(products);
 
   // Initialize filters
   useEffect(() => {
@@ -270,23 +319,23 @@ export default function AllProductsPage() {
       // Search filter
       if (searchQuery) {
         const searchLower = searchQuery.toLowerCase();
-        if (!product.title.toLowerCase().includes(searchLower) &&
+        if (!product.name.toLowerCase().includes(searchLower) &&
             !product.description.toLowerCase().includes(searchLower) &&
-            !product.category?.toLowerCase().includes(searchLower)) {
+            !product.category?.name.toLowerCase().includes(searchLower)) {
           return false;
         }
       }
 
       // Category filter
       if (filters.category?.length > 0) {
-        if (!filters.category.includes(product.category || '')) {
+        if (!filters.category.includes(product.category?.name || '')) {
           return false;
         }
       }
 
       // Price range filter
       if (filters.priceRange?.length > 0) {
-        const price = getPriceValue(product.price);
+        const price = product.price;
         const matchesPriceRange = filters.priceRange.some(range => {
           switch (range) {
             case "Under ₹1000":
@@ -319,17 +368,17 @@ export default function AllProductsPage() {
     // Sort products
     switch (sortOption) {
       case "price-low":
-        filtered.sort((a, b) => getPriceValue(a.price) - getPriceValue(b.price));
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case "price-high":
-        filtered.sort((a, b) => getPriceValue(b.price) - getPriceValue(a.price));
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case "name":
-        filtered.sort((a, b) => a.title.localeCompare(b.title));
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
       case "newest":
         // Assuming newer products have higher IDs
-        filtered.sort((a, b) => b.id.localeCompare(a.id));
+        filtered.sort((a, b) => b.id - a.id);
         break;
       default:
         // Featured/default sorting
@@ -337,7 +386,7 @@ export default function AllProductsPage() {
     }
 
     return filtered;
-  }, [searchQuery, filters, sortOption]);
+  }, [searchQuery, filters, sortOption, products]);
 
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
@@ -514,26 +563,58 @@ export default function AllProductsPage() {
               )}
             </div>
 
+            {/* Loading State */}
+            {loading && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
+                    <div className="aspect-square bg-gray-200"></div>
+                    <div className="p-4 space-y-3">
+                      <div className="h-4 bg-gray-200 rounded"></div>
+                      <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                      <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Products Grid/List */}
-            <ReusableProductGrid
-              products={paginatedProducts}
-              viewMode={viewMode}
-              columns={4}
-              showQuickActions={true}
-              showWishlist={true}
-              showCompare={false}
-              onWishlistClick={(product) => {
-                console.log('Added to wishlist:', product.title);
-                // Add wishlist logic here
-              }}
-              onQuickViewClick={(product) => {
-                console.log('Quick view:', product.title);
-                // Add quick view logic here
-              }}
-            />
+            {!loading && (
+              <ReusableProductGrid
+                products={paginatedProducts.map(product => ({
+                  id: product.id.toString(),
+                  title: product.name,
+                  description: product.description,
+                  price: `₹${product.price}`,
+                  originalPrice: product.original_price ? `₹${product.original_price}` : undefined,
+                  slug: product.slug,
+                  image: product.product_media?.[0]?.media_url || product.image,
+                  category: product.category?.name,
+                  rating: product.rating,
+                  reviewCount: product.reviewCount,
+                  inStock: product.product_stock?.[0] ? product.product_stock[0].quantity > 0 : true,
+                  isNew: product.isNew,
+                  isFeatured: product.isFeatured
+                }))}
+                viewMode={viewMode}
+                columns={4}
+                showQuickActions={true}
+                showWishlist={true}
+                showCompare={false}
+                onWishlistClick={(product) => {
+                  console.log('Added to wishlist:', product.title);
+                  // Add wishlist logic here
+                }}
+                onQuickViewClick={(product) => {
+                  console.log('Quick view:', product.title);
+                  // Add quick view logic here
+                }}
+              />
+            )}
 
             {/* No Results */}
-            {filteredAndSortedProducts.length === 0 && (
+            {!loading && filteredAndSortedProducts.length === 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

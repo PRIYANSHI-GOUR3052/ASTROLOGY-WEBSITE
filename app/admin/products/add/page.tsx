@@ -166,49 +166,10 @@ export default function AddProductPage() {
       setIsEditMode(true);
       setEditProductId(parseInt(editId));
       setCreatedProductId(parseInt(editId));
-      // Load product data for editing
-      loadProductForEdit(parseInt(editId));
+      // Start from step 0 (Category Selection) for editing
+      setActiveStep(0);
     }
   }, [searchParams]);
-  
-  const loadProductForEdit = async (productId: number) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/products/${productId}`);
-      if (response.ok) {
-        const product = await response.json();
-        // Populate form with existing product data
-        setFormData({
-          zodiacSign: product.zodiac_id?.toString() || null,
-          categoryId: product.category_id,
-          name: product.name,
-          description: product.description,
-          sku: product.sku || '',
-          sellingPrice: product.price?.toString() || '',
-          originalPrice: product.original_price?.toString() || '',
-          discountPrice: product.discount_price?.toString() || '',
-          color: product.color || '',
-          images: product.image_url ? [product.image_url] : [],
-          // Auto-pricing fields
-          productType: product.product_type || '',
-          weight: product.weight?.toString() || '',
-          carats: product.carats?.toString() || '',
-          quantity: product.quantity?.toString() || '',
-          quality: product.quality || '',
-          clarity: product.clarity || '',
-          mukhi: product.mukhi || '',
-          material: product.material || '',
-          perCaratPrice: product.per_carat_price?.toString() || '',
-          perGramPrice: product.per_gram_price?.toString() || '',
-          perPiecePrice: product.per_piece_price?.toString() || '',
-        });
-      }
-    } catch (error) {
-      console.error('Error loading product for edit:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
   
   const handleStockFieldChange = (field: string, value: any) => {
     setStock(prev => ({ ...prev, [field]: value }));
@@ -268,41 +229,12 @@ export default function AddProductPage() {
     try {
       setLoading(true);
       
-      // Save SEO data immediately
-      if (createdProductId || editProductId) {
-        const seoData = {
-          meta_title: seo.meta_title,
-          meta_description: seo.meta_description,
-          meta_keywords: seo.meta_keywords,
-          og_title: seo.og_title,
-          og_description: seo.og_description,
-          og_image: seo.og_image,
-          twitter_title: seo.twitter_title,
-          twitter_description: seo.twitter_description,
-          twitter_image: seo.twitter_image,
-          canonical_url: seo.canonical_url
-        };
-
-        const response = await fetch(`/api/products/${createdProductId || editProductId}/meta`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(seoData)
-        });
-
-        if (response.ok) {
-          console.log('SEO data saved successfully');
-          setActiveStep(5);
-        } else {
-          console.error('Error saving SEO data');
-          alert('Error saving SEO data. Please try again.');
-        }
-      } else {
-        setActiveStep(5);
-      }
+      // SEO data is already saved by the StepDetailedSEO component
+      console.log('SEO step completed, proceeding to stock management...');
+      setActiveStep(5);
       
     } catch (error) {
-      console.error('Error saving SEO data:', error);
-      alert('Error saving SEO data. Please try again.');
+      console.error('Error in SEO step:', error);
     } finally {
       setLoading(false);
     }
@@ -415,10 +347,25 @@ export default function AddProductPage() {
           name: formData.name,
           description: formData.description,
           price: formData.sellingPrice,
+          original_price: formData.originalPrice,
+          discount_price: formData.discountPrice,
           sku: formData.sku,
           category_id: formData.categoryId,
           zodiac_id: formData.zodiacSign ? parseInt(formData.zodiacSign) : null,
-          images: formData.images
+          images: formData.images,
+          // Auto-pricing fields
+          product_type: formData.productType,
+          weight: formData.weight,
+          carats: formData.carats,
+          quantity: formData.quantity,
+          quality: formData.quality,
+          clarity: formData.clarity,
+          color: formData.color,
+          mukhi: formData.mukhi,
+          material: formData.material,
+          per_carat_price: formData.perCaratPrice,
+          per_gram_price: formData.perGramPrice,
+          per_piece_price: formData.perPiecePrice
         };
         response = await fetch(`/api/products/${editProductId}`, {
           method: 'PUT',
@@ -484,6 +431,8 @@ export default function AddProductPage() {
   // Get category label for Step 1 (mocked, replace with actual lookup if needed)
   const categoryLabel = formData.categoryId ? `Category #${formData.categoryId}` : "";
 
+
+
   return (
     <div className="w-full p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-8">
       <h1 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
@@ -516,6 +465,11 @@ export default function AddProductPage() {
             style={{ width: `${((activeStep) / (steps.length - 1)) * 100}%` }}
           ></div>
         </div>
+        {isEditMode && (
+          <div className="mt-2 text-sm text-purple-600 text-center">
+            Editing existing product - All data will be pre-filled
+          </div>
+        )}
       </div>
       {/* End Progress Bar */}
       <div className="">
@@ -527,6 +481,7 @@ export default function AddProductPage() {
             onCategoryChange={handleCategoryChange}
             onNext={handleNext}
             errors={errors}
+            productId={createdProductId || editProductId || undefined}
           />
         )}
         {activeStep === 1 && (
@@ -539,6 +494,7 @@ export default function AddProductPage() {
             onSubmit={handleSubmit}
             categoryLabel={categoryLabel}
             errors={errors}
+            productId={createdProductId || editProductId || undefined}
           />
         )}
         {activeStep === 2 && (
@@ -550,7 +506,7 @@ export default function AddProductPage() {
             onBack={() => setActiveStep(1)}
             onSubmit={handleAttributeMediaSubmit}
             errors={errors}
-            productId={createdProductId || editProductId}
+            productId={createdProductId || editProductId || undefined}
             isSubmitting={loading}
           />
         )}
@@ -567,11 +523,16 @@ export default function AddProductPage() {
         )}
         {activeStep === 4 && (
           <StepDetailedSEO
+            productId={createdProductId || editProductId || undefined}
+            productName={formData.name}
+            productDescription={formData.description}
+            productImage={formData.images[0] || ''}
             seo={seo}
             onFieldChange={handleSEOFieldChange}
             onBack={() => setActiveStep(3)}
-            onNext={() => setActiveStep(5)}
+            onNext={handleSEONext}
             errors={{}}
+            isSubmitting={loading}
           />
         )}
                  {activeStep === 5 && (

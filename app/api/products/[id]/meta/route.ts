@@ -36,43 +36,29 @@ export async function POST(
       where: { product_id: productId }
     });
 
-    let result;
     if (existingMeta) {
-      // Update existing meta data
-      result = await prisma.product_meta.update({
-        where: { product_id: productId },
-        data: {
-          meta_title: body.meta_title || null,
-          meta_description: body.meta_description || null,
-          meta_keywords: body.meta_keywords || null,
-          og_title: body.og_title || null,
-          og_description: body.og_description || null,
-          og_image: body.og_image || null,
-          twitter_title: body.twitter_title || null,
-          twitter_description: body.twitter_description || null,
-          twitter_image: body.twitter_image || null,
-          canonical_url: body.canonical_url || null,
-          updated_at: new Date()
-        }
-      });
-    } else {
-      // Create new meta data
-      result = await prisma.product_meta.create({
-        data: {
-          product_id: productId,
-          meta_title: body.meta_title || null,
-          meta_description: body.meta_description || null,
-          meta_keywords: body.meta_keywords || null,
-          og_title: body.og_title || null,
-          og_description: body.og_description || null,
-          og_image: body.og_image || null,
-          twitter_title: body.twitter_title || null,
-          twitter_description: body.twitter_description || null,
-          twitter_image: body.twitter_image || null,
-          canonical_url: body.canonical_url || null
-        }
-      });
+      return NextResponse.json(
+        { error: 'Meta data already exists for this product. Use PUT to update.' },
+        { status: 400 }
+      );
     }
+
+    // Create new meta data
+    const result = await prisma.product_meta.create({
+      data: {
+        product_id: productId,
+        meta_title: body.meta_title || null,
+        meta_description: body.meta_description || null,
+        meta_keywords: body.meta_keywords || null,
+        og_title: body.og_title || null,
+        og_description: body.og_description || null,
+        og_image: body.og_image || null,
+        twitter_title: body.twitter_title || null,
+        twitter_description: body.twitter_description || null,
+        twitter_image: body.twitter_image || null,
+        canonical_url: body.canonical_url || null
+      }
+    });
 
     return NextResponse.json({
       success: true,

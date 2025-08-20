@@ -64,10 +64,25 @@ export async function PUT(
       name,
       description,
       price,
+      original_price,
+      discount_price,
       sku,
       category_id,
       zodiac_id,
-      images = []
+      images = [],
+      // Auto-pricing fields
+      product_type,
+      weight,
+      carats,
+      quantity,
+      quality,
+      clarity,
+      color,
+      mukhi,
+      material,
+      per_carat_price,
+      per_gram_price,
+      per_piece_price
     } = body;
 
     if (isNaN(id)) {
@@ -92,11 +107,26 @@ export async function PUT(
         name,
         description,
         price: parseFloat(price),
+        original_price: original_price ? parseFloat(original_price) : null,
+        discount_price: discount_price ? parseFloat(discount_price) : null,
         sku: sku || null,
         category_id: category_id ? parseInt(category_id) : null,
         zodiac_id: zodiac_id ? parseInt(zodiac_id) : null,
         image_url: null, // Remove image_url from products table
-        updated_at: new Date()
+        updated_at: new Date(),
+        // Auto-pricing fields
+        product_type: product_type || null,
+        weight: weight ? parseFloat(weight) : null,
+        carats: carats ? parseFloat(carats) : null,
+        quantity: quantity ? parseInt(quantity) : null,
+        quality: quality || null,
+        clarity: clarity || null,
+        color: color || null,
+        mukhi: mukhi || null,
+        material: material || null,
+        per_carat_price: per_carat_price ? parseFloat(per_carat_price) : null,
+        per_gram_price: per_gram_price ? parseFloat(per_gram_price) : null,
+        per_piece_price: per_piece_price ? parseFloat(per_piece_price) : null
       }
     });
 
@@ -105,7 +135,7 @@ export async function PUT(
       try {
         const mediaData = images.map((imageUrl: string, index: number) => ({
           type: 'image',
-          url: imageUrl,
+          media_url: imageUrl,
           alt_text: `${name} image ${index + 1}`,
           title: `${name} image ${index + 1}`
         }));
@@ -113,7 +143,7 @@ export async function PUT(
         const mediaResponse = await fetch(`${request.nextUrl.origin}/api/products/${id}/media`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ media: mediaData })
+          body: JSON.stringify(mediaData)
         });
 
         if (mediaResponse.ok) {

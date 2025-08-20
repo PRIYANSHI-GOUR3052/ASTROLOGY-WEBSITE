@@ -36,6 +36,7 @@ type StepProductDetailsProps = {
   onSubmit: () => void;
   errors: { [key: string]: string };
   isSubmitting?: boolean;
+  productId?: number; // Add productId for edit mode
 };
 
 // Type definitions for price rules
@@ -176,11 +177,65 @@ const StepProductDetails: React.FC<StepProductDetailsProps> = ({
   onSubmit,
   errors,
   isSubmitting = false,
+  productId,
 }) => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<{ [key: number]: number }>({});
   const [showAutoPrice, setShowAutoPrice] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [loadingProductData, setLoadingProductData] = useState(false);
+
+  // Load product data if in edit mode
+  useEffect(() => {
+    if (productId) {
+      loadProductData();
+    }
+  }, [productId]);
+
+  const loadProductData = async () => {
+    try {
+      setLoadingProductData(true);
+      console.log(`🔄 Loading product data for StepProductDetails: ${productId}`);
+      
+      const response = await fetch(`/api/products/${productId}`);
+      if (response.ok) {
+        const product = await response.json();
+        console.log('✅ Product data loaded for StepProductDetails:', product);
+        
+        // Update form fields with existing data
+        onFieldChange('name', product.name || '');
+        onFieldChange('description', product.description || '');
+        onFieldChange('sku', product.sku || '');
+        onFieldChange('sellingPrice', product.price?.toString() || '');
+        onFieldChange('originalPrice', product.original_price?.toString() || '');
+        onFieldChange('discountPrice', product.discount_price?.toString() || '');
+        onFieldChange('color', product.color || '');
+        onFieldChange('productType', product.product_type || '');
+        onFieldChange('weight', product.weight?.toString() || '');
+        onFieldChange('carats', product.carats?.toString() || '');
+        onFieldChange('quantity', product.quantity?.toString() || '');
+        onFieldChange('quality', product.quality || '');
+        onFieldChange('clarity', product.clarity || '');
+        onFieldChange('mukhi', product.mukhi || '');
+        onFieldChange('material', product.material || '');
+        onFieldChange('perCaratPrice', product.per_carat_price?.toString() || '');
+        onFieldChange('perGramPrice', product.per_gram_price?.toString() || '');
+        onFieldChange('perPiecePrice', product.per_piece_price?.toString() || '');
+        
+        // Load media data
+        if (product.product_media && product.product_media.length > 0) {
+          const imageUrls = product.product_media.map((media: any) => media.media_url || media.url);
+          onFieldChange('images', imageUrls);
+        } else if (product.image_url) {
+          onFieldChange('images', [product.image_url]);
+        }
+      }
+    } catch (error) {
+      console.error('❌ Error loading product data for StepProductDetails:', error);
+    } finally {
+      setLoadingProductData(false);
+    }
+  };
 
   // Auto-generate SKU based on product name and category
   const generateSKU = (name: string, categoryLabel: string) => {

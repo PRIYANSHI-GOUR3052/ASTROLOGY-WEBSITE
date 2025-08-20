@@ -56,12 +56,12 @@ const StepDetailedSEO: React.FC<StepDetailedSEOProps> = ({
       const response = await fetch(`/api/products/${productId}/meta`);
       if (response.ok) {
         const data = await response.json();
-        if (data) {
-          setExistingMeta(data);
+        if (data && data.meta) {
+          setExistingMeta(data.meta);
           // Pre-fill form with existing data
-          Object.keys(data).forEach(key => {
+          Object.keys(data.meta).forEach(key => {
             if (key !== 'id' && key !== 'product_id' && key !== 'created_at' && key !== 'updated_at' && key !== 'structured_data') {
-              onFieldChange(key, data[key] || '');
+              onFieldChange(key, data.meta[key] || '');
             }
           });
         }
@@ -90,23 +90,38 @@ const StepDetailedSEO: React.FC<StepDetailedSEOProps> = ({
         canonical_url: seo.canonical_url
       };
 
-      const method = existingMeta ? 'PUT' : 'POST';
-      const response = await fetch(`/api/products/${productId}/meta`, {
-        method,
+      // Always try POST first, if it fails with 400 (already exists), then use PUT
+      let response = await fetch(`/api/products/${productId}/meta`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(metaData)
       });
 
+      // If POST fails with 400 (meta already exists), try PUT
+      if (response.status === 400) {
+        const errorData = await response.json();
+        if (errorData.error && errorData.error.includes('already exists')) {
+          response = await fetch(`/api/products/${productId}/meta`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(metaData)
+          });
+        }
+      }
+
       if (response.ok) {
         const savedData = await response.json();
-        setExistingMeta(savedData);
+        setExistingMeta(savedData.meta || savedData);
+        console.log('SEO data saved successfully:', savedData);
         onNext();
       } else {
         const errorData = await response.json();
         console.error('Error saving meta data:', errorData);
+        alert('Error saving SEO data. Please try again.');
       }
     } catch (error) {
       console.error('Error saving meta data:', error);
+      alert('Error saving SEO data. Please try again.');
     } finally {
       setLoading(false);
     }

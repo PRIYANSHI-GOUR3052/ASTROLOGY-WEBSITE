@@ -159,7 +159,15 @@ export async function GET(request: NextRequest) {
         where,
         include: {
           category: true,
-          zodiac: true
+          zodiac: true,
+          product_media: {
+            take: 1, // Get first image for thumbnail
+            orderBy: { created_at: 'asc' }
+          },
+          product_stock: {
+            take: 1,
+            orderBy: { created_at: 'desc' }
+          }
         },
         orderBy: { created_at: 'desc' },
         skip,

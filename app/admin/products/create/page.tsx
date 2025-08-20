@@ -61,13 +61,8 @@ export default function ProductsPage() {
 
   // Function to open modal for editing a product
   const openEditModal = (product: Product) => {
-    setProductName(product.name);
-    setProductDescription(product.description);
-    setProductPrice(product.price.toString());
-    setProductSlug(product.slug);
-    setCurrentProductId(product.id || null);
-    setIsEditMode(true);
-    setIsModalOpen(true);
+    // Redirect to the multi-step form for editing
+    window.location.href = `/admin/products/add?edit=${product.id}`;
   };
 
   // Function to close modal
