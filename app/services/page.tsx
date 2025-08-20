@@ -124,7 +124,8 @@ export default function ServicesPage() {
           title="Featured Services"
           subtitle="Discover our most popular spiritual services and expert consultations"
           services={featuredServices}
-          pageSize={5}
+          cardsPerView={5}
+          scrollStep={1}
         />
 
         {/* Service Carousels (Top-Selling Section) */}
@@ -142,7 +143,8 @@ export default function ServicesPage() {
           title="Expert Consultations"
           subtitle="Get guidance from our top astrologers, numerologists, and vastu experts"
           services={expertConsultations}
-          pageSize={5}
+          cardsPerView={5}
+          scrollStep={1}
         />
 
         {/* Specialized Services */}
@@ -150,7 +152,8 @@ export default function ServicesPage() {
           title="Specialized Services"
           subtitle="Unique spiritual offerings tailored to your needs"
           services={specializedServices}
-          pageSize={5}
+          cardsPerView={5}
+          scrollStep={1}
         />
 
         {/* Product Assurance Bar */}
