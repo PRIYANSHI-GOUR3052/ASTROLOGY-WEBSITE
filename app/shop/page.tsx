@@ -74,8 +74,8 @@ export default function ShopPage() {
             products={products}
             title="Best Selling Products" 
             subtitle="Explore our most loved and trusted spiritual items"
-            pageSize={6}
-            autoScrollOnPageChange={false}
+            cardsPerView={5}
+            scrollStep={1}
           />
           {/* <FeaturedProducts /> */}
           {/* Product Of The Day Section */}

@@ -38,12 +38,12 @@ export default function ServicesPage() {
     const consultationTypes = ['Video Call', 'Phone Call', 'In Person'];
     const durations = ['30 mins', '45 mins', '60 mins', '90 mins'];
     const ratings = [4.2, 4.5, 4.7, 4.8, 4.9];
-    
+
     // Assign specific details based on service type
     let consultationType = consultationTypes[index % consultationTypes.length];
     let duration = durations[index % durations.length];
-    let rating = ratings[index % ratings.length];
-    
+    const rating = ratings[index % ratings.length];
+
     // Customize based on service slug
     if (slug.includes('puja') || slug.includes('online')) {
       consultationType = 'Video Call';
@@ -55,7 +55,7 @@ export default function ServicesPage() {
       consultationType = 'Phone Call';
       duration = '45 mins';
     }
-    
+
     return { consultationType, duration, rating };
   };
 
@@ -124,7 +124,8 @@ export default function ServicesPage() {
           title="Featured Services"
           subtitle="Discover our most popular spiritual services and expert consultations"
           services={featuredServices}
-          pageSize={5}
+          cardsPerView={5}
+          scrollStep={1}
         />
 
         {/* Service Carousels (Top-Selling Section) */}
@@ -142,7 +143,8 @@ export default function ServicesPage() {
           title="Expert Consultations"
           subtitle="Get guidance from our top astrologers, numerologists, and vastu experts"
           services={expertConsultations}
-          pageSize={5}
+          cardsPerView={5}
+          scrollStep={1}
         />
 
         {/* Specialized Services */}
@@ -150,7 +152,8 @@ export default function ServicesPage() {
           title="Specialized Services"
           subtitle="Unique spiritual offerings tailored to your needs"
           services={specializedServices}
-          pageSize={5}
+          cardsPerView={5}
+          scrollStep={1}
         />
 
         {/* Product Assurance Bar */}
