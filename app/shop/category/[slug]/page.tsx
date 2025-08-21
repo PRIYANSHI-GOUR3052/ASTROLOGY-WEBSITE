@@ -11,6 +11,23 @@ import SpiritualTicker from "@/app/components/Hero/SpiritualTicker";
 import NakshatraGyaanBanner from "@/app/components/NakshatraGyaanBanner";
 import SpiritualJourneyBanner from "@/app/components/SpiritualJourneyBanner";
 
+// Interface for API product data from backend
+interface ApiProduct {
+  id: number;
+  name: string;
+  material?: string;
+  product_type?: string;
+  color?: string;
+  price: string;
+  original_price?: string;
+  description?: string;
+  image?: string;
+  product_media?: Array<{
+    media_url?: string;
+    url?: string;
+  }>;
+}
+
 // Type definitions
 interface Product {
   id: number;
@@ -424,7 +441,7 @@ export default function CategoryPage() {
         const apiProducts = Array.isArray(data.products) ? data.products : [];
 
         // Map API products to local Product shape used by this page
-        const mapped: Product[] = apiProducts.map((p: any) => ({
+        const mapped: Product[] = apiProducts.map((p: ApiProduct) => ({
           id: p.id,
           name: p.name,
           material: p.material || undefined,

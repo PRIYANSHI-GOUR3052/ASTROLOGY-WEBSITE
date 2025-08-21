@@ -1,9 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
+// Interface for stock data from database
+interface ProductStockData {
+  id: number;
+  product_id: number;
+  sku: string | null;
+  quantity: number;
+  reserved: number;
+  min_stock: number;
+  max_stock: number | null;
+  location: string | null;
+  batch_number: string | null;
+  expiry_date: Date | null;
+  cost_price: number | null;
+  created_at: Date;
+  updated_at: Date;
+}
+
+// Interface for product info from database
+interface ProductInfo {
+  name: string;
+  category_name: string | null;
+}
+
+// Interface for product SKU from database
+interface ProductSKU {
+  sku: string | null;
+}
+
+// Interface for stock ID from database
+interface StockID {
+  id: number;
+}
+
+// Interface for stock request body
+interface StockRequestBody {
+  quantity?: number;
+  reserved?: number;
+  min_stock?: number;
+  max_stock?: number;
+  location?: string;
+  batch_number?: string;
+  expiry_date?: string;
+  cost_price?: number;
+}
+
 const prisma = new PrismaClient();
-
-
 
 // GET stock data for a product
 export async function GET(
@@ -38,7 +81,7 @@ export async function GET(
         updated_at
       FROM product_stock 
       WHERE product_id = ${productId}
-    ` as any[];
+    ` as ProductStockData[];
 
     if (stockData.length === 0) {
       return NextResponse.json(null);
@@ -63,7 +106,7 @@ export async function POST(
 ) {
   try {
     const productId = parseInt(params.id);
-    const body = await request.json();
+    const body = await request.json() as StockRequestBody;
     const {
       quantity = 0,
       reserved = 0,
@@ -88,7 +131,7 @@ export async function POST(
       FROM products p 
       LEFT JOIN categories c ON p.category_id = c.id 
       WHERE p.id = ${productId}
-    ` as any[];
+    ` as ProductInfo[];
 
     if (product.length === 0) {
       return NextResponse.json(
@@ -102,7 +145,7 @@ export async function POST(
     // Check if stock data already exists
     const existingStock = await prisma.$queryRaw`
       SELECT id FROM product_stock WHERE product_id = ${productId}
-    ` as any[];
+    ` as StockID[];
 
     if (existingStock.length > 0) {
       return NextResponse.json(
@@ -114,7 +157,7 @@ export async function POST(
     // Get SKU from the product table since it's managed there
     const productSKU = await prisma.$queryRaw`
       SELECT sku FROM products WHERE id = ${productId}
-    ` as any[];
+    ` as ProductSKU[];
     
     const finalSKU = productSKU.length > 0 ? productSKU[0].sku : null;
 
@@ -133,11 +176,11 @@ export async function POST(
         ${location || null}, 
         ${batch_number || null}, 
         ${expiry_date ? new Date(expiry_date) : null}, 
-        ${cost_price ? parseFloat(cost_price) : null}, 
+        ${cost_price ? parseFloat(cost_price.toString()) : null}, 
         NOW(), 
         NOW()
       )
-    ` as any[];
+    ` as ProductStockData[];
 
     // Get the created stock data
     const newStockData = await prisma.$queryRaw`
@@ -157,7 +200,7 @@ export async function POST(
         updated_at
       FROM product_stock 
       WHERE product_id = ${productId}
-    ` as any[];
+    ` as ProductStockData[];
 
     return NextResponse.json(newStockData[0], { status: 201 });
   } catch (error) {
@@ -178,7 +221,7 @@ export async function PUT(
 ) {
   try {
     const productId = parseInt(params.id);
-    const body = await request.json();
+    const body = await request.json() as StockRequestBody;
     const {
       quantity,
       reserved,
@@ -200,7 +243,7 @@ export async function PUT(
     // Check if stock data exists
     const existingStock = await prisma.$queryRaw`
       SELECT id FROM product_stock WHERE product_id = ${productId}
-    ` as any[];
+    ` as StockID[];
 
     if (existingStock.length === 0) {
       return NextResponse.json(
@@ -210,8 +253,8 @@ export async function PUT(
     }
 
     // Build update query dynamically
-    const updateFields = [];
-    const updateValues = [];
+    const updateFields: string[] = [];
+    const updateValues: (string | number | Date | null)[] = [];
     if (quantity !== undefined) {
       updateFields.push('quantity = ?');
       updateValues.push(quantity);
@@ -242,7 +285,7 @@ export async function PUT(
     }
     if (cost_price !== undefined) {
       updateFields.push('cost_price = ?');
-      updateValues.push(cost_price ? parseFloat(cost_price) : null);
+      updateValues.push(cost_price ? parseFloat(cost_price.toString()) : null);
     }
 
     updateFields.push('updated_at = NOW()');
@@ -281,7 +324,7 @@ export async function PUT(
         updated_at
       FROM product_stock 
       WHERE product_id = ${productId}
-    ` as any[];
+    ` as ProductStockData[];
 
     return NextResponse.json(updatedStockData[0]);
   } catch (error) {

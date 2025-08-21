@@ -3,14 +3,30 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// GET zodiac attributes by zodiac ID
+// Interface for zodiac attribute assignment with all fields from SQL query
+interface ZodiacAttributeAssignment {
+  id: number;
+  zodiac_id: number;
+  attribute_id: number;
+  is_required: boolean;
+  sort_order: number;
+  zodiac_name: string;
+  zodiac_slug: string;
+  attribute_name: string;
+  attribute_type: string;
+  attribute_description: string | null;
+  attribute_is_required: boolean;
+  attribute_sort_order: number;
+}
+
+  // GET zodiac attributes by zodiac ID
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const zodiacId = searchParams.get('zodiac_id');
 
     let query;
-    let params: any[] = [];
+    let params: (string | number)[] = [];
 
     if (zodiacId) {
       // Fetch attributes for a specific zodiac sign
@@ -51,7 +67,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Use raw query since Prisma client doesn't recognize zodiac_attributes model
-    const zodiacAttributes = await prisma.$queryRawUnsafe(query, ...params) as any[];
+    const zodiacAttributes = await prisma.$queryRawUnsafe(query, ...params) as ZodiacAttributeAssignment[];
 
     // Transform the data to match the expected interface
     const transformedAttributes = zodiacAttributes.map(attr => ({
@@ -101,7 +117,7 @@ export async function POST(request: NextRequest) {
       SELECT * FROM zodiac_attributes 
       WHERE zodiac_id = ${parseInt(zodiac_id)} 
       AND attribute_id = ${parseInt(attribute_id)}
-    ` as any[];
+    ` as ZodiacAttributeAssignment[];
 
     if (existingAssignment.length > 0) {
       return NextResponse.json(
@@ -114,7 +130,7 @@ export async function POST(request: NextRequest) {
     await prisma.$queryRaw`
       INSERT INTO zodiac_attributes (zodiac_id, attribute_id, is_required, sort_order, created_at, updated_at)
       VALUES (${parseInt(zodiac_id)}, ${parseInt(attribute_id)}, ${is_required || false}, ${sort_order || 0}, NOW(), NOW())
-    ` as any[];
+    ` as ZodiacAttributeAssignment[];
 
     // Get the created assignment with full details
     const createdAssignment = await prisma.$queryRaw`
@@ -132,7 +148,7 @@ export async function POST(request: NextRequest) {
       JOIN attributes a ON za.attribute_id = a.id
       WHERE za.zodiac_id = ${parseInt(zodiac_id)} 
       AND za.attribute_id = ${parseInt(attribute_id)}
-    ` as any[];
+    ` as ZodiacAttributeAssignment[];
 
     if (createdAssignment.length === 0) {
       return NextResponse.json(
@@ -200,7 +216,7 @@ export async function PUT(request: NextRequest) {
             sort_order = ${sort_order !== undefined ? sort_order : 0},
             updated_at = NOW()
         WHERE id = ${parseInt(id)}
-      ` as any[];
+        ` as ZodiacAttributeAssignment[];
 
       // Get the updated assignment
       const updatedAssignment = await prisma.$queryRaw`
@@ -214,7 +230,7 @@ export async function PUT(request: NextRequest) {
         JOIN zodiac_signs z ON za.zodiac_id = z.id
         JOIN attributes a ON za.attribute_id = a.id
         WHERE za.id = ${parseInt(id)}
-      ` as any[];
+      ` as ZodiacAttributeAssignment[];
 
       updatedAssignments.push(updatedAssignment[0]);
     }

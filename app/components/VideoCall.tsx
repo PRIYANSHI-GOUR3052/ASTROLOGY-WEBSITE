@@ -108,7 +108,7 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
       }
     };
 
-    const handleConnectError = (error: any) => {
+    const handleConnectError = (error: { message: string }) => {
       console.error('Socket connection error in VideoCall:', error);
       setSocketConnected(false);
       setError('Socket connection failed. Please refresh the page.');
@@ -185,7 +185,7 @@ export default function VideoCall({ bookingId, astrologer, onClose, socket }: Vi
             resolve();
           };
 
-          const handleConnectError = (error: any) => {
+          const handleConnectError = (error: { message: string }) => {
             clearTimeout(timeout);
             socket.off('connect', handleConnect);
             socket.off('connect_error', handleConnectError);

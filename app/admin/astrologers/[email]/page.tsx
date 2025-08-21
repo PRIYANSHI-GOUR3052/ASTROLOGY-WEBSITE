@@ -4,6 +4,20 @@ import { notFound } from "next/navigation"
 import { Certification, Education } from "../../../../types/astrologer";
 import Image from 'next/image'
 
+// Interface for education data from API
+interface EducationData {
+  id?: number;
+  status?: string;
+  remarks?: string;
+}
+
+// Interface for certification data from API
+interface CertificationData {
+  id?: number;
+  status?: string;
+  remarks?: string;
+}
+
 const documentLabels = {
   aadharCard: "Aadhar Card",
   panCard: "PAN Card",
@@ -180,9 +194,9 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
       // Set education and certification statuses
       const eduStatusMap: { [id: number]: DocumentStatus } = {};
       const eduRemarksMap: { [id: number]: string } = {};
-      (verification.educations || []).forEach((edu: any) => {
+      (verification.educations || []).forEach((edu: EducationData) => {
         if (edu.id) {
-          eduStatusMap[edu.id] = normalizeStatus(edu.status);
+          eduStatusMap[edu.id] = normalizeStatus(edu.status || "");
           eduRemarksMap[edu.id] = edu.remarks || "";
         }
       });
@@ -191,9 +205,9 @@ export default function AstrologerDetailPage({ params }: { params: { email: stri
       
       const certStatusMap: { [id: number]: DocumentStatus } = {};
       const certRemarksMap: { [id: number]: string } = {};
-      (verification.certifications || []).forEach((cert: any) => {
+      (verification.certifications || []).forEach((cert: CertificationData) => {
         if (cert.id) {
-          certStatusMap[cert.id] = normalizeStatus(cert.status);
+          certStatusMap[cert.id] = normalizeStatus(cert.status || "");
           certRemarksMap[cert.id] = cert.remarks || "";
         }
       });

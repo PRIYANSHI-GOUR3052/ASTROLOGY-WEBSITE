@@ -3,6 +3,13 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// Interface for zodiac attribute assignment
+interface ZodiacAttributeAssignment {
+  id: number;
+  zodiac_name: string;
+  attribute_name: string;
+}
+
 // DELETE zodiac attribute assignment
 export async function DELETE(
   request: NextRequest,
@@ -25,7 +32,7 @@ export async function DELETE(
       JOIN zodiac_signs z ON za.zodiac_id = z.id
       JOIN attributes a ON za.attribute_id = a.id
       WHERE za.id = ${id}
-    ` as any[];
+    ` as ZodiacAttributeAssignment[];
 
     if (assignment.length === 0) {
       return NextResponse.json(

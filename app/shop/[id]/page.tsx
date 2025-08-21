@@ -57,7 +57,8 @@ const getProductFaqs = (product: ProductData | null) => {
   ];
 };
 
-// Interface for related product data
+// Related Products based on category (commented out as not currently used)
+/*
 interface RelatedProductData {
   id: number;
   title: string;
@@ -68,7 +69,6 @@ interface RelatedProductData {
   category?: string;
 }
 
-// Related Products based on category
 const getRelatedProducts = (currentProduct: RelatedProductData, allProducts: RelatedProductData[]) => {
   return allProducts
     .filter(p => p.id !== currentProduct.id && p.category === currentProduct.category)
@@ -81,6 +81,7 @@ const getRelatedProducts = (currentProduct: RelatedProductData, allProducts: Rel
       slug: product.slug,
     }));
 };
+*/
 
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
   type UiProduct = {
@@ -140,8 +141,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           rating: '4.8'
         };
         setProduct(mapped);
-      } catch (e: any) {
-        setError(e?.message || 'Failed to load product');
+      } catch (e: unknown) {
+        const errorMessage = e instanceof Error ? e.message : 'Failed to load product';
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -149,8 +151,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     fetchProduct();
   }, [params.id]);
 
-  if (!loading && !product) return notFound();
-
+  // React hooks must be called at the top level, before any conditional returns
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState("");
@@ -158,10 +159,32 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [descriptionOpen, setDescriptionOpen] = useState(false);
   const { items, updateQuantity } = useCart();
 
+  // Real-time offer timer (generic 24 hour offer)
+  const OFFER_DURATION = 24 * 60 * 60; // 24 hours in seconds
+  const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
+
   // Find if this product is already in cart and get its quantity
   const productId = product ? String(product.id) : params.id;
   const cartItem = items.find(item => item.id === productId);
   const cartQuantity = cartItem?.quantity || 0;
+
+  // Sync local quantity with cart quantity when cart changes
+  useEffect(() => {
+    if (cartQuantity > 0) {
+      setQuantity(cartQuantity);
+    }
+  }, [cartQuantity]);
+
+  // Timer effect
+  useEffect(() => {
+    if (secondsLeft <= 0) return;
+    const interval = setInterval(() => {
+      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [secondsLeft]);
+
+  if (!loading && !product) return notFound();
 
   // Helper function for default detailed description
   const getDefaultDetailedDescription = (product: UiProduct) => {
@@ -179,13 +202,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     ? product.images
     : [product?.image || '/images/products/default.jpg'];
 
-  // Sync local quantity with cart quantity when cart changes
-  useEffect(() => {
-    if (cartQuantity > 0) {
-      setQuantity(cartQuantity);
-    }
-  }, [cartQuantity]);
-
   // Calculate discount percentage
   const getDiscountPercentage = () => {
     if (!product?.originalPrice) return null;
@@ -196,24 +212,15 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
   const discount = getDiscountPercentage();
 
-  // Real-time offer timer (generic 24 hour offer)
-  const OFFER_DURATION = 24 * 60 * 60; // 24 hours in seconds
-  const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
-
-  useEffect(() => {
-    if (secondsLeft <= 0) return;
-    const interval = setInterval(() => {
-      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [secondsLeft]);
-
+  // Format time function (commented out as not currently used)
+  /*
   function formatTime(secs: number) {
     const h = Math.floor(secs / 3600).toString().padStart(2, '0');
     const m = Math.floor((secs % 3600) / 60).toString().padStart(2, '0');
     const s = (secs % 60).toString().padStart(2, '0');
     return `${h} hr : ${m} min : ${s} sec`;
   }
+  */
 
   if (loading) {
     return (

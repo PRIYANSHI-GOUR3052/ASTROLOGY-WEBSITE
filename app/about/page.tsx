@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { User, Calendar, Star, HelpCircle, Users, Target, Quote } from 'lucide-react';
+import { HelpCircle, Users, Target, Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { CTASection } from '../components/CTASection';

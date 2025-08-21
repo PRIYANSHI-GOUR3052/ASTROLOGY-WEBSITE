@@ -445,10 +445,10 @@ export default function AddProductPage() {
     }
   };
 
-  const handleAttributeChange = (attributeId: number, value: any) => {
+  const handleAttributeChange = (attributeId: number, value: string | number | boolean | string[] | null | undefined) => {
     // Map attribute IDs to form fields
     if (attributeId === 1) { // Assuming 1 is color attribute ID
-      setFormData(prev => ({ ...prev, color: value }));
+      setFormData(prev => ({ ...prev, color: value?.toString() || '' }));
     }
   };
 

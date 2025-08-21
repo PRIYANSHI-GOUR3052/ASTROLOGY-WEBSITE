@@ -1,6 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
+// Interface for attribute data from request
+interface AttributeData {
+  attributeId: number;
+  value: string | number | boolean | string[] | null;
+  valueType: string;
+}
+
+// Interface for saved attribute response
+interface SavedAttribute {
+  attributeId: number;
+  value: string | number | boolean | string[] | null;
+  valueType: string;
+}
+
+// Interface for product attribute row from database
+interface ProductAttributeRow {
+  product_attribute_id: number;
+  attribute_id: number;
+  attribute_name: string;
+  attribute_type: string;
+  attribute_description: string | null;
+  value_id: number | null;
+  text_value: string | null;
+  number_value: number | null;
+  boolean_value: boolean | null;
+  date_value: Date | null;
+  attribute_value_id: number | null;
+  attribute_value_name: string | null;
+}
+
+// Interface for transformed attribute value
+interface AttributeValue {
+  valueId: number;
+  value: string | number | boolean | Date | null;
+  attributeValueName: string | null;
+}
+
+// Interface for transformed attribute
+interface TransformedAttribute {
+  attributeId: number;
+  attributeName: string;
+  attributeType: string;
+  attributeDescription: string | null;
+  values: AttributeValue[];
+}
+
+// Interface for transformed attributes response
+interface TransformedAttributes {
+  [key: string]: TransformedAttribute;
+}
+
 const prisma = new PrismaClient();
 
 // POST - Save product attributes and their values
@@ -33,15 +84,15 @@ export async function POST(
       WHERE product_attribute_id IN (
         SELECT id FROM product_attributes WHERE product_id = ${productId}
       )
-    ` as any[];
+    ` as ProductAttributeRow[];
 
     await prisma.$queryRaw`
       DELETE FROM product_attributes WHERE product_id = ${productId}
-    ` as any[];
+    ` as ProductAttributeRow[];
 
-    const savedAttributes = [];
+    const savedAttributes: SavedAttribute[] = [];
 
-    for (const attr of attributes) {
+    for (const attr of attributes as AttributeData[]) {
       const { attributeId, value, valueType = 'text' } = attr;
 
       if (!attributeId || value === undefined || value === null || value === '') {
@@ -51,25 +102,25 @@ export async function POST(
       // Create product attribute record
       const productAttribute = await prisma.$queryRaw`
         INSERT INTO product_attributes (product_id, attribute_id, created_at, updated_at)
-        VALUES (${productId}, ${parseInt(attributeId)}, NOW(), NOW())
-      ` as any[];
+        VALUES (${productId}, ${parseInt(attributeId.toString())}, NOW(), NOW())
+      ` as ProductAttributeRow[];
 
       // Get the created product attribute ID
       const createdProductAttribute = await prisma.$queryRaw`
         SELECT id FROM product_attributes 
-        WHERE product_id = ${productId} AND attribute_id = ${parseInt(attributeId)}
+        WHERE product_id = ${productId} AND attribute_id = ${parseInt(attributeId.toString())}
         ORDER BY id DESC LIMIT 1
-      ` as any[];
+      ` as ProductAttributeRow[];
 
       if (createdProductAttribute.length > 0) {
-        const productAttributeId = createdProductAttribute[0].id;
+        const productAttributeId = createdProductAttribute[0].product_attribute_id;
 
         // Create product attribute value record
-        let attributeValueId = null;
-        let textValue = null;
-        let numberValue = null;
-        let booleanValue = null;
-        let dateValue = null;
+        let attributeValueId: number | null = null;
+        let textValue: string | null = null;
+        let numberValue: number | null = null;
+        let booleanValue: boolean | null = null;
+        let dateValue: Date | null = null;
 
         // Handle different value types
         switch (valueType) {
@@ -82,22 +133,22 @@ export async function POST(
                 await prisma.$queryRaw`
                   INSERT INTO product_attribute_values 
                   (product_attribute_id, attribute_value_id, created_at, updated_at)
-                  VALUES (${productAttributeId}, ${parseInt(valId)}, NOW(), NOW())
-                ` as any[];
+                  VALUES (${productAttributeId}, ${parseInt(valId.toString())}, NOW(), NOW())
+                ` as ProductAttributeRow[];
               }
             } else {
               // Handle single select
-              attributeValueId = parseInt(value);
+              attributeValueId = parseInt(value.toString());
             }
             break;
           case 'number':
-            numberValue = parseFloat(value);
+            numberValue = parseFloat(value.toString());
             break;
           case 'boolean':
             booleanValue = Boolean(value);
             break;
           case 'date':
-            dateValue = new Date(value);
+            dateValue = new Date(value.toString());
             break;
           default:
             textValue = String(value);
@@ -110,11 +161,11 @@ export async function POST(
             INSERT INTO product_attribute_values 
             (product_attribute_id, attribute_value_id, text_value, number_value, boolean_value, date_value, created_at, updated_at)
             VALUES (${productAttributeId}, ${attributeValueId}, ${textValue}, ${numberValue}, ${booleanValue}, ${dateValue}, NOW(), NOW())
-          ` as any[];
+          ` as ProductAttributeRow[];
         }
 
         savedAttributes.push({
-          attributeId: parseInt(attributeId),
+          attributeId: parseInt(attributeId.toString()),
           value,
           valueType
         });
@@ -173,12 +224,12 @@ export async function GET(
       LEFT JOIN attribute_values av ON pav.attribute_value_id = av.id
       WHERE pa.product_id = ${productId}
       ORDER BY a.sort_order ASC, pa.id ASC
-    ` as any[];
+    ` as ProductAttributeRow[];
 
     // Transform the data to a more usable format
-    const transformedAttributes = {};
+    const transformedAttributes: TransformedAttributes = {};
     
-    productAttributes.forEach(row => {
+    productAttributes.forEach((row: ProductAttributeRow) => {
       const attributeId = row.attribute_id;
       
       if (!transformedAttributes[attributeId]) {
@@ -192,7 +243,7 @@ export async function GET(
       }
 
       if (row.value_id) {
-        let value = null;
+        let value: string | number | boolean | Date | null = null;
         
         if (row.text_value !== null) value = row.text_value;
         else if (row.number_value !== null) value = row.number_value;
