@@ -90,6 +90,16 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [product, setProduct] = useState<UiProduct | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [pincode, setPincode] = useState("");
+  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
+  const { items, updateQuantity } = useCart();
+  
+  // Real-time offer timer (generic 24 hour offer)
+  const OFFER_DURATION = 24 * 60 * 60; // 24 hours in seconds
+  const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -134,22 +144,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   }, [params.id]);
 
   if (!loading && !product) return notFound();
-
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const [pincode, setPincode] = useState("");
-  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
-  const [descriptionOpen, setDescriptionOpen] = useState(false);
-  const { items, updateQuantity } = useCart();
-  
-  // Real-time offer timer (generic 24 hour offer)
-  const OFFER_DURATION = 24 * 60 * 60; // 24 hours in seconds
-  const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
-
-  const product = getProductById(params.id);
   
   // Find if this product is already in cart and get its quantity
-  const productId = product? ? String(product.id) : params.id || '';
+  const productId = product ? String(product.id) : params.id || '';
   const cartItem = items.find(item => item.id === productId);
   const cartQuantity = cartItem?.quantity || 0;
 
@@ -172,7 +169,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   if (!product) return notFound();
 
   // Helper function for default detailed description
-  const getDefaultDetailedDescription = (product: Product) => {
+  const getDefaultDetailedDescription = (product: UiProduct) => {
     return `
       <div style="color: #374151; line-height: 1.8;">
         <h3 style="font-size: 1.5rem; font-weight: 600; color: #23244a; margin-bottom: 1rem; font-family: 'Playfair Display', serif;">About ${product.title}</h3>
