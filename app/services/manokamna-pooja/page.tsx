@@ -1,16 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Sparkles, TrendingUp, Heart, Briefcase, Home, Shield, BookOpen, HeartHandshake } from 'lucide-react';
+import { Sparkles, TrendingUp, Heart, Briefcase, Home, Shield, BookOpen, HeartHandshake, Star, Zap, Users, Globe, Award, Compass, Target, Lightbulb, Moon, Sun, Crown, Eye, Brain, Infinity, Calendar, Gift, Lock, ArrowUpRight } from 'lucide-react';
 import { DrNarendraProfile } from '../../../app/components/DrNarendraProfile';
 import { Statistics } from '../../../app/components/Statistics';
 import { ContactForm } from '../../../app/components/ContactForm';
 
-const tabs = ['Overview', 'Benefits', 'FAQs', 'Book Puja'];
+const tabs = ['Overview', 'Benefits', 'FAQs'];
 
 const benefits = [
     {
@@ -53,6 +50,41 @@ const benefits = [
         title: 'Resolve Family Disputes',
         desc: 'Foster love, understanding, and harmony within the family, helping to heal rifts and disagreements.'
     },
+    {
+        icon: <Star className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Spiritual Growth',
+        desc: 'Deepen your spiritual connection and gain inner peace through divine blessings and sacred rituals.'
+    },
+    {
+        icon: <Zap className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Energy Activation',
+        desc: 'Activate your dormant energies and unlock your full potential for success and fulfillment.'
+    },
+    {
+        icon: <Users className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Social Recognition',
+        desc: 'Gain respect and recognition in your social circle and professional community.'
+    },
+    {
+        icon: <Globe className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Travel Opportunities',
+        desc: 'Open doors for travel, relocation, and new experiences that align with your desires.'
+    },
+    {
+        icon: <Award className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Achievement Unlocked',
+        desc: 'Break through limitations and achieve goals that previously seemed impossible.'
+    },
+    {
+        icon: <Compass className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Life Direction',
+        desc: 'Find clarity about your life path and make confident decisions about your future.'
+    },
+    {
+        icon: <Target className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Goal Manifestation',
+        desc: 'Transform your dreams into reality through focused intention and divine assistance.'
+    }
 ];
 
 const faqs = [
@@ -75,35 +107,22 @@ const faqs = [
     {
         q: 'Do I need to be physically present for the puja?',
         a: "No, physical presence is not mandatory. Our expert priests can perform the entire ritual on your behalf. The energetic benefits and blessings are transmitted to you through the power of the Sankalpa, regardless of your location."
-    },
-    {
-        q: 'How long does it take for my wish to be fulfilled?',
-        a: "The timeline for manifestation varies. It depends on the nature and magnitude of the wish, your personal karma, and the intensity of your faith. Some experience swift results, while for others, the path is cleared gradually over time. The puja sets a powerful divine process in motion."
-    },
+    }
 ];
-
 
 export default function ManokamnaPujaPage() {
     const [activeTab, setActiveTab] = useState('Overview');
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        dateOfBirth: "",
-        wish: ""
-    });
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log(formData);
-    };
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white font-sans">
-            <div className="container mx-auto pt-8 px-4 py-16 relative z-10">
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
+            <div className="container mx-auto pt-8 px-4 pb-16 relative z-10">
+                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e6c77e]" style={{ backgroundColor: '#FEFBF2' }}>
                     <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg font-serif" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Manokamna Siddhi Puja</h1>
-                    <p className="text-xl md:text-2xl text-center text-gray-700 max-w-3xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
+                    <p className="text-xl md:text-2xl text-center max-w-3xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', color: '#166534' }}>
                         Invoke Divine Blessings to Manifest Your Deepest, Heartfelt Desires with the Sacred Wish-Fulfillment Puja.
                     </p>
                 </motion.div>
@@ -123,10 +142,13 @@ export default function ManokamnaPujaPage() {
 
                 {activeTab === 'Overview' && (
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
-                        <p>Every human heart holds a garden of secret wishes and profound desires—aspirations for love, success, health, and happiness. In the Vedic tradition, it is believed that sincere, righteous desires are a divine spark within us, guiding us toward our life&apos;s purpose. The <span className="font-bold text-indigo-900">Manokamna Siddhi Puja</span> is a sacred and powerful ritual specifically designed to bridge the gap between human aspiration and divine grace. &apos;Manokamna&apos; means &apos;heart&apos;s desire&apos; and &apos;Siddhi&apos; means &apos;fulfillment&apos; or &apos;attainment&apos;. This puja is a direct appeal to the cosmos, a concentrated prayer to manifest a specific, heartfelt wish.</p>
-                        <p>The principle behind this puja is the concentration of cosmic energy towards a singular, focused goal. It operates on the law of attraction, amplified by sacred Vedic technology. The process begins with a <span className="font-bold text-indigo-900">Sankalpa</span>, a sacred vow taken by the priest on behalf of the individual. In this Sankalpa, your name, gotra (lineage), and the specific wish are clearly articulated. This act of intention-setting is crucial, as it directs the energy of the entire ritual towards your personal goal. It is like programming a divine computer with the explicit details of your request, ensuring the universal energies know exactly where to deliver the blessings.</p>
-                        <p>The puja involves the worship of specific deities known for their ability to grant boons and remove obstacles. Lord Ganesha is almost always invoked first to clear any impediments in the path of the desire&apos;s fulfillment. Depending on the nature of the wish, other deities like Goddess Lakshmi (for wealth and prosperity), Goddess Durga or Lord Hanuman (for courage and protection), Saraswati (for knowledge and success in exams), or Shiva and Parvati (for marital harmony) are worshipped with their specific mantras, stotras, and offerings. This personalized approach ensures that the most appropriate divine energies are petitioned for your specific need.</p>
-                        <p>A Manokamna Siddhi Puja is not merely a passive request; it is an active process of aligning your own energy with your desire. The faith, devotion, and sincerity of the person for whom the puja is being performed are paramount. While the priests perform the intricate rituals, your own focused intention and belief create a powerful magnetic field that helps draw the desired outcome into your reality. It is a co-creative process between you, the priest, and the divine, working in synergy to turn a deeply held wish into a tangible reality, provided it aligns with your higher karmic path.</p>
+                        <p>Every human heart holds a garden of secret wishes and profound desires—aspirations for love, success, health, and happiness. In the Vedic tradition, it is believed that sincere, righteous desires are a divine spark within us, guiding us toward our life&apos;s purpose. The <span className="font-bold text-green-800">Manokamna Siddhi Puja</span> is a sacred and powerful ritual specifically designed to bridge the gap between human aspiration and divine grace. &apos;Manokamna&apos; means &apos;heart&apos;s desire&apos; and &apos;Siddhi&apos; means &apos;fulfillment&apos; or &apos;attainment&apos;. This puja is a direct appeal to the cosmos, a concentrated prayer to manifest a specific, heartfelt wish.</p>
+                        <p>The principle behind this puja is the concentration of cosmic energy towards a singular, focused goal. It operates on the law of attraction, amplified by sacred Vedic technology. The process begins with a <span className="font-bold text-green-800">Sankalpa</span>, a sacred vow taken by the priest on behalf of the individual. In this Sankalpa, your name, gotra (lineage), and the specific wish are clearly articulated. This act of intention-setting is crucial, as it directs the energy of the entire ritual towards your personal goal. It is like programming a divine computer with the explicit details of your request, ensuring the universal energies know exactly where to deliver the blessings.</p>
+                        <p>The puja involves the worship of specific deities known for their ability to grant boons and remove obstacles. <span className="font-bold text-green-800">Lord Ganesha</span> is almost always invoked first to clear any impediments in the path of the desire&apos;s fulfillment. Depending on the nature of the wish, other deities like <span className="font-bold text-green-800">Goddess Lakshmi</span> (for wealth and prosperity), <span className="font-bold text-green-800">Goddess Durga</span> or <span className="font-bold text-green-800">Lord Hanuman</span> (for courage and protection), <span className="font-bold text-green-800">Saraswati</span> (for knowledge and success in exams), or <span className="font-bold text-green-800">Shiva and Parvati</span> (for marital harmony) are worshipped with their specific mantras, stotras, and offerings.</p>
+                        <p>A Manokamna Siddhi Puja is not merely a passive request; it is an active process of aligning your own energy with your desire. The <span className="font-bold text-green-800">faith</span>, <span className="font-bold text-green-800">devotion</span>, and <span className="font-bold text-green-800">sincerity</span> of the person for whom the puja is being performed are paramount. While the priests perform the intricate rituals, your own focused intention and belief create a powerful magnetic field that helps draw the desired outcome into your reality. It is a co-creative process between you, the priest, and the divine, working in synergy to turn a deeply held wish into a tangible reality.</p>
+                        <p>The effectiveness of the puja depends on several factors, including the <span className="font-bold text-green-800">timing</span> chosen for the ritual, the <span className="font-bold text-green-800">purity of intention</span>, and the <span className="font-bold text-green-800">karmic alignment</span> of the desire. We carefully select auspicious timings based on your birth chart and the nature of your wish, ensuring that the cosmic energies are most favorable for manifestation. The ritual is performed with complete devotion and precision, following ancient Vedic protocols that have been perfected over thousands of years.</p>
+                        <p>Beyond the immediate ritual, the puja creates a lasting <span className="font-bold text-green-800">energetic shift</span> in your life. It removes obstacles, clears negative karma, and opens new pathways for your desires to manifest. The effects are not limited to the specific wish mentioned in the Sankalpa; they often extend to related areas of life, creating a ripple effect of positive change. For example, a puja for career success might also improve relationships, health, and overall life satisfaction as the positive energies flow through all aspects of your being.</p>
+                        <p>Our experienced priests have performed countless Manokamna Siddhi Pujas with remarkable success rates. They understand the subtle nuances of intention-setting and can guide you in formulating your wish in the most effective way. Whether your desire is related to <span className="font-bold text-green-800">love and relationships</span>, <span className="font-bold text-green-800">career and business</span>, <span className="font-bold text-green-800">health and well-being</span>, or <span className="font-bold text-green-800">spiritual growth</span>, this powerful ritual can help you manifest your deepest aspirations and create the life you truly desire.</p>
                     </motion.div>
                 )}
 
@@ -166,44 +188,6 @@ export default function ManokamnaPujaPage() {
                                     <p className="text-black text-justify pl-8" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>{faq.a}</p>
                                 </div>
                             ))}
-                        </div>
-                    </section>
-                )}
-
-                {activeTab === 'Book Puja' && (
-                    <section className="mb-12">
-                        <div className="rounded-3xl bg-gradient-to-r from-[#e0f7fa] via-[#f3e8ff] to-[#e0f2fe] p-10 shadow-xl border border-indigo-100 flex flex-col items-center">
-                            <h2 className="text-3xl font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>Book Your Manokamna Siddhi Puja</h2>
-                            <p className="text-lg text-center mb-6" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
-                                To manifest your specific desire, please provide your details below. Your intention will be kept strictly confidential.
-                            </p>
-                            <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-xl">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Full Name</label>
-                                        <Input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Email</label>
-                                        <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Phone Number</label>
-                                        <Input type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Date of Birth</label>
-                                        <Input type="date" value={formData.dateOfBirth} onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="text-indigo-900 block mb-2 font-semibold">Please Clearly State Your Specific Wish (Manokamna)</label>
-                                    <Textarea value={formData.wish} onChange={(e) => setFormData({...formData, wish: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full h-32" required />
-                                </div>
-                                <Button type="submit" className="w-full bg-indigo-700 text-white hover:bg-indigo-800 text-lg px-8 py-4 font-bold rounded-full shadow-lg transition-transform transform hover:scale-105">
-                                    Submit Puja Request
-                                </Button>
-                            </form>
                         </div>
                     </section>
                 )}

@@ -1,16 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { CalendarDays, TrendingUp, HeartHandshake, Briefcase, Shield, DollarSign, Target, Lightbulb } from 'lucide-react';
+import { CalendarDays, TrendingUp, HeartHandshake, Briefcase, Shield, DollarSign, Target, Lightbulb, Star, Zap, Users, Globe, Award, Compass, Moon, Sun, Crown, Eye, Brain, Infinity, Clock, Gift, Lock, ArrowUpRight, BookOpen, Heart } from 'lucide-react';
 import { DrNarendraProfile } from '../../../app/components/DrNarendraProfile';
 import { Statistics } from '../../../app/components/Statistics';
 import { ContactForm } from '../../../app/components/ContactForm';
 
-const tabs = ['Overview', 'Benefits', 'FAQs', 'Get Your Report'];
+const tabs = ['Overview', 'Benefits', 'FAQs'];
 
 const benefits = [
     {
@@ -53,6 +50,41 @@ const benefits = [
         title: 'Gain Deeper Self-Awareness',
         desc: 'Use the monthly themes as a tool for self-reflection and personal development, aligning with your spiritual path.'
     },
+    {
+        icon: <Star className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Planetary Transit Insights',
+        desc: 'Understand how major planetary movements affect your personal chart and life areas for better decision-making.'
+    },
+    {
+        icon: <Zap className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Energy Management',
+        desc: 'Learn to work with cosmic energies rather than against them, optimizing your productivity and well-being.'
+    },
+    {
+        icon: <Users className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Social Timing',
+        desc: 'Know the best times for networking, meetings, and social interactions to maximize positive outcomes.'
+    },
+    {
+        icon: <Globe className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Travel & Movement',
+        desc: 'Identify auspicious periods for travel, relocation, and important journeys in your life.'
+    },
+    {
+        icon: <Award className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Achievement Timing',
+        desc: 'Time your goals and projects to align with favorable planetary energies for maximum success.'
+    },
+    {
+        icon: <Compass className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Life Direction',
+        desc: 'Gain clarity about your life path and make confident decisions about your future direction.'
+    },
+    {
+        icon: <BookOpen className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Learning & Growth',
+        desc: 'Identify the best periods for education, skill development, and personal growth activities.'
+    }
 ];
 
 const faqs = [
@@ -75,36 +107,22 @@ const faqs = [
     {
         q: 'What information do you need for a personalized report?',
         a: "To create a personalized report, we need your full name, and your accurate date, time, and place of birth. This allows us to cast your unique birth chart, which is the foundation of the analysis."
-    },
-    {
-        q: 'How will I receive my monthly report?',
-        a: "After you submit your details and the request is processed, your personalized monthly horoscope report will be compiled by our expert astrologers and delivered to you via email as a detailed PDF document."
-    },
+    }
 ];
-
 
 export default function MonthlyHoroscopePage() {
     const [activeTab, setActiveTab] = useState('Overview');
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        dateOfBirth: "",
-        placeOfBirth: "",
-        timeOfBirth: "",
-    });
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log(formData);
-    };
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white font-sans">
-            <div className="container mx-auto pt-8 px-4 py-16 relative z-10">
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
+            <div className="container mx-auto pt-8 px-4 pb-16 relative z-10">
+                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e6c77e]" style={{ backgroundColor: '#FEFBF2' }}>
                     <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg font-serif" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Monthly Horoscope Analysis</h1>
-                    <p className="text-xl md:text-2xl text-center text-gray-700 max-w-3xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
+                    <p className="text-xl md:text-2xl text-center max-w-3xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', color: '#166534' }}>
                         Plan your month ahead with detailed astrological insights and cosmic guidance for every zodiac sign.
                     </p>
                 </motion.div>
@@ -124,9 +142,12 @@ export default function MonthlyHoroscopePage() {
 
                 {activeTab === 'Overview' && (
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
-                        <p>While a daily horoscope offers a snapshot, a <span className="font-bold text-indigo-900">Monthly Horoscope</span> provides a panoramic view of the cosmic landscape ahead. It is an invaluable strategic tool for anyone looking to navigate their life with greater foresight and wisdom. By analyzing the slower and more impactful planetary transits over the course of the month, this analysis reveals the overarching themes, dominant energies, and significant opportunities that will shape your coming weeks. It moves beyond the immediate to give you a framework for proactive and conscious living.</p>
-                        <p>Our personalized Monthly Horoscope goes deep into how major planetary movements—such as the Sun&apos;s journey through a new sign, Mercury&apos;s communication cycles (including retrogrades), and the dynamic shifts of Venus and Mars—will interact with your unique birth chart. This creates a highly relevant and practical guide. We identify which houses (areas of life) in your chart will be activated, helping you understand where to focus your energy: be it career, relationships, health, or personal projects. This is not generic advice; it is a tailored cosmic weather report for your soul.</p>
-                        <p>Understanding the flow of the month empowers you to make aligned decisions. A Monthly Horoscope can highlight auspicious periods for launching a new project, having important conversations, or making financial investments. Conversely, it can warn you of potential periods of conflict, misunderstanding, or low energy, advising you to act with more caution and patience. This knowledge transforms you from a passive recipient of fate into an active co-creator of your reality, allowing you to work with the planetary energies, not against them.</p>
+                        <p>While a daily horoscope offers a snapshot, a <span className="font-bold text-green-800">Monthly Horoscope</span> provides a panoramic view of the cosmic landscape ahead. It is an invaluable strategic tool for anyone looking to navigate their life with greater foresight and wisdom. By analyzing the slower and more impactful planetary transits over the course of the month, this analysis reveals the overarching themes, dominant energies, and significant opportunities that will shape your coming weeks. It moves beyond the immediate to give you a framework for proactive and conscious living.</p>
+                        <p>Our personalized Monthly Horoscope goes deep into how major planetary movements—such as the <span className="font-bold text-green-800">Sun's journey</span> through a new sign, <span className="font-bold text-green-800">Mercury's communication cycles</span> (including retrogrades), and the dynamic shifts of <span className="font-bold text-green-800">Venus and Mars</span>—will interact with your unique birth chart. This creates a highly relevant and practical guide. We identify which houses (areas of life) in your chart will be activated, helping you understand where to focus your energy: be it career, relationships, health, or personal projects. This is not generic advice; it is a tailored cosmic weather report for your soul.</p>
+                        <p>Understanding the flow of the month empowers you to make aligned decisions. A Monthly Horoscope can highlight <span className="font-bold text-green-800">auspicious periods</span> for launching a new project, having important conversations, or making financial investments. Conversely, it can warn you of potential periods of conflict, misunderstanding, or low energy, advising you to act with more caution and patience. This knowledge transforms you from a passive recipient of fate into an active co-creator of your reality, allowing you to work with the planetary energies, not against them.</p>
+                        <p>The <span className="font-bold text-green-800">planetary transits</span> that form the foundation of monthly analysis include the Sun's movement through zodiac signs (changing approximately every 30 days), Mercury's communication cycles and retrograde periods, Venus's influence on love and relationships, and Mars's impact on energy and action. Each of these planetary movements creates specific energetic themes that affect different areas of your life based on your birth chart.</p>
+                        <p>Beyond the major planets, we also analyze the <span className="font-bold text-green-800">lunar phases</span> and their influence on your emotional landscape throughout the month. The New Moon represents new beginnings and setting intentions, while the Full Moon brings illumination and completion. Understanding these lunar cycles helps you align your personal rhythms with the cosmic flow, enhancing your ability to manifest your desires and achieve your goals.</p>
+                        <p>A Monthly Horoscope also provides insights into <span className="font-bold text-green-800">karmic lessons</span> and spiritual growth opportunities that may arise during the month. By understanding the deeper meaning behind challenging transits, you can approach difficulties with wisdom and grace, transforming obstacles into stepping stones for personal evolution. This perspective helps you maintain a positive outlook even during challenging periods.</p>
                         <p>Ultimately, a Monthly Horoscope is a guide for personal growth and empowerment. It provides a rhythm and a narrative to the month, helping you to understand the &apos;why&apos; behind the events and feelings you experience. By seeing the bigger picture, you can handle challenges with more grace, seize opportunities with more confidence, and ensure that your actions are in harmony with the celestial tides. It is an essential tool for anyone serious about living a conscious, purposeful, and successful life.</p>
                     </motion.div>
                 )}
@@ -167,48 +188,6 @@ export default function MonthlyHoroscopePage() {
                                     <p className="text-black text-justify pl-8" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>{faq.a}</p>
                                 </div>
                             ))}
-                        </div>
-                    </section>
-                )}
-
-                {activeTab === 'Get Your Report' && (
-                    <section className="mb-12">
-                        <div className="rounded-3xl bg-gradient-to-r from-[#e0f7fa] via-[#f3e8ff] to-[#e0f2fe] p-10 shadow-xl border border-indigo-100 flex flex-col items-center">
-                            <h2 className="text-3xl font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>Request Your Personalized Monthly Report</h2>
-                            <p className="text-lg text-center mb-6 text-black" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
-                                To receive a detailed, personalized monthly horoscope, please provide your birth details below.
-                            </p>
-                            <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-xl">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Full Name</label>
-                                        <Input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Email</label>
-                                        <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Phone Number</label>
-                                        <Input type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Date of Birth</label>
-                                        <Input type="date" value={formData.dateOfBirth} onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                     <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Place of Birth (City, Country)</label>
-                                        <Input type="text" value={formData.placeOfBirth} onChange={(e) => setFormData({...formData, placeOfBirth: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Time of Birth</label>
-                                        <Input type="time" value={formData.timeOfBirth} onChange={(e) => setFormData({...formData, timeOfBirth: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                </div>
-                                <Button type="submit" className="w-full bg-indigo-700 text-white hover:bg-indigo-800 text-lg px-8 py-4 font-bold rounded-full shadow-lg transition-transform transform hover:scale-105">
-                                    Submit Request
-                                </Button>
-                            </form>
                         </div>
                     </section>
                 )}

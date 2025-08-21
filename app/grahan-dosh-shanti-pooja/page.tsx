@@ -1,338 +1,208 @@
 "use client";
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { UniversalCartButton } from '../components/UniversalCartButton';
-import ProductAssuranceBar from '../components/ProductAssuranceBar';
-import ProductPurchaseInfo from '../components/ProductPurchaseInfo';
-import { ProductServiceCard } from "../components/UniversalServiceGrid";
-import ServiceCarousels from '../components/ServiceCarousels';
-import NakshatraGyaanBanner from '../components/NakshatraGyaanBanner';
-import SpiritualJourneyBanner from '../components/SpiritualJourneyBanner';
 
-// FAQ Item Component
-function FAQItem({ faq, index }: { faq: { question: string; answer: string }; index: number }) {
-  const [open, setOpen] = useState(false);
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.07 }}
-      className="rounded-xl border border-gray-200 bg-white/80 shadow-md p-4 group hover:shadow-lg transition-all w-full"
-    >
-      <button
-        className="w-full text-left font-medium text-[#23244a] cursor-pointer text-base group-open:text-[#77A656] focus:outline-none flex justify-between items-center"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-      >
-        {faq.question}
-        <span className={`ml-2 transition-transform text-lg ${open ? 'rotate-90' : ''}`}>▶</span>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="content"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            className="overflow-hidden"
-          >
-            <div className="mt-2 text-[#2C3A4B] text-sm leading-relaxed">{faq.answer}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-}
+import React, { useState, useEffect } from "react";
+import { motion } from 'framer-motion';
+import { Shield, Moon, Sun, Star, Zap, Heart, Users, Globe, BookOpen, Award, Compass, TrendingUp, Clock, Target, Lightbulb, Sparkles, Crown, Eye, Brain, Infinity } from 'lucide-react';
+import { DrNarendraProfile } from "../components/DrNarendraProfile";
+import { Statistics } from "../components/Statistics";
+import { ContactForm } from "../components/ContactForm";
 
-// Grahan Dosh Shanti Pooja Service Configuration
-const grahanDoshService = {
-  title: "Grahan Dosh Shanti Pooja",
-  images: [
-    "/images/course-2.jpg",
-    "/images/birth_chart_mockup.jpg",
-    "/images/astrology_understanding.jpg",
-    "/images/spiritualpathway.jpg",
-  ],
-  variants: [
-    { label: "Basic Grahan Shanti", image: "/images/course-2.jpg" },
-    { label: "Complete Grahan Dosh Pooja", image: "/images/astrology_understanding.jpg" },
-  ],
-  features: ["Expert Vedic Priests", "Sacred Rituals", "Personalized Remedies"],
-  price: "₹4,500",
-  oldPrice: "₹7,000",
-  discount: "35% OFF",
-  offerEnds: "03 hr : 45 min : 30 sec",
-  rating: 4.8,
-  reviews: 934,
-  orders: 1567,
-};
+const tabs = ['Overview', 'Benefits', 'FAQs'];
 
-// Grahan Dosh Shanti Pooja FAQs
-const grahanDoshFaqs = [
+const benefits = [
   {
-    question: "What is Grahan Dosh and why is it significant?",
-    answer: "Grahan Dosh occurs when Rahu and Ketu (shadow planets) are unfavorably placed in your birth chart, causing obstacles, delays, and negative influences. This dosh can affect career, relationships, health, and overall life progress.",
+    icon: <Shield className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Remove Planetary Obstacles',
+    desc: 'Eliminate the negative effects of Rahu and Ketu placements that cause delays, obstacles, and challenges in your life.'
   },
   {
-    question: "How do I know if I have Grahan Dosh?",
-    answer: "Grahan Dosh is identified through detailed astrological analysis of your birth chart. Common symptoms include persistent obstacles, unexpected delays, health issues, relationship problems, and feeling stuck despite efforts.",
+    icon: <Moon className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Balance Shadow Planets',
+    desc: 'Harmonize the energy of Rahu and Ketu to restore balance and positive flow in your astrological chart.'
   },
   {
-    question: "What is included in the Grahan Dosh Shanti Pooja?",
-    answer: "Our comprehensive pooja includes Rahu-Ketu pacification rituals, sacred mantras, specific offerings, priest fees, detailed astrological consultation, and personalized remedies for ongoing protection.",
+    icon: <Sun className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Career Growth',
+    desc: 'Remove professional obstacles and unlock new opportunities for advancement and success in your career.'
   },
   {
-    question: "How long does the Grahan Dosh Shanti Pooja take?",
-    answer: "The complete Grahan Dosh Shanti Pooja typically takes 2-3 hours, including preparation, main rituals, and conclusion. We perform it during auspicious timings for maximum effectiveness.",
+    icon: <Star className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Relationship Harmony',
+    desc: 'Resolve relationship conflicts and attract positive, harmonious connections in your personal life.'
   },
   {
-    question: "Can this pooja be performed remotely?",
-    answer: "Yes, our expert priests can perform the pooja on your behalf. You'll receive live updates and can participate mentally from anywhere. The spiritual benefits and positive energy will reach you regardless of location.",
+    icon: <Zap className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Health & Vitality',
+    desc: 'Improve physical and mental well-being by removing negative planetary influences that affect health.'
   },
   {
-    question: "What information is needed for the pooja?",
-    answer: "We require your complete birth details (date, time, place), current concerns, and any specific areas of life you want to improve. This helps us customize the pooja for your specific Grahan Dosh.",
+    icon: <Heart className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Emotional Balance',
+    desc: 'Achieve inner peace and emotional stability by pacifying the disruptive energies of shadow planets.'
   },
   {
-    question: "How soon will I see the effects of the pooja?",
-    answer: "Effects vary by individual. Some experience immediate relief and clarity, while others notice gradual improvements over weeks. The pooja works to remove obstacles and create positive energy flow in your life.",
+    icon: <Users className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Social Success',
+    desc: 'Improve social interactions and build better relationships with family, friends, and colleagues.'
   },
   {
-    question: "Are there any follow-up remedies required?",
-    answer: "Yes, we provide personalized follow-up remedies including specific mantras, gemstones, and lifestyle recommendations to maintain the positive effects and prevent future Grahan Dosh issues.",
+    icon: <Globe className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Travel & Movement',
+    desc: 'Remove obstacles related to travel, relocation, and physical movement in your life.'
   },
+  {
+    icon: <BookOpen className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Learning & Education',
+    desc: 'Enhance learning abilities and overcome mental blocks that hinder educational progress.'
+  },
+  {
+    icon: <Award className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Recognition & Fame',
+    desc: 'Gain recognition for your talents and achieve the fame and respect you deserve.'
+  },
+  {
+    icon: <Compass className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Life Direction',
+    desc: 'Find clarity about your life path and make confident decisions about your future.'
+  },
+  {
+    icon: <TrendingUp className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Financial Prosperity',
+    desc: 'Remove financial obstacles and attract wealth and abundance into your life.'
+  },
+  {
+    icon: <Clock className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Timing & Opportunities',
+    desc: 'Identify the right timing for important decisions and seize opportunities at the perfect moment.'
+  },
+  {
+    icon: <Target className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Goal Achievement',
+    desc: 'Overcome obstacles that prevent you from reaching your goals and dreams.'
+  },
+  {
+    icon: <Lightbulb className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Mental Clarity',
+    desc: 'Gain mental clarity and remove confusion that clouds your judgment and decision-making.'
+  }
 ];
 
-// Related Services
-const relatedServices = [
+const faqs = [
   {
-    title: 'Grah Shanti Puja',
-    image: '/images/course-2.jpg',
-    price: '₹3,500',
-    oldPrice: '₹5,000',
-    slug: 'grah-shanti',
+    q: 'What is Grahan Dosh and why is it significant?',
+    a: 'Grahan Dosh occurs when Rahu and Ketu (shadow planets) are unfavorably placed in your birth chart, causing obstacles, delays, and negative influences. This dosh can affect career, relationships, health, and overall life progress.'
   },
   {
-    title: 'Kundali Matching',
-    image: '/images/birth_chart_mockup.jpg',
-    price: '₹2,100',
-    oldPrice: '₹4,500',
-    slug: 'kundali-matching',
+    q: 'How do I know if I have Grahan Dosh?',
+    a: 'Grahan Dosh is identified through detailed astrological analysis of your birth chart. Common symptoms include persistent obstacles, unexpected delays, health issues, relationship problems, and feeling stuck despite efforts.'
   },
   {
-    title: 'Online Puja Services',
-    image: '/images/astrology_understanding.jpg',
-    price: '₹2,500',
-    oldPrice: '₹4,000',
-    slug: 'online-puja',
+    q: 'What is included in the Grahan Dosh Shanti Pooja?',
+    a: 'Our comprehensive pooja includes Rahu-Ketu pacification rituals, sacred mantras, specific offerings, priest fees, detailed astrological consultation, and personalized remedies for ongoing protection.'
   },
   {
-    title: 'Personal Astrology Reading',
-    image: '/images/astrology_understanding.jpg',
-    price: '₹2,500',
-    oldPrice: '₹3,500',
-    slug: 'personal-reading',
+    q: 'How long does the Grahan Dosh Shanti Pooja take?',
+    a: 'The complete Grahan Dosh Shanti Pooja typically takes 2-3 hours, including preparation, main rituals, and conclusion. We perform it during auspicious timings for maximum effectiveness.'
   },
+  {
+    q: 'Can this pooja be performed remotely?',
+    a: 'Yes, our expert priests can perform the pooja on your behalf. You\'ll receive live updates and can participate mentally from anywhere. The spiritual benefits and positive energy will reach you regardless of location.'
+  }
 ];
 
 export default function GrahanDoshShantiPoojaPage() {
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedVariant, setSelectedVariant] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const [pincode, setPincode] = useState("");
-  const [added, setAdded] = useState(false);
-
-  // Real-time offer timer
-  const OFFER_DURATION = 3 * 60 * 60 + 45 * 60 + 30; // 3 hr 45 min 30 sec in seconds
-  const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
+  const [activeTab, setActiveTab] = useState('Overview');
 
   useEffect(() => {
-    if (secondsLeft <= 0) return;
-    const interval = setInterval(() => {
-      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [secondsLeft]);
-
-  function formatTime(secs: number) {
-    const h = Math.floor(secs / 3600).toString().padStart(2, '0');
-    const m = Math.floor((secs % 3600) / 60).toString().padStart(2, '0');
-    const s = (secs % 60).toString().padStart(2, '0');
-    return `${h} hr : ${m} min : ${s} sec`;
-  }
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
-    <>
-      <style jsx global>{`
-        *::-webkit-scrollbar {
-          display: none !important;
-          height: 0 !important;
-          width: 0 !important;
-          background: transparent !important;
-        }
-        * {
-          scrollbar-width: none !important;
-          -ms-overflow-style: none !important;
-        }
-      `}</style>
-      <div className="min-h-screen bg-white flex flex-col items-center justify-start py-6 px-2 md:px-0 mt-8">
-        <div className="max-w-5xl w-full flex flex-col md:flex-row gap-8">
-          {/* Left: Main Image and Thumbnails */}
-          <div className="flex flex-col items-center md:w-1/2">
-            <div className="w-full rounded-xl overflow-hidden bg-[#f7f5ed] flex items-center justify-center mb-3" style={{ aspectRatio: '1/1', maxWidth: 340 }}>
-              <Image
-                src={grahanDoshService.images[selectedImage]}
-                alt={grahanDoshService.title}
-                width={320}
-                height={320}
-                className="object-cover w-full h-full"
-                priority
-              />
-            </div>
-            <div className="flex flex-row gap-2 w-full overflow-x-auto pb-2">
-              {grahanDoshService.images.map((img, idx) => (
-                <button
-                  key={img}
-                  onClick={() => setSelectedImage(idx)}
-                  className={`rounded-lg border-2 ${selectedImage === idx ? 'border-black' : 'border-transparent'} overflow-hidden focus:outline-none`}
-                  style={{ minWidth: 54, minHeight: 54 }}
-                >
-                  <Image src={img} alt={grahanDoshService.title} width={54} height={54} className="object-cover w-full h-full" />
-                </button>
-              ))}
-            </div>
-          </div>
-          {/* Right: Service Info */}
-          <div className="flex-1 flex flex-col gap-3">
-            <h1 className="text-2xl md:text-3xl font-semibold text-[#23244a]" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{grahanDoshService.title}</h1>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-[#FFD700] text-lg">&#9733;</span>
-              <span className="text-base font-medium text-[#23244a]">{grahanDoshService.rating}</span>
-              <span className="text-sm text-[#23244a]">{grahanDoshService.reviews} reviews</span>
-            </div>
-            <div className="flex gap-2 mt-2">
-              {grahanDoshService.features.map((f, i) => (
-                <span key={f} className={`px-3 py-0.5 rounded-full text-xs font-medium ${i === 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-indigo-100 text-indigo-800'}`}>{f}</span>
-              ))}
-            </div>
-            <div className="flex items-end gap-3 mt-3">
-              {secondsLeft === 0 ? (
-                <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{grahanDoshService.oldPrice}</span>
-              ) : (
-                <>
-                  <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{grahanDoshService.price}</span>
-                  <span className="text-base text-gray-400 line-through">{grahanDoshService.oldPrice}</span>
-                  <span className="text-base font-semibold text-green-700">{grahanDoshService.discount}</span>
-                </>
-              )}
-            </div>
-            <div className="text-red-600 font-medium text-sm mt-1">
-              {secondsLeft > 0 ? `Offer ends in ${formatTime(secondsLeft)}` : 'Offer ended'}
-            </div>
-            {/* Service Variants */}
-            <div className="flex gap-4 mt-3">
-              {grahanDoshService.variants.map((v, idx) => (
-                <button
-                  key={v.label}
-                  onClick={() => setSelectedVariant(idx)}
-                  className={`flex flex-col items-center gap-1 focus:outline-none ${selectedVariant === idx ? 'ring-2 ring-black' : ''}`}
-                >
-                  <Image src={v.image} alt={v.label} width={40} height={40} className="rounded-full object-cover" />
-                  <span className="text-xs text-[#23244a] mt-1 font-normal">{v.label}</span>
-                </button>
-              ))}
-            </div>
-            {/* Quantity Selector */}
-            <div className="flex items-center gap-3 mt-3">
-              <span className="text-sm text-[#23244a]">Quantity</span>
-              <button
-                className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-lg font-bold text-[#23244a] bg-white"
-                onClick={() => setQuantity(q => Math.max(1, q - 1))}
-              >-</button>
-              <span className="text-base font-medium text-[#23244a] w-7 text-center">{quantity}</span>
-              <button
-                className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-lg font-bold text-[#23244a] bg-white"
-                onClick={() => setQuantity(q => q + 1)}
-              >+</button>
-            </div>
-            <div className="text-xs text-gray-600 mt-1">{grahanDoshService.orders.toLocaleString()} orders placed in the last 24 hours</div>
-            {/* Delivery Date Input */}
-            <div className="mt-3 bg-gray-100 rounded-lg p-3 flex flex-col gap-2">
-              <span className="text-xs font-medium text-[#23244a]">ESTIMATED DELIVERY DATE</span>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Enter your pincode"
-                  value={pincode}
-                  onChange={e => setPincode(e.target.value)}
-                  className="rounded-md px-3 py-1.5 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#23244a] bg-white"
-                  style={{ maxWidth: 120 }}
-                />
-                <button className="bg-black text-white px-4 py-1.5 rounded-md font-semibold text-sm hover:bg-[#23244a] transition">CHECK</button>
-              </div>
-            </div>
-            {/* Add to Cart / Buy Now */}
-            <div className="flex gap-3 mt-5">
-              <UniversalCartButton
-                productId="grahan-dosh-shanti-pooja"
-                productName={grahanDoshService.title}
-                price={Number(grahanDoshService.price.replace(/[^\d]/g, ''))}
-                image={grahanDoshService.images[0]}
-                quantity={quantity}
-                className="flex-1 bg-black text-white py-3 rounded-md font-semibold text-base hover:bg-[#23244a] transition"
-              >
-                ADD TO CART
-              </UniversalCartButton>
-              <button className="flex-1 bg-yellow-400 text-black py-3 rounded-md font-semibold text-base hover:bg-yellow-500 transition">BUY IT NOW</button>
-            </div>
-          </div>
-        </div>
-        {/* ProductAssuranceBar */}
-        <ProductAssuranceBar />
-        {/* FAQ Section */}
-        <div className="w-screen overflow-x-clip mt-14 mb-10" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
-          <div className="max-w-5xl w-full mx-auto px-2 md:px-0">
-            <h2 className="text-2xl md:text-3xl font-semibold mb-7 text-[#23244a] text-center" style={{ fontFamily: 'Playfair Display, serif', letterSpacing: '0.02em' }}>Frequently Asked Questions</h2>
-            <div className="space-y-5 w-full">
-              {grahanDoshFaqs.map((faq, idx) => (
-                <FAQItem key={idx} faq={faq} index={idx} />
-              ))}
-            </div>
-          </div>
-        </div>
-        {/* ProductPurchaseInfo */}
-        <ProductPurchaseInfo />
-        {/* Full-width ServiceCarousels */}
-        <div className="w-screen overflow-x-clip" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
-          <ServiceCarousels />
-        </div>
-        {/* Nakshatra Gyaan Banner */}
-        <NakshatraGyaanBanner />
-        {/* Related Services */}
-        <div className="w-screen overflow-x-clip mb-16" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
-          <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-[#23244a] text-center" style={{ fontFamily: 'Playfair Display, serif' }}>Related Services</h2>
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 px-4 md:px-8">
-            {relatedServices.map(service => (
-              <div key={service.slug} className="group">
-                <ProductServiceCard
-                  image={service.image}
-                  title={service.title}
-                  description={service.oldPrice ? `${service.price} (was ${service.oldPrice})` : service.price}
-                  badge={service.oldPrice ? 'Recommended' : ''}
-                  href={`/services/${service.slug}`}
-                />
-              </div>
-            ))}
-          </div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white font-sans">
+      <div className="container mx-auto pt-8 px-4 pb-16 relative z-10">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e6c77e]" style={{ backgroundColor: '#FEFBF2' }}>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg font-serif" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            Grahan Dosh Shanti Pooja
+          </h1>
+          <p className="text-xl md:text-2xl text-center max-w-2xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', color: '#166534' }}>
+            Remove planetary obstacles and restore harmony in your life through powerful Vedic rituals that pacify Rahu and Ketu.
+          </p>
+        </motion.div>
+
+        <div className="flex flex-wrap gap-2 mb-8 border-b border-gray-200">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors font-sans ${activeTab === tab ? 'border-indigo-500 text-indigo-600 font-bold' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
+              style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
-        {/* Spiritual Journey Banner */}
-        <SpiritualJourneyBanner />
+        {activeTab === 'Overview' && (
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
+            <p>Grahan Dosh, also known as Rahu-Ketu Dosha, is one of the most significant astrological challenges that can affect every aspect of your life. This dosh occurs when the shadow planets <span className="font-bold text-green-800">Rahu</span> and <span className="font-bold text-green-800">Ketu</span> are unfavorably placed in your birth chart, creating a complex web of obstacles, delays, and negative influences that can persist throughout your lifetime. Understanding and addressing this dosh is crucial for achieving harmony and success in all areas of life.</p>
+            <p>The <span className="font-bold text-green-800">Rahu-Ketu axis</span> represents the lunar nodes where the Moon's path intersects with the Sun's apparent path around the Earth. Rahu, the North Node, symbolizes our desires, ambitions, and material pursuits, while Ketu, the South Node, represents detachment, spirituality, and past-life karma. When these planets are afflicted or placed in challenging houses, they create Grahan Dosh, which manifests as persistent obstacles, unexpected delays, and a feeling of being stuck despite your best efforts.</p>
+            <p>Grahan Dosh can affect multiple areas of life simultaneously. In your <span className="font-bold text-green-800">career</span>, it may cause job instability, missed promotions, or difficulty in achieving professional goals. In <span className="font-bold text-green-800">relationships</span>, it can lead to misunderstandings, conflicts, and difficulty in forming lasting bonds. Health-wise, it may manifest as chronic issues, mental stress, or unexplained ailments. The dosh can also affect your <span className="font-bold text-green-800">financial stability</span>, <span className="font-bold text-green-800">travel plans</span>, and overall sense of well-being.</p>
+            <p>The <span className="font-bold text-green-800">Grahan Dosh Shanti Pooja</span> is a powerful Vedic ritual specifically designed to pacify and harmonize the energies of Rahu and Ketu. This sacred ceremony involves elaborate rituals, specific mantras, and offerings that directly address the root causes of the dosh. Our expert Vedic priests perform this pooja with utmost precision, following ancient traditions that have been passed down through generations of spiritual masters.</p>
+            <p>During the pooja, we use specific <span className="font-bold text-green-800">mantras</span> and <span className="font-bold text-green-800">rituals</span> that resonate with the energy of Rahu and Ketu. These include the Rahu Stotra, Ketu Stotra, and other powerful Vedic hymns that help balance the planetary energies. We also perform specific <span className="font-bold text-green-800">offerings</span> and <span className="font-bold text-green-800">sacred fire ceremonies</span> (Havan) that purify the negative influences and create positive energy flow.</p>
+            <p>The timing of the pooja is crucial for its effectiveness. We perform it during <span className="font-bold text-green-800">auspicious planetary hours</span> when the cosmic energies are most favorable for such rituals. This ensures maximum impact and lasting results. The pooja typically takes 2-3 hours to complete, during which you can participate mentally and receive the spiritual benefits regardless of your physical location.</p>
+            <p>Beyond the immediate ritual, we provide comprehensive <span className="font-bold text-green-800">follow-up remedies</span> and guidance to maintain the positive effects. This includes personalized mantras for daily practice, recommendations for gemstones that can further support the healing process, and lifestyle adjustments that align with the harmonized planetary energies. Our holistic approach ensures that the benefits of the pooja continue to manifest in your life long after the ceremony is complete.</p>
+          </motion.div>
+        )}
+        
+        {activeTab === 'Benefits' && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-indigo-900 mb-8 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Benefits of Grahan Dosh Shanti Pooja</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {benefits.map((benefit, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 + idx * 0.1 }}
+                  viewport={{ once: true }}
+                  className="rounded-2xl bg-white/70 backdrop-blur-md shadow-lg p-8 flex flex-col items-center border border-indigo-100 hover:scale-105 transition-transform duration-200"
+                  style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}
+                >
+                  {benefit.icon}
+                  <h3 className="font-bold text-lg mb-2 text-indigo-900 text-center" style={{ fontFamily: 'Playfair Display, serif' }}>{benefit.title}</h3>
+                  <p className="text-gray-700 text-center text-base">{benefit.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {activeTab === 'FAQs' && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-indigo-900 mb-8 border-b pb-2 text-left" style={{ fontFamily: 'Playfair Display, serif' }}>Frequently Asked Questions</h2>
+            <div className="space-y-8">
+              {faqs.map((faq, idx) => (
+                <div key={idx}>
+                  <div className="flex items-center mb-2">
+                    <span className="text-indigo-600 mr-2 text-xl">&#x3f;</span>
+                    <span className="font-bold text-lg text-indigo-900" style={{ fontFamily: 'Playfair Display, serif' }}>{faq.q}</span>
+                  </div>
+                  <p className="text-black text-justify pl-8" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+        
+        <div className="mt-20 space-y-20">
+          <DrNarendraProfile />
+          <Statistics />
+        </div>
+
+        <div className="mt-20">
+          <ContactForm />
+        </div>
       </div>
-    </>
+    </div>
   );
 } 

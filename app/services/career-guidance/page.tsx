@@ -1,16 +1,13 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FaRegLightbulb, FaRegStar, FaRegGem, FaRegSmile, FaRegHeart, FaRegComments, FaRegSun } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { DrNarendraProfile } from '@/app/components/DrNarendraProfile';
 import { Statistics } from '@/app/components/Statistics';
 import { ContactForm } from '@/app/components/ContactForm';
 
-const tabs = ['Overview', 'Benefits', 'FAQs', 'Purchase'];
+const tabs = ['Overview', 'Benefits', 'FAQs'];
 
 const benefits = [
   {
@@ -76,27 +73,18 @@ const faqs = [
 
 export default function CareerGuidancePage() {
   const [activeTab, setActiveTab] = useState('Overview');
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    dateOfBirth: "",
-    message: ""
-  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log(formData);
-  };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-blue-50 to-white font-sans">
-      <div className="container mx-auto pt-8 px-4 py-16 relative z-10">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white font-sans">
+      <div className="container mx-auto pt-8 px-4 pb-16 relative z-10">
         {/* Glassmorphic Banner */}
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl bg-gradient-to-r from-[#e0f7fa] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e0f7fa]">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e6c77e]" style={{ backgroundColor: '#FEFBF2' }}>
           <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg font-serif" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Career & Job Guidance</h1>
-          <p className="text-xl md:text-2xl text-center text-gray-700 max-w-3xl" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
+          <p className="text-xl md:text-2xl text-center max-w-3xl" style={{ fontFamily: 'Open Sans, Arial, sans-serif', color: '#166534' }}>
             Unlock your professional destiny with cosmic clarity. Our Vedic astrologers offer deep, actionable insights for every stage of your career journey.
           </p>
         </motion.div>
@@ -107,7 +95,7 @@ export default function CareerGuidancePage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors font-sans ${activeTab === tab ? 'border-blue-500 text-blue-600 font-bold' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors font-sans ${activeTab === tab ? 'border-indigo-500 text-indigo-600 font-bold' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
               style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}
             >
               {tab}
@@ -118,29 +106,19 @@ export default function CareerGuidancePage() {
         {/* Tab Content */}
         {activeTab === 'Overview' && (
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
-            <p>In today&apos;s fast-paced, hyper-competitive world, choosing and navigating a career path can feel overwhelming. Amidst external expectations and internal doubts, how do you find the work that truly resonates with your soul? At Nakshatra Gyaan, we believe your profession is not just a means of livelihood—it is a sacred expression of your dharma, your higher purpose in this lifetime. Through the ancient science of Vedic astrology, we help you uncover your divine professional blueprint and align it with real-world opportunities and inner fulfillment.</p>
-            <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6" style={{ fontFamily: 'Playfair Display, serif' }}>Why Choose Astrological Career Guidance?</h3>
-            <p>Conventional career advice often falls short because it ignores the cosmic design encoded in your birth chart. Your Janma Kundli is a celestial map of your karma, potential, and soul journey. It reveals the ideal environments, industries, and roles where your energy naturally thrives, as well as the karmic challenges that may appear along the way. With the precision of Vedic astrology, combined with insights from modern psychology and spiritual counseling, we offer a comprehensive roadmap that answers questions your heart has been asking all along:</p>
-            <ul className="list-disc ml-8">
-              <li>What career path is truly aligned with my natural gifts and spiritual essence?</li>
-              <li>Am I destined to lead, serve, heal, teach, innovate, or create?</li>
-              <li>When is the ideal time to change jobs, start a new venture, or take a leap of faith?</li>
-              <li>Why do I keep facing the same challenges in the workplace—and how can I overcome them?</li>
-              <li>Can I achieve material success while staying spiritually grounded and emotionally balanced?</li>
-            </ul>
-            <h3 className="text-2xl font-bold text-blue-800 mb-2 mt-6" style={{ fontFamily: 'Playfair Display, serif' }}>What is Career & Job Guidance?</h3>
-            <p>Career & Job Guidance at Nakshatra Gyaan is not merely a consultation—it is a sacred decoding of your professional destiny. In a world driven by competition, uncertainty, and ever-evolving opportunities, we offer a calm, cosmic perspective that reveals what your soul truly seeks in the realm of work, purpose, and prosperity. Our sessions are designed to guide you toward a career that doesn&apos;t just sustain you—but fulfills, inspires, and elevates you.</p>
-            <p>What sets our service apart is its deeply integrative approach—a blend of classical Vedic astrology, karmic insight, and modern career psychology. We begin by analyzing your birth chart, which acts as a divine blueprint of your professional inclinations, talents, lessons, and dharma (life purpose). We examine planetary placements, your 10th and 6th houses, nakshatras, dashas (planetary periods), and current transits to understand not just what you can do—but what you are destined to thrive in.</p>
-            <p>Our mission is not to fit you into a box, but to help you break free from limitations—be it stagnation, self-doubt, job dissatisfaction, or confusion about your path. Whether you are a student trying to choose a stream, a young professional navigating early career choices, a seasoned employee facing burnout, or an entrepreneur looking for divine timing to launch a business—our guidance meets you where you are and helps you realign.</p>
-            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg">
-              <span className="text-blue-600 font-medium">Key Takeaway:</span> <span className="font-bold text-blue-900">Career Guidance</span> provides a cosmic roadmap to align your professional life with your soul&apos;s true purpose.
-            </div>
+            <p>In today&apos;s fast-paced, hyper-competitive world, choosing and navigating a career path can feel overwhelming. Amidst external expectations and internal doubts, how do you find the work that truly resonates with your soul? At Nakshatra Gyaan, we believe your profession is not just a means of livelihood—it is a sacred expression of your <span className="font-bold text-green-800">dharma</span>, your higher purpose in this lifetime. Through the ancient science of Vedic astrology, we help you uncover your divine professional blueprint and align it with real-world opportunities and inner fulfillment.</p>
+            <p>Conventional career advice often falls short because it ignores the cosmic design encoded in your birth chart. Your <span className="font-bold text-green-800">Janma Kundli</span> is a celestial map of your karma, potential, and soul journey. It reveals the ideal environments, industries, and roles where your energy naturally thrives, as well as the karmic challenges that may appear along the way. With the precision of Vedic astrology, combined with insights from modern psychology and spiritual counseling, we offer a comprehensive roadmap that answers questions your heart has been asking all along.</p>
+            <p>What sets our service apart is its deeply integrative approach—a blend of classical Vedic astrology, karmic insight, and modern career psychology. We begin by analyzing your birth chart, which acts as a divine blueprint of your professional inclinations, talents, lessons, and dharma (life purpose). We examine <span className="font-bold text-green-800">planetary placements</span>, your <span className="font-bold text-green-800">10th and 6th houses</span>, <span className="font-bold text-green-800">nakshatras</span>, <span className="font-bold text-green-800">dashas</span> (planetary periods), and current transits to understand not just what you can do—but what you are destined to thrive in.</p>
+            <p>Our mission is not to fit you into a box, but to help you break free from limitations—be it stagnation, self-doubt, job dissatisfaction, or confusion about your path. Whether you are a student trying to choose a stream, a young professional navigating early career choices, a seasoned employee facing burnout, or an entrepreneur looking for divine timing to launch a business—our guidance meets you where you are and helps you realign with your true calling.</p>
+            <p>The <span className="font-bold text-green-800">10th House</span> in your birth chart represents your career, profession, and public reputation. The <span className="font-bold text-green-800">6th House</span> governs your work environment, daily routines, and service to others. By analyzing these houses and their ruling planets, we can identify the most suitable career paths, optimal work environments, and the timing for career transitions that will bring you the greatest success and satisfaction.</p>
+            <p>Timing is everything in career success, and Vedic astrology provides precise guidance through <span className="font-bold text-green-800">Dasha sequences</span> and <span className="font-bold text-green-800">planetary transits</span>. We can identify the most auspicious periods for job changes, promotions, business launches, and career milestones. This cosmic timing ensures that you act when the universe is most supportive of your professional goals, maximizing your chances of success.</p>
+            <p>Beyond career choice and timing, we also provide practical remedies and strategies to overcome professional obstacles. Whether it&apos;s workplace conflicts, lack of recognition, or career stagnation, we offer personalized solutions including <span className="font-bold text-green-800">mantras</span>, <span className="font-bold text-green-800">gemstones</span>, and <span className="font-bold text-green-800">rituals</span> that can help you navigate challenges and unlock your full professional potential. Our guidance empowers you to create a career that is not only financially rewarding but also spiritually fulfilling.</p>
           </motion.div>
         )}
         {activeTab === 'Benefits' && (
           <section className="mb-12">
-            <h2 className="text-3xl font-bold text-blue-900 mb-8 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Benefits of Career & Job Guidance</h2>
-            <div className="grid md:grid-cols-2 gap-8">
+            <h2 className="text-3xl font-bold text-indigo-900 mb-8 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Benefits of Career & Job Guidance</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {benefits.map((benefit, idx) => (
                 <motion.div
                   key={idx}
@@ -148,11 +126,11 @@ export default function CareerGuidancePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 + idx * 0.1 }}
                   viewport={{ once: true }}
-                  className="rounded-2xl bg-white/70 backdrop-blur-md shadow-lg p-8 flex flex-col items-center border border-blue-100 hover:scale-105 transition-transform duration-200"
+                  className="rounded-2xl bg-white/70 backdrop-blur-md shadow-lg p-8 flex flex-col items-center border border-indigo-100 hover:scale-105 transition-transform duration-200"
                   style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}
                 >
                   {benefit.icon}
-                  <h3 className="font-bold text-lg mb-2 text-blue-900" style={{ fontFamily: 'Playfair Display, serif' }}>{benefit.title}</h3>
+                  <h3 className="font-bold text-lg mb-2 text-indigo-900 text-center" style={{ fontFamily: 'Playfair Display, serif' }}>{benefit.title}</h3>
                   <p className="text-gray-700 text-center text-base">{benefit.desc}</p>
                 </motion.div>
               ))}
@@ -161,13 +139,13 @@ export default function CareerGuidancePage() {
         )}
         {activeTab === 'FAQs' && (
           <section className="mb-12">
-            <h2 className="text-3xl font-bold text-blue-900 mb-8 border-b pb-2 text-left" style={{ fontFamily: 'Playfair Display, serif' }}>Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-bold text-indigo-900 mb-8 border-b pb-2 text-left" style={{ fontFamily: 'Playfair Display, serif' }}>Frequently Asked Questions</h2>
             <div className="space-y-8">
               {faqs.map((faq, idx) => (
                 <div key={idx}>
                   <div className="flex items-center mb-2">
-                    <span className="text-blue-600 mr-2 text-xl">&#x3f;</span>
-                    <span className="font-bold text-lg text-blue-900" style={{ fontFamily: 'Playfair Display, serif' }}>{faq.q}</span>
+                    <span className="text-indigo-600 mr-2 text-xl">&#x3f;</span>
+                    <span className="font-bold text-lg text-indigo-900" style={{ fontFamily: 'Playfair Display, serif' }}>{faq.q}</span>
                   </div>
                   <p className="text-black text-justify pl-8" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>{faq.a}</p>
                 </div>
@@ -175,74 +153,7 @@ export default function CareerGuidancePage() {
             </div>
           </section>
         )}
-        {activeTab === 'Purchase' && (
-          <section className="mb-12">
-            <div className="rounded-3xl bg-gradient-to-r from-[#e0f7fa] via-[#f3e8ff] to-[#e0f2fe] p-10 shadow-xl border border-blue-100 flex flex-col items-center">
-              <h2 className="text-3xl font-bold text-blue-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>Book Your Career & Job Guidance Session</h2>
-              <p className="text-lg text-center mb-6 text-black" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
-                Ready to unlock your professional destiny? Book a personalized session with our expert astrologers and take the next step toward success.
-              </p>
-              <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="text-blue-900 block mb-2 font-semibold">Name</label>
-                    <input 
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="bg-white/80 text-blue-900 border border-blue-200 rounded-lg px-4 py-2 w-full"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="text-blue-900 block mb-2 font-semibold">Email</label>
-                    <input 
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="bg-white/80 text-blue-900 border border-blue-200 rounded-lg px-4 py-2 w-full"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="text-blue-900 block mb-2 font-semibold">Phone Number</label>
-                    <input 
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="bg-white/80 text-blue-900 border border-blue-200 rounded-lg px-4 py-2 w-full"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="text-blue-900 block mb-2 font-semibold">Date of Birth</label>
-                    <input 
-                      type="date"
-                      value={formData.dateOfBirth}
-                      onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
-                      className="bg-white/80 text-blue-900 border border-blue-200 rounded-lg px-4 py-2 w-full"
-                      required
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-blue-900 block mb-2 font-semibold">Your Message or Specific Questions</label>
-                  <textarea 
-                    value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    className="bg-white/80 text-blue-900 border border-blue-200 rounded-lg px-4 py-2 w-full h-32"
-                  />
-                </div>
-                <Button 
-                  type="submit"
-                  className="w-full bg-blue-700 text-white hover:bg-blue-800 text-lg px-8 py-4 font-bold rounded-full shadow-lg transition-transform transform hover:scale-105"
-                >
-                  Book Consultation
-                </Button>
-              </form>
-            </div>
-          </section>
-        )}
+
 
         {/* Dr. Narendra Profile & Statistics */}
         <div className="mt-20 space-y-20">

@@ -1,15 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ClipboardList, KeyRound, TrendingUp, HeartHandshake, Landmark, HeartPulse, BookUser, Milestone } from 'lucide-react';
+import { ClipboardList, KeyRound, TrendingUp, HeartHandshake, Landmark, HeartPulse, BookUser, Milestone, Star, Zap, Users, Globe, Award, Compass, Moon, Sun, Crown, Eye, Brain, Infinity, Clock, Gift, Lock, ArrowUpRight, BookOpen, Heart, Target, Lightbulb } from 'lucide-react';
 import { DrNarendraProfile } from '@/app/components/DrNarendraProfile';
 import { Statistics } from '@/app/components/Statistics';
 import { ContactForm } from '@/app/components/ContactForm';
 
-const tabs = ['Overview', 'Benefits', 'FAQs', 'Get Your Report'];
+const tabs = ['Overview', 'Benefits', 'FAQs'];
 
 const benefits = [
     {
@@ -52,6 +50,41 @@ const benefits = [
         title: 'Spiritual Growth Roadmap',
         desc: "See how the year's transits will influence your spiritual journey and personal evolution."
     },
+    {
+        icon: <Star className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Jupiter Transit Insights',
+        desc: 'Understand how Jupiter\'s movement through your chart affects wisdom, expansion, and spiritual growth.'
+    },
+    {
+        icon: <Zap className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Saturn Return Guidance',
+        desc: 'Navigate Saturn\'s return and its lessons about responsibility, discipline, and life structure.'
+    },
+    {
+        icon: <Users className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Social & Network Expansion',
+        desc: 'Identify periods for building new connections and expanding your social and professional network.'
+    },
+    {
+        icon: <Globe className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Travel & Relocation Timing',
+        desc: 'Know the best times for international travel, moving to new places, or expanding your horizons.'
+    },
+    {
+        icon: <Award className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Recognition & Achievement',
+        desc: 'Identify periods when your talents and efforts will be recognized and rewarded.'
+    },
+    {
+        icon: <Compass className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Life Purpose Clarity',
+        desc: 'Gain deeper understanding of your life mission and how to align your actions with your higher purpose.'
+    },
+    {
+        icon: <Target className="text-indigo-400 w-8 h-8 mb-2" />,
+        title: 'Goal Achievement Strategy',
+        desc: 'Develop a strategic approach to achieving your major life goals based on cosmic timing.'
+    }
 ];
 
 const faqs = [
@@ -74,36 +107,22 @@ const faqs = [
     {
         q: 'How often should I get a yearly reading done?',
         a: "It is most beneficial to get a yearly reading done once a year, ideally around your birthday, as this is when your personal solar new year begins. This allows you to plan and align your goals for the coming twelve months."
-    },
-    {
-        q: 'What information is needed to create the report?',
-        a: "For an accurate yearly horoscope, we require your full name, along with your precise date, time, and place of birth. This allows us to create both your birth chart and your solar return chart for the year."
-    },
+    }
 ];
-
 
 export default function YearlyHoroscopePage() {
     const [activeTab, setActiveTab] = useState('Overview');
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        dateOfBirth: "",
-        placeOfBirth: "",
-        timeOfBirth: "",
-    });
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log(formData);
-    };
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white font-sans">
-            <div className="container mx-auto pt-8 px-4 relative z-10">
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
+            <div className="container mx-auto pt-8 px-4 pb-16 relative z-10">
+                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e6c77e]" style={{ backgroundColor: '#FEFBF2' }}>
                     <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg font-serif" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Yearly Horoscope Analysis</h1>
-                    <p className="text-xl md:text-2xl text-center text-gray-700 max-w-3xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
+                    <p className="text-xl md:text-2xl text-center max-w-3xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', color: '#166534' }}>
                         Unlock your year&apos;s potential with a comprehensive astrological forecast and personalized guidance.
                     </p>
                 </motion.div>
@@ -123,10 +142,12 @@ export default function YearlyHoroscopePage() {
 
                 {activeTab === 'Overview' && (
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
-                        <p>A <span className="font-bold text-indigo-900">Yearly Horoscope</span>, also known in Vedic Astrology as Varshaphala, is your personal cosmic blueprint for the next twelve months. It offers a bird&apos;s-eye view of the entire year, focusing on the major life-altering transits of slow-moving planets like Jupiter and Saturn. Unlike daily or monthly forecasts that track immediate energies, a yearly analysis helps you understand the grand themes, major chapters, and pivotal lessons the universe has in store for you, empowering you with unparalleled strategic foresight.</p>
-                        <p>This powerful forecast is based on a technique called the <span className="font-bold text-indigo-900">Solar Return chart</span>. This chart is cast for the exact moment the Sun returns to the precise degree it occupied at your birth, an event that happens once every year around your birthday. This &apos;solar birthday&apos; chart provides a map of your potential for the coming year. By comparing this annual chart to your natal birth chart, our astrologers can reveal which areas of your life will be highlighted for growth, which will present challenges, and where your greatest opportunities for success lie.</p>
-                        <p>The calculation is an intricate process. Beyond the Solar Return chart, Vedic astrology employs the <span className="font-bold text-indigo-900">Tajika system</span>, which includes unique elements like the <span className="font-bold text-indigo-900">Muntha</span> (a point that progresses one sign per year from your Ascendant), and the Year Lord (<span className="font-bold text-indigo-900">Varsha Pravesh</span>). Our analysis meticulously synthesizes these elements, examining the planetary positions in the annual chart, their relationship to your natal chart, and the dasha (planetary period) you are running. This creates a multi-layered, dynamic forecast that is far more personalized and precise than generic sun-sign predictions.</p>
-                        <p>With a yearly analysis, you can confidently plan your most important life decisions. Whether you are considering a career change, getting married, starting a family, investing in property, or moving to a new country, this forecast will identify the most auspicious and challenging periods for these significant steps. It provides you with a timeline of cosmic green lights and red flags, so you can align your ambitions with the supportive flow of planetary energy, a strategy that dramatically increases your chances of success and fulfillment.</p>
+                        <p>A <span className="font-bold text-green-800">Yearly Horoscope</span>, also known in Vedic Astrology as Varshaphala, is your personal cosmic blueprint for the next twelve months. It offers a bird&apos;s-eye view of the entire year, focusing on the major life-altering transits of slow-moving planets like <span className="font-bold text-green-800">Jupiter</span> and <span className="font-bold text-green-800">Saturn</span>. Unlike daily or monthly forecasts that track immediate energies, a yearly analysis helps you understand the grand themes, major chapters, and pivotal lessons the universe has in store for you, empowering you with unparalleled strategic foresight.</p>
+                        <p>This powerful forecast is based on a technique called the <span className="font-bold text-green-800">Solar Return chart</span>. This chart is cast for the exact moment the Sun returns to the precise degree it occupied at your birth, an event that happens once every year around your birthday. This &apos;solar birthday&apos; chart provides a map of your potential for the coming year. By comparing this annual chart to your natal birth chart, our astrologers can reveal which areas of your life will be highlighted for growth, which will present challenges, and where your greatest opportunities for success lie.</p>
+                        <p>The calculation is an intricate process. Beyond the Solar Return chart, Vedic astrology employs the <span className="font-bold text-green-800">Tajika system</span>, which includes unique elements like the <span className="font-bold text-green-800">Muntha</span> (a point that progresses one sign per year from your Ascendant), and the Year Lord (<span className="font-bold text-green-800">Varsha Pravesh</span>). Our analysis meticulously synthesizes these elements, examining the planetary positions in the annual chart, their relationship to your natal chart, and the <span className="font-bold text-green-800">dasha</span> (planetary period) you are running. This creates a multi-layered, dynamic forecast that is far more personalized and precise than generic sun-sign predictions.</p>
+                        <p>With a yearly analysis, you can confidently plan your most important life decisions. Whether you are considering a career change, getting married, starting a family, investing in property, or moving to a new country, this forecast will identify the most <span className="font-bold text-green-800">auspicious</span> and challenging periods for these significant steps. It provides you with a timeline of cosmic green lights and red flags, so you can align your ambitions with the supportive flow of planetary energy, a strategy that dramatically increases your chances of success and fulfillment.</p>
+                        <p>The <span className="font-bold text-green-800">Jupiter transit</span> is particularly significant in yearly forecasts, as this planet takes approximately one year to move through each zodiac sign. When Jupiter transits through different houses in your chart, it brings expansion, wisdom, and opportunities in those life areas. Similarly, <span className="font-bold text-green-800">Saturn's movement</span> brings lessons, structure, and sometimes challenges that are essential for your growth and maturity. Understanding these major transits helps you prepare for the year ahead.</p>
+                        <p>Beyond the major planets, we also analyze the <span className="font-bold text-green-800">Rahu and Ketu</span> transits, which can bring sudden changes and karmic lessons. The <span className="font-bold text-green-800">Mars transit</span> influences your energy levels and action-oriented activities, while <span className="font-bold text-green-800">Venus transits</span> affect your relationships and creative pursuits. By understanding how all these planetary movements interact, we create a comprehensive picture of your year's potential.</p>
                         <p>Ultimately, the Yearly Horoscope is the ultimate tool for conscious co-creation. It is a guide that illuminates your path, revealing the mountains you will be asked to climb and the green valleys where you can rest and prosper. Armed with this knowledge, you can navigate challenges with wisdom and grace, seize opportunities with confidence, and live the year with a profound sense of purpose and alignment. It is your strategic advantage for making the next twelve months your most successful and transformative year yet.</p>
                     </motion.div>
                 )}
@@ -171,59 +192,13 @@ export default function YearlyHoroscopePage() {
                     </section>
                 )}
 
-                {activeTab === 'Get Your Report' && (
-                    <section className="mb-12">
-                        <div className="rounded-3xl bg-gradient-to-r from-[#e0f7fa] via-[#f3e8ff] to-[#e0f2fe] p-10 shadow-xl border border-indigo-100 flex flex-col items-center">
-                            <h2 className="text-3xl font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>Request Your Personalized Yearly Report</h2>
-                            <p className="text-lg text-center mb-6 text-black" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>
-                                To receive a detailed, personalized yearly horoscope, please provide your birth details below.
-                            </p>
-                            <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-xl">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Full Name</label>
-                                        <Input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Email</label>
-                                        <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Phone Number</label>
-                                        <Input type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Date of Birth</label>
-                                        <Input type="date" value={formData.dateOfBirth} onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                     <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Place of Birth (City, Country)</label>
-                                        <Input type="text" value={formData.placeOfBirth} onChange={(e) => setFormData({...formData, placeOfBirth: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                    <div>
-                                        <label className="text-indigo-900 block mb-2 font-semibold">Time of Birth</label>
-                                        <Input type="time" value={formData.timeOfBirth} onChange={(e) => setFormData({...formData, timeOfBirth: e.target.value})} className="bg-white/80 text-indigo-900 border border-indigo-200 rounded-lg px-4 py-2 w-full" required />
-                                    </div>
-                                </div>
-                                <Button type="submit" className="w-full bg-indigo-700 text-white hover:bg-indigo-800 text-lg px-8 py-4 font-bold rounded-full shadow-lg transition-transform transform hover:scale-105">
-                                    Submit Request
-                                </Button>
-                            </form>
-                        </div>
-                    </section>
-                )}
-
                 <div className="mt-20 space-y-20">
-                    <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] px-0">
-                        <DrNarendraProfile />
-                    </div>
+                    <DrNarendraProfile />
                     <Statistics />
                 </div>
 
                 <div className="mt-20">
-                    <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] px-0">
-                        <ContactForm />
-                    </div>
+                    <ContactForm />
                 </div>
             </div>
         </div>

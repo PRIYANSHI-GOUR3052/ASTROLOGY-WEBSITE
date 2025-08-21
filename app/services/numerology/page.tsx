@@ -1,335 +1,209 @@
 "use client";
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { UniversalCartButton } from '../../components/UniversalCartButton';
-import ProductAssuranceBar from '../../components/ProductAssuranceBar';
-import ProductPurchaseInfo from '../../components/ProductPurchaseInfo';
-import { ProductServiceCard } from "../../components/UniversalServiceGrid";
-import ServiceCarousels from '../../components/ServiceCarousels';
-import NakshatraGyaanBanner from '../../components/NakshatraGyaanBanner';
-import SpiritualJourneyBanner from '../../components/SpiritualJourneyBanner';
 
-// FAQ Item Component
-function FAQItem({ faq, index }: { faq: { question: string; answer: string }; index: number }) {
-  const [open, setOpen] = useState(false);
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.07 }}
-      className="rounded-xl border border-gray-200 bg-white/80 shadow-md p-4 group hover:shadow-lg transition-all w-full"
-    >
-      <button
-        className="w-full text-left font-medium text-[#23244a] cursor-pointer text-base group-open:text-[#77A656] focus:outline-none flex justify-between items-center"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-      >
-        {faq.question}
-        <span className={`ml-2 transition-transform text-lg ${open ? 'rotate-90' : ''}`}>▶</span>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="content"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            className="overflow-hidden"
-          >
-            <div className="mt-2 text-[#2C3A4B] text-sm leading-relaxed">{faq.answer}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-}
+import React, { useState, useEffect } from "react";
+import { motion } from 'framer-motion';
+import { Calculator, Hash, Star, Clock, Target, Lightbulb, Heart, Users, Globe, BookOpen, Award, Zap, Shield, Compass, TrendingUp, Calendar, Sparkles, Crown, Eye, Brain, Infinity } from 'lucide-react';
+import { DrNarendraProfile } from "../../components/DrNarendraProfile";
+import { Statistics } from "../../components/Statistics";
+import { ContactForm } from "../../components/ContactForm";
 
-// Numerology Service Configuration
-const numerologyService = {
-  title: "Numerology Analysis",
-  images: [
-    "/images/course-4.jpg",
-    "/images/birth_chart_mockup.jpg",
-    "/images/astrology_understanding.jpg",
-    "/images/spiritualpathway.jpg",
-  ],
-  variants: [
-    { label: "Basic Numerology Reading", image: "/images/course-4.jpg" },
-    { label: "Complete Numerology Analysis", image: "/images/astrology_understanding.jpg" },
-  ],
-  features: ["Expert Numerologists", "Life Path Analysis", "Personalized Insights"],
-  price: "₹1,800",
-  oldPrice: "₹2,500",
-  discount: "28% OFF",
-  offerEnds: "02 hr : 30 min : 15 sec",
-  rating: 4.8,
-  reviews: 892,
-  orders: 1234,
-};
+const tabs = ['Overview', 'Benefits', 'FAQs'];
 
-// Numerology FAQs
-const numerologyFaqs = [
+const benefits = [
   {
-    question: "What is Numerology and how does it work?",
-    answer: "Numerology is the ancient metaphysical science of numbers that reveals your life path, personality traits, and destiny by analyzing your birth date and name. Each number carries unique vibrations that influence every aspect of your life, from relationships to career choices.",
+    icon: <Calculator className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Life Path Number',
+    desc: 'Discover your primary life purpose and the central theme of your existence through your birth date calculations.'
   },
   {
-    question: "What are the main numbers in Numerology?",
-    answer: "The key numbers include Life Path Number (from birth date), Expression Number (from full name), Soul Urge Number (from vowels), Personality Number (from consonants), and Birthday Number. Each reveals different aspects of your character and life purpose.",
+    icon: <Hash className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Expression Number',
+    desc: 'Understand your natural talents and how you express yourself to the world through your full name analysis.'
   },
   {
-    question: "How can Numerology help me in life?",
-    answer: "Numerology provides deep insights into your personality, relationships, career potential, and life purpose. It helps you make informed decisions, understand your strengths and challenges, and align with your true calling for greater fulfillment.",
+    icon: <Star className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Soul Urge Number',
+    desc: 'Reveal your deepest desires, inner motivations, and what truly makes your soul happy and fulfilled.'
   },
   {
-    question: "What is a Life Path Number?",
-    answer: "Your Life Path Number is the most important number in Numerology, calculated from your birth date. It reveals your primary life purpose, the central theme of your existence, and the major lessons you're here to learn in this lifetime.",
+    icon: <Clock className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Personal Year Numbers',
+    desc: 'Navigate life cycles and understand the energy themes for each year to make optimal decisions.'
   },
   {
-    question: "Can Numerology predict the future?",
-    answer: "Numerology doesn't predict fixed future events, but it reveals life patterns, timing of opportunities, and personal cycles. It helps you understand your natural rhythms and make choices aligned with your destiny.",
+    icon: <Target className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Career Guidance',
+    desc: 'Identify your ideal career paths and professional strengths based on your numerological profile.'
   },
   {
-    question: "What are Personal Year Numbers?",
-    answer: "Personal Year Numbers are calculated for each year and reveal the overarching theme and energy for that period. They help you understand what to focus on - whether it's new beginnings, relationships, or completion phases.",
+    icon: <Lightbulb className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Relationship Compatibility',
+    desc: 'Understand relationship dynamics and find compatible partners through numerological matching.'
   },
   {
-    question: "How accurate is Numerology?",
-    answer: "The accuracy depends on the expertise of the numerologist and the clarity of your birth information. Our experienced numerologists provide highly accurate readings based on traditional principles and modern interpretations.",
+    icon: <Heart className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Emotional Patterns',
+    desc: 'Gain insights into your emotional nature and learn how to navigate feelings more effectively.'
   },
+  {
+    icon: <Users className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Social Interactions',
+    desc: 'Learn how to improve your social skills and build better relationships with others.'
+  },
+  {
+    icon: <Globe className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Life Timing',
+    desc: 'Understand the best periods for important decisions, changes, and new beginnings.'
+  },
+  {
+    icon: <BookOpen className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Learning Style',
+    desc: 'Discover your optimal learning methods and educational paths for personal growth.'
+  },
+  {
+    icon: <Award className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Achievement Patterns',
+    desc: 'Identify your natural talents and the best ways to achieve success in your chosen field.'
+  },
+  {
+    icon: <Zap className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Energy Management',
+    desc: 'Learn how to work with your natural energy cycles for maximum productivity and well-being.'
+  },
+  {
+    icon: <Shield className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Personal Protection',
+    desc: 'Understand your vulnerabilities and learn protective measures for better life balance.'
+  },
+  {
+    icon: <Compass className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Life Direction',
+    desc: 'Get clear guidance on your life\'s direction and the steps needed to reach your goals.'
+  },
+  {
+    icon: <TrendingUp className="text-indigo-400 w-8 h-8 mb-2" />,
+    title: 'Personal Growth',
+    desc: 'Identify areas for personal development and the best strategies for continuous improvement.'
+  }
 ];
 
-// Related Services
-const relatedServices = [
+const faqs = [
   {
-    title: 'Kundali Matching',
-    image: '/images/birth_chart_mockup.jpg',
-    price: '₹2,100',
-    oldPrice: '₹4,500',
-    slug: 'kundali-matching',
+    q: 'What is Numerology and how does it work?',
+    a: 'Numerology is the ancient metaphysical science of numbers that reveals your life path, personality traits, and destiny by analyzing your birth date and name. Each number carries unique vibrations that influence every aspect of your life, from relationships to career choices.'
   },
   {
-    title: 'Grah Shanti Puja',
-    image: '/images/course-2.jpg',
-    price: '₹3,500',
-    oldPrice: '₹5,000',
-    slug: 'grah-shanti',
+    q: 'What are the main numbers in Numerology?',
+    a: 'The key numbers include Life Path Number (from birth date), Expression Number (from full name), Soul Urge Number (from vowels), Personality Number (from consonants), and Birthday Number. Each reveals different aspects of your character and life purpose.'
   },
   {
-    title: 'Palmistry Consultation',
-    image: '/images/course-5.jpg',
-    price: '₹1,200',
-    oldPrice: '₹2,000',
-    slug: 'palmistry',
+    q: 'How can Numerology help me in life?',
+    a: 'Numerology provides deep insights into your personality, relationships, career potential, and life purpose. It helps you make informed decisions, understand your strengths and challenges, and align with your true calling for greater fulfillment.'
   },
   {
-    title: 'Personal Astrology Reading',
-    image: '/images/astrology_understanding.jpg',
-    price: '₹2,500',
-    oldPrice: '₹3,500',
-    slug: 'personal-reading',
+    q: 'What is a Life Path Number?',
+    a: 'Your Life Path Number is the most important number in Numerology, calculated from your birth date. It reveals your primary life purpose, the central theme of your existence, and the major lessons you\'re here to learn in this lifetime.'
   },
+  {
+    q: 'Can Numerology predict the future?',
+    a: 'Numerology doesn\'t predict fixed future events, but it reveals life patterns, timing of opportunities, and personal cycles. It helps you understand your natural rhythms and make choices aligned with your destiny.'
+  }
 ];
 
 export default function NumerologyPage() {
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedVariant, setSelectedVariant] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const [pincode, setPincode] = useState("");
-  const [added, setAdded] = useState(false);
-
-  // Real-time offer timer
-  const OFFER_DURATION = 2 * 60 * 60 + 30 * 60 + 15; // 2 hr 30 min 15 sec in seconds
-  const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
+  const [activeTab, setActiveTab] = useState('Overview');
 
   useEffect(() => {
-    if (secondsLeft <= 0) return;
-    const interval = setInterval(() => {
-      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [secondsLeft]);
-
-  function formatTime(secs: number) {
-    const h = Math.floor(secs / 3600).toString().padStart(2, '0');
-    const m = Math.floor((secs % 3600) / 60).toString().padStart(2, '0');
-    const s = (secs % 60).toString().padStart(2, '0');
-    return `${h} hr : ${m} min : ${s} sec`;
-  }
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
-    <>
-      <style jsx global>{`
-        *::-webkit-scrollbar {
-          display: none !important;
-          height: 0 !important;
-          width: 0 !important;
-          background: transparent !important;
-        }
-        * {
-          scrollbar-width: none !important;
-          -ms-overflow-style: none !important;
-        }
-      `}</style>
-      <div className="min-h-screen bg-white flex flex-col items-center justify-start py-6 px-2 md:px-0 mt-8">
-        <div className="max-w-5xl w-full flex flex-col md:flex-row gap-8">
-          {/* Left: Main Image and Thumbnails */}
-          <div className="flex flex-col items-center md:w-1/2">
-            <div className="w-full rounded-xl overflow-hidden bg-[#f7f5ed] flex items-center justify-center mb-3" style={{ aspectRatio: '1/1', maxWidth: 340 }}>
-              <Image
-                src={numerologyService.images[selectedImage]}
-                alt={numerologyService.title}
-                width={320}
-                height={320}
-                className="object-cover w-full h-full"
-                priority
-              />
-            </div>
-            <div className="flex flex-row gap-2 w-full overflow-x-auto pb-2">
-              {numerologyService.images.map((img, idx) => (
-                <button
-                  key={img}
-                  onClick={() => setSelectedImage(idx)}
-                  className={`rounded-lg border-2 ${selectedImage === idx ? 'border-black' : 'border-transparent'} overflow-hidden focus:outline-none`}
-                  style={{ minWidth: 54, minHeight: 54 }}
-                >
-                  <Image src={img} alt={numerologyService.title} width={54} height={54} className="object-cover w-full h-full" />
-                </button>
-              ))}
-            </div>
-          </div>
-          {/* Right: Service Info */}
-          <div className="flex-1 flex flex-col gap-3">
-            <h1 className="text-2xl md:text-3xl font-semibold text-[#23244a]" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{numerologyService.title}</h1>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-[#FFD700] text-lg">&#9733;</span>
-              <span className="text-base font-medium text-[#23244a]">{numerologyService.rating}</span>
-              <span className="text-sm text-[#23244a]">{numerologyService.reviews} reviews</span>
-            </div>
-            <div className="flex gap-2 mt-2">
-              {numerologyService.features.map((f, i) => (
-                <span key={f} className={`px-3 py-0.5 rounded-full text-xs font-medium ${i === 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-indigo-100 text-indigo-800'}`}>{f}</span>
-              ))}
-            </div>
-            <div className="flex items-end gap-3 mt-3">
-              {secondsLeft === 0 ? (
-                <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{numerologyService.oldPrice}</span>
-              ) : (
-                <>
-                  <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{numerologyService.price}</span>
-                  <span className="text-base text-gray-400 line-through">{numerologyService.oldPrice}</span>
-                  <span className="text-base font-semibold text-green-700">{numerologyService.discount}</span>
-                </>
-              )}
-            </div>
-            <div className="text-red-600 font-medium text-sm mt-1">
-              {secondsLeft > 0 ? `Offer ends in ${formatTime(secondsLeft)}` : 'Offer ended'}
-            </div>
-            {/* Service Variants */}
-            <div className="flex gap-4 mt-3">
-              {numerologyService.variants.map((v, idx) => (
-                <button
-                  key={v.label}
-                  onClick={() => setSelectedVariant(idx)}
-                  className={`flex flex-col items-center gap-1 focus:outline-none ${selectedVariant === idx ? 'ring-2 ring-black' : ''}`}
-                >
-                  <Image src={v.image} alt={v.label} width={40} height={40} className="rounded-full object-cover" />
-                  <span className="text-xs text-[#23244a] mt-1 font-normal">{v.label}</span>
-                </button>
-              ))}
-            </div>
-            {/* Quantity Selector */}
-            <div className="flex items-center gap-3 mt-3">
-              <span className="text-sm text-[#23244a]">Quantity</span>
-              <button
-                className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-lg font-bold text-[#23244a] bg-white"
-                onClick={() => setQuantity(q => Math.max(1, q - 1))}
-              >-</button>
-              <span className="text-base font-medium text-[#23244a] w-7 text-center">{quantity}</span>
-              <button
-                className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-lg font-bold text-[#23244a] bg-white"
-                onClick={() => setQuantity(q => q + 1)}
-              >+</button>
-            </div>
-            <div className="text-xs text-gray-600 mt-1">{numerologyService.orders.toLocaleString()} orders placed in the last 24 hours</div>
-            {/* Delivery Date Input */}
-            <div className="mt-3 bg-gray-100 rounded-lg p-3 flex flex-col gap-2">
-              <span className="text-xs font-medium text-[#23244a]">ESTIMATED DELIVERY DATE</span>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Enter your pincode"
-                  value={pincode}
-                  onChange={e => setPincode(e.target.value)}
-                  className="rounded-md px-3 py-1.5 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#23244a] bg-white"
-                  style={{ maxWidth: 120 }}
-                />
-                <button className="bg-black text-white px-4 py-1.5 rounded-md font-semibold text-sm hover:bg-[#23244a] transition">CHECK</button>
-              </div>
-            </div>
-            {/* Add to Cart / Buy Now */}
-            <div className="flex gap-3 mt-5">
-              <UniversalCartButton
-                productId="numerology"
-                productName={numerologyService.title}
-                price={Number(numerologyService.price.replace(/[^\d]/g, ''))}
-                image={numerologyService.images[0]}
-                quantity={quantity}
-                className="flex-1 bg-black text-white py-3 rounded-md font-semibold text-base hover:bg-[#23244a] transition"
-              >
-                ADD TO CART
-              </UniversalCartButton>
-              <button className="flex-1 bg-yellow-400 text-black py-3 rounded-md font-semibold text-base hover:bg-yellow-500 transition">BUY IT NOW</button>
-            </div>
-          </div>
-        </div>
-        {/* ProductAssuranceBar */}
-        <ProductAssuranceBar />
-        {/* FAQ Section */}
-        <div className="w-screen overflow-x-clip mt-14 mb-10" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
-          <div className="max-w-5xl w-full mx-auto px-2 md:px-0">
-            <h2 className="text-2xl md:text-3xl font-semibold mb-7 text-[#23244a] text-center" style={{ fontFamily: 'Playfair Display, serif', letterSpacing: '0.02em' }}>Frequently Asked Questions</h2>
-            <div className="space-y-5 w-full">
-              {numerologyFaqs.map((faq, idx) => (
-                <FAQItem key={idx} faq={faq} index={idx} />
-              ))}
-            </div>
-          </div>
-        </div>
-        {/* ProductPurchaseInfo */}
-        <ProductPurchaseInfo />
-        {/* Full-width ServiceCarousels */}
-        <div className="w-screen overflow-x-clip" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
-          <ServiceCarousels />
-        </div>
-        {/* Nakshatra Gyaan Banner */}
-        <NakshatraGyaanBanner />
-        {/* Related Services */}
-        <div className="w-screen overflow-x-clip mb-16" style={{ marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)' }}>
-          <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-[#23244a] text-center" style={{ fontFamily: 'Playfair Display, serif' }}>Related Services</h2>
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 px-4 md:px-8">
-            {relatedServices.map(service => (
-              <div key={service.slug} className="group">
-                <ProductServiceCard
-                  image={service.image}
-                  title={service.title}
-                  description={service.oldPrice ? `${service.price} (was ${service.oldPrice})` : service.price}
-                  badge={service.oldPrice ? 'Recommended' : ''}
-                  href={`/services/${service.slug}`}
-                />
-              </div>
-            ))}
-          </div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white font-sans">
+      <div className="container mx-auto pt-8 px-4 pb-16 relative z-10">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="w-full rounded-3xl py-12 px-4 md:px-16 mb-12 flex flex-col items-center justify-center shadow-md border border-[#e6c77e]" style={{ backgroundColor: '#FEFBF2' }}>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-black mb-4 text-center drop-shadow-lg font-serif" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            Numerology Analysis
+          </h1>
+          <p className="text-xl md:text-2xl text-center max-w-2xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', color: '#166534' }}>
+            Unlock the hidden meanings of numbers and discover your life's blueprint through the ancient science of Numerology.
+          </p>
+        </motion.div>
+
+        <div className="flex flex-wrap gap-2 mb-8 border-b border-gray-200">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors font-sans ${activeTab === tab ? 'border-indigo-500 text-indigo-600 font-bold' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
+              style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
-        {/* Spiritual Journey Banner */}
-        <SpiritualJourneyBanner />
+        {activeTab === 'Overview' && (
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
+            <p>Numerology is the ancient metaphysical science that reveals the hidden meanings and influences of numbers in our lives. Based on the principle that everything in the universe vibrates at specific frequencies, numerology teaches us that numbers are not just mathematical symbols but carriers of cosmic energy that shape our personality, relationships, career, and life purpose. By analyzing your birth date and name, we can unlock the secrets of your soul's journey and understand the divine blueprint that guides your existence.</p>
+            <p>At the heart of numerology lies the <span className="font-bold text-green-800">Life Path Number</span>, calculated from your birth date. This is the most significant number in your numerological profile, representing your primary life purpose and the central theme of your existence. It reveals the major lessons you're here to learn, the challenges you'll face, and the ultimate destination of your soul's journey. Understanding your Life Path Number helps you align your actions with your true calling and navigate life's twists and turns with greater clarity and purpose.</p>
+            <p>The <span className="font-bold text-green-800">Expression Number</span>, derived from your full name, reveals your natural talents, abilities, and how you express yourself to the world. This number represents the person you are becoming and the unique gifts you bring to humanity. It shows your communication style, creative potential, and the ways in which you can make your mark in the world. When you align your career and life choices with your Expression Number, you experience greater fulfillment and success.</p>
+            <p>Your <span className="font-bold text-green-800">Soul Urge Number</span>, calculated from the vowels in your name, represents your deepest desires, inner motivations, and what truly makes your soul happy. This number reveals the emotional and spiritual yearnings that drive your decisions and shape your relationships. Understanding your Soul Urge Number helps you make choices that align with your heart's true desires, leading to greater happiness and inner peace.</p>
+            <p>Numerology also provides powerful insights into <span className="font-bold text-green-800">timing and cycles</span> through Personal Year Numbers. Each year of your life carries a specific energy theme that influences your experiences and opportunities. By understanding these cycles, you can make better decisions about when to start new ventures, make important changes, or focus on specific areas of your life. This cosmic timing ensures that you act when the universe is most supportive of your goals.</p>
+            <p>The <span className="font-bold text-green-800">compatibility aspects</span> of numerology help you understand relationship dynamics and find compatible partners. By comparing numerological profiles, we can identify areas of natural harmony and potential challenges in relationships. This knowledge empowers you to build stronger, more fulfilling connections and navigate relationship challenges with greater understanding and compassion.</p>
+            <p>Beyond personal insights, numerology offers practical guidance for <span className="font-bold text-green-800">career choices</span>, <span className="font-bold text-green-800">business decisions</span>, and <span className="font-bold text-green-800">life planning</span>. Whether you're choosing a career path, starting a business, or making major life decisions, numerology provides a framework for understanding your natural strengths and the best ways to achieve your goals. This ancient wisdom serves as a compass, guiding you toward choices that align with your soul's purpose and bring you the greatest fulfillment.</p>
+          </motion.div>
+        )}
+        
+        {activeTab === 'Benefits' && (
+            <section className="mb-12">
+            <h2 className="text-3xl font-bold text-indigo-900 mb-8 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>Benefits of Numerology Analysis</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {benefits.map((benefit, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 + idx * 0.1 }}
+                  viewport={{ once: true }}
+                  className="rounded-2xl bg-white/70 backdrop-blur-md shadow-lg p-8 flex flex-col items-center border border-indigo-100 hover:scale-105 transition-transform duration-200"
+                  style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}
+                >
+                  {benefit.icon}
+                  <h3 className="font-bold text-lg mb-2 text-indigo-900 text-center" style={{ fontFamily: 'Playfair Display, serif' }}>{benefit.title}</h3>
+                  <p className="text-gray-700 text-center text-base">{benefit.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {activeTab === 'FAQs' && (
+           <section className="mb-12">
+            <h2 className="text-3xl font-bold text-indigo-900 mb-8 border-b pb-2 text-left" style={{ fontFamily: 'Playfair Display, serif' }}>Frequently Asked Questions</h2>
+            <div className="space-y-8">
+              {faqs.map((faq, idx) => (
+                <div key={idx}>
+                  <div className="flex items-center mb-2">
+                    <span className="text-indigo-600 mr-2 text-xl">&#x3f;</span>
+                    <span className="font-bold text-lg text-indigo-900" style={{ fontFamily: 'Playfair Display, serif' }}>{faq.q}</span>
+                  </div>
+                  <p className="text-black text-justify pl-8" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+        
+        <div className="mt-20 space-y-20">
+          <DrNarendraProfile />
+          <Statistics />
+        </div>
+
+        <div className="mt-20">
+          <ContactForm />
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
