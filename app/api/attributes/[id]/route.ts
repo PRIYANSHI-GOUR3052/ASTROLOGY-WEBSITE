@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { Attribute } from '@/app/admin/products/attributes/types';
 
 const prisma = new PrismaClient();
 
@@ -33,7 +34,7 @@ export async function GET(
         updated_at
       FROM attributes 
       WHERE id = ${attributeId}
-    ` as any[];
+    ` as unknown as Attribute[];
 
     if (attributes.length === 0) {
       return NextResponse.json(
@@ -81,7 +82,7 @@ export async function PUT(
     // Check if attribute exists
     const existingAttribute = await prisma.$queryRaw`
       SELECT * FROM attributes WHERE id = ${attributeId}
-    ` as any[];
+    ` as unknown as Attribute[];
 
     if (existingAttribute.length === 0) {
       return NextResponse.json(
@@ -93,7 +94,7 @@ export async function PUT(
     // Check if slug is already used by another attribute
     const slugConflict = await prisma.$queryRaw`
       SELECT * FROM attributes WHERE slug = ${slug} AND id != ${attributeId}
-    ` as any[];
+    ` as unknown as Attribute[];
 
     if (slugConflict.length > 0) {
       return NextResponse.json(
@@ -115,7 +116,7 @@ export async function PUT(
           sort_order = ${sort_order || 0},
           updated_at = NOW()
       WHERE id = ${attributeId}
-    ` as any[];
+    ` as unknown as Attribute[];
 
     // Get the updated attribute
     const updatedAttribute = await prisma.$queryRaw`
@@ -133,7 +134,7 @@ export async function PUT(
         updated_at
       FROM attributes 
       WHERE id = ${attributeId}
-    ` as any[];
+    ` as unknown as Attribute[];
 
     return NextResponse.json(updatedAttribute[0]);
   } catch (error) {
@@ -165,7 +166,7 @@ export async function DELETE(
     // Check if attribute exists
     const existingAttribute = await prisma.$queryRaw`
       SELECT * FROM attributes WHERE id = ${attributeId}
-    ` as any[];
+    ` as unknown as Attribute[];
 
     if (existingAttribute.length === 0) {
       return NextResponse.json(
@@ -177,15 +178,15 @@ export async function DELETE(
     // Check if attribute is being used in any assignments
     const categoryAssignments = await prisma.$queryRaw`
       SELECT COUNT(*) as count FROM category_attributes WHERE attribute_id = ${attributeId}
-    ` as any[];
+    ` as unknown as { count: number }[];
 
     const zodiacAssignments = await prisma.$queryRaw`
       SELECT COUNT(*) as count FROM zodiac_attributes WHERE attribute_id = ${attributeId}
-    ` as any[];
+    ` as unknown as { count: number }[];
 
     const productAssignments = await prisma.$queryRaw`
       SELECT COUNT(*) as count FROM product_attributes WHERE attribute_id = ${attributeId}
-    ` as any[];
+    ` as unknown as { count: number }[];
 
     if (categoryAssignments[0].count > 0 || zodiacAssignments[0].count > 0 || productAssignments[0].count > 0) {
       return NextResponse.json(
@@ -197,12 +198,12 @@ export async function DELETE(
     // Delete attribute values first
     await prisma.$queryRaw`
       DELETE FROM attribute_values WHERE attribute_id = ${attributeId}
-    ` as any[];
+    ` as unknown as { count: number }[];
 
     // Delete the attribute
     await prisma.$queryRaw`
       DELETE FROM attributes WHERE id = ${attributeId}
-    ` as any[];
+      ` as unknown as { count: number }[];
 
     return NextResponse.json({ 
       success: true,

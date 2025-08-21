@@ -179,7 +179,7 @@ export default function AttributeValues({ attributes, attributeValues, onValuesU
           No select or multiselect attributes found.
         </div>
         <p className="text-sm text-gray-400 dark:text-gray-500">
-          Create attributes with type "Single Select" or "Multi Select" to manage predefined values.
+          Create attributes with type &ldquo;Single Select&rdquo; or &ldquo;Multi Select&rdquo; to manage predefined values.
         </p>
       </div>
     );

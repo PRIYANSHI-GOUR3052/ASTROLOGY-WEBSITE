@@ -12,8 +12,20 @@ import SpiritualJourneyBanner from '../../components/SpiritualJourneyBanner';
 import { Testimonials } from '../../components/Testimonials';
 import { useCart } from '../../contexts/CartContext';
 
+// Interface for product data structure
+interface ProductData {
+  id: number;
+  title: string;
+  description: string;
+  name?: string;
+  detailedDescription?: string;
+}
+
 // Generic FAQs that will be customized based on product
-const getProductFaqs = (product: any) => [
+const getProductFaqs = (product: ProductData | null) => {
+  if (!product) return [];
+  
+  return [
   {
     question: `What is ${product.title} and what are its benefits?`,
     answer: `${product.title} is ${product.description}. This authentic product is carefully selected to provide maximum spiritual and healing benefits according to ancient Vedic traditions.`,
@@ -42,10 +54,22 @@ const getProductFaqs = (product: any) => [
     question: "How long does shipping take?",
     answer: "We offer fast shipping with delivery within 3-5 business days across India. International shipping takes 7-14 business days depending on your location. All orders are carefully packaged for safe delivery.",
   },
-];
+  ];
+};
+
+// Interface for related product data
+interface RelatedProductData {
+  id: number;
+  title: string;
+  image: string;
+  price: string;
+  originalPrice?: string;
+  slug?: string;
+  category?: string;
+}
 
 // Related Products based on category
-const getRelatedProducts = (currentProduct: any, allProducts: any[]) => {
+const getRelatedProducts = (currentProduct: RelatedProductData, allProducts: RelatedProductData[]) => {
   return allProducts
     .filter(p => p.id !== currentProduct.id && p.category === currentProduct.category)
     .slice(0, 4)
@@ -92,8 +116,14 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           throw new Error('Failed to fetch product');
         }
         const p = await res.json();
+        // Interface for product media from API
+        interface ProductMedia {
+          media_url?: string;
+          url?: string;
+        }
+
         const images: string[] = Array.isArray(p.product_media) && p.product_media.length > 0
-          ? p.product_media.map((m: any) => m.media_url || m.url).filter(Boolean)
+          ? p.product_media.map((m: ProductMedia) => m.media_url || m.url).filter(Boolean)
           : (p.image_url ? [p.image_url] : []);
 
         const mapped: UiProduct = {
@@ -134,7 +164,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const cartQuantity = cartItem?.quantity || 0;
 
   // Helper function for default detailed description
-  const getDefaultDetailedDescription = (product: any) => {
+  const getDefaultDetailedDescription = (product: UiProduct) => {
     return `
       <div style="color: #374151; line-height: 1.8;">
         <h3 style="font-size: 1.5rem; font-weight: 600; color: #23244a; margin-bottom: 1rem; font-family: 'Playfair Display', serif;">About ${product.title}</h3>
@@ -206,7 +236,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     );
   }
 
-  const productFaqs = getProductFaqs(product as any);
+  const productFaqs = getProductFaqs(product);
 
   return (
     <>
@@ -373,7 +403,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                           color: '#374151'
                         }}
                         dangerouslySetInnerHTML={{ 
-                          __html: product?.detailedDescription || getDefaultDetailedDescription(product)
+                          __html: product?.detailedDescription || (product ? getDefaultDetailedDescription(product) : '')
                         }}
                       />
                     </div>

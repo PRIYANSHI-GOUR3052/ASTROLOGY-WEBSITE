@@ -214,7 +214,7 @@ export default function AddProductPage() {
     return zodiac ? zodiac.name : `Zodiac #${zodiacId}`;
   };
   
-  const handleStockFieldChange = (field: string, value: any) => {
+  const handleStockFieldChange = (field: string, value: string | number | boolean | string[] | null | undefined) => {
     setStock(prev => ({ ...prev, [field]: value }));
   };
 
@@ -533,7 +533,7 @@ export default function AddProductPage() {
             categoryId={formData.categoryId}
             zodiacSign={zodiacLabel}
             formData={formData}
-            onFieldChange={handleFieldChange as (field: string, value: string) => void}
+            onFieldChange={handleFieldChange as (field: string, value: string | number | boolean | string[] | null | undefined) => void}
             onBack={handleBack}
             onSubmit={handleSubmit}
             categoryLabel={categoryLabel}
@@ -558,7 +558,7 @@ export default function AddProductPage() {
           <StepShippingDetails
             productId={createdProductId || editProductId || undefined}
             shipping={shipping}
-            onFieldChange={handleShippingFieldChange}
+            onFieldChange={handleShippingFieldChange as (field: string, value: string | number | boolean | string[] | null | undefined) => void}
             onBack={() => setActiveStep(2)}
             onNext={() => setActiveStep(4)}
             errors={{}}

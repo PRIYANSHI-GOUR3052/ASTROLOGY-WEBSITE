@@ -84,10 +84,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         verificationStatus: 'unverified',
       },
     });
-    await prisma.astrologerVerification.create({
+    await prisma.astrologerverification.create({
       data: {
         astrologerId: astrologer.id,
         status: 'unverified',
+        updatedAt: new Date(),
       },
     });
     return res.status(201).json({ message: 'Registration successful', astrologer: { id: astrologer.id, email: astrologer.email, profileImage: astrologer.profileImage } });

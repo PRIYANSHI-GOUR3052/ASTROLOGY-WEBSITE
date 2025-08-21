@@ -106,9 +106,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.log('Received educations:', body.educations);
       console.log('Received degreeFiles:', files['degreeFiles']?.map(f => f.originalname));
       // Fetch current verification
-      let verification = await prisma.astrologerVerification.findUnique({
+      let verification = await prisma.astrologerverification.findUnique({
         where: { astrologerId },
-        include: { certifications: true, educations: true, astrologer: true },
+        include: { astrologercertification: true, astrologereducation: true, astrologer: true },
       });
       if (!verification) {
         console.log('No verification found, creating new verification and related records...');
@@ -145,7 +145,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const addressProof = await uploadFile('addressProof');
 
         // Upsert main verification record
-        await prisma.astrologerVerification.upsert({
+        await prisma.astrologerverification.upsert({
           where: { astrologerId },
           update: {
             aadharCard,
@@ -166,6 +166,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             declarationForm,
             addressProof,
             status: 'pending',
+            updatedAt: new Date(),
           },
         });
 
@@ -176,9 +177,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         // RE-FETCH verification with relations
-        verification = await prisma.astrologerVerification.findUnique({
+        verification = await prisma.astrologerverification.findUnique({
           where: { astrologerId },
-          include: { certifications: true, educations: true, astrologer: true },
+          include: { astrologercertification: true, astrologereducation: true, astrologer: true },
         });
 
         // Certifications (array of objects)
@@ -191,9 +192,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
           if (certs[i].id) {
             // Update existing
-            const existingCert = await prisma.astrologerCertification.findUnique({ where: { id: certs[i].id } });
+            const existingCert = await prisma.astrologercertification.findUnique({ where: { id: certs[i].id } });
             console.log('Updating existing certification:', certs[i]);
-            await prisma.astrologerCertification.update({
+            await prisma.astrologercertification.update({
               where: { id: certs[i].id },
               data: {
                 courseName: certs[i].courseName,
@@ -211,7 +212,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               yearOfCompletion: certs[i].yearOfCompletion,
               certificateFile: certFileUrl || '',
             });
-            const createdCert = await prisma.astrologerCertification.create({
+            const createdCert = await prisma.astrologercertification.create({
               data: {
                 verificationId: verification!.id,
                 courseName: certs[i].courseName,
@@ -234,9 +235,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
           if (edus[i].id) {
             // Update existing
-            const existingEdu = await prisma.astrologerEducation.findUnique({ where: { id: edus[i].id } });
+            const existingEdu = await prisma.astrologereducation.findUnique({ where: { id: edus[i].id } });
             console.log('Updating existing education:', edus[i]);
-            await prisma.astrologerEducation.update({
+            await prisma.astrologereducation.update({
               where: { id: edus[i].id },
               data: {
                 qualification: edus[i].qualification,
@@ -254,7 +255,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               universityName: edus[i].universityName,
               degreeFile: degreeFileUrl || '',
             });
-            const createdEdu = await prisma.astrologerEducation.create({
+            const createdEdu = await prisma.astrologereducation.create({
               data: {
                 verificationId: verification!.id,
                 qualification: edus[i].qualification,
@@ -267,9 +268,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
         }
         // RE-FETCH again to return the latest state
-        const fullVerification = await prisma.astrologerVerification.findUnique({
+        const fullVerification = await prisma.astrologerverification.findUnique({
           where: { astrologerId },
-          include: { certifications: true, educations: true, astrologer: true },
+          include: { astrologercertification: true, astrologereducation: true, astrologer: true },
         });
         return res.status(200).json({ message: 'Verification submitted successfully!', verification: fullVerification });
       } else {
@@ -300,7 +301,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const certFiles = files['certificationFiles'] || [];
         for (let i = 0; i < certs.length; i++) {
           const cert = certs[i];
-          const existing = verification.certifications.find((c: Record<string, unknown>) => c.id === cert.id);
+          const existing = verification.astrologercertification.find((c: Record<string, unknown>) => c.id === cert.id);
           if (existing && (existing.status === 'rejected' || existing.status === 'unverified')) {
             // If file is re-uploaded
             let certFileUrl = existing.certificateFile;
@@ -309,7 +310,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               anyDocUpdated = true;
             }
             console.log('Updating existing certification:', cert);
-            await prisma.astrologerCertification.update({
+            await prisma.astrologercertification.update({
               where: { id: existing.id },
               data: {
                 courseName: cert.courseName,
@@ -334,7 +335,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               yearOfCompletion: cert.yearOfCompletion,
               certificateFile: certFileUrl || '',
             });
-            const createdCert = await prisma.astrologerCertification.create({
+            const createdCert = await prisma.astrologercertification.create({
               data: {
                 verificationId: verification.id,
                 courseName: cert.courseName,
@@ -351,7 +352,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const eduFiles = files['degreeFiles'] || [];
         for (let i = 0; i < edus.length; i++) {
           const edu = edus[i];
-          const existing = verification.educations.find((e: Record<string, unknown>) => e.id === edu.id);
+          const existing = verification.astrologereducation.find((e: Record<string, unknown>) => e.id === edu.id);
           if (existing && (existing.status === 'rejected' || existing.status === 'unverified')) {
             let degreeFileUrl = existing.degreeFile;
             if (eduFiles[i]) {
@@ -359,7 +360,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               anyDocUpdated = true;
             }
             console.log('Updating existing education:', edu);
-            await prisma.astrologerEducation.update({
+            await prisma.astrologereducation.update({
               where: { id: existing.id },
               data: {
                 qualification: edu.qualification,
@@ -384,7 +385,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               universityName: edu.universityName,
               degreeFile: degreeFileUrl || '',
             });
-            const createdEdu = await prisma.astrologerEducation.create({
+            const createdEdu = await prisma.astrologereducation.create({
               data: {
                 verificationId: verification.id,
                 qualification: edu.qualification,
@@ -406,15 +407,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           });
         }
         if (Object.keys(updateData).length > 0) {
-          await prisma.astrologerVerification.update({
+          await prisma.astrologerverification.update({
             where: { astrologerId },
             data: updateData,
           });
         }
         // Return updated verification
-        const updatedVerification = await prisma.astrologerVerification.findUnique({
+        const updatedVerification = await prisma.astrologerverification.findUnique({
           where: { astrologerId },
-          include: { certifications: true, educations: true, astrologer: true },
+          include: { astrologercertification: true, astrologereducation: true, astrologer: true },
         });
         return res.status(200).json({ message: 'Updated only re-uploaded documents/certifications/educations.', verification: updatedVerification });
       }
@@ -427,11 +428,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     // Only astrologer can fetch their own verification
     try {
-      const verification = await prisma.astrologerVerification.findUnique({
+        const verification = await prisma.astrologerverification.findUnique({
         where: { astrologerId },
         include: {
-          certifications: true,
-          educations: true,
+          astrologercertification: true,
+          astrologereducation: true,
         },
       });
       return res.status(200).json({ verification });

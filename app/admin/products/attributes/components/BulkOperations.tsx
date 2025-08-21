@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Download, Upload, FileText, Trash2, Plus, Save, Copy } from 'lucide-react';
-import { Attribute, Category, ZodiacSign, BulkAssignmentData } from '../types';
+import { Attribute, Category, ZodiacSign, BulkAssignmentData, AttributeValue } from '../types';
 
 interface BulkOperationsProps {
   attributes: Attribute[];
@@ -106,7 +106,7 @@ export default function BulkOperations({ attributes, categories, zodiacSigns, on
   };
 
   const handleExport = (type: 'attributes' | 'values' | 'assignments') => {
-    let data: any = {};
+    let data: Attribute[] | AttributeValue[] | BulkAssignmentData[] = [];
     
     switch (type) {
       case 'attributes':
@@ -194,7 +194,7 @@ export default function BulkOperations({ attributes, categories, zodiacSigns, on
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'import' | 'export' | 'templates')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
                   activeTab === tab.id
                     ? 'border-purple-500 text-purple-600 dark:text-purple-400'
@@ -228,7 +228,7 @@ export default function BulkOperations({ attributes, categories, zodiacSigns, on
               </label>
               <select
                 value={importType}
-                onChange={(e) => setImportType(e.target.value as any)}
+                onChange={(e) => setImportType(e.target.value as 'attributes' | 'values' | 'assignments')}
                 className="w-full md:w-1/3 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               >
                 <option value="attributes">Attributes</option>

@@ -37,11 +37,21 @@ interface ZodiacAttribute {
   attribute_values?: AttributeValue[];
 }
 
+// Interface for existing attribute structure from API
+interface ExistingAttribute {
+  values: { value: string }[];
+  attributeType: string;
+  attributeId: number;
+}
+
+// Type for attribute values based on attribute type
+type AttributeValueType = string | number | boolean | string[] | null | undefined;
+
 interface StepAttributeMediaProps {
   categoryId: number | null;
   zodiacId: number | null;
-  selectedAttributes: { [key: string]: any };
-  onAttributeChange: (attributeId: number, value: any) => void;
+  selectedAttributes: { [key: string]: AttributeValueType };
+  onAttributeChange: (attributeId: number, value: AttributeValueType) => void;
   onBack: () => void;
   onSubmit: () => void;
   errors: { [key: string]: string };
@@ -65,7 +75,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
-  const [localSelectedAttributes, setLocalSelectedAttributes] = useState<{ [key: string]: any }>(selectedAttributes);
+  const [localSelectedAttributes, setLocalSelectedAttributes] = useState<{ [key: string]: AttributeValueType }>(selectedAttributes);
   const [savingAttributes, setSavingAttributes] = useState(false);
 
   // Fetch attributes for the selected category and zodiac
@@ -154,12 +164,12 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
           const response = await fetch(`/api/products/${productId}/attributes`);
           if (response.ok) {
             const existingAttributes = await response.json();
-            const formattedAttributes: { [key: string]: any } = {};
+            const formattedAttributes: { [key: string]: AttributeValueType } = {};
             
-            Object.values(existingAttributes).forEach((attr: any) => {
+            (Object.values(existingAttributes) as ExistingAttribute[]).forEach((attr) => {
               if (attr.values && attr.values.length > 0) {
                 if (attr.attributeType === 'multiselect') {
-                  formattedAttributes[attr.attributeId] = attr.values.map((v: any) => v.value);
+                  formattedAttributes[attr.attributeId] = attr.values.map((v: { value: string }) => v.value);
                 } else {
                   formattedAttributes[attr.attributeId] = attr.values[0].value;
                 }
@@ -185,7 +195,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
   };
 
   // Handle local attribute changes
-  const handleLocalAttributeChange = (attributeId: number, value: any) => {
+  const handleLocalAttributeChange = (attributeId: number, value: AttributeValueType) => {
     setLocalSelectedAttributes(prev => ({
       ...prev,
       [attributeId]: value
@@ -207,7 +217,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
       // Prepare attributes data for API
       const attributesToSave: Array<{
         attributeId: number;
-        value: any;
+        value: AttributeValueType;
         valueType: string;
       }> = [];
       
@@ -287,7 +297,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
           <input
             type="text"
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
-            value={currentValue || ''}
+            value={typeof currentValue === 'string' ? currentValue : ''}
             onChange={e => handleLocalAttributeChange(attribute.id, e.target.value)}
             placeholder={`Enter ${attribute.name.toLowerCase()}`}
             required={isRequired}
@@ -299,7 +309,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
           <input
             type="number"
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
-            value={currentValue || ''}
+            value={typeof currentValue === 'number' ? currentValue.toString() : ''}
             onChange={e => handleLocalAttributeChange(attribute.id, parseFloat(e.target.value) || 0)}
             placeholder={`Enter ${attribute.name.toLowerCase()}`}
             required={isRequired}
@@ -312,7 +322,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
         return (
           <select
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
-            value={currentValue || ''}
+            value={typeof currentValue === 'string' ? currentValue : ''}
             onChange={e => handleLocalAttributeChange(attribute.id, e.target.value)}
             required={isRequired}
           >
@@ -333,12 +343,12 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
                 <input
                   type="checkbox"
                   className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                  checked={Array.isArray(currentValue) && currentValue.includes(value.id)}
+                  checked={Array.isArray(currentValue) && currentValue.includes(value.id.toString())}
                   onChange={e => {
                     const currentArray = Array.isArray(currentValue) ? currentValue : [];
                     const newValue = e.target.checked
-                      ? [...currentArray, value.id]
-                      : currentArray.filter(id => id !== value.id);
+                      ? [...currentArray, value.id.toString()]
+                      : currentArray.filter(id => id !== value.id.toString());
                     handleLocalAttributeChange(attribute.id, newValue);
                   }}
                 />
@@ -354,7 +364,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
             <input
               type="checkbox"
               className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-              checked={currentValue || false}
+              checked={typeof currentValue === 'boolean' ? currentValue : false}
               onChange={e => handleLocalAttributeChange(attribute.id, e.target.checked)}
             />
             <span className="text-gray-700 dark:text-gray-300">Yes</span>
@@ -366,7 +376,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
           <input
             type="date"
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
-            value={currentValue || ''}
+            value={typeof currentValue === 'string' ? currentValue : ''}
             onChange={e => handleLocalAttributeChange(attribute.id, e.target.value)}
             required={isRequired}
           />
@@ -377,7 +387,7 @@ const StepAttributeMedia: React.FC<StepAttributeMediaProps> = ({
           <input
             type="text"
             className={`w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors ${errors[`attribute_${attribute.id}`] ? 'border-red-500 dark:border-red-400' : ''}`}
-            value={currentValue || ''}
+            value={typeof currentValue === 'string' ? currentValue : ''}
             onChange={e => handleLocalAttributeChange(attribute.id, e.target.value)}
             placeholder={`Enter ${attribute.name.toLowerCase()}`}
             required={isRequired}

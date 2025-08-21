@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { Attribute } from '@/app/admin/products/attributes/types';
 
 const prisma = new PrismaClient();
 
@@ -21,7 +22,7 @@ export async function GET() {
         updated_at
       FROM attributes 
       ORDER BY sort_order ASC, name ASC
-    ` as any[];
+    ` as unknown as Attribute[];
     
     return NextResponse.json(attributes);
   } catch (error) {
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
     // Check if attribute with same slug already exists
     const existingAttribute = await prisma.$queryRaw`
       SELECT * FROM attributes WHERE slug = ${slug}
-    ` as any[];
+    ` as unknown as Attribute[];
 
     if (existingAttribute.length > 0) {
       return NextResponse.json(
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
     await prisma.$queryRaw`
       INSERT INTO attributes (name, slug, type, description, is_required, is_filterable, is_searchable, sort_order, created_at, updated_at)
       VALUES (${name}, ${slug}, ${type}, ${description || null}, ${is_required || false}, ${is_filterable || false}, ${is_searchable || false}, ${sort_order || 0}, NOW(), NOW())
-    ` as any[];
+    ` as unknown as Attribute[];
 
     // Get the created attribute
     const newAttribute = await prisma.$queryRaw`
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
       WHERE slug = ${slug}
       ORDER BY id DESC
       LIMIT 1
-    ` as any[];
+      ` as unknown as Attribute[];
 
     return NextResponse.json(newAttribute[0], { status: 201 });
   } catch (error) {

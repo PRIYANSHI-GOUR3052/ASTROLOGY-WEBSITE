@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { AttributeValue } from '@/app/admin/products/attributes/types';
 
 const prisma = new PrismaClient();
 
@@ -33,7 +34,7 @@ export async function GET(
       WHERE attribute_id = ${attributeId}
       AND is_active = true
       ORDER BY sort_order ASC, value ASC
-    ` as any[];
+    ` as unknown as AttributeValue[];
 
     return NextResponse.json(attributeValues);
   } catch (error) {
@@ -76,7 +77,7 @@ export async function POST(
       SELECT * FROM attribute_values 
       WHERE attribute_id = ${attributeId} 
       AND (value = ${value} OR slug = ${slug})
-    ` as any[];
+    ` as unknown as AttributeValue[];
 
     if (existingValue.length > 0) {
       return NextResponse.json(
@@ -89,7 +90,7 @@ export async function POST(
     await prisma.$queryRaw`
       INSERT INTO attribute_values (attribute_id, value, slug, sort_order, is_active, created_at, updated_at)
       VALUES (${attributeId}, ${value}, ${slug}, ${sort_order}, true, NOW(), NOW())
-    ` as any[];
+      ` as unknown as AttributeValue[];
 
     return NextResponse.json({ 
       success: true,

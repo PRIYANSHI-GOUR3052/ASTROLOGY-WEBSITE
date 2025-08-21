@@ -2,6 +2,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Upload, X, Image as ImageIcon, Calculator, Sparkles } from "lucide-react";
 
+// Interface for product media from API
+interface ProductMedia {
+  id?: number;
+  product_id?: number;
+  media_url?: string;
+  url?: string;
+  media_type?: string;
+  sort_order?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 type FormData = {
   name: string;
   description: string;
@@ -31,7 +43,7 @@ type StepProductDetailsProps = {
   categoryLabel: string;
   categoryId: number | null;
   zodiacSign: string | null;
-  onFieldChange: (field: string, value: any) => void;
+  onFieldChange: (field: string, value: string | number | boolean | string[] | null | undefined) => void;
   onBack: () => void;
   onSubmit: () => void;
   errors: { [key: string]: string };
@@ -224,7 +236,7 @@ const StepProductDetails: React.FC<StepProductDetailsProps> = ({
         
         // Load media data
         if (product.product_media && product.product_media.length > 0) {
-          const imageUrls = product.product_media.map((media: any) => media.media_url || media.url);
+          const imageUrls = product.product_media.map((media: ProductMedia) => media.media_url || media.url);
           onFieldChange('images', imageUrls);
         } else if (product.image_url) {
           onFieldChange('images', [product.image_url]);

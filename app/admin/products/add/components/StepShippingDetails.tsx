@@ -18,7 +18,7 @@ interface ShippingDetails {
 interface StepShippingDetailsProps {
   productId?: number;
   shipping: ShippingDetails;
-  onFieldChange: (field: string, value: any) => void;
+  onFieldChange: (field: string, value: string | number | boolean | string[] | null | undefined) => void;
   onBack: () => void;
   onNext: () => void;
   errors: { [key: string]: string };
@@ -54,7 +54,7 @@ const StepShippingDetails: React.FC<StepShippingDetailsProps> = ({
   isSubmitting = false,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [existingShipping, setExistingShipping] = useState<any>(null);
+  const [existingShipping, setExistingShipping] = useState<ShippingDetails | null>(null);
 
   // Load existing shipping details if productId is provided
   useEffect(() => {
