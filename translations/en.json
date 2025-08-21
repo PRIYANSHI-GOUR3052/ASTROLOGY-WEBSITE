@@ -671,11 +671,11 @@
       "emailTitle": "Email",
       "emailNote": "We reply within 24 hours",
       "locationTitle": "Location",
-      "addressLine1": "1- KHA -18, Jawahar Nagar",
-      "addressLine2": "Jaipur",
-      "addressCity": "Jaipur",
-      "addressState": "Rajasthan",
-      "addressZip": "302004",
+      "addressLine1": "15, Lashkar Road, Civil Lines",
+      "addressLine2": "Gwalior",
+      "addressCity": "Gwalior",
+      "addressState": "Madhya Pradesh",
+      "addressZip": "474001",
       "addressCountry": "India",
       "phoneNumber": "+91-7229808887"
     },
@@ -689,7 +689,7 @@
       "success": "Message sent successfully! We'll get back to you soon.",
       "error": "Something went wrong. Please try again."
     },
-    "brand": "nakshatra"
+    "brand": "nakshatra gyan"
   },
   "footer": {
     "newsletter": {
@@ -722,6 +722,7 @@
       "quickLinks": {
         "home": "Home",
         "about": "About",
+        "products": "Products",
         "services": "Services",
         "reviews": "Reviews",
         "blog": "Blog",
