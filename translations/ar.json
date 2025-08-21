@@ -1,4 +1,23 @@
 ﻿{
+  "zodiac": {
+    "shopByZodiac": "تسوق حسب البرج",
+    "showMoreSigns": "عرض المزيد من الأبراج",
+    "showLessSigns": "عرض أبراج أقل",
+    "signs": {
+      "aries": "الحمل",
+      "taurus": "الثور",
+      "gemini": "الجوزاء",
+      "cancer": "السرطان",
+      "leo": "الأسد",
+      "virgo": "العذراء",
+      "libra": "الميزان",
+      "scorpio": "العقرب",
+      "sagittarius": "القوس",
+      "capricorn": "الجدي",
+      "aquarius": "الدلو",
+      "pisces": "الحوت"
+    }
+  },
   "hero": {
     "mainHeading": "فتح أسرار الكون",
     "subHeading": "علم التنجيم الفيدي الشخصي لإلقاء الضوء على طريقك",
@@ -237,7 +256,7 @@
   "about": {
     "banner": {
       "heading": "حول ناكشاترا غيان",
-      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
+      "text": "لأكثر من عقدين من الزمان، مزج خبراؤنا في علم التنجيم الحكمة القديمة بالرؤى الحديثة، ووجهوا الباحثين في رحلتهم الروحية بإرشادات دقيقة ومغيرة للحياة."
     },
     "tabs": {
       "0": "رحلتنا",
@@ -332,6 +351,12 @@
       "link1": { "title": "الأحجار الكريمة وقواها", "url": "/blog/gemstones-and-their-powers" },
       "link2": { "title": "أساسيات علم الأعداد", "url": "/blog/numerology-basics" },
       "link3": { "title": "تأثير الكواكب", "url": "/blog/the-influence-of-planets" }
+    },
+    "statistics": {
+      "kundli_served": "تم خدمة كوندلي",
+      "years_legacy": "سنوات من الإرث",
+      "consultations_given": "تم تقديم الاستشارات",
+      "awards_occult": "جوائز في العلوم الغامضة"
     }
   },
   "astrologyQuiz": {

@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../contexts/useLanguage';
 
 // Zodiac sign interface
 interface ZodiacSign {

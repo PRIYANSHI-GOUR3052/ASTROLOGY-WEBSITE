@@ -4,18 +4,19 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
+import { useLanguage } from '../contexts/useLanguage'
 
 const credentials = [
   {
-    title: 'Vedic Astrology Expert',
-    description: 'Dr. Narendra is a renowned Vedic Astrologer with over 15 years of experience in traditional Indian astrology. He specializes in birth chart analysis, planetary remedies, and life guidance through ancient Vedic wisdom.',
+    titleKey: 'astrologerProfile.credentials.0.title',
+    descriptionKey: 'astrologerProfile.credentials.0.description',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042880/astro_ca0pkb.jpg',
     icon: '🔮',
     highlights: ['Birth Chart Analysis', 'Planetary Remedies', 'Life Guidance']
   },
   {
-    title: 'PhD in Astrology & Philosophy',
-    description: 'With a PhD in Astrology and Philosophy, Dr. Narendra combines traditional knowledge with modern understanding to provide comprehensive astrological consultations and spiritual guidance.',
+    titleKey: 'astrologerProfile.credentials.1.title',
+    descriptionKey: 'astrologerProfile.credentials.1.description',
     image: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1752042876/phd_klwwvl.jpg',
     icon: '🎓',
     highlights: ['Traditional Knowledge', 'Modern Understanding', 'Spiritual Guidance']
@@ -23,6 +24,8 @@ const credentials = [
 ]
 
 export function AstrologerProfile() {
+  const { t } = useLanguage();
+  
   return (
     <>
       <style jsx>{`

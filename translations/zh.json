@@ -1,4 +1,23 @@
 {
+  "zodiac": {
+    "shopByZodiac": "按星座购物",
+    "showMoreSigns": "显示更多星座",
+    "showLessSigns": "显示更少星座",
+    "signs": {
+      "aries": "白羊座",
+      "taurus": "金牛座",
+      "gemini": "双子座",
+      "cancer": "巨蟹座",
+      "leo": "狮子座",
+      "virgo": "处女座",
+      "libra": "天秤座",
+      "scorpio": "天蝎座",
+      "sagittarius": "射手座",
+      "capricorn": "摩羯座",
+      "aquarius": "水瓶座",
+      "pisces": "双鱼座"
+    }
+  },
   "hero": {
     "mainHeading": "解锁宇宙的秘密",
     "subHeading": "个性化的吠陀占星术以照亮您的道路",
@@ -147,8 +166,8 @@
   },
   "about": {
     "banner": {
-      "heading": "关于 Nakshatra Gyaan",
-      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
+      "heading": "关于纳克沙特拉吉安",
+      "text": "二十多年来，我们的专业占星师融合了古老智慧与现代洞察，以准确且改变人生的指导引导寻求者在他们的灵性之旅中前行。"
     },
     "tabs": {
       "0": "我们的旅程",
@@ -242,6 +261,12 @@
       "link1": { "title": "宝石及其力量", "url": "/blog/gemstones-and-their-powers" },
       "link2": { "title": "数字命理学基础", "url": "/blog/numerology-basics" },
       "link3": { "title": "行星的影响", "url": "/blog/the-influence-of-planets" }
+    },
+    "statistics": {
+      "kundli_served": "已服务昆德利",
+      "years_legacy": "传承年数",
+      "consultations_given": "已提供咨询",
+      "awards_occult": "神秘学奖项"
     }
   },
   "astrologyQuiz": {
@@ -594,6 +619,65 @@
       "error": "出现问题。请再试一次。"
     },
     "brand": "纳克沙特拉"
+  },
+  "footer": {
+    "newsletter": {
+      "title": "通过我们的",
+      "titleHighlight": "星际通讯",
+      "subtitle": "定期更新确保读者能够获得新鲜的宇宙视角，使纳克沙特拉智慧成为必读内容。",
+      "placeholder": "电子邮件地址",
+      "button": "订阅 →"
+    },
+    "floatingCards": {
+      "card1": {
+        "tag": "占星与文化",
+        "title": "星际指引的神秘艺术",
+        "date": "2024年12月20日",
+        "readTime": "5分钟",
+        "button": "阅读更多 →"
+      },
+      "card2": {
+        "tag": "宇宙洞察",
+        "title": "行星排列对精神成果的重要性",
+        "date": "2024年12月11日",
+        "readTime": "8分钟",
+        "button": "阅读更多 →"
+      }
+    },
+    "links": {
+      "keepExploring": "继续探索",
+      "connect": "联系",
+      "legal": "法律",
+      "quickLinks": {
+        "home": "首页",
+        "about": "关于我们",
+        "services": "服务",
+        "reviews": "评价",
+        "blog": "博客",
+        "contact": "联系我们"
+      },
+      "legalLinks": {
+        "terms": "条款和条件",
+        "privacy": "隐私政策",
+        "credits": "网站致谢"
+      }
+    },
+    "brand": {
+      "name": "纳克沙特拉智慧",
+      "taglinePrefix": "由 ",
+      "team": "斯卡利克西蒂团队",
+      "copyright": "© 纳克沙特拉智慧。保留所有权利。",
+      "poweredByPrefix": "由 ",
+      "energy": "宇宙能量",
+      "language": "🌍 ZH 中文"
+    },
+    "scrollToTop": "回到顶部",
+    "social": {
+      "facebook": "脸书",
+      "twitter": "推特",
+      "instagram": "照片墙",
+      "youtube": "优酷"
+    }
   },
   "cart": {
     "yourCart": "您的购物车",
