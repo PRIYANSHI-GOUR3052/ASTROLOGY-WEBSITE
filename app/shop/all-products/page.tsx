@@ -315,7 +315,7 @@ export default function AllProductsPage() {
 
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = products.filter(product => {
+    const filtered = products.filter(product => {
       // Search filter
       if (searchQuery) {
         const searchLower = searchQuery.toLowerCase();

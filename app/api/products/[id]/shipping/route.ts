@@ -1,6 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
+// Interface for product ID from database
+interface ProductID {
+  id: number;
+}
+
+// Interface for shipping ID from database
+interface ShippingID {
+  id: number;
+}
+
+// Interface for shipping zone data
+interface ShippingZoneData {
+  zone_name: string;
+  countries: string[];
+  states?: string[];
+  cities?: string[];
+  shipping_cost: number;
+  delivery_time?: string;
+}
+
+// Interface for shipping request body
+interface ShippingRequestBody {
+  weight?: number;
+  weight_unit?: string;
+  length?: number;
+  width?: number;
+  height?: number;
+  dimension_unit?: string;
+  shipping_class?: string;
+  is_free_shipping?: boolean;
+  shipping_cost?: number;
+  max_shipping_cost?: number;
+  shipping_zones?: ShippingZoneData[] | null;
+}
+
+// Interface for shipping details from database
+interface ProductShippingDetails {
+  id: number;
+  product_id: number;
+  weight: number | null;
+  weight_unit: string | null;
+  length: number | null;
+  width: number | null;
+  height: number | null;
+  dimension_unit: string | null;
+  shipping_class: string | null;
+  is_free_shipping: boolean;
+  shipping_cost: number | null;
+  max_shipping_cost: number | null;
+  shipping_zones: string | null;
+  created_at: Date;
+  updated_at: Date;
+}
+
 const prisma = new PrismaClient();
 
 // POST - Create or update product shipping details
@@ -10,7 +64,7 @@ export async function POST(
 ) {
   try {
     const productId = parseInt(params.id);
-    const body = await request.json();
+    const body = await request.json() as ShippingRequestBody;
 
     if (isNaN(productId)) {
       return NextResponse.json(
@@ -22,7 +76,7 @@ export async function POST(
     // Check if product exists
     const product = await prisma.$queryRaw`
       SELECT id FROM products WHERE id = ${productId}
-    ` as any[];
+    ` as ProductID[];
 
     if (product.length === 0) {
       return NextResponse.json(
@@ -34,12 +88,12 @@ export async function POST(
     // Check if shipping details already exist
     const existingShipping = await prisma.$queryRaw`
       SELECT id FROM product_shipping WHERE product_id = ${productId}
-    ` as any[];
+    ` as ShippingID[];
 
-    let result;
+    let result: ProductShippingDetails;
     if (existingShipping.length > 0) {
       // Update existing shipping details
-      result = await prisma.$queryRaw`
+      await prisma.$queryRaw`
         UPDATE product_shipping 
         SET 
           weight = ${body.weight},
@@ -55,17 +109,17 @@ export async function POST(
           shipping_zones = ${body.shipping_zones ? JSON.stringify(body.shipping_zones) : null},
           updated_at = NOW()
         WHERE product_id = ${productId}
-      ` as any[];
+      ` as ProductShippingDetails[];
 
       // Get the updated record
       const updatedShipping = await prisma.$queryRaw`
         SELECT * FROM product_shipping WHERE product_id = ${productId}
-      ` as any[];
+      ` as ProductShippingDetails[];
 
       result = updatedShipping[0];
     } else {
       // Create new shipping details
-      result = await prisma.$queryRaw`
+      await prisma.$queryRaw`
         INSERT INTO product_shipping (
           product_id,
           weight,
@@ -97,12 +151,12 @@ export async function POST(
           NOW(),
           NOW()
         )
-      ` as any[];
+      ` as ProductShippingDetails[];
 
       // Get the created record
       const newShipping = await prisma.$queryRaw`
         SELECT * FROM product_shipping WHERE product_id = ${productId}
-      ` as any[];
+      ` as ProductShippingDetails[];
 
       result = newShipping[0];
     }
@@ -127,7 +181,7 @@ export async function PUT(
 ) {
   try {
     const productId = parseInt(params.id);
-    const body = await request.json();
+    const body = await request.json() as ShippingRequestBody;
 
     if (isNaN(productId)) {
       return NextResponse.json(
@@ -139,7 +193,7 @@ export async function PUT(
     // Check if shipping details exist
     const existingShipping = await prisma.$queryRaw`
       SELECT id FROM product_shipping WHERE product_id = ${productId}
-    ` as any[];
+    ` as ShippingID[];
 
     if (existingShipping.length === 0) {
       return NextResponse.json(
@@ -165,12 +219,12 @@ export async function PUT(
         shipping_zones = ${body.shipping_zones ? JSON.stringify(body.shipping_zones) : null},
         updated_at = NOW()
       WHERE product_id = ${productId}
-    ` as any[];
+    ` as ProductShippingDetails[];
 
     // Get the updated record
     const updatedShipping = await prisma.$queryRaw`
       SELECT * FROM product_shipping WHERE product_id = ${productId}
-    ` as any[];
+    ` as ProductShippingDetails[];
 
     return NextResponse.json(updatedShipping[0]);
 
@@ -219,7 +273,7 @@ export async function GET(
         updated_at
       FROM product_shipping 
       WHERE product_id = ${productId}
-    ` as any[];
+    ` as ProductShippingDetails[];
 
     if (shippingDetails.length === 0) {
       return NextResponse.json(null);
@@ -265,7 +319,7 @@ export async function DELETE(
 
     await prisma.$queryRaw`
       DELETE FROM product_shipping WHERE product_id = ${productId}
-    ` as any[];
+    ` as ProductShippingDetails[];
 
     return NextResponse.json({
       success: true,

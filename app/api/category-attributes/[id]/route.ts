@@ -3,6 +3,13 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// Interface for category attribute assignment
+interface CategoryAttributeAssignment {
+  id: number;
+  category_name: string;
+  attribute_name: string;
+}
+
 // DELETE category attribute assignment
 export async function DELETE(
   request: NextRequest,
@@ -25,7 +32,7 @@ export async function DELETE(
       JOIN categories c ON ca.category_id = c.id
       JOIN attributes a ON ca.attribute_id = a.id
       WHERE ca.id = ${id}
-    ` as any[];
+    ` as CategoryAttributeAssignment[];
 
     if (assignment.length === 0) {
       return NextResponse.json(

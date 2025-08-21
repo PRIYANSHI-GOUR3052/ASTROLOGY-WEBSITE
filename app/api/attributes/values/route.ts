@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-
+import { AttributeValue } from '@/app/admin/products/attributes/types';
+  
 const prisma = new PrismaClient();
 
 // GET all attribute values
@@ -12,7 +13,7 @@ export async function GET() {
       FROM attribute_values av 
       JOIN attributes a ON av.attribute_id = a.id 
       ORDER BY a.name ASC, av.sort_order ASC
-    ` as any[];
+    ` as unknown as AttributeValue[];
     
     return NextResponse.json(attributeValues);
   } catch (error) {

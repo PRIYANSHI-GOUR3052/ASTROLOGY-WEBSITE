@@ -14,6 +14,25 @@ interface ProductMeta {
   canonical_url: string;
 }
 
+// Interface for existing meta data from API
+interface ExistingMetaData {
+  id?: number;
+  product_id?: number;
+  meta_title?: string;
+  meta_description?: string;
+  meta_keywords?: string;
+  og_title?: string;
+  og_description?: string;
+  og_image?: string;
+  twitter_title?: string;
+  twitter_description?: string;
+  twitter_image?: string;
+  canonical_url?: string;
+  created_at?: string;
+  updated_at?: string;
+  structured_data?: string;
+}
+
 interface StepDetailedSEOProps {
   productId?: number;
   productName?: string;
@@ -40,7 +59,7 @@ const StepDetailedSEO: React.FC<StepDetailedSEOProps> = ({
   isSubmitting = false,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [existingMeta, setExistingMeta] = useState<any>(null);
+  const [existingMeta, setExistingMeta] = useState<ExistingMetaData | null>(null);
   const [previewMode, setPreviewMode] = useState<'google' | 'facebook' | 'twitter'>('google');
 
   // Load existing meta data if productId is provided

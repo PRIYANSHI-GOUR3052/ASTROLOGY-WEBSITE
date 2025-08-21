@@ -135,7 +135,15 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit;
 
-    const where: any = {
+    const where: {
+      is_active: boolean;
+      category_id?: number;
+      zodiac_id?: number;
+      OR?: {
+        name?: { contains: string; mode: 'insensitive' };
+        description?: { contains: string; mode: 'insensitive' };
+      }[];
+    } = {
       is_active: true
     };
 

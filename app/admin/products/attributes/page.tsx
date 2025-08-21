@@ -38,7 +38,7 @@ export default function ProductAttributesPage() {
       if (attributesRes.ok) setAttributes(await attributesRes.json());
       if (categoriesRes.ok) setCategories(await categoriesRes.json());
       if (zodiacRes.ok) setZodiacSigns(await zodiacRes.json());
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error('Failed to fetch data');
     } finally {
       setLoading(false);
@@ -61,7 +61,7 @@ export default function ProductAttributesPage() {
       } else {
         throw new Error('Failed to create attribute');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error('Failed to create attribute');
     }
   };
@@ -83,7 +83,7 @@ export default function ProductAttributesPage() {
       } else {
         throw new Error('Failed to update attribute');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error('Failed to update attribute');
     }
   };
@@ -100,7 +100,7 @@ export default function ProductAttributesPage() {
       } else {
         throw new Error('Failed to delete attribute');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error('Failed to delete attribute');
     }
   };

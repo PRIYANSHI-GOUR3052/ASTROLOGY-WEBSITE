@@ -1,33 +1,31 @@
+
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from 'framer-motion';
 import { notFound } from 'next/navigation';
-import { getProductById, products } from '../../../data/products';
+// Using real backend API instead of mock data
 import { UniversalCartButton } from '../../components/UniversalCartButton';
-import ProductAssuranceBar from '../../components/ProductAssuranceBar';
-import ProductPurchaseInfo from '../../components/ProductPurchaseInfo';
-import { ProductServiceCard } from "../../components/ProductServiceCard";
 import ServiceCarousels from '../../components/ServiceCarousels';
 import NakshatraGyaanBanner from '../../components/NakshatraGyaanBanner';
 import SpiritualJourneyBanner from '../../components/SpiritualJourneyBanner';
 import { Testimonials } from '../../components/Testimonials';
 import { useCart } from '../../contexts/CartContext';
 
-// Define a Product type interface
-interface Product {
-  id: string;
+// Interface for product data structure
+interface ProductData {
+  id: number;
   title: string;
   description: string;
-  image: string;
-  price: string;
-  originalPrice?: string;
-  slug: string;
-  category?: string;
+  name?: string;
+  detailedDescription?: string;
 }
 
 // Generic FAQs that will be customized based on product
-const getProductFaqs = (product: Product) => [
+const getProductFaqs = (product: ProductData | null) => {
+  if (!product) return [];
+  
+  return [
   {
     question: `What is ${product.title} and what are its benefits?`,
     answer: `${product.title} is ${product.description}. This authentic product is carefully selected to provide maximum spiritual and healing benefits according to ancient Vedic traditions.`,
@@ -56,10 +54,22 @@ const getProductFaqs = (product: Product) => [
     question: "How long does shipping take?",
     answer: "We offer fast shipping with delivery within 3-5 business days across India. International shipping takes 7-14 business days depending on your location. All orders are carefully packaged for safe delivery.",
   },
-];
+  ];
+};
 
-// Related Products based on category
-const getRelatedProducts = (currentProduct: Product, allProducts: Product[]) => {
+// Related Products based on category (commented out as not currently used)
+/*
+interface RelatedProductData {
+  id: number;
+  title: string;
+  image: string;
+  price: string;
+  originalPrice?: string;
+  slug?: string;
+  category?: string;
+}
+
+const getRelatedProducts = (currentProduct: RelatedProductData, allProducts: RelatedProductData[]) => {
   return allProducts
     .filter(p => p.id !== currentProduct.id && p.category === currentProduct.category)
     .slice(0, 4)
@@ -71,24 +81,90 @@ const getRelatedProducts = (currentProduct: Product, allProducts: Product[]) => 
       slug: product.slug,
     }));
 };
+*/
 
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  // Move all hooks to the top before any conditional returns
+  type UiProduct = {
+    id: number;
+    title: string;
+    image: string;
+    images?: string[];
+    price: string;
+    originalPrice?: string;
+    slug?: string;
+    description: string;
+    detailedDescription?: string;
+    category?: string;
+    rating?: string;
+  };
+
+  const [product, setProduct] = useState<UiProduct | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch(`/api/products/${params.id}`);
+        if (res.status === 404) {
+          setLoading(false);
+          setProduct(null);
+          return;
+        }
+        if (!res.ok) {
+          throw new Error('Failed to fetch product');
+        }
+        const p = await res.json();
+        // Interface for product media from API
+        interface ProductMedia {
+          media_url?: string;
+          url?: string;
+        }
+
+        const images: string[] = Array.isArray(p.product_media) && p.product_media.length > 0
+          ? p.product_media.map((m: ProductMedia) => m.media_url || m.url).filter(Boolean)
+          : (p.image_url ? [p.image_url] : []);
+
+        const mapped: UiProduct = {
+          id: p.id,
+          title: p.name,
+          image: images[0] || '/images/products/default.jpg',
+          images,
+          price: `₹${p.price}`,
+          originalPrice: p.original_price ? `₹${p.original_price}` : undefined,
+          slug: p.slug,
+          description: p.description || '',
+          detailedDescription: p.product_meta?.[0]?.meta_description || undefined,
+          category: p.category?.name,
+          rating: '4.8'
+        };
+        setProduct(mapped);
+      } catch (e: unknown) {
+        const errorMessage = e instanceof Error ? e.message : 'Failed to load product';
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [params.id]);
+
+  // React hooks must be called at the top level, before any conditional returns
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState("");
   const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
   const [descriptionOpen, setDescriptionOpen] = useState(false);
   const { items, updateQuantity } = useCart();
-  
+
   // Real-time offer timer (generic 24 hour offer)
   const OFFER_DURATION = 24 * 60 * 60; // 24 hours in seconds
   const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
 
-  const product = getProductById(params.id);
-  
   // Find if this product is already in cart and get its quantity
-  const productId = product?.id || '';
+  const productId = product ? String(product.id) : params.id;
   const cartItem = items.find(item => item.id === productId);
   const cartQuantity = cartItem?.quantity || 0;
 
@@ -108,50 +184,27 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     return () => clearInterval(interval);
   }, [secondsLeft]);
 
-  if (!product) return notFound();
+  if (!loading && !product) return notFound();
 
   // Helper function for default detailed description
-  const getDefaultDetailedDescription = (product: Product) => {
+  const getDefaultDetailedDescription = (product: UiProduct) => {
     return `
       <div style="color: #374151; line-height: 1.8;">
         <h3 style="font-size: 1.5rem; font-weight: 600; color: #23244a; margin-bottom: 1rem; font-family: 'Playfair Display', serif;">About ${product.title}</h3>
         <p style="margin-bottom: 1rem; color: #4b5563;">${product.description}</p>
         
-        <h4 style="font-size: 1.25rem; font-weight: 600; color: #23244a; margin-top: 1.5rem; margin-bottom: 0.75rem;">Key Features:</h4>
-        <ul style="margin-bottom: 1.5rem; padding-left: 1.5rem;">
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Authentic and high-quality materials</li>
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Handpicked by spiritual experts</li>
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Traditional craftsmanship</li>
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Energized through Vedic rituals</li>
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Suitable for personal and professional use</li>
-        </ul>
         
-        <h4 style="font-size: 1.25rem; font-weight: 600; color: #23244a; margin-top: 1.5rem; margin-bottom: 0.75rem;">Benefits:</h4>
-        <ul style="margin-bottom: 1.5rem; padding-left: 1.5rem;">
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Enhances spiritual growth and awareness</li>
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Provides positive energy and protection</li>
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Supports meditation and mindfulness practices</li>
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Brings harmony and balance to your life</li>
-          <li style="margin-bottom: 0.5rem; color: #4b5563;">Perfect for gifting to loved ones</li>
-        </ul>
-        
-        <h4 style="font-size: 1.25rem; font-weight: 600; color: #23244a; margin-top: 1.5rem; margin-bottom: 0.75rem;">Usage & Care:</h4>
-        <p style="margin-bottom: 1rem; color: #4b5563;">This item is ready to use and comes with care instructions. For best results, keep in a clean, sacred space and handle with respect. Regular cleansing and energizing will maintain its spiritual potency.</p>
-      </div>
     `;
   };
 
   // Create product images array (using main image multiple times as placeholder)
-  const productImages = [
-    product.image,
-    product.image,
-    product.image,
-    product.image,
-  ];
+  const productImages = product?.images && product.images.length > 0
+    ? product.images
+    : [product?.image || '/images/products/default.jpg'];
 
   // Calculate discount percentage
   const getDiscountPercentage = () => {
-    if (!product.originalPrice) return null;
+    if (!product?.originalPrice) return null;
     const original = Number(product.originalPrice.replace(/[^\d]/g, ''));
     const current = Number(product.price.replace(/[^\d]/g, ''));
     return Math.round(((original - current) / original) * 100);
@@ -159,11 +212,35 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
   const discount = getDiscountPercentage();
 
+  // Format time function (commented out as not currently used)
+  /*
   function formatTime(secs: number) {
     const h = Math.floor(secs / 3600).toString().padStart(2, '0');
     const m = Math.floor((secs % 3600) / 60).toString().padStart(2, '0');
     const s = (secs % 60).toString().padStart(2, '0');
     return `${h} hr : ${m} min : ${s} sec`;
+  }
+  */
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading product...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+        </div>
+      </div>
+    );
   }
 
   const productFaqs = getProductFaqs(product);
@@ -190,7 +267,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             <div className="w-full rounded-xl overflow-hidden bg-[#f7f5ed] flex items-center justify-center mb-3" style={{ aspectRatio: '1/1', maxWidth: 400 }}>
               <Image
                 src={productImages[selectedImage]}
-                alt={product.title}
+                alt={product?.title || 'Product'}
                 width={380}
                 height={380}
                 className="object-cover w-full h-full"
@@ -205,7 +282,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                   className={`rounded-lg border-2 ${selectedImage === idx ? 'border-black' : 'border-transparent'} overflow-hidden focus:outline-none`}
                   style={{ minWidth: 64, minHeight: 64 }}
                 >
-                  <Image src={img} alt={product.title} width={64} height={64} className="object-cover w-full h-full" />
+                  <Image src={img} alt={product?.title || 'Product'} width={64} height={64} className="object-cover w-full h-full" />
                 </button>
               ))}
             </div>
@@ -213,24 +290,26 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
           {/* Right: Scrollable Product Info Section */}
           <div className="lg:w-1/2 flex flex-col gap-4 lg:max-h-screen lg:overflow-y-auto lg:pr-4" style={{ scrollbarWidth: 'thin' }}>
-            <h1 className="text-2xl md:text-3xl font-semibold text-[#23244a]" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{product.title}</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold text-[#23244a]" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{product?.title}</h1>
             <div className="flex items-center gap-2 mt-1">
               <span className="text-[#FFD700] text-lg">&#9733;</span>
-              <span className="text-base font-medium text-[#23244a]">{product.rating}</span>
+              <span className="text-base font-medium text-[#23244a]">{product?.rating}</span>
               <span className="text-sm text-[#23244a]">Based on customer reviews</span>
             </div>
             <div className="flex gap-2 mt-2">
-              <span className="px-3 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{product.category}</span>
+              {product?.category && (
+                <span className="px-3 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{product.category}</span>
+              )}
               <span className="px-3 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Authentic</span>
               <span className="px-3 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Premium</span>
             </div>
             <div className="flex items-end gap-3 mt-3">
               {secondsLeft === 0 ? (
-                <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{product.originalPrice || product.price}</span>
+                <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{product?.originalPrice || product?.price}</span>
               ) : (
                 <>
-                  <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{product.price}</span>
-                  {product.originalPrice && (
+                  <span className="text-xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 500 }}>{product?.price}</span>
+                  {product?.originalPrice && (
                     <>
                       <span className="text-base text-gray-400 line-through">{product.originalPrice}</span>
                       {discount && <span className="text-base font-semibold text-green-700">{discount}% OFF</span>}
@@ -239,11 +318,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 </>
               )}
             </div>
-            {product.originalPrice && (
-              <div className="text-red-600 font-medium text-sm mt-1">
-                {secondsLeft > 0 ? `Limited time offer ends in ${formatTime(secondsLeft)}` : 'Offer ended'}
-              </div>
-            )}
+         
             
             {/* Quantity Selector */}
             <div className="flex items-center gap-3 mt-3">
@@ -273,7 +348,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <span className="text-xs text-green-600 ml-2">({cartQuantity} in cart)</span>
               )}
             </div>
-            <div className="text-xs text-gray-600 mt-1">Popular item - {Math.floor(Math.random() * 500) + 100} orders placed recently</div>
+            
             
             {/* Delivery Date Input */}
             <div className="mt-3 bg-gray-100 rounded-lg p-3 flex flex-col gap-2">
@@ -294,10 +369,10 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             {/* Add to Cart / Buy Now */}
             <div className="flex gap-3 mt-5">
               <UniversalCartButton
-                productId={product.id}
-                productName={product.title}
-                price={Number(product.price.replace(/[^\d]/g, ''))}
-                image={product.image}
+                productId={productId}
+                productName={product?.title || ''}
+                price={Number((product?.price || '0').replace(/[^\d]/g, ''))}
+                image={product?.image || ''}
                 quantity={quantity}
                 className="flex-1 bg-black text-white py-3 rounded-md font-semibold text-base hover:bg-[#23244a] transition"
               >
@@ -335,7 +410,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                           color: '#374151'
                         }}
                         dangerouslySetInnerHTML={{ 
-                          __html: product.detailedDescription || getDefaultDetailedDescription(product)
+                          __html: product?.detailedDescription || (product ? getDefaultDetailedDescription(product) : '')
                         }}
                       />
                     </div>
@@ -586,5 +661,3 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     </>
   );
 }
-
-

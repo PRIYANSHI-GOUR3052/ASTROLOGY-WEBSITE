@@ -151,7 +151,7 @@ export async function PUT(
 
     // Create new media entries
     const mediaEntries = await Promise.all(
-      media.map(async (mediaItem: any, index: number) => {
+      media.map(async (mediaItem: { type: string; url: string; alt_text: string; title: string }, index: number) => {
         return prisma.product_media.create({
           data: {
             product_id: productId,

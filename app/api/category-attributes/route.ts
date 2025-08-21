@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { CategoryAttribute } from '@/app/admin/products/attributes/types';
+
+// Interface for raw query result that includes joined fields
+interface CategoryAttributeWithJoins extends CategoryAttribute {
+  category_name: string;
+  category_slug: string;
+  attribute_name: string;
+  attribute_type: string;
+  attribute_description?: string;
+  attribute_is_required: boolean;
+  attribute_sort_order: number;
+}
 
 const prisma = new PrismaClient();
 
@@ -27,7 +39,7 @@ export async function GET(request: NextRequest) {
         JOIN attributes a ON ca.attribute_id = a.id
         WHERE ca.category_id = ${parseInt(categoryId)}
         ORDER BY ca.sort_order ASC, a.sort_order ASC
-      ` as any[];
+      ` as unknown as CategoryAttributeWithJoins[];
     } else {
       categoryAttributes = await prisma.$queryRaw`
         SELECT 
@@ -43,11 +55,11 @@ export async function GET(request: NextRequest) {
         JOIN categories c ON ca.category_id = c.id
         JOIN attributes a ON ca.attribute_id = a.id
         ORDER BY ca.sort_order ASC, a.sort_order ASC
-      ` as any[];
+      ` as unknown as CategoryAttributeWithJoins[];
     }
     
     // Transform the data to match the expected interface
-    const transformedAttributes = categoryAttributes.map(attr => ({
+    const transformedAttributes = categoryAttributes.map((attr: CategoryAttributeWithJoins) => ({
       id: attr.id,
       category_id: attr.category_id,
       attribute_id: attr.attribute_id,
@@ -94,7 +106,7 @@ export async function POST(request: NextRequest) {
       SELECT * FROM category_attributes 
       WHERE category_id = ${parseInt(category_id)} 
       AND attribute_id = ${parseInt(attribute_id)}
-    ` as any[];
+    ` as unknown as CategoryAttribute[];
 
     if (existingAssignment.length > 0) {
       return NextResponse.json(
@@ -106,7 +118,7 @@ export async function POST(request: NextRequest) {
     // Check if category exists
     const category = await prisma.$queryRaw`
       SELECT * FROM categories WHERE id = ${parseInt(category_id)}
-    ` as any[];
+    ` as unknown as CategoryAttribute[];
 
     if (category.length === 0) {
       return NextResponse.json(
@@ -118,7 +130,7 @@ export async function POST(request: NextRequest) {
     // Check if attribute exists
     const attribute = await prisma.$queryRaw`
       SELECT * FROM attributes WHERE id = ${parseInt(attribute_id)}
-    ` as any[];
+    ` as unknown as CategoryAttribute[];
 
     if (attribute.length === 0) {
       return NextResponse.json(
@@ -131,7 +143,7 @@ export async function POST(request: NextRequest) {
     await prisma.$queryRaw`
       INSERT INTO category_attributes (category_id, attribute_id, is_required, sort_order, created_at, updated_at)
       VALUES (${parseInt(category_id)}, ${parseInt(attribute_id)}, ${is_required || false}, ${sort_order || 0}, NOW(), NOW())
-    ` as any[];
+    ` as unknown as CategoryAttribute[];
 
     // Get the created assignment
     const newCategoryAttribute = await prisma.$queryRaw`
@@ -148,7 +160,7 @@ export async function POST(request: NextRequest) {
       AND ca.attribute_id = ${parseInt(attribute_id)}
       ORDER BY ca.id DESC
       LIMIT 1
-    ` as any[];
+    ` as unknown as CategoryAttribute[];
 
     return NextResponse.json(newCategoryAttribute[0], { status: 201 });
   } catch (error) {
@@ -191,7 +203,7 @@ export async function PUT(request: NextRequest) {
             sort_order = ${sort_order !== undefined ? sort_order : 0},
             updated_at = NOW()
         WHERE id = ${parseInt(id)}
-      ` as any[];
+      ` as unknown as CategoryAttribute[];
 
       // Get the updated assignment
       const updatedAssignment = await prisma.$queryRaw`
@@ -205,7 +217,7 @@ export async function PUT(request: NextRequest) {
         JOIN categories c ON ca.category_id = c.id
         JOIN attributes a ON ca.attribute_id = a.id
         WHERE ca.id = ${parseInt(id)}
-      ` as any[];
+      ` as unknown as CategoryAttribute[];
 
       updatedAssignments.push(updatedAssignment[0]);
     }

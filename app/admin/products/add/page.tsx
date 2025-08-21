@@ -159,6 +159,10 @@ export default function AddProductPage() {
   const [editProductId, setEditProductId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   
+  // Add state for categories and zodiac signs
+  const [categories, setCategories] = useState<Array<{id: number, name: string, slug: string}>>([]);
+  const [zodiacSigns, setZodiacSigns] = useState<Array<{id: number, name: string, slug: string}>>([]);
+  
   // Check if we're in edit mode
   useEffect(() => {
     const editId = searchParams?.get('edit');
@@ -170,8 +174,47 @@ export default function AddProductPage() {
       setActiveStep(0);
     }
   }, [searchParams]);
+
+  // Fetch categories and zodiac signs on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [categoriesResponse, zodiacResponse] = await Promise.all([
+          fetch('/api/categories'),
+          fetch('/api/zodiac-signs')
+        ]);
+
+        if (categoriesResponse.ok) {
+          const categoriesData = await categoriesResponse.json();
+          setCategories(categoriesData);
+        }
+
+        if (zodiacResponse.ok) {
+          const zodiacData = await zodiacResponse.json();
+          setZodiacSigns(zodiacData);
+        }
+      } catch (error) {
+        console.error('Error fetching categories and zodiac signs:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Helper functions to get names by IDs
+  const getCategoryName = (categoryId: number | null): string => {
+    if (!categoryId) return '';
+    const category = categories.find(cat => cat.id === categoryId);
+    return category ? category.name : `Category #${categoryId}`;
+  };
+
+  const getZodiacName = (zodiacId: string | null): string => {
+    if (!zodiacId) return '';
+    const zodiac = zodiacSigns.find(sign => sign.id.toString() === zodiacId);
+    return zodiac ? zodiac.name : `Zodiac #${zodiacId}`;
+  };
   
-  const handleStockFieldChange = (field: string, value: any) => {
+  const handleStockFieldChange = (field: string, value: string | number | boolean | string[] | null | undefined) => {
     setStock(prev => ({ ...prev, [field]: value }));
   };
 
@@ -402,10 +445,10 @@ export default function AddProductPage() {
     }
   };
 
-  const handleAttributeChange = (attributeId: number, value: any) => {
+  const handleAttributeChange = (attributeId: number, value: string | number | boolean | string[] | null | undefined) => {
     // Map attribute IDs to form fields
     if (attributeId === 1) { // Assuming 1 is color attribute ID
-      setFormData(prev => ({ ...prev, color: value }));
+      setFormData(prev => ({ ...prev, color: value?.toString() || '' }));
     }
   };
 
@@ -428,8 +471,9 @@ export default function AddProductPage() {
     }
   };
 
-  // Get category label for Step 1 (mocked, replace with actual lookup if needed)
-  const categoryLabel = formData.categoryId ? `Category #${formData.categoryId}` : "";
+  // Get category and zodiac labels for Step 1
+  const categoryLabel = getCategoryName(formData.categoryId);
+  const zodiacLabel = getZodiacName(formData.zodiacSign);
 
 
 
@@ -487,9 +531,9 @@ export default function AddProductPage() {
         {activeStep === 1 && (
           <StepProductDetails
             categoryId={formData.categoryId}
-            zodiacSign={formData.zodiacSign}
+            zodiacSign={zodiacLabel}
             formData={formData}
-            onFieldChange={handleFieldChange as (field: string, value: string) => void}
+            onFieldChange={handleFieldChange as (field: string, value: string | number | boolean | string[] | null | undefined) => void}
             onBack={handleBack}
             onSubmit={handleSubmit}
             categoryLabel={categoryLabel}
@@ -514,7 +558,7 @@ export default function AddProductPage() {
           <StepShippingDetails
             productId={createdProductId || editProductId || undefined}
             shipping={shipping}
-            onFieldChange={handleShippingFieldChange}
+            onFieldChange={handleShippingFieldChange as (field: string, value: string | number | boolean | string[] | null | undefined) => void}
             onBack={() => setActiveStep(2)}
             onNext={() => setActiveStep(4)}
             errors={{}}

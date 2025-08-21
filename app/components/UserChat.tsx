@@ -489,7 +489,7 @@ export default function UserChat({
       
       // Socket event listeners for WebRTC signaling
       if (socket) {
-        socket.on('video-offer', async (data: any) => {
+        socket.on('video-offer', async (data: { offer: RTCSessionDescriptionInit }) => {
           try {
             console.log('Received video offer in chat component');
             
@@ -513,7 +513,7 @@ export default function UserChat({
           }
         });
 
-        socket.on('video-answer', async (data: any) => {
+        socket.on('video-answer', async (data: { answer: RTCSessionDescriptionInit }) => {
           try {
             console.log('Received video answer in chat component');
             
@@ -529,7 +529,7 @@ export default function UserChat({
           }
         });
 
-        socket.on('ice-candidate', async (data: any) => {
+        socket.on('ice-candidate', async (data: { candidate: RTCIceCandidateInit }) => {
           try {
             console.log('Received ICE candidate in chat component');
             

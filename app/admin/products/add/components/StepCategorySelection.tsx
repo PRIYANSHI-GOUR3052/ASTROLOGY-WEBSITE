@@ -154,7 +154,7 @@ const StepCategorySelection: React.FC<StepCategorySelectionProps> = ({
           >
             <option value="">Select zodiac sign</option>
             {zodiacSigns.map(sign => (
-              <option key={sign.id} value={sign.name}>{sign.name}</option>
+              <option key={sign.id} value={sign.id}>{sign.name}</option>
             ))}
           </select>
         </div>

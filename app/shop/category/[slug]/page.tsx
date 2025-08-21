@@ -11,6 +11,23 @@ import SpiritualTicker from "@/app/components/Hero/SpiritualTicker";
 import NakshatraGyaanBanner from "@/app/components/NakshatraGyaanBanner";
 import SpiritualJourneyBanner from "@/app/components/SpiritualJourneyBanner";
 
+// Interface for API product data from backend
+interface ApiProduct {
+  id: number;
+  name: string;
+  material?: string;
+  product_type?: string;
+  color?: string;
+  price: string;
+  original_price?: string;
+  description?: string;
+  image?: string;
+  product_media?: Array<{
+    media_url?: string;
+    url?: string;
+  }>;
+}
+
 // Type definitions
 interface Product {
   id: number;
@@ -378,6 +395,8 @@ export default function CategoryPage() {
   const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [productLoading, setProductLoading] = useState(false);
+  const [categoryProducts, setCategoryProducts] = useState<Product[]>([]);
 
   // Fetch category data from API
   useEffect(() => {
@@ -407,6 +426,53 @@ export default function CategoryPage() {
     fetchCategoryData();
   }, [slug]);
 
+  // Fetch products for this category from API once category id is known
+  useEffect(() => {
+    const fetchProductsForCategory = async () => {
+      if (!categoryData?.id) return;
+
+      try {
+        setProductLoading(true);
+        const res = await fetch(`/api/products?category=${categoryData.id}&limit=100`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await res.json();
+        const apiProducts = Array.isArray(data.products) ? data.products : [];
+
+        // Map API products to local Product shape used by this page
+        const mapped: Product[] = apiProducts.map((p: ApiProduct) => ({
+          id: p.id,
+          name: p.name,
+          material: p.material || undefined,
+          type: p.product_type || undefined,
+          color: p.color || undefined,
+          purpose: [],
+          style: undefined,
+          gender: undefined,
+          zodiac: [],
+          chakra: [],
+          planet: undefined,
+          price: `₹${p.price}`,
+          oldPrice: p.original_price ? `₹${p.original_price}` : `₹${(Number(p.price) * 1.2).toFixed(2)}`,
+          image: (p.product_media && p.product_media[0]?.media_url) || p.image || '/images/products/default.jpg',
+          description: p.description || '',
+          path: `/shop/${p.id}`,
+          category: slug
+        }));
+
+        setCategoryProducts(mapped);
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        setCategoryProducts([]);
+      } finally {
+        setProductLoading(false);
+      }
+    };
+
+    fetchProductsForCategory();
+  }, [categoryData, slug]);
+
   // Get category configuration based on API data or fallback
   const categoryConfig = useMemo(() => {
     if (categoryData) {
@@ -431,15 +497,10 @@ export default function CategoryPage() {
     };
   }, [categoryData, slug]);
 
-  // Filter products for current category
-  const categoryProducts = useMemo(() => {
-    return allProducts.filter(product => product.category === slug);
-  }, [slug]);
-
   // Get filter options for current category
   const filterOptions = useMemo(() => {
-    return getFilterOptions(slug, allProducts);
-  }, [slug]);
+    return getFilterOptions(slug, categoryProducts);
+  }, [slug, categoryProducts]);
 
   // Initialize filters when category changes
   useEffect(() => {
@@ -511,7 +572,7 @@ export default function CategoryPage() {
   }, []);
 
   // Show loading state
-  if (loading) {
+  if (loading || productLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">

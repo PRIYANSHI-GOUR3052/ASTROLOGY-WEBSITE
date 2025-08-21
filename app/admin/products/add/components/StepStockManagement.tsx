@@ -15,7 +15,7 @@ interface ProductStock {
 interface StepStockManagementProps {
   productId?: number;
   stock: ProductStock;
-  onFieldChange: (field: string, value: any) => void;
+  onFieldChange: (field: string, value: string | number | boolean | string[] | null | undefined) => void;
   onBack: () => void;
   onNext: () => void;
   errors: { [key: string]: string };
@@ -32,7 +32,7 @@ const StepStockManagement: React.FC<StepStockManagementProps> = ({
   isSubmitting = false,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [existingStock, setExistingStock] = useState<any>(null);
+  const [existingStock, setExistingStock] = useState<ProductStock | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   // Load existing stock data if productId is provided
