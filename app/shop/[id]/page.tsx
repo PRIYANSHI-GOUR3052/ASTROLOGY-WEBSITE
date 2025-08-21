@@ -1,3 +1,4 @@
+
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -5,29 +6,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { notFound } from 'next/navigation';
 // Using real backend API instead of mock data
 import { UniversalCartButton } from '../../components/UniversalCartButton';
-import ProductAssuranceBar from '../../components/ProductAssuranceBar';
-import ProductPurchaseInfo from '../../components/ProductPurchaseInfo';
-import { ProductServiceCard } from "../../components/ProductServiceCard";
 import ServiceCarousels from '../../components/ServiceCarousels';
 import NakshatraGyaanBanner from '../../components/NakshatraGyaanBanner';
 import SpiritualJourneyBanner from '../../components/SpiritualJourneyBanner';
 import { Testimonials } from '../../components/Testimonials';
 import { useCart } from '../../contexts/CartContext';
 
-// Define a Product type interface
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  price: string;
-  originalPrice?: string;
-  slug: string;
-  category?: string;
-}
-
 // Generic FAQs that will be customized based on product
-const getProductFaqs = (product: Product) => [
+const getProductFaqs = (product: any) => [
   {
     question: `What is ${product.title} and what are its benefits?`,
     answer: `${product.title} is ${product.description}. This authentic product is carefully selected to provide maximum spiritual and healing benefits according to ancient Vedic traditions.`,
@@ -59,7 +45,7 @@ const getProductFaqs = (product: Product) => [
 ];
 
 // Related Products based on category
-const getRelatedProducts = (currentProduct: Product, allProducts: Product[]) => {
+const getRelatedProducts = (currentProduct: any, allProducts: any[]) => {
   return allProducts
     .filter(p => p.id !== currentProduct.id && p.category === currentProduct.category)
     .slice(0, 4)
@@ -90,16 +76,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [product, setProduct] = useState<UiProduct | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const [pincode, setPincode] = useState("");
-  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
-  const [descriptionOpen, setDescriptionOpen] = useState(false);
-  const { items, updateQuantity } = useCart();
-  
-  // Real-time offer timer (generic 24 hour offer)
-  const OFFER_DURATION = 24 * 60 * 60; // 24 hours in seconds
-  const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -144,32 +120,21 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   }, [params.id]);
 
   if (!loading && !product) return notFound();
-  
+
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [pincode, setPincode] = useState("");
+  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
+  const { items, updateQuantity } = useCart();
+
   // Find if this product is already in cart and get its quantity
-  const productId = product ? String(product.id) : params.id || '';
+  const productId = product ? String(product.id) : params.id;
   const cartItem = items.find(item => item.id === productId);
   const cartQuantity = cartItem?.quantity || 0;
 
-  // Sync local quantity with cart quantity when cart changes
-  useEffect(() => {
-    if (cartQuantity > 0) {
-      setQuantity(cartQuantity);
-    }
-  }, [cartQuantity]);
-
-  // Timer effect
-  useEffect(() => {
-    if (secondsLeft <= 0) return;
-    const interval = setInterval(() => {
-      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [secondsLeft]);
-
-  if (!product) return notFound();
-
   // Helper function for default detailed description
-  const getDefaultDetailedDescription = (product: UiProduct) => {
+  const getDefaultDetailedDescription = (product: any) => {
     return `
       <div style="color: #374151; line-height: 1.8;">
         <h3 style="font-size: 1.5rem; font-weight: 600; color: #23244a; margin-bottom: 1rem; font-family: 'Playfair Display', serif;">About ${product.title}</h3>
@@ -184,6 +149,13 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     ? product.images
     : [product?.image || '/images/products/default.jpg'];
 
+  // Sync local quantity with cart quantity when cart changes
+  useEffect(() => {
+    if (cartQuantity > 0) {
+      setQuantity(cartQuantity);
+    }
+  }, [cartQuantity]);
+
   // Calculate discount percentage
   const getDiscountPercentage = () => {
     if (!product?.originalPrice) return null;
@@ -193,6 +165,18 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   };
 
   const discount = getDiscountPercentage();
+
+  // Real-time offer timer (generic 24 hour offer)
+  const OFFER_DURATION = 24 * 60 * 60; // 24 hours in seconds
+  const [secondsLeft, setSecondsLeft] = useState(OFFER_DURATION);
+
+  useEffect(() => {
+    if (secondsLeft <= 0) return;
+    const interval = setInterval(() => {
+      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [secondsLeft]);
 
   function formatTime(secs: number) {
     const h = Math.floor(secs / 3600).toString().padStart(2, '0');
@@ -640,5 +624,3 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     </>
   );
 }
-
-
