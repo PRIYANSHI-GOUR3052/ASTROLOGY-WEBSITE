@@ -176,7 +176,7 @@ export const ReusableServiceCard = ({
               )}
               
               <Link href={`/services/${service.slug}`}>
-                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
+                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors">
                   {service.title}
                 </h3>
               </Link>
@@ -186,30 +186,24 @@ export const ReusableServiceCard = ({
               </p>
 
               {/* Service Details */}
-              <div className="flex flex-wrap items-center gap-3 mb-3 text-xs text-gray-500">
-                {service.duration && (
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    <span>{service.duration}</span>
-                  </div>
-                )}
+              <div className="flex flex-col gap-1 mb-3 text-xs text-gray-500">
                 {service.consultationType && (
                   <div className="flex items-center gap-1">
                     {getConsultationIcon(service.consultationType)}
                     <span>{service.consultationType}</span>
                   </div>
                 )}
-                {service.ordersCount && (
+                {service.duration && (
                   <div className="flex items-center gap-1">
-                    <Users className="w-3 h-3" />
-                    <span>{service.ordersCount} bookings</span>
+                    <Clock className="w-3 h-3" />
+                    <span>{service.duration}</span>
                   </div>
                 )}
               </div>
               
               {/* Rating */}
               {service.rating && (
-                <div className="flex items-center mb-3">
+                <div className="flex items-center mb-0.5">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
                       <Star
@@ -224,7 +218,7 @@ export const ReusableServiceCard = ({
                     ))}
                   </div>
                   <span className="text-xs text-gray-500 ml-2">
-                    ({service.rating}) {service.reviewsCount && `• ${service.reviewsCount} reviews`}
+                    ({service.rating})
                   </span>
                 </div>
               )}
@@ -246,7 +240,7 @@ export const ReusableServiceCard = ({
                 productName={service.title}
                 price={service.price}
                 isService={true}
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors"
+                className="bg-green-800 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-900 transition-colors"
               >
                 Book Now
               </UniversalCartButton>
@@ -265,12 +259,12 @@ export const ReusableServiceCard = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       className={cn(
-        "group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden",
+        "group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden h-full flex flex-col",
         className
       )}
     >
       {/* Image Section */}
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <div className="relative aspect-[4/3] overflow-hidden flex-shrink-0">
         <Link href={`/services/${service.slug}`}>
           <Image
             src={mainImage}
@@ -330,57 +324,39 @@ export const ReusableServiceCard = ({
       </div>
       
       {/* Content Section */}
-      <CardContent className="p-4">
+      <CardContent className="p-4 pb-1 flex-1 flex flex-col">
         <Link href={`/services/${service.slug}`}>
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
+          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-green-800 transition-colors min-h-[3rem]">
             {service.title}
           </h3>
         </Link>
-        
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3">
-          {service.description}
-        </p>
-
-        {/* Service Details */}
-        <div className="flex flex-wrap items-center gap-2 mb-3 text-xs text-gray-500">
-          {service.duration && (
-            <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              <span>{service.duration}</span>
-            </div>
-          )}
-          {service.consultationType && (
-            <div className="flex items-center gap-1">
-              {getConsultationIcon(service.consultationType)}
-              <span className="truncate">{service.consultationType}</span>
+                
+        {/* Rating */}
+        <div className="mb-0.5 min-h-[1.5rem]">
+          {service.rating && (
+            <div className="flex items-center">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={cn(
+                      "w-4 h-4",
+                      i < Math.floor(service.rating!) 
+                        ? "text-yellow-400 fill-yellow-400" 
+                        : "text-gray-300"
+                    )}
+                  />
+                ))}
+              </div>
+              <span className="text-xs text-gray-500 ml-2">
+                ({service.rating})
+              </span>
             </div>
           )}
         </div>
         
-        {/* Rating */}
-        {service.rating && (
-          <div className="flex items-center mb-3">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={cn(
-                    "w-4 h-4",
-                    i < Math.floor(service.rating!) 
-                      ? "text-yellow-400 fill-yellow-400" 
-                      : "text-gray-300"
-                  )}
-                />
-              ))}
-            </div>
-            <span className="text-xs text-gray-500 ml-2">
-              ({service.rating}) {service.reviewsCount && `• ${service.reviewsCount} reviews`}
-            </span>
-          </div>
-        )}
-        
         {/* Price */}
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mt-auto mb-0.5">
           <div className="flex items-center space-x-2">
             <span className="text-lg font-bold text-gray-900">₹{service.price}</span>
             {service.originalPrice && (
@@ -389,20 +365,17 @@ export const ReusableServiceCard = ({
               </span>
             )}
           </div>
-          {service.ordersCount && (
-            <span className="text-xs text-gray-500">{service.ordersCount} bookings</span>
-          )}
         </div>
       </CardContent>
 
       {/* Footer with Book Button */}
-      <CardFooter className="p-4 pt-0">
+      <CardFooter className="p-4 pt-0.5">
         <UniversalCartButton
           productId={service.id}
           productName={service.title}
           price={service.price}
           isService={true}
-          className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-green-800 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={service.availability === 'offline'}
         >
           <Calendar className="w-4 h-4 mr-2" />

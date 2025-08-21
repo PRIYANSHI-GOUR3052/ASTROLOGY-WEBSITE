@@ -1,10 +1,10 @@
 'use client'
 
-import { GraduationCap, Heart, Activity, Briefcase, Users, Baby } from 'lucide-react'
+import { GraduationCap, Heart, Activity, Briefcase, Users, Baby, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { motion } from 'framer-motion'
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { useLanguage } from '../contexts/useLanguage'
 import { useRouter } from 'next/navigation'
@@ -70,6 +70,35 @@ function getLocalizedText(obj: { en: string; hi: string }, lang: string) {
 export function LifeChangingSolutions() {
   const { t } = useLanguage();
   const router = useRouter();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScrollButtons = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    checkScrollButtons();
+  }, []);
 
   const scrollToContact = () => {
     router.push('/contact');
@@ -89,7 +118,8 @@ export function LifeChangingSolutions() {
         </div>
         {/* Main Solutions Section */}
         <div className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Desktop View - Grid */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {solutions.map((solution, index) => (
               <Link href={solution.href} key={index} className="block h-full">
                 <motion.div
@@ -117,6 +147,80 @@ export function LifeChangingSolutions() {
                 </motion.div>
               </Link>
             ))}
+          </div>
+
+          {/* Mobile View - Horizontal Scroll */}
+          <div className="md:hidden">
+            <div className="relative">
+              {/* Navigation Arrows */}
+              <button
+                onClick={scrollLeft}
+                disabled={!canScrollLeft}
+                className={`absolute left-0 top-32 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
+                  canScrollLeft ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+                }`}
+                style={{ marginLeft: '-20px' }}
+              >
+                <ChevronLeft className="w-5 h-5 text-gray-600" />
+              </button>
+              
+              <button
+                onClick={scrollRight}
+                disabled={!canScrollRight}
+                className={`absolute right-0 top-32 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
+                  canScrollRight ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+                }`}
+                style={{ marginRight: '-20px' }}
+              >
+                <ChevronRight className="w-5 h-5 text-gray-600" />
+              </button>
+
+              {/* Scrollable Container */}
+              <div
+                ref={scrollContainerRef}
+                onScroll={checkScrollButtons}
+                className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-2"
+                style={{ 
+                  scrollSnapType: 'x mandatory', 
+                  scrollbarWidth: 'none', 
+                  msOverflowStyle: 'none',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
+                {solutions.map((solution, index) => (
+                  <div
+                    key={`mobile-${index}`}
+                    className="flex-none w-[calc(52%-6px)] min-w-[170px] snap-start"
+                  >
+                    <Link href={solution.href} className="block h-full">
+                      <div className="bg-white rounded-xl shadow-lg overflow-hidden h-[300px] flex flex-col">
+                        <div className="relative w-full h-32 flex-shrink-0">
+                          <Image 
+                            src={solution.imageUrl} 
+                            alt={t(solution.titleKey)} 
+                            fill 
+                            className="object-cover" 
+                          />
+                        </div>
+                        <div className="p-3 flex flex-col flex-1">
+                          <h3 className="text-sm font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
+                            {t(solution.titleKey)}
+                          </h3>
+                          <p className="text-xs text-gray-600 mb-3 line-clamp-4 flex-1 leading-relaxed">
+                            {t(solution.descriptionKey)}
+                          </p>
+                          <div className="mt-auto">
+                            <Button className="w-full px-3 py-2 rounded-lg bg-black text-white text-xs font-semibold text-center hover:bg-gray-800 transition-all">
+                              {t('lifeChangingSolutions.exploreMoreButton')}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 

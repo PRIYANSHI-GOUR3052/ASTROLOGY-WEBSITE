@@ -121,7 +121,7 @@ export default function AllServicesPage() {
   ].filter(Boolean).length;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-purple-50 via-white to-indigo-50">
+  <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-green-50 via-white to-emerald-50">
       <AnimatedStars />
       <MysticBackground>
         <div className="container mx-auto px-4 py-8 relative z-10">
@@ -141,19 +141,19 @@ export default function AllServicesPage() {
             {/* Quick Stats */}
             <div className="flex flex-wrap justify-center gap-6 mb-8">
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">{services.length}+</div>
+                <div className="text-2xl font-bold text-green-800">{services.length}+</div>
                 <div className="text-sm text-gray-600">Services Available</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">50+</div>
+                <div className="text-2xl font-bold text-green-800">50+</div>
                 <div className="text-sm text-gray-600">Expert Astrologers</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">10k+</div>
+                <div className="text-2xl font-bold text-green-800">10k+</div>
                 <div className="text-sm text-gray-600">Happy Clients</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">24/7</div>
+                <div className="text-2xl font-bold text-green-800">24/7</div>
                 <div className="text-sm text-gray-600">Available</div>
               </div>
             </div>
@@ -173,7 +173,7 @@ export default function AllServicesPage() {
                 placeholder="Search for services, astrologers, or spiritual guidance..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 transition-all duration-200 bg-white/80 backdrop-blur-sm"
+                className="w-full pl-12 pr-4 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-green-600 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white/80 backdrop-blur-sm"
               />
             </div>
           </motion.div>
@@ -192,13 +192,13 @@ export default function AllServicesPage() {
                   onClick={() => setShowFilters(!showFilters)}
                   className={cn(
                     "flex items-center gap-2",
-                    showFilters && "bg-purple-50 border-purple-300"
+                    showFilters && "bg-green-50 border-green-300"
                   )}
                 >
                   <Filter className="w-4 h-4" />
                   Filters
                   {activeFiltersCount > 0 && (
-                    <Badge variant="secondary" className="ml-1 bg-purple-100 text-purple-700">
+                    <Badge variant="secondary" className="ml-1 bg-green-100 text-green-800">
                       {activeFiltersCount}
                     </Badge>
                   )}
@@ -208,7 +208,7 @@ export default function AllServicesPage() {
                   <Button
                     variant="ghost"
                     onClick={clearAllFilters}
-                    className="text-purple-600 hover:text-purple-700"
+                    className="text-green-800 hover:text-green-900"
                   >
                     Clear All
                   </Button>
@@ -240,7 +240,7 @@ export default function AllServicesPage() {
                           className={cn(
                             "w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors",
                             selectedCategory === category.id
-                              ? "bg-purple-100 text-purple-700"
+                              ? "bg-green-100 text-green-800"
                               : "hover:bg-gray-100 text-gray-700"
                           )}
                         >
@@ -264,7 +264,7 @@ export default function AllServicesPage() {
                           className={cn(
                             "w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors",
                             selectedConsultationType === type.id
-                              ? "bg-purple-100 text-purple-700"
+                              ? "bg-green-100 text-green-800"
                               : "hover:bg-gray-100 text-gray-700"
                           )}
                         >
@@ -288,7 +288,7 @@ export default function AllServicesPage() {
                           className={cn(
                             "w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors",
                             selectedPriceRange === range.id
-                              ? "bg-purple-100 text-purple-700"
+                              ? "bg-green-100 text-green-800"
                               : "hover:bg-gray-100 text-gray-700"
                           )}
                         >
@@ -312,21 +312,10 @@ export default function AllServicesPage() {
               services={filteredServices}
               loading={loading}
               loadingCount={12}
-              showControls={true}
-              showViewToggle={true}
-              showSortOptions={true}
-              initialViewMode="grid"
-              emptyStateTitle="No Services Found"
-              emptyStateDescription="Try adjusting your filters or search criteria to find the perfect spiritual service for you."
-              emptyStateAction={
-                <Button 
-                  onClick={clearAllFilters}
-                  className="bg-purple-600 text-white hover:bg-purple-700"
-                >
-                  Clear Filters
-                </Button>
-              }
+              viewMode="grid"
+              columns={4}
               className="max-w-none"
+              emptyMessage="Try adjusting your filters or search criteria to find the perfect spiritual service for you."
             />
           </motion.div>
 
@@ -335,7 +324,7 @@ export default function AllServicesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="mt-16 text-center bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 text-white"
+            className="mt-16 text-center bg-gradient-to-r from-green-800 to-emerald-700 rounded-2xl p-8 text-white"
           >
             <h2 className="text-3xl font-bold mb-4 font-playfair">
               Need Personalized Guidance?
@@ -344,10 +333,10 @@ export default function AllServicesPage() {
               Connect with our expert astrologers for a personalized consultation tailored to your unique spiritual journey.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" variant="secondary" className="bg-white text-purple-600 hover:bg-gray-100">
+              <Button size="lg" variant="secondary" className="bg-white text-green-800 hover:bg-gray-100">
                 Talk to Astrologer
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-800">
                 Book Free Consultation
               </Button>
             </div>

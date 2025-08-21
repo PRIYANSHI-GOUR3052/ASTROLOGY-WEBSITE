@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+import { UniversalCartButton } from './UniversalCartButton';
 
 interface UniversalServiceCardProps {
   image: string;
@@ -14,6 +15,8 @@ interface UniversalServiceCardProps {
   price?: string;
   originalPrice?: string;
   onAddToCart?: () => void;
+  productId?: string;
+  productName?: string;
 }
 
 export function UniversalServiceCard({ 
@@ -25,7 +28,9 @@ export function UniversalServiceCard({
   index = 0,
   price,
   originalPrice,
-  onAddToCart
+  onAddToCart,
+  productId,
+  productName
 }: UniversalServiceCardProps) {
   return (
     <motion.div
@@ -120,21 +125,38 @@ export function UniversalServiceCard({
                 </div>
                 
                 {/* Add to Cart Button */}
-                {onAddToCart && (
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onAddToCart();
-                    }}
-                    className="bg-[#23244a] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#1a1b35] transition-colors duration-200"
-                    style={{ 
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 500
-                    }}
-                  >
-                    Add to Cart
-                  </button>
+                {(onAddToCart || (productId && productName && price)) && (
+                  <>
+                    {productId && productName && price ? (
+                      <div onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                        <UniversalCartButton
+                          productId={productId}
+                          productName={productName}
+                          price={parseFloat(price.replace(/[₹,]/g, ''))}
+                          image={image}
+                          isService={true}
+                          className="bg-[#23244a] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#1a1b35] transition-colors duration-200"
+                        >
+                          Add to Cart
+                        </UniversalCartButton>
+                      </div>
+                    ) : onAddToCart ? (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          onAddToCart();
+                        }}
+                        className="bg-[#23244a] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#1a1b35] transition-colors duration-200"
+                        style={{ 
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 500
+                        }}
+                      >
+                        Add to Cart
+                      </button>
+                    ) : null}
+                  </>
                 )}
               </div>
             </div>

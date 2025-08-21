@@ -13,7 +13,7 @@ const ShopBanner = dynamic(() => import('../components/ShopBanner'), { loading: 
 const ZodiacCategories = dynamic(() => import('../components/ZodiacCategories'), { loading: () => <div>Loading...</div>, ssr: false });
 const SimpleHorizontalBanner = dynamic(() => import('../components/SimpleHorizontalBanner'), { loading: () => <div>Loading...</div>, ssr: false });
 const ProductAnnouncementTicker = dynamic(() => import('../components/ProductAnnouncementTicker'), { loading: () => <div>Loading...</div>, ssr: false });
-const BestSellerCards = dynamic(() => import('../components/BestSellerCards'), { loading: () => <div>Loading...</div>, ssr: false });
+const ProductShowcase = dynamic(() => import('../components/ProductShowcase'), { loading: () => <div>Loading...</div>, ssr: false });
 const ProductAssuranceBar = dynamic(() => import('../components/ProductAssuranceBar'), { loading: () => <div>Loading...</div>, ssr: false });
 const NakshatraGyaanBanner = dynamic(() => import('../components/NakshatraGyaanBanner'), { loading: () => <div>Loading...</div>, ssr: false });
 const SpiritualJourneyBanner = dynamic(() => import('../components/SpiritualJourneyBanner'), { loading: () => <div>Loading...</div>, ssr: false });
@@ -70,7 +70,13 @@ export default function ShopPage() {
           {/* Removed duplicate <h1>Spiritual Shop</h1> here */}
           {/* Full-width Product Carousel (dynamically imported) */}
           {/* New Best Seller Cards with RecentPosts Layout */}
-          <BestSellerCards products={products.map(product => ({ ...product, loading: 'lazy' }))} />
+          <ProductShowcase 
+            products={products}
+            title="Best Selling Products" 
+            subtitle="Explore our most loved and trusted spiritual items"
+            cardsPerView={5}
+            scrollStep={1}
+          />
           {/* <FeaturedProducts /> */}
           {/* Product Of The Day Section */}
           <ProductOfTheDay />

@@ -133,7 +133,7 @@ export function AstrologyQuiz() {
   const optionLetters = ['A', 'B', 'C', 'D']
 
   return (
-    <section className="py-1 sm:py-8 md:py-16 rounded-3xl relative bg-gradient-to-b from-[#EADCF5] via-[#FBEAFF] to-[#F5ECFB] min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="py-4 sm:py-12 md:py-16 rounded-3xl relative bg-gradient-to-b from-[#EADCF5] via-[#FBEAFF] to-[#F5ECFB] min-h-fit sm:min-h-screen sm:flex sm:items-center sm:justify-center overflow-hidden">
 
       {/* Floating cards, hidden on xs screens for clarity */}
       <div className="hidden xs:block">
@@ -161,7 +161,7 @@ export function AstrologyQuiz() {
       </div>
 
       <div className="container mx-auto px-2 sm:px-4 relative z-10 max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl">
-        <div className="text-center mb-6 sm:mb-8 flex flex-col items-center">
+        <div className="text-center mb-3 sm:mb-6 md:mb-8 flex flex-col items-center pt-2 sm:pt-0">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-2 bg-gradient-to-r from-purple-800 via-pink-600 to-orange-400 text-transparent bg-clip-text">
             {quizData.title}
           </h2>
@@ -170,66 +170,74 @@ export function AstrologyQuiz() {
           </p>
         </div>
 
-        <Card className="bg-white rounded-2xl shadow-xl overflow-hidden mt-3 sm:mt-8 max-w-full sm:max-w-2xl mx-auto border-none">
-          <div className="relative bg-[#6A0DAD] text-white p-4 sm:p-6 pb-10 sm:pb-12 rounded-t-2xl transform -skew-y-3 origin-bottom-left">
-            <div className="transform skew-y-3 px-2 sm:px-4 py-2 flex items-center">
-              <h3 className="text-lg sm:text-2xl font-bold uppercase text-white">{quizData.questionHeader}</h3>
-            </div>
-            <div className="absolute -bottom-5 sm:-bottom-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] min-h-12 sm:min-h-16 bg-white rounded-xl shadow-lg flex items-center justify-center border border-gray-200 px-3 sm:px-6 py-2 sm:py-3">
+        <Card className="bg-white rounded-2xl shadow-xl overflow-hidden mt-1 sm:mt-6 md:mt-8 max-w-full sm:max-w-2xl mx-auto border-none mb-4 sm:mb-0">
+          {/* Progress Indicator */}
+          <div className="bg-gray-50 px-4 sm:px-6 py-3 border-b border-gray-200">
+            <p className="text-sm sm:text-base font-semibold text-gray-600 text-center">
+              Q{currentQuestionIndex + 1} of {questions.length}
+            </p>
+          </div>
+
+          {/* Question Container */}
+          <div className="p-4 sm:p-6">
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 sm:p-5 mb-6 sm:mb-8 border border-purple-100 mx-2 sm:mx-0">
               {currentQuestion && (
-                <p className="text-base sm:text-xl font-bold text-gray-800 uppercase text-center px-2 sm:px-4 line-clamp-2">{currentQuestion.question}</p>
+                <p className="text-base sm:text-lg md:text-xl font-bold text-gray-800 text-center leading-relaxed px-2 sm:px-4">
+                  {currentQuestion.question}
+                </p>
+              )}
+            </div>
+
+            {/* Answer Options */}
+            <div className="px-2 sm:px-0">
+              {!quizCompleted ? (
+                <RadioGroup onValueChange={(value) => setSelectedAnswer(parseInt(value))} value={selectedAnswer !== null ? selectedAnswer.toString() : ''}>
+                  <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
+                    {currentQuestion.options.map((option: string, index: number) => (
+                      <motion.div
+                        key={index}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="relative"
+                      >
+                        <Button
+                          variant="default"
+                          className={`w-full justify-start text-left py-4 sm:py-6 px-3 sm:px-4 rounded-xl text-base sm:text-lg font-semibold
+                            ${selectedAnswer === index
+                              ? (index === currentQuestion.correctAnswerIndex ? 'bg-green-500 text-white' : 'bg-red-500 text-white')
+                              : 'bg-[#EFE6F7] text-[#6A0DAD] hover:bg-[#E0CCF5]'}
+                            ${showFeedback && index === currentQuestion.correctAnswerIndex && 'bg-green-500 text-white'}
+                          `}
+                          onClick={() => handleAnswer(index)}
+                          disabled={showFeedback}
+                        >
+                          <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 font-bold text-base sm:text-lg">{optionLetters[index]}.</span>
+                          <span className="ml-7 sm:ml-8">{option}</span>
+                        </Button>
+                      </motion.div>
+                    ))}
+                  </div>
+                </RadioGroup>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-center"
+                >
+                  <h4 className="text-xl sm:text-2xl font-bold text-[#6A0DAD] mb-3 sm:mb-4">
+                    {quizData.completedTitle}
+                  </h4>
+                  <p className="text-lg sm:text-xl text-gray-700 mb-4 sm:mb-6">
+                    {t('astrologyQuiz.scoreText').replace('{{score}}', score.toString()).replace('{{total}}', questions.length.toString())}
+                  </p>
+                  <Button onClick={resetQuiz} className="bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg hover:opacity-90">
+                    {quizData.tryAgainButton}
+                  </Button>
+                </motion.div>
               )}
             </div>
           </div>
-
-          <CardContent className="p-4 sm:p-8 pt-12 sm:pt-16">
-            {!quizCompleted ? (
-              <RadioGroup onValueChange={(value) => setSelectedAnswer(parseInt(value))} value={selectedAnswer !== null ? selectedAnswer.toString() : ''}>
-                <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
-                  {currentQuestion.options.map((option: string, index: number) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="relative"
-                    >
-                      <Button
-                        variant="default"
-                        className={`w-full justify-start text-left py-4 sm:py-6 px-3 sm:px-4 rounded-xl text-base sm:text-lg font-semibold
-                          ${selectedAnswer === index
-                            ? (index === currentQuestion.correctAnswerIndex ? 'bg-green-500 text-white' : 'bg-red-500 text-white')
-                            : 'bg-[#EFE6F7] text-[#6A0DAD] hover:bg-[#E0CCF5]'}
-                          ${showFeedback && index === currentQuestion.correctAnswerIndex && 'bg-green-500 text-white'}
-                        `}
-                        onClick={() => handleAnswer(index)}
-                        disabled={showFeedback}
-                      >
-                        <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 font-bold text-base sm:text-lg">{optionLetters[index]}.</span>
-                        <span className="ml-7 sm:ml-8">{option}</span>
-                      </Button>
-                    </motion.div>
-                  ))}
-                </div>
-              </RadioGroup>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="text-center"
-              >
-                <h4 className="text-xl sm:text-2xl font-bold text-[#6A0DAD] mb-3 sm:mb-4">
-                  {quizData.completedTitle}
-                </h4>
-                <p className="text-lg sm:text-xl text-gray-700 mb-4 sm:mb-6">
-                  {t('astrologyQuiz.scoreText').replace('{{score}}', score.toString()).replace('{{total}}', questions.length.toString())}
-                </p>
-                <Button onClick={resetQuiz} className="bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg hover:opacity-90">
-                  {quizData.tryAgainButton}
-                </Button>
-              </motion.div>
-            )}
-          </CardContent>
         </Card>
 
         {/* <div className="text-center mt-8 sm:mt-12">
