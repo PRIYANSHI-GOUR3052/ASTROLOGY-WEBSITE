@@ -25,7 +25,7 @@ export function Statistics() {
   ];
 
   return (
-    <section className="w-full py-12 md:py-16 lg:py-20 -mt-8 md:-mt-12 lg:-mt-16" style={{ backgroundColor: '#F5F5DC' }}>
+    <section className="w-full py-12 md:py-16 lg:py-20 -mt-8 md:-mt-12 lg:-mt-16" style={{ backgroundColor: '#FEFBF2' }}>
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-row justify-between items-center gap-4 md:gap-8 lg:gap-12">
           {stats.map((stat, index) => (

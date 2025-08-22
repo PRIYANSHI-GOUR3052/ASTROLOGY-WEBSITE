@@ -24,7 +24,20 @@ const credentials = [
 ]
 
 export function AstrologerProfile() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  
+  // Debug: Log what the translation function returns
+  console.log('Translation test:', {
+    lang: lang,
+    heading: t('astrologerProfile.heading'),
+    cred0Title: t('astrologerProfile.credentials.0.title'),
+    cred0Desc: t('astrologerProfile.credentials.0.description'),
+    cred1Title: t('astrologerProfile.credentials.1.title'),
+    cred1Desc: t('astrologerProfile.credentials.1.description')
+  });
+  
+  // Force English content for now to fix user experience
+  const isEnglish = lang === 'en';
   
   return (
     <>

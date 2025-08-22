@@ -171,7 +171,7 @@ export function Header() {
     <>
       <div
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between w-full px-4 py-2 md:hidden"
-        style={{ background: '#F3F1EB' }}
+        style={{ background: '#FEFBF2' }}
       >
         {/* Left: Logo */}
         <Link
@@ -240,7 +240,7 @@ export function Header() {
       {/* Mobile horizontal nav bar (below top bar) */}
       <div
         className="fixed top-[56px] left-0 right-0 z-50 md:hidden w-full flex justify-center items-center gap-2 px-2 py-2"
-        style={{ background: '#FDF9EF', boxShadow: '0 2px 8px 0 rgba(36,34,68,0.04)' }}
+        style={{ background: '#FEFBF2', boxShadow: '0 2px 8px 0 rgba(36,34,68,0.04)' }}
       >
   {/* Consultations dropdown trigger */}
   <button
@@ -276,11 +276,11 @@ export function Header() {
     {t("header.nav.our_services")}
   </Link>
   {/* Dropdown below nav bar */}
-  <div className={`absolute left-0 top-full w-full z-40 transition-all duration-300 ${isConsultationBarOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`} style={{ background: '#FDF9EF', borderRadius: '0 0 1rem 1rem', boxShadow: isConsultationBarOpen ? '0 4px 24px 0 rgba(36,34,68,0.08)' : 'none', overflow: 'hidden' }}>
+  <div className={`absolute left-0 top-full w-full z-40 transition-all duration-300 ${isConsultationBarOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`} style={{ background: '#FEFBF2', borderRadius: '0 0 1rem 1rem', boxShadow: isConsultationBarOpen ? '0 4px 24px 0 rgba(36,34,68,0.08)' : 'none', overflow: 'hidden' }}>
     <div className="py-2 px-2 flex flex-col gap-2">
       {/* Consultations group */}
       <div>
-        <div className="text-base font-bold mb-1" style={{ color: '#77A656', fontFamily: 'Playfair Display, serif' }}>{t('header.mega_menu.consultations.title')}</div>
+        <div className="text-base font-bold mb-1" style={{ color: 'rgb(22 101 52)', fontFamily: 'Playfair Display, serif' }}>{t('header.mega_menu.consultations.title')}</div>
         <ul className="flex flex-col gap-1">
           {servicesMegaMenu.consultations.items.map((item) => (
             <li key={item.key}>
@@ -298,7 +298,7 @@ export function Header() {
       </div>
       {/* Puja & Rituals group */}
       <div>
-        <div className="text-base font-bold mb-1" style={{ color: '#77A656', fontFamily: 'Playfair Display, serif' }}>{t('header.mega_menu.puja_rituals.title')}</div>
+        <div className="text-base font-bold mb-1" style={{ color: 'rgb(22 101 52)', fontFamily: 'Playfair Display, serif' }}>{t('header.mega_menu.puja_rituals.title')}</div>
         <ul className="flex flex-col gap-1">
           {servicesMegaMenu.puja_rituals.items.map((item) => (
             <li key={item.key}>
@@ -316,7 +316,7 @@ export function Header() {
       </div>
       {/* Horoscopes group */}
       <div>
-        <div className="text-base font-bold mb-1" style={{ color: '#77A656', fontFamily: 'Playfair Display, serif' }}>{t('header.mega_menu.horoscopes.title')}</div>
+        <div className="text-base font-bold mb-1" style={{ color: 'rgb(22 101 52)', fontFamily: 'Playfair Display, serif' }}>{t('header.mega_menu.horoscopes.title')}</div>
         <ul className="flex flex-col gap-1">
           {servicesMegaMenu.horoscopes.items.map((item) => (
             <li key={item.key}>
@@ -458,7 +458,7 @@ export function Header() {
           </Link>
           {/* Search Bar */}
           <form onSubmit={handleSearchSubmit} className="flex-1 flex justify-center">
-            <div className="flex w-full max-w-xl items-center bg-[#F3F1EB] rounded-full shadow-md border border-gray-200 px-4 py-2 gap-x-3">
+            <div className="flex w-full max-w-xl items-center bg-[#FEFBF2] rounded-full shadow-md border border-gray-200 px-4 py-2 gap-x-3">
               <input
                 type="text"
                 placeholder={t('header.search_placeholder') || t('header.search') || 'Find product, service, or article...'}
@@ -468,7 +468,7 @@ export function Header() {
                 style={{ fontFamily: 'Playfair Display, serif' }}
               />
               {/* Desktop search button */}
-              <button type="submit" className="px-6 py-2 rounded-full font-semibold shadow transition-colors text-base" style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff' }}>
+              <button type="submit" className="px-6 py-2 rounded-full font-semibold shadow transition-all duration-300 hover:translate-x-1 text-base" style={{ fontFamily: 'Playfair Display, serif', background: 'rgb(22 101 52)', color: 'white', border: 'none' }}>
                 {t('header.search_button') || t('header.search') || 'Search'}
               </button>
             </div>
@@ -488,8 +488,8 @@ export function Header() {
             {/* Join Us Button */}
             <a
               href="/astrologer/auth/"
-              className="px-5 py-2 rounded-full font-semibold shadow transition-colors text-base"
-              style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff' }}
+              className="px-5 py-2 rounded-full font-semibold shadow transition-all duration-300 hover:translate-x-1 text-base"
+              style={{ fontFamily: 'Playfair Display, serif', background: 'rgb(22 101 52)', color: 'white', border: 'none' }}
             >
               {t('header.nav.join_us') || t('header.join_us') || 'Join Us'}
             </a>
@@ -498,8 +498,8 @@ export function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="flex items-center gap-2 px-3 py-2 rounded-full font-semibold transition-colors text-base hover:bg-[#6a9550]"
-                    style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff', border: 'none' }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-full font-semibold transition-colors text-base hover:bg-green-700"
+                    style={{ fontFamily: 'Playfair Display, serif', background: 'rgb(22 101 52)', color: '#fff', border: 'none' }}
                   >
                     <Avatar className="h-6 w-6">
                       <AvatarFallback className="text-xs font-bold bg-white/20 text-white">
@@ -531,8 +531,8 @@ export function Header() {
             ) : (
               <button
                 onClick={() => signIn()}
-                className="px-5 py-2 rounded-full font-semibold transition-colors text-base"
-                style={{ fontFamily: 'Playfair Display, serif', background: '#77A656', color: '#fff', border: 'none' }}
+                className="px-5 py-2 rounded-full font-semibold transition-all duration-300 hover:translate-x-1 text-base"
+                style={{ fontFamily: 'Playfair Display, serif', background: 'rgb(22 101 52)', color: 'white', border: 'none' }}
               >
                 {t('header.auth.signin') || 'Sign In'}
               </button>
@@ -544,19 +544,19 @@ export function Header() {
           {/* Desktop nav links */}
           <Link
             href="/"
-            className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
+            className="text-base font-bold text-black px-2 py-1 relative group transition-all duration-300 hover:text-green-700 hover:translate-x-1"
             style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
           >
             <span className="relative z-10">{t("header.nav.home")}</span>
-            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-green-800 to-green-800 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
           <Link
             href="/about"
-            className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
+            className="text-base font-bold text-black px-2 py-1 relative group transition-all duration-300 hover:text-green-700 hover:translate-x-1"
             style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
           >
             <span className="relative z-10">{t("header.nav.about")}</span>
-            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-green-800 to-green-800 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
           {/* Consultation Dropdown (keep yellow) */}
           <div
@@ -568,8 +568,8 @@ export function Header() {
             {/* Consultations Button: Yellow */}
             <button
               onClick={() => setIsServicesOpen((prev) => !prev)}
-              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none"
-              style={{ fontFamily: 'Playfair Display, serif', color: '#77A656', background: 'transparent', fontWeight: 700 }}
+              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none hover:translate-x-1"
+              style={{ fontFamily: 'Playfair Display, serif', color: 'rgb(22 101 52)', background: 'transparent', fontWeight: 700 }}
               aria-haspopup="true"
               aria-expanded={isServicesOpen}
               aria-controls="consultation-menu"
@@ -580,8 +580,8 @@ export function Header() {
               }}
             >
               <span className="relative z-10">{t("header.nav.consultations")}</span>
-              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`} style={{ color: '#77A656' }} />
-              <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`} style={{ color: 'rgb(22 101 52)' }} />
+              <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-green-800 to-green-800 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
             </button>
             <AnimatePresence>
               {isServicesOpen && (
@@ -598,7 +598,7 @@ export function Header() {
                 >
                   {Object.entries(servicesMegaMenu).map(([sectionKey, sectionValue]) => (
                     <div key={sectionKey} className="flex-1 min-w-[140px] max-w-[220px]">
-                      <div className="text-[1.08rem] font-bold mb-4" style={{ fontFamily: 'Playfair Display, serif', color: '#77A656', letterSpacing: '0.04em' }}>{t(`header.mega_menu.${sectionKey}.title`)}</div>
+                      <div className="text-[1.08rem] font-bold mb-4" style={{ fontFamily: 'Playfair Display, serif', color: 'rgb(22 101 52)', letterSpacing: '0.04em' }}>{t(`header.mega_menu.${sectionKey}.title`)}</div>
                       <ul className="space-y-1">
                         {sectionValue.items.map((item) => (
                           <li key={item.key}>
@@ -629,7 +629,7 @@ export function Header() {
           >
             <button
               onClick={() => setIsStudyDropdownOpen((prev) => !prev)}
-              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none"
+              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none hover:translate-x-1"
               style={{ fontFamily: 'Playfair Display, serif', color: '#000', background: 'transparent', fontWeight: 700 }}
               aria-haspopup="true"
               aria-expanded={isStudyDropdownOpen}
@@ -641,8 +641,8 @@ export function Header() {
               }}
             >
               <span className="relative z-10">{t("header.nav.study")}</span>
-              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isStudyDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#77A656' }} />
-              <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isStudyDropdownOpen ? 'rotate-180' : ''}`} style={{ color: 'rgb(22 101 52)' }} />
+              <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-green-800 to-green-800 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
             </button>
             <AnimatePresence>
               {isStudyDropdownOpen && (
@@ -679,19 +679,19 @@ export function Header() {
           </div>
           <Link
             href="/blog"
-            className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
+            className="text-base font-bold text-black px-2 py-1 relative group transition-all duration-300 hover:text-green-700 hover:translate-x-1"
             style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
           >
             <span className="relative z-10">{t("header.nav.blog")}</span>
-            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-green-800 to-green-800 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
           <Link
             href="/chat-with-astrologer"
-            className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
+            className="text-base font-bold text-black px-2 py-1 relative group transition-all duration-300 hover:text-green-700 hover:translate-x-1"
             style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
           >
             <span className="relative z-10">{t("header.nav.chat_with_astrologer")}</span>
-            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-green-800 to-green-800 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
           {/* Shop Dropdown */}
           <div
@@ -753,19 +753,19 @@ export function Header() {
           </div>
           <Link
             href="/services"
-            className="text-base font-bold text-black px-2 py-1 relative group transition-colors"
+            className="text-base font-bold text-black px-2 py-1 relative group transition-all duration-300 hover:text-green-700 hover:translate-x-1"
             style={{ fontFamily: 'Playfair Display, serif', color: '#000', fontWeight: 700 }}
           >
             <span className="relative z-10">{t("header.nav.our_services")}</span>
-            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+            <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-green-800 to-green-800 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
           </Link>
           {/* Language Selector Icon (moved here) */}
           <div className="relative ml-2" ref={langDropdownRef}>
             {/* Language Button: Yellow, Dropdown White, Items Black */}
             <button
               onClick={() => setIsLangDropdownOpen((prev) => !prev)}
-              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none align-middle"
-              style={{ fontFamily: 'Playfair Display, serif', color: '#77A656', background: 'transparent', fontWeight: 700, display: 'flex', alignItems: 'center', minHeight: '32px', height: 'auto', lineHeight: 1, paddingTop: 0, paddingBottom: 0 }}
+              className="flex items-center text-base font-bold px-2 py-1 relative group transition-colors focus:outline-none align-middle hover:translate-x-1"
+              style={{ fontFamily: 'Playfair Display, serif', color: 'rgb(22 101 52)', background: 'transparent', fontWeight: 700, display: 'flex', alignItems: 'center', minHeight: '32px', height: 'auto', lineHeight: 1, paddingTop: 0, paddingBottom: 0 }}
               aria-haspopup="listbox"
               aria-expanded={isLangDropdownOpen}
               aria-controls="lang-menu"
@@ -777,8 +777,8 @@ export function Header() {
             >
               <span className="relative z-10 flex items-center" style={{lineHeight:1}}>{(LANGUAGE_NAMES as Record<string, string>)[lang] || t('header.language_selector.button') || 'Select Language'}</span>
               {/* Dropdown arrow styled to match Consultations menu, perfectly centered */}
-              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isLangDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#77A656', display: 'flex', alignItems: 'center', marginTop: '1px' }} />
-              <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-[#77A656] to-[#77A656] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
+              <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isLangDropdownOpen ? 'rotate-180' : ''}`} style={{ color: 'rgb(22 101 52)', display: 'flex', alignItems: 'center', marginTop: '1px' }} />
+              <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-green-800 to-green-800 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200 z-0" />
             </button>
             <AnimatePresence>
               {isLangDropdownOpen && (
@@ -953,7 +953,7 @@ export function Header() {
                 </button>
                 <div
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${isStudyOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}
-                  style={{ background: '#FDF9EF', borderRadius: '0.75rem' }}
+                  style={{ background: '#FEFBF2', borderRadius: '0.75rem' }}
                 >
                   <div className="py-2 px-2 flex flex-col gap-2">
                     <Link
@@ -982,10 +982,10 @@ export function Header() {
                 <button
                   onClick={() => setIsMobileLangMenuOpen((prev) => !prev)}
                   className="w-full font-semibold text-lg text-left flex items-center justify-between py-2 px-3 rounded-md bg-[#F3F1EB] border border-gray-200 shadow"
-                  style={{ color: '#77A656', fontFamily: 'Playfair Display, serif' }}
+                  style={{ color: 'rgb(22 101 52)', fontFamily: 'Playfair Display, serif' }}
                 >
                   {(LANGUAGE_NAMES as Record<string, string>)[lang] || 'Select Language'}
-                  <ChevronDown className={`ml-2 w-5 h-5 transition-transform ${isMobileLangMenuOpen ? 'rotate-180' : ''}`} style={{ color: '#77A656' }} />
+                  <ChevronDown className={`ml-1 w-5 h-5 transition-transform ${isMobileLangMenuOpen ? 'rotate-180' : ''}`} style={{ color: 'rgb(22 101 52)' }} />
                 </button>
                 <AnimatePresence>
                   {isMobileLangMenuOpen && (
@@ -1015,11 +1015,11 @@ export function Header() {
               <div className="flex gap-3 mt-6">
                 {/* <Link href="/cart" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 py-2 rounded-full bg-[#f7f7fa] text-black font-semibold text-center" style={{ fontFamily: 'Playfair Display, serif' }}>{t('header.cart')}</Link> */}
                 {/* Mobile Join Us button */}
-                <a href="/astrologer/auth/" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 py-2 rounded-full font-semibold text-center" style={{ background: '#77A656', color: '#fff', fontFamily: 'Playfair Display, serif' }}>{t('header.nav.join_us') || t('header.join_us') || 'Join Us'}</a>
+                <a href="/astrologer/auth/" onClick={() => setIsMobileMenuOpen(false)} className="flex-1 py-2 rounded-full font-semibold text-center transition-all duration-300 hover:translate-x-1" style={{ background: 'rgb(22 101 52)', color: 'white', border: 'none', fontFamily: 'Playfair Display, serif' }}>{t('header.nav.join_us') || t('header.nav.join_us') || 'Join Us'}</a>
                 {/* Mobile User Menu or Sign In button */}
                 {session?.user ? (
                   <div className="flex-1 flex flex-col gap-2">
-                    <div className="flex items-center gap-2 py-2 px-3 rounded-full bg-[#77A656] text-white">
+                    <div className="flex items-center gap-2 py-2 px-3 rounded-full bg-green-800 text-white">
                       <Avatar className="h-6 w-6">
                         <AvatarFallback className="text-xs font-bold bg-white/20 text-white">
                           {session.user.name ? session.user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U'}
@@ -1040,7 +1040,7 @@ export function Header() {
                     </div>
                   </div>
                 ) : (
-                  <button onClick={() => { signIn(); setIsMobileMenuOpen(false); }} className="flex-1 py-2 rounded-full font-semibold text-center" style={{ background: '#77A656', color: '#fff', border: 'none', fontFamily: 'Playfair Display, serif' }}>{t('header.auth.signin') || 'Sign In'}</button>
+                  <button onClick={() => { signIn(); setIsMobileMenuOpen(false); }} className="flex-1 py-2 rounded-full font-semibold text-center transition-all duration-300 hover:translate-x-1" style={{ background: 'rgb(22 101 52)', color: 'white', border: 'none', fontFamily: 'Playfair Display, serif' }}>{t('header.auth.signin') || 'Sign In'}</button>
                 )}
               </div>
             </nav>
