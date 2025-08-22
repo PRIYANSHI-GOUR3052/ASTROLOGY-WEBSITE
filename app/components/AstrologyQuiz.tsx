@@ -143,7 +143,7 @@ export function AstrologyQuiz() {
   const optionLetters = isMalayalam ? ['അ', 'ബ', 'ക', 'ഡ'] : isGujarati ? ['અ', 'બ', 'ક', 'ડ'] : ['A', 'B', 'C', 'D']
 
   return (
-    <section className="py-4 sm:py-12 md:py-16 rounded-3xl relative bg-gradient-to-b from-[#EADCF5] via-[#FBEAFF] to-[#F5ECFB] min-h-fit sm:min-h-screen sm:flex sm:items-center sm:justify-center overflow-hidden">
+    <section className="py-1 sm:py-8 md:py-16 rounded-3xl relative bg-[#FEFBF2] min-h-screen flex items-center justify-center overflow-hidden">
 
       {/* Floating cards, hidden on xs screens for clarity */}
       <div className="hidden xs:block">
@@ -171,26 +171,21 @@ export function AstrologyQuiz() {
       </div>
 
       <div className="container mx-auto px-2 sm:px-4 relative z-10 max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl">
-        <div className="text-center mb-3 sm:mb-6 md:mb-8 flex flex-col items-center pt-2 sm:pt-0">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-2 bg-gradient-to-r from-purple-800 via-pink-600 to-orange-400 text-transparent bg-clip-text">
-            {quizData.title}
+        <div className="text-center mb-6 sm:mb-8 flex flex-col items-center">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-2 text-black">
+            {isMalayalam ? 'ജ്യോതിഷ ക്വിസ്' : isGujarati ? 'જ്યോતિષ ક്વിઝ' : isMarathi ? 'ज्योतिष क्विझ' : isTelugu ? 'జ്యോతిష క്విజ్' : isTamil ? 'ஜோதிட வினாடி வினா' : isBengali ? 'জ্যোতিষ কুইজ' : isHindi ? 'ജ്യോതിഷ ക്വിസ്' : isEnglish ? 'Astrology Quiz' : quizData.title}
           </h2>
           <p className="text-base sm:text-lg max-w-xs sm:max-w-md text-green-800">
             {isMalayalam ? 'ഈ രസകരമായ ചോദ്യങ്ങൾ ഉപയോഗിച്ച് നിങ്ങളുടെ ജ്യോതിഷ അറിവ് പരീക്ഷിക്കുക!' : isGujarati ? 'આ મજેદાર પ્રશ્નો સાથે તમારું જ്યോતિષ જ്ઞાન તપાસો!' : isMarathi ? 'या मजेदार प्रश्नांसह तुमचे ज्योतिष ज्ञान तपासा!' : isTelugu ? 'ఈ ఆసక్తికరమైన ప్రశ్నలతో మీ జ്యోతిష జ്ఞానాన్ని పరీక్షించండి!' : isTamil ? 'இந்த வேடிக்கையான கேள்விகளுடன் உங்கள் ஜோதிட அறிவை சோதிக்கவும்!' : isBengali ? 'এই মজার প্রশ্নগুলির সাথে আপনার জ্যোতিষ জ্ঞান পরীক্ষা করুন!' : isHindi ? 'ഈ രസകരമായ ചോദ്യങ്ങൾ ഉപയോഗിച്ച് നിങ്ങളുടെ ജ്യോതിഷ അറിവ് പരീക്ഷിക്കുക!' : isEnglish ? 'Test your astrology knowledge with these fun questions!' : quizData.subtitle}
           </p>
         </div>
 
-        <Card className="bg-white rounded-2xl shadow-xl overflow-hidden mt-1 sm:mt-6 md:mt-8 max-w-full sm:max-w-2xl mx-auto border-none mb-4 sm:mb-0">
-          {/* Progress Indicator */}
-          <div className="bg-gray-50 px-4 sm:px-6 py-3 border-b border-gray-200">
-            <p className="text-sm sm:text-base font-semibold text-gray-600 text-center">
-              Q{currentQuestionIndex + 1} of {questions.length}
-            </p>
-          </div>
-
-          {/* Question Container */}
-          <div className="p-4 sm:p-6">
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 sm:p-5 mb-6 sm:mb-8 border border-purple-100 mx-2 sm:mx-0">
+        <Card className="bg-white rounded-2xl shadow-xl overflow-hidden mt-3 sm:mt-8 max-w-full sm:max-w-2xl mx-auto border-none">
+          <div className="relative bg-[#6A0DAD] text-white p-4 sm:p-6 pb-10 sm:pb-12 rounded-t-2xl transform -skew-y-3 origin-bottom-left">
+            <div className="transform skew-y-3 px-2 sm:px-4 py-2 flex items-center">
+              <h3 className="text-lg sm:text-2xl font-bold uppercase text-white">{isMalayalam ? 'ചോദ്യം' : isGujarati ? 'પ્રશ્ન' : isMarathi ? 'प्रश्न' : isTelugu ? 'ప્రశ્న' : isTamil ? 'கேள்வி' : isBengali ? 'প্রশ্ন' : isHindi ? 'ചോദ്യം' : isEnglish ? 'Question' : quizData.questionHeader}</h3>
+            </div>
+            <div className="absolute -bottom-5 sm:-bottom-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] min-h-12 sm:min-h-16 bg-white rounded-xl shadow-lg flex items-center justify-center border border-gray-200 px-3 sm:px-6 py-2 sm:py-3">
               {currentQuestion && (
                 <p className="text-base sm:text-lg md:text-xl font-bold text-gray-800 text-center leading-relaxed px-2 sm:px-4">
                   {currentQuestion.question}
@@ -198,56 +193,54 @@ export function AstrologyQuiz() {
               )}
             </div>
 
-            {/* Answer Options */}
-            <div className="px-2 sm:px-0">
-              {!quizCompleted ? (
-                <RadioGroup onValueChange={(value) => setSelectedAnswer(parseInt(value))} value={selectedAnswer !== null ? selectedAnswer.toString() : ''}>
-                  <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
-                    {currentQuestion.options.map((option: string, index: number) => (
-                      <motion.div
-                        key={index}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="relative"
+          <CardContent className="p-4 sm:p-8 pt-12 sm:pt-16">
+            {!quizCompleted ? (
+              <RadioGroup onValueChange={(value) => setSelectedAnswer(parseInt(value))} value={selectedAnswer !== null ? selectedAnswer.toString() : ''}>
+                <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
+                  {currentQuestion.options.map((option: string, index: number) => (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="relative"
+                    >
+                      <Button
+                        variant="default"
+                        className={`w-full justify-start text-left py-4 sm:py-6 px-3 sm:px-4 rounded-xl text-base sm:text-lg font-semibold
+                          ${selectedAnswer === index
+                            ? (index === currentQuestion.correctAnswerIndex ? 'bg-green-500 text-white' : 'bg-red-500 text-white')
+                            : 'bg-[#EFE6F7] text-[#6A0DAD] hover:bg-[#E0CCF5]'}
+                          ${showFeedback && index === currentQuestion.correctAnswerIndex && 'bg-green-500 text-white'}
+                        `}
+                        onClick={() => handleAnswer(index)}
+                        disabled={showFeedback}
                       >
-                        <Button
-                          variant="default"
-                          className={`w-full justify-start text-left py-4 sm:py-6 px-3 sm:px-4 rounded-xl text-base sm:text-lg font-semibold
-                            ${selectedAnswer === index
-                              ? (index === currentQuestion.correctAnswerIndex ? 'bg-green-500 text-white' : 'bg-red-500 text-white')
-                              : 'bg-[#EFE6F7] text-[#6A0DAD] hover:bg-[#E0CCF5]'}
-                            ${showFeedback && index === currentQuestion.correctAnswerIndex && 'bg-green-500 text-white'}
-                          `}
-                          onClick={() => handleAnswer(index)}
-                          disabled={showFeedback}
-                        >
-                          <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 font-bold text-base sm:text-lg">{optionLetters[index]}.</span>
-                          <span className="ml-7 sm:ml-8">{option}</span>
-                        </Button>
-                      </motion.div>
-                    ))}
-                  </div>
-                </RadioGroup>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="text-center"
-                >
-                  <h4 className="text-xl sm:text-2xl font-bold text-[#6A0DAD] mb-3 sm:mb-4">
-                    {quizData.completedTitle}
-                  </h4>
-                  <p className="text-lg sm:text-xl text-gray-700 mb-4 sm:mb-6">
-                    {t('astrologyQuiz.scoreText').replace('{{score}}', score.toString()).replace('{{total}}', questions.length.toString())}
-                  </p>
-                  <Button onClick={resetQuiz} className="bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg hover:opacity-90">
-                    {quizData.tryAgainButton}
-                  </Button>
-                </motion.div>
-              )}
-            </div>
-          </div>
+                        <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 font-bold text-base sm:text-lg">{optionLetters[index]}.</span>
+                        <span className="ml-7 sm:ml-8">{option}</span>
+                      </Button>
+                    </motion.div>
+                  ))}
+                </div>
+              </RadioGroup>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center"
+              >
+                <h4 className="text-xl sm:text-2xl font-bold text-[#6A0DAD] mb-3 sm:mb-4">
+                  {isMalayalam ? 'ക്വിസ് പൂർത്തിയായി!' : isGujarati ? 'ક്વિઝ પൂર્ણ થયું!' : isMarathi ? 'क्विझ पूर्ण झाले!' : isTelugu ? 'క്విజ్ పൂర്తయింది!' : isTamil ? 'வினாடி வினா முடிந்தது!' : isBengali ? 'কুইজ সম্পন্ন!' : isHindi ? 'ക്വിസ് പൂർത്തിയായി!' : isEnglish ? 'Quiz Completed!' : quizData.completedTitle}
+                </h4>
+                <p className="text-lg sm:text-xl text-gray-700 mb-4 sm:mb-6">
+                  {isMalayalam ? `നിങ്ങളുടെ സ്കോർ: ${score}/${questions.length}` : isGujarati ? `તુમચો સ્કોર: ${score} મધ્યે ${questions.length}` : isMarathi ? `तुमचा स्कोर: ${score} मध्ये ${questions.length}` : isTelugu ? `మీ స్కోరు: ${score} లో ${questions.length}` : isTamil ? `உங்கள் மதிப்பெண்: ${score} இல் ${questions.length}` : isBengali ? `আপনার স্কোর: ${score} এর মধ্যে ${questions.length}` : isHindi ? `आपका स्कोर: ${score}/${questions.length}` : isEnglish ? `Your score: ${score} out of ${questions.length}` : (t('astrologyQuiz.scoreText') ? t('astrologyQuiz.scoreText').replace('{{score}}', score.toString()).replace('{{total}}', questions.length.toString()) : `Score: ${score}/${questions.length}`)}
+                </p>
+                <Button onClick={resetQuiz} className="bg-gradient-to-r from-[#6A0DAD] to-[#FF8C00] text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg hover:opacity-90">
+                  {isMalayalam ? 'വീണ്ടും ശ്രമിക്കുക' : isGujarati ? 'ફરીથી પ્રયાસ કરો' : isMarathi ? 'पुन्हा प्रयत्न करा' : isTelugu ? 'మళ్లీ ప్రయత్నించండి' : isTamil ? 'மீண்டும் முயற்சிக்கவும்' : isBengali ? 'আবার চেষ্টা করুন' : isHindi ? 'വീണ്ടും ശ്രമിക്കുക' : isEnglish ? 'Try Again' : quizData.tryAgainButton}
+                </Button>
+              </motion.div>
+            )}
+          </CardContent>
         </Card>
       </div>
     </section>

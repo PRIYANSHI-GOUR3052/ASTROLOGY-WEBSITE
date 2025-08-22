@@ -147,7 +147,6 @@ export default function AboutPage() {
                   <div className="grid md:grid-cols-2 gap-6">
                     {coreValues.map((value, idx) => (
                       <motion.div
-                      
                         key={idx}
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}

@@ -721,32 +721,55 @@ export function Header() {
                   tabIndex={-1}
                   onKeyDown={e => { if (e.key === 'Escape') setIsShopDropdownOpen(false); }}
                 >
-                  <div className="flex flex-nowrap items-stretch gap-2">
-                    <Link
-                      href="/shop"
-                      onClick={() => setIsShopDropdownOpen(false)}
-                      className="px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-md transition-colors whitespace-nowrap"
-                      style={{ fontFamily: 'Playfair Display, serif' }}
-                    >
-                      🏪 Home
-                    </Link>
-                    <Link
-                      href="/shop/categories"
-                      onClick={() => setIsShopDropdownOpen(false)}
-                      className="px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-md transition-colors whitespace-nowrap"
-                      style={{ fontFamily: 'Playfair Display, serif' }}
-                    >
-                      📂 Categories
-                    </Link>
-                    <Link
-                      href="/shop/all-products"
-                      onClick={() => setIsShopDropdownOpen(false)}
-                      className="px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-md transition-colors whitespace-nowrap"
-                      style={{ fontFamily: 'Playfair Display, serif' }}
-                    >
-                      🔍 All Products
-                    </Link>
-                  </div>
+                  <Link
+                    href="/shop"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    🏪 Shop Home
+                  </Link>
+                  <Link
+                    href="/shop/all-products"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    🔍 All Products
+                  </Link>
+                  <Link
+                    href="/shop/categories"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    📂 Browse Categories
+                  </Link>
+                  <hr className="my-2 border-gray-200" />
+                  <Link
+                    href="/shop/category/gemstones-crystals"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    💎 Gemstones & Crystals
+                  </Link>
+                  <Link
+                    href="/shop/category/rudraksha-malas"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    📿 Rudraksha & Malas
+                  </Link>
+                  <Link
+                    href="/shop/category/spiritual-jewelry"
+                    onClick={() => setIsShopDropdownOpen(false)}
+                    className="block px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    💍 Spiritual Jewelry
+                  </Link>
                 </motion.div>
               )}
             </AnimatePresence>
