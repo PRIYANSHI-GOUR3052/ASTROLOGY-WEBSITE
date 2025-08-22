@@ -1,4 +1,29 @@
 ﻿{
+  "zodiac": {
+    "shopByZodiac": "Nach Tierkreiszeichen Einkaufen",
+    "showMoreSigns": "Mehr Zeichen Anzeigen",
+    "showLessSigns": "Weniger Zeichen Anzeigen",
+    "signs": {
+      "aries": "Widder",
+      "taurus": "Stier",
+      "gemini": "Zwillinge",
+      "cancer": "Krebs",
+      "leo": "Löwe",
+      "virgo": "Jungfrau",
+      "libra": "Waage",
+      "scorpio": "Skorpion",
+      "sagittarius": "Schütze",
+      "capricorn": "Steinbock",
+      "aquarius": "Wassermann",
+      "pisces": "Fische"
+    }
+  },
+  "statistics": {
+    "kundliServed": "Kundlis bedient",
+    "yearsOfLegacy": "Jahre des Vermächtnisses",
+    "consultationsGiven": "Beratungen gegeben",
+    "awardsInOccult": "Preise in okkulten Wissenschaften"
+  },
   "hero": {
     "mainHeading": "Schalte die Geheimnisse des Kosmos frei",
     "subHeading": "Personalisierte vedische Astrologie, um Ihren Weg zu beleuchten",
@@ -264,26 +289,42 @@
     }
   },
   "astrologerProfile": {
-    "heading": "Lernen Sie Dr. Narendra kennen – Ihr vertrauenswürdiger Astrologe",
-    "subheading": "Experte für vedische Astrologie mit jahrzehntelanger Erfahrung",
-    "credential1": {
-      "title": "Experte für vedische Astrologie",
-      "description": "Dr. Narendra ist ein renommierter vedischer Astrologe mit über 15 Jahren Erfahrung in der traditionellen indischen Astrologie. Er ist spezialisiert auf Geburtshoroskop-Analysen, planetare Heilmittel und Lebensberatung durch alte vedische Weisheit."
+    "heading": "Unser Hauptastrologe",
+    "subheading": "Experte für vedische Astrologie mit über 20 Jahren Erfahrung",
+    "credentials": {
+      "0": {
+        "title": "Experte für vedische Astrologie",
+        "description": "Über zwei Jahrzehnte Studium und Praxis traditioneller vedischer Astrologietechniken. Spezialisiert auf Geburtshoroskop-Analysen, planetare Doshas und Heilmittel."
+      },
+      "1": {
+        "title": "PhD in Astrologiewissenschaften",
+        "description": "PhD in Astrologiewissenschaften von einer renommierten Universität. Verbindet tiefes Studium alter Texte mit moderner Forschung."
+      },
+      "2": {
+        "title": "Experte für Numerologie und Tarot",
+        "description": "Spezialisierung in Numerologie und Tarot-Lesung, bietet umfassende Beratung kombiniert mit Astrologie."
+      }
     },
-    "credential2": {
-      "title": "PhD in Astrologie & Philosophie",
-      "description": "Mit einem PhD in Astrologie und Philosophie verbindet Dr. Narendra traditionelles Wissen mit modernem Verständnis, um umfassende astrologische Beratungen und spirituelle Führung zu bieten."
+    "specializations": {
+      "heading": "Spezialisierungen",
+      "list": [
+        "Geburtshoroskop-Analyse",
+        "Planetare Dosha-Heilmittel",
+        "Eheliche Kompatibilität",
+        "Karriereberatung",
+        "Geschäftsastrologie",
+        "Gesundheitsastrologie"
+      ]
     },
-    "beliefHi": "Ich glaube, dass das Leben jedes Menschen einzigartig ist und jedes Problem eine Lösung hat.",
-    "beliefEn": "I believe that every individual's life is unique and every problem has a solution.",
-    "experienceHi": "15+ Jahre Erfahrung und Tausende zufriedene Kunden",
-    "experienceEn": "15+ Years of Experience and Thousands of Satisfied Clients",
-    "bookAppointment": "Beratung buchen"
+    "experience": {
+      "heading": "Erfahrung",
+      "text": "Mit über 20 Jahren Erfahrung hat er über 10.000 Geburtshoroskope analysiert und Kunden weltweit beraten."
+    }
   },
   "about": {
     "banner": {
       "heading": "Über Nakshatra Gyaan",
-      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
+      "text": "Seit über zwei Jahrzehnten haben unsere erfahrenen Astrologen alte Weisheit mit modernen Erkenntnissen verbunden und Suchende auf ihrer spirituellen Reise mit präziser und lebensverändernder Führung geleitet."
     },
     "tabs": {
       "0": "Unsere Reise",
@@ -377,6 +418,12 @@
       "link1": { "title": "Edelsteine und ihre Kräfte", "url": "/blog/gemstones-and-their-powers" },
       "link2": { "title": "Grundlagen der Numerologie", "url": "/blog/numerology-basics" },
       "link3": { "title": "Der Einfluss der Planeten", "url": "/blog/the-influence-of-planets" }
+    },
+    "statistics": {
+      "kundli_served": "Kundli Bedient",
+      "years_legacy": "Jahre des Vermächtnisses",
+      "consultations_given": "Beratungen Gegeben",
+      "awards_occult": "Preise im Okkultismus"
     }
   },
   "astrologyQuiz": {
@@ -577,7 +624,47 @@
         "button": "Mehr lesen →"
       }
     },
-    "scrollToTop": "Nach oben"
+    "scrollToTop": "Nach oben",
+    "newsletter": {
+      "title": "Bleiben Sie informiert mit unserem",
+      "titleHighlight": "himmlischen Newsletter",
+      "subtitle": "Regelmäßige Updates stellen sicher, dass Leser Zugang zu frischen kosmischen Perspektiven haben und machen Nakshatra Gyaan zu einer Pflichtlektüre.",
+      "placeholder": "E-Mail-Adresse",
+      "button": "Abonnieren →"
+    },
+    "links": {
+      "keepExploring": "Weiter erkunden",
+      "connect": "Verbinden",
+      "legal": "Rechtlich",
+      "quickLinks": {
+        "home": "Startseite",
+        "about": "Über uns",
+        "services": "Dienstleistungen",
+        "reviews": "Bewertungen",
+        "blog": "Blog",
+        "contact": "Kontakt"
+      },
+      "legalLinks": {
+        "terms": "Allgemeine Geschäftsbedingungen",
+        "privacy": "Datenschutzrichtlinie",
+        "credits": "Seiten-Credits"
+      }
+    },
+    "brand": {
+      "name": "Nakshatra Wissen",
+      "taglinePrefix": "Entworfen von ",
+      "team": "Scalixity Team",
+      "copyright": "© Nakshatra Wissen. Alle Rechte vorbehalten.",
+      "poweredByPrefix": "Angetrieben von ",
+      "energy": "Kosmische Energie",
+      "language": "🌍 DE Deutsch"
+    },
+    "social": {
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "youtube": "YouTube"
+    }
   },
   "blog": {
     "recent": { "heading": "Neueste Blogs" },

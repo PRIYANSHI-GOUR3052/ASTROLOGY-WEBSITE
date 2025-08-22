@@ -1,4 +1,23 @@
 {
+  "zodiac": {
+    "shopByZodiac": "Shop By Zodiac",
+    "showMoreSigns": "Show More Signs",
+    "showLessSigns": "Show Less Signs",
+    "signs": {
+      "aries": "Aries",
+      "taurus": "Taurus",
+      "gemini": "Gemini",
+      "cancer": "Cancer",
+      "leo": "Leo",
+      "virgo": "Virgo",
+      "libra": "Libra",
+      "scorpio": "Scorpio",
+      "sagittarius": "Sagittarius",
+      "capricorn": "Capricorn",
+      "aquarius": "Aquarius",
+      "pisces": "Pisces"
+    }
+  },
   "hero": {
     "mainHeading": "Unlock the Secrets of the Cosmos",
     "subHeading": "Discover your future with expert astrological guidance, personalized readings, and ancient wisdom.",
@@ -75,6 +94,32 @@
     "card8Desc": "Explore the transformative path of Tantra with expert guidance. Our consultations focus on spiritual growth, healing, and meditation practices.",
     "card9Title": "Tarot Reading",
     "card9Desc": "Unlock the mystical secrets of the cards and gain profound insight into your life's journey."
+  },
+  "astrologerProfile": {
+    "heading": "Meet Our Expert Astrologer",
+    "subheading": "Discover Your Destiny Through Ancient Wisdom and Modern Expertise",
+    "credentials": {
+      "0": {
+        "title": "Vedic Astrology Expert",
+        "description": "Specialized in Vedic astrology with over 15 years of experience in birth chart analysis, planetary positions, and cosmic influences. Expert in providing accurate predictions and life guidance based on ancient Vedic wisdom."
+      },
+      "1": {
+        "title": "PhD in Astrology & Philosophy",
+        "description": "Holds a Doctorate in Astrology and Philosophy from prestigious institutions. Combines traditional knowledge with modern research to offer comprehensive astrological consultations and remedies."
+      }
+    },
+    "belief": {
+      "hindi": "हमारा मानना है कि प्रत्येक व्यक्ति के पास एक अनूठा कॉस्मिक ब्लूप्रिंट होता है जो उनके जीवन की यात्रा का मार्गदर्शन करता है।",
+      "english": "We believe that every individual has a unique cosmic blueprint that guides their life's journey."
+    },
+    "experience": {
+      "hindi": "वैदिक ज्योतिष में दशकों के संयुक्त अनुभव के साथ, हमने हजारों लोगों को उनके जीवन में स्पष्टता, उद्देश्य और दिशा खोजने में मदद की है।",
+      "english": "With decades of combined experience in Vedic astrology, we have helped thousands find clarity, purpose, and direction in their lives."
+    },
+    "additionalInfo": "Our consultations combine traditional Vedic wisdom with modern understanding to provide you with the most accurate and helpful guidance.",
+    "cta": {
+      "button": "Book Your Consultation Now"
+    }
   },
   "header": {
     "logo": {
@@ -269,6 +314,12 @@
       "link1": { "title": "Gemstones and Their Powers", "url": "/blog/gemstones-and-their-powers" },
       "link2": { "title": "Numerology Basics", "url": "/blog/numerology-basics" },
       "link3": { "title": "The Influence of Planets", "url": "/blog/the-influence-of-planets" }
+    },
+    "statistics": {
+      "kundli_served": "Kundli Served",
+      "years_legacy": "Years of Legacy", 
+      "consultations_given": "Consultations Given",
+      "awards_occult": "Awards in Occult"
     }
   },
   "astrologyQuiz": {
@@ -620,11 +671,11 @@
       "emailTitle": "Email",
       "emailNote": "We reply within 24 hours",
       "locationTitle": "Location",
-      "addressLine1": "1- KHA -18, Jawahar Nagar",
-      "addressLine2": "Jaipur",
-      "addressCity": "Jaipur",
-      "addressState": "Rajasthan",
-      "addressZip": "302004",
+      "addressLine1": "15, Lashkar Road, Civil Lines",
+      "addressLine2": "Gwalior",
+      "addressCity": "Gwalior",
+      "addressState": "Madhya Pradesh",
+      "addressZip": "474001",
       "addressCountry": "India",
       "phoneNumber": "+91-7229808887"
     },
@@ -638,7 +689,7 @@
       "success": "Message sent successfully! We'll get back to you soon.",
       "error": "Something went wrong. Please try again."
     },
-    "brand": "nakshatra"
+    "brand": "nakshatra gyan"
   },
   "footer": {
     "newsletter": {
@@ -671,6 +722,7 @@
       "quickLinks": {
         "home": "Home",
         "about": "About",
+        "products": "Products",
         "services": "Services",
         "reviews": "Reviews",
         "blog": "Blog",
@@ -764,6 +816,38 @@
     },
     "about": {
       "heading": "About Nakshatra Gyaan",
+      "journey": {
+        "heading": "Our Journey",
+        "description": "Nakshatra Gyaan was founded in 2002 with a vision to make ancient astrological wisdom accessible and practical for modern lives. Over the years, we have helped thousands discover their true potential, overcome challenges, and find clarity on their life path."
+      },
+      "philosophy": {
+        "heading": "Our Philosophy",
+        "description": "We believe every individual has a unique cosmic blueprint. Our mission is to help you understand and harness the power of your celestial connections for a more fulfilling life. We blend Vedic and modern astrology, spiritual counseling, and practical remedies for holistic growth."
+      },
+      "milestone": {
+        "label": "Milestone",
+        "description": "In 2015, we launched our online platform, reaching seekers in over 30 countries and building a global community of astrology enthusiasts."
+      },
+      "values": {
+        "label": "Values",
+        "description": "Integrity, compassion, and empowerment are at the heart of everything we do. We are committed to ethical guidance and lifelong learning."
+      },
+      "quickFacts": {
+        "heading": "Quick Facts",
+        "fact1": "20+ years of astrological guidance",
+        "fact2": "10,000+ consultations delivered",
+        "fact3": "500+ workshops and courses",
+        "fact4": "Global community: 50,000+ members",
+        "fact5": "Personalized remedies and solutions",
+        "fact6": "Ethical, confidential, and compassionate service"
+      },
+      "recommendedResources": {
+        "heading": "Recommended Resources",
+        "resource1": "Understanding Your Birth Chart",
+        "resource2": "Gemstones and Their Powers",
+        "resource3": "Numerology Basics",
+        "resource4": "The Influence of Planets"
+      },
       "founder": {
         "heading": "A Message from Our Founder",
         "p1": "Astrology is not just about glimpsing the future—it is a sacred mirror that reflects the soul's journey. It empowers us to understand who we truly are, to make choices in alignment with our higher self, and to walk through life with intention, grace, and spiritual clarity.",
@@ -875,5 +959,85 @@
       "subheading": "Get your Kundali matched by experts. Accurate, confidential, and fast!",
       "button": "Get Started"
     }
+  },
+  "astrologyServices": {
+    "pageTitle": "Astrology Services",
+    "pageDescription": "Unlock the mysteries of the stars with our expert astrology services—personalized horoscopes, birth chart analysis, compatibility readings, and more, all designed to illuminate your path and empower your journey.",
+    "tabs": {
+      "overview": "Overview",
+      "whatIsAstrology": "What is Astrology?",
+      "benefits": "Benefits",
+      "faqs": "FAQs"
+    },
+    "overview": {
+      "title": "Astrology: Your Cosmic Compass",
+      "content": [
+        "Astrology is one of humanity's oldest spiritual sciences—a profound system of understanding the self and the universe through the movements and relationships of celestial bodies. At Nakshatra Gyaan, we honor this timeless Vedic tradition by fusing it with thoughtful modern interpretation, providing meaningful and actionable insights for today's world.",
+        "Every individual has a unique cosmic blueprint shaped by the planetary alignments at the time of their birth. Our experienced astrologers decode this intricate map through detailed natal chart readings (Janam Kundali), offering deep insights into your personality, strengths, challenges, and karmic patterns.",
+        "Beyond analysis, we offer practical, Vedic-based remedies such as gemstone recommendations, mantra prescriptions, personalized rituals, and yantras to help mitigate malefic planetary influences and enhance positive energy in your life."
+      ]
+    },
+    "whatIsAstrology": {
+      "title": "What is Astrology?",
+      "content": [
+        "Astrology is not merely a discipline—it is a divine science, a sacred dialogue between the cosmos and the human soul. Revered across cultures and centuries, astrology deciphers the celestial language of the stars, revealing how the rhythms of the universe intricately interweave with the destiny of every individual.",
+        "More than a predictive tool, astrology is a profound mirror of consciousness. It reflects your inner architecture—your fears, gifts, desires, patterns, and potential—and invites you into a state of awakened self-awareness.",
+        "Rooted in the luminous Vedic tradition and enriched by thousands of years of spiritual scholarship, astrology empowers you to find clarity in confusion, rhythm amidst chaos, and divinity in the ordinary."
+      ]
+    },
+    "benefits": {
+      "title": "Benefits of Astrology",
+      "benefits": [
+        {
+          "title": "Personalized Guidance",
+          "description": "Receive insights tailored to your unique birth chart, helping you make empowered decisions in love, career, health, and more."
+        },
+        {
+          "title": "Self-Discovery & Growth",
+          "description": "Understand your strengths, challenges, and soul lessons—unlocking your highest potential and fostering personal growth."
+        },
+        {
+          "title": "Relationship Harmony",
+          "description": "Explore compatibility, improve communication, and deepen emotional bonds with loved ones through astrological insights."
+        },
+        {
+          "title": "Timing & Opportunity",
+          "description": "Identify auspicious moments for important actions, harness planetary cycles, and navigate challenges with cosmic timing."
+        },
+        {
+          "title": "Holistic Wellbeing",
+          "description": "Integrate mind, body, and spirit with remedies, affirmations, and spiritual practices rooted in Vedic wisdom."
+        },
+        {
+          "title": "Confidential & Compassionate",
+          "description": "Every session is handled with empathy, respect, and strict confidentiality—your journey is sacred to us."
+        }
+      ]
+    },
+    "faqs": {
+      "title": "Frequently Asked Questions",
+      "questions": [
+        {
+          "question": "What can astrology help me with?",
+          "answer": "Astrology can provide guidance on relationships, career, health, finances, spiritual growth, and more. It helps you understand your strengths, challenges, and the best timing for important decisions."
+        },
+        {
+          "question": "Is my information confidential?",
+          "answer": "Absolutely. All consultations and birth details are kept strictly confidential and used only for your personalized analysis."
+        },
+        {
+          "question": "How do I book a session?",
+          "answer": "Simply select your desired service, fill in your details, and choose a convenient time. Our team will confirm your booking and guide you through the process."
+        },
+        {
+          "question": "Can I get remedies for my problems?",
+          "answer": "Yes. Our astrologers provide practical remedies—mantras, rituals, gemstones, and lifestyle advice—tailored to your unique chart and concerns."
+        },
+        {
+          "question": "What makes Nakshatra Gyaan different?",
+          "answer": "We combine ancient Vedic wisdom with modern insight, offering compassionate, personalized guidance and a holistic approach to astrology. Your journey is our priority."
+        }
+      ]
+    }
   }
-} 
+}

@@ -316,11 +316,11 @@ export function DailyHoroscope() {
     <section className="min-h-screen bg-white pt-6 pb-10 font-sans">
       <div className="max-w-8xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
         {/* Banner Heading */}
-        <div className="w-full rounded-3xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] py-7 px-2 sm:px-4 md:px-10 lg:px-16 mb-8 flex flex-col items-center justify-center shadow-md border border-[#f3e8ff]">
+        <div className="w-full rounded-3xl py-7 px-2 sm:px-4 md:px-10 lg:px-16 mb-8 flex flex-col items-center justify-center shadow-md border border-[#e6c77e]" style={{ backgroundColor: '#FEFBF2' }}>
           <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-extrabold text-black mb-3 text-center drop-shadow-lg tracking-tight">
             {t('dailyHoroscope.heading')}
           </h1>
-          <p className="text-base xs:text-lg md:text-2xl text-gray-700 text-center max-w-2xl">
+          <p className="text-base xs:text-lg md:text-2xl text-center max-w-2xl" style={{ color: '#166534' }}>
             {t('dailyHoroscope.subheading')}
           </p>
         </div>

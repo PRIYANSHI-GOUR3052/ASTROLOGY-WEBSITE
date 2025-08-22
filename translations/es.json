@@ -1,4 +1,29 @@
 ﻿{
+  "zodiac": {
+    "shopByZodiac": "Comprar por Zodiaco",
+    "showMoreSigns": "Mostrar Más Signos",
+    "showLessSigns": "Mostrar Menos Signos",
+    "signs": {
+      "aries": "Aries",
+      "taurus": "Tauro",
+      "gemini": "Géminis",
+      "cancer": "Cáncer",
+      "leo": "Leo",
+      "virgo": "Virgo",
+      "libra": "Libra",
+      "scorpio": "Escorpio",
+      "sagittarius": "Sagitario",
+      "capricorn": "Capricornio",
+      "aquarius": "Acuario",
+      "pisces": "Piscis"
+    }
+  },
+  "statistics": {
+    "kundliServed": "Kundlis atendidos",
+    "yearsOfLegacy": "Años de legado",
+    "consultationsGiven": "Consultas realizadas",
+    "awardsInOccult": "Premios en ciencias ocultas"
+  },
   "hero": {
     "mainHeading": "Desbloquear los secretos del cosmos",
     "subHeading": "Astrología védica personalizada para iluminar tu camino",
@@ -265,26 +290,35 @@
     }
   },
   "astrologerProfile": {
-    "heading": "Conozca al Dr. Narendra - Su astrólogo de confianza",
-    "subheading": "Astrólogo védico experto con décadas de experiencia",
-    "credential1": {
-      "title": "Experto en astrología védica",
-      "description": "El Dr. Narendra es un renombrado astrólogo védico con más de 15 años de experiencia en astrología india tradicional. Se especializa en análisis de cartas natales, remedios planetarios y orientación vital a través de la sabiduría védica antigua."
+    "heading": "Conoce a Nuestro Experto Astrólogo",
+    "subheading": "Descubre tu Destino a Través de la Sabiduría Antigua y la Experiencia Moderna",
+    "credentials": {
+      "0": {
+        "title": "Experto en Astrología Védica",
+        "description": "Especializado en astrología védica con más de 15 años de experiencia en análisis de cartas natales, posiciones planetarias e influencias cósmicas. Experto en proporcionar predicciones precisas y orientación vital basada en la sabiduría védica antigua."
+      },
+      "1": {
+        "title": "PhD en Astrología y Filosofía",
+        "description": "Posee un Doctorado en Astrología y Filosofía de instituciones prestigiosas. Combina el conocimiento tradicional con la investigación moderna para ofrecer consultas astrológicas integrales y remedios."
+      }
     },
-    "credential2": {
-      "title": "Doctorado en Astrología y Filosofía",
-      "description": "Con un doctorado en astrología y filosofía, el Dr. Narendra combina el conocimiento tradicional con la comprensión moderna para brindar consultas astrológicas integrales y orientación espiritual."
+    "belief": {
+      "hindi": "हमारा मानना है कि प्रत्येक व्यक्ति के पास एक अनूठा कॉस्मिक ब्लूप्रिंट होता है जो उनके जीवन की यात्रा का मार्गदर्शन करता है।",
+      "english": "We believe that every individual has a unique cosmic blueprint that guides their life's journey."
     },
-    "beliefHi": "Creo que la vida de cada persona es única y que todo problema tiene solución.",
-    "beliefEn": "I believe that every individual's life is unique and every problem has a solution.",
-    "experienceHi": "Más de 15 años de experiencia y miles de clientes satisfechos",
-    "experienceEn": "15+ Years of Experience and Thousands of Satisfied Clients",
-    "bookAppointment": "Reservar consulta"
+    "experience": {
+      "hindi": "वैदिक ज्योतिष में दशकों के संयुक्त अनुभव के साथ, हमने हजारों लोगों को उनके जीवन में स्पष्टता, उद्देश्य और दिशा खोजने में मदद की है।",
+      "english": "With decades of combined experience in Vedic astrology, we have helped thousands find clarity, purpose, and direction in their lives."
+    },
+    "additionalInfo": "Nuestras consultas combinan la sabiduría védica tradicional con la comprensión moderna para proporcionarte la orientación más precisa y útil.",
+    "cta": {
+      "button": "Reserva tu Consulta Ahora"
+    }
   },
   "about": {
     "banner": {
       "heading": "Acerca de Nakshatra Gyaan",
-      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
+      "text": "Durante más de dos décadas, nuestros astrólogos expertos han combinado la sabiduría antigua con conocimientos modernos, guiando a los buscadores en su viaje espiritual con orientación precisa y transformadora."
     },
     "tabs": {
       "0": "Nuestro viaje",
@@ -378,6 +412,12 @@
       "link1": { "title": "Las piedras preciosas y sus poderes", "url": "/blog/gemstones-and-their-powers" },
       "link2": { "title": "Conceptos básicos de numerología", "url": "/blog/numerology-basics" },
       "link3": { "title": "La influencia de los planetas", "url": "/blog/the-influence-of-planets" }
+    },
+    "statistics": {
+      "kundli_served": "Kundli Servidos",
+      "years_legacy": "Años de Legado",
+      "consultations_given": "Consultas Realizadas",
+      "awards_occult": "Premios en Ocultismo"
     }
   },
   "astrologyQuiz": {
@@ -551,6 +591,7 @@
       "quickLinks": {
         "home": "Inicio",
         "about": "Acerca de",
+        "products": "Productos",
         "services": "Servicios",
         "reviews": "Reseñas",
         "blog": "Blog",
