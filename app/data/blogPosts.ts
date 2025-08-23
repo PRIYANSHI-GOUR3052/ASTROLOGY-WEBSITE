@@ -400,6 +400,52 @@ export const blogPosts: Record<string, BlogPost> = {
     date: "2024-04-15",
     category: "Spiritual Healing"
   },
+  "vastu-shastra-tips": {
+    title: {
+      en: "Vastu Shastra Tips",
+      hi: "वास्तु शास्त्र के टिप्स",
+      es: "Consejos de Vastu Shastra",
+      fr: "Conseils de Vastu Shastra",
+      de: "Vastu Shastra Tipps",
+      zh: "风水学技巧",
+      ar: "نصائح فاستو شاسترا",
+      ru: "Советы по Васту Шастре"
+    },
+    description: {
+      en: "Discover the ancient science of Vastu Shastra and learn how to harmonize your living spaces with cosmic energies for prosperity, health, and happiness.",
+      hi: "वास्तु शास्त्र के प्राचीन विज्ञान की खोज करें और सीखें कि कैसे अपने रहने के स्थानों को ब्रह्मांडीय ऊर्जाओं के साथ सामंजस्य बिठाकर समृद्धि, स्वास्थ्य और खुशी प्राप्त करें।",
+      es: "Descubre la antigua ciencia del Vastu Shastra y aprende a armonizar tus espacios de vida con energías cósmicas para la prosperidad, la salud y la felicidad.",
+      fr: "Découvrez l'ancienne science du Vastu Shastra et apprenez à harmoniser vos espaces de vie avec les énergies cosmiques pour la prospérité, la santé et le bonheur.",
+      de: "Entdecken Sie die alte Wissenschaft des Vastu Shastra und lernen Sie, wie Sie Ihre Lebensräume mit kosmischen Energien für Wohlstand, Gesundheit und Glück harmonisieren können.",
+      zh: "探索古老的瓦斯塔学科学，学习如何将您的生活空间与宇宙能量协调，以获得繁荣、健康和幸福。",
+      ar: "اكتشف العلم القديم لفاستو شاسترا وتعلم كيفية تنسيق مساحات حياتك مع الطاقات الكونية للازدهار والصحة والسعادة.",
+      ru: "Откройте для себя древнюю науку Васту Шастра и научитесь гармонизировать свои жилые пространства с космическими энергиями для процветания, здоровья и счастья."
+    },
+    content: {
+      en: `Discover the ancient science of Vastu Shastra and learn how to harmonize your living spaces with cosmic energies for prosperity, health, and happiness.\n\nMain Topics:\n• Five Elements and Their Balance\n• Eight Directions and Their Energies\n• Room Placement Guidelines\n• Vastu Remedies and Solutions\n• Practical Tips for Home and Office`,
+      hi: `वास्तु शास्त्र के प्राचीन विज्ञान की खोज करें और सीखें कि कैसे अपने रहने के स्थानों को ब्रह्मांडीय ऊर्जाओं के साथ सामंजस्य बिठाकर समृद्धि, स्वास्थ्य और खुशी प्राप्त करें।\n\nमुख्य विषय:\n• पांच तत्व और उनका संतुलन\n• आठ दिशाएं और उनकी ऊर्जाएं\n• कमरे की स्थापना के दिशानिर्देश\n• वास्तु उपाय और समाधान\n• घर और कार्यालय के लिए व्यावहारिक सुझाव`,
+      es: `Descubre la antigua ciencia del Vastu Shastra y aprende a armonizar tus espacios de vida con energías cósmicas para la prosperidad, la salud y la felicidad.\n\nTemas principales:\n• Cinco elementos y su equilibrio\n• Ocho direcciones y sus energías\n• Pautas de colocación de habitaciones\n• Remedios y soluciones de Vastu\n• Consejos prácticos para casa y oficina`,
+      fr: `Découvrez l'ancienne science du Vastu Shastra et apprenez à harmoniser vos espaces de vie avec les énergies cosmiques pour la prospérité, la santé et le bonheur.\n\nThèmes principaux :\n• Cinq éléments et leur équilibre\n• Huit directions et leurs énergies\n• Directives de placement des pièces\n• Remèdes et solutions Vastu\n• Conseils pratiques pour la maison et le bureau`,
+      de: `Entdecken Sie die alte Wissenschaft des Vastu Shastra und lernen Sie, wie Sie Ihre Lebensräume mit kosmischen Energien für Wohlstand, Gesundheit und Glück harmonisieren können.\n\nHauptthemen :\n• Fünf Elemente und ihr Gleichgewicht\n• Acht Richtungen und ihre Energien\n• Richtlinien für die Raumaufteilung\n• Vastu-Heilmittel und Lösungen\n• Praktische Tipps für Zuhause und Büro`,
+      zh: `探索古老的瓦斯塔学科学，学习如何将您的生活空间与宇宙能量协调，以获得繁荣、健康和幸福。\n\n主要主题：\n• 五大元素及其平衡\n• 八个方向及其能量\n• 房间布置指南\n• 瓦斯塔疗法和解决方案\n• 家庭和办公室的实用技巧`,
+      ar: `اكتشف العلم القديم لفاستو شاسترا وتعلم كيفية تنسيق مساحات حياتك مع الطاقات الكونية للازدهار والصحة والسعادة.\n\nالمواضيع الرئيسية:\n• خمسة عناصر وتوازنها\n• ثمانية اتجاهات وطاقاتها\n• إرشادات تنسيق الغرف\n• علاجات وحلول فاستو\n• نصائح عملية للمنزل والمكتب`,
+      ru: `Откройте для себя древнюю науку Васту Шастра и научитесь гармонизировать свои жилые пространства с космическими энергиями для процветания, здоровья и счастья.\n\nОсновные темы:\n• Пять элементов и их баланс\n• Восемь направлений и их энергии\n• Руководство по размещению комнат\n• Средства и решения Васту\n• Практические советы для дома и офиса`
+    },
+    imageUrl: "/images/blog/vastu-shastra.jpg",
+    themeColor: "#34d399",
+    author: {
+      en: "Dr. Narendra Kumar Sharma",
+      hi: "डॉ. नरेंद्र कुमार शर्मा",
+      es: "Dr. Narendra Kumar Sharma",
+      fr: "Dr Narendra Kumar Sharma",
+      de: "Dr. Narendra Kumar Sharma",
+      zh: "纳伦德拉·库马尔·沙尔马博士",
+      ar: "الدكتور ناريندرا كومار شارما",
+      ru: "Др. Нарендра Кумар Шарма"
+    },
+    date: "2024-04-15",
+    category: "Vastu Shastra"
+  },
   
    
   }
