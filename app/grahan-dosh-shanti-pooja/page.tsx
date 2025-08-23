@@ -106,7 +106,7 @@ const faqs = [
   },
   {
     q: 'Can this pooja be performed remotely?',
-    a: 'Yes, our expert priests can perform the pooja on your behalf. You\'ll receive live updates and can participate mentally from anywhere. The spiritual benefits and positive energy will reach you regardless of location.'
+    a: 'Yes, our expert priests can perform the pooja on your behalf. You&apos;ll receive live updates and can participate mentally from anywhere. The spiritual benefits and positive energy will reach you regardless of location.'
   }
 ];
 

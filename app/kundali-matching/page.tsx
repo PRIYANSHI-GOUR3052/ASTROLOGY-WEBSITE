@@ -73,7 +73,7 @@ const benefits = [
   {
     icon: <Briefcase className="text-indigo-400 w-8 h-8 mb-2" />, 
     title: 'Career Support Dynamics', 
-    desc: 'Learn how to best support each other\'s professional ambitions based on career houses in your charts.'
+    desc: 'Learn how to best support each other&apos;s professional ambitions based on career houses in your charts.'
   },
   {
     icon: <TrendingUp className="text-indigo-400 w-8 h-8 mb-2" />, 
@@ -94,15 +94,15 @@ const faqs = [
   },
   {
     q: 'How accurate is the birth time for Kundali matching?',
-    a: 'Birth time accuracy is crucial for precise Kundali matching. Even a few minutes\' difference can affect the ascendant and house positions. We recommend using the most accurate birth time available, preferably from hospital records or family documentation.'
+    a: 'Birth time accuracy is crucial for precise Kundali matching. Even a few minutes&apos; difference can affect the ascendant and house positions. We recommend using the most accurate birth time available, preferably from hospital records or family documentation.'
   },
   {
-    q: 'What if the Kundali doesn\'t match well?',
+    q: 'What if the Kundali doesn&apos;t match well?',
     a: 'If the match shows challenges, our astrologers recommend specific remedies and rituals (upayas) to help neutralize negative effects. We believe that no match is entirely doomed—through conscious effort, spiritual practices, and mutual understanding, many challenges can be overcome.'
   },
   {
     q: 'Can Kundali matching be done for same-sex couples?',
-    a: 'Yes, Kundali matching can be adapted for same-sex couples. The fundamental principles of compatibility analysis remain the same—we evaluate emotional, spiritual, and practical harmony between two individuals, focusing on unique dynamics relevant to each couple\'s journey.'
+    a: 'Yes, Kundali matching can be adapted for same-sex couples. The fundamental principles of compatibility analysis remain the same—we evaluate emotional, spiritual, and practical harmony between two individuals, focusing on unique dynamics relevant to each couple&apos;s journey.'
   },
   {
     q: 'What information do I need for Kundali matching?',
