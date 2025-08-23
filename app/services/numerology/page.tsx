@@ -78,7 +78,7 @@ const benefits = [
   {
     icon: <Compass className="text-indigo-400 w-8 h-8 mb-2" />,
     title: 'Life Direction',
-    desc: 'Get clear guidance on your life\'s direction and the steps needed to reach your goals.'
+    desc: 'Get clear guidance on your life&apos;s direction and the steps needed to reach your goals.'
   },
   {
     icon: <TrendingUp className="text-indigo-400 w-8 h-8 mb-2" />,
@@ -102,11 +102,11 @@ const faqs = [
   },
   {
     q: 'What is a Life Path Number?',
-    a: 'Your Life Path Number is the most important number in Numerology, calculated from your birth date. It reveals your primary life purpose, the central theme of your existence, and the major lessons you\'re here to learn in this lifetime.'
+    a: 'Your Life Path Number is the most important number in Numerology, calculated from your birth date. It reveals your primary life purpose, the central theme of your existence, and the major lessons you&apos;re here to learn in this lifetime.'
   },
   {
     q: 'Can Numerology predict the future?',
-    a: 'Numerology doesn\'t predict fixed future events, but it reveals life patterns, timing of opportunities, and personal cycles. It helps you understand your natural rhythms and make choices aligned with your destiny.'
+    a: 'Numerology doesn&apos;t predict fixed future events, but it reveals life patterns, timing of opportunities, and personal cycles. It helps you understand your natural rhythms and make choices aligned with your destiny.'
   }
 ];
 

@@ -274,7 +274,7 @@ export default function ReturnPolicyPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-yellow-600 mt-1">•</span>
-                    <span>Products marked as "Final Sale" or "Non-Returnable"</span>
+                    <span>Products marked as &quot;Final Sale&quot; or &quot;Non-Returnable&quot;</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-yellow-600 mt-1">•</span>
