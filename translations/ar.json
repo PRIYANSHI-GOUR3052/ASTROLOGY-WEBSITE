@@ -1,4 +1,23 @@
 ﻿{
+  "zodiac": {
+    "shopByZodiac": "تسوق حسب البرج",
+    "showMoreSigns": "عرض المزيد من الأبراج",
+    "showLessSigns": "عرض أبراج أقل",
+    "signs": {
+      "aries": "الحمل",
+      "taurus": "الثور",
+      "gemini": "الجوزاء",
+      "cancer": "السرطان",
+      "leo": "الأسد",
+      "virgo": "العذراء",
+      "libra": "الميزان",
+      "scorpio": "العقرب",
+      "sagittarius": "القوس",
+      "capricorn": "الجدي",
+      "aquarius": "الدلو",
+      "pisces": "الحوت"
+    }
+  },
   "hero": {
     "mainHeading": "فتح أسرار الكون",
     "subHeading": "علم التنجيم الفيدي الشخصي لإلقاء الضوء على طريقك",
@@ -221,26 +240,35 @@
     }
   },
   "astrologerProfile": {
-    "heading": "تعرف على الدكتور ناريندرا - عالم الفلك الموثوق بك",
-    "subheading": "خبير في علم التنجيم الفيدي مع عقود من الخبرة",
-    "credential1": {
-      "title": "خبير في علم التنجيم الفيدي",
-      "description": "الدكتور ناريندرا هو عالم فلك فيدي مشهور يتمتع بأكثر من 15 عامًا من الخبرة في علم التنجيم الهندي التقليدي. وهو متخصص في تحليل الخرائط الفلكية والعلاجات الكوكبية وتقديم الإرشاد الحياتي من خلال الحكمة الفيدية القديمة."
+    "heading": "تعرف على خبير التنجيم لدينا",
+    "subheading": "اكتشف مصيرك من خلال الحكمة القديمة والخبرة الحديثة",
+    "credentials": {
+      "0": {
+        "title": "خبير في علم التنجيم الفيدي",
+        "description": "متخصص في علم التنجيم الفيدي مع أكثر من 15 عامًا من الخبرة في تحليل خريطة الولادة والمواقع الكوكبية والتأثيرات الكونية. خبير في تقديم التنبؤات الدقيقة والإرشاد الحياتي بناءً على الحكمة الفيدية القديمة."
+      },
+      "1": {
+        "title": "دكتوراه في علم التنجيم والفلسفة",
+        "description": "يحمل درجة الدكتوراه في علم التنجيم والفلسفة من مؤسسات مرموقة. يجمع بين المعرفة التقليدية والبحث الحديث لتقديم استشارات فلكية شاملة وعلاجات."
+      }
     },
-    "credential2": {
-      "title": "دكتوراه في علم التنجيم والفلسفة",
-      "description": "مع دكتوراه في علم التنجيم والفلسفة، يجمع الدكتور ناريندرا بين المعرفة التقليدية والفهم الحديث لتقديم استشارات فلكية شاملة وإرشاد روحي."
+    "belief": {
+      "hindi": "نعتقد أن كل فرد لديه مخطط كوني فريد يوجه رحلته في الحياة.",
+      "english": "We believe that every individual has a unique cosmic blueprint that guides their life's journey."
     },
-    "beliefHi": "أعتقد أن حياة كل فرد فريدة من نوعها وأن لكل مشكلة حلاً.",
-    "beliefEn": "I believe that every individual's life is unique and every problem has a solution.",
-    "experienceHi": "أكثر من 15 عامًا من الخبرة وآلاف العملاء الراضين",
-    "experienceEn": "15+ Years of Experience and Thousands of Satisfied Clients",
-    "bookAppointment": "احجز استشارتك"
+    "experience": {
+      "hindi": "مع عقود من الخبرة المشتركة في علم التنجيم الفيدي، لقد ساعدنا آلاف الأشخاص في العثور على الوضوح والغرض والاتجاه في حياتهم.",
+      "english": "With decades of combined experience in Vedic astrology, we have helped thousands find clarity, purpose, and direction in their lives."
+    },
+    "additionalInfo": "تجمع استشاراتنا بين الحكمة الفيدية التقليدية والفهم الحديث لتزويدك بأكثر الإرشادات دقة وفائدة.",
+    "cta": {
+      "button": "احجز استشارتك الآن"
+    }
   },
   "about": {
     "banner": {
       "heading": "حول ناكشاترا غيان",
-      "text": "For over two decades, our expert astrologers have blended ancient wisdom with modern insights, guiding seekers on their spiritual journey with accurate and life-changing guidance."
+      "text": "لأكثر من عقدين من الزمان، مزج خبراؤنا في علم التنجيم الحكمة القديمة بالرؤى الحديثة، ووجهوا الباحثين في رحلتهم الروحية بإرشادات دقيقة ومغيرة للحياة."
     },
     "tabs": {
       "0": "رحلتنا",
@@ -335,6 +363,12 @@
       "link1": { "title": "الأحجار الكريمة وقواها", "url": "/blog/gemstones-and-their-powers" },
       "link2": { "title": "أساسيات علم الأعداد", "url": "/blog/numerology-basics" },
       "link3": { "title": "تأثير الكواكب", "url": "/blog/the-influence-of-planets" }
+    },
+    "statistics": {
+      "kundli_served": "تم خدمة كوندلي",
+      "years_legacy": "سنوات من الإرث",
+      "consultations_given": "تم تقديم الاستشارات",
+      "awards_occult": "جوائز في العلوم الغامضة"
     }
   },
   "astrologyQuiz": {
@@ -488,6 +522,7 @@
       "quickLinks": {
         "home": "الرئيسية",
         "about": "حول",
+        "products": "المنتجات",
         "services": "الخدمات",
         "reviews": "المراجعات",
         "blog": "مدونة",

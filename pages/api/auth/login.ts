@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { serialize } from 'cookie';
 import jwt from 'jsonwebtoken';
 import pool from '@/lib/db'; // Adjust path as needed based on your project structure
+import { getCookieConfig } from '@/utils/cookieConfig';
 
 export default async function handler(
   req: NextApiRequest,
@@ -56,14 +57,11 @@ export default async function handler(
         { expiresIn: '8h' }
       );
       
+      // Get cookie configuration using utility function
+      const cookieOptions = getCookieConfig(req, { maxAge: 8 * 60 * 60 }); // 8 hours
+      
       // Set the token as an HTTP-only cookie
-      res.setHeader('Set-Cookie', serialize('adminToken', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 8 * 60 * 60, // 8 hours in seconds
-        sameSite: 'strict',
-        path: '/',
-      }));
+      res.setHeader('Set-Cookie', serialize('adminToken', token, cookieOptions));
       
       return res.status(200).json({ 
         message: 'Logged in successfully',

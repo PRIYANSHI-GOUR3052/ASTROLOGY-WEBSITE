@@ -1,5 +1,6 @@
 import { serialize } from 'cookie';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getCookieConfig } from '@/utils/cookieConfig';
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,14 +10,11 @@ export default async function handler(
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
+  // Get cookie configuration using utility function
+  const cookieOptions = getCookieConfig(req, { expires: new Date(0) }); // Expire immediately
+
   // Clear the adminToken cookie by setting it to expire immediately
-  res.setHeader('Set-Cookie', serialize('adminToken', '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    expires: new Date(0), // Set to epoch time to expire immediately
-    sameSite: 'strict',
-    path: '/',
-  }));
+  res.setHeader('Set-Cookie', serialize('adminToken', '', cookieOptions));
 
   return res.status(200).json({ message: 'Logged out successfully' });
 }

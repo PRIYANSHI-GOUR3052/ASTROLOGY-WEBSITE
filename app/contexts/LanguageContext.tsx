@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useEffect } from 'react';
 
 // Import translations
 import en from '../../translations/en.json';
@@ -121,9 +121,15 @@ function normalizeLang(code: string): SupportedLang {
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [lang, setLangRaw] = useState<SupportedLang>('en');
 
-  // Wrap setLang to normalize
+  // Wrap setLang to normalize and update HTML lang attribute
   const setLang = (code: string) => {
-    setLangRaw(normalizeLang(code));
+    const newLang = normalizeLang(code);
+    setLangRaw(newLang);
+    
+    // Update HTML lang attribute
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = newLang;
+    }
   };
 
   // Function to get nested translation value
@@ -156,6 +162,13 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     
     return typeof result === 'string' ? result : key;
   };
+
+  // Set initial lang attribute
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang;
+    }
+  }, [lang]);
 
   const value = { lang: normalizeLang(lang), setLang, t };
 
