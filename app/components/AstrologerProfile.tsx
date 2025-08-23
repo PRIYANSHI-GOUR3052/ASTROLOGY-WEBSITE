@@ -99,6 +99,6 @@ export function AstrologerProfile() {
         </div>
       </div>
     </section>
-    </>
+    
   )
 }
