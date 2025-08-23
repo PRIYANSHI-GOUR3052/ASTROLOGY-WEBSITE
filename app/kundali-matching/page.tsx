@@ -73,7 +73,7 @@ const benefits = [
   {
     icon: <Briefcase className="text-indigo-400 w-8 h-8 mb-2" />, 
     title: 'Career Support Dynamics', 
-    desc: 'Learn how to best support each other\'s professional ambitions based on career houses in your charts.'
+    desc: 'Learn how to best support each other&apos;s professional ambitions based on career houses in your charts.'
   },
   {
     icon: <TrendingUp className="text-indigo-400 w-8 h-8 mb-2" />, 
@@ -94,15 +94,15 @@ const faqs = [
   },
   {
     q: 'How accurate is the birth time for Kundali matching?',
-    a: 'Birth time accuracy is crucial for precise Kundali matching. Even a few minutes\' difference can affect the ascendant and house positions. We recommend using the most accurate birth time available, preferably from hospital records or family documentation.'
+    a: 'Birth time accuracy is crucial for precise Kundali matching. Even a few minutes&apos; difference can affect the ascendant and house positions. We recommend using the most accurate birth time available, preferably from hospital records or family documentation.'
   },
   {
-    q: 'What if the Kundali doesn\'t match well?',
+    q: 'What if the Kundali doesn&apos;t match well?',
     a: 'If the match shows challenges, our astrologers recommend specific remedies and rituals (upayas) to help neutralize negative effects. We believe that no match is entirely doomed—through conscious effort, spiritual practices, and mutual understanding, many challenges can be overcome.'
   },
   {
     q: 'Can Kundali matching be done for same-sex couples?',
-    a: 'Yes, Kundali matching can be adapted for same-sex couples. The fundamental principles of compatibility analysis remain the same—we evaluate emotional, spiritual, and practical harmony between two individuals, focusing on unique dynamics relevant to each couple\'s journey.'
+    a: 'Yes, Kundali matching can be adapted for same-sex couples. The fundamental principles of compatibility analysis remain the same—we evaluate emotional, spiritual, and practical harmony between two individuals, focusing on unique dynamics relevant to each couple&apos;s journey.'
   },
   {
     q: 'What information do I need for Kundali matching?',
@@ -146,11 +146,11 @@ export default function KundaliMatchingPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
             <p>Kundali Matching, or Horoscope Matching, is a revered tradition rooted deeply in the ancient wisdom of Vedic astrology. At Nakshatra Gyaan, we honor this sacred practice by offering a comprehensive and thoughtful approach to compatibility analysis between two individuals preparing for the commitment of marriage. Our methodology is not limited to point-based systems; instead, we focus on delivering a holistic perspective that takes into account the emotional, spiritual, psychological, and practical dimensions of a potential union.</p>
             <p>Our expert astrologers begin by evaluating the birth charts of both individuals through the lens of the <span className="font-bold text-green-800">Ashtakoota system</span>—a classical framework that assigns a score based on eight distinct aspects of compatibility. These include mental and emotional connection, physical and sexual harmony, genetic compatibility, temperament alignment, and long-term relationship stability. The cumulative score out of 36 points offers a general indication of compatibility, but at Nakshatra Gyaan, we believe in going beyond numbers.</p>
-            <p>A critical part of our analysis involves identifying the presence of <span className="font-bold text-green-800">doshas</span>—such as Mangal Dosha, Nadi Dosha, and Bhakoot Dosha—that can significantly impact married life if left unaddressed. Rather than viewing these as inescapable flaws, we provide carefully considered remedies and insights to mitigate their effects. These may include recommended rituals, mantras, gemstones, or changes in timing, all aligned with the individual\'s karmic framework and spiritual evolution.</p>
+            <p>A critical part of our analysis involves identifying the presence of <span className="font-bold text-green-800">doshas</span>—such as Mangal Dosha, Nadi Dosha, and Bhakoot Dosha—that can significantly impact married life if left unaddressed. Rather than viewing these as inescapable flaws, we provide carefully considered remedies and insights to mitigate their effects. These may include recommended rituals, mantras, gemstones, or changes in timing, all aligned with the individual&apos;s karmic framework and spiritual evolution.</p>
             <p>What sets our approach apart is our dedication to <span className="font-bold text-green-800">personalized interpretation</span>. Unlike automated tools that generate impersonal scores, our astrologers invest time in understanding the complete astrological profile of both individuals. We aim to provide context, not just data—guiding couples toward self-awareness, mutual understanding, and conscious decision-making.</p>
             <p>For deeper insights, we meticulously analyze the <span className="font-bold text-green-800">Navamsha (D9) chart</span>, considered the single most important divisional chart for marriage. If the main birth chart is the tree, the D9 chart is the fruit, revealing the ultimate promise and inner reality of your relationships. Strong compatibility seen in the Navamsha can often overcome challenges present in the main birth chart, indicating a powerful, destined connection.</p>
-            <p>A key element of our analysis is the often-misunderstood <span className="font-bold text-green-800">\'Kuja Dosha\' or Mars affliction</span>. Specific placements of Mars can introduce excess fire, anger, or competition into a relationship. However, a proper analysis goes beyond simply identifying this placement. We assess its true intensity and, crucially, look for numerous cancellation factors that can completely nullify its negative effects, providing a clear and fear-free perspective.</p>
-            <p>Finally, our analysis is not about a deterministic judgment but about empowerment through understanding. By illuminating the cosmic forces at play, we provide you with a roadmap. This map shows you the smoothest paths, the potential roadblocks, and the scenic routes. Armed with this knowledge, you can make conscious choices, appreciate your partner\'s perspective, and co-create a relationship filled with more love, compassion, and understanding.</p>
+            <p>A key element of our analysis is the often-misunderstood <span className="font-bold text-green-800">&apos;Kuja Dosha&apos; or Mars affliction</span>. Specific placements of Mars can introduce excess fire, anger, or competition into a relationship. However, a proper analysis goes beyond simply identifying this placement. We assess its true intensity and, crucially, look for numerous cancellation factors that can completely nullify its negative effects, providing a clear and fear-free perspective.</p>
+            <p>Finally, our analysis is not about a deterministic judgment but about empowerment through understanding. By illuminating the cosmic forces at play, we provide you with a roadmap. This map shows you the smoothest paths, the potential roadblocks, and the scenic routes. Armed with this knowledge, you can make conscious choices, appreciate your partner&apos;s perspective, and co-create a relationship filled with more love, compassion, and understanding.</p>
           </motion.div>
         )}
         

@@ -54,7 +54,7 @@ export default function StudyPage() {
       desc: 'Gain deep insights into your personality, strengths, and life path through the study of astrology, numerology, and spiritual sciences.'
     },
     {
-      title: 'Navigate Life\'s Challenges',
+      title: 'Navigate Life&apos;s Challenges',
       desc: 'Learn to interpret cosmic patterns and cycles, empowering you to make informed decisions and overcome obstacles with confidence.'
     },
     {
@@ -86,7 +86,7 @@ export default function StudyPage() {
   const faqs = [
     {
       q: 'What is spiritual study and why is it important?',
-      a: 'Spiritual study involves exploring mystical sciences such as astrology, numerology, tarot, and metaphysics to gain a deeper understanding of yourself and the universe. It is important because it empowers you to live with awareness, purpose, and harmony, helping you navigate life\'s challenges and unlock your highest potential.'
+      a: 'Spiritual study involves exploring mystical sciences such as astrology, numerology, tarot, and metaphysics to gain a deeper understanding of yourself and the universe. It is important because it empowers you to live with awareness, purpose, and harmony, helping you navigate life&apos;s challenges and unlock your highest potential.'
     },
     {
       q: 'Do I need any prior knowledge to begin?',
@@ -193,10 +193,10 @@ export default function StudyPage() {
                   The Value of Spiritual Study
                 </h2>
                 <div className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
-                  <p>Spiritual study is the gateway to self-realization and conscious living. By delving into the mysteries of astrology, numerology, tarot, and other mystical sciences, you gain tools to understand your true nature, navigate life's challenges, and unlock your highest potential.</p>
+                  <p>Spiritual study is the gateway to self-realization and conscious living. By delving into the mysteries of astrology, numerology, tarot, and other mystical sciences, you gain tools to understand your true nature, navigate life&apos;s challenges, and unlock your highest potential.</p>
                   <p>Our courses are designed to bridge ancient wisdom with modern life, offering practical insights and transformative practices that empower you to live with clarity, confidence, and purpose.</p>
                   <p>Through guided lessons, interactive exercises, and community support, you will learn to interpret cosmic patterns, harness universal energies, and cultivate a deeper connection with your inner self.</p>
-                  <p>The journey of spiritual study is not just about acquiring knowledge—it's about awakening your intuition, expanding your consciousness, and embracing a life of meaning and fulfillment.</p>
+                  <p>The journey of spiritual study is not just about acquiring knowledge—it&apos;s about awakening your intuition, expanding your consciousness, and embracing a life of meaning and fulfillment.</p>
                 </div>
                 
                 {/* Study Topics Section */}
