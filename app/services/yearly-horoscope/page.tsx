@@ -13,7 +13,7 @@ const benefits = [
     {
         icon: <ClipboardList className="text-indigo-400 w-8 h-8 mb-2" />,
         title: 'Long-Term Strategic Planning',
-        desc: "Receive a high-level overview of the year&apos;s energies, perfect for setting major goals and life direction."
+        desc: "Receive a high-level overview of the year's energies, perfect for setting major goals and life direction."
     },
     {
         icon: <KeyRound className="text-indigo-400 w-8 h-8 mb-2" />,
@@ -48,17 +48,17 @@ const benefits = [
     {
         icon: <Milestone className="text-indigo-400 w-8 h-8 mb-2" />,
         title: 'Spiritual Growth Roadmap',
-        desc: "See how the year&apos;s transits will influence your spiritual journey and personal evolution."
+        desc: "See how the year's transits will influence your spiritual journey and personal evolution."
     },
     {
         icon: <Star className="text-indigo-400 w-8 h-8 mb-2" />,
         title: 'Jupiter Transit Insights',
-        desc: 'Understand how Jupiter&apos;s movement through your chart affects wisdom, expansion, and spiritual growth.'
+        desc: 'Understand how Jupiter\'s movement through your chart affects wisdom, expansion, and spiritual growth.'
     },
     {
         icon: <Zap className="text-indigo-400 w-8 h-8 mb-2" />,
         title: 'Saturn Return Guidance',
-        desc: 'Navigate Saturn&apos;s return and its lessons about responsibility, discipline, and life structure.'
+        desc: 'Navigate Saturn\'s return and its lessons about responsibility, discipline, and life structure.'
     },
     {
         icon: <Users className="text-indigo-400 w-8 h-8 mb-2" />,
@@ -90,11 +90,11 @@ const benefits = [
 const faqs = [
     {
         q: "What is a Yearly Horoscope (Varshaphala)?",
-        a: "A Yearly Horoscope, or Varshaphala, is a detailed astrological forecast for a twelve-month period, typically from one birthday to the next. It&apos;s based on a solar return chart, which is a snapshot of the planets at the exact moment the Sun returns to its natal position."
+        a: "A Yearly Horoscope, or Varshaphala, is a detailed astrological forecast for a twelve-month period, typically from one birthday to the next. It's based on a solar return chart, which is a snapshot of the planets at the exact moment the Sun returns to its natal position."
     },
     {
         q: 'How is it different from a birth chart reading?',
-        a: "A birth chart is the permanent blueprint of your entire life&apos;s potential. A yearly horoscope is a temporary, time-sensitive forecast that shows how the current planetary transits for a specific year will activate and influence that permanent blueprint."
+        a: "A birth chart is the permanent blueprint of your entire life's potential. A yearly horoscope is a temporary, time-sensitive forecast that shows how the current planetary transits for a specific year will activate and influence that permanent blueprint."
     },
     {
         q: 'Which planets are most important in a yearly forecast?',
@@ -146,8 +146,8 @@ export default function YearlyHoroscopePage() {
                         <p>This powerful forecast is based on a technique called the <span className="font-bold text-green-800">Solar Return chart</span>. This chart is cast for the exact moment the Sun returns to the precise degree it occupied at your birth, an event that happens once every year around your birthday. This &apos;solar birthday&apos; chart provides a map of your potential for the coming year. By comparing this annual chart to your natal birth chart, our astrologers can reveal which areas of your life will be highlighted for growth, which will present challenges, and where your greatest opportunities for success lie.</p>
                         <p>The calculation is an intricate process. Beyond the Solar Return chart, Vedic astrology employs the <span className="font-bold text-green-800">Tajika system</span>, which includes unique elements like the <span className="font-bold text-green-800">Muntha</span> (a point that progresses one sign per year from your Ascendant), and the Year Lord (<span className="font-bold text-green-800">Varsha Pravesh</span>). Our analysis meticulously synthesizes these elements, examining the planetary positions in the annual chart, their relationship to your natal chart, and the <span className="font-bold text-green-800">dasha</span> (planetary period) you are running. This creates a multi-layered, dynamic forecast that is far more personalized and precise than generic sun-sign predictions.</p>
                         <p>With a yearly analysis, you can confidently plan your most important life decisions. Whether you are considering a career change, getting married, starting a family, investing in property, or moving to a new country, this forecast will identify the most <span className="font-bold text-green-800">auspicious</span> and challenging periods for these significant steps. It provides you with a timeline of cosmic green lights and red flags, so you can align your ambitions with the supportive flow of planetary energy, a strategy that dramatically increases your chances of success and fulfillment.</p>
-                        <p>The <span className="font-bold text-green-800">Jupiter transit</span> is particularly significant in yearly forecasts, as this planet takes approximately one year to move through each zodiac sign. When Jupiter transits through different houses in your chart, it brings expansion, wisdom, and opportunities in those life areas. Similarly, <span className="font-bold text-green-800">Saturn&apos;s movement</span> brings lessons, structure, and sometimes challenges that are essential for your growth and maturity. Understanding these major transits helps you prepare for the year ahead.</p>
-                        <p>Beyond the major planets, we also analyze the <span className="font-bold text-green-800">Rahu and Ketu</span> transits, which can bring sudden changes and karmic lessons. The <span className="font-bold text-green-800">Mars transit</span> influences your energy levels and action-oriented activities, while <span className="font-bold text-green-800">Venus transits</span> affect your relationships and creative pursuits. By understanding how all these planetary movements interact, we create a comprehensive picture of your year&apos;s potential.</p>
+                        <p>The <span className="font-bold text-green-800">Jupiter transit</span> is particularly significant in yearly forecasts, as this planet takes approximately one year to move through each zodiac sign. When Jupiter transits through different houses in your chart, it brings expansion, wisdom, and opportunities in those life areas. Similarly, <span className="font-bold text-green-800">Saturn's movement</span> brings lessons, structure, and sometimes challenges that are essential for your growth and maturity. Understanding these major transits helps you prepare for the year ahead.</p>
+                        <p>Beyond the major planets, we also analyze the <span className="font-bold text-green-800">Rahu and Ketu</span> transits, which can bring sudden changes and karmic lessons. The <span className="font-bold text-green-800">Mars transit</span> influences your energy levels and action-oriented activities, while <span className="font-bold text-green-800">Venus transits</span> affect your relationships and creative pursuits. By understanding how all these planetary movements interact, we create a comprehensive picture of your year's potential.</p>
                         <p>Ultimately, the Yearly Horoscope is the ultimate tool for conscious co-creation. It is a guide that illuminates your path, revealing the mountains you will be asked to climb and the green valleys where you can rest and prosper. Armed with this knowledge, you can navigate challenges with wisdom and grace, seize opportunities with confidence, and live the year with a profound sense of purpose and alignment. It is your strategic advantage for making the next twelve months your most successful and transformative year yet.</p>
                     </motion.div>
                 )}

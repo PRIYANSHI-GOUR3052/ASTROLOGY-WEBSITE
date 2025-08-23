@@ -78,7 +78,7 @@ const benefits = [
   {
     icon: <Compass className="text-indigo-400 w-8 h-8 mb-2" />,
     title: 'Life Direction',
-    desc: 'Get clear guidance on your life&apos;s direction and the steps needed to reach your goals.'
+    desc: 'Get clear guidance on your life\'s direction and the steps needed to reach your goals.'
   },
   {
     icon: <TrendingUp className="text-indigo-400 w-8 h-8 mb-2" />,
@@ -102,11 +102,11 @@ const faqs = [
   },
   {
     q: 'What is a Life Path Number?',
-    a: 'Your Life Path Number is the most important number in Numerology, calculated from your birth date. It reveals your primary life purpose, the central theme of your existence, and the major lessons you&apos;re here to learn in this lifetime.'
+    a: 'Your Life Path Number is the most important number in Numerology, calculated from your birth date. It reveals your primary life purpose, the central theme of your existence, and the major lessons you\'re here to learn in this lifetime.'
   },
   {
     q: 'Can Numerology predict the future?',
-    a: 'Numerology doesn&apos;t predict fixed future events, but it reveals life patterns, timing of opportunities, and personal cycles. It helps you understand your natural rhythms and make choices aligned with your destiny.'
+    a: 'Numerology doesn\'t predict fixed future events, but it reveals life patterns, timing of opportunities, and personal cycles. It helps you understand your natural rhythms and make choices aligned with your destiny.'
   }
 ];
 
@@ -125,7 +125,7 @@ export default function NumerologyPage() {
             Numerology Analysis
           </h1>
           <p className="text-xl md:text-2xl text-center max-w-2xl font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', color: '#166534' }}>
-            Unlock the hidden meanings of numbers and discover your life&apos;s blueprint through the ancient science of Numerology.
+            Unlock the hidden meanings of numbers and discover your life's blueprint through the ancient science of Numerology.
           </p>
         </motion.div>
 
@@ -144,13 +144,13 @@ export default function NumerologyPage() {
 
         {activeTab === 'Overview' && (
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
-            <p>Numerology is the ancient metaphysical science that reveals the hidden meanings and influences of numbers in our lives. Based on the principle that everything in the universe vibrates at specific frequencies, numerology teaches us that numbers are not just mathematical symbols but carriers of cosmic energy that shape our personality, relationships, career, and life purpose. By analyzing your birth date and name, we can unlock the secrets of your soul&apos;s journey and understand the divine blueprint that guides your existence.</p>
-            <p>At the heart of numerology lies the <span className="font-bold text-green-800">Life Path Number</span>, calculated from your birth date. This is the most significant number in your numerological profile, representing your primary life purpose and the central theme of your existence. It reveals the major lessons you&apos;re here to learn, the challenges you&apos;ll face, and the ultimate destination of your soul&apos;s journey. Understanding your Life Path Number helps you align your actions with your true calling and navigate life&apos;s twists and turns with greater clarity and purpose.</p>
+            <p>Numerology is the ancient metaphysical science that reveals the hidden meanings and influences of numbers in our lives. Based on the principle that everything in the universe vibrates at specific frequencies, numerology teaches us that numbers are not just mathematical symbols but carriers of cosmic energy that shape our personality, relationships, career, and life purpose. By analyzing your birth date and name, we can unlock the secrets of your soul's journey and understand the divine blueprint that guides your existence.</p>
+            <p>At the heart of numerology lies the <span className="font-bold text-green-800">Life Path Number</span>, calculated from your birth date. This is the most significant number in your numerological profile, representing your primary life purpose and the central theme of your existence. It reveals the major lessons you're here to learn, the challenges you'll face, and the ultimate destination of your soul's journey. Understanding your Life Path Number helps you align your actions with your true calling and navigate life's twists and turns with greater clarity and purpose.</p>
             <p>The <span className="font-bold text-green-800">Expression Number</span>, derived from your full name, reveals your natural talents, abilities, and how you express yourself to the world. This number represents the person you are becoming and the unique gifts you bring to humanity. It shows your communication style, creative potential, and the ways in which you can make your mark in the world. When you align your career and life choices with your Expression Number, you experience greater fulfillment and success.</p>
-            <p>Your <span className="font-bold text-green-800">Soul Urge Number</span>, calculated from the vowels in your name, represents your deepest desires, inner motivations, and what truly makes your soul happy. This number reveals the emotional and spiritual yearnings that drive your decisions and shape your relationships. Understanding your Soul Urge Number helps you make choices that align with your heart&apos;s true desires, leading to greater happiness and inner peace.</p>
+            <p>Your <span className="font-bold text-green-800">Soul Urge Number</span>, calculated from the vowels in your name, represents your deepest desires, inner motivations, and what truly makes your soul happy. This number reveals the emotional and spiritual yearnings that drive your decisions and shape your relationships. Understanding your Soul Urge Number helps you make choices that align with your heart's true desires, leading to greater happiness and inner peace.</p>
             <p>Numerology also provides powerful insights into <span className="font-bold text-green-800">timing and cycles</span> through Personal Year Numbers. Each year of your life carries a specific energy theme that influences your experiences and opportunities. By understanding these cycles, you can make better decisions about when to start new ventures, make important changes, or focus on specific areas of your life. This cosmic timing ensures that you act when the universe is most supportive of your goals.</p>
             <p>The <span className="font-bold text-green-800">compatibility aspects</span> of numerology help you understand relationship dynamics and find compatible partners. By comparing numerological profiles, we can identify areas of natural harmony and potential challenges in relationships. This knowledge empowers you to build stronger, more fulfilling connections and navigate relationship challenges with greater understanding and compassion.</p>
-            <p>Beyond personal insights, numerology offers practical guidance for <span className="font-bold text-green-800">career choices</span>, <span className="font-bold text-green-800">business decisions</span>, and <span className="font-bold text-green-800">life planning</span>. Whether you&apos;re choosing a career path, starting a business, or making major life decisions, numerology provides a framework for understanding your natural strengths and the best ways to achieve your goals. This ancient wisdom serves as a compass, guiding you toward choices that align with your soul&apos;s purpose and bring you the greatest fulfillment.</p>
+            <p>Beyond personal insights, numerology offers practical guidance for <span className="font-bold text-green-800">career choices</span>, <span className="font-bold text-green-800">business decisions</span>, and <span className="font-bold text-green-800">life planning</span>. Whether you're choosing a career path, starting a business, or making major life decisions, numerology provides a framework for understanding your natural strengths and the best ways to achieve your goals. This ancient wisdom serves as a compass, guiding you toward choices that align with your soul's purpose and bring you the greatest fulfillment.</p>
           </motion.div>
         )}
         
