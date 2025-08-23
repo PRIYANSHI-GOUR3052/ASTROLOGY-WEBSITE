@@ -46,7 +46,27 @@ export default function InfluenceOfPlanetsPage() {
             
             {/* Intro */}
             <div className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6 text-justify">
-              {/* Intro content removed as requested */}
+              <p>
+                Discover how celestial bodies affect our daily lives and spiritual journey. The positions and movements of the planets, Sun, and Moon at the time of your birth create a unique cosmic blueprint—your birth chart. This chart reveals your strengths, challenges, and the lessons you are meant to learn in this lifetime.
+              </p>
+              <p>
+                <span className="font-semibold text-indigo-700">Daily Influences:</span> Each day, planetary transits activate different areas of your life. For example, a strong Moon transit may heighten your emotions, while a favorable Jupiter aspect can bring opportunities for growth and wisdom. By understanding these influences, you can make better decisions and align your actions with the cosmic flow.
+              </p>
+              <ul className="list-disc list-inside ml-4 space-y-4">
+                <li><span className="font-semibold text-indigo-700">Relationships:</span> Venus and Mars play a key role in love, attraction, and harmony. Their positions can indicate periods of romance or the need for healing in relationships. When Venus is strong, you may experience deep affection, artistic inspiration, and harmonious partnerships. Mars brings passion and drive, but if afflicted, can cause conflicts or impulsive actions. Astrological analysis can reveal the best times for love, marriage, or resolving relationship issues.</li>
+                <li><span className="font-semibold text-indigo-700">Career & Ambitions:</span> The Sun, Saturn, and Mercury influence your ambitions, discipline, and communication. The Sun represents your core purpose and leadership qualities, Saturn brings structure, perseverance, and lessons through challenges, while Mercury governs intellect, adaptability, and business acumen. Favorable alignments can signal promotions, new ventures, or recognition, while challenging periods may require patience, skill-building, or strategic planning.</li>
+                <li><span className="font-semibold text-indigo-700">Health & Well-being:</span> The Moon and ascendant sign affect your physical and emotional health. The Moon governs your mind, moods, and habits, while the ascendant and its ruler influence your body type and vitality. Planetary afflictions may point to areas needing extra care, such as stress management, dietary changes, or spiritual remedies. Regularly tracking lunar cycles and planetary transits can help you maintain balance and well-being.</li>
+                <li><span className="font-semibold text-indigo-700">Spiritual Growth:</span> Jupiter and Ketu are associated with wisdom, detachment, and spiritual evolution. Jupiter inspires learning, generosity, and faith, while Ketu encourages letting go of material attachments and seeking higher truths. Their influence can inspire meditation, study of sacred texts, and transformative spiritual practices. Times of strong Jupiter or Ketu influence are ideal for retreats, pilgrimages, or deepening your spiritual path.</li>
+                <li><span className="font-semibold text-indigo-700">Financial Prosperity:</span> Jupiter and Venus can bring abundance, wealth, and opportunities for financial growth when well-placed in your chart. Jupiter&apos;s blessings may manifest as luck, expansion, or wise investments, while Venus attracts luxury, comfort, and creative income. Challenging placements may require prudent budgeting, charitable giving, or seeking expert advice to improve your financial situation.</li>
+                <li><span className="font-semibold text-indigo-700">Family & Home:</span> The Moon and fourth house planets influence your sense of belonging, emotional security, and harmony at home. A strong Moon fosters nurturing relationships, a peaceful home environment, and supportive family ties. Malefic influences may bring misunderstandings or instability, but remedies such as family rituals, home blessings, or fostering open communication can restore harmony.</li>
+                <li><span className="font-semibold text-indigo-700">Personal Transformation:</span> Rahu and Ketu drive major life changes, spiritual awakenings, and the breaking of old patterns for soul growth. Rahu pushes you toward new experiences, ambitions, and sometimes obsessions, while Ketu helps you release what no longer serves you. Their cycles often coincide with turning points, breakthroughs, or the need to embrace change and trust your inner guidance.</li>
+              </ul>
+              <p>
+                <span className="font-semibold text-indigo-700">Spiritual Journey:</span> Astrology is not just about prediction—it&apos;s a tool for self-awareness and spiritual growth. By tuning into the rhythms of the cosmos, you can cultivate mindfulness, embrace change, and walk your path with greater confidence and peace.
+              </p>
+              <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-lg">
+                <span className="text-indigo-600 font-medium">Tip:</span> Keep a daily journal of your moods, experiences, and planetary transits. Over time, you&apos;ll notice patterns that help you harness positive energies and navigate challenges with wisdom.
+              </div>
             </div>
 
             {/* Tabs */}
