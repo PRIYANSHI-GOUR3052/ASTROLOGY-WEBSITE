@@ -1,4 +1,5 @@
 
+import React from 'react';
 import NewHeroSection from './components/NewHeroSection';
 import dynamic from 'next/dynamic';
 import { ScrollAnimation } from './components/ScrollAnimation';
@@ -32,7 +33,7 @@ export default function HomePage() {
           <Statistics />
         </ScrollAnimation>
         <RecentPosts />
-        <FeaturedBlogs />
+        {/* <FeaturedBlogs /> */}
         
         <ScrollAnimation>
           <DailyHoroscope />

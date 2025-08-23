@@ -12,7 +12,7 @@ export function BestServices() {
   const { t } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [responsiveCardsPerView, setResponsiveCardsPerView] = useState(5);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const desktopContainerRef = useRef<HTMLDivElement | null>(null);
   const scrollStep = 1;
 
   // Update cards per view based on screen size
@@ -20,7 +20,7 @@ export function BestServices() {
     const updateCardsPerView = () => {
       const width = window.innerWidth;
       if (width < 768) {
-        setResponsiveCardsPerView(1); // Mobile: 1 card
+        setResponsiveCardsPerView(2); // Mobile: 2 cards
       } else if (width < 1024) {
         setResponsiveCardsPerView(2); // Tablet: 2 cards
       } else if (width < 1280) {
@@ -37,17 +37,50 @@ export function BestServices() {
     return () => window.removeEventListener('resize', updateCardsPerView);
   }, []);
 
+
   // Use imported services data and select the first 6 services for display
   const displayServices = servicesData.slice(0, 6);
   const totalCards = displayServices.length;
   const maxIndex = Math.max(0, totalCards - responsiveCardsPerView);
-  const canScrollLeft = currentIndex > 0;
-  const canScrollRight = currentIndex < maxIndex;
+  // Desktop scroll logic
+  const canScrollLeftDesktop = currentIndex > 0;
+  const canScrollRightDesktop = currentIndex < maxIndex;
+
+  // Mobile scroll logic
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeftMobile, setCanScrollLeftMobile] = useState(false);
+  const [canScrollRightMobile, setCanScrollRightMobile] = useState(true);
+
+  const checkScrollButtonsMobile = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeftMobile(scrollLeft > 0);
+      setCanScrollRightMobile(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  const scrollLeftMobile = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRightMobile = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.clientWidth / 2;
+      scrollContainerRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    checkScrollButtonsMobile();
+  }, []);
 
   const handleScroll = (direction: 'left' | 'right') => {
-    if (direction === 'left' && canScrollLeft) {
+    if (direction === 'left' && canScrollLeftDesktop) {
       setCurrentIndex(Math.max(0, currentIndex - scrollStep));
-    } else if (direction === 'right' && canScrollRight) {
+    } else if (direction === 'right' && canScrollRightDesktop) {
       setCurrentIndex(Math.min(maxIndex, currentIndex + scrollStep));
     }
   };
@@ -75,113 +108,174 @@ export function BestServices() {
         </motion.div>
 
         {/* Services Section */}
-        <div className="mb-12" ref={containerRef}>
-          {/* Header with controls */}
-          <div className="mb-6">
-            <div className="flex justify-end">
-              <div className="flex items-center gap-4">
-                {/* View All Button */}
-                <Link href="/services/all">
-                  <button className="px-6 py-3 bg-black text-white font-semibold rounded-xl shadow-lg hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2">
-                    View All
-                    <span className="text-white">→</span>
-                  </button>
-                </Link>
-                
-                {/* Carousel Navigation */}
-                {totalCards > responsiveCardsPerView && (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleScroll('left')}
-                      disabled={!canScrollLeft}
-                      className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm transition-all duration-200"
-                      aria-label="Scroll left"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleScroll('right')}
-                      disabled={!canScrollRight}
-                      className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm transition-all duration-200"
-                      aria-label="Scroll right"
-                    >
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                )}
+  <div className="mb-12" ref={desktopContainerRef}>
+          {/* Header with controls (desktop: includes nav arrows) */}
+          <div className="mb-6 flex justify-end">
+            <div className="flex items-center gap-0">
+              {/* View All Button */}
+              <Link href="/services/all">
+                <button className="px-6 py-3 text-black font-semibold rounded-xl hover:text-green-800 transition-colors duration-200 flex items-center gap-2">
+                  View All 
+                </button>
+              </Link>
+              {/* Desktop navigation arrows (md and up) */}
+              <div className="hidden md:flex items-center gap-2 ml-1">
+                <button
+                  onClick={() => handleScroll('left')}
+                  disabled={!canScrollLeftDesktop}
+                  className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm transition-all duration-200"
+                  aria-label="Scroll left"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleScroll('right')}
+                  disabled={!canScrollRightDesktop}
+                  className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 hover:text-black shadow-sm transition-all duration-200"
+                  aria-label="Scroll right"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
+              
             </div>
           </div>
 
-          {/* Carousel container */}
-          <div 
-            className="relative overflow-hidden cursor-grab active:cursor-grabbing"
-            style={{
-              width: `${responsiveCardsPerView * (288 + 24) - 24}px`, // Exact width for visible cards only
-              maxWidth: '100%',
-            }}
-            onWheel={(e) => {
-              // Only handle horizontal scrolling (Shift+wheel or horizontal wheel)
-              if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-                e.preventDefault();
-                const scrollDirection = (e.deltaX || e.deltaY) > 0 ? 'right' : 'left';
-                handleScroll(scrollDirection);
-              }
-            }}
-          >
-            <motion.div
-              className="flex gap-6"
-              animate={{
-                x: `-${currentIndex * (288 + 24)}px`, // 288px card width + 24px gap
-              }}
-              transition={{
-                type: 'spring',
-                damping: 20,
-                stiffness: 300,
-              }}
+          {/* Responsive Carousel: Desktop (unchanged), Mobile (scrollable like LifeChangingSolutions) */}
+          {/* Desktop/Tablet: show as before, but nav arrows are now in header */}
+          <div className="hidden md:block">
+            <div 
+              className="relative overflow-hidden cursor-grab active:cursor-grabbing"
               style={{
-                width: `${displayServices.length * (288 + 24)}px`, // Total width for all cards
+                width: `${responsiveCardsPerView * (288 + 24) - 24}px`,
+                maxWidth: '100%',
+                minHeight: '1px',
               }}
-              drag="x"
-              dragConstraints={{
-                left: -maxIndex * (288 + 24),
-                right: 0,
-              }}
-              dragElastic={0.1}
-              onDragEnd={(_, info) => {
-                const dragOffset = info.offset.x;
-                const dragThreshold = 100;
-                
-                if (Math.abs(dragOffset) > dragThreshold) {
-                  if (dragOffset > 0 && canScrollLeft) {
-                    handleScroll('left');
-                  } else if (dragOffset < 0 && canScrollRight) {
-                    handleScroll('right');
-                  }
+              onWheel={(e) => {
+                if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                  e.preventDefault();
+                  const scrollDirection = (e.deltaX || e.deltaY) > 0 ? 'right' : 'left';
+                  handleScroll(scrollDirection);
                 }
               }}
             >
-              {displayServices.map((service, index) => (
-                <div key={service.slug} className="w-72 flex-shrink-0">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ 
-                      duration: 0.25, 
-                      delay: index * 0.05, 
-                      type: 'spring', 
-                      stiffness: 300 
-                    }}
+              <motion.div
+                className="flex gap-6"
+                animate={{
+                  x: `-${currentIndex * (288 + 24)}px`,
+                }}
+                transition={{
+                  type: 'spring',
+                  damping: 20,
+                  stiffness: 300,
+                }}
+                style={{
+                  width: `${displayServices.length * (288 + 24)}px`,
+                }}
+                drag="x"
+                dragConstraints={{
+                  left: -maxIndex * (288 + 24),
+                  right: 0,
+                }}
+                dragElastic={0.1}
+                onDragEnd={(_, info) => {
+                  const dragOffset = info.offset.x;
+                  const dragThreshold = 100;
+                  if (Math.abs(dragOffset) > dragThreshold) {
+                    if (dragOffset > 0 && canScrollLeftDesktop) {
+                      handleScroll('left');
+                    } else if (dragOffset < 0 && canScrollRightDesktop) {
+                      handleScroll('right');
+                    }
+                  }
+                }}
+              >
+                {displayServices.map((service, index) => (
+                  <div key={service.slug} className="w-72 flex-shrink-0">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ 
+                        duration: 0.25, 
+                        delay: index * 0.05, 
+                        type: 'spring', 
+                        stiffness: 300 
+                      }}
+                    >
+                      <ReusableServiceCard 
+                        service={service} 
+                        viewMode="grid"
+                        className="h-full"
+                      />
+                    </motion.div>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+          {/* Mobile: scrollable flexbox, snap, responsive card width, overlay arrows */}
+          <div className="md:hidden">
+            <div className="relative">
+              {/* Navigation Arrows */}
+              <button
+                onClick={scrollLeftMobile}
+                disabled={!canScrollLeftMobile}
+                className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity border border-gray-300 ${
+                  canScrollLeftMobile ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+                }`}
+                style={{ marginLeft: '-20px' }}
+                aria-label="Scroll left"
+              >
+                <ArrowLeft className="w-4 h-4 text-gray-700" />
+              </button>
+              <button
+                onClick={scrollRightMobile}
+                disabled={!canScrollRightMobile}
+                className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity border border-gray-300 ${
+                  canScrollRightMobile ? 'opacity-100 hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'
+                }`}
+                style={{ marginRight: '-20px' }}
+                aria-label="Scroll right"
+              >
+                <ArrowRight className="w-4 h-4 text-gray-700" />
+              </button>
+              {/* Scrollable Container */}
+              <div
+                ref={scrollContainerRef}
+                onScroll={checkScrollButtonsMobile}
+                className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-2"
+                style={{
+                  scrollSnapType: 'x mandatory',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                  WebkitOverflowScrolling: 'touch',
+                }}
+              >
+                {displayServices.map((service, index) => (
+                  <div
+                    key={service.slug}
+                    className="flex-none w-[calc(52%-6px)] min-w-[170px] snap-start"
                   >
-                    <ReusableServiceCard 
-                      service={service} 
-                      viewMode="grid"
-                      className="h-full"
-                    />
-                  </motion.div>
-                </div>
-              ))}
-            </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        duration: 0.25,
+                        delay: index * 0.05,
+                        type: 'spring',
+                        stiffness: 300,
+                      }}
+                    >
+                      <ReusableServiceCard
+                        service={service}
+                        viewMode="grid"
+                        className="h-full"
+                      />
+                    </motion.div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
