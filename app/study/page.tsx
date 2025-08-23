@@ -193,10 +193,10 @@ export default function StudyPage() {
                   The Value of Spiritual Study
                 </h2>
                 <div className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
-                  <p>Spiritual study is the gateway to self-realization and conscious living. By delving into the mysteries of astrology, numerology, tarot, and other mystical sciences, you gain tools to understand your true nature, navigate life's challenges, and unlock your highest potential.</p>
+                  <p>Spiritual study is the gateway to self-realization and conscious living. By delving into the mysteries of astrology, numerology, tarot, and other mystical sciences, you gain tools to understand your true nature, navigate life&apos;s challenges, and unlock your highest potential.</p>
                   <p>Our courses are designed to bridge ancient wisdom with modern life, offering practical insights and transformative practices that empower you to live with clarity, confidence, and purpose.</p>
                   <p>Through guided lessons, interactive exercises, and community support, you will learn to interpret cosmic patterns, harness universal energies, and cultivate a deeper connection with your inner self.</p>
-                  <p>The journey of spiritual study is not just about acquiring knowledge—it's about awakening your intuition, expanding your consciousness, and embracing a life of meaning and fulfillment.</p>
+                  <p>The journey of spiritual study is not just about acquiring knowledge—it&apos;s about awakening your intuition, expanding your consciousness, and embracing a life of meaning and fulfillment.</p>
                 </div>
                 
                 {/* Study Topics Section */}

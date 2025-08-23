@@ -56,7 +56,7 @@ export default function MercuryRetrogradeGuidePage() {
                     Mercury retrograde is one of the most talked-about astrological phenomena, occurring when the planet Mercury appears to move backward in its orbit from Earth&apos;s perspective. This optical illusion happens three to four times a year and typically lasts for about three weeks.
                   </p>
                   <p className="text-black text-justify" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif' }}>
-                    During these periods, Mercury's energy becomes more introspective and reflective, affecting areas of life that Mercury governs: communication, travel, technology, contracts, and daily routines. While often feared, Mercury retrograde periods can actually be beneficial for review, reflection, and revision.
+                    During these periods, Mercury&apos;s energy becomes more introspective and reflective, affecting areas of life that Mercury governs: communication, travel, technology, contracts, and daily routines. While often feared, Mercury retrograde periods can actually be beneficial for review, reflection, and revision.
                   </p>
                   <p className="text-black text-justify" style={{ fontFamily: 'Inter, Lato, Open Sans, sans-serif' }}>
                     Understanding how to navigate Mercury retrograde can help you minimize challenges and maximize the opportunities for growth and improvement that these periods offer. With proper preparation and awareness, you can turn potential obstacles into valuable learning experiences.
