@@ -21,42 +21,42 @@ export default function AboutPage() {
 
   const sidebarFeatures = [
     {
-      icon: <Award className="w-6 h-6 text-indigo-500" />,
+      icon: <Award className="w-6 h-6 text-green-800" />,
       title: "20+ Years of Excellence",
       desc: "Two decades of dedicated astrological guidance and spiritual wisdom"
     },
     {
-      icon: <Users className="w-6 h-6 text-indigo-500" />,
+      icon: <Users className="w-6 h-6 text-green-800" />,
       title: "10,000+ Consultations",
       desc: "Life-changing guidance delivered to seekers worldwide"
     },
     {
-      icon: <Globe className="w-6 h-6 text-indigo-500" />,
+      icon: <Globe className="w-6 h-6 text-green-800" />,
       title: "Global Reach",
       desc: "Serving clients from over 30 countries across the globe"
     },
     {
-      icon: <Heart className="w-6 h-6 text-indigo-500" />,
+      icon: <Heart className="w-6 h-6 text-green-800" />,
       title: "Compassionate Approach",
       desc: "Ethical, confidential, and empowering guidance for all"
     },
     {
-      icon: <Shield className="w-6 h-6 text-indigo-500" />,
+      icon: <Shield className="w-6 h-6 text-green-800" />,
       title: "Trusted & Reliable",
       desc: "Built on integrity, authenticity, and proven results"
     },
     {
-      icon: <BookOpen className="w-6 h-6 text-indigo-500" />,
+      icon: <BookOpen className="w-6 h-6 text-green-800" />,
       title: "500+ Workshops",
       desc: "Educational programs empowering spiritual seekers"
     },
     {
-      icon: <Sparkles className="w-6 h-6 text-indigo-500" />,
+      icon: <Sparkles className="w-6 h-6 text-green-800" />,
       title: "Ancient Wisdom",
       desc: "Traditional Vedic astrology blended with modern insights"
     },
     {
-      icon: <Zap className="w-6 h-6 text-indigo-500" />,
+      icon: <Zap className="w-6 h-6 text-green-800" />,
       title: "Life Transformation",
       desc: "Real solutions for real challenges in life"
     }
@@ -64,29 +64,29 @@ export default function AboutPage() {
 
   const coreValues = [
     {
-      icon: <Compass className="w-8 h-8 text-indigo-400" />,
+      icon: <Compass className="w-8 h-8 text-green-800" />,
       title: "Authenticity",
       desc: "Genuine Vedic wisdom, free from superstition and fear-mongering"
     },
     {
-      icon: <Gem className="w-8 h-8 text-indigo-400" />,
+      icon: <Gem className="w-8 h-8 text-green-800" />,
       title: "Empowerment",
       desc: "Tools and insights to help you take control of your destiny"
     },
     {
-      icon: <Activity className="w-8 h-8 text-indigo-400" />,
+      icon: <Activity className="w-8 h-8 text-green-800" />,
       title: "Compassion",
       desc: "Understanding and support through life's challenges"
     },
     {
-      icon: <TrendingUp className="w-8 h-8 text-indigo-400" />,
+      icon: <TrendingUp className="w-8 h-8 text-green-800" />,
       title: "Growth",
       desc: "Continuous learning and spiritual development"
     }
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white font-sans">
+    <div className="relative min-h-screen overflow-hidden bg-white font-sans">
       <div className="container mx-auto pt-8 px-4 pb-16 relative z-10">
         {/* Banner Heading */}
         <motion.div 
@@ -131,9 +131,9 @@ export default function AboutPage() {
                 transition={{ duration: 0.7 }} 
                 className="mb-12 bg-white rounded-xl p-6 shadow-md border border-gray-100"
               >
-                <h2 className="text-3xl font-bold text-indigo-900 mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  {t('about.journey.heading')}
-                </h2>
+                                  <h2 className="text-3xl font-bold text-black mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    {t('about.journey.heading')}
+                  </h2>
                 <div className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
                   {/* Reduced to 4 paragraphs for perfect sidebar alignment */}
                   {[0, 1, 2, 3].map(i => (
@@ -143,7 +143,7 @@ export default function AboutPage() {
                 
                 {/* Core Values Section */}
                 <div className="mt-8">
-                  <h3 className="text-2xl font-bold text-indigo-900 mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>Our Core Values</h3>
+                  <h3 className="text-2xl font-bold text-black mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>Our Core Values</h3>
                   <div className="grid md:grid-cols-2 gap-6">
                     {coreValues.map((value, idx) => (
                       <motion.div
@@ -152,12 +152,12 @@ export default function AboutPage() {
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 + idx * 0.1 }}
                         viewport={{ once: true }}
-                        className="flex items-start gap-4 p-4 rounded-lg bg-indigo-50 border border-indigo-100"
+                        className="flex items-start gap-4 p-4 rounded-lg bg-white border border-amber-200"
                       >
                         {value.icon}
                         <div>
-                          <h4 className="font-bold text-indigo-900 mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{value.title}</h4>
-                          <p className="text-gray-700 text-sm">{value.desc}</p>
+                          <h4 className="font-bold text-black mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{value.title}</h4>
+                          <p className="text-black text-sm">{value.desc}</p>
                         </div>
                       </motion.div>
                     ))}
@@ -174,27 +174,27 @@ export default function AboutPage() {
                 transition={{ duration: 0.7 }} 
                 className="mb-12 bg-white rounded-xl p-6 shadow-md border border-gray-100"
               >
-                <h2 className="text-3xl font-bold text-indigo-900 mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h2 className="text-3xl font-bold text-black mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                   {t('about.mission.heading')}
                 </h2>
                 <div className="space-y-6">
-                  <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-6 rounded-xl border border-indigo-100">
-                    <h3 className="font-bold text-indigo-900 text-lg mb-3 flex items-center">
-                      <Target className="w-5 h-5 mr-2" />
+                  <div className="bg-white p-6 rounded-xl border border-amber-200">
+                    <h3 className="font-bold text-black text-lg mb-3 flex items-center">
+                      <Target className="w-5 h-5 mr-2 text-green-800" />
                       {t('about.mission.missionTitle')}
                     </h3>
-                    <p className="text-indigo-800 leading-relaxed">{t('about.mission.missionText')}</p>
+                    <p className="text-black leading-relaxed">{t('about.mission.missionText')}</p>
                   </div>
-                  <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-6 rounded-xl border border-purple-100">
-                    <h3 className="font-bold text-purple-900 text-lg mb-3 flex items-center">
-                      <Users className="w-5 h-5 mr-2" />
+                  <div className="bg-white p-6 rounded-xl border border-amber-200">
+                    <h3 className="font-bold text-black text-lg mb-3 flex items-center">
+                      <Users className="w-5 h-5 mr-2 text-green-800" />
                       {t('about.mission.visionTitle')}
                     </h3>
-                    <p className="text-purple-800 leading-relaxed">{t('about.mission.visionText')}</p>
+                    <p className="text-black leading-relaxed">{t('about.mission.visionText')}</p>
                   </div>
-                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg border border-green-100">
-                    <span className="text-green-800 font-bold text-lg">{t('about.mission.impactTitle')}</span> 
-                    <span className="text-gray-800 font-semibold ml-2">{t('about.mission.impactText')}</span>
+                  <div className="bg-white p-6 rounded-lg border border-amber-200">
+                    <span className="text-black font-bold text-lg">{t('about.mission.impactTitle')}</span> 
+                    <span className="text-black font-semibold ml-2">{t('about.mission.impactText')}</span>
                   </div>
                 </div>
               </motion.section>
@@ -208,7 +208,7 @@ export default function AboutPage() {
                 transition={{ duration: 0.7 }} 
                 className="mb-12 bg-white rounded-xl p-6 shadow-md border border-gray-100"
               >
-                <h2 className="text-3xl font-bold text-indigo-900 mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h2 className="text-3xl font-bold text-black mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                   {t('about.faq.heading')}
                 </h2>
                 <motion.div 
@@ -221,11 +221,11 @@ export default function AboutPage() {
                   {/* Reduced to 6 FAQs for better proportion */}
                   {[0, 1, 2, 3, 4, 5].map(i => (
                     <div key={i} className="border-b border-gray-200 pb-6">
-                      <h3 className="text-lg font-bold text-indigo-900 mb-2 flex items-center">
-                        <HelpCircle className="w-5 h-5 mr-2 text-indigo-400" />
+                      <h3 className="text-lg font-bold text-black mb-2 flex items-center">
+                        <HelpCircle className="w-5 h-5 mr-2 text-black border border-black rounded-full p-1" />
                         {t(`about.faq.q${i}`)}
                       </h3>
-                      <p className="text-gray-700">{t(`about.faq.a${i}`)}</p>
+                      <p className="text-black">{t(`about.faq.a${i}`)}</p>
                     </div>
                   ))}
                 </motion.div>
@@ -240,7 +240,7 @@ export default function AboutPage() {
             <div className="sticky top-8 space-y-6">
               {/* Quick Facts */}
               <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-md">
-                <h3 className="text-lg font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h3 className="text-lg font-bold text-black mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                   {t('about.quickfacts.heading')}
                 </h3>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
@@ -252,7 +252,7 @@ export default function AboutPage() {
 
               {/* Featured Services */}
               <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-md">
-                <h3 className="text-lg font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h3 className="text-lg font-bold text-black mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                   Featured Services
                 </h3>
                 <div className="space-y-4">
@@ -263,12 +263,12 @@ export default function AboutPage() {
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5 + idx * 0.1 }}
                       viewport={{ once: true }}
-                      className="flex items-start gap-3 p-3 rounded-lg bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-colors"
+                      className="flex items-start gap-3 p-3 rounded-lg bg-white hover:bg-gray-50 transition-colors"
                     >
                       {feature.icon}
                       <div>
-                        <h4 className="font-semibold text-indigo-900 text-sm mb-1">{feature.title}</h4>
-                        <p className="text-gray-600 text-xs">{feature.desc}</p>
+                        <h4 className="font-semibold text-black text-sm mb-1">{feature.title}</h4>
+                        <p className="text-black text-xs">{feature.desc}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -277,14 +277,14 @@ export default function AboutPage() {
 
               {/* Resources */}
               <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-md">
-                <h3 className="text-lg font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h3 className="text-lg font-bold text-black mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                   {t('about.resources.heading')}
                 </h3>
                 <ul className="space-y-3">
                   {[0, 1, 2, 3].map(i => (
                     <li key={i}>
-                      <a href={t(`about.resources.link${i}.url`)} className="text-indigo-700 hover:text-indigo-900 hover:underline flex items-start transition-colors">
-                        <ArrowUpRight className="w-4 h-4 mr-2 mt-1 text-indigo-500" />
+                      <a href={t(`about.resources.link${i}.url`)} className="text-black hover:text-green-800 hover:underline flex items-start transition-colors">
+                        <ArrowUpRight className="w-4 h-4 mr-2 mt-1 text-green-800" />
                         <span className="text-sm">{t(`about.resources.link${i}.title`)}</span>
                       </a>
                     </li>
@@ -294,7 +294,7 @@ export default function AboutPage() {
 
               {/* Contact Info */}
               <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-md">
-                <h3 className="text-lg font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h3 className="text-lg font-bold text-black mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                   Get in Touch
                 </h3>
                 <div className="space-y-3 text-sm text-gray-700">
@@ -313,14 +313,12 @@ export default function AboutPage() {
         </div>
 
         {/* Additional Components */}
-        <div className="mt-20 space-y-20">
+        <div className="mt-8 space-y-8">
           <DrNarendraProfile />
           <Statistics />
         </div>
 
-        <div className="mt-20">
-          <ContactForm />
-        </div>
+
       </div>
     </div>
   );

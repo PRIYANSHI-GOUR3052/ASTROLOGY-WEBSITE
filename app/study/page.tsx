@@ -6,7 +6,6 @@ import { BookOpen, Star, Moon, Sun, HelpCircle, Users, Target, Award, Globe, Hea
 import { CTASection } from '../components/CTASection';
 import { DrNarendraProfile } from '../components/DrNarendraProfile';
 import { Statistics } from '../components/Statistics';
-import { ContactForm } from '../components/ContactForm';
 import { useLanguage } from '../contexts/useLanguage';
 
 const tabKeys = ['study.tabs.0', 'study.tabs.1', 'study.tabs.2']; // Overview, Benefits, FAQs
@@ -22,28 +21,28 @@ export default function StudyPage() {
       title: "Vedic Astrology Fundamentals",
       titleHi: "वैदिक ज्योतिष के मूल सिद्धांत",
       description: "Learn the basics of Vedic astrology, including planets, houses, and zodiac signs.",
-      icon: <Sun className="w-12 h-12 text-yellow-500" />,
+      icon: <Sun className="w-12 h-12 text-green-800" />,
       href: "/study/vedic-astrology"
     },
     {
       title: "Numerology Essentials",
       titleHi: "अंक ज्योतिष के आवश्यक तत्व",
       description: "Discover the mystical significance of numbers in your life and their impact on your destiny.",
-      icon: <Star className="w-12 h-12 text-purple-500" />,
+      icon: <Star className="w-12 h-12 text-green-800" />,
       href: "/study/numerology"
     },
     {
       title: "Palmistry Techniques",
       titleHi: "हस्तरेखा विज्ञान की तकनीकें",
       description: "Explore the art of reading palms and understanding the lines that shape our lives.",
-      icon: <Moon className="w-12 h-12 text-blue-500" />,
+      icon: <Moon className="w-12 h-12 text-green-800" />,
       href: "/study/palmistry"
     },
     {
       title: "Tarot Card Reading",
       titleHi: "टैरो कार्ड रीडिंग",
       description: "Learn the meanings behind tarot cards and how to conduct insightful readings.",
-      icon: <BookOpen className="w-12 h-12 text-green-500" />,
+      icon: <BookOpen className="w-12 h-12 text-green-800" />,
       href: "/study/tarot"
     }
   ];
@@ -112,39 +111,39 @@ export default function StudyPage() {
 
   const sidebarFeatures = [
     {
-      icon: <BookOpen className="w-6 h-6 text-indigo-500" />,
+      icon: <BookOpen className="w-6 h-6 text-green-800" />,
       title: "Comprehensive Courses",
       desc: "Structured learning paths from beginner to advanced levels"
     },
     {
-      icon: <Users className="w-6 h-6 text-indigo-500" />,
+      icon: <Users className="w-6 h-6 text-green-800" />,
       title: "Expert Mentors",
       desc: "Learn from experienced practitioners and teachers"
     },
     {
-      icon: <Globe className="w-6 h-6 text-indigo-500" />,
+      icon: <Globe className="w-6 h-6 text-green-800" />,
       title: "Global Community",
       desc: "Connect with spiritual seekers worldwide"
     },
     {
-      icon: <Heart className="w-6 h-6 text-indigo-500" />,
+      icon: <Heart className="w-6 h-6 text-green-800" />,
       title: "Personal Growth",
       desc: "Transform your life through spiritual wisdom"
     },
     {
-      icon: <Shield className="w-6 h-6 text-indigo-500" />,
+      icon: <Shield className="w-6 h-6 text-green-800" />,
       title: "Safe Learning",
       desc: "Supportive environment for spiritual exploration"
     },
     {
-      icon: <Sparkles className="w-6 h-6 text-indigo-500" />,
+      icon: <Sparkles className="w-6 h-6 text-green-800" />,
       title: "Ancient Wisdom",
       desc: "Traditional knowledge with modern applications"
     }
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-indigo-50 to-white font-sans">
+    <div className="relative min-h-screen overflow-hidden bg-white font-sans">
       <div className="container mx-auto pt-8 px-4 pb-16 relative z-10">
         {/* Banner Heading */}
         <motion.div 
@@ -172,7 +171,7 @@ export default function StudyPage() {
                 <button
                   key={tabKey}
                   onClick={() => setActiveTab(tabKey)}
-                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors font-sans ${activeTab === tabKey ? 'border-indigo-500 text-indigo-600 font-bold' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
+                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors font-sans ${activeTab === tabKey ? 'border-green-800 text-green-800 font-bold' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
                   style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}
                 >
                   {tabKey === 'study.tabs.0' ? 'Overview' : tabKey === 'study.tabs.1' ? 'Benefits' : 'FAQs'}
@@ -187,12 +186,12 @@ export default function StudyPage() {
                 whileInView={{ opacity: 1, y: 0 }} 
                 viewport={{ once: true }} 
                 transition={{ duration: 0.7 }} 
-                className="mb-12 bg-white rounded-xl p-6 shadow-md border border-gray-100"
+                className="mb-12 bg-white rounded-xl p-6 shadow-md border border-amber-200"
               >
-                <h2 className="text-3xl font-bold text-indigo-900 mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h2 className="text-3xl font-bold text-black mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                   The Value of Spiritual Study
                 </h2>
-                <div className="mb-8 text-lg leading-relaxed text-gray-700 space-y-6" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
+                <div className="mb-8 text-lg leading-relaxed text-black space-y-6" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
                   <p>Spiritual study is the gateway to self-realization and conscious living. By delving into the mysteries of astrology, numerology, tarot, and other mystical sciences, you gain tools to understand your true nature, navigate life&apos;s challenges, and unlock your highest potential.</p>
                   <p>Our courses are designed to bridge ancient wisdom with modern life, offering practical insights and transformative practices that empower you to live with clarity, confidence, and purpose.</p>
                   <p>Through guided lessons, interactive exercises, and community support, you will learn to interpret cosmic patterns, harness universal energies, and cultivate a deeper connection with your inner self.</p>
@@ -201,7 +200,7 @@ export default function StudyPage() {
                 
                 {/* Study Topics Section */}
                 <div className="mt-8">
-                  <h3 className="text-2xl font-bold text-indigo-900 mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>Study Topics</h3>
+                  <h3 className="text-2xl font-bold text-black mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>Study Topics</h3>
                   <div className="grid md:grid-cols-2 gap-6">
                     {studyTopics.map((topic, idx) => (
                       <motion.div
@@ -210,13 +209,13 @@ export default function StudyPage() {
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 + idx * 0.1 }}
                         viewport={{ once: true }}
-                        className="flex items-start gap-4 p-4 rounded-lg bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-colors cursor-pointer"
+                        className="flex items-start gap-4 p-4 rounded-lg bg-white border border-amber-200 hover:bg-gray-50 transition-colors cursor-pointer"
                       >
                         {topic.icon}
                         <div>
-                          <h4 className="font-bold text-indigo-900 mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{topic.title}</h4>
-                          {lang === 'hi' && <h5 className="text-sm text-indigo-700 mb-2">{topic.titleHi}</h5>}
-                          <p className="text-gray-700 text-sm">{topic.description}</p>
+                          <h4 className="font-bold text-black mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{topic.title}</h4>
+                          {lang === 'hi' && <h5 className="text-sm text-black mb-2">{topic.titleHi}</h5>}
+                          <p className="text-black text-sm">{topic.description}</p>
                         </div>
                       </motion.div>
                     ))}
@@ -231,9 +230,9 @@ export default function StudyPage() {
                 whileInView={{ opacity: 1, y: 0 }} 
                 viewport={{ once: true }} 
                 transition={{ duration: 0.7 }} 
-                className="mb-12 bg-white rounded-xl p-6 shadow-md border border-gray-100"
+                className="mb-12 bg-white rounded-xl p-6 shadow-md border border-amber-200"
               >
-                <h2 className="text-3xl font-bold text-indigo-900 mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h2 className="text-3xl font-bold text-black mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                   Benefits of Spiritual Study
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
@@ -244,14 +243,14 @@ export default function StudyPage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 + idx * 0.1 }}
                       viewport={{ once: true }}
-                      className="flex items-start gap-4 p-4 rounded-lg bg-indigo-50 border border-indigo-100"
+                      className="flex items-start gap-4 p-4 rounded-lg bg-white border border-amber-200"
                     >
-                      <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                        <span className="text-indigo-600 font-bold text-sm">{idx + 1}</span>
+                      <div className="w-8 h-8 rounded-full bg-green-800 flex items-center justify-center flex-shrink-0">
+                        <span className="text-white font-bold text-sm">{idx + 1}</span>
                       </div>
                       <div>
-                        <h4 className="font-bold text-indigo-900 mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{benefit.title}</h4>
-                        <p className="text-gray-700 text-sm">{benefit.desc}</p>
+                        <h4 className="font-bold text-black mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{benefit.title}</h4>
+                        <p className="text-black text-sm">{benefit.desc}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -265,9 +264,9 @@ export default function StudyPage() {
                 whileInView={{ opacity: 1, y: 0 }} 
                 viewport={{ once: true }} 
                 transition={{ duration: 0.7 }} 
-                className="mb-12 bg-white rounded-xl p-6 shadow-md border border-gray-100"
+                className="mb-12 bg-white rounded-xl p-6 shadow-md border border-amber-200"
               >
-                <h2 className="text-3xl font-bold text-indigo-900 mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h2 className="text-3xl font-bold text-black mb-6 border-b pb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                   Frequently Asked Questions
                 </h2>
                 <motion.div 
@@ -279,11 +278,11 @@ export default function StudyPage() {
                 >
                   {faqs.map((faq, idx) => (
                     <div key={idx} className="border-b border-gray-200 pb-6">
-                      <h3 className="text-lg font-bold text-indigo-900 mb-2 flex items-center">
-                        <HelpCircle className="w-5 h-5 mr-2 text-indigo-400" />
+                      <h3 className="text-lg font-bold text-black mb-2 flex items-center">
+                        <HelpCircle className="w-5 h-5 mr-2 text-black border border-black rounded-full p-1" />
                         {faq.q}
                       </h3>
-                      <p className="text-gray-700">{faq.a}</p>
+                      <p className="text-black">{faq.a}</p>
                     </div>
                   ))}
                 </motion.div>
@@ -297,11 +296,11 @@ export default function StudyPage() {
           <div className="lg:col-span-1">
             <div className="sticky top-8 space-y-6">
               {/* Quick Facts */}
-              <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-md">
-                <h3 className="text-lg font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <div className="bg-white rounded-lg p-6 border border-amber-200 shadow-md">
+                <h3 className="text-lg font-bold text-black mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                   Study Highlights
                 </h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                <ul className="list-disc list-inside text-black space-y-2">
                   <li>4 main study topics</li>
                   <li>Beginner to advanced levels</li>
                   <li>Interactive learning materials</li>
@@ -312,8 +311,8 @@ export default function StudyPage() {
               </div>
 
               {/* Featured Features */}
-              <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-md">
-                <h3 className="text-lg font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <div className="bg-white rounded-lg p-6 border border-amber-200 shadow-md">
+                <h3 className="text-lg font-bold text-black mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                   Learning Features
                 </h3>
                 <div className="space-y-4">
@@ -324,12 +323,12 @@ export default function StudyPage() {
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5 + idx * 0.1 }}
                       viewport={{ once: true }}
-                      className="flex items-start gap-3 p-3 rounded-lg bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-colors"
+                      className="flex items-start gap-3 p-3 rounded-lg bg-white hover:bg-gray-50 transition-colors"
                     >
                       {feature.icon}
                       <div>
-                        <h4 className="font-semibold text-indigo-900 text-sm mb-1">{feature.title}</h4>
-                        <p className="text-gray-600 text-xs">{feature.desc}</p>
+                        <h4 className="font-semibold text-black text-sm mb-1">{feature.title}</h4>
+                        <p className="text-black text-xs">{feature.desc}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -337,11 +336,11 @@ export default function StudyPage() {
               </div>
 
               {/* Get Started */}
-              <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-md">
-                <h3 className="text-lg font-bold text-indigo-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <div className="bg-white rounded-lg p-6 border border-amber-200 shadow-md">
+                <h3 className="text-lg font-bold text-black mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                   Ready to Begin?
                 </h3>
-                <div className="space-y-3 text-sm text-gray-700">
+                <div className="space-y-3 text-sm text-black">
                   <p>Start your spiritual journey today with our comprehensive study programs.</p>
                   <p>Choose from our four main topics and begin learning at your own pace.</p>
                   <button className="w-full bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm mt-3">
@@ -354,13 +353,9 @@ export default function StudyPage() {
         </div>
 
         {/* Additional Components */}
-        <div className="mt-20 space-y-20">
+        <div className="mt-8 space-y-8">
           <DrNarendraProfile />
           <Statistics />
-        </div>
-
-        <div className="mt-20">
-          <ContactForm />
         </div>
       </div>
     </div>
