@@ -131,9 +131,13 @@ export function Testimonials() {
           transition={{ duration: 0.7 }}
           className="w-full mb-12 flex flex-col items-center"
         >
-          <div className="w-full rounded-2xl bg-gradient-to-r from-[#fdf6f2] via-[#f3e8ff] to-[#e0f2fe] shadow-lg px-4 py-8 md:py-10 flex flex-col items-center">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-black text-center font-playfair mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{t('testimonials.heading') || 'Client Reviews'}</h1>
-            <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl font-cormorant" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{t('testimonials.subheading') || 'Read what our clients say about their experiences with our astrology services.'}</p>
+          <div className="w-full rounded-3xl py-7 px-2 sm:px-4 md:px-10 lg:px-16 mb-8 flex flex-col items-center justify-center shadow-md border border-[#e6c77e]" style={{ backgroundColor: '#FEFBF2' }}>
+            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-extrabold text-black mb-3 text-center drop-shadow-lg tracking-tight">
+              {t('testimonials.heading') || 'Client Reviews'}
+            </h1>
+            <p className="text-base xs:text-lg md:text-2xl text-center max-w-2xl" style={{ color: '#166534' }}>
+              {t('testimonials.subheading') || 'Read what our clients say about their experiences with our astrology services.'}
+            </p>
           </div>
         </motion.div>
         <div className="relative w-full flex items-center justify-center">

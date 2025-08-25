@@ -17,6 +17,7 @@ interface SavedAttribute {
 
 // Interface for product attribute row from database
 interface ProductAttributeRow {
+  id: number;
   product_attribute_id: number;
   attribute_id: number;
   attribute_name: string;
@@ -52,6 +53,12 @@ interface TransformedAttributes {
   [key: string]: TransformedAttribute;
 }
 
+// Interface for database operation results
+interface DatabaseResult {
+  insertId?: number;
+  affectedRows?: number;
+}
+
 const prisma = new PrismaClient();
 
 // POST - Save product attributes and their values
@@ -84,11 +91,11 @@ export async function POST(
       WHERE product_attribute_id IN (
         SELECT id FROM product_attributes WHERE product_id = ${productId}
       )
-    ` as ProductAttributeRow[];
+    ` as unknown as DatabaseResult;
 
     await prisma.$queryRaw`
       DELETE FROM product_attributes WHERE product_id = ${productId}
-    ` as ProductAttributeRow[];
+    ` as unknown as DatabaseResult;
 
     const savedAttributes: SavedAttribute[] = [];
 
@@ -96,14 +103,17 @@ export async function POST(
       const { attributeId, value, valueType = 'text' } = attr;
 
       if (!attributeId || value === undefined || value === null || value === '') {
+        console.log('Skipping attribute due to missing data:', { attributeId, value, valueType });
         continue;
       }
 
-      // Create product attribute record
-      const productAttribute = await prisma.$queryRaw`
+      console.log('Processing attribute:', { attributeId, value, valueType });
+
+      // Create product attribute record and get the inserted ID
+      const productAttributeResult = await prisma.$queryRaw`
         INSERT INTO product_attributes (product_id, attribute_id, created_at, updated_at)
         VALUES (${productId}, ${parseInt(attributeId.toString())}, NOW(), NOW())
-      ` as ProductAttributeRow[];
+      ` as unknown as DatabaseResult;
 
       // Get the created product attribute ID
       const createdProductAttribute = await prisma.$queryRaw`
@@ -112,8 +122,17 @@ export async function POST(
         ORDER BY id DESC LIMIT 1
       ` as ProductAttributeRow[];
 
+      console.log('Created product attribute result:', createdProductAttribute);
+
       if (createdProductAttribute.length > 0) {
-        const productAttributeId = createdProductAttribute[0].product_attribute_id;
+        const productAttributeId = createdProductAttribute[0].id;
+
+        if (!productAttributeId) {
+          console.error('Failed to get product attribute ID for attribute:', attributeId);
+          continue;
+        }
+
+        console.log('Using product attribute ID:', productAttributeId);
 
         // Create product attribute value record
         let attributeValueId: number | null = null;
@@ -134,7 +153,7 @@ export async function POST(
                   INSERT INTO product_attribute_values 
                   (product_attribute_id, attribute_value_id, created_at, updated_at)
                   VALUES (${productAttributeId}, ${parseInt(valId.toString())}, NOW(), NOW())
-                ` as ProductAttributeRow[];
+                ` as unknown as DatabaseResult;
               }
             } else {
               // Handle single select
@@ -161,7 +180,7 @@ export async function POST(
             INSERT INTO product_attribute_values 
             (product_attribute_id, attribute_value_id, text_value, number_value, boolean_value, date_value, created_at, updated_at)
             VALUES (${productAttributeId}, ${attributeValueId}, ${textValue}, ${numberValue}, ${booleanValue}, ${dateValue}, NOW(), NOW())
-          ` as ProductAttributeRow[];
+          ` as unknown as DatabaseResult;
         }
 
         savedAttributes.push({

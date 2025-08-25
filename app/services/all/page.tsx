@@ -89,7 +89,7 @@ const FilterSidebar = ({
                             type="checkbox"
                             checked={filters[category]?.includes(option) || false}
                             onChange={() => onFilterChange(category, option)}
-                            className="mr-3 h-4 w-4 text-green-700 border-gray-300 rounded focus:ring-green-600"
+                            className="mr-3 h-4 w-4 text-green-700 border-gray-200 bg-gray-50 rounded focus:ring-green-600 focus:ring-2"
                           />
                           <span className="text-sm text-gray-700">{option}</span>
                         </label>
@@ -149,7 +149,7 @@ const FilterSidebar = ({
                         name={activeTab}
                         checked={filters[activeTab]?.includes(option) || false}
                         onChange={() => onFilterChange(activeTab, option)}
-                        className="mr-3 h-4 w-4 text-green-700 border-gray-300 focus:ring-green-600"
+                        className="mr-3 h-4 w-4 text-green-700 border-gray-200 bg-gray-50 focus:ring-green-600 focus:ring-2"
                       />
                       <span className="text-sm text-gray-700">{option}</span>
                     </label>
@@ -405,7 +405,7 @@ export default function AllServicesPage() {
                       placeholder="Search services..."
                       value={searchQuery}
                       onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 bg-gray-50 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-300 placeholder-gray-400 text-gray-900"
                     />
                   </div>
 
@@ -506,7 +506,7 @@ export default function AllServicesPage() {
                     <button
                       onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
                       disabled={currentPage === 1}
-                      className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                      className="px-4 py-2 rounded-lg font-semibold transition-colors border border-green-800 bg-green-800 text-white disabled:bg-gray-300 disabled:text-gray-500 disabled:border-gray-300 disabled:cursor-not-allowed hover:bg-green-900 hover:border-green-900"
                     >
                       Previous
                     </button>
@@ -517,20 +517,25 @@ export default function AllServicesPage() {
                           <button
                             key={page}
                             onClick={() => setCurrentPage(page)}
-                            className={cn('px-4 py-2 rounded-lg transition-colors', currentPage === page ? 'bg-green-800 text-white' : 'border border-gray-300 hover:bg-gray-50')}
+                            className={cn(
+                              'px-4 py-2 rounded-lg font-semibold transition-colors border',
+                              currentPage === page
+                                ? 'bg-green-800 text-white border-green-800 hover:bg-green-900 hover:border-green-900'
+                                : 'bg-white text-green-800 border-green-800 hover:bg-green-50 hover:text-green-900'
+                            )}
                           >
                             {page}
                           </button>
                         );
                       } else if (page === currentPage - 3 || page === currentPage + 3) {
-                        return <span key={page} className="px-2">...</span>;
+                        return <span key={page} className="px-2 text-green-800">...</span>;
                       }
                       return null;
                     })}
                     <button
                       onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
                       disabled={currentPage === totalPages}
-                      className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                      className="px-4 py-2 rounded-lg font-semibold transition-colors border border-green-800 bg-green-800 text-white disabled:bg-gray-300 disabled:text-gray-500 disabled:border-gray-300 disabled:cursor-not-allowed hover:bg-green-900 hover:border-green-900"
                     >
                       Next
                     </button>
@@ -540,13 +545,21 @@ export default function AllServicesPage() {
             </div>
           </div>
 
+          {/* Section Divider */}
+          <div className="flex justify-center my-16">
+            <hr className="border-t-2 border-gray-200 w-3/4 md:w-2/3 lg:w-1/2 rounded-full" />
+          </div>
           {/* CTA Section (kept minimal) */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mt-24 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-center">
             <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4 font-playfair">Need Personalized Guidance?</h2>
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">Connect with our expert astrologers for a personalized consultation tailored to your unique spiritual journey.</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-green-800 hover:bg-green-900 text-white">Talk to Astrologer</Button>
-              <Button size="lg" variant="outline" className="border-green-800 text-green-800 hover:bg-green-50">Book Free Consultation</Button>
+              <a href="/chat-with-astrologer">
+                <Button size="lg" className="bg-green-800 hover:bg-green-900 text-white w-full md:w-auto">Talk to Astrologer</Button>
+              </a>
+              <a href="/contact">
+                <Button size="lg" variant="outline" className="border-green-800 text-green-800 hover:bg-green-50 w-full md:w-auto">Book Free Consultation</Button>
+              </a>
             </div>
           </motion.div>
         </div>
