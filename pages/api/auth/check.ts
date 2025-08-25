@@ -11,20 +11,39 @@ export default async function handler(
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
+  // Debug logging
+  console.log('Auth check request:', {
+    method: req.method,
+    url: req.url,
+    headers: {
+      host: req.headers.host,
+      origin: req.headers.origin,
+      referer: req.headers.referer,
+      cookie: req.headers.cookie ? 'present' : 'missing'
+    },
+    cookies: req.cookies,
+    NODE_ENV: process.env.NODE_ENV
+  });
+
   // Get the adminToken cookie
   const { adminToken } = req.cookies;
 
   if (!adminToken) {
+    console.log('No adminToken cookie found');
     return res.status(401).json({ message: 'Not authenticated' });
   }
 
+  console.log('AdminToken found, length:', adminToken.length);
+
   try {
     // Verify the token
-    jwt.verify(adminToken, SECRET_KEY);
+    const decoded = jwt.verify(adminToken, SECRET_KEY);
+    console.log('Token verified successfully:', { userId: (decoded as any)?.userId });
     
     // Token is valid
     return res.status(200).json({ message: 'Authenticated' });
-  } catch {
+  } catch (error) {
+    console.log('Token verification failed:', error);
     return res.status(401).json({ message: 'Invalid token' });
   }
 }
