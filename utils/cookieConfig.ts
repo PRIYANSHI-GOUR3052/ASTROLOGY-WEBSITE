@@ -17,11 +17,23 @@ export function getCookieConfig(req: NextApiRequest, options?: {
   const isProduction = process.env.NODE_ENV === 'production';
   const host = req.headers.host || '';
   const isLocalhost = host.includes('localhost') || host.includes('127.0.0.1');
+  const isHttps = req.headers['x-forwarded-proto'] === 'https' || (req.headers.referer ? req.headers.referer.startsWith('https://') : false);
+  
+  // Debug logging for production
+  if (isProduction) {
+    console.log('Cookie config debug:', {
+      host,
+      isLocalhost,
+      NODE_ENV: process.env.NODE_ENV,
+      isHttps,
+      secure: isProduction && isHttps && !isLocalhost
+    });
+  }
   
   const cookieOptions: CookieOptions = {
     httpOnly: true,
-    secure: isProduction && !isLocalhost, // Only secure in production and not localhost
-    sameSite: isProduction && !isLocalhost ? 'lax' : 'strict', // Use 'lax' for production domains
+    secure: isProduction && isHttps && !isLocalhost, // Only secure if HTTPS
+    sameSite: 'lax', // Use 'lax' for better compatibility
     path: '/',
   };
   
@@ -41,6 +53,11 @@ export function getCookieConfig(req: NextApiRequest, options?: {
     if (domain && domain.includes('.') && !domain.startsWith('localhost')) {
       cookieOptions.domain = domain;
     }
+  }
+  
+  // Debug logging for production
+  if (isProduction) {
+    console.log('Final cookie options:', cookieOptions);
   }
   
   return cookieOptions;
