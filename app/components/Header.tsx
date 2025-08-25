@@ -818,7 +818,7 @@ export function Header() {
                 >
                   <div className="flex flex-nowrap items-stretch gap-2">
                     <Link
-                      href="/"
+                      href="/services"
                       onClick={() => setIsServicesDropdownOpen(false)}
                       className="px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-md transition-colors whitespace-nowrap"
                       style={{ fontFamily: 'Playfair Display, serif' }}
@@ -826,7 +826,7 @@ export function Header() {
                       {t('header.nav.home')}
                     </Link>
                     <Link
-                      href="/services"
+                      href="/services/all"
                       onClick={() => setIsServicesDropdownOpen(false)}
                       className="px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-md transition-colors whitespace-nowrap"
                       style={{ fontFamily: 'Playfair Display, serif' }}
