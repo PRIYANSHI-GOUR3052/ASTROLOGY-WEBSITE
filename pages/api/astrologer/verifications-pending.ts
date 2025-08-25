@@ -27,12 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ? { status: String(status) }
         : {};
 
-      const pending = await prisma.astrologerVerification.findMany({
+      const pending = await prisma.astrologerverification.findMany({
         where: filter,
         include: {
           astrologer: true,
-          certifications: true,
-          educations: true,
+          astrologercertification: true,
+          astrologereducation: true,
         },
       });
       return res.status(200).json({ pending });
