@@ -23,7 +23,14 @@ export async function GET(
       include: {
         category: true,
         zodiac: true,
-        product_media: true,
+        product_media: {
+          where: {
+            is_active: true
+          },
+          orderBy: {
+            sort_order: 'asc'
+          }
+        },
         product_meta: true,
         product_shipping: true,
         product_stock: {
@@ -38,6 +45,9 @@ export async function GET(
         { status: 404 }
       );
     }
+
+    console.log('Product found with media count:', product.product_media?.length || 0);
+    console.log('Product media:', product.product_media);
 
     return NextResponse.json(product);
 
@@ -133,12 +143,14 @@ export async function PUT(
     // Update media if images are provided
     if (images && images.length > 0) {
       try {
-        const mediaData = images.map((imageUrl: string, index: number) => ({
-          type: 'image',
-          media_url: imageUrl,
-          alt_text: `${name} image ${index + 1}`,
-          title: `${name} image ${index + 1}`
-        }));
+        const mediaData = {
+          media: images.map((imageUrl: string, index: number) => ({
+            type: 'image',
+            url: imageUrl, // Use 'url' field as expected by media route
+            alt_text: `${name} image ${index + 1}`,
+            title: `${name} image ${index + 1}`
+          }))
+        };
 
         const mediaResponse = await fetch(`${request.nextUrl.origin}/api/products/${id}/media`, {
           method: 'PUT',
@@ -150,7 +162,9 @@ export async function PUT(
           const mediaResult = await mediaResponse.json();
           console.log('Media updated successfully:', mediaResult);
         } else {
-          console.error('Failed to update media:', await mediaResponse.json());
+          const errorResponse = await mediaResponse.json();
+          console.error('Failed to update media:', errorResponse);
+          console.error('Media request body:', mediaData);
         }
       } catch (mediaError) {
         console.error('Error updating media:', mediaError);
