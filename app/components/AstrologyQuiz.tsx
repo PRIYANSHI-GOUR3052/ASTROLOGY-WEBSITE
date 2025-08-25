@@ -193,7 +193,6 @@ export function AstrologyQuiz() {
               )}
             </div>
           </div>
-
           <CardContent className="p-4 sm:p-8 pt-12 sm:pt-16">
             {!quizCompleted ? (
               <RadioGroup onValueChange={(value) => setSelectedAnswer(parseInt(value))} value={selectedAnswer !== null ? selectedAnswer.toString() : ''}>

@@ -53,7 +53,7 @@ export default function StudyPage() {
       desc: 'Gain deep insights into your personality, strengths, and life path through the study of astrology, numerology, and spiritual sciences.'
     },
     {
-      title: 'Navigate Life&apos;s Challenges',
+      title: 'Navigate Life\'s Challenges',
       desc: 'Learn to interpret cosmic patterns and cycles, empowering you to make informed decisions and overcome obstacles with confidence.'
     },
     {
@@ -105,7 +105,7 @@ export default function StudyPage() {
     },
     {
       q: 'How do I ask questions or get support during my study?',
-      a: 'You can join our community forums, attend live Q&A sessions, or contact our mentors directly for personalized guidance and support.'
+      a: 'You can join our community forums, attend live Q&amp;A sessions, or contact our mentors directly for personalized guidance and support.'
     }
   ];
 
@@ -195,7 +195,7 @@ export default function StudyPage() {
                   <p>Spiritual study is the gateway to self-realization and conscious living. By delving into the mysteries of astrology, numerology, tarot, and other mystical sciences, you gain tools to understand your true nature, navigate life&apos;s challenges, and unlock your highest potential.</p>
                   <p>Our courses are designed to bridge ancient wisdom with modern life, offering practical insights and transformative practices that empower you to live with clarity, confidence, and purpose.</p>
                   <p>Through guided lessons, interactive exercises, and community support, you will learn to interpret cosmic patterns, harness universal energies, and cultivate a deeper connection with your inner self.</p>
-                  <p>The journey of spiritual study is not just about acquiring knowledge—it&apos;s about awakening your intuition, expanding your consciousness, and embracing a life of meaning and fulfillment.</p>
+                  <p>The journey of spiritual study is not just about acquiring knowledge— it&apos;s about awakening your intuition, expanding your consciousness, and embracing a life of meaning and fulfillment.</p>
                 </div>
                 
                 {/* Study Topics Section */}

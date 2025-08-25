@@ -78,7 +78,7 @@ const benefits = [
   {
     icon: <Compass className="text-indigo-400 w-8 h-8 mb-2" />,
     title: 'Life Direction',
-    desc: 'Get clear guidance on your life&apos;s direction and the steps needed to reach your goals.'
+    desc: 'Get clear guidance on your life\'s direction and the steps needed to reach your goals.'
   },
   {
     icon: <TrendingUp className="text-indigo-400 w-8 h-8 mb-2" />,
@@ -102,11 +102,11 @@ const faqs = [
   },
   {
     q: 'What is a Life Path Number?',
-    a: 'Your Life Path Number is the most important number in Numerology, calculated from your birth date. It reveals your primary life purpose, the central theme of your existence, and the major lessons you&apos;re here to learn in this lifetime.'
+    a: 'Your Life Path Number is the most important number in Numerology, calculated from your birth date. It reveals your primary life purpose, the central theme of your existence, and the major lessons you\'re here to learn in this lifetime.'
   },
   {
     q: 'Can Numerology predict the future?',
-    a: 'Numerology doesn&apos;t predict fixed future events, but it reveals life patterns, timing of opportunities, and personal cycles. It helps you understand your natural rhythms and make choices aligned with your destiny.'
+    a: 'Numerology doesn\'t predict fixed future events, but it reveals life patterns, timing of opportunities, and personal cycles. It helps you understand your natural rhythms and make choices aligned with your destiny.'
   }
 ];
 
@@ -131,16 +131,16 @@ export default function NumerologyPage() {
 
         <div className="flex flex-wrap gap-2 mb-8 border-b border-gray-200">
           {tabs.map((tab) => (
-                <button
+            <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors font-sans ${activeTab === tab ? 'border-indigo-500 text-indigo-600 font-bold' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
               style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}
             >
               {tab}
-                </button>
-              ))}
-            </div>
+            </button>
+          ))}
+        </div>
 
         {activeTab === 'Overview' && (
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12 text-lg leading-relaxed text-gray-700 space-y-6 font-sans" style={{ fontFamily: 'Open Sans, Arial, sans-serif', textAlign: 'justify' }}>
@@ -186,9 +186,11 @@ export default function NumerologyPage() {
                   <div className="flex items-center mb-2">
                     <span className="text-indigo-600 mr-2 text-xl">&#x3f;</span>
                     <span className="font-bold text-lg text-indigo-900" style={{ fontFamily: 'Playfair Display, serif' }}>{faq.q}</span>
+
             </div>
-                  <p className="text-black text-justify pl-8" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>{faq.a}</p>
+                  <p className="text-black text-justify pl-8" style={{ fontFamily: 'Open Sans, Arial, sans-serif' }}>{faq.a.replace(/'/g, '&apos;')}</p>
         </div>
+
               ))}
             </div>
           </section>

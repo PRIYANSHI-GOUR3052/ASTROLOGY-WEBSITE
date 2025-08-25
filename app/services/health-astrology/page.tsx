@@ -106,7 +106,7 @@ const faqs = [
   },
   {
     q: 'What kind of remedies are suggested for health issues?',
-    a: 'Remedies are holistic and can include dietary recommendations, lifestyle changes, specific mantras, gemstone therapy, and rituals designed to pacify malefic planetary influences and strengthen benefic ones.'
+  a: 'Remedies are holistic and can include dietary recommendations, lifestyle changes, specific mantras, gemstone therapy, and rituals designed to pacify malefic planetary influences and strengthen benefic ones.'
   }
 ];
 
