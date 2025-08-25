@@ -135,28 +135,37 @@ export default function UniversalZodiacBanner({ signKey }: { signKey: string }) 
   return (
     <section 
       ref={ref}
-      className="relative w-full h-[300px] bg-amber-50/60 overflow-hidden"
+  className="relative w-full h-[300px] bg-amber-50/60 overflow-hidden pt-24 md:pt-0"
     >
       {/* Main Content Container */}
       <div className="max-w-7xl mx-auto px-8 h-full flex items-center">
-                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center w-full ml-4 md:ml-16">
           
-          {/* LEFT SIDE - Visual Element */}
+          {/* LEFT SIDE - Visual Element (3:4 Image) */}
           <motion.div 
-            className="flex items-center justify-center lg:justify-start"
+            className="flex items-center justify-center lg: relative"
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-                         {/* Rounded Square with Aries Symbol */}
-             <div className="w-36 h-36 bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl flex items-center justify-center shadow-2xl">
-               <span className="text-5xl text-white font-light">
-                 {data.symbol}
-               </span>
-             </div>
-            
-            {/* Small decorative dot */}
-            <div className="absolute -top-4 -right-4 w-4 h-4 bg-amber-300 rounded-full opacity-60"></div>
+            {/* 3:4 Image for Zodiac Sign */}
+            {(() => {
+              const zodiacImages: Record<string, string> = {
+                aquarius: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556372/aquarius_p6wkxz.png',
+                // Add other signs as needed
+              };
+              const imageUrl = zodiacImages[signKey] || '/images/zodiac/default-4x3.jpg';
+              return (
+                <div className="w-full h-40 md:h-60 relative mb-2 mt-8 rounded-lg overflow-hidden shadow-lg">
+                  <img
+                    src={imageUrl}
+                    alt={`${data.sign} zodiac illustration`}
+                    className="object-cover w-full h-full"
+                    style={{ aspectRatio: '4/3' }}
+                  />
+                </div>
+              );
+            })()}
           </motion.div>
 
                      {/* RIGHT SIDE - Text Content */}

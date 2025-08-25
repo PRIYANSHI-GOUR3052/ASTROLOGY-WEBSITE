@@ -1,227 +1,403 @@
-'use client';
-
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp, Sparkles, Heart, Zap, Shield, Star, Gem, TrendingUp, HelpCircle } from 'lucide-react';
+import { Sparkles, Heart, Zap, Shield, Star, Gem, TrendingUp, HelpCircle, ChevronDown } from 'lucide-react';
 
 const navigationItems = [
-  { id: 'about', label: 'About Aquarius', icon: Sparkles },
-  { id: 'daily', label: 'Daily Insights', icon: Star },
-  { id: 'lucky', label: 'Lucky Elements', icon: Gem },
-  { id: 'compatibility', label: 'Compatibility', icon: Heart },
-  { id: 'growth', label: 'Growth & Challenges', icon: TrendingUp },
-  { id: 'products', label: 'Aquarius Products', icon: Shield },
-  { id: 'uranus', label: 'Uranus Influence', icon: Zap },
-  { id: 'faq', label: 'FAQ', icon: HelpCircle }
+  { id: 'about', label: 'About', shortLabel: 'About', icon: Sparkles },
+  { id: 'daily', label: 'Daily Insights', shortLabel: 'Daily', icon: Star },
+  { id: 'lucky', label: 'Lucky Elements', shortLabel: 'Lucky', icon: Gem },
+  { id: 'compatibility', label: 'Compatibility', shortLabel: 'Match', icon: Heart },
+  { id: 'growth', label: 'Growth', shortLabel: 'Growth', icon: TrendingUp },
+  { id: 'products', label: 'Products', shortLabel: 'Shop', icon: Shield },
+  { id: 'uranus', label: 'Uranus', shortLabel: 'Uranus', icon: Zap },
+  { id: 'faq', label: 'FAQ', shortLabel: 'FAQ', icon: HelpCircle },
 ];
 
 export default function AquariusInfoNavigation() {
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('about');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const toggleDropdown = (id: string) => {
-    setActiveDropdown(activeDropdown === id ? null : id);
-  };
+  const activeItem = navigationItems.find(item => item.id === activeTab);
 
   return (
-    <div className="bg-gradient-to-r from-amber-50 via-white to-orange-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* NAVIGATION BAR */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <motion.button
-                key={item.id}
-                onClick={() => toggleDropdown(item.id)}
-                className="flex items-center gap-2 px-6 py-3 bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-lg font-serif font-semibold text-black"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Icon className="w-5 h-5" />
-                {item.label}
-                {activeDropdown === item.id ? (
-                  <ChevronUp className="w-4 h-4" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-              </motion.button>
-            );
-          })}
+    <div className="min-h-screen bg-gradient-to-r from-amber-50 via-white to-orange-50">
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        
+        {/* Mobile Dropdown Navigation */}
+        <div className="block sm:hidden mb-6">
+          <div className="relative">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="w-full flex items-center justify-between bg-white rounded-xl shadow-md px-4 py-3 text-left border border-orange-100"
+            >
+              <div className="flex items-center gap-3">
+                {activeItem && <activeItem.icon className="w-5 h-5 text-orange-600" />}
+                <span className="font-medium text-gray-800">{activeItem?.label}</span>
+              </div>
+              <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${mobileMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {mobileMenuOpen && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-orange-100 z-10">
+                {navigationItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-orange-50 first:rounded-t-xl last:rounded-b-xl transition-colors ${
+                        activeTab === item.id ? 'bg-orange-100 text-orange-700' : 'text-gray-700'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* DROPDOWN CONTENT */}
-        <AnimatePresence mode="wait">
-          {activeDropdown && (
-            <motion.div
-              key={activeDropdown}
-              className="bg-white rounded-2xl shadow-xl p-8"
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-            >
-              {activeDropdown === 'about' && (
-                <div className="space-y-6">
-                  <h3 className="text-3xl font-serif font-bold text-black mb-6">About Aquarius</h3>
-                  <div className="grid md:grid-cols-3 gap-8">
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Element & Quality</h4>
-                      <p className="text-black leading-relaxed">Air sign with Fixed quality. Aquarius represents innovation, humanitarianism, and a unique perspective on the world.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Ruling Planet</h4>
-                      <p className="text-black leading-relaxed">Uranus, the planet of innovation, rebellion, and sudden change. This gives Aquarius their revolutionary spirit, originality, and desire for progress.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Natural Strengths</h4>
-                      <p className="text-black leading-relaxed">Innovation, independence, humanitarianism, intellectual curiosity, and a unique perspective. Aquarius excels in thinking outside the box.</p>
-                    </div>
-                  </div>
-                </div>
-              )}
+        {/* Desktop Tab Navigation */}
+        <div className="hidden sm:block mb-8">
+          <div className="bg-white rounded-2xl shadow-md p-2 border border-orange-100">
+            <nav className="grid grid-cols-4 lg:grid-cols-8 gap-2">
+              {navigationItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-xl transition-all duration-200 ${
+                      isActive 
+                        ? 'bg-gradient-to-br from-orange-100 to-amber-100 text-orange-700 shadow-sm' 
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-orange-600'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span className="text-sm font-medium">{item.shortLabel}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        </div>
 
-              {activeDropdown === 'daily' && (
-                <div className="space-y-6">
-                  <h3 className="text-3xl font-serif font-bold text-black mb-6">Daily Insights for Aquarius</h3>
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Today&apos;s Forecast</h4>
-                      <p className="text-black leading-relaxed mb-4">Uranus aligns with Mercury today, bringing innovative ideas and opportunities for intellectual breakthroughs. Embrace your unique perspective.</p>
-                      <div className="bg-gradient-to-r from-yellow-50 to-amber-50 p-4 rounded-xl">
-                        <p className="text-black font-medium">Lucky Number: 11</p>
-                        <p className="text-black font-medium">Best Time: 3:00 PM - 5:00 PM</p>
+        {/* Content Panel */}
+        <div className="bg-white rounded-2xl shadow-lg border border-orange-100 overflow-hidden">
+          <div className="p-6 sm:p-8">
+            
+            {activeTab === 'about' && (
+              <div className="space-y-8">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
+                    <Sparkles className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">About Aquarius</h2>
+                  <p className="text-gray-600 max-w-2xl mx-auto">The innovative water bearer, bringing revolutionary ideas and humanitarian spirit to the world.</p>
+                </div>
+                
+                <div className="grid md:grid-cols-3 gap-6">
+                  {[
+                    {
+                      title: "Element & Quality",
+                      content: "Air sign with Fixed quality. Aquarius represents innovation, humanitarianism, and a unique perspective on the world."
+                    },
+                    {
+                      title: "Ruling Planet", 
+                      content: "Uranus, the planet of innovation, rebellion, and sudden change. This gives Aquarius their revolutionary spirit and originality."
+                    },
+                    {
+                      title: "Natural Strengths",
+                      content: "Innovation, independence, humanitarianism, intellectual curiosity, and thinking outside the box."
+                    }
+                  ].map((item, index) => (
+                    <div key={index} className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
+                      <h3 className="text-xl font-semibold text-gray-800 mb-3">{item.title}</h3>
+                      <p className="text-gray-600 leading-relaxed">{item.content}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'daily' && (
+              <div className="space-y-8">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-full mb-4">
+                    <Star className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">Daily Insights</h2>
+                </div>
+                
+                <div className="grid lg:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <h3 className="text-2xl font-semibold text-gray-800">Today&apos;s Forecast</h3>
+                    <p className="text-gray-600 leading-relaxed">Uranus aligns with Mercury today, bringing innovative ideas and opportunities for intellectual breakthroughs. Embrace your unique perspective.</p>
+                    
+                    <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl border border-orange-100">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-orange-600">11</p>
+                          <p className="text-sm text-gray-600">Lucky Number</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-lg font-semibold text-orange-600">3-5 PM</p>
+                          <p className="text-sm text-gray-600">Best Time</p>
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Weekly Focus</h4>
-                      <p className="text-black leading-relaxed">This week emphasizes innovation and humanitarian efforts. Perfect time to share your unique ideas and work toward positive change.</p>
-                    </div>
                   </div>
-                </div>
-              )}
-
-              {activeDropdown === 'lucky' && (
-                <div className="space-y-6">
-                  <h3 className="text-3xl font-serif font-bold text-black mb-6">Lucky Elements for Aquarius</h3>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="text-center">
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">Lucky Colors</h4>
-                      <p className="text-black">Electric Blue, Turquoise, Silver, Purple</p>
-                    </div>
-                    <div className="text-center">
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">Lucky Numbers</h4>
-                      <p className="text-black">4, 7, 11, 22, 29</p>
-                    </div>
-                    <div className="text-center">
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">Lucky Days</h4>
-                      <p className="text-black">Saturday, Wednesday</p>
-                    </div>
-                    <div className="text-center">
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">Lucky Stones</h4>
-                      <p className="text-black">Amethyst, Aquamarine, Clear Quartz, Fluorite</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeDropdown === 'compatibility' && (
-                <div className="space-y-6">
-                  <h3 className="text-3xl font-serif font-bold text-black mb-6">Aquarius Compatibility</h3>
-                  <div className="grid md:grid-cols-3 gap-8">
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Best Matches</h4>
-                      <p className="text-black leading-relaxed">Gemini, Libra, Sagittarius, and Aries. These signs appreciate Aquarius&apos;innovation and provide the intellectual stimulation they crave.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Challenging Matches</h4>
-                      <p className="text-black leading-relaxed">Taurus and Scorpio may find Aquarius too unpredictable, while Aquarius may see them as too traditional or emotional.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Friendship Compatibility</h4>
-                      <p className="text-black leading-relaxed">Excellent with Air and Fire signs. Aquarius values intellectual connection, independence, and shared humanitarian values in friendships.</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeDropdown === 'growth' && (
-                <div className="space-y-6">
-                  <h3 className="text-3xl font-serif font-bold text-black mb-6">Growth & Challenges</h3>
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Areas for Growth</h4>
-                      <p className="text-black leading-relaxed">Learning to be more emotionally expressive, developing patience, and balancing independence with connection. Embracing emotional intimacy.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Common Challenges</h4>
-                      <p className="text-black leading-relaxed">Being too detached, stubbornness, and sometimes being too idealistic. Learning to be more practical and emotionally available is key.</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeDropdown === 'products' && (
-                <div className="space-y-6">
-                  <h3 className="text-3xl font-serif font-bold text-black mb-6">Aquarius Power Collection</h3>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl">
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">Amethyst Innovation Crystal</h4>
-                      <p className="text-black mb-3">Enhances innovation and intuition</p>
-                      <button className="bg-gradient-to-r from-blue-100 to-cyan-100 text-black font-serif font-bold py-2 px-4 rounded-lg">View Details</button>
-                    </div>
-                    <div className="bg-gradient-to-br from-teal-50 to-blue-50 p-6 rounded-xl">
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">Aquamarine Vision Stone</h4>
-                      <p className="text-black mb-3">Promotes vision and clarity</p>
-                      <button className="bg-gradient-to-r from-teal-100 to-blue-100 text-black font-serif font-bold py-2 px-4 rounded-lg">View Details</button>
-                    </div>
-                    <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-xl">
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">Clear Quartz Amplifier</h4>
-                      <p className="text-black mb-3">Amplifies energy and clarity</p>
-                      <button className="bg-gradient-to-r from-purple-100 to-indigo-100 text-black font-serif font-bold py-2 px-4 rounded-lg">View Details</button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeDropdown === 'uranus' && (
-                <div className="space-y-6">
-                  <h3 className="text-3xl font-serif font-bold text-black mb-6">Uranus Influence on Aquarius</h3>
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Innovation & Rebellion</h4>
-                      <p className="text-black leading-relaxed">Uranus gives Aquarius a revolutionary spirit, love for innovation, and desire to break free from traditional norms and create positive change.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-serif font-bold text-black mb-3">Originality & Independence</h4>
-                      <p className="text-black leading-relaxed">Aquarius&apos; Uranian influence brings unique perspectives, intellectual curiosity, and a strong need for personal freedom and authenticity.</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeDropdown === 'faq' && (
-                <div className="space-y-6">
-                  <h3 className="text-3xl font-serif font-bold text-black mb-6">Frequently Asked Questions</h3>
+                  
                   <div className="space-y-4">
-                    <div>
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">Why are Aquarius so innovative?</h4>
-                      <p className="text-black leading-relaxed">Aquarius&apos; ruling planet Uranus brings a revolutionary spirit and love for innovation. They are naturally drawn to new ideas and progressive thinking.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">What careers suit Aquarius?</h4>
-                      <p className="text-black leading-relaxed">Technology, science, humanitarian work, social activism, research, and any field requiring innovation, originality, and progressive thinking.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-serif font-bold text-black mb-2">How can Aquarius improve relationships?</h4>
-                      <p className="text-black leading-relaxed">By being more emotionally expressive, developing patience, and balancing their need for independence with emotional connection and intimacy.</p>
+                    <h3 className="text-2xl font-semibold text-gray-800">Weekly Focus</h3>
+                    <p className="text-gray-600 leading-relaxed">This week emphasizes innovation and humanitarian efforts. Perfect time to share your unique ideas and work toward positive change.</p>
+                    
+                    <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
+                      <h4 className="font-semibold text-gray-800 mb-2">Key Themes</h4>
+                      <ul className="space-y-2 text-gray-600">
+                        <li>• Innovation and creativity</li>
+                        <li>• Community connections</li>
+                        <li>• Progressive thinking</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </div>
+            )}
+
+            {activeTab === 'lucky' && (
+              <div className="space-y-8">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
+                    <Gem className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">Lucky Elements</h2>
+                </div>
+                
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[
+                    { title: "Colors", items: ["Electric Blue", "Turquoise", "Silver", "Purple"] },
+                    { title: "Numbers", items: ["4", "7", "11", "22", "29"] },
+                    { title: "Days", items: ["Saturday", "Wednesday"] },
+                    { title: "Stones", items: ["Amethyst", "Aquamarine", "Clear Quartz", "Fluorite"] }
+                  ].map((category, index) => (
+                    <div key={index} className="text-center bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
+                      <h3 className="text-xl font-semibold text-gray-800 mb-4">Lucky {category.title}</h3>
+                      <div className="space-y-2">
+                        {category.items.map((item, i) => (
+                          <div key={i} className="bg-white/60 px-3 py-1 rounded-lg text-sm text-gray-700">
+                            {item}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'compatibility' && (
+              <div className="space-y-8">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
+                    <Heart className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">Compatibility</h2>
+                </div>
+                
+                <div className="grid lg:grid-cols-3 gap-8">
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-amber-100">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Best Matches</h3>
+                    <div className="space-y-3">
+                      {["Gemini", "Libra", "Sagittarius", "Aries"].map((sign, i) => (
+                        <div key={i} className="bg-white/60 px-4 py-2 rounded-lg text-center font-medium text-gray-700">
+                          {sign}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl border border-orange-100">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Challenging</h3>
+                    <div className="space-y-3">
+                      {["Taurus", "Scorpio"].map((sign, i) => (
+                        <div key={i} className="bg-white/60 px-4 py-2 rounded-lg text-center font-medium text-gray-700">
+                          {sign}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-6 rounded-xl border border-amber-100">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Friendship</h3>
+                    <p className="text-gray-600 text-center">Excellent with Air and Fire signs who value intellectual connection and independence.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'growth' && (
+              <div className="space-y-8">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
+                    <TrendingUp className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">Growth & Challenges</h2>
+                </div>
+                
+                <div className="grid lg:grid-cols-2 gap-8">
+                  <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-8 rounded-xl border border-amber-100">
+                    <h3 className="text-2xl font-semibold text-gray-800 mb-6">Areas for Growth</h3>
+                    <ul className="space-y-3 text-gray-600">
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Learning emotional expression</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Developing patience</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Balancing independence with connection</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-orange-50 to-red-50 p-8 rounded-xl border border-orange-100">
+                    <h3 className="text-2xl font-semibold text-gray-800 mb-6">Common Challenges</h3>
+                    <ul className="space-y-3 text-gray-600">
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Being too detached emotionally</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Fixed opinions and stubbornness</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Sometimes too idealistic</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'products' && (
+              <div className="space-y-8">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
+                    <Shield className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">Aquarius Power Collection</h2>
+                </div>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[
+                    {
+                      name: "Amethyst Innovation Crystal",
+                      description: "Enhances innovation and intuition",
+                      gradient: "from-orange-50 to-amber-50",
+                      border: "border-orange-100",
+                      button: "from-orange-100 to-amber-100"
+                    },
+                    {
+                      name: "Aquamarine Vision Stone", 
+                      description: "Promotes vision and clarity",
+                      gradient: "from-amber-50 to-orange-50",
+                      border: "border-amber-100", 
+                      button: "from-amber-100 to-orange-100"
+                    },
+                    {
+                      name: "Clear Quartz Amplifier",
+                      description: "Amplifies energy and clarity", 
+                      gradient: "from-orange-50 to-yellow-50",
+                      border: "border-orange-100",
+                      button: "from-orange-100 to-yellow-100"
+                    }
+                  ].map((product, index) => (
+                    <div key={index} className={`bg-gradient-to-br ${product.gradient} p-6 rounded-xl border ${product.border} hover:shadow-lg transition-shadow`}>
+                      <div className="text-center mb-4">
+                        <Gem className="w-12 h-12 mx-auto text-gray-600 mb-3" />
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">{product.name}</h3>
+                        <p className="text-gray-600">{product.description}</p>
+                      </div>
+                      <button className={`w-full bg-gradient-to-r ${product.button} text-gray-800 font-semibold py-3 px-6 rounded-lg hover:shadow-md transition-shadow`}>
+                        View Details
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'uranus' && (
+              <div className="space-y-8">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
+                    <Zap className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">Uranus Influence</h2>
+                  <p className="text-gray-600 max-w-2xl mx-auto">The revolutionary planet that shapes Aquarius&apos; innovative spirit and desire for change.</p>
+                </div>
+                
+                <div className="grid lg:grid-cols-2 gap-8">
+                  <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-8 rounded-xl border border-orange-100">
+                    <h3 className="text-2xl font-semibold text-gray-800 mb-4">Innovation & Rebellion</h3>
+                    <p className="text-gray-600 leading-relaxed">Uranus gives Aquarius a revolutionary spirit, love for innovation, and desire to break free from traditional norms and create positive change in the world.</p>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-xl border border-amber-100">
+                    <h3 className="text-2xl font-semibold text-gray-800 mb-4">Originality & Independence</h3>
+                    <p className="text-gray-600 leading-relaxed">Aquarius&apos; Uranian influence brings unique perspectives, intellectual curiosity, and a strong need for personal freedom and authentic self-expression.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'faq' && (
+              <div className="space-y-8">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
+                    <HelpCircle className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">Frequently Asked Questions</h2>
+                </div>
+                
+                <div className="space-y-6">
+                  {[
+                    {
+                      question: "Why are Aquarius so innovative?",
+                      answer: "Aquarius' ruling planet Uranus brings a revolutionary spirit and love for innovation. They are naturally drawn to new ideas and progressive thinking."
+                    },
+                    {
+                      question: "What careers suit Aquarius?", 
+                      answer: "Technology, science, humanitarian work, social activism, research, and any field requiring innovation, originality, and progressive thinking."
+                    },
+                    {
+                      question: "How can Aquarius improve relationships?",
+                      answer: "By being more emotionally expressive, developing patience, and balancing their need for independence with emotional connection and intimacy."
+                    }
+                  ].map((faq, index) => (
+                    <div key={index} className="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
+                      <h3 className="text-xl font-semibold text-gray-800 mb-3">{faq.question}</h3>
+                      <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
       </div>
     </div>
   );
-} 
+}
