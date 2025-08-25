@@ -3,6 +3,15 @@ import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key';
 
+// Define the JWT payload interface
+interface JwtPayload {
+  userId: number;
+  email: string;
+  role: string;
+  iat?: number;
+  exp?: number;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -37,8 +46,8 @@ export default async function handler(
 
   try {
     // Verify the token
-    const decoded = jwt.verify(adminToken, SECRET_KEY);
-    console.log('Token verified successfully:', { userId: (decoded as any)?.userId });
+    const decoded = jwt.verify(adminToken, SECRET_KEY) as JwtPayload;
+    console.log('Token verified successfully:', { userId: decoded.userId });
     
     // Token is valid
     return res.status(200).json({ message: 'Authenticated' });
