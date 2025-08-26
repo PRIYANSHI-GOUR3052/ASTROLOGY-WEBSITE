@@ -151,8 +151,18 @@ export default function UniversalZodiacBanner({ signKey }: { signKey: string }) 
             {/* 3:4 Image for Zodiac Sign */}
             {(() => {
               const zodiacImages: Record<string, string> = {
+                aries: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556366/ariies___vgl9oj.png',
+                taurus: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556342/Taurus_qnsgar.png',
+                gemini: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556343/Gemini_kjqrtl.png',
+                cancer: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556346/Cancer_sgabek.png',
+                leo: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556367/leo_ynxtts.png',
+                virgo: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556342/Virgo_p7fsyl.png',
+                libra: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556360/Libra_wgw2b0.png',
+                scorpio: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556341/Scorpio_vk9by5.png',
+                sagittarius: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556365/Saggitarius_rr44xl.png',
+                capricorn: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556368/capricorn_has0km.png',
                 aquarius: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556372/aquarius_p6wkxz.png',
-                // Add other signs as needed
+                pisces: 'https://res.cloudinary.com/dxwspucxw/image/upload/v1754556343/Pisces_syoesx.png',
               };
               const imageUrl = zodiacImages[signKey] || '/images/zodiac/default-4x3.jpg';
               return (
