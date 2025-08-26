@@ -50,104 +50,6 @@ export const zodiacInfoData = {
             "Innovation, independence, humanitarianism, intellectual curiosity, and thinking outside the box.",
         },
       ],
-      libra: {
-        navigationItems: universalNavigationItems,
-        about: {
-          elementQuality: {
-            title: "Element & Quality",
-            description:
-              "Air sign with Cardinal quality. Libra represents balance, harmony, and a natural desire for justice and beauty.",
-          },
-          rulingPlanet: {
-            title: "Ruling Planet",
-            description:
-              "Venus, the planet of love, beauty, and harmony. This gives Libra their appreciation for aesthetics, diplomacy, and balanced relationships.",
-          },
-          naturalStrengths: {
-            title: "Natural Strengths",
-            description:
-              "Diplomacy, fairness, charm, artistic sense, and natural ability to see both sides of any situation. Libra excels in creating harmony.",
-          },
-        },
-        daily: {
-          forecast: {
-            title: "Today's Forecast",
-            description:
-              "Venus aligns with Jupiter today, bringing opportunities for harmony, beauty, and balanced decision-making. Your diplomatic skills are enhanced.",
-            luckyNumber: "6",
-            bestTime: "3:00 PM - 5:00 PM",
-          },
-          weeklyFocus: {
-            title: "Weekly Focus",
-            description:
-              "This week emphasizes balance and harmony. Perfect time to resolve conflicts, make fair decisions, and surround yourself with beauty.",
-          },
-        },
-        lucky: {
-          colors: "Pink, Blue, Green, White",
-          numbers: "6, 7, 15, 24, 33",
-          days: "Friday, Monday",
-          stones: "Rose Quartz, Opal, Lapis Lazuli",
-        },
-        compatibility: {
-          bestMatches: {
-            title: "Best Matches",
-            description:
-              "Gemini, Aquarius, Leo, and Sagittarius. These signs appreciate Libra's charm and provide the intellectual stimulation they crave.",
-          },
-          challengingMatches: {
-            title: "Challenging Matches",
-            description:
-              "Cancer and Capricorn may find Libra too indecisive, while Libra may see them as too emotional or rigid.",
-          },
-          friendship: {
-            title: "Friendship Compatibility",
-            description:
-              "Excellent with Air and Fire signs. Libra values intellectual conversations, fairness, and harmonious relationships.",
-          },
-        },
-        growth: {
-          areas: {
-            title: "Areas for Growth",
-            description:
-              "Learning to make decisions more confidently, developing assertiveness, and balancing the needs of others with their own needs.",
-          },
-          challenges: {
-            title: "Common Challenges",
-            description:
-              "Indecisiveness, people-pleasing, and sometimes avoiding conflict at all costs. Learning to be more decisive is key.",
-          },
-        },
-        venus: {
-          love: {
-            title: "Love & Relationships",
-            description:
-              "Venus makes Libra naturally romantic and diplomatic. They seek balanced, harmonious relationships and value partnership deeply.",
-          },
-          aesthetics: {
-            title: "Aesthetics & Beauty",
-            description:
-              "Libra has an innate appreciation for beauty, art, and elegance. They enjoy creating beautiful environments and experiences.",
-          },
-        },
-        faq: [
-          {
-            question: "Why are Libra so indecisive?",
-            answer:
-              "Libra's desire to see all sides of a situation and their fear of making the wrong choice can lead to indecision. They want to make the fairest decision.",
-          },
-          {
-            question: "What careers suit Libra?",
-            answer:
-              "Law, diplomacy, interior design, fashion, counseling, and any field requiring fairness, beauty, and interpersonal skills.",
-          },
-          {
-            question: "How can Libra improve relationships?",
-            answer:
-              "By being more decisive, learning to express their own needs clearly, and finding the right balance between compromise and self-assertion.",
-          },
-        ],
-      },
     },
     daily: {
       title: "Daily Insights",
@@ -238,6 +140,118 @@ export const zodiacInfoData = {
           question: "How can Aquarius improve relationships?",
           answer:
             "By being more emotionally expressive, developing patience, and balancing their need for independence with emotional connection and intimacy.",
+        },
+      ],
+    },
+  },
+
+  libra: {
+    navigationItems: universalNavigationItems,
+    about: {
+      title: "About Libra",
+      description:
+        "The balanced air sign, known for harmony, diplomacy, and a love for beauty and fairness.",
+      cards: [
+        {
+          title: "Element & Quality",
+          content:
+            "Air sign with Cardinal quality. Libra represents balance, harmony, and a natural desire for justice and beauty.",
+        },
+        {
+          title: "Ruling Planet",
+          content:
+            "Venus, the planet of love, beauty, and harmony. This gives Libra their appreciation for aesthetics, diplomacy, and balanced relationships.",
+        },
+        {
+          title: "Natural Strengths",
+          content:
+            "Diplomacy, fairness, charm, artistic sense, and natural ability to see both sides of any situation. Libra excels in creating harmony.",
+        },
+      ],
+    },
+    daily: {
+      title: "Daily Insights",
+      forecast: {
+        title: "Today's Forecast",
+        description:
+          "Venus aligns with Jupiter today, bringing opportunities for harmony, beauty, and balanced decision-making. Your diplomatic skills are enhanced.",
+        luckyNumber: "6",
+        bestTime: "3:00 PM - 5:00 PM",
+      },
+      weekly: {
+        title: "Weekly Focus",
+        description:
+          "This week emphasizes balance and harmony. Perfect time to resolve conflicts, make fair decisions, and surround yourself with beauty.",
+        keyThemes: [
+          "Harmony and balance",
+          "Diplomacy in relationships",
+          "Appreciation for beauty",
+        ],
+      },
+    },
+    lucky: {
+      title: "Lucky Elements",
+      categories: [
+        { title: "Colors", items: ["Pink", "Blue", "Green", "White"] },
+        { title: "Numbers", items: ["6", "7", "15", "24", "33"] },
+        { title: "Days", items: ["Friday", "Monday"] },
+        { title: "Stones", items: ["Rose Quartz", "Opal", "Lapis Lazuli"] },
+      ],
+    },
+    compatibility: {
+      title: "Compatibility",
+      bestMatches: ["Gemini", "Aquarius", "Leo", "Sagittarius"],
+      challenging: ["Cancer", "Capricorn"],
+      friendship:
+        "Excellent with Air and Fire signs. Libra values intellectual conversations, fairness, and harmonious relationships.",
+    },
+    growth: {
+      title: "Growth & Challenges",
+      areasForGrowth: [
+        "Learning to make decisions more confidently",
+        "Developing assertiveness",
+        "Balancing the needs of others with their own needs",
+      ],
+      commonChallenges: [
+        "Indecisiveness",
+        "People-pleasing",
+        "Avoiding conflict at all costs",
+      ],
+    },
+    venus: {
+      title: "Venus Influence",
+      description:
+        "Venus, the planet of love and beauty, shapes Libra’s romantic, diplomatic, and aesthetic nature.",
+      cards: [
+        {
+          title: "Love & Relationships",
+          content:
+            "Venus makes Libra naturally romantic and diplomatic. They seek balanced, harmonious relationships and value partnership deeply.",
+        },
+        {
+          title: "Aesthetics & Beauty",
+          content:
+            "Libra has an innate appreciation for beauty, art, and elegance. They enjoy creating beautiful environments and experiences.",
+        },
+      ],
+    },
+    faq: {
+      title: "Frequently Asked Questions",
+      faqs: [
+        {
+          question: "Why are Libra so indecisive?",
+          answer:
+            "Libra's desire to see all sides of a situation and their fear of making the wrong choice can lead to indecision. They want to make the fairest decision.",
+        },
+        {
+          question: "What careers suit Libra?",
+          answer:
+            "Law, diplomacy, interior design, fashion, counseling, and any field requiring fairness, beauty, and interpersonal skills.",
+        },
+        {
+          question: "How can Libra improve relationships?",
+          answer:
+            "By being more decisive, learning to express their own needs clearly, and finding the right balance between compromise and self-assertion.",
         },
       ],
     },
@@ -768,23 +782,29 @@ export const zodiacInfoData = {
   pisces: {
     navigationItems: universalNavigationItems,
     about: {
-      elementQuality: {
-        title: "Element & Quality",
-        description:
-          "Water sign with Mutable quality. Pisces represents intuition, compassion, and a deep connection to the spiritual realm.",
-      },
-      rulingPlanet: {
-        title: "Ruling Planet",
-        description:
-          "Neptune, the planet of dreams, intuition, and spirituality. This gives Pisces their psychic abilities, compassion, and artistic talents.",
-      },
-      naturalStrengths: {
-        title: "Natural Strengths",
-        description:
-          "Intuition, empathy, creativity, spirituality, and compassion. Pisces excels in understanding others and connecting with the divine.",
-      },
+      title: "About Pisces",
+      description:
+        "The mystical water sign, known for intuition, compassion, and a deep connection to the spiritual realm.",
+      cards: [
+        {
+          title: "Element & Quality",
+          content:
+            "Water sign with Mutable quality. Pisces represents intuition, compassion, and a deep connection to the spiritual realm.",
+        },
+        {
+          title: "Ruling Planet",
+          content:
+            "Neptune, the planet of dreams, intuition, and spirituality. This gives Pisces their psychic abilities, compassion, and artistic talents.",
+        },
+        {
+          title: "Natural Strengths",
+          content:
+            "Intuition, empathy, creativity, spirituality, and compassion. Pisces excels in understanding others and connecting with the divine.",
+        },
+      ],
     },
     daily: {
+      title: "Daily Insights",
       forecast: {
         title: "Today's Forecast",
         description:
@@ -792,98 +812,111 @@ export const zodiacInfoData = {
         luckyNumber: "7",
         bestTime: "9:00 PM - 11:00 PM",
       },
-      weeklyFocus: {
+      weekly: {
         title: "Weekly Focus",
         description:
           "This week emphasizes intuition and spiritual growth. Perfect time for meditation, creative projects, and deepening your spiritual connection.",
+        keyThemes: [
+          "Intuition and creativity",
+          "Spiritual growth",
+          "Compassion and empathy",
+        ],
       },
     },
     lucky: {
-      colors: "Sea Green, Purple, Silver, Turquoise",
-      numbers: "3, 7, 12, 16, 21, 25",
-      days: "Thursday, Monday",
-      stones: "Moonstone, Aquamarine, Amethyst, Pearl",
+      title: "Lucky Elements",
+      categories: [
+        { title: "Colors", items: ["Sea Green", "Purple", "Silver", "Turquoise"] },
+        { title: "Numbers", items: ["3", "7", "12", "16", "21", "25"] },
+        { title: "Days", items: ["Thursday", "Monday"] },
+        { title: "Stones", items: ["Moonstone", "Aquamarine", "Amethyst", "Pearl"] },
+      ],
     },
     compatibility: {
-      bestMatches: {
-        title: "Best Matches",
-        description:
-          "Cancer, Scorpio, Taurus, and Capricorn. These signs appreciate Pisces's sensitivity and provide the emotional security they need.",
-      },
-      challengingMatches: {
-        title: "Challenging Matches",
-        description:
-          "Gemini and Sagittarius may find Pisces too emotional, while Pisces may see them as too rational or restless.",
-      },
-      friendship: {
-        title: "Friendship Compatibility",
-        description:
-          "Excellent with Water and Earth signs. Pisces values emotional connection, understanding, and shared spiritual values in friendships.",
-      },
+      title: "Compatibility",
+      bestMatches: ["Cancer", "Scorpio", "Taurus", "Capricorn"],
+      challenging: ["Gemini", "Sagittarius"],
+      friendship:
+        "Excellent with Water and Earth signs. Pisces values emotional connection, understanding, and shared spiritual values in friendships.",
     },
     growth: {
-      areas: {
-        title: "Areas for Growth",
-        description:
-          "Learning to be more practical, developing boundaries, and balancing dreams with reality. Embracing structure and discipline.",
-      },
-      challenges: {
-        title: "Common Challenges",
-        description:
-          "Being too idealistic, emotional overwhelm, and sometimes being too escapist. Learning to stay grounded and practical is key.",
-      },
+      title: "Growth & Challenges",
+      areasForGrowth: [
+        "Learning to be more practical",
+        "Developing boundaries",
+        "Balancing dreams with reality",
+      ],
+      commonChallenges: [
+        "Being too idealistic",
+        "Emotional overwhelm",
+        "Escapism",
+      ],
     },
     neptune: {
-      dreams: {
-        title: "Dreams & Intuition",
-        description:
-          "Neptune gives Pisces a deep connection to the spiritual realm, heightened intuition, and a natural ability to understand the unseen.",
-      },
-      compassion: {
-        title: "Compassion & Creativity",
-        description:
-          "Pisces's Neptunian influence brings boundless compassion, artistic talents, and a desire to help and heal others.",
-      },
+      title: "Neptune Influence",
+      description:
+        "Neptune, the planet of dreams and intuition, shapes Pisces’ mystical, compassionate, and artistic nature.",
+      cards: [
+        {
+          title: "Dreams & Intuition",
+          content:
+            "Neptune gives Pisces a deep connection to the spiritual realm, heightened intuition, and a natural ability to understand the unseen.",
+        },
+        {
+          title: "Compassion & Creativity",
+          content:
+            "Pisces's Neptunian influence brings boundless compassion, artistic talents, and a desire to help and heal others.",
+        },
+      ],
     },
-    faq: [
-      {
-        question: "Why are Pisces so intuitive?",
-        answer:
-          "Pisces's ruling planet Neptune brings a deep connection to the spiritual realm and heightened psychic abilities. They are naturally sensitive to energy and emotions.",
-      },
-      {
-        question: "What careers suit Pisces?",
-        answer:
-          "Art, music, therapy, healing, spiritual work, charity, and any field requiring empathy, creativity, and helping others.",
-      },
-      {
-        question: "How can Pisces improve relationships?",
-        answer:
-          "By setting healthy boundaries, being more practical, and balancing their emotional nature with logical thinking and self-care.",
-      },
-    ],
+    faq: {
+      title: "Frequently Asked Questions",
+      faqs: [
+        {
+          question: "Why are Pisces so intuitive?",
+          answer:
+            "Pisces's ruling planet Neptune brings a deep connection to the spiritual realm and heightened psychic abilities. They are naturally sensitive to energy and emotions.",
+        },
+        {
+          question: "What careers suit Pisces?",
+          answer:
+            "Art, music, therapy, healing, spiritual work, charity, and any field requiring empathy, creativity, and helping others.",
+        },
+        {
+          question: "How can Pisces improve relationships?",
+          answer:
+            "By setting healthy boundaries, being more practical, and balancing their emotional nature with logical thinking and self-care.",
+        },
+      ],
+    },
   },
 
   sagittarius: {
     navigationItems: universalNavigationItems,
     about: {
-      elementQuality: {
-        title: "Element & Quality",
-        description:
-          "Fire sign with Mutable quality. Sagittarius represents exploration, optimism, and a quest for truth and adventure.",
-      },
-      rulingPlanet: {
-        title: "Ruling Planet",
-        description:
-          "Jupiter, the planet of expansion, wisdom, and good fortune. This gives Sagittarius their adventurous spirit, optimism, and love for learning.",
-      },
-      naturalStrengths: {
-        title: "Natural Strengths",
-        description:
-          "Optimism, curiosity, independence, honesty, and a love for travel and new experiences. Sagittarius excels in inspiring others to explore.",
-      },
+      title: "About Sagittarius",
+      description:
+        "The adventurous fire sign, known for optimism, exploration, and a quest for truth and freedom.",
+      cards: [
+        {
+          title: "Element & Quality",
+          content:
+            "Fire sign with Mutable quality. Sagittarius represents exploration, optimism, and a quest for truth and adventure.",
+        },
+        {
+          title: "Ruling Planet",
+          content:
+            "Jupiter, the planet of expansion, wisdom, and good fortune. This gives Sagittarius their adventurous spirit, optimism, and love for learning.",
+        },
+        {
+          title: "Natural Strengths",
+          content:
+            "Optimism, curiosity, independence, honesty, and a love for travel and new experiences. Sagittarius excels in inspiring others to explore.",
+        },
+      ],
     },
     daily: {
+      title: "Daily Insights",
       forecast: {
         title: "Today's Forecast",
         description:
@@ -891,97 +924,110 @@ export const zodiacInfoData = {
         luckyNumber: "3",
         bestTime: "4:00 PM - 6:00 PM",
       },
-      weeklyFocus: {
+      weekly: {
         title: "Weekly Focus",
         description:
           "This week emphasizes adventure and growth. Perfect time to start a new journey, learn something new, or plan a trip.",
+        keyThemes: [
+          "Adventure and exploration",
+          "Learning and growth",
+          "Optimism and freedom",
+        ],
       },
     },
     lucky: {
-      colors: "Purple, Blue, Gold, Turquoise",
-      numbers: "3, 12, 21, 30, 42",
-      days: "Thursday, Sunday",
-      stones: "Turquoise, Amethyst, Lapis Lazuli, Citrine",
+      title: "Lucky Elements",
+      categories: [
+        { title: "Colors", items: ["Purple", "Blue", "Gold", "Turquoise"] },
+        { title: "Numbers", items: ["3", "12", "21", "30", "42"] },
+        { title: "Days", items: ["Thursday", "Sunday"] },
+        { title: "Stones", items: ["Turquoise", "Amethyst", "Lapis Lazuli", "Citrine"] },
+      ],
     },
     compatibility: {
-      bestMatches: {
-        title: "Best Matches",
-        description:
-          "Aries, Leo, Libra, and Aquarius. These signs appreciate Sagittarius's optimism and provide the excitement and freedom they crave.",
-      },
-      challengingMatches: {
-        title: "Challenging Matches",
-        description:
-          "Virgo and Pisces may find Sagittarius too restless, while Sagittarius may see them as too cautious or sensitive.",
-      },
-      friendship: {
-        title: "Friendship Compatibility",
-        description:
-          "Excellent with Fire and Air signs. Sagittarius values adventure, honesty, and open-mindedness in friendships.",
-      },
+      title: "Compatibility",
+      bestMatches: ["Aries", "Leo", "Libra", "Aquarius"],
+      challenging: ["Virgo", "Pisces"],
+      friendship:
+        "Excellent with Fire and Air signs. Sagittarius values adventure, honesty, and open-mindedness in friendships.",
     },
     growth: {
-      areas: {
-        title: "Areas for Growth",
-        description:
-          "Learning to be more patient, developing focus, and balancing freedom with responsibility. Embracing commitment and follow-through.",
-      },
-      challenges: {
-        title: "Common Challenges",
-        description:
-          "Restlessness, impatience, and sometimes being too blunt. Learning to listen and consider others' feelings is key.",
-      },
+      title: "Growth & Challenges",
+      areasForGrowth: [
+        "Learning to be more patient",
+        "Developing focus",
+        "Balancing freedom with responsibility",
+      ],
+      commonChallenges: [
+        "Restlessness",
+        "Impatience",
+        "Bluntness",
+      ],
     },
     jupiter: {
-      expansion: {
-        title: "Expansion & Wisdom",
-        description:
-          "Jupiter gives Sagittarius a love for learning, growth, and expanding their horizons. They are optimistic and open-minded.",
-      },
-      adventure: {
-        title: "Adventure & Optimism",
-        description:
-          "Sagittarius's Jupiterian influence brings a thirst for adventure, travel, and a positive outlook on life.",
-      },
+      title: "Jupiter Influence",
+      description:
+        "Jupiter, the planet of expansion and wisdom, shapes Sagittarius’ adventurous, optimistic, and philosophical nature.",
+      cards: [
+        {
+          title: "Expansion & Wisdom",
+          content:
+            "Jupiter gives Sagittarius a love for learning, growth, and expanding their horizons. They are optimistic and open-minded.",
+        },
+        {
+          title: "Adventure & Optimism",
+          content:
+            "Sagittarius's Jupiterian influence brings a thirst for adventure, travel, and a positive outlook on life.",
+        },
+      ],
     },
-    faq: [
-      {
-        question: "Why are Sagittarius so adventurous?",
-        answer:
-          "Sagittarius's ruling planet Jupiter brings a love for exploration, learning, and new experiences. They are naturally curious and optimistic.",
-      },
-      {
-        question: "What careers suit Sagittarius?",
-        answer:
-          "Travel, education, philosophy, publishing, sports, and any field requiring exploration, learning, and open-mindedness.",
-      },
-      {
-        question: "How can Sagittarius improve relationships?",
-        answer:
-          "By being more patient, listening to others, and balancing their need for freedom with commitment and understanding.",
-      },
-    ],
+    faq: {
+      title: "Frequently Asked Questions",
+      faqs: [
+        {
+          question: "Why are Sagittarius so adventurous?",
+          answer:
+            "Sagittarius's ruling planet Jupiter brings a love for exploration, learning, and new experiences. They are naturally curious and optimistic.",
+        },
+        {
+          question: "What careers suit Sagittarius?",
+          answer:
+            "Travel, education, philosophy, publishing, sports, and any field requiring exploration, learning, and open-mindedness.",
+        },
+        {
+          question: "How can Sagittarius improve relationships?",
+          answer:
+            "By being more patient, listening to others, and balancing their need for freedom with commitment and understanding.",
+        },
+      ],
+    },
   },
   scorpio: {
     navigationItems: universalNavigationItems,
     about: {
-      elementQuality: {
-        title: "Element & Quality",
-        description:
-          "Water sign with Fixed quality. Scorpio represents transformation, depth, and a powerful drive for truth and intensity.",
-      },
-      rulingPlanet: {
-        title: "Ruling Planet",
-        description:
-          "Pluto (and Mars, traditionally), the planet of transformation, power, and rebirth. This gives Scorpio their intensity, resilience, and magnetic presence.",
-      },
-      naturalStrengths: {
-        title: "Natural Strengths",
-        description:
-          "Determination, intuition, emotional depth, resourcefulness, and the ability to transform and heal. Scorpio excels in uncovering hidden truths.",
-      },
+      title: "About Scorpio",
+      description:
+        "The intense water sign, known for transformation, depth, and a powerful drive for truth and intensity.",
+      cards: [
+        {
+          title: "Element & Quality",
+          content:
+            "Water sign with Fixed quality. Scorpio represents transformation, depth, and a powerful drive for truth and intensity.",
+        },
+        {
+          title: "Ruling Planet",
+          content:
+            "Pluto (and Mars, traditionally), the planet of transformation, power, and rebirth. This gives Scorpio their intensity, resilience, and magnetic presence.",
+        },
+        {
+          title: "Natural Strengths",
+          content:
+            "Determination, intuition, emotional depth, resourcefulness, and the ability to transform and heal. Scorpio excels in uncovering hidden truths.",
+        },
+      ],
     },
     daily: {
+      title: "Daily Insights",
       forecast: {
         title: "Today's Forecast",
         description:
@@ -989,97 +1035,110 @@ export const zodiacInfoData = {
         luckyNumber: "9",
         bestTime: "8:00 PM - 10:00 PM",
       },
-      weeklyFocus: {
+      weekly: {
         title: "Weekly Focus",
         description:
           "This week emphasizes transformation and renewal. Perfect time to let go of the past, embrace change, and focus on personal growth.",
+        keyThemes: [
+          "Transformation and healing",
+          "Emotional depth",
+          "Letting go and renewal",
+        ],
       },
     },
     lucky: {
-      colors: "Deep red, maroon, black, and dark purple",
-      numbers: "8, 11, 18, and 22",
-      stones: "Obsidian, garnet, malachite, and topaz",
-      days: "Tuesday and Thursday",
+      title: "Lucky Elements",
+      categories: [
+        { title: "Colors", items: ["Deep Red", "Maroon", "Black", "Dark Purple"] },
+        { title: "Numbers", items: ["8", "11", "18", "22"] },
+        { title: "Days", items: ["Tuesday", "Thursday"] },
+        { title: "Stones", items: ["Obsidian", "Garnet", "Malachite", "Topaz"] },
+      ],
     },
     compatibility: {
-      bestMatches: {
-        title: "Best Matches",
-        description:
-          "Cancer, Pisces, Virgo, and Capricorn. These signs appreciate Scorpio's depth and provide the loyalty and stability they need.",
-      },
-      challengingMatches: {
-        title: "Challenging Matches",
-        description:
-          "Leo and Aquarius may find Scorpio too intense, while Scorpio may see them as too detached or unpredictable.",
-      },
-      friendship: {
-        title: "Friendship Compatibility",
-        description:
-          "Excellent with Water and Earth signs. Scorpio values loyalty, trust, and deep emotional connections in friendships.",
-      },
+      title: "Compatibility",
+      bestMatches: ["Cancer", "Pisces", "Virgo", "Capricorn"],
+      challenging: ["Leo", "Aquarius"],
+      friendship:
+        "Excellent with Water and Earth signs. Scorpio values loyalty, trust, and deep emotional connections in friendships.",
     },
     growth: {
-      areas: {
-        title: "Areas for Growth",
-        description:
-          "Learning to let go of grudges, developing trust, and embracing vulnerability. Allowing transformation and healing to occur.",
-      },
-      challenges: {
-        title: "Common Challenges",
-        description:
-          "Jealousy, secrecy, and sometimes being too controlling. Learning to trust and open up is key.",
-      },
+      title: "Growth & Challenges",
+      areasForGrowth: [
+        "Learning to let go of grudges",
+        "Developing trust",
+        "Embracing vulnerability",
+      ],
+      commonChallenges: [
+        "Jealousy",
+        "Secrecy",
+        "Control issues",
+      ],
     },
     pluto: {
-      transformation: {
-        title: "Transformation & Power",
-        description:
-          "Pluto gives Scorpio a powerful drive for transformation, rebirth, and uncovering hidden truths. They are resilient and resourceful.",
-      },
-      depth: {
-        title: "Emotional Depth",
-        description:
-          "Scorpio's Plutonic influence brings emotional depth, intuition, and the ability to heal themselves and others.",
-      },
+      title: "Pluto Influence",
+      description:
+        "Pluto, the planet of transformation and power, shapes Scorpio’s intense, resilient, and magnetic nature.",
+      cards: [
+        {
+          title: "Transformation & Power",
+          content:
+            "Pluto gives Scorpio a powerful drive for transformation, rebirth, and uncovering hidden truths. They are resilient and resourceful.",
+        },
+        {
+          title: "Emotional Depth",
+          content:
+            "Scorpio's Plutonic influence brings emotional depth, intuition, and the ability to heal themselves and others.",
+        },
+      ],
     },
-    faq: [
-      {
-        question: "Why are Scorpio so intense?",
-        answer:
-          "Scorpio's ruling planet Pluto brings intensity, depth, and a desire for transformation. They feel emotions deeply and seek truth in all things.",
-      },
-      {
-        question: "What careers suit Scorpio?",
-        answer:
-          "Psychology, research, healing, investigation, finance, and any field requiring depth, intuition, and resilience.",
-      },
-      {
-        question: "How can Scorpio improve relationships?",
-        answer:
-          "By learning to trust, being more open, and letting go of control. Embracing vulnerability and honest communication is key.",
-      },
-    ],
+    faq: {
+      title: "Frequently Asked Questions",
+      faqs: [
+        {
+          question: "Why are Scorpio so intense?",
+          answer:
+            "Scorpio's ruling planet Pluto brings intensity, depth, and a desire for transformation. They feel emotions deeply and seek truth in all things.",
+        },
+        {
+          question: "What careers suit Scorpio?",
+          answer:
+            "Psychology, research, healing, investigation, finance, and any field requiring depth, intuition, and resilience.",
+        },
+        {
+          question: "How can Scorpio improve relationships?",
+          answer:
+            "By learning to trust, being more open, and letting go of control. Embracing vulnerability and honest communication is key.",
+        },
+      ],
+    },
   },
   taurus: {
     navigationItems: universalNavigationItems,
     about: {
-      elementQuality: {
-        title: "Element & Quality",
-        description:
-          "Earth sign with Fixed quality. Taurus represents stability, determination, and a deep connection to the physical world.",
-      },
-      rulingPlanet: {
-        title: "Ruling Planet",
-        description:
-          "Venus, the planet of love, beauty, and harmony. This gives Taurus their appreciation for luxury and aesthetic pleasures.",
-      },
-      naturalStrengths: {
-        title: "Natural Strengths",
-        description:
-          "Patience, reliability, sensuality, determination, and a strong work ethic. Taurus excels in building lasting foundations.",
-      },
+      title: "About Taurus",
+      description:
+        "The steadfast earth sign, known for stability, determination, and a deep connection to the physical world.",
+      cards: [
+        {
+          title: "Element & Quality",
+          content:
+            "Earth sign with Fixed quality. Taurus represents stability, determination, and a deep connection to the physical world.",
+        },
+        {
+          title: "Ruling Planet",
+          content:
+            "Venus, the planet of love, beauty, and harmony. This gives Taurus their appreciation for luxury and aesthetic pleasures.",
+        },
+        {
+          title: "Natural Strengths",
+          content:
+            "Patience, reliability, sensuality, determination, and a strong work ethic. Taurus excels in building lasting foundations.",
+        },
+      ],
     },
     daily: {
+      title: "Daily Insights",
       forecast: {
         title: "Today's Forecast",
         description:
@@ -1087,97 +1146,110 @@ export const zodiacInfoData = {
         luckyNumber: "6",
         bestTime: "2:00 PM - 4:00 PM",
       },
-      weeklyFocus: {
+      weekly: {
         title: "Weekly Focus",
         description:
           "This week emphasizes stability and growth. Perfect time to invest in yourself, strengthen relationships, and build your foundation.",
+        keyThemes: [
+          "Stability and growth",
+          "Building foundations",
+          "Romance and luxury",
+        ],
       },
     },
     lucky: {
-      colors: "Green, Pink, White, Light Blue",
-      numbers: "2, 6, 9, 12, 24",
-      days: "Friday, Monday",
-      stones: "Emerald, Rose Quartz, Diamond",
+      title: "Lucky Elements",
+      categories: [
+        { title: "Colors", items: ["Green", "Pink", "White", "Light Blue"] },
+        { title: "Numbers", items: ["2", "6", "9", "12", "24"] },
+        { title: "Days", items: ["Friday", "Monday"] },
+        { title: "Stones", items: ["Emerald", "Rose Quartz", "Diamond"] },
+      ],
     },
     compatibility: {
-      bestMatches: {
-        title: "Best Matches",
-        description:
-          "Cancer, Virgo, Capricorn, and Pisces. These signs appreciate Taurus's stability and provide the emotional depth they crave.",
-      },
-      challengingMatches: {
-        title: "Challenging Matches",
-        description:
-          "Aquarius and Leo may find Taurus too stubborn, while Taurus may see them as too unpredictable.",
-      },
-      friendship: {
-        title: "Friendship Compatibility",
-        description:
-          "Excellent with Earth and Water signs. Taurus values loyalty and deep, meaningful connections.",
-      },
+      title: "Compatibility",
+      bestMatches: ["Cancer", "Virgo", "Capricorn", "Pisces"],
+      challenging: ["Aquarius", "Leo"],
+      friendship:
+        "Excellent with Earth and Water signs. Taurus values loyalty and deep, meaningful connections.",
     },
     growth: {
-      areas: {
-        title: "Areas for Growth",
-        description:
-          "Learning to embrace change, developing flexibility, and opening up to new experiences while maintaining your core values.",
-      },
-      challenges: {
-        title: "Common Challenges",
-        description:
-          "Stubbornness, resistance to change, and sometimes being too materialistic. Learning to let go and adapt is key.",
-      },
+      title: "Growth & Challenges",
+      areasForGrowth: [
+        "Learning to embrace change",
+        "Developing flexibility",
+        "Opening up to new experiences",
+      ],
+      commonChallenges: [
+        "Stubbornness",
+        "Resistance to change",
+        "Materialism",
+      ],
     },
     venus: {
-      love: {
-        title: "Love & Relationships",
-        description:
-          "Venus makes Taurus deeply romantic and loyal. They seek stable, long-term relationships and value physical affection and quality time.",
-      },
-      aesthetics: {
-        title: "Aesthetics & Luxury",
-        description:
-          "Taurus has an innate appreciation for beauty, art, and luxury. They enjoy surrounding themselves with quality and comfort.",
-      },
+      title: "Venus Influence",
+      description:
+        "Venus, the planet of love and beauty, shapes Taurus’s romantic, loyal, and aesthetic nature.",
+      cards: [
+        {
+          title: "Love & Relationships",
+          content:
+            "Venus makes Taurus deeply romantic and loyal. They seek stable, long-term relationships and value physical affection and quality time.",
+        },
+        {
+          title: "Aesthetics & Luxury",
+          content:
+            "Taurus has an innate appreciation for beauty, art, and luxury. They enjoy surrounding themselves with quality and comfort.",
+        },
+      ],
     },
-    faq: [
-      {
-        question: "Why are Taurus so stubborn?",
-        answer:
-          "Taurus's fixed earth nature makes them determined and persistent. Once they set their mind to something, they rarely give up.",
-      },
-      {
-        question: "What careers suit Taurus?",
-        answer:
-          "Finance, real estate, agriculture, culinary arts, and any field requiring patience, reliability, and attention to detail.",
-      },
-      {
-        question: "How can Taurus improve relationships?",
-        answer:
-          "By being more flexible, communicating openly about their needs, and learning to compromise while maintaining their values.",
-      },
-    ],
+    faq: {
+      title: "Frequently Asked Questions",
+      faqs: [
+        {
+          question: "Why are Taurus so stubborn?",
+          answer:
+            "Taurus's fixed earth nature makes them determined and persistent. Once they set their mind to something, they rarely give up.",
+        },
+        {
+          question: "What careers suit Taurus?",
+          answer:
+            "Finance, real estate, agriculture, culinary arts, and any field requiring patience, reliability, and attention to detail.",
+        },
+        {
+          question: "How can Taurus improve relationships?",
+          answer:
+            "By being more flexible, communicating openly about their needs, and learning to compromise while maintaining their values.",
+        },
+      ],
+    },
   },
   virgo: {
     navigationItems: universalNavigationItems,
     about: {
-      elementQuality: {
-        title: "Element & Quality",
-        description:
-          "Earth sign with Mutable quality. Virgo represents precision, service, and a deep desire for perfection and order.",
-      },
-      rulingPlanet: {
-        title: "Ruling Planet",
-        description:
-          "Mercury, the planet of communication, intellect, and analysis. This gives Virgo their sharp mind, attention to detail, and practical approach.",
-      },
-      naturalStrengths: {
-        title: "Natural Strengths",
-        description:
-          "Analytical thinking, attention to detail, reliability, practicality, and a strong work ethic. Virgo excels in organization and problem-solving.",
-      },
+      title: "About Virgo",
+      description:
+        "The precise earth sign, known for service, analytical thinking, and a deep desire for perfection and order.",
+      cards: [
+        {
+          title: "Element & Quality",
+          content:
+            "Earth sign with Mutable quality. Virgo represents precision, service, and a deep desire for perfection and order.",
+        },
+        {
+          title: "Ruling Planet",
+          content:
+            "Mercury, the planet of communication, intellect, and analysis. This gives Virgo their sharp mind, attention to detail, and practical approach.",
+        },
+        {
+          title: "Natural Strengths",
+          content:
+            "Analytical thinking, attention to detail, reliability, practicality, and a strong work ethic. Virgo excels in organization and problem-solving.",
+        },
+      ],
     },
     daily: {
+      title: "Daily Insights",
       forecast: {
         title: "Today's Forecast",
         description:
@@ -1185,75 +1257,82 @@ export const zodiacInfoData = {
         luckyNumber: "5",
         bestTime: "9:00 AM - 11:00 AM",
       },
-      weeklyFocus: {
+      weekly: {
         title: "Weekly Focus",
         description:
           "This week emphasizes organization and efficiency. Perfect time to tackle projects, improve systems, and focus on health and wellness.",
+        keyThemes: [
+          "Organization and efficiency",
+          "Health and wellness",
+          "Practical solutions",
+        ],
       },
     },
     lucky: {
-      colors: "Green, Brown, Navy Blue, White",
-      numbers: "5, 14, 15, 23, 32",
-      days: "Wednesday, Friday",
-      stones: "Peridot, Jade, Moss Agate",
+      title: "Lucky Elements",
+      categories: [
+        { title: "Colors", items: ["Green", "Brown", "Navy Blue", "White"] },
+        { title: "Numbers", items: ["5", "14", "15", "23", "32"] },
+        { title: "Days", items: ["Wednesday", "Friday"] },
+        { title: "Stones", items: ["Peridot", "Jade", "Moss Agate"] },
+      ],
     },
     compatibility: {
-      bestMatches: {
-        title: "Best Matches",
-        description:
-          "Taurus, Capricorn, Cancer, and Scorpio. These signs appreciate Virgo's reliability and provide the emotional depth they need.",
-      },
-      challengingMatches: {
-        title: "Challenging Matches",
-        description:
-          "Sagittarius and Gemini may find Virgo too critical, while Virgo may see them as too scattered or impractical.",
-      },
-      friendship: {
-        title: "Friendship Compatibility",
-        description:
-          "Excellent with Earth and Water signs. Virgo values loyalty, reliability, and meaningful conversations in friendships.",
-      },
+      title: "Compatibility",
+      bestMatches: ["Taurus", "Capricorn", "Cancer", "Scorpio"],
+      challenging: ["Sagittarius", "Gemini"],
+      friendship:
+        "Excellent with Earth and Water signs. Virgo values loyalty, reliability, and meaningful conversations in friendships.",
     },
     growth: {
-      areas: {
-        title: "Areas for Growth",
-        description:
-          "Learning to be less critical of themselves and others, embracing imperfection, and developing more flexibility and spontaneity.",
-      },
-      challenges: {
-        title: "Common Challenges",
-        description:
-          "Perfectionism, overthinking, and sometimes being too critical. Learning to relax and accept imperfection is key.",
-      },
+      title: "Growth & Challenges",
+      areasForGrowth: [
+        "Learning to be less critical",
+        "Embracing imperfection",
+        "Developing flexibility and spontaneity",
+      ],
+      commonChallenges: [
+        "Perfectionism",
+        "Overthinking",
+        "Being too critical",
+      ],
     },
     mercury: {
-      analyticalMind: {
-        title: "Analytical Mind",
-        description:
-          "Mercury gives Virgo a sharp, analytical mind with excellent problem-solving skills and attention to detail.",
-      },
-      communication: {
-        title: "Communication & Service",
-        description:
-          "Virgo excels in clear communication and has a natural desire to serve and help others through practical means.",
-      },
+      title: "Mercury Influence",
+      description:
+        "Mercury, the planet of intellect and analysis, shapes Virgo’s analytical, practical, and service-oriented nature.",
+      cards: [
+        {
+          title: "Analytical Mind",
+          content:
+            "Mercury gives Virgo a sharp, analytical mind with excellent problem-solving skills and attention to detail.",
+        },
+        {
+          title: "Communication & Service",
+          content:
+            "Virgo excels in clear communication and has a natural desire to serve and help others through practical means.",
+        },
+      ],
     },
-    faq: [
-      {
-        question: "Why are Virgo so critical?",
-        answer:
-          "Virgo's attention to detail and desire for perfection can make them notice flaws that others miss. They often have high standards for themselves and others.",
-      },
-      {
-        question: "What careers suit Virgo?",
-        answer:
-          "Healthcare, research, accounting, editing, quality control, and any field requiring attention to detail, analysis, and practical problem-solving.",
-      },
-      {
-        question: "How can Virgo improve relationships?",
-        answer:
-          "By being less critical, learning to accept imperfection, and developing more flexibility while maintaining their helpful and reliable nature.",
-      },
-    ],
+    faq: {
+      title: "Frequently Asked Questions",
+      faqs: [
+        {
+          question: "Why are Virgo so critical?",
+          answer:
+            "Virgo's attention to detail and desire for perfection can make them notice flaws that others miss. They often have high standards for themselves and others.",
+        },
+        {
+          question: "What careers suit Virgo?",
+          answer:
+            "Healthcare, research, accounting, editing, quality control, and any field requiring attention to detail, analysis, and practical problem-solving.",
+        },
+        {
+          question: "How can Virgo improve relationships?",
+          answer:
+            "By being less critical, learning to accept imperfection, and developing more flexibility while maintaining their helpful and reliable nature.",
+        },
+      ],
+    },
   },
 };

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import UniversalZodiacBanner from '../../../components/UniversalZodiacBanner';
-import AquariusInfoNavigation from '../../../components/AquariusInfoNavigation';
+import ZodiacInfoNavigation from '@/app/components/ZodiacInfoNavigation';
 import AquariusProductRecommendations from '../../../components/AquariusProductRecommendations';
 import ReusableProductGrid from '../../../components/ReusableProductGrid';
 import { Statistics } from '../../../components/Statistics';
@@ -56,7 +56,7 @@ export default function AquariusZodiacPage() {
     <UniversalZodiacBanner signKey="aquarius" />
 
     {/* HORIZONTAL DROPDOWN NAVIGATION */}
-    <AquariusInfoNavigation />
+    <ZodiacInfoNavigation zodiacSign="aquarius" />
 
     {/* MAIN CONTENT AREA - FULL WIDTH */}
     <motion.div 
@@ -160,25 +160,6 @@ export default function AquariusZodiacPage() {
         })()}
       </div>
     </motion.div>
-
-        {/* STATISTICS SECTION */}
-        <motion.div
-          className="bg-white py-16"
-          initial={{ opacity: 0, y: 50 }}
-          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          <div className="max-w-7xl mx-auto px-4">
-            <Statistics />
-          </div>
-        </motion.div>
-
-{/* SIMPLE HORIZONTAL BANNER */}
-<div className="-mt-8">
-  {/* <SimpleHorizontalBanner /> */}
-</div>
-
-
 
         {/* GLOBAL STYLES FOR REFINED AQUARIUS THEME */}
         <style jsx global>{`

@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import UniversalZodiacBanner from '../../../components/UniversalZodiacBanner';
-import AriesInfoNavigation from '../../../components/AriesInfoNavigation';
+import ZodiacInfoNavigation from '@/app/components/ZodiacInfoNavigation';
 import AriesProductRecommendations from '../../../components/AriesProductRecommendations';
 import { Statistics } from '../../../components/Statistics';
 import SimpleHorizontalBanner from '../../../components/SimpleHorizontalBanner';
+import ReusableProductGrid from '../../../components/ReusableProductGrid';
 
 export default function AriesZodiacPage() {
   const [isPageEntering, setIsPageEntering] = useState(true);
@@ -44,116 +45,119 @@ export default function AriesZodiacPage() {
       </AnimatePresence>
 
       {/* MAIN PAGE CONTENT */}
+
       <motion.div 
-        className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-yellow-50/40"
+        className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-yellow-50/40 overflow-x-hidden overflow-y-hidden"
         initial={{ opacity: 0 }}
         animate={isLoaded ? { opacity: 1 } : {}}
         transition={{ duration: 0.6 }}
       >
-        
-            {/* UNIVERSAL ZODIAC BANNER */}
-    <UniversalZodiacBanner signKey="aries" />
+        {/* UNIVERSAL ZODIAC BANNER */}
+        <UniversalZodiacBanner signKey="aries" />
 
-    {/* HORIZONTAL DROPDOWN NAVIGATION */}
-    <AriesInfoNavigation />
+        {/* HORIZONTAL DROPDOWN NAVIGATION */}
+        <ZodiacInfoNavigation zodiacSign="aries" />
 
-    {/* MAIN CONTENT AREA - FULL WIDTH */}
-    <motion.div 
-      className="w-full bg-white"
-      initial={{ opacity: 0, y: 30 }}
-      animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay: 0.4 }}
-    >
-      <div className="max-w-7xl mx-auto p-4 sm:p-8 pt-8 sm:pt-12">
-        <AriesProductRecommendations />
-      </div>
-    </motion.div>
-
-        {/* STATISTICS SECTION */}
-        <motion.div
-          className="bg-white py-16"
-          initial={{ opacity: 0, y: 50 }}
+        {/* MAIN CONTENT AREA - FULL WIDTH */}
+        <motion.div 
+          className="w-full bg-white"
+          initial={{ opacity: 0, y: 30 }}
           animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <div className="max-w-7xl mx-auto px-4">
-            <Statistics />
-          </div>
-        </motion.div>
-
-{/* SIMPLE HORIZONTAL BANNER */}
-<div className="-mt-8">
-  <SimpleHorizontalBanner />
-</div>
-
-        {/* FLOATING ACTION BUTTONS */}
-        <motion.div
-          className="fixed bottom-8 right-8 z-40 space-y-4"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={isLoaded ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.6, delay: 1 }}
-        >
-          {/* CHAT WITH ASTROLOGER */}
-          <motion.button
-            className="bg-black text-white p-4 rounded-full shadow-2xl hover:bg-gray-800 transition-all duration-300 group"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-            <span className="absolute right-16 bg-white text-black px-3 py-1 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-serif border border-gray-200">
-              Chat with Astrologer
-            </span>
-          </motion.button>
-
-          {/* DAILY HOROSCOPE */}
-          <motion.button
-            className="bg-white text-black p-4 rounded-full shadow-2xl hover:bg-gray-100 border border-gray-200 transition-all duration-300 group"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-            </svg>
-            <span className="absolute right-16 bg-black text-white px-3 py-1 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-serif">
-              Daily Horoscope
-            </span>
-          </motion.button>
-        </motion.div>
-
-        {/* RESPONSIVE MOBILE BOTTOM NAVIGATION */}
-        <motion.div
-          className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-orange-200/30 px-4 py-3 z-30"
-          initial={{ opacity: 0, y: 100 }}
-          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          <div className="flex justify-between items-center">
-            <button className="flex flex-col items-center py-2 px-4 text-orange-800">
-              <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white text-sm font-bold mb-1">
-                ♈
-              </div>
-              <span className="text-xs font-medium font-serif">Aries</span>
-            </button>
-            <button className="flex flex-col items-center py-2 px-4 text-slate-600">
-              <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              <span className="text-xs font-medium font-serif">Shop</span>
-            </button>
-            <button className="flex flex-col items-center py-2 px-4 text-slate-600">
-              <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-              <span className="text-xs font-medium font-serif">Reading</span>
-            </button>
-            <button className="flex flex-col items-center py-2 px-4 text-slate-600">
-              <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-              <span className="text-xs font-medium font-serif">Consult</span>
-            </button>
+          <div className="max-w-7xl mx-auto p-4 pt-8 sm:p-8 sm:pt-12 w-full">
+            {/* Aries Product Grid */}
+            {(() => {
+              const ariesProductsRaw = [
+                {
+                  id: 'red-jasper-courage-stone',
+                  title: 'Red Jasper Courage Stone',
+                  description: 'Boosts courage and determination',
+                  price: '₹2,499',
+                  originalPrice: '₹4,999',
+                  slug: 'red-jasper-courage-stone',
+                  image: '/images/course-1.jpg',
+                  category: 'Courage Stones',
+                },
+                {
+                  id: 'carnelian-energy-crystal',
+                  title: 'Carnelian Energy Crystal',
+                  description: 'Enhances energy and motivation',
+                  price: '₹2,799',
+                  originalPrice: '₹5,599',
+                  slug: 'carnelian-energy-crystal',
+                  image: '/images/course-2.jpg',
+                  category: 'Energy Crystals',
+                },
+                {
+                  id: 'bloodstone-action-gem',
+                  title: 'Bloodstone Action Gem',
+                  description: 'Promotes action and vitality',
+                  price: '₹3,299',
+                  originalPrice: '₹6,599',
+                  slug: 'bloodstone-action-gem',
+                  image: '/images/course-3.jpg',
+                  category: 'Action Gems',
+                },
+                {
+                  id: 'garnet-passion-stone',
+                  title: 'Garnet Passion Stone',
+                  description: 'Ignites passion and confidence',
+                  price: '₹2,199',
+                  originalPrice: '₹4,399',
+                  slug: 'garnet-passion-stone',
+                  image: '/images/course-4.jpg',
+                  category: 'Passion Stones',
+                },
+                {
+                  id: 'pyrite-success-crystal',
+                  title: 'Pyrite Success Crystal',
+                  description: 'Attracts success and abundance',
+                  price: '₹2,999',
+                  originalPrice: '₹5,999',
+                  slug: 'pyrite-success-crystal',
+                  image: '/images/course-5.jpg',
+                  category: 'Success Crystals',
+                },
+                {
+                  id: 'clear-quartz-focus-gem',
+                  title: 'Clear Quartz Focus Gem',
+                  description: 'Improves focus and clarity',
+                  price: '₹1,899',
+                  originalPrice: '₹3,799',
+                  slug: 'clear-quartz-focus-gem',
+                  image: '/images/course-6.jpg',
+                  category: 'Focus Gems',
+                },
+                {
+                  id: 'hematite-grounding-stone',
+                  title: 'Hematite Grounding Stone',
+                  description: 'Provides grounding and protection',
+                  price: '₹2,499',
+                  originalPrice: '₹4,999',
+                  slug: 'hematite-grounding-stone',
+                  image: '/images/course-7.jpg',
+                  category: 'Grounding Stones',
+                },
+                {
+                  id: 'citrine-optimism-crystal',
+                  title: 'Citrine Optimism Crystal',
+                  description: 'Inspires optimism and joy',
+                  price: '₹1,799',
+                  originalPrice: '₹3,599',
+                  slug: 'citrine-optimism-crystal',
+                  image: '/images/course-8.jpg',
+                  category: 'Optimism Crystals',
+                },
+              ];
+              // Add random ratings and review counts
+              const ariesProducts = ariesProductsRaw.map(product => ({
+                ...product,
+                rating: Math.round((Math.random() * 1.5 + 3.5) * 10) / 10, // 3.5 to 5.0
+                reviewCount: Math.floor(Math.random() * 200 + 20), // 20 to 220
+              }));
+              return <ReusableProductGrid products={ariesProducts} columns={4} mobileColumns={2} gap="md" />;
+            })()}
           </div>
         </motion.div>
 

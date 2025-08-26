@@ -1,15 +1,64 @@
 
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+
 import { zodiacInfoData, universalNavigationItems } from '../../data/zodiacInfoData';
 
 interface ZodiacInfoNavigationProps {
   zodiacSign: keyof typeof zodiacInfoData;
 }
 
+type NavigationItem = typeof universalNavigationItems[number];
 
-const tabContentMap = {
-  about: (data: any) => (
+// Discriminated union for ZodiacData to allow for optional planet sections
+type ZodiacData = typeof zodiacInfoData[keyof typeof zodiacInfoData] & {
+  uranus?: {
+    title: string;
+    description: string;
+    cards: { title: string; content: string }[];
+  };
+  mercury?: {
+    title: string;
+    description: string;
+    cards: { title: string; content: string }[];
+  };
+  venus?: {
+    title: string;
+    description: string;
+    cards: { title: string; content: string }[];
+  };
+  mars?: {
+    title: string;
+    description: string;
+    cards: { title: string; content: string }[];
+  };
+  saturn?: {
+    title: string;
+    cards: { title: string; content: string }[];
+  };
+  moon?: {
+    title: string;
+    cards: { title: string; content: string }[];
+  };
+  neptune?: {
+    title: string;
+    description: string;
+    cards: { title: string; content: string }[];
+  };
+  jupiter?: {
+    title: string;
+    description: string;
+    cards: { title: string; content: string }[];
+  };
+  pluto?: {
+    title: string;
+    description: string;
+    cards: { title: string; content: string }[];
+  };
+};
+
+const tabContentMap: Record<string, (data: ZodiacData) => JSX.Element> = {
+  about: (data: ZodiacData) => (
     <div className="space-y-8">
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
@@ -19,10 +68,12 @@ const tabContentMap = {
           })()}
         </div>
         <h2 className="text-3xl font-bold text-gray-800 mb-2">{data.about.title}</h2>
-        {data.about.description && <p className="text-gray-600 max-w-2xl mx-auto">{data.about.description}</p>}
+        {'description' in data.about && data.about.description && (
+          <p className="text-gray-600 max-w-2xl mx-auto">{data.about.description}</p>
+        )}
       </div>
       <div className="grid md:grid-cols-3 gap-6">
-        {data.about.cards && data.about.cards.map((item: any, index: number) => (
+  {data.about.cards && data.about.cards.map((item: { title: string; content: string }, index: number) => (
           <div key={index} className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
             <h3 className="text-xl font-semibold text-gray-800 mb-3">{item.title}</h3>
             <p className="text-gray-600 leading-relaxed">{item.content}</p>
@@ -31,7 +82,7 @@ const tabContentMap = {
       </div>
     </div>
   ),
-  daily: (data: any) => (
+  daily: (data: ZodiacData) => (
     <div className="space-y-8">
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-full mb-4">
@@ -44,7 +95,7 @@ const tabContentMap = {
       </div>
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="space-y-4">
-          <h3 className="text-2xl font-semibold text-gray-800">Today's Forecast</h3>
+          <h3 className="text-2xl font-semibold text-gray-800">Today&apos;s Forecast</h3>
           <p className="text-gray-600 leading-relaxed">{data.daily.forecast?.description}</p>
           <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl border border-orange-100">
             <div className="grid grid-cols-2 gap-4">
@@ -62,19 +113,24 @@ const tabContentMap = {
         <div className="space-y-4">
           <h3 className="text-2xl font-semibold text-gray-800">Weekly Focus</h3>
           <p className="text-gray-600 leading-relaxed">{data.daily.weekly?.description}</p>
-          {data.daily.weekly?.keyThemes && (
-            <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
-              <h4 className="font-semibold text-gray-800 mb-2">Key Themes</h4>
-              <ul className="space-y-2 text-gray-600">
-                {data.daily.weekly.keyThemes.map((theme: string, i: number) => <li key={i}>• {theme}</li>)}
-              </ul>
-            </div>
-          )}
+          {/* Define a type for weekly with keyThemes */}
+          {(() => {
+            type WeeklyWithKeyThemes = { keyThemes: string[] };
+            const weekly = data.daily.weekly as WeeklyWithKeyThemes | undefined;
+            return weekly && Array.isArray(weekly.keyThemes) ? (
+              <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
+                <h4 className="font-semibold text-gray-800 mb-2">Key Themes</h4>
+                <ul className="space-y-2 text-gray-600">
+                  {weekly.keyThemes.map((theme: string, i: number) => <li key={i}>{'• '}{theme}</li>)}
+                </ul>
+              </div>
+            ) : null;
+          })()}
         </div>
       </div>
     </div>
   ),
-  lucky: (data: any) => (
+  lucky: (data: ZodiacData) => (
     <div className="space-y-8">
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
@@ -86,7 +142,7 @@ const tabContentMap = {
         <h2 className="text-3xl font-bold text-gray-800 mb-2">{data.lucky.title || 'Lucky Elements'}</h2>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {data.lucky.categories && data.lucky.categories.map((category: any, index: number) => (
+  {data.lucky.categories && data.lucky.categories.map((category: { title: string; items: string[] }, index: number) => (
           <div key={index} className="text-center bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
             <h3 className="text-xl font-semibold text-gray-800 mb-4">Lucky {category.title}</h3>
             <div className="space-y-2">
@@ -99,7 +155,7 @@ const tabContentMap = {
       </div>
     </div>
   ),
-  compatibility: (data: any) => (
+  compatibility: (data: ZodiacData) => (
     <div className="space-y-8">
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
@@ -134,7 +190,7 @@ const tabContentMap = {
       </div>
     </div>
   ),
-  growth: (data: any) => (
+  growth: (data: ZodiacData) => (
     <div className="space-y-8">
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
@@ -171,29 +227,31 @@ const tabContentMap = {
       </div>
     </div>
   ),
-  uranus: (data: any) => (
-    <div className="space-y-8">
-      <div className="text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
-          {(() => {
-            const Icon = universalNavigationItems[5].icon;
-            return <Icon className="w-8 h-8 text-orange-600" />;
-          })()}
-        </div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-2">{data.uranus?.title || 'Uranus Influence'}</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">{data.uranus?.description}</p>
-      </div>
-      <div className="grid lg:grid-cols-2 gap-8">
-        {data.uranus?.cards && data.uranus.cards.map((item: any, i: number) => (
-          <div key={i} className="bg-gradient-to-br from-orange-50 to-amber-50 p-8 rounded-xl border border-orange-100">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">{item.title}</h3>
-            <p className="text-gray-600 leading-relaxed">{item.content}</p>
+  uranus: (data: ZodiacData) => (
+    data.uranus ? (
+      <div className="space-y-8">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
+            {(() => {
+              const Icon = universalNavigationItems[5].icon;
+              return <Icon className="w-8 h-8 text-orange-600" />;
+            })()}
           </div>
-        ))}
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">{data.uranus.title || 'Uranus Influence'}</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">{data.uranus.description}</p>
+        </div>
+        <div className="grid lg:grid-cols-2 gap-8">
+          {data.uranus.cards.map((item, i) => (
+            <div key={i} className="bg-gradient-to-br from-orange-50 to-amber-50 p-8 rounded-xl border border-orange-100">
+              <h3 className="text-2xl font-semibold text-gray-800 mb-4">{item.title}</h3>
+              <p className="text-gray-600 leading-relaxed">{item.content}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    ) : <div>Section not available.</div>
   ),
-  faq: (data: any) => (
+  faq: (data: ZodiacData) => (
     <div className="space-y-8">
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4">
@@ -205,7 +263,7 @@ const tabContentMap = {
         <h2 className="text-3xl font-bold text-gray-800 mb-2">{data.faq?.title || 'Frequently Asked Questions'}</h2>
       </div>
       <div className="space-y-6">
-        {data.faq?.faqs && data.faq.faqs.map((faq: any, index: number) => (
+  {data.faq?.faqs && data.faq.faqs.map((faq: { question: string; answer: string }, index: number) => (
           <div key={index} className="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100">
             <h3 className="text-xl font-semibold text-gray-800 mb-3">{faq.question}</h3>
             <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
@@ -222,7 +280,7 @@ export default function ZodiacInfoNavigation({ zodiacSign }: ZodiacInfoNavigatio
 
   const data = zodiacInfoData[zodiacSign];
   const navigationItems = data.navigationItems;
-  const activeItem = navigationItems.find((item: any) => item.id === activeTab);
+  const activeItem = navigationItems.find((item: NavigationItem) => item.id === activeTab);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-amber-50 via-white to-orange-50">
